@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react"
-import { Week } from "../../CreateTemplate"
+import { Week } from "../../CreateModule"
 
 type Props = {
     setWeeks: Dispatch<SetStateAction<Week[]>>

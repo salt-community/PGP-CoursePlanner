@@ -1,7 +1,6 @@
 import { FormEvent, useRef, useState } from "react";
 import WeekTable from "./WeekTable/WeekTable"
 import { CalendarEvent } from "./WeekTable/Event/CalendarEvent";
-import { useNavigate } from "react-router-dom";
 
 export type Template = {
     id?: string;
@@ -15,8 +14,7 @@ export type Week = {
     events: CalendarEvent[];
 }
 
-function CreateTemplate() {
-    const navigate = useNavigate();
+function CreateModule() {
     const [weeks, setWeeks] = useState<Week[]>([{
         number: 1,
         events: [{
@@ -89,4 +87,4 @@ function CreateTemplate() {
         )
 }
 
-export default CreateTemplate
+export default CreateModule

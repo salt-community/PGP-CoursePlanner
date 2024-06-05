@@ -1,5 +1,5 @@
 import { startOfDay, addDays, addHours, addMinutes } from "date-fns";
-import { Week } from "./CreateTemplate";
+import { Week } from "./CreateModule";
 import { GoogleEvent } from "./WeekTable/Event/CalendarEvent";
 import { createCalendarTemplate } from "../../../api/CalendarApi";
 
