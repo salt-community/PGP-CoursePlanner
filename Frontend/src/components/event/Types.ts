@@ -1,6 +1,7 @@
 export type Event = {
-    description: string;
-    summary: string;
+    name: string;
     startTime: string;
     endTime: string;
+    description?: string;
+    links?: string[];
 }
