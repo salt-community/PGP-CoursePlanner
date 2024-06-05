@@ -1,4 +1,4 @@
-export type event = {
+export type Event = {
     description: string;
     summary: string;
     startTime: string;
