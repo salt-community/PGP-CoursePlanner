@@ -5,7 +5,7 @@ import NavBar from './components/NavBar'
 function App() {
 
   return (
-    <section className="flex">
+    <section className="w-screen h-screen">
       <NavBar />
     </section>
 
