@@ -1,6 +1,6 @@
 import './App.css'
 import NavBar from './components/NavBar'
-import Day from './components/day/Day'
+import Module from './components/module/Module'
 
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
   return (
     <section className="w-screen h-screen">
       <NavBar />
-      <Day/>
+      <Module/>
     </section>
 
   )
