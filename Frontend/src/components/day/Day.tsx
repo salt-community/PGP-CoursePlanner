@@ -20,7 +20,7 @@ export default function Day({ dayNumber }: DayProps) {
                         <thead>
                             <tr>
                                 <th>Day {dayNumber}</th>
-                                <th> </th>
+                                <th><input className="input input-bordered input-sm max-w-xs" type="text" placeholder="Theme" /></th>
                                 <th> </th>
                                 <th> </th>
                                 <th><button type="button" onClick={handleAddEvent} className="btn btn-sm btn-primary"> + Add Event</button></th>
@@ -41,8 +41,8 @@ export default function Day({ dayNumber }: DayProps) {
                     <thead>
                         <tr>
                             <th>Day {dayNumber}</th>
-                            <th><div className="w-72"></div></th>
-                            <th><div className="w-64"></div></th>
+                            <th><input className="input input-bordered input-sm max-w-xs" type="text" placeholder="Theme" /></th>
+                            <th><div className="w-96"></div></th>
                             <th><button type="button" onClick={handleAddEvent} className="btn btn-sm btn-primary"> + Add Event</button></th>
                         </tr>
 
