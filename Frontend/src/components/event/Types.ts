@@ -5,3 +5,9 @@ export type Event = {
     description?: string;
     links?: string[];
 }
+
+export type EventProps = {
+    setEventArr: React.Dispatch<React.SetStateAction<number[]>>;
+    eventArr: number[];
+    index: number;
+}

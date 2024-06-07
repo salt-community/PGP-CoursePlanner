@@ -34,7 +34,7 @@ export default function Day({ dayNumber }: DayProps) {
                             </tr>
                         </thead>
                         <tbody>
-                            {events.map((i) => <Event key={i} />)}
+                            {events.map((number, index) => <Event key={number} eventArr={events} setEventArr={setEvents} index={index} />)}
                         </tbody>
                     </>
                     :
