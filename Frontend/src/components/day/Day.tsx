@@ -7,6 +7,9 @@ export default function Day() {
             <thead>
                 <tr>
                     <th>Day</th>
+                    <th> </th>
+                    <th> </th>
+                    <th> </th>
                     <th><button type="button" className="btn btn-sm btn-primary"> + Add Event</button></th>
                 </tr>
                 <tr>
