@@ -1,12 +1,13 @@
 import Event from '../event/Event'
+import { DayProps} from './Types'
 
 
-export default function Day() {
+export default function Day({dayNumber}: DayProps) {
     return (
         <table className="table table-sm">
             <thead>
                 <tr>
-                    <th>Day</th>
+                    <th>Day {dayNumber}</th>
                     <th> </th>
                     <th> </th>
                     <th> </th>

@@ -3,3 +3,7 @@ export type Day = {
     description: string;
     events: Event[];
 }
+
+export type DayProps = {
+    dayNumber: number;
+}
