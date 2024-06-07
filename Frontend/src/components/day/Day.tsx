@@ -1,8 +1,17 @@
+import { useState } from 'react';
 import Event from '../event/Event'
 import { DayProps} from './Types'
 
 
 export default function Day({dayNumber}: DayProps) {
+    const [numOfEvents, setNumOfEvents] = useState<number>(1);
+    const [events, setEvents] = useState<number[]>([]);
+
+    const handleAddEvent = () => {
+        setNumOfEvents(numOfEvents + 1);
+        setEvents([...Array(numOfEvents).keys()].map(i => i + 1));
+    }
+
     return (
         <table className="table table-sm">
             <thead>
@@ -11,7 +20,7 @@ export default function Day({dayNumber}: DayProps) {
                     <th> </th>
                     <th> </th>
                     <th> </th>
-                    <th><button type="button" className="btn btn-sm btn-primary"> + Add Event</button></th>
+                    <th><button type="button" onClick={handleAddEvent} className="btn btn-sm btn-primary"> + Add Event</button></th>
                 </tr>
                 <tr>
                     <th>Name</th>
@@ -21,7 +30,7 @@ export default function Day({dayNumber}: DayProps) {
                 </tr>
             </thead>
             <tbody>
-                <Event/>
+                {events.map((i) => <Event key={i}/>)}
             </tbody>
         </table>
     )
