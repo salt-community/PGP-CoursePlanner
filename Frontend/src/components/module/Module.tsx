@@ -7,7 +7,6 @@ export default function Module() {
 
     const handleDays = () => {
         setNumOfDays([...Array(days).keys()].map(i => i + 1));
-        console.log(numOfDays);
     }
 
     return (
@@ -21,7 +20,7 @@ export default function Module() {
                 <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                     {numOfDays.map((num) => <Day key={"day_" + num} dayNumber={num} />)}
                 </div>
-                <input type="submit" className="btn btn-sm mt-4 max-w-48 btn-success text-white" value="Create Template" />
+                <input type="submit" className="btn btn-sm mt-4 max-w-48 btn-success text-white" value="Create Module" />
             </form>
         </section>
     )
