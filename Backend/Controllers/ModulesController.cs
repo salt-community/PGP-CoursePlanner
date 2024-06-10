@@ -1,3 +1,4 @@
+using Backend.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
@@ -6,6 +7,10 @@ namespace Backend.Controllers;
 [Route("[controller]")]
 public class ModulesController : ControllerBase
 {
+    private readonly DataContext _context;
 
- 
+    public ModulesController(DataContext context)
+    {
+        _context = context;
+    }
 }
