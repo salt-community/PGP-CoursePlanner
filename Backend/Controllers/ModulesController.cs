@@ -1,5 +1,7 @@
 using Backend.Data;
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers;
 
@@ -13,4 +15,13 @@ public class ModulesController : ControllerBase
     {
         _context = context;
     }
+
+         [HttpGet]
+        public async Task<ActionResult<IEnumerable<Module>>> GetTemplates()
+        {
+            return await _context.Modules
+            .Include(t => t.Days)
+            .ThenInclude(w => w.Events)
+            .ToListAsync();
+        }
 }
