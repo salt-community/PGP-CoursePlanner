@@ -1,3 +1,4 @@
+using System.Linq;
 using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -23,5 +24,15 @@ public class ModulesController : ControllerBase
             .Include(t => t.Days)
             .ThenInclude(w => w.Events)
             .ToListAsync();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Module>> CreateModule(Module module)
+        {
+            await _context.Modules.AddAsync(module);
+            module.Days.Select(day => _context.Days.Add(day));
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetModule", new {id = module.Id}, module);
         }
 }
