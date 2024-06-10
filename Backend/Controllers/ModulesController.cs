@@ -17,22 +17,37 @@ public class ModulesController : ControllerBase
         _context = context;
     }
 
-         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Module>>> GetTemplates()
-        {
-            return await _context.Modules
-            .Include(t => t.Days)
-            .ThenInclude(w => w.Events)
-            .ToListAsync();
-        }
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Module>>> GetTemplates()
+    {
+        return await _context.Modules
+        .Include(t => t.Days)
+        .ThenInclude(w => w.Events)
+        .ToListAsync();
+    }
 
-        [HttpPost]
-        public async Task<ActionResult<Module>> CreateModule(Module module)
-        {
-            await _context.Modules.AddAsync(module);
-            module.Days.Select(day => _context.Days.Add(day));
-            await _context.SaveChangesAsync();
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Module>> GetModule(int id)
+    {
+        var module = await _context.Modules
+        .Include(module => module.Days)
+        .ThenInclude(day => day.Events).FirstOrDefaultAsync(module => module.Id == id);
 
-            return CreatedAtAction("GetModule", new {id = module.Id}, module);
+        if (module == null)
+        {
+            return NotFound();
         }
+        return module;
+    }
+
+
+    [HttpPost]
+    public async Task<ActionResult<Module>> CreateModule(Module module)
+    {
+        await _context.Modules.AddAsync(module);
+        module.Days.Select(day => _context.Days.Add(day));
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction("GetModule", new { id = module.Id }, module);
+    }
 }
