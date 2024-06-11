@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Day from "../day/Day";
+import { getAllModules } from "../../api/ModuleApi";
 
 export default function Module() {
     const [days, setDays] = useState<number>(0);
@@ -8,6 +9,8 @@ export default function Module() {
     const handleDays = () => {
         setNumOfDays([...Array(days).keys()].map(i => i + 1));
     }
+
+    console.log(getAllModules());
 
     return (
         <section className="px-4">
