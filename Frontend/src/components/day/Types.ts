@@ -1,4 +1,4 @@
-export type Day = {
+export type DayType = {
     dayNumber: number;
     description: string;
     events: Event[];

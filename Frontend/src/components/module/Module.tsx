@@ -2,14 +2,34 @@ import { useState } from "react";
 import Day from "../day/Day";
 import { getAllModules } from "../../api/ModuleApi";
 import { useQuery } from "react-query";
+import { DayType } from "../day/Types";
 
 export default function Module() {
     const [days, setDays] = useState<number>(0);
-    const [numOfDays, setNumOfDays] = useState<number[]>([1]);
+    const [daysOfModule, setDaysOfModule] = useState<DayType[]>([{
+        dayNumber: 1,
+        description: "",
+        events: []
+    }]);
 
     const handleDays = () => {
-        setNumOfDays([...Array(days).keys()].map(i => i + 1));
+        const numOfDays = ([...Array(days).keys()].map(i => i + 1));
+
+        const editedDays: DayType[] = [] ;
+        numOfDays.map((num) => {
+            const newDay = {
+                dayNumber: num,
+                description: "",
+                events: []
+            };
+
+            editedDays.push(newDay)
+        })
+        setDaysOfModule(editedDays);
+
     }
+
+    
 
     const {data} = useQuery({
         queryKey: ['modules'],
@@ -26,7 +46,7 @@ export default function Module() {
                     <button type="button" onClick={handleDays} className="btn btn-sm max-w-48 btn-primary">Apply</button>
                 </div>
                 <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
-                    {numOfDays.map((num) => <Day key={"day_" + num} dayNumber={num} />)}
+                    {daysOfModule.map((day) => <Day key={"day_" + day.dayNumber} dayNumber={day.dayNumber} />)}
                 </div>
                 <input type="submit" className="btn btn-sm mt-4 max-w-48 btn-success text-white" value="Create Module" />
             </form>
