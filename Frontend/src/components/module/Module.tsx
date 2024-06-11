@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Day from "../day/Day";
 import { getAllModules } from "../../api/ModuleApi";
+import { useQuery } from "react-query";
 
 export default function Module() {
     const [days, setDays] = useState<number>(0);
@@ -10,7 +11,11 @@ export default function Module() {
         setNumOfDays([...Array(days).keys()].map(i => i + 1));
     }
 
-    console.log(getAllModules());
+    const {data} = useQuery({
+        queryKey: ['modules'],
+        queryFn: getAllModules
+    });
+    console.log(data);
 
     return (
         <section className="px-4">
