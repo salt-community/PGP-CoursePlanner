@@ -1,15 +1,19 @@
-import { useState } from 'react';
-import Event from '../event/Event'
-import { DayProps } from './Types'
+    import { DayProps } from './Types'
+import CalendarEvent from '../event/CalendarEvent';
 
 
-export default function Day({ dayNumber }: DayProps) {
-    const [numOfEvents, setNumOfEvents] = useState<number>(1);
-    const [events, setEvents] = useState<number[]>([]);
+export default function Day({ dayNumber, events, setDays, days }: DayProps) {
 
     const handleAddEvent = () => {
-        setNumOfEvents(numOfEvents + 1);
-        setEvents([...Array(numOfEvents).keys()].map(i => i + 1));
+        const editedDays = [...days];
+
+        editedDays[dayNumber-1].events.push({
+            name: "",
+            startTime: "",
+            endTime: ""
+        })
+
+        setDays(editedDays)
     }
 
     return (
@@ -34,7 +38,7 @@ export default function Day({ dayNumber }: DayProps) {
                             </tr>
                         </thead>
                         <tbody>
-                            {events.map((number, index) => <Event key={number} eventArr={events} setEventArr={setEvents} index={index} />)}
+                            {events.map((event, index) => <CalendarEvent event={event} key={index} days={days} setDays={setDays} index={index} dayNumber={dayNumber} />)}
                         </tbody>
                     </>
                     :

@@ -1,13 +1,17 @@
-export type Event = {
-    name: string;
-    startTime: string;
-    endTime: string;
-    description?: string;
-    links?: string[];
-}
+import { DayType } from "../day/Types";
+
+export type EventType = {
+  name: string;
+  startTime: string;
+  endTime: string;
+  description?: string;
+  links?: string[];
+};
 
 export type EventProps = {
-    setEventArr: React.Dispatch<React.SetStateAction<number[]>>;
-    eventArr: number[];
-    index: number;
-}
+  setDays: React.Dispatch<React.SetStateAction<DayType[]>>;
+  days: DayType[];
+  index: number;
+  dayNumber: number;
+  event: EventType;
+};
