@@ -15,7 +15,7 @@ export default function Module() {
     const handleDays = () => {
         const numOfDays = ([...Array(days).keys()].map(i => i + 1));
 
-        const editedDays: DayType[] = [] ;
+        const editedDays: DayType[] = [];
         numOfDays.map((num) => {
             const newDay = {
                 dayNumber: num,
@@ -29,20 +29,19 @@ export default function Module() {
 
     }
 
-    
-
-    const {data} = useQuery({
+    const { data } = useQuery({
         queryKey: ['modules'],
         queryFn: getAllModules
     });
     console.log(data);
+
 
     return (
         <section className="px-4">
             <form className="flex flex-col gap-4 ">
                 <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto flex space-x-8">
                     <input type="text" name="moduleName" className="input input-bordered w-full input-sm max-w-xs" placeholder="Module name" />
-                    <input type="number" name="numberOfDays" onChange={(e) => setDays(parseInt(e.target.value))} className="input input-bordered input-sm max-w-xs" placeholder="Number of days"/>
+                    <input type="number" name="numberOfDays" onChange={(e) => setDays(parseInt(e.target.value))} className="input input-bordered input-sm max-w-xs" placeholder="Number of days" />
                     <button type="button" onClick={handleDays} className="btn btn-sm max-w-48 btn-primary">Apply</button>
                 </div>
                 <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
