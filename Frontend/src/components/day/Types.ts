@@ -6,4 +6,5 @@ export type DayType = {
 
 export type DayProps = {
     dayNumber: number;
+    events: Event[];
 }
