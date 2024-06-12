@@ -1,15 +1,15 @@
 import NavBar from "./NavBar";
 
 type Props = {
-    pageContent: React.ReactNode;
+    children: React.ReactNode;
 }
 
-export default function Page({ pageContent }: Props) {
+export default function Page({ children }: Props) {
 
     return (
         <section className="w-screen h-screen">
             <NavBar />
-            {pageContent}
+            {children}
         </section>
     )
 }

@@ -1,11 +1,10 @@
-import NavBar from "../components/NavBar";
+import Page from "../components/Page";
 import Module from "../components/module/Module";
 
 export default function Home() {
     return (
-        <section className="w-screen h-screen">
-            <NavBar />
+        <Page>
             <Module />
-        </section>
+        </Page>
     )
 }
