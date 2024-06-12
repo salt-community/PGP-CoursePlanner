@@ -8,6 +8,12 @@ export async function getAllModules() {
   return data as ModuleType[];
 }
 
+export async function getModuleById(moduleId: number) {
+  const response = await fetch(`${BASE_URL}/${moduleId}`);
+  const data = await response.json();
+  return data as ModuleType;
+}
+
 export async function postModule(module: ModuleType) {
   const response = await fetch(BASE_URL, {
     method: "POST",
