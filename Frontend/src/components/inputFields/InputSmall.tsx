@@ -1,9 +1,9 @@
 type Props = {
     name: string;
-    value: string;
     type: string;
-    placeholder: string;
-    onChange?: () => void;
+    placeholder?: string;
+    value?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function InputSmall ({name, value, type, placeholder, onChange}: Props) {
