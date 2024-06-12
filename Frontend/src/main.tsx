@@ -23,6 +23,10 @@ const router = createBrowserRouter([
     path: "/modules",
     element: <Modules/>,
   },
+  {
+    path: "/modules/details/*",
+    element: <ModuleDetails/>,
+  },
 
 ]);
 
