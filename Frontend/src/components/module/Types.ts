@@ -1,7 +1,7 @@
-import { Day } from "../day/Types";
+import { DayType } from "../day/Types";
 
-export type Module = {
-    name: string;
-    numberOfDays: number;
-    days: Day[];
-}
+export type ModuleType = {
+  name: string;
+  numberOfDays: number;
+  days: DayType[];
+};
