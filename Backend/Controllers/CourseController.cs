@@ -53,7 +53,6 @@ public class CourseController : ControllerBase
 
         await _context.Courses.AddAsync(course);
 
-        // Add related entities using LINQ-like syntax with ToList to ensure compatibility
         course.Modules.ToList().ForEach(module =>
         {
             _context.Modules.Add(module);
@@ -74,6 +73,19 @@ public class CourseController : ControllerBase
         return CreatedAtAction("GetCourse", new { id = course.Id }, course);
     }
 
+    [HttpPatch]
+    [HttpDelete]
+    public async Task<ActionResult> DeleteCourse(int id)
+    {
+        var course = await _context.Courses.FindAsync(id);
+        if (course == null)
+        {
+            return NotFound();
+        }
+        _context.Courses.Remove(course);
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
 
 
 }
