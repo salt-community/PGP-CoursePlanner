@@ -74,7 +74,7 @@ public class CourseController : ControllerBase
     }
 
     [HttpPatch]
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCourse(int id)
     {
         var course = await _context.Courses.FindAsync(id);
