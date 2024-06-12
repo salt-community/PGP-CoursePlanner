@@ -1,3 +1,5 @@
+import SuccessBtn from "../buttons/SuccessBtn";
+
 export default function Course () {
 
     return (
@@ -10,7 +12,7 @@ export default function Course () {
             </div>
             <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
             </div>
-            <input type="submit" className="btn btn-sm mt-4 max-w-48 btn-success text-white" value="Create Course" />
+            <SuccessBtn value="Create Course"/>
         </form>
     </section>
     )
