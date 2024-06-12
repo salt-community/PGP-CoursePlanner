@@ -5,6 +5,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Home from './pages/Home.tsx'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import Modules from './pages/Modules.tsx'
+import ModuleDetails from './pages/ModuleDetails.tsx'
 
 const router = createBrowserRouter([
   {
