@@ -3,6 +3,7 @@ using Backend.Models;
 using Backend.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Backend.Controllers;
 
@@ -19,7 +20,7 @@ public class CourseController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Course>>> GetCourse()
+    public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
     {
         return await _context.Courses
         .Include(m => m.Modules)
@@ -27,6 +28,20 @@ public class CourseController : ControllerBase
         .ThenInclude(w => w.Events).ToListAsync();
     }
 
-    //[HttpGet("{id}")]
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Course>> GetCourse(int id)
+    {
+       var course = await _context.Courses
+        .Include(m => m.Modules)
+        .ThenInclude(t => t.Days)
+        .ThenInclude(w => w.Events)
+        .FirstOrDefaultAsync(course => course.Id == id);
+        if (course == null)
+        {
+            return NotFound();
+        }
+        return course;
+
+    }
     
 }
