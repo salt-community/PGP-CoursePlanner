@@ -73,7 +73,35 @@ public class CourseController : ControllerBase
         return CreatedAtAction("GetCourse", new { id = course.Id }, course);
     }
 
-    [HttpPatch]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateCourse(int id, [FromBody] Course course)
+    {
+        if (id != course.Id)
+        {
+            return BadRequest();
+        }
+
+        _context.Entry(course).State = EntityState.Modified;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!CourseExists(id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        return NoContent();
+    }
+
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteCourse(int id)
     {
@@ -86,7 +114,7 @@ public class CourseController : ControllerBase
         await _context.SaveChangesAsync();
         return NoContent();
     }
-    private bool CourseExcists(int id)
+    private bool CourseExists(int id)
     {
         return _context.Courses.Any(e => e.Id == id);
     }
