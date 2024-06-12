@@ -59,6 +59,14 @@
               "target": "Package",
               "version": "[6.0.0, )"
             },
+            "fluentassertions": {
+              "target": "Package",
+              "version": "[6.12.0, )"
+            },
+            "moq": {
+              "target": "Package",
+              "version": "[4.20.70, )"
+            },
             "xunit": {
               "target": "Package",
               "version": "[2.4.2, )"
