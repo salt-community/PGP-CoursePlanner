@@ -18,7 +18,7 @@ public class ModulesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Module>>> GetTemplates()
+    public async Task<ActionResult<IEnumerable<Module>>> GetModules()
     {
         return await _context.Modules
         .Include(t => t.Days)
