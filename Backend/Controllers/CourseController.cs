@@ -31,11 +31,11 @@ public class CourseController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Course>> GetCourse(int id)
     {
-       var course = await _context.Courses
-        .Include(m => m.Modules)
-        .ThenInclude(t => t.Days)
-        .ThenInclude(w => w.Events)
-        .FirstOrDefaultAsync(course => course.Id == id);
+        var course = await _context.Courses
+         .Include(m => m.Modules)
+         .ThenInclude(t => t.Days)
+         .ThenInclude(w => w.Events)
+         .FirstOrDefaultAsync(course => course.Id == id);
         if (course == null)
         {
             return NotFound();
@@ -43,5 +43,37 @@ public class CourseController : ControllerBase
         return course;
 
     }
-    
+    [HttpPost]
+    public async Task<IActionResult> CreateCourse([FromBody] Course course)
+    {
+        if (course == null)
+        {
+            return BadRequest("Course is null.");
+        }
+
+        await _context.Courses.AddAsync(course);
+
+        // Add related entities using LINQ-like syntax with ToList to ensure compatibility
+        course.Modules.ToList().ForEach(module =>
+        {
+            _context.Modules.Add(module);
+
+            module.Days.ToList().ForEach(day =>
+            {
+                _context.Days.Add(day);
+
+                day.Events.ToList().ForEach(eventItem =>
+                {
+                    _context.Events.Add(eventItem);
+                });
+            });
+        });
+
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction("GetCourse", new { id = course.Id }, course);
+    }
+
+
+
 }
