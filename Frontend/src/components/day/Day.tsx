@@ -1,5 +1,6 @@
     import { DayProps } from './Types'
 import CalendarEvent from '../event/CalendarEvent';
+import PrimaryBtn from '../buttons/PrimaryBtn';
 
 
 export default function Day({ dayNumber, events, setDays, days }: DayProps) {
@@ -47,7 +48,7 @@ export default function Day({ dayNumber, events, setDays, days }: DayProps) {
                             <th>Day {dayNumber}</th>
                             <th><input className="input input-bordered input-sm max-w-xs" type="text" placeholder="Theme" /></th>
                             <th><div className="w-96"></div></th>
-                            <th><button type="button" onClick={handleAddEvent} className="btn btn-sm btn-primary"> + Add Event</button></th>
+                            <th><PrimaryBtn onClick={handleAddEvent}> + Add Event</PrimaryBtn></th>
                         </tr>
 
                     </thead>
