@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import { getModuleById } from "../api/ModuleApi";
 
 export default function ModuleDetails () {
     const {pathname} = useLocation();
@@ -7,7 +8,7 @@ export default function ModuleDetails () {
 
     const {data: module, isLoading, isError} = useQuery({
         queryKey: ['modules', moduleId],
-        queryFn: () => getModuleById(moduleId)
+        queryFn: () => getModuleById(parseInt(moduleId))
     });
 
     return (
