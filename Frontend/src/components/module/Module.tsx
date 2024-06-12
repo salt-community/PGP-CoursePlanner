@@ -33,13 +33,6 @@ export default function Module() {
 
     }
 
-    const { data } = useQuery({
-        queryKey: ['modules'],
-        queryFn: getAllModules
-    });
-    console.log(data);
-
-
     const queryClient = useQueryClient();
 
     const mutation = useMutation({
