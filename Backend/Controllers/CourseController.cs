@@ -86,6 +86,10 @@ public class CourseController : ControllerBase
         await _context.SaveChangesAsync();
         return NoContent();
     }
+    private bool CourseExcists(int id)
+    {
+        return _context.Courses.Any(e => e.Id == id);
+    }
 
 
 }
