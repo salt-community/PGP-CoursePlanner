@@ -5,6 +5,8 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { DayType } from "../day/Types";
 import { ModuleType } from "./Types";
 import PrimaryBtn from "../buttons/PrimaryBtn";
+import SuccessBtn from "../buttons/SuccessBtn";
+import InputSmall from "../inputFields/InputSmall";
 
 export default function Module() {
     const [days, setDays] = useState<number>(0);
@@ -70,14 +72,14 @@ export default function Module() {
         <section className="px-4">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
                 <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto flex space-x-8">
-                    <input type="text" name="moduleName" className="input input-bordered w-full input-sm max-w-xs" placeholder="Module name" />
+                    <InputSmall type="text" name="moduleName" placeholder="Module name"/>
                     <input type="number" name="numberOfDays" onChange={(e) => setDays(parseInt(e.target.value))} className="input input-bordered input-sm max-w-xs" placeholder="Number of days" />
                     <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
                 </div>
                 <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                     {daysOfModule.map((day) => <Day key={"day_" + day.dayNumber} setDays={setDaysOfModule} days={daysOfModule} dayNumber={day.dayNumber} events={day.events} />)}
                 </div>
-                <input type="submit" className="btn btn-sm mt-4 max-w-48 btn-success text-white" value="Create Module" />
+                <SuccessBtn value="Create Module"/>
             </form>
         </section>
     )

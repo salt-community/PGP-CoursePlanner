@@ -1,7 +1,7 @@
-import { Module } from "../module/Types";
+import { ModuleType } from "../module/Types";
 
 export type Course = {
     name: string;
     numberOfWeeks: number;
-    modules: Module[];
+    modules: ModuleType[];
 }

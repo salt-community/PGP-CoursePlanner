@@ -1,6 +1,7 @@
-    import { DayProps } from './Types'
+import { DayProps } from './Types'
 import CalendarEvent from '../event/CalendarEvent';
 import PrimaryBtn from '../buttons/PrimaryBtn';
+import InputSmall from '../inputFields/InputSmall';
 
 
 export default function Day({ dayNumber, events, setDays, days }: DayProps) {
@@ -8,7 +9,7 @@ export default function Day({ dayNumber, events, setDays, days }: DayProps) {
     const handleAddEvent = () => {
         const editedDays = [...days];
 
-        editedDays[dayNumber-1].events.push({
+        editedDays[dayNumber - 1].events.push({
             name: "",
             startTime: "",
             endTime: ""
@@ -25,7 +26,7 @@ export default function Day({ dayNumber, events, setDays, days }: DayProps) {
                         <thead>
                             <tr>
                                 <th>Day {dayNumber}</th>
-                                <th><input className="input input-bordered input-sm max-w-xs" type="text" placeholder="Theme" /></th>
+                                <th><InputSmall type="text" placeholder="Theme" name="dayTheme" /></th>
                                 <th> </th>
                                 <th> </th>
                                 <th><button type="button" onClick={handleAddEvent} className="btn btn-sm btn-primary"> + Add Event</button></th>
@@ -46,7 +47,7 @@ export default function Day({ dayNumber, events, setDays, days }: DayProps) {
                     <thead>
                         <tr>
                             <th>Day {dayNumber}</th>
-                            <th><input className="input input-bordered input-sm max-w-xs" type="text" placeholder="Theme" /></th>
+                            <th><InputSmall type="text" placeholder="Theme" name="dayTheme" /></th>
                             <th><div className="w-96"></div></th>
                             <th><PrimaryBtn onClick={handleAddEvent}> + Add Event</PrimaryBtn></th>
                         </tr>
