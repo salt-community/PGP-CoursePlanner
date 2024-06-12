@@ -4,6 +4,7 @@ import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Home from './pages/Home.tsx'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import Modules from './pages/Modules.tsx'
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "/home/*",
     element: <Home />,
+  },
+  {
+    path: "/modules",
+    element: <Modules/>,
   },
 
 ]);
