@@ -1,14 +1,14 @@
-import { Module } from "../components/module/Types";
+import { ModuleType } from "../components/module/Types";
 
 const BASE_URL = "http://localhost:5268/Modules";
 
 export async function getAllModules() {
   const response = await fetch(BASE_URL);
   const data = await response.json();
-  return data as Module[];
+  return data as ModuleType[];
 }
 
-export async function postModule(module: Module) {
+export async function postModule(module: ModuleType) {
   const response = await fetch(BASE_URL, {
     method: "POST",
     headers: {
