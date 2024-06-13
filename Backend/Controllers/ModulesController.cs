@@ -63,7 +63,7 @@ public class ModulesController : ControllerBase
             .Include(module => module.Days)
             .ThenInclude(day => day.Events)
             .AsNoTracking()
-            .FirstOrDefaultAsync(t => t.Id == id);
+            .FirstOrDefaultAsync(module => module.Id == id);
 
             if (moduleToUpdate == null)
             {
