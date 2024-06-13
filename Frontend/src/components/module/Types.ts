@@ -9,6 +9,6 @@ export type ModuleType = {
 };
 
 export type ModuleProps = {
-  handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  submitFunction: () => void;
   module: ModuleType;
 }
