@@ -9,6 +9,6 @@ export type ModuleType = {
 };
 
 export type ModuleProps = {
-  submitFunction: () => void;
+  submitFunction: (module: ModuleType) => Promise<void>;
   module: ModuleType;
 }
