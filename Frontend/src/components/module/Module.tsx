@@ -62,7 +62,7 @@ export default function Module({ submitFunction, module }: ModuleProps) {
                     <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
                 </div>
                 <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
-                    {daysOfModule.map((day) => <Day key={"day_" + day.dayNumber} setDays={setDaysOfModule} days={daysOfModule} day={day} events={day.events} />)}
+                    {daysOfModule.map((day) => <Day key={"day_" + day.dayNumber} setDays={setDaysOfModule} days={daysOfModule} day={day} />)}
                 </div>
                 <SuccessBtn value="Create Module" />
             </form>
