@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import Modules from './pages/Modules.tsx'
 import ModuleDetails from './pages/ModuleDetails.tsx'
 import EditModule from './pages/EditModule.tsx'
+import CreateModule from './pages/CreateModule.tsx'
 
 const router = createBrowserRouter([
   {
@@ -33,7 +34,10 @@ const router = createBrowserRouter([
     path: "/modules/edit/*",
     element: <EditModule/>,
   },
-
+  {
+    path: "/modules/create/*",
+    element: <CreateModule/>,
+  },
 ]);
 
 const queryClient = new QueryClient();
