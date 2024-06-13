@@ -8,7 +8,6 @@ export type DayType = {
 
 export type DayProps = {
   day: DayType;
-  events: EventType[];
   setDays: React.Dispatch<React.SetStateAction<DayType[]>>;
   days: DayType[];
 };
