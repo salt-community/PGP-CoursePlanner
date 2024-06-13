@@ -3,12 +3,12 @@ import Day from "../day/Day";
 import { getAllModules, postModule } from "../../api/ModuleApi";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { DayType } from "../day/Types";
-import { ModuleType } from "./Types";
+import { ModuleProps, ModuleType } from "./Types";
 import PrimaryBtn from "../buttons/PrimaryBtn";
 import SuccessBtn from "../buttons/SuccessBtn";
 import InputSmall from "../inputFields/InputSmall";
 
-export default function Module() {
+export default function Module({handleSubmit}: ModuleProps) {
     const [days, setDays] = useState<number>(0);
     const [daysOfModule, setDaysOfModule] = useState<DayType[]>([{
         dayNumber: 1,
@@ -32,34 +32,6 @@ export default function Module() {
         setDaysOfModule(editedDays);
 
     }
-
-    const queryClient = useQueryClient();
-
-    const mutation = useMutation({
-        mutationFn: (module: ModuleType) => {
-            return postModule(module);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
-        }
-    })
-
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        const { moduleName } = e.target as typeof e.target & { moduleName: { value: string } };
-        const { numberOfDays } = e.target as typeof e.target & { numberOfDays: { value: number } };
-
-        const module: ModuleType = {
-            name: moduleName.value,
-            numberOfDays: numberOfDays.value,
-            days: daysOfModule
-        };
-
-        mutation.mutate(module);
-    }
-
-
 
     return (
         <section className="px-4">

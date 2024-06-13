@@ -6,3 +6,7 @@ export type ModuleType = {
   numberOfDays: number;
   days: DayType[];
 };
+
+export type ModuleProps = {
+  handleSubmit: () => void;
+}
