@@ -6,12 +6,13 @@ import PrimaryBtn from "../buttons/PrimaryBtn";
 import SuccessBtn from "../buttons/SuccessBtn";
 import InputSmall from "../inputFields/InputSmall";
 import { useMutation, useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 
-export default function Module({ submitFunction, module }: ModuleProps) {
+export default function Module({ submitFunction, module, buttonText }: ModuleProps) {
+    const navigate = useNavigate();
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [days, setDays] = useState<number>(module.days.length);
     const [daysOfModule, setDaysOfModule] = useState<DayType[]>(module.days);
-
 
     const handleDays = () => {
         const numOfDays = ([...Array(days).keys()].map(i => i + 1));
@@ -37,6 +38,7 @@ export default function Module({ submitFunction, module }: ModuleProps) {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
+            navigate(`/modules`)
         }
     })
 
@@ -46,13 +48,14 @@ export default function Module({ submitFunction, module }: ModuleProps) {
         const { moduleName } = e.target as typeof e.target & { moduleName: { value: string } };
         const { numberOfDays } = e.target as typeof e.target & { numberOfDays: { value: number } };
 
-        const module: ModuleType = {
+        const newModule: ModuleType = {
+            id: module.id ?? 0,
             name: moduleName.value,
             numberOfDays: numberOfDays.value,
             days: daysOfModule
         };
 
-        mutation.mutate(module);
+        mutation.mutate(newModule);
     }
 
     return (
@@ -66,7 +69,7 @@ export default function Module({ submitFunction, module }: ModuleProps) {
                 <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                     {daysOfModule.map((day) => <Day key={"day_" + day.dayNumber} setDays={setDaysOfModule} days={daysOfModule} day={day} />)}
                 </div>
-                <SuccessBtn value="Create Module" />
+                <SuccessBtn value={buttonText} />
             </form>
         </section>
     )

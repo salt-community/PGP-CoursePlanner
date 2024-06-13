@@ -1,4 +1,3 @@
-import { FormEvent } from "react";
 import { DayType } from "../day/Types";
 
 export type ModuleType = {
@@ -11,4 +10,5 @@ export type ModuleType = {
 export type ModuleProps = {
   submitFunction: (module: ModuleType) => Promise<void>;
   module: ModuleType;
-}
+  buttonText: string;
+};
