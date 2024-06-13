@@ -6,6 +6,7 @@ import Home from './pages/Home.tsx'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import Modules from './pages/Modules.tsx'
 import ModuleDetails from './pages/ModuleDetails.tsx'
+import EditModule from './pages/EditModule.tsx'
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/modules/details/*",
     element: <ModuleDetails/>,
+  },
+  {
+    path: "/modules/edit/*",
+    element: <EditModule/>,
   },
 
 ]);
