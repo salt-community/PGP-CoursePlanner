@@ -6,8 +6,10 @@ import PrimaryBtn from "../buttons/PrimaryBtn";
 import SuccessBtn from "../buttons/SuccessBtn";
 import InputSmall from "../inputFields/InputSmall";
 import { useMutation, useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 export default function Module({ submitFunction, module }: ModuleProps) {
+    const navigate = useNavigate();
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [days, setDays] = useState<number>(module.days.length);
     const [daysOfModule, setDaysOfModule] = useState<DayType[]>(module.days);
@@ -37,6 +39,7 @@ export default function Module({ submitFunction, module }: ModuleProps) {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
+            navigate(`/modules/details/${module.id}`)
         }
     })
 
