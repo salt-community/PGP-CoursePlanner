@@ -2,9 +2,11 @@ import { DayProps } from './Types'
 import CalendarEvent from '../event/CalendarEvent';
 import PrimaryBtn from '../buttons/PrimaryBtn';
 import InputSmall from '../inputFields/InputSmall';
+import { useState } from 'react';
 
 
 export default function Day({ day, setDays, days }: DayProps) {
+    const [dayTheme, setDayTheme] = useState<string>(day.description)
 
     const handleAddEvent = () => {
         const editedDays = [...days];
@@ -19,15 +21,13 @@ export default function Day({ day, setDays, days }: DayProps) {
     }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
+        setDayTheme(e.target.value);
         const editedDays = [...days];
-        editedDays[day.dayNumber-1] = {
-            ...editedDays[day.dayNumber-1],
-            [name]: value
-        }
-
+        editedDays[day.dayNumber - 1].description = e.target.value
         setDays(editedDays);
     }
+
+    console.log("description:", day.description)
 
     return (
         <>
@@ -37,7 +37,7 @@ export default function Day({ day, setDays, days }: DayProps) {
                         <thead>
                             <tr>
                                 <th>Day {day.dayNumber}</th>
-                                <th><InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={day.description} /></th>
+                                <th><InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={dayTheme} /></th>
                                 <th> </th>
                                 <th> </th>
                                 <th><button type="button" onClick={handleAddEvent} className="btn btn-sm btn-primary"> + Add Event</button></th>
@@ -58,7 +58,7 @@ export default function Day({ day, setDays, days }: DayProps) {
                     <thead>
                         <tr>
                             <th>Day {day.dayNumber}</th>
-                            <th><InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={day.description} /></th>
+                            <th><InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={dayTheme} /></th>
                             <th><div className="w-96"></div></th>
                             <th><PrimaryBtn onClick={handleAddEvent}> + Add Event</PrimaryBtn></th>
                         </tr>
