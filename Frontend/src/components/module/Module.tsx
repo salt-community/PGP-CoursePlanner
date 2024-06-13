@@ -8,7 +8,7 @@ import InputSmall from "../inputFields/InputSmall";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 
-export default function Module({ submitFunction, module }: ModuleProps) {
+export default function Module({ submitFunction, module, buttonText }: ModuleProps) {
     const navigate = useNavigate();
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [days, setDays] = useState<number>(module.days.length);
@@ -69,7 +69,7 @@ export default function Module({ submitFunction, module }: ModuleProps) {
                 <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                     {daysOfModule.map((day) => <Day key={"day_" + day.dayNumber} setDays={setDaysOfModule} days={daysOfModule} day={day} />)}
                 </div>
-                <SuccessBtn value="Create Module" />
+                <SuccessBtn value={buttonText} />
             </form>
         </section>
     )
