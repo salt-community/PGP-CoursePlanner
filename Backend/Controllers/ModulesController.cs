@@ -50,4 +50,44 @@ public class ModulesController : ControllerBase
 
         return CreatedAtAction("GetModule", new { id = module.Id }, module);
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateModule(int id, [FromBody] Module module)
+    {
+       if (id != module.Id)
+            {
+                return BadRequest();
+            }
+
+            var moduleToUpdate = await _context.Modules
+            .Include(module => module.Days)
+            .ThenInclude(day => day.Events)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (moduleToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            var days = await _context.Days.Include(day => day.Events).AsNoTracking().ToListAsync();
+
+            var deleteList = moduleToUpdate.Days.Where(day => !module.Days.Any(putDay => day.Id == putDay.Id)).ToList();
+
+            foreach (var day in deleteList)
+            {
+                _context.Days.Remove(day);
+                Console.WriteLine(day.Id);
+
+            }
+
+            moduleToUpdate = module;
+            moduleToUpdate.Days = module.Days;
+
+            _context.Modules.Update(moduleToUpdate);
+            await _context.SaveChangesAsync();
+
+
+            return NoContent();
+    }
 }
