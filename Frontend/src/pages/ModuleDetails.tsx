@@ -41,7 +41,7 @@ export default function ModuleDetails() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {day.events.map((event, eventIndex) =>
+                                        {day.events.length > 0 && day.events.map((event, eventIndex) =>
                                             <tr key={eventIndex}>
                                                 <td className="w-1/4">{event.name}</td>
                                                 <td className="w-1/4">{event.description}</td>
@@ -57,8 +57,8 @@ export default function ModuleDetails() {
                     </section>
                 </div>
                 <div className="pt-4 flex gap-4 flex-col sm:flex-row">
-                    <button  className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module </button>
-                    <Link to={`/home/editModule/${module!.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white"> Edit Module </Link>
+                    <button className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module </button>
+                    <Link to={`/modules/edit/${module!.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white"> Edit Module </Link>
                 </div>
             </section>
         </Page>
