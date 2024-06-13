@@ -19,7 +19,7 @@ export default function CreateModule() {
 
     return (
         <Page>
-            <Module module={emptyModule} submitFunction={postModule} />
+            <Module module={emptyModule} submitFunction={postModule} buttonText="Create"/>
         </Page>
     )
 }
