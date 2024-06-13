@@ -4,7 +4,7 @@ import PrimaryBtn from '../buttons/PrimaryBtn';
 import InputSmall from '../inputFields/InputSmall';
 
 
-export default function Day({ day, events, setDays, days }: DayProps) {
+export default function Day({ day, setDays, days }: DayProps) {
 
     const handleAddEvent = () => {
         const editedDays = [...days];
@@ -21,7 +21,7 @@ export default function Day({ day, events, setDays, days }: DayProps) {
     return (
         <>
             <table className="table table-sm">
-                {events.length > 0 ?
+                {day.events.length > 0 ?
                     <>
                         <thead>
                             <tr>
@@ -40,7 +40,7 @@ export default function Day({ day, events, setDays, days }: DayProps) {
                             </tr>
                         </thead>
                         <tbody>
-                            {events.map((event, index) => <CalendarEvent event={event} key={index} days={days} setDays={setDays} index={index} dayNumber={day.dayNumber} />)}
+                            {day.events.map((event, index) => <CalendarEvent event={event} key={index} days={days} setDays={setDays} index={index} dayNumber={day.dayNumber} />)}
                         </tbody>
                     </>
                     :
