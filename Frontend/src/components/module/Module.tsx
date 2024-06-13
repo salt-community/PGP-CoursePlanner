@@ -25,38 +25,37 @@ export default function Module({ submitFunction, module }: ModuleProps) {
             editedDays.push(newDay)
         })
         setDaysOfModule(editedDays);
+    }
 
-        const queryClient = useQueryClient();
+    const queryClient = useQueryClient();
 
-        const mutation = useMutation({
-            mutationFn: (module: ModuleType) => {
-                return submitFunction(module);
-            },
-            onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ['modules'] })
-            }
-        })
-
-        const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-            e.preventDefault();
-
-            const { moduleName } = e.target as typeof e.target & { moduleName: { value: string } };
-            const { numberOfDays } = e.target as typeof e.target & { numberOfDays: { value: number } };
-
-            const module: ModuleType = {
-                name: moduleName.value,
-                numberOfDays: numberOfDays.value,
-                days: daysOfModule
-            };
-
-            mutation.mutate(module);
+    const mutation = useMutation({
+        mutationFn: (module: ModuleType) => {
+            return submitFunction(module);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
         }
+    })
 
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const { moduleName } = e.target as typeof e.target & { moduleName: { value: string } };
+        const { numberOfDays } = e.target as typeof e.target & { numberOfDays: { value: number } };
+
+        const module: ModuleType = {
+            name: moduleName.value,
+            numberOfDays: numberOfDays.value,
+            days: daysOfModule
+        };
+
+        mutation.mutate(module);
     }
 
     return (
         <section className="px-4">
-            <form  className="flex flex-col gap-4 ">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
                 <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto flex space-x-8">
                     <InputSmall type="text" name="moduleName" placeholder="Module name" />
                     <input type="number" name="numberOfDays" onChange={(e) => setDays(parseInt(e.target.value))} className="input input-bordered input-sm max-w-xs" placeholder="Number of days" />
