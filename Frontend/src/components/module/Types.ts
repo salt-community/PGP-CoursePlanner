@@ -1,3 +1,4 @@
+import { FormEvent } from "react";
 import { DayType } from "../day/Types";
 
 export type ModuleType = {
@@ -8,5 +9,6 @@ export type ModuleType = {
 };
 
 export type ModuleProps = {
-  handleSubmit: () => void;
+  handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  module: ModuleType;
 }

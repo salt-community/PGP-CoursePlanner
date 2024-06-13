@@ -23,6 +23,22 @@ export async function postModule(module: ModuleType) {
     body: JSON.stringify(module),
   });
 
-  const data = await response.json();
-  return data;
+  if (!response.ok) {
+    throw new Error("Failed to create module");
+  }
+}
+
+export async function editModule(module: ModuleType) {
+
+  const response = await fetch(`${BASE_URL}/${module.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(module),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to edit module");
+  }
+
 }

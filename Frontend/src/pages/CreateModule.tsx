@@ -32,10 +32,22 @@ export default function CreateModule() {
 
         mutation.mutate(module);
     }
+
+    const emptyModule: ModuleType = 
+        {
+            name: "",
+            numberOfDays: 1,
+            days: [{
+                dayNumber: 1,
+                description: "",
+                events: []
+            }]
+        } 
     
+
     return (
         <Page>
-            <Module />
+            <Module module={emptyModule} handleSubmit={handleSubmit} />
         </Page>
     )
 }

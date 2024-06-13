@@ -1,20 +1,14 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import Day from "../day/Day";
-import { getAllModules, postModule } from "../../api/ModuleApi";
-import { useMutation, useQuery, useQueryClient } from "react-query";
 import { DayType } from "../day/Types";
-import { ModuleProps, ModuleType } from "./Types";
+import { ModuleProps } from "./Types";
 import PrimaryBtn from "../buttons/PrimaryBtn";
 import SuccessBtn from "../buttons/SuccessBtn";
 import InputSmall from "../inputFields/InputSmall";
 
-export default function Module({handleSubmit}: ModuleProps) {
+export default function Module({handleSubmit, module}: ModuleProps) {
     const [days, setDays] = useState<number>(0);
-    const [daysOfModule, setDaysOfModule] = useState<DayType[]>([{
-        dayNumber: 1,
-        description: "",
-        events: []
-    }]);
+    const [daysOfModule, setDaysOfModule] = useState<DayType[]>(module.days);
 
     const handleDays = () => {
         const numOfDays = ([...Array(days).keys()].map(i => i + 1));
