@@ -2,14 +2,16 @@ import { DayProps } from './Types'
 import CalendarEvent from '../event/CalendarEvent';
 import PrimaryBtn from '../buttons/PrimaryBtn';
 import InputSmall from '../inputFields/InputSmall';
+import { useState } from 'react';
 
 
-export default function Day({ dayNumber, events, setDays, days }: DayProps) {
+export default function Day({ day, setDays, days }: DayProps) {
+    const [dayTheme, setDayTheme] = useState<string>(day.description)
 
     const handleAddEvent = () => {
         const editedDays = [...days];
 
-        editedDays[dayNumber - 1].events.push({
+        editedDays[day.dayNumber - 1].events.push({
             name: "",
             startTime: "",
             endTime: ""
@@ -18,15 +20,24 @@ export default function Day({ dayNumber, events, setDays, days }: DayProps) {
         setDays(editedDays)
     }
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDayTheme(e.target.value);
+        const editedDays = [...days];
+        editedDays[day.dayNumber - 1].description = e.target.value
+        setDays(editedDays);
+    }
+
+    console.log("day:", day)
+
     return (
         <>
             <table className="table table-sm">
-                {events.length > 0 ?
+                {day.events.length > 0 ?
                     <>
                         <thead>
                             <tr>
-                                <th>Day {dayNumber}</th>
-                                <th><InputSmall type="text" placeholder="Theme" name="dayTheme" /></th>
+                                <th>Day {day.dayNumber}</th>
+                                <th><InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={dayTheme} /></th>
                                 <th> </th>
                                 <th> </th>
                                 <th><button type="button" onClick={handleAddEvent} className="btn btn-sm btn-primary"> + Add Event</button></th>
@@ -40,14 +51,14 @@ export default function Day({ dayNumber, events, setDays, days }: DayProps) {
                             </tr>
                         </thead>
                         <tbody>
-                            {events.map((event, index) => <CalendarEvent event={event} key={index} days={days} setDays={setDays} index={index} dayNumber={dayNumber} />)}
+                            {day.events.map((event, index) => <CalendarEvent event={event} key={index} days={days} setDays={setDays} index={index} dayNumber={day.dayNumber} />)}
                         </tbody>
                     </>
                     :
                     <thead>
                         <tr>
-                            <th>Day {dayNumber}</th>
-                            <th><InputSmall type="text" placeholder="Theme" name="dayTheme" /></th>
+                            <th>Day {day.dayNumber}</th>
+                            <th><InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={dayTheme} /></th>
                             <th><div className="w-96"></div></th>
                             <th><PrimaryBtn onClick={handleAddEvent}> + Add Event</PrimaryBtn></th>
                         </tr>

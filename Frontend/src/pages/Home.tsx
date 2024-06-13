@@ -1,11 +1,9 @@
-import NavBar from "../components/NavBar";
-import Module from "../components/module/Module";
+import Page from "../components/Page";
 
 export default function Home() {
     return (
-        <section className="w-screen h-screen">
-            <NavBar />
-            <Module />
-        </section>
+        <Page>
+            <p>Welcome!</p>
+        </Page>
     )
 }
