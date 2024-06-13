@@ -39,7 +39,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
-            navigate(`/modules/details/${module.id}`)
+            navigate(`/modules`)
         }
     })
 
