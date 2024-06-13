@@ -4,12 +4,12 @@ import PrimaryBtn from '../buttons/PrimaryBtn';
 import InputSmall from '../inputFields/InputSmall';
 
 
-export default function Day({ dayNumber, events, setDays, days }: DayProps) {
+export default function Day({ day, events, setDays, days }: DayProps) {
 
     const handleAddEvent = () => {
         const editedDays = [...days];
 
-        editedDays[dayNumber - 1].events.push({
+        editedDays[day.dayNumber - 1].events.push({
             name: "",
             startTime: "",
             endTime: ""
@@ -25,7 +25,7 @@ export default function Day({ dayNumber, events, setDays, days }: DayProps) {
                     <>
                         <thead>
                             <tr>
-                                <th>Day {dayNumber}</th>
+                                <th>Day {day.dayNumber}</th>
                                 <th><InputSmall type="text" placeholder="Theme" name="dayTheme" /></th>
                                 <th> </th>
                                 <th> </th>
@@ -40,13 +40,13 @@ export default function Day({ dayNumber, events, setDays, days }: DayProps) {
                             </tr>
                         </thead>
                         <tbody>
-                            {events.map((event, index) => <CalendarEvent event={event} key={index} days={days} setDays={setDays} index={index} dayNumber={dayNumber} />)}
+                            {events.map((event, index) => <CalendarEvent event={event} key={index} days={days} setDays={setDays} index={index} dayNumber={day.dayNumber} />)}
                         </tbody>
                     </>
                     :
                     <thead>
                         <tr>
-                            <th>Day {dayNumber}</th>
+                            <th>Day {day.dayNumber}</th>
                             <th><InputSmall type="text" placeholder="Theme" name="dayTheme" /></th>
                             <th><div className="w-96"></div></th>
                             <th><PrimaryBtn onClick={handleAddEvent}> + Add Event</PrimaryBtn></th>
