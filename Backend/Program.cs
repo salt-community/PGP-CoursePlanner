@@ -1,5 +1,7 @@
 using Backend.Data;
+using Backend.Services;
 using Microsoft.EntityFrameworkCore;
+using static Backend.Repositores.Repositores;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,9 @@ builder.Services.AddDbContext<DataContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DataContext") ?? throw new InvalidOperationException("Connection string 'DataContext' not found.")));
 
 builder.Services.AddCors();
+
+builder.Services.AddScoped<ModuleRepo>();
+builder.Services.AddScoped<ModuleService>();
 
 var app = builder.Build();
 

@@ -29,7 +29,18 @@ namespace Backend.Repositores
                 return await _context.Modules
                     .Include(module => module.Days)
                     .ThenInclude(day => day.Events)
-                    .FirstOrDefaultAsync(predicate) ?? null!; 
+                    .FirstOrDefaultAsync(predicate) ?? null!;
+            }
+
+            public override async Task<bool> DeleteAsync(Expression<Func<Module, bool>> predicate)
+
+            {
+                var response = await _context.Modules
+                    .Include(module => module.Days)
+                    .ThenInclude(day => day.Events)
+                    .FirstOrDefaultAsync(predicate);
+
+                return response == null ? false : true;
             }
         }
     }
