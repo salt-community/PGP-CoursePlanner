@@ -13,11 +13,11 @@ namespace Backend.Tests.UnitTests
         public void GetModules_Returns_CollectionOfModules()
         {
             //Arrange
-      
-
+        
             //Act
 
             //Assert
+
         }
     }
 }

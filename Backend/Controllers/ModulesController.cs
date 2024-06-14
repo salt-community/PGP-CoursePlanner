@@ -109,4 +109,8 @@ public class ModulesController : ControllerBase
 
         return NoContent();
     }
+    private bool ModuleExists(int id)
+    {
+        return _context.Modules.Any(m => m.Id == id);
+    }
 }
