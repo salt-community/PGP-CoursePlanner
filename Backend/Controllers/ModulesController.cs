@@ -91,8 +91,7 @@ public class ModulesController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("id")]
-
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteModule(int id)
     {
         var moduleToDelete = await _context
