@@ -42,3 +42,15 @@ export async function editModule(module: ModuleType) {
   }
 
 }
+
+export async function deleteModule(id: number) {
+  const response = await fetch(`${BASE_URL}/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  });
+  if(!response.ok) {
+    throw new Error("Failed to delete module");
+  }
+}
