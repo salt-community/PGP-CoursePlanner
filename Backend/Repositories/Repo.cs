@@ -76,14 +76,4 @@ public abstract class Repo<TEntity> where TEntity : class
 
     }
 
-    public virtual async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> expression)
-    {
-        try
-        {
-            var item = await _context.Set<TEntity>().AnyAsync(expression);
-            return item;
-        }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return false;
-    }
 }
