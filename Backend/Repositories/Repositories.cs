@@ -4,9 +4,9 @@ using Backend.Data;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Repositores
+namespace Backend.Repositories
 {
-    public class Repositores
+    public class Repositories
     {
         public class ModuleRepo : Repo<Module>
         {

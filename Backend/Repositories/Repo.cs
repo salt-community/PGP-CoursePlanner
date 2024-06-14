@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Repositores;
+namespace Backend.Repositories;
 public abstract class Repo<TEntity> where TEntity : class
 {
     private readonly DataContext _context;
