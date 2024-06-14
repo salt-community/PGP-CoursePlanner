@@ -1,4 +1,5 @@
 using Backend.Models;
+using System.Linq;
 using static Backend.Repositores.Repositores;
 
 namespace Backend.Services;
@@ -19,5 +20,9 @@ public class ModuleService
     public async Task<IEnumerable<Module>> GetAllModulesAsync()
     {
         return await _repo.GetAllAsync();
+    }
+    public async Task<Module> GetSpecificModule(int id)
+    {
+        return await _repo.GetSpecificAsync(module => module.Id == id); 
     }
 }
