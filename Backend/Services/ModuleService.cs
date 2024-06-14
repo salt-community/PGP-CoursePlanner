@@ -25,4 +25,9 @@ public class ModuleService
     {
         return await _repo.GetSpecificAsync(module => module.Id == id); 
     }
+    public async Task<Module> UpdateModule(Module module)
+    {
+        return await _repo.UpdateAsync(module);
+    }
+    
 }
