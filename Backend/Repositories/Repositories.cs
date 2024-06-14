@@ -17,7 +17,7 @@ namespace Backend.Repositores
                 _context = context;
             }
 
-            public override async Task<IEnumerable<Module>> GetAllAsync()
+            public override async Task<List<Module>> GetAllAsync()
             {
                 return await _context.Modules
                                             .Include(module => module.Days)

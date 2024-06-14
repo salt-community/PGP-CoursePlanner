@@ -17,7 +17,7 @@ public class ModuleService
     {
         return await _repo.CreateAsync(module);   
     }
-    public async Task<IEnumerable<Module>> GetAllModulesAsync()
+    public async Task<List<Module>> GetAllModulesAsync()
     {
         return await _repo.GetAllAsync();
     }

@@ -23,7 +23,7 @@ public abstract class Repo<TEntity> where TEntity : class
         return null!;
 
     }
-    public async virtual Task<IEnumerable<TEntity>> GetAllAsync()
+    public async virtual Task<List<TEntity>> GetAllAsync()
     {
         try
         {
