@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
-import { getModuleById } from "../api/ModuleApi";
+import { Link, useNavigate } from "react-router-dom";
+import { deleteModule, getModuleById } from "../api/ModuleApi";
 import Page from "../components/Page";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getIdFromPath } from "../helpers/helperMethods";
 
 export default function ModuleDetails() {
+    const navigate = useNavigate();
 
     const moduleId = getIdFromPath();
 
@@ -12,6 +13,18 @@ export default function ModuleDetails() {
         queryKey: ['modules', moduleId],
         queryFn: () => getModuleById(parseInt(moduleId))
     });
+
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation({
+        mutationFn: (id: number) => {
+            return deleteModule(id);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+            navigate(`/modules`);
+        }
+    })
 
 
     return (
@@ -53,8 +66,8 @@ export default function ModuleDetails() {
                         </section>
                     </div>
                     <div className="pt-4 flex gap-4 flex-col sm:flex-row">
-                        <button className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module </button>
-                        <Link to={`/modules/edit/${module!.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white"> Edit Module </Link>
+                        <button onClick={() => mutation.mutate(parseInt(moduleId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module </button>
+                        <Link to={`/modules/edit/${moduleId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white"> Edit Module </Link>
                     </div>
                 </section>
             }

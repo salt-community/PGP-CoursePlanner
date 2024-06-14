@@ -44,12 +44,11 @@ export async function editModule(module: ModuleType) {
 }
 
 export async function deleteModule(id: number) {
-  const response = await fetch(`${BASE_URL}/${module.id}`, {
+  const response = await fetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
     },
-    body: JSON.stringify(id),
   });
   if(!response.ok) {
     throw new Error("Failed to delete module");
