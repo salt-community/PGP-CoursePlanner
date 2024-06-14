@@ -29,5 +29,9 @@ public class ModuleService
     {
         return await _repo.UpdateAsync(module);
     }
-    
+    public async Task<bool> DeleteModule(int id)
+    {
+        return await _repo.DeleteAsync(module => module.Id == id);
+    }
+
 }
