@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq.Expressions;
 using Backend.Data;
 using Backend.Models;
@@ -35,12 +36,24 @@ namespace Backend.Repositores
             public override async Task<bool> DeleteAsync(Expression<Func<Module, bool>> predicate)
 
             {
-                var response = await _context.Modules
-                    .Include(module => module.Days)
-                    .ThenInclude(day => day.Events)
-                    .FirstOrDefaultAsync(predicate);
+                try
+                {
+                    var response = await _context.Modules
+                        .Include(module => module.Days)
+                        .ThenInclude(day => day.Events)
+                        .FirstOrDefaultAsync(predicate);
+                    if (response != null)
+                    {
+                        _context.Remove(response);
+                        await _context.SaveChangesAsync();
+                    }
+                    return true;
 
-                return response == null ? false : true;
+
+                }
+                catch (Exception ex) { Debug.WriteLine(ex.Message); }
+                return false;
+
             }
         }
     }
