@@ -13,10 +13,10 @@ using Newtonsoft.Json;
 namespace Backend.Tests.IntegrationTests
 {
 
-    public class IntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+    public class ModuleControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
-        public IntegrationTests(WebApplicationFactory<Program> fixture) =>
+        public ModuleControllerIntegrationTests(WebApplicationFactory<Program> fixture) =>
             _client = fixture.CreateClient();
 
         [Fact]

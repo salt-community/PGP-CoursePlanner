@@ -19,6 +19,7 @@ public class ModuleService : IService
     }
     public async Task<List<Module>> GetAllModulesAsync()
     {
+        Console.WriteLine("!!!!!!!!!!!!Service");
         return await _repo.GetAllAsync();
     }
     public async Task<Module> GetSpecificModule(int id)

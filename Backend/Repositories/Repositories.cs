@@ -19,10 +19,13 @@ namespace Backend.Repositories
 
             public override async Task<List<Module>> GetAllAsync()
             {
-                return await _context.Modules
+                Console.WriteLine("!!!!!!!!!!!!Repo");
+                var result = await _context.Modules
                                             .Include(module => module.Days)
                                             .ThenInclude(day => day.Events)
                                             .ToListAsync();
+                Console.WriteLine("!!!!!!!!!!Result" + result);
+                return result;
             }
 
             public override async Task<Module> GetSpecificAsync(Expression<Func<Module, bool>> predicate)
