@@ -1,6 +1,6 @@
 using Backend.Models;
 using System.Linq;
-using static Backend.Repositories.Repositories;
+using static Backend.Repositories.SpecificRepo;
 
 namespace Backend.Services;
 
