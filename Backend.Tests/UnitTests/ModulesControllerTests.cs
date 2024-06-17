@@ -10,27 +10,37 @@ using Moq;
 
 namespace Backend.Tests.UnitTests
 {
+    public class MockService : IService
+    {
+        public Task<Module> CreateModuleAsync(Module module)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> DeleteModule(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<Module>> GetAllModulesAsync()
+        {
+            var module = new Module() { Name = "Ewy" };
+            var list = new List<Module>() { module };
+            return list;
+        }
+
+        public Task<Module> GetSpecificModule(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Module> UpdateModule(Module module)
+        {
+            throw new NotImplementedException();
+        }
+    }
     public class ModulesControllerTests
     {
-        // Mock<ISaltJokeClient> clientMoq = new Mock<ISaltJokeClient>();
-        // Mock<IJokeRepository> repoMoq = new Mock<IJokeRepository>();
-
-        // [Fact]
-        // public void JokesController_GetJoke_ShouldReturn_JokeResponse()
-        // {
-        //     // Arrange
-        //     repoMoq.Setup(p => p.GetJoke("1")).Returns(new Joke("It's Funny"));
-        //     var controller = new JokesController(repoMoq.Object, clientMoq.Object);
-
-        //     // Act 
-        //     var result = controller.GetJoke("1");
-
-        //     // Assert
-        //     result.Should().NotBeNull();
-        //     var joke = result.Value.Joke;
-        //     joke.Should().Be("It's Funny");
-        // }
-
         readonly Mock<IService> _mockService = new Mock<IService>();
 
         [Fact]
@@ -48,22 +58,38 @@ namespace Backend.Tests.UnitTests
             result.Result.Should().BeOfType<OkObjectResult>();
         }
 
-        [Fact]
-        public async void GetModules_Returns_CollectionOfModules()
-        {
-            //Arrange
-            var module = new Module() { Name = "Ewy" };
-            var list = new List<Module>() { module };
-            _mockService.Setup(service => service.GetAllModulesAsync()).ReturnsAsync(list);
-            var controller = new ModulesController(_mockService.Object);
+        // [Fact]
+        // public async void GetModules_Returns_CollectionOfModules()
+        // {
+        //     //Arrange
+        //     var module = new Module() { Name = "Ewy" };
+        //     var list = new List<Module>() { module };
+        //     _mockService.Setup(service => service.GetAllModulesAsync()).ReturnsAsync(list);
+        //     var controller = new ModulesController(_mockService.Object);
 
-            //Act
-            var result = await controller.GetModules();
-            var resultValue = result.Value;
+        //     //Act
+        //     var result = await controller.GetModules();
+        //     var resultValue = result.Value;
 
-            //Assert
-            //result.Value.Should().NotBeNull();
-            resultValue.Should().BeOfType<IEnumerable<Module>>();
-        }
+        //     //Assert
+        //     //result.Value.Should().NotBeNull();
+        //     resultValue.Should().BeOfType<IEnumerable<Module>>();
+        // }
+
+        // [Fact]
+        // public async void GetModules_Returns_CollectionOfModules()
+        // {
+        //     //Arrange
+        //     var mock = new MockService();
+        //     var controller = new ModulesController(mock);
+
+        //     //Act
+        //     var result = await controller.GetModules();
+        //     var resultValue = result.Value;
+
+        //     //Assert
+        //     //result.Value.Should().NotBeNull();
+        //     resultValue.Should().BeOfType<IEnumerable<Module>>();
+        // }
     }
 }

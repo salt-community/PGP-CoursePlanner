@@ -18,7 +18,8 @@ public class ModulesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Module>>> GetModules()
     {
-        return Ok(await _service.GetAllModulesAsync());
+        var response = await _service.GetAllModulesAsync();
+        return Ok(response);
     }
 
     [HttpGet("{id}")]
