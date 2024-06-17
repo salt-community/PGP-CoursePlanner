@@ -4,7 +4,7 @@ using static Backend.Repositories.Repositories;
 
 namespace Backend.Services;
 
-public class ModuleService
+public class ModuleService : IService
 {
     private readonly ModuleRepo _repo;
     
