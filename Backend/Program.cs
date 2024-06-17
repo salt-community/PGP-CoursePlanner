@@ -1,7 +1,7 @@
 using Backend.Data;
 using Backend.Services;
 using Microsoft.EntityFrameworkCore;
-using static Backend.Repositories.Repositories;
+using static Backend.Repositories.SpecificRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
