@@ -5,11 +5,21 @@ using Newtonsoft.Json;
 
 namespace Backend.IntegrationTests
 {
-   public class ModuleControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
+    public class ModuleControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
-        public ModuleControllerIntegrationTests(WebApplicationFactory<Program> fixture) =>
-            _client = fixture.CreateClient();
+        private readonly CustomWebApplicationFactory<Program>
+         _factory;
+
+        public ModuleControllerIntegrationTests(
+            CustomWebApplicationFactory<Program> factory)
+        {
+            _factory = factory;
+            _client = factory.CreateClient(new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false
+            });
+        }
 
         [Fact]
         public async Task GetModules_Returns_ListOfModules()
