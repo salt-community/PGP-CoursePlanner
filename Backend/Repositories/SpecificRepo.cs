@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Repositories
 {
-    public class Repositories
+    public class SpecificRepo
     {
-        public class ModuleRepo : Repo<Module>
+        public class ModuleRepo : AbstractRepo<Module>
         {
             private readonly DataContext _context;
 

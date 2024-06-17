@@ -4,10 +4,10 @@ using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Repositories;
-public abstract class Repo<TEntity> where TEntity : class
+public abstract class AbstractRepo<TEntity> where TEntity : class
 {
     private readonly DataContext _context;
-    protected Repo(DataContext context)
+    protected AbstractRepo(DataContext context)
     {
         _context = context;
     }
