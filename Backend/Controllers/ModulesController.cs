@@ -8,9 +8,9 @@ namespace Backend.Controllers;
 [Route("[controller]")]
 public class ModulesController : ControllerBase
 {
-    private readonly ModuleService _service;
+    private readonly IService _service;
 
-    public ModulesController(ModuleService service)
+    public ModulesController(IService service)
     {
         _service = service;
     }
