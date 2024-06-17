@@ -1,10 +1,7 @@
-using System.Collections.ObjectModel;
 using Backend.Controllers;
 using Backend.Models;
 using Backend.Services;
-using Castle.Components.DictionaryAdapter.Xml;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
