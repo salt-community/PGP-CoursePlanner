@@ -26,7 +26,7 @@ namespace Backend.Tests.IntegrationTests
             // var createResponse = await _client.PostAsync("/api/jokes", null);
 
             // act 
-            var getResponse = await _client.GetAsync("/api/Modules");
+            var getResponse = await _client.GetAsync("/Modules");
 
             var deserializedGetResponse = JsonConvert.DeserializeObject<List<Module>>(
                 await getResponse.Content.ReadAsStringAsync());
