@@ -42,8 +42,6 @@ namespace Backend.IntegrationTests
 
             // assert
             deserializedGetResponse.Should().NotBeNull();
-            // clean up
-            //await _client.DeleteAsync(createResponse.Headers.Location.AbsoluteUri);
 
         }
     }
