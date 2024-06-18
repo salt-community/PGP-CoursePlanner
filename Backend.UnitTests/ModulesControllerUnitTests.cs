@@ -45,7 +45,7 @@ namespace Backend.Tests.UnitTests
         }
         
         [Fact]
-        public async void PostModule_Returns_PostedModule()
+        public async void CreateModule_Returns_CreatedModule()
         {
             //Arrange
             var module = new Module() { Name = "Ewy" };
@@ -55,6 +55,25 @@ namespace Backend.Tests.UnitTests
             //Act
             var result = await controller.CreateModule(module);
             var resultValue = (result.Result as CreatedAtActionResult)!.Value as Module;
+
+            //Assert
+            resultValue.Should().NotBeNull();
+            resultValue.Should().BeOfType<Module>();
+            resultValue.Name.Should().Be("Ewy");
+        }
+
+        [Fact]
+        public async void GetModule_Returns_CorrectModule()
+        {
+            //Arrange
+            var module = new Module() { Id = 1, Name = "Ewy" };
+            _mockService.Setup(service => service.GetSpecificModule(1)).ReturnsAsync(module);
+            var controller = new ModulesController(_mockService.Object);
+
+            //Act
+            await controller.CreateModule(module);
+            var result = await controller.GetModule(1);
+            var resultValue = (result.Result as OkObjectResult)!.Value as Module;
 
             //Assert
             resultValue.Should().NotBeNull();
