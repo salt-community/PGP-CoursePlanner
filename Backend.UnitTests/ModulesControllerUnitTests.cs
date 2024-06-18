@@ -98,6 +98,38 @@ namespace Backend.Tests.UnitTests
         }
 
         [Fact]
+        public async void UpdateModule_Returns_NoContent()
+        {
+            //Arrange
+            var module = new Module() { Id = 1, Name = "Ewy" };
+            _mockService.Setup(service => service.UpdateModule(module)).ReturnsAsync(module);
+            var controller = new ModulesController(_mockService.Object);
+
+            //Act
+            var result = await controller.UpdateModule(1, module);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public async void Updateodule_Returns_BadRequest()
+        {
+            //Arrange
+            var module = new Module() { Id = 1, Name = "Ewy" };
+            _mockService.Setup(service => service.UpdateModule(module)).ReturnsAsync((Module)null);
+            var controller = new ModulesController(_mockService.Object);
+
+            //Act
+            var result = await controller.DeleteModule(1);
+
+            //Assert
+            result.Should().NotBeNull();
+            result.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        [Fact]
         public async void DeleteModule_Returns_NoContent()
         {
             //Arrange
