@@ -95,5 +95,31 @@ namespace Backend.IntegrationTests
             createResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
         }
+
+        [Fact]
+        public async void GetModule_Should_Return_OK_Module()
+        {
+            //arrange
+           using (var scope = _factory.Services.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<DataContext>();
+
+                db.Database.EnsureCreated();
+                Seeding.InitializeTestDB(db);
+            }
+
+            //act
+            var result = await _client.GetAsync("/Modules/1");
+
+
+            //assert
+            result.StatusCode.Should().Be(HttpStatusCode.OK);
+            var responseBody = JsonConvert.DeserializeObject<Module>(
+                await result.Content.ReadAsStringAsync()
+            );
+            responseBody.Name.Length.Should().NotBe(0);
+
+        }
     }
 }
