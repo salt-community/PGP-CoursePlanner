@@ -77,7 +77,7 @@ namespace Backend.IntegrationTests
         }
 
         [Fact]
-        public async void GetJoke_Should_Return_404()
+        public async void GetModule_Should_Return_404()
         {
             //arrange
             using (var scope = _factory.Services.CreateScope())
