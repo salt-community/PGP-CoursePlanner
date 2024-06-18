@@ -75,5 +75,25 @@ namespace Backend.IntegrationTests
             response.Content.Headers.ContentType.Should().BeOfType<MediaTypeHeaderValue>();
 
         }
+
+        [Fact]
+        public async void GetJoke_Should_Return_404()
+        {
+            //arrange
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<DataContext>();
+
+                db.Database.EnsureCreated();
+            }
+
+            //act
+            var createResponse = await _client.GetAsync("/Modules/123");
+
+            //assert
+            createResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+
+        }
     }
 }
