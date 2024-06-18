@@ -19,12 +19,10 @@ namespace Backend.Repositories
 
             public override async Task<List<Module>> GetAllAsync()
             {
-                Console.WriteLine("!!!!!!!!!!!!Repo");
                 var result = await _context.Modules
                                             .Include(module => module.Days)
                                             .ThenInclude(day => day.Events)
                                             .ToListAsync();
-                Console.WriteLine("!!!!!!!!!!Result" + result);
                 return result;
             }
 
@@ -45,17 +43,56 @@ namespace Backend.Repositories
                         .Include(module => module.Days)
                         .ThenInclude(day => day.Events)
                         .FirstOrDefaultAsync(predicate);
+
                     if (response != null)
                     {
                         _context.Remove(response);
                         await _context.SaveChangesAsync();
                     }
+
                     return true;
-
-
                 }
                 catch (Exception ex) { Debug.WriteLine(ex.Message); }
                 return false;
+
+            }
+
+            public override async Task<Module> UpdateAsync(Module module)
+            {
+                try
+                {
+                    var moduleToUpdate = await _context.Modules
+                        .Include(module => module.Days)
+                        .ThenInclude(day => day.Events)
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(m => m.Id == module.Id);
+
+                    if (moduleToUpdate == null)
+                    {
+                        return null!;
+                    }
+
+                    var allDaysInDB = await _context.Days
+                        .Include(day => day.Events)
+                        .AsNoTracking()
+                        .ToListAsync();
+
+                    var daysToDelete = moduleToUpdate.Days
+                        .Where(day => !module.Days
+                        .Any(d => d.Id == day.Id))
+                        .ToList();
+
+                    foreach (var day in daysToDelete)
+                    {
+                        _context.Days.Remove(day);
+                    }
+
+                    _context.Set<Module>().Update(module);
+                    await _context.SaveChangesAsync();
+                    return module;
+                }
+                catch (Exception ex) { Debug.WriteLine(ex.Message); }
+                return null!;
 
             }
         }

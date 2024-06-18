@@ -97,7 +97,7 @@ namespace Backend.IntegrationTests
             var responseBody = JsonConvert.DeserializeObject<Module>(
                 await result.Content.ReadAsStringAsync()
             );
-            responseBody.Name.Length.Should().NotBe(0);
+            responseBody!.Name.Length.Should().NotBe(0);
 
         }
 
@@ -159,7 +159,7 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            var updatedModule = new Module() { Name = "Updated module!", Id = 2};
+            var updatedModule = new Module() { Name = "Updated module!", Id = 2 };
             var content = JsonConvert.SerializeObject(updatedModule);
 
             var body = new StringContent(content, Encoding.UTF8, "application/json");
@@ -185,15 +185,21 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            var updatedModule = new Module(){Name = "UpdatedModule", Id = 1, NumberOfDays = 2, Days = 
+            var updatedModule = new Module()
+            {
+                Name = "UpdatedModule",
+                Id = 1,
+                NumberOfDays = 2,
+                Days =
                 [
-                    new Day(){Description = "Updated test day for TestModule1", DayNumber = 1, Events = 
+                    new Day(){Description = "Updated test day for TestModule1", DayNumber = 1, Events =
                     [
                         new Event() { Name = "TestEvent1", StartTime = "11:00", EndTime = "12:00", Description = "Updated event for TestModule1"},
                         new Event() { Name = "TestEvent2", StartTime = "22:00", EndTime = "23:00", Description = "Added event for TestModule1"}
                     ]},
                     new Day(){Description = "Updated day 2", DayNumber = 2}
-                ]};
+                ]
+            };
 
             var content = JsonConvert.SerializeObject(updatedModule);
 
@@ -212,7 +218,7 @@ namespace Backend.IntegrationTests
                 await result.Content.ReadAsStringAsync()
             );
 
-            responseBody.Name.Should().Be("UpdatedModule");
+            responseBody!.Name.Should().Be("UpdatedModule");
             var days = responseBody.Days.ToList();
             days.Count.Should().Be(2);
             days[1].Events.Count.Should().Be(0);
@@ -220,7 +226,6 @@ namespace Backend.IntegrationTests
             days[0].Description.Should().Be("Updated test day for TestModule1");
             var eventsOfDayOne = days[0].Events.ToList();
             eventsOfDayOne[0].Description.Should().Be("Updated event for TestModule1");
-
         }
     }
 }
