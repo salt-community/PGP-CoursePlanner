@@ -15,11 +15,20 @@ namespace Backend.IntegrationTests
 
         private static List<Module> GetModule()
         {
+
             return new List<Module>()
             {
-                new Module(){Name = "TestModule1"},
+                new Module(){Name = "TestModule1", NumberOfDays = 1, Days = 
+                [
+                    new Day(){Description = "Test day for TestModule1", DayNumber = 1, Events = 
+                    [
+                        new Event() { Name = "Event1", StartTime = "10:00", EndTime = "11:00", Description = "Test event for TestModule1"}
+                    ]}
+                ]},
                 new Module(){Name = "TestModule2"}
             };
         }
+
+       
     }
 }
