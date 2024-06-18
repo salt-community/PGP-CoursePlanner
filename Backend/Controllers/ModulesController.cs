@@ -18,9 +18,7 @@ public class ModulesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Module>>> GetModules()
     {
-        Console.WriteLine("!!!!!!!!!!!!Controller");
         var response = await _service.GetAllModulesAsync();
-        Console.WriteLine("!!!!!!!!!!Response in controller" + response);
         return Ok(response);
     }
 
@@ -35,7 +33,6 @@ public class ModulesController : ControllerBase
         }
         return NotFound("Module does not exist");
     }
-
 
     [HttpPost]
     public async Task<ActionResult<Module>> CreateModule(Module module)
@@ -65,12 +62,12 @@ public class ModulesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteModule(int id)
     {
-       if(!await _service.DeleteModule(id))
-       {
-        return BadRequest("Unable to delete module");
-       }
+        if (!await _service.DeleteModule(id))
+        {
+            return BadRequest("Unable to delete module");
+        }
 
         return NoContent();
     }
-    
+
 }
