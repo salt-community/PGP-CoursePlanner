@@ -43,8 +43,26 @@ namespace Backend.Tests.UnitTests
             resultValue.Should().NotBeNull();
             resultValue.Should().BeOfType<List<Module>>();
         }
-
         
+        [Fact]
+        public async void PostModule_Returns_PostedModule()
+        {
+            //Arrange
+            var module = new Module() { Name = "Ewy" };
+            _mockService.Setup(service => service.CreateModuleAsync(module)).ReturnsAsync(module);
+            var controller = new ModulesController(_mockService.Object);
+
+            //Act
+            var result = await controller.CreateModule(module);
+            var resultValue = (result.Result as CreatedAtActionResult)!.Value as Module;
+
+            //Assert
+            resultValue.Should().NotBeNull();
+            resultValue.Should().BeOfType<Module>();
+            resultValue.Name.Should().Be("Ewy");
+        }
+
+
 
         // public class MockService : IService
         // {
