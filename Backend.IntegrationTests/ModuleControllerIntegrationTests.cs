@@ -216,6 +216,10 @@ namespace Backend.IntegrationTests
             var days = responseBody.Days.ToList();
             days.Count.Should().Be(2);
             days[1].Events.Count.Should().Be(0);
+            days[0].Events.Count.Should().Be(2);
+            days[0].Description.Should().Be("Updated test day for TestModule1");
+            var eventsOfDayOne = days[0].Events.ToList();
+            eventsOfDayOne[0].Description.Should().Be("Updated event for TestModule1");
 
         }
     }
