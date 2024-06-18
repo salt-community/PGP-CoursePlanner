@@ -213,7 +213,10 @@ namespace Backend.IntegrationTests
             );
 
             responseBody.Name.Should().Be("UpdatedModule");
-            responseBody.Days.Count.Should().Be(2);
+            var days = responseBody.Days.ToList();
+            days.Count.Should().Be(2);
+            days[1].Events.Count.Should().Be(0);
+
         }
     }
 }
