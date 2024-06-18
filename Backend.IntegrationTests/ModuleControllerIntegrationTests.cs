@@ -192,7 +192,7 @@ namespace Backend.IntegrationTests
                         new Event() { Name = "TestEvent1", StartTime = "11:00", EndTime = "12:00", Description = "Updated event for TestModule1"},
                         new Event() { Name = "TestEvent2", StartTime = "22:00", EndTime = "23:00", Description = "Added event for TestModule1"}
                     ]},
-                    new Day(){Description = "Added day", DayNumber = 2}
+                    new Day(){Description = "Updated day 2", DayNumber = 2}
                 ]};
 
             var content = JsonConvert.SerializeObject(updatedModule);
@@ -207,10 +207,13 @@ namespace Backend.IntegrationTests
 
             //assert
             result.StatusCode.Should().Be(HttpStatusCode.OK);
+
             var responseBody = JsonConvert.DeserializeObject<Module>(
                 await result.Content.ReadAsStringAsync()
             );
+
             responseBody.Name.Should().Be("UpdatedModule");
+            responseBody.Days.Count.Should().Be(2);
         }
     }
 }
