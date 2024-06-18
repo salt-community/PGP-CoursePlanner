@@ -18,12 +18,17 @@ namespace Backend.IntegrationTests
 
             return new List<Module>()
             {
-                new Module(){Name = "TestModule1", NumberOfDays = 1, Days = 
+                new Module(){Name = "TestModule1", NumberOfDays = 3, Days = 
                 [
-                    new Day(){Description = "Test day for TestModule1", DayNumber = 1, Events = 
+                    new Day(){Description = "Test day 1 for TestModule1", DayNumber = 1, Events = 
                     [
                         new Event() { Name = "Event1", StartTime = "10:00", EndTime = "11:00", Description = "Test event for TestModule1"}
-                    ]}
+                    ]},
+                    new Day(){Description = "Test day 2 for TestModule1", DayNumber = 2, Events = 
+                    [
+                        new Event() { Name = "Event2", StartTime = "10:00", EndTime = "11:00", Description = "Test 2 event for TestModule1"}
+                    ]},
+                    new Day() {Description = "Test day 3 for TestModule1", DayNumber = 3}
                 ]},
                 new Module(){Name = "TestModule2"}
             };
