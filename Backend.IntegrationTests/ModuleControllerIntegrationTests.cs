@@ -35,13 +35,13 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
             // act 
-            var getResponse = await _client.GetAsync("/Modules");
+            var response = await _client.GetAsync("/Modules");
 
-            var deserializedGetResponse = JsonConvert.DeserializeObject<List<Module>>(
-                await getResponse.Content.ReadAsStringAsync());
+            var deserializedResponse = JsonConvert.DeserializeObject<List<Module>>(
+                await response.Content.ReadAsStringAsync());
 
             // assert
-            deserializedGetResponse.Should().NotBeNull();
+            deserializedResponse.Should().NotBeNull();
 
         }
     }
