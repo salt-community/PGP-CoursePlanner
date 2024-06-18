@@ -1,4 +1,6 @@
 using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
 using Backend.Data;
 using Backend.Models;
 using FluentAssertions;
@@ -48,7 +50,7 @@ namespace Backend.IntegrationTests
         }
 
         [Fact]
-        public async Task GetModules_Returns_EmptyListOfModules()
+        public async Task CreateModule_ReturnsSuccess_WithModule()
         {
             //  arrange
             using (var scope = _factory.Services.CreateScope())
@@ -58,17 +60,18 @@ namespace Backend.IntegrationTests
 
                 db.Database.EnsureCreated();
             }
-            // act 
-            var response = await _client.GetAsync("/Modules");
 
-            var deserializedResponse = JsonConvert.DeserializeObject<List<Module>>(
-                await response.Content.ReadAsStringAsync());
+            var newModule = new Module(){Name = "CreatedModule"};
+            var content = JsonConvert.SerializeObject(newModule);
+
+            var body = new StringContent(content, Encoding.UTF8, "application/json");
+            body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            // act 
+            var response = await _client.PostAsync("/Modules", body);
 
             // assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-            deserializedResponse.Should().NotBeNull();
-            deserializedResponse.Should().BeEmpty();
-
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
         }
     }
 }
