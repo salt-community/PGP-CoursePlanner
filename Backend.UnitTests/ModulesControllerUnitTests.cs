@@ -63,6 +63,22 @@ namespace Backend.Tests.UnitTests
         }
 
         [Fact]
+        public async void CreateModule_Returns_BadRequest()
+        {
+            //Arrange
+            var module = new Module() { Name = "Ewy" };
+            _mockService.Setup(service => service.CreateModuleAsync(module)).ReturnsAsync((Module)null);
+            var controller = new ModulesController(_mockService.Object);
+
+            //Act
+            var result = await controller.CreateModule(module);
+            
+            //Assert
+            result.Result.Should().NotBeNull();
+            result.Result.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        [Fact]
         public async void GetModule_Returns_CorrectModule()
         {
             //Arrange

@@ -34,7 +34,6 @@ public class ModulesController : ControllerBase
         return BadRequest("Module does not exist");
     }
 
-
     [HttpPost]
     public async Task<ActionResult<Module>> CreateModule(Module module)
     {
@@ -67,7 +66,7 @@ public class ModulesController : ControllerBase
         {
             return BadRequest("Unable to delete module");
         }
-        
+
         return NoContent();
     }
 
