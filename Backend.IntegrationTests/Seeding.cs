@@ -7,10 +7,12 @@ namespace Backend.IntegrationTests
     {
         public static void InitializeTestDB(DataContext db)
         {
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
             db.Modules.AddRange(GetModule());
             db.SaveChanges();
         }
-        
+
         private static List<Module> GetModule()
         {
             return new List<Module>()

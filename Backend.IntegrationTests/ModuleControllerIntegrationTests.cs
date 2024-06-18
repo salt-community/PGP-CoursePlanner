@@ -33,7 +33,6 @@ namespace Backend.IntegrationTests
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<DataContext>();
 
-                db.Database.EnsureCreated();
                 Seeding.InitializeTestDB(db);
             }
             // act 
@@ -58,7 +57,7 @@ namespace Backend.IntegrationTests
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<DataContext>();
 
-                db.Database.EnsureCreated();
+                Seeding.InitializeTestDB(db);
             }
 
             var newModule = new Module() { Name = "CreatedModule" };
@@ -85,7 +84,7 @@ namespace Backend.IntegrationTests
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<DataContext>();
 
-                db.Database.EnsureCreated();
+                Seeding.InitializeTestDB(db);
             }
 
             //act
@@ -105,7 +104,6 @@ namespace Backend.IntegrationTests
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<DataContext>();
 
-                db.Database.EnsureCreated();
                 Seeding.InitializeTestDB(db);
             }
 
@@ -131,7 +129,6 @@ namespace Backend.IntegrationTests
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<DataContext>();
 
-                db.Database.EnsureCreated();
                 Seeding.InitializeTestDB(db);
             }
 
