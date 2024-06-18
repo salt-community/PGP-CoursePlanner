@@ -100,7 +100,7 @@ namespace Backend.IntegrationTests
         public async void GetModule_Should_Return_OK_Module()
         {
             //arrange
-           using (var scope = _factory.Services.CreateScope())
+            using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<DataContext>();
@@ -119,6 +119,28 @@ namespace Backend.IntegrationTests
                 await result.Content.ReadAsStringAsync()
             );
             responseBody.Name.Length.Should().NotBe(0);
+
+        }
+
+        [Fact]
+        public async void DeleteModule_Should_Return_204()
+        {
+            //arrange
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<DataContext>();
+
+                db.Database.EnsureCreated();
+                Seeding.InitializeTestDB(db);
+            }
+
+            //act
+            var result = await _client.DeleteAsync("/Modules/1");
+
+
+            //assert
+            result.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
         }
     }
