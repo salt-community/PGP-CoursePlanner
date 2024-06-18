@@ -54,6 +54,7 @@ namespace Backend.Tests.UnitTests
             //Assert
             result.Result.Should().BeOfType<OkObjectResult>();
         }
+        // fixed
 
         // [Fact]
         // public async void GetModules_Returns_CollectionOfModules()
