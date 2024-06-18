@@ -1,8 +1,6 @@
-using System.Linq;
-using Backend.Data;
 using Backend.Models;
+using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers;
 
@@ -10,43 +8,43 @@ namespace Backend.Controllers;
 [Route("[controller]")]
 public class ModulesController : ControllerBase
 {
-    private readonly DataContext _context;
+    private readonly IService _service;
 
-    public ModulesController(DataContext context)
+    public ModulesController(IService service)
     {
-        _context = context;
+        _service = service;
     }
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Module>>> GetModules()
     {
-        return await _context.Modules
-        .Include(t => t.Days)
-        .ThenInclude(w => w.Events)
-        .ToListAsync();
+        Console.WriteLine("!!!!!!!!!!!!Controller");
+        var response = await _service.GetAllModulesAsync();
+        Console.WriteLine("!!!!!!!!!!Response in controller" + response);
+        return Ok(response);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Module>> GetModule(int id)
     {
-        var module = await _context.Modules
-        .Include(module => module.Days)
-        .ThenInclude(day => day.Events).FirstOrDefaultAsync(module => module.Id == id);
+        var response = await _service.GetSpecificModule(id);
 
-        if (module == null)
+        if (response != null)
         {
-            return NotFound();
+            return Ok(response);
         }
-        return module;
+        return BadRequest("Module does not exist");
     }
 
 
     [HttpPost]
     public async Task<ActionResult<Module>> CreateModule(Module module)
     {
-        await _context.Modules.AddAsync(module);
-        module.Days.Select(day => _context.Days.Add(day));
-        await _context.SaveChangesAsync();
+        var response = await _service.CreateModuleAsync(module);
+        if (response == null)
+        {
+            return BadRequest("Unable to create module");
+        }
 
         return CreatedAtAction("GetModule", new { id = module.Id }, module);
     }
@@ -54,39 +52,12 @@ public class ModulesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateModule(int id, [FromBody] Module module)
     {
-        if (id != module.Id)
+        var response = await _service.UpdateModule(module);
+
+        if (response == null)
         {
-            return BadRequest();
+            return BadRequest("Unable to update module");
         }
-
-        var moduleToUpdate = await _context.Modules
-        .Include(module => module.Days)
-        .ThenInclude(day => day.Events)
-        .AsNoTracking()
-        .FirstOrDefaultAsync(module => module.Id == id);
-
-        if (moduleToUpdate == null)
-        {
-            return NotFound();
-        }
-
-        var days = await _context.Days.Include(day => day.Events).AsNoTracking().ToListAsync();
-
-        var deleteList = moduleToUpdate.Days.Where(day => !module.Days.Any(putDay => day.Id == putDay.Id)).ToList();
-
-        foreach (var day in deleteList)
-        {
-            _context.Days.Remove(day);
-            Console.WriteLine(day.Id);
-
-        }
-
-        moduleToUpdate = module;
-        moduleToUpdate.Days = module.Days;
-
-        _context.Modules.Update(moduleToUpdate);
-        await _context.SaveChangesAsync();
-
 
         return NoContent();
     }
@@ -94,19 +65,12 @@ public class ModulesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteModule(int id)
     {
-        var moduleToDelete = await _context
-                                        .Modules
-                                        .Include(module => module.Days)
-                                        .ThenInclude(day => day.Events)
-                                        .FirstOrDefaultAsync(module => module.Id == id);
-
-        if (moduleToDelete != null)
-        {
-            _context.Modules.Remove(moduleToDelete);
-
-            await _context.SaveChangesAsync();
-        }
+       if(!await _service.DeleteModule(id))
+       {
+        return BadRequest("Unable to delete module");
+       }
 
         return NoContent();
     }
+    
 }
