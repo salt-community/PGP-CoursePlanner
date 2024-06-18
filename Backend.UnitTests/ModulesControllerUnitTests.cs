@@ -97,7 +97,7 @@ namespace Backend.Tests.UnitTests
         }
 
         [Fact]
-        public async void GetModule_Returns_Badrequest()
+        public async void GetModule_Returns_NotFound()
         {
             //Arrange
             var module = new Module() { Id = 1, Name = "Ewy" };
@@ -110,7 +110,7 @@ namespace Backend.Tests.UnitTests
 
             //Assert
             resultValue.Should().NotBeNull();
-            resultValue.Should().BeOfType<BadRequestObjectResult>();
+            resultValue.Should().BeOfType<NotFoundObjectResult>();
         }
 
         [Fact]
