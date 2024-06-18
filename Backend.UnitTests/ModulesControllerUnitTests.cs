@@ -43,7 +43,7 @@ namespace Backend.Tests.UnitTests
             resultValue.Should().NotBeNull();
             resultValue.Should().BeOfType<List<Module>>();
         }
-        
+
         [Fact]
         public async void CreateModule_Returns_CreatedModule()
         {
@@ -79,6 +79,24 @@ namespace Backend.Tests.UnitTests
             resultValue.Should().NotBeNull();
             resultValue.Should().BeOfType<Module>();
             resultValue.Name.Should().Be("Ewy");
+        }
+
+        [Fact]
+        public async void GetModule_Returns_Badrequest()
+        {
+            //Arrange
+            var module = new Module() { Id = 1, Name = "Ewy" };
+            _mockService.Setup(service => service.GetSpecificModule(1)).ReturnsAsync(module);
+            var controller = new ModulesController(_mockService.Object);
+
+            //Act
+            await controller.CreateModule(module);
+            var result = await controller.GetModule(2);
+            var resultValue = result.Result;
+
+            //Assert
+            resultValue.Should().NotBeNull();
+            resultValue.Should().BeOfType<BadRequestObjectResult>();
         }
 
 
