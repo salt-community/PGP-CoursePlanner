@@ -159,17 +159,58 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            var updatedModule = new Module() { Name = "Updated module!" };
+            var updatedModule = new Module() { Name = "Updated module!", Id = 2};
             var content = JsonConvert.SerializeObject(updatedModule);
 
             var body = new StringContent(content, Encoding.UTF8, "application/json");
             body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             //act
-            var response = await _client.PutAsync("/Modules/1", body);
+            var response = await _client.PutAsync("/Modules/2", body);
 
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+
+
+        [Fact]
+        public async Task UpdatedModule_Should_Have_Correct_Parameters()
+        {
+            //arrange
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<DataContext>();
+
+                Seeding.InitializeTestDB(db);
+            }
+
+            var updatedModule = new Module(){Name = "UpdatedModule", Id = 1, NumberOfDays = 2, Days = 
+                [
+                    new Day(){Description = "Updated test day for TestModule1", DayNumber = 1, Events = 
+                    [
+                        new Event() { Name = "TestEvent1", StartTime = "11:00", EndTime = "12:00", Description = "Updated event for TestModule1"},
+                        new Event() { Name = "TestEvent2", StartTime = "22:00", EndTime = "23:00", Description = "Added event for TestModule1"}
+                    ]},
+                    new Day(){Description = "Added day", DayNumber = 2}
+                ]};
+
+            var content = JsonConvert.SerializeObject(updatedModule);
+
+            var body = new StringContent(content, Encoding.UTF8, "application/json");
+            body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            await _client.PutAsync("/Modules/2", body);
+
+            //act
+            var result = await _client.GetAsync("/Modules/1");
+
+            //assert
+            result.StatusCode.Should().Be(HttpStatusCode.OK);
+            var responseBody = JsonConvert.DeserializeObject<Module>(
+                await result.Content.ReadAsStringAsync()
+            );
+            responseBody.Name.Should().Be("UpdatedModule");
         }
     }
 }
