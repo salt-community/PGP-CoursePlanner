@@ -1,3 +1,4 @@
+using System.Net;
 using Backend.Data;
 using Backend.Models;
 using FluentAssertions;
@@ -41,6 +42,7 @@ namespace Backend.IntegrationTests
                 await response.Content.ReadAsStringAsync());
 
             // assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
             deserializedResponse.Should().NotBeNull();
 
         }
