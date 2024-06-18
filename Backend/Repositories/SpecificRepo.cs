@@ -58,6 +58,19 @@ namespace Backend.Repositories
                 return false;
 
             }
+
+            // public override async Task<Module> UpdateAsync(Module module)
+            // {
+            //     try
+            //     {
+            //         _context.Set<Module>().Update(module);
+            //         await _context.SaveChangesAsync();
+            //         return module;
+            //     }
+            //     catch (Exception ex) { Debug.WriteLine(ex.Message); }
+            //     return null!;
+
+            // }
         }
     }
 }

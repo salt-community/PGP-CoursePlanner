@@ -220,7 +220,6 @@ namespace Backend.IntegrationTests
             days[0].Description.Should().Be("Updated test day for TestModule1");
             var eventsOfDayOne = days[0].Events.ToList();
             eventsOfDayOne[0].Description.Should().Be("Updated event for TestModule1");
-
         }
     }
 }
