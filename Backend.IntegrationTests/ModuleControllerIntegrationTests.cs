@@ -61,7 +61,7 @@ namespace Backend.IntegrationTests
                 db.Database.EnsureCreated();
             }
 
-            var newModule = new Module(){Name = "CreatedModule"};
+            var newModule = new Module() { Name = "CreatedModule" };
             var content = JsonConvert.SerializeObject(newModule);
 
             var body = new StringContent(content, Encoding.UTF8, "application/json");
@@ -72,6 +72,8 @@ namespace Backend.IntegrationTests
 
             // assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
+            response.Content.Headers.ContentType.Should().BeOfType<MediaTypeHeaderValue>();
+
         }
     }
 }
