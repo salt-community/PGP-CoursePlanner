@@ -7,35 +7,6 @@ using Moq;
 
 namespace Backend.Tests.UnitTests
 {
-    public class MockService : IService
-    {
-        public Task<Module> CreateModuleAsync(Module module)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteModule(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<Module>> GetAllModulesAsync()
-        {
-            var module = new Module() { Name = "Ewy" };
-            var list = new List<Module>() { module };
-            return list;
-        }
-
-        public Task<Module> GetSpecificModule(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Module> UpdateModule(Module module)
-        {
-            throw new NotImplementedException();
-        }
-    }
     public class ModulesControllerTests
     {
         readonly Mock<IService> _mockService = new Mock<IService>();
@@ -54,24 +25,56 @@ namespace Backend.Tests.UnitTests
             //Assert
             result.Result.Should().BeOfType<OkObjectResult>();
         }
-        // fixed
 
-        // [Fact]
-        // public async void GetModules_Returns_CollectionOfModules()
+        [Fact]
+        public async void GetModules_Returns_CollectionOfModules()
+        {
+            //Arrange
+            var module = new Module() { Name = "Ewy" };
+            var list = new List<Module>() { module };
+            _mockService.Setup(service => service.GetAllModulesAsync()).ReturnsAsync(list);
+            var controller = new ModulesController(_mockService.Object);
+
+            //Act
+            var result = await controller.GetModules();
+            var resultValue = (result.Result as OkObjectResult)!.Value;
+
+            //Assert
+            resultValue.Should().NotBeNull();
+            resultValue.Should().BeOfType<List<Module>>();
+        }
+
+        
+
+        // public class MockService : IService
         // {
-        //     //Arrange
-        //     var module = new Module() { Name = "Ewy" };
-        //     var list = new List<Module>() { module };
-        //     _mockService.Setup(service => service.GetAllModulesAsync()).ReturnsAsync(list);
-        //     var controller = new ModulesController(_mockService.Object);
+        //     public Task<Module> CreateModuleAsync(Module module)
+        //     {
+        //         throw new NotImplementedException();
+        //     }
 
-        //     //Act
-        //     var result = await controller.GetModules();
-        //     var resultValue = result.Value;
+        //     public Task<bool> DeleteModule(int id)
+        //     {
+        //         throw new NotImplementedException();
+        //     }
 
-        //     //Assert
-        //     //result.Value.Should().NotBeNull();
-        //     resultValue.Should().BeOfType<IEnumerable<Module>>();
+        //     public async Task<List<Module>> GetAllModulesAsync()
+        //     {
+        //         Console.WriteLine("!!!!!In mock service");
+        //         var module = new Module() { Name = "Ewy" };
+        //         var list = new List<Module>() { module };
+        //         return list;
+        //     }
+
+        //     public Task<Module> GetSpecificModule(int id)
+        //     {
+        //         throw new NotImplementedException();
+        //     }
+
+        //     public Task<Module> UpdateModule(Module module)
+        //     {
+        //         throw new NotImplementedException();
+        //     }
         // }
 
         // [Fact]
@@ -83,11 +86,11 @@ namespace Backend.Tests.UnitTests
 
         //     //Act
         //     var result = await controller.GetModules();
-        //     var resultValue = result.Value;
+        //     var resultValue = (result.Result as OkObjectResult).Value;
 
         //     //Assert
-        //     //result.Value.Should().NotBeNull();
-        //     resultValue.Should().BeOfType<IEnumerable<Module>>();
+        //     resultValue.Should().NotBeNull();
+        //     resultValue.Should().BeOfType<List<Module>>();
         // }
     }
 }

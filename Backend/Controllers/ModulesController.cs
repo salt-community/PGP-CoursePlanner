@@ -18,9 +18,7 @@ public class ModulesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Module>>> GetModules()
     {
-        Console.WriteLine("!!!!!!!!!!!!Controller");
         var response = await _service.GetAllModulesAsync();
-        Console.WriteLine("!!!!!!!!!!Response in controller" + response);
         return Ok(response);
     }
 
