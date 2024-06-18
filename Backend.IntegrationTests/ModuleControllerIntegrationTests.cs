@@ -145,5 +145,31 @@ namespace Backend.IntegrationTests
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
         }
+
+        [Fact]
+
+        public async Task UpdateModule_Should_Return_204()
+        {
+            //arrange
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<DataContext>();
+
+                Seeding.InitializeTestDB(db);
+            }
+
+            var updatedModule = new Module() { Name = "Updated module!" };
+            var content = JsonConvert.SerializeObject(updatedModule);
+
+            var body = new StringContent(content, Encoding.UTF8, "application/json");
+            body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            //act
+            var response = await _client.PutAsync("/Modules/1", body);
+
+            //assert
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
     }
 }
