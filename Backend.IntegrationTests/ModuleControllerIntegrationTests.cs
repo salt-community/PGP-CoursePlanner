@@ -50,7 +50,7 @@ namespace Backend.IntegrationTests
         }
 
         [Fact]
-        public async Task CreateModule_ReturnsSuccess_WithModule()
+        public async Task CreateModule_Returns_Success()
         {
             //  arrange
             using (var scope = _factory.Services.CreateScope())
