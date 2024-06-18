@@ -63,12 +63,12 @@ public class ModulesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteModule(int id)
     {
-       if(!await _service.DeleteModule(id))
-       {
-        return BadRequest("Unable to delete module");
-       }
-
+        if (!await _service.DeleteModule(id))
+        {
+            return BadRequest("Unable to delete module");
+        }
+        
         return NoContent();
     }
-    
+
 }
