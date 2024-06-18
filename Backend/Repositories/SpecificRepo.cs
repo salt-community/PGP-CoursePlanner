@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.IO.Compression;
 using System.Linq.Expressions;
 using Backend.Data;
 using Backend.Models;
@@ -20,12 +19,10 @@ namespace Backend.Repositories
 
             public override async Task<List<Module>> GetAllAsync()
             {
-                Console.WriteLine("!!!!!!!!!!!!Repo");
                 var result = await _context.Modules
                                             .Include(module => module.Days)
                                             .ThenInclude(day => day.Events)
                                             .ToListAsync();
-                Console.WriteLine("!!!!!!!!!!Result" + result);
                 return result;
             }
 
@@ -46,14 +43,14 @@ namespace Backend.Repositories
                         .Include(module => module.Days)
                         .ThenInclude(day => day.Events)
                         .FirstOrDefaultAsync(predicate);
+
                     if (response != null)
                     {
                         _context.Remove(response);
                         await _context.SaveChangesAsync();
                     }
+
                     return true;
-
-
                 }
                 catch (Exception ex) { Debug.WriteLine(ex.Message); }
                 return false;
@@ -69,22 +66,23 @@ namespace Backend.Repositories
                         .ThenInclude(day => day.Events)
                         .AsNoTracking()
                         .FirstOrDefaultAsync(m => m.Id == module.Id);
+
                     if (moduleToUpdate == null)
                     {
                         return null!;
                     }
 
-                    var allDays = await _context.Days
+                    var allDaysInDB = await _context.Days
                         .Include(day => day.Events)
                         .AsNoTracking()
                         .ToListAsync();
 
-                    var deletedList = moduleToUpdate.Days
-                    .Where(day => !module.Days
-                    .Any(d => d.Id == day.Id))
-                    .ToList();
+                    var daysToDelete = moduleToUpdate.Days
+                        .Where(day => !module.Days
+                        .Any(d => d.Id == day.Id))
+                        .ToList();
 
-                    foreach (var day in deletedList)
+                    foreach (var day in daysToDelete)
                     {
                         _context.Days.Remove(day);
                     }

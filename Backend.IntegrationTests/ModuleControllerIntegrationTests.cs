@@ -212,7 +212,7 @@ namespace Backend.IntegrationTests
                 await result.Content.ReadAsStringAsync()
             );
 
-            responseBody.Name.Should().Be("UpdatedModule");
+            responseBody!.Name.Should().Be("UpdatedModule");
             var days = responseBody.Days.ToList();
             days.Count.Should().Be(2);
             days[1].Events.Count.Should().Be(0);
