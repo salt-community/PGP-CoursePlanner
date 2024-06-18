@@ -33,7 +33,7 @@ public class ModulesController : ControllerBase
         {
             return Ok(response);
         }
-        return BadRequest("Module does not exist");
+        return NotFound("Module does not exist");
     }
 
 
