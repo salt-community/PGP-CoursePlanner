@@ -2,8 +2,6 @@ using Backend.Data;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using System.Linq;
-using static Backend.Repositories.SpecificRepo;
 
 namespace Backend.Services;
 

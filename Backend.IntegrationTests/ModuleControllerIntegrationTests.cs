@@ -35,6 +35,7 @@ namespace Backend.IntegrationTests
 
                 Seeding.InitializeTestDB(db);
             }
+
             // act 
             var response = await _client.GetAsync("/Modules");
 
@@ -45,7 +46,6 @@ namespace Backend.IntegrationTests
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             deserializedResponse.Should().NotBeNull();
             deserializedResponse.Should().HaveCount(2);
-
         }
 
         [Fact]
@@ -72,7 +72,6 @@ namespace Backend.IntegrationTests
             // assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             response.Content.Headers.ContentType.Should().BeOfType<MediaTypeHeaderValue>();
-
         }
 
 
@@ -98,7 +97,6 @@ namespace Backend.IntegrationTests
                 await result.Content.ReadAsStringAsync()
             );
             responseBody!.Name.Length.Should().NotBe(0);
-
         }
 
         [Fact]
@@ -119,7 +117,6 @@ namespace Backend.IntegrationTests
 
             //assert
             result.StatusCode.Should().Be(HttpStatusCode.NoContent);
-
         }
 
         [Fact]
@@ -133,9 +130,7 @@ namespace Backend.IntegrationTests
 
                 Seeding.InitializeTestDB(db);
             }
-
             await _client.DeleteAsync("/Modules/1");
-
 
             //act
             var response = await _client.GetAsync("/Modules/1");
@@ -143,7 +138,6 @@ namespace Backend.IntegrationTests
 
             // assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-
         }
 
         [Fact]
