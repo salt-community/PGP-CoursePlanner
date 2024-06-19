@@ -70,7 +70,7 @@ public class ModuleService : IService<Module>
             var allDaysInDB = await _context.Days
                 .Include(day => day.Events)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync(); //Is this necessary, it is not used
 
             var daysToDelete = moduleToUpdate.Days
                 .Where(day => !module.Days

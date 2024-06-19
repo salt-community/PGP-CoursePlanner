@@ -67,10 +67,12 @@ public class CourseService : IService<Course>
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
     }
-    public async Task<Course> UpdateAsync(Course T)
+    public async Task<Course> UpdateAsync(Course course)
     {
         try
         {
+            _context.Entry(course).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
