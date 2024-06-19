@@ -180,13 +180,11 @@ namespace Backend.IntegrationTests
             {
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<DataContext>();
-
                 Seeding.InitializeTestDB(db);
             }
 
             //act
             var response = await _client.DeleteAsync("/Modules/1");
-
 
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -200,14 +198,12 @@ namespace Backend.IntegrationTests
             {
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<DataContext>();
-
                 Seeding.InitializeTestDB(db);
             }
             await _client.DeleteAsync("/Modules/1");
 
             //act
             var response = await _client.GetAsync("/Modules/1");
-
 
             // assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);

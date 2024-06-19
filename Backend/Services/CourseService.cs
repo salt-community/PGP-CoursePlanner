@@ -101,7 +101,12 @@ public class CourseService : IService<Course>
     {
         try
         {
-            var course = await _context.Courses.FirstAsync(course => course.Id == id);
+            var course = await _context.Courses
+                .Include(course => course.Modules)
+                .ThenInclude(module => module.Days)
+                .ThenInclude(day => day.Events)
+                .FirstAsync(course => course.Id == id);
+            await _context.Courses.FirstAsync(course => course.Id == id);
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
             return true;

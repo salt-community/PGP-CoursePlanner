@@ -120,7 +120,6 @@ namespace Backend.IntegrationTests
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
-
         [Fact]
         public async Task UpdatedCourse_Should_Have_Correct_Parameters()
         {
@@ -188,13 +187,11 @@ namespace Backend.IntegrationTests
             {
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<DataContext>();
-
                 Seeding.InitializeTestDB(db);
             }
 
             //act
             var response = await _client.DeleteAsync("/Courses/1");
-
 
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
@@ -208,7 +205,6 @@ namespace Backend.IntegrationTests
             {
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<DataContext>();
-
                 Seeding.InitializeTestDB(db);
             }
             await _client.DeleteAsync("/Courses/1");
@@ -216,11 +212,8 @@ namespace Backend.IntegrationTests
             //act
             var response = await _client.GetAsync("/Courses/1");
 
-
             // assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
-
-
     }
 }
