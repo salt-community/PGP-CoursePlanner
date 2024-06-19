@@ -44,12 +44,14 @@ export default function ModuleDetails() {
                                             <th>Day</th>
                                             <th>{day.dayNumber}</th>
                                         </tr>
-                                        <tr>
-                                            <th className="w-1/4">Summary</th>
-                                            <th className="w-1/4">Description</th>
-                                            <th className="w-1/4">Start</th>
-                                            <th className="w-1/4">End</th>
-                                        </tr>
+                                        {day.events.length > 0 &&
+                                            <tr>
+                                                <th className="w-1/4">Summary</th>
+                                                <th className="w-1/4">Description</th>
+                                                <th className="w-1/4">Start</th>
+                                                <th className="w-1/4">End</th>
+                                            </tr>
+                                        }
                                     </thead>
                                     <tbody>
                                         {day.events.length > 0 && day.events.map((event, eventIndex) =>
