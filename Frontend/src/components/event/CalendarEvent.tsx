@@ -17,7 +17,6 @@ export default function CalendarEvent({ dayNumber, setDays, days, index, event}:
 
     const handleDeleteEvent = () => {
         const editedDays = [...days];
-        console.log("removing event ", editedDays[dayNumber-1].events[index]);
         editedDays[dayNumber-1].events.splice(index, 1);
         setDays(editedDays);
     }
