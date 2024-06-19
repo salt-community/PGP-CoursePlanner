@@ -60,22 +60,13 @@ public class CourseController : ControllerBase
         return NoContent();
     }
 
-    // [HttpDelete("{id}")]
-    // public async Task<ActionResult> DeleteCourse(int id)
-    // {
-    //     var course = await _context.Courses.FindAsync(id);
-    //     if (course == null)
-    //     {
-    //         return NotFound();
-    //     }
-    //     _context.Courses.Remove(course);
-    //     await _context.SaveChangesAsync();
-    //     return NoContent();
-    // }
-    // private bool CourseExists(int id)
-    // {
-    //     return _context.Courses.Any(e => e.Id == id);
-    // }
-    //evy är en mört
-
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteCourse(int id)
+    {
+        if (!await _service.DeleteAsync(id))
+        {
+            return BadRequest("Unable to delete course");
+        }
+        return NoContent();
+    }
 }

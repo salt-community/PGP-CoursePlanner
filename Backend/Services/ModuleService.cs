@@ -93,17 +93,12 @@ public class ModuleService : IService<Module>
     {
         try
         {
-            var response = await _context.Modules
+            var module = await _context.Modules
                 .Include(module => module.Days)
                 .ThenInclude(day => day.Events)
-                .FirstOrDefaultAsync(module => module.Id == id);
-
-            if (response != null)
-            {
-                _context.Remove(response);
-                await _context.SaveChangesAsync();
-            }
-
+                .FirstAsync(module => module.Id == id);
+            _context.Remove(module);
+            await _context.SaveChangesAsync();
             return true;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }

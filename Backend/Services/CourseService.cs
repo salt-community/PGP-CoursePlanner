@@ -81,6 +81,10 @@ public class CourseService : IService<Course>
     {
         try
         {
+            var course = await _context.Courses.FirstAsync(course => course.Id == id);
+            _context.Courses.Remove(course);
+            await _context.SaveChangesAsync();
+            return true;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return false;
