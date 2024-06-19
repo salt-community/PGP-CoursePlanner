@@ -42,10 +42,27 @@ public class CourseService : IService<Course>
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
     }
-    public async Task<Course> CreateAsync(Course T)
+    public async Task<Course> CreateAsync(Course course)
     {
         try
         {
+            await _context.Courses.AddAsync(course);
+
+            course.Modules.ToList().ForEach(module =>
+            {
+                _context.Modules.Add(module);
+                module.Days.ToList().ForEach(day =>
+                {
+                    _context.Days.Add(day);
+                    day.Events.ToList().ForEach(eventItem =>
+                    {
+                        _context.Events.Add(eventItem);
+                    });
+                });
+            });
+
+            await _context.SaveChangesAsync();
+            return course;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;

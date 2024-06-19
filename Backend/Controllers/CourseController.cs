@@ -39,35 +39,17 @@ public class CourseController : ControllerBase
         return NotFound("Course does not exist");
     }
 
-    // [HttpPost]
-    // public async Task<IActionResult> CreateCourse([FromBody] Course course)
-    // {
-    //     if (course == null)
-    //     {
-    //         return BadRequest("Course is null.");
-    //     }
+    [HttpPost]
+    public async Task<IActionResult> CreateCourse([FromBody] Course course)
+    {
+        var response = await _service.CreateAsync(course);
+        if (response == null)
+        {
+            return BadRequest("Unable to create course");
+        }
 
-    //     await _context.Courses.AddAsync(course);
-
-    //     course.Modules.ToList().ForEach(module =>
-    //     {
-    //         _context.Modules.Add(module);
-
-    //         module.Days.ToList().ForEach(day =>
-    //         {
-    //             _context.Days.Add(day);
-
-    //             day.Events.ToList().ForEach(eventItem =>
-    //             {
-    //                 _context.Events.Add(eventItem);
-    //             });
-    //         });
-    //     });
-
-    //     await _context.SaveChangesAsync();
-
-    //     return CreatedAtAction("GetCourse", new { id = course.Id }, course);
-    // }
+        return CreatedAtAction("GetCourse", new { id = course.Id }, course);
+    }
 
     // [HttpPut("{id}")]
     // public async Task<IActionResult> UpdateCourse(int id, [FromBody] Course course)
