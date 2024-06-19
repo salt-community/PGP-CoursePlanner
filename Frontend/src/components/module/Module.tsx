@@ -15,9 +15,9 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     const [daysOfModule, setDaysOfModule] = useState<DayType[]>(module.days);
 
     const handleDays = () => {
-        const numOfDays = ([...Array(days).keys()].map(i => i + 1));
+        const numOfDays = ([...Array(days - daysOfModule.length).keys()].map(i => i + 1));
 
-        const editedDays: DayType[] = [];
+        const editedDays = daysOfModule.slice();
         numOfDays.map((num) => {
             const newDay = {
                 dayNumber: num,
