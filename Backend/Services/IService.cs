@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace Backend.Services;
 
-public interface IService
+public interface IService <T>
 {
-    Task<Module> CreateModuleAsync(Module module);
-    Task<List<Module>> GetAllModulesAsync();
-    Task<Module> GetSpecificModule(int id);
-    Task<Module> UpdateModule(Module module);
-    Task<bool> DeleteModule(int id);
+    Task<T> CreateAsync(T T);
+    Task<List<T>> GetAllAsync();
+    Task<T> GetOneAsync(int id);
+    Task<T> UpdateAsync(T T);
+    Task<bool> DeleteAsync(int id);
 }

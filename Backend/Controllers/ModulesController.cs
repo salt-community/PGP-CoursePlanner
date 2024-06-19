@@ -8,9 +8,9 @@ namespace Backend.Controllers;
 [Route("[controller]")]
 public class ModulesController : ControllerBase
 {
-    private readonly IService _service;
+    private readonly IService<Module> _service;
 
-    public ModulesController(IService service)
+    public ModulesController(IService<Module> service)
     {
         _service = service;
     }
@@ -18,14 +18,14 @@ public class ModulesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Module>>> GetModules()
     {
-        var response = await _service.GetAllModulesAsync();
+        var response = await _service.GetAllAsync();
         return Ok(response);
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Module>> GetModule(int id)
     {
-        var response = await _service.GetSpecificModule(id);
+        var response = await _service.GetOneAsync(id);
 
         if (response != null)
         {
@@ -37,7 +37,7 @@ public class ModulesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Module>> CreateModule(Module module)
     {
-        var response = await _service.CreateModuleAsync(module);
+        var response = await _service.CreateAsync(module);
         if (response == null)
         {
             return BadRequest("Unable to create module");
@@ -49,7 +49,7 @@ public class ModulesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateModule(int id, [FromBody] Module module)
     {
-        var response = await _service.UpdateModule(module);
+        var response = await _service.UpdateAsync(module);
 
         if (response == null)
         {
@@ -62,7 +62,7 @@ public class ModulesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteModule(int id)
     {
-        if (!await _service.DeleteModule(id))
+        if (!await _service.DeleteAsync(id))
         {
             return BadRequest("Unable to delete module");
         }

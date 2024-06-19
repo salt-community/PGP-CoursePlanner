@@ -4,29 +4,29 @@ using static Backend.Repositories.SpecificRepo;
 
 namespace Backend.Services;
 
-public class CourseService : IService
+public class CourseService : IService<Course>
 {
-    public Task<Module> CreateModuleAsync(Module module)
+    public Task<Course> CreateAsync(Course T)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> DeleteModule(int id)
+    public Task<bool> DeleteAsync(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<List<Module>> GetAllModulesAsync()
+    public Task<List<Course>> GetAllAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<Module> GetSpecificModule(int id)
+    public Task<Course> GetOneAsync(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Module> UpdateModule(Module module)
+    public Task<Course> UpdateAsync(Course T)
     {
         throw new NotImplementedException();
     }

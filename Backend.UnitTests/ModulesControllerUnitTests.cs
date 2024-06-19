@@ -9,14 +9,14 @@ namespace Backend.Tests.UnitTests
 {
     public class ModulesControllerTests
     {
-        readonly Mock<IService> _mockService = new Mock<IService>();
+        readonly Mock<IService<Module>> _mockService = new Mock<IService<Module>>();
 
         [Fact]
         public async void GetModules_Returns_Ok()
         {
             //Arrange
             var module = new Module() { Name = "Ewy" };
-            _mockService.Setup(service => service.GetAllModulesAsync()).ReturnsAsync(new List<Module>() { module });
+            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(new List<Module>() { module });
             var controller = new ModulesController(_mockService.Object);
 
             //Act
@@ -32,7 +32,7 @@ namespace Backend.Tests.UnitTests
             //Arrange
             var module = new Module() { Name = "Ewy" };
             var list = new List<Module>() { module };
-            _mockService.Setup(service => service.GetAllModulesAsync()).ReturnsAsync(list);
+            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(list);
             var controller = new ModulesController(_mockService.Object);
 
             //Act
@@ -49,7 +49,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             var module = new Module() { Name = "Ewy" };
-            _mockService.Setup(service => service.CreateModuleAsync(module)).ReturnsAsync(module);
+            _mockService.Setup(service => service.CreateAsync(module)).ReturnsAsync(module);
             var controller = new ModulesController(_mockService.Object);
 
             //Act
@@ -67,7 +67,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             var module = new Module() { Name = "Ewy" };
-            _mockService.Setup(service => service.CreateModuleAsync(module)).ReturnsAsync((Module)null);
+            _mockService.Setup(service => service.CreateAsync(module)).ReturnsAsync((Module)null);
             var controller = new ModulesController(_mockService.Object);
 
             //Act
@@ -83,7 +83,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             var module = new Module() { Id = 1, Name = "Ewy" };
-            _mockService.Setup(service => service.GetSpecificModule(1)).ReturnsAsync(module);
+            _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(module);
             var controller = new ModulesController(_mockService.Object);
 
             //Act
@@ -101,7 +101,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             var module = new Module() { Id = 1, Name = "Ewy" };
-            _mockService.Setup(service => service.GetSpecificModule(1)).ReturnsAsync(module);
+            _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(module);
             var controller = new ModulesController(_mockService.Object);
 
             //Act
@@ -118,7 +118,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             var module = new Module() { Id = 1, Name = "Ewy" };
-            _mockService.Setup(service => service.UpdateModule(module)).ReturnsAsync(module);
+            _mockService.Setup(service => service.UpdateAsync(module)).ReturnsAsync(module);
             var controller = new ModulesController(_mockService.Object);
 
             //Act
@@ -134,7 +134,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             var module = new Module() { Id = 1, Name = "Ewy" };
-            _mockService.Setup(service => service.UpdateModule(module)).ReturnsAsync((Module)null);
+            _mockService.Setup(service => service.UpdateAsync(module)).ReturnsAsync((Module)null);
             var controller = new ModulesController(_mockService.Object);
 
             //Act
@@ -149,7 +149,7 @@ namespace Backend.Tests.UnitTests
         public async void DeleteModule_Returns_NoContent()
         {
             //Arrange
-            _mockService.Setup(service => service.DeleteModule(1)).ReturnsAsync(true);
+            _mockService.Setup(service => service.DeleteAsync(1)).ReturnsAsync(true);
             var controller = new ModulesController(_mockService.Object);
 
             //Act
@@ -164,7 +164,7 @@ namespace Backend.Tests.UnitTests
         public async void DeleteModule_Returns_BadRequest()
         {
             //Arrange
-            _mockService.Setup(service => service.DeleteModule(1)).ReturnsAsync(false);
+            _mockService.Setup(service => service.DeleteAsync(1)).ReturnsAsync(false);
             var controller = new ModulesController(_mockService.Object);
 
             //Act
@@ -174,54 +174,5 @@ namespace Backend.Tests.UnitTests
             result.Should().NotBeNull();
             result.Should().BeOfType<BadRequestObjectResult>();
         }
-
-
-
-        // public class MockService : IService
-        // {
-        //     public Task<Module> CreateModuleAsync(Module module)
-        //     {
-        //         throw new NotImplementedException();
-        //     }
-
-        //     public Task<bool> DeleteModule(int id)
-        //     {
-        //         throw new NotImplementedException();
-        //     }
-
-        //     public async Task<List<Module>> GetAllModulesAsync()
-        //     {
-        //         Console.WriteLine("!!!!!In mock service");
-        //         var module = new Module() { Name = "Ewy" };
-        //         var list = new List<Module>() { module };
-        //         return list;
-        //     }
-
-        //     public Task<Module> GetSpecificModule(int id)
-        //     {
-        //         throw new NotImplementedException();
-        //     }
-
-        //     public Task<Module> UpdateModule(Module module)
-        //     {
-        //         throw new NotImplementedException();
-        //     }
-        // }
-
-        // [Fact]
-        // public async void GetModules_Returns_CollectionOfModules()
-        // {
-        //     //Arrange
-        //     var mock = new MockService();
-        //     var controller = new ModulesController(mock);
-
-        //     //Act
-        //     var result = await controller.GetModules();
-        //     var resultValue = (result.Result as OkObjectResult).Value;
-
-        //     //Assert
-        //     resultValue.Should().NotBeNull();
-        //     resultValue.Should().BeOfType<List<Module>>();
-        // }
     }
 }

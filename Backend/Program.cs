@@ -18,7 +18,7 @@ options.UseSqlite(builder.Configuration.GetConnectionString("DataContext") ?? th
 builder.Services.AddCors();
 
 builder.Services.AddScoped<ModuleRepo>();
-builder.Services.AddScoped<IService, ModuleService>();
+builder.Services.AddScoped<IService<Backend.Models.Module>, ModuleService>();
 
 var app = builder.Build();
 
