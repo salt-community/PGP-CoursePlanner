@@ -50,7 +50,7 @@ public class ModuleService : IService<Module>
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
     }
-    public async Task<Module> UpdateAsync(Module module)
+    public async Task<Module> UpdateAsync(int id, Module module)
     {
         try
         {
@@ -58,7 +58,7 @@ public class ModuleService : IService<Module>
                         .Include(module => module.Days)
                         .ThenInclude(day => day.Events)
                         .AsNoTracking()
-                        .FirstOrDefaultAsync(m => m.Id == module.Id);
+                        .FirstOrDefaultAsync(m => m.Id == id);
 
             if (moduleToUpdate == null)
             {
@@ -66,16 +66,15 @@ public class ModuleService : IService<Module>
             }
 
             var daysToDelete = moduleToUpdate.Days
-                .Where(day => !module.Days
-                .Any(d => d.Id == day.Id))
+                .Where(day => !module.Days.Any(d => d.Id == day.Id))
                 .ToList();
-
             foreach (var day in daysToDelete)
             {
                 _context.Days.Remove(day);
             }
 
-            _context.Set<Module>().Update(module);
+            moduleToUpdate = updateModule(module, moduleToUpdate);
+            _context.Set<Module>().Update(moduleToUpdate);
             await _context.SaveChangesAsync();
             return module;
         }
@@ -96,5 +95,14 @@ public class ModuleService : IService<Module>
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return false;
+    }
+
+    private Module updateModule(Module newModule, Module module)
+    {
+        module.Name = newModule.Name;
+        module.NumberOfDays = newModule.NumberOfDays;
+        module.Days = newModule.Days;
+
+        return module;
     }
 }

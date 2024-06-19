@@ -17,7 +17,7 @@ namespace Backend.Tests.UnitTests
             //Arrange
             var course = new Course() { Name = "TestCourse" };
             _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(new List<Course>() { course });
-            var controller = new CourseController(_mockService.Object);
+            var controller = new CoursesController(_mockService.Object);
 
             //Act
             var result = await controller.GetCourses();
@@ -33,7 +33,7 @@ namespace Backend.Tests.UnitTests
             var course = new Course() { Name = "TestCourse" };
             var list = new List<Course>() { course };
             _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(list);
-            var controller = new CourseController(_mockService.Object);
+            var controller = new CoursesController(_mockService.Object);
 
             //Act
             var result = await controller.GetCourses();
@@ -50,7 +50,7 @@ namespace Backend.Tests.UnitTests
             //Arrange
             var course = new Course() { Name = "TestCourse" };
             _mockService.Setup(service => service.CreateAsync(course)).ReturnsAsync(course);
-            var controller = new CourseController(_mockService.Object);
+            var controller = new CoursesController(_mockService.Object);
 
             //Act
             var result = await controller.CreateCourse(course);
@@ -68,7 +68,7 @@ namespace Backend.Tests.UnitTests
             //Arrange
             var course = new Course() { Name = "TestCourse" };
             _mockService.Setup(service => service.CreateAsync(course)).ReturnsAsync((Course)null);
-            var controller = new CourseController(_mockService.Object);
+            var controller = new CoursesController(_mockService.Object);
 
             //Act
             var result = await controller.CreateCourse(course);
@@ -84,7 +84,7 @@ namespace Backend.Tests.UnitTests
             //Arrange
             var course = new Course() { Id = 1, Name = "TestCourse" };
             _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(course);
-            var controller = new CourseController(_mockService.Object);
+            var controller = new CoursesController(_mockService.Object);
 
             //Act
             var result = await controller.GetCourse(1);
@@ -102,7 +102,7 @@ namespace Backend.Tests.UnitTests
             //Arrange
             var course = new Course() { Id = 1, Name = "TestCourse" };
             _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(course);
-            var controller = new CourseController(_mockService.Object);
+            var controller = new CoursesController(_mockService.Object);
 
             //Act
             var result = await controller.GetCourse(2);
@@ -119,7 +119,7 @@ namespace Backend.Tests.UnitTests
             //Arrange
             var course = new Course() { Id = 1, Name = "TestCourse" };
             _mockService.Setup(service => service.UpdateAsync(course)).ReturnsAsync(course);
-            var controller = new CourseController(_mockService.Object);
+            var controller = new CoursesController(_mockService.Object);
 
             //Act
             var result = await controller.UpdateCourse(1, course);
@@ -135,7 +135,7 @@ namespace Backend.Tests.UnitTests
             //Arrange
             var course = new Course() { Id = 1, Name = "TestCourse" };
             _mockService.Setup(service => service.UpdateAsync(course)).ReturnsAsync((Course)null);
-            var controller = new CourseController(_mockService.Object);
+            var controller = new CoursesController(_mockService.Object);
 
             //Act
             var result = await controller.DeleteCourse(1);
@@ -150,7 +150,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             _mockService.Setup(service => service.DeleteAsync(1)).ReturnsAsync(true);
-            var controller = new CourseController(_mockService.Object);
+            var controller = new CoursesController(_mockService.Object);
 
             //Act
             var result = await controller.DeleteCourse(1);
@@ -165,7 +165,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             _mockService.Setup(service => service.DeleteAsync(1)).ReturnsAsync(false);
-            var controller = new CourseController(_mockService.Object);
+            var controller = new CoursesController(_mockService.Object);
 
             //Act
             var result = await controller.DeleteCourse(1);

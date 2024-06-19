@@ -65,12 +65,34 @@ public class CourseService : IService<Course>
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
     }
-    public async Task<Course> UpdateAsync(Course course)
+    public async Task<Course> UpdateAsync(int id, Course course)
     {
         try
         {
-            _context.Entry(course).State = EntityState.Modified;
+            var courseToUpdate = await _context.Courses
+                        .Include(course => course.Modules)
+                        .ThenInclude(module => module.Days)
+                        .ThenInclude(day => day.Events)
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (courseToUpdate == null)
+            {
+                return null!;
+            }
+
+            var modulesToDelete = courseToUpdate.Modules
+                .Where(module => !course.Modules.Any(m => m.Id == module.Id))
+                .ToList();
+            foreach (var module in modulesToDelete)
+            {
+                _context.Modules.Remove(module);
+            }
+
+            courseToUpdate = updateCourse(course, courseToUpdate);
+            _context.Set<Course>().Update(courseToUpdate);
             await _context.SaveChangesAsync();
+            return course;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
@@ -86,5 +108,14 @@ public class CourseService : IService<Course>
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return false;
+    }
+
+    private Course updateCourse(Course newCourse, Course course)
+    {
+        course.Name = newCourse.Name;
+        course.NumberOfWeeks = newCourse.NumberOfWeeks;
+        course.Modules = newCourse.Modules;
+
+        return course;
     }
 }

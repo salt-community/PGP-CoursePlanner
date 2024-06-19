@@ -47,7 +47,7 @@ public class ModulesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateModule(int id, [FromBody] Module module)
     {
-        var response = await _service.UpdateAsync(module);
+        var response = await _service.UpdateAsync(id, module);
         if (response == null)
         {
             return BadRequest("Unable to update module");

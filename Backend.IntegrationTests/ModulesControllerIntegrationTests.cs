@@ -104,11 +104,10 @@ namespace Backend.IntegrationTests
             {
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<DataContext>();
-
                 Seeding.InitializeTestDB(db);
             }
 
-            var updatedModule = new Module() { Name = "Updated module!", Id = 2 };
+            var updatedModule = new Module() { Name = "UpdatedModule", Id = 2 };
             var content = JsonConvert.SerializeObject(updatedModule);
 
             var body = new StringContent(content, Encoding.UTF8, "application/json");
@@ -120,7 +119,6 @@ namespace Backend.IntegrationTests
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
-
 
         [Fact]
         public async Task UpdatedModule_Should_Have_Correct_Parameters()
@@ -141,12 +139,12 @@ namespace Backend.IntegrationTests
                 NumberOfDays = 2,
                 Days =
                 [
-                    new Day(){Description = "Updated test day for TestModule1", DayNumber = 1, Events =
+                    new Day(){Description = "UpdatedDay1 for UpdatedModule", DayNumber = 1, Events =
                     [
-                        new Event() { Name = "TestEvent1", StartTime = "11:00", EndTime = "12:00", Description = "Updated event for TestModule1"},
-                        new Event() { Name = "TestEvent2", StartTime = "22:00", EndTime = "23:00", Description = "Added event for TestModule1"}
+                        new Event() { Name = "UpdatedEvent1", StartTime = "11:00", EndTime = "12:00", Description = "UpdatedEvent1 for UpdatedModule"},
+                        new Event() { Name = "UpdatedEvent2", StartTime = "22:00", EndTime = "23:00", Description = "UpdatedEvent2 for UpdatedModule"}
                     ]},
-                    new Day(){Description = "Updated day 2", DayNumber = 2}
+                    new Day(){Description = "UpdatedDay2", DayNumber = 2}
                 ]
             };
 
@@ -158,23 +156,20 @@ namespace Backend.IntegrationTests
             await _client.PutAsync("/Modules/2", body);
 
             //act
-            var response = await _client.GetAsync("/Modules/1");
+            var response = await _client.GetAsync("/Modules/2");
+            var deserializedResponse = JsonConvert.DeserializeObject<Module>(
+                await response.Content.ReadAsStringAsync());
 
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-            var deserializedResponse = JsonConvert.DeserializeObject<Module>(
-                await response.Content.ReadAsStringAsync()
-            );
-
             deserializedResponse!.Name.Should().Be("UpdatedModule");
+            deserializedResponse!.NumberOfDays.Should().Be(2);
             var days = deserializedResponse.Days.ToList();
             days.Count.Should().Be(2);
-            days[1].Events.Count.Should().Be(0);
+            days[0].Description.Should().Be("UpdatedDay1 for UpdatedModule");
             days[0].Events.Count.Should().Be(2);
-            days[0].Description.Should().Be("Updated test day for TestModule1");
-            var eventsOfDayOne = days[0].Events.ToList();
-            eventsOfDayOne[0].Description.Should().Be("Updated event for TestModule1");
+            days[0].Events.First().Description.Should().Be("UpdatedEvent1 for UpdatedModule");
+            days[1].Events.Count.Should().Be(0);
         }
 
         [Fact]
