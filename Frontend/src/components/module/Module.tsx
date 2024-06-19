@@ -11,23 +11,23 @@ import { useNavigate } from "react-router-dom";
 export default function Module({ submitFunction, module, buttonText }: ModuleProps) {
     const navigate = useNavigate();
     const [moduleName, setModuleName] = useState<string>(module.name);
-    const [days, setDays] = useState<number>(module.days.length);
-    const [daysOfModule, setDaysOfModule] = useState<DayType[]>(module.days);
+    const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
+    const [days, setDays] = useState<DayType[]>(module.days);
 
     const handleDays = () => {
-        const numOfDays = ([...Array(days).keys()].map(i => i + 1));
+        const numOfDaysArray = ([...Array(numOfDays - days.length).keys()].map(i => i + 1));
 
-        const editedDays: DayType[] = [];
-        numOfDays.map((num) => {
+        const editedDays = days.slice();
+        numOfDaysArray.map((num) => {
             const newDay = {
-                dayNumber: num,
+                dayNumber: num +1,
                 description: "",
                 events: []
             };
 
             editedDays.push(newDay)
         })
-        setDaysOfModule(editedDays);
+        setDays(editedDays);
     }
 
     const queryClient = useQueryClient();
@@ -52,7 +52,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
             id: module.id ?? 0,
             name: moduleName.value,
             numberOfDays: numberOfDays.value,
-            days: daysOfModule
+            days: days
         };
 
         mutation.mutate(newModule);
@@ -63,11 +63,11 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
                 <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto flex space-x-8">
                     <InputSmall type="text" name="moduleName" onChange={(e) => setModuleName(e.target.value)} placeholder="Module name" value={moduleName} />
-                    <input type="number" name="numberOfDays" onChange={(e) => setDays(parseInt(e.target.value))} value={days} className="input input-bordered input-sm max-w-xs" placeholder="Number of days" />
+                    <input type="number" name="numberOfDays" onChange={(e) => setNumOfDays(parseInt(e.target.value))} value={numOfDays} className="input input-bordered input-sm max-w-xs" placeholder="Number of days" />
                     <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
                 </div>
                 <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
-                    {daysOfModule.map((day) => <Day key={"day_" + day.dayNumber} setDays={setDaysOfModule} days={daysOfModule} day={day} />)}
+                    {days.map((day) => <Day key={"day_" + day.dayNumber} setDays={setDays} days={days} day={day} />)}
                 </div>
                 <SuccessBtn value={buttonText} />
             </form>
