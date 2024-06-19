@@ -23,8 +23,8 @@ export default function CalendarEvent({ dayNumber, setDays, days, index, event}:
 
     return (
         <tr className="">
-            <td><InputSmall onChange={handleInputChange} name="name" value={event.name} type="text" /></td>
-            <td><InputSmall onChange={handleInputChange} name="description" value={event.description} type="text" /></td>
+            <td><InputSmall onChange={handleInputChange} name="name" value={event.name} type="text" placeholder="Event name"/></td>
+            <td><InputSmall onChange={handleInputChange} name="description" value={event.description} type="text" placeholder="Description"/></td>
             <td><InputSmall onChange={handleInputChange} name="startTime" value={event.startTime} type="time"/></td>
             <td><InputSmall onChange={handleInputChange} name="endTime" value={event.endTime} type="time"/></td>
             <td>
