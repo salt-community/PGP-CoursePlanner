@@ -6,9 +6,11 @@ import DropDown from "../DropDown";
 import PrimaryBtn from "../buttons/PrimaryBtn";
 import { useState } from "react";
 import DeleteBtn from "../buttons/DeleteBtn";
+import { ModuleType } from "../module/Types";
 
 export default function Course() {
     const [numberOfModules, setNumberOfModules] = useState<number[]>([0]);
+    const [courseModules, setCourseModules] = useState<ModuleType[]>([]);
 
     const { data: modules } = useQuery({
         queryKey: ['modules'],
