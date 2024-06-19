@@ -4,10 +4,11 @@ import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Home from './pages/Home.tsx'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import Modules from './pages/Modules.tsx'
-import ModuleDetails from './pages/ModuleDetails.tsx'
-import EditModule from './pages/EditModule.tsx'
-import CreateModule from './pages/CreateModule.tsx'
+import ModuleDetails from './pages/modulePages/ModuleDetails.tsx'
+import EditModule from './pages/modulePages/EditModule.tsx'
+import Modules from './pages/modulePages/Modules.tsx'
+import CreateModule from './pages/modulePages/CreateModule.tsx'
+import Courses from './pages/coursePages/Courses.tsx'
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: "/modules/create/*",
     element: <CreateModule/>,
+  },
+  {
+    path: "/courses",
+    element: <Courses/>,
   },
 ]);
 
