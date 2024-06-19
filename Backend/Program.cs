@@ -1,7 +1,6 @@
 using Backend.Data;
 using Backend.Services;
 using Microsoft.EntityFrameworkCore;
-using static Backend.Repositories.SpecificRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +16,8 @@ options.UseSqlite(builder.Configuration.GetConnectionString("DataContext") ?? th
 
 builder.Services.AddCors();
 
-builder.Services.AddScoped<ModuleRepo>();
 builder.Services.AddScoped<IService<Backend.Models.Module>, ModuleService>();
+builder.Services.AddScoped<IService<Backend.Models.Course>, CourseService>();
 
 var app = builder.Build();
 
