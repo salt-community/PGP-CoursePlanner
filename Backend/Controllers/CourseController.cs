@@ -1,13 +1,8 @@
-
 using Backend.Models;
-using Backend.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using Backend.Services;
 
 namespace Backend.Controllers;
-
 
 [ApiController]
 [Route("[controller]")]
@@ -39,7 +34,7 @@ public class CourseController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCourse([FromBody] Course course)
+    public async Task<ActionResult<Course>> CreateCourse([FromBody] Course course)
     {
         var response = await _service.CreateAsync(course);
         if (response == null)
@@ -61,7 +56,7 @@ public class CourseController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> DeleteCourse(int id)
+    public async Task<IActionResult> DeleteCourse(int id)
     {
         if (!await _service.DeleteAsync(id))
         {

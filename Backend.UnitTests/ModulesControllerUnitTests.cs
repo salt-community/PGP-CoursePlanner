@@ -15,7 +15,7 @@ namespace Backend.Tests.UnitTests
         public async void GetModules_Returns_Ok()
         {
             //Arrange
-            var module = new Module() { Name = "Ewy" };
+            var module = new Module() { Name = "TestModule" };
             _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(new List<Module>() { module });
             var controller = new ModulesController(_mockService.Object);
 
@@ -30,7 +30,7 @@ namespace Backend.Tests.UnitTests
         public async void GetModules_Returns_CollectionOfModules()
         {
             //Arrange
-            var module = new Module() { Name = "Ewy" };
+            var module = new Module() { Name = "TestModule" };
             var list = new List<Module>() { module };
             _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(list);
             var controller = new ModulesController(_mockService.Object);
@@ -48,7 +48,7 @@ namespace Backend.Tests.UnitTests
         public async void CreateModule_Returns_CreatedModule()
         {
             //Arrange
-            var module = new Module() { Name = "Ewy" };
+            var module = new Module() { Name = "TestModule" };
             _mockService.Setup(service => service.CreateAsync(module)).ReturnsAsync(module);
             var controller = new ModulesController(_mockService.Object);
 
@@ -59,14 +59,14 @@ namespace Backend.Tests.UnitTests
             //Assert
             resultValue.Should().NotBeNull();
             resultValue.Should().BeOfType<Module>();
-            resultValue.Name.Should().Be("Ewy");
+            resultValue.Name.Should().Be("TestModule");
         }
 
         [Fact]
         public async void CreateModule_Returns_BadRequest()
         {
             //Arrange
-            var module = new Module() { Name = "Ewy" };
+            var module = new Module() { Name = "TestModule" };
             _mockService.Setup(service => service.CreateAsync(module)).ReturnsAsync((Module)null);
             var controller = new ModulesController(_mockService.Object);
 
@@ -82,7 +82,7 @@ namespace Backend.Tests.UnitTests
         public async void GetModule_Returns_CorrectModule()
         {
             //Arrange
-            var module = new Module() { Id = 1, Name = "Ewy" };
+            var module = new Module() { Id = 1, Name = "TestModule" };
             _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(module);
             var controller = new ModulesController(_mockService.Object);
 
@@ -93,14 +93,14 @@ namespace Backend.Tests.UnitTests
             //Assert
             resultValue.Should().NotBeNull();
             resultValue.Should().BeOfType<Module>();
-            resultValue.Name.Should().Be("Ewy");
+            resultValue.Name.Should().Be("TestModule");
         }
 
         [Fact]
         public async void GetModule_Returns_NotFound()
         {
             //Arrange
-            var module = new Module() { Id = 1, Name = "Ewy" };
+            var module = new Module() { Id = 1, Name = "TestModule" };
             _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(module);
             var controller = new ModulesController(_mockService.Object);
 
@@ -117,7 +117,7 @@ namespace Backend.Tests.UnitTests
         public async void UpdateModule_Returns_NoContent()
         {
             //Arrange
-            var module = new Module() { Id = 1, Name = "Ewy" };
+            var module = new Module() { Id = 1, Name = "TestModule" };
             _mockService.Setup(service => service.UpdateAsync(module)).ReturnsAsync(module);
             var controller = new ModulesController(_mockService.Object);
 
@@ -133,7 +133,7 @@ namespace Backend.Tests.UnitTests
         public async void Updateodule_Returns_BadRequest()
         {
             //Arrange
-            var module = new Module() { Id = 1, Name = "Ewy" };
+            var module = new Module() { Id = 1, Name = "TestModule" };
             _mockService.Setup(service => service.UpdateAsync(module)).ReturnsAsync((Module)null);
             var controller = new ModulesController(_mockService.Object);
 

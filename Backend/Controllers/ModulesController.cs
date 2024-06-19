@@ -26,7 +26,6 @@ public class ModulesController : ControllerBase
     public async Task<ActionResult<Module>> GetModule(int id)
     {
         var response = await _service.GetOneAsync(id);
-
         if (response != null)
         {
             return Ok(response);
@@ -42,7 +41,6 @@ public class ModulesController : ControllerBase
         {
             return BadRequest("Unable to create module");
         }
-
         return CreatedAtAction("GetModule", new { id = module.Id }, module);
     }
 
@@ -50,12 +48,10 @@ public class ModulesController : ControllerBase
     public async Task<IActionResult> UpdateModule(int id, [FromBody] Module module)
     {
         var response = await _service.UpdateAsync(module);
-
         if (response == null)
         {
             return BadRequest("Unable to update module");
         }
-
         return NoContent();
     }
 
@@ -66,8 +62,6 @@ public class ModulesController : ControllerBase
         {
             return BadRequest("Unable to delete module");
         }
-
         return NoContent();
     }
-
 }
