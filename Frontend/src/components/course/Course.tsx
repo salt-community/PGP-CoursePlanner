@@ -35,6 +35,8 @@ export default function Course() {
         setNumberOfModules(editedModules);
     }
 
+    console.log("Course modules: ",);
+
     return (
         <section className="px-4">
             <form className="flex flex-col gap-4 ">
