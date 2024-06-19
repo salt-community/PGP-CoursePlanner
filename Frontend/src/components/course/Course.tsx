@@ -5,6 +5,7 @@ import InputSmall from "../inputFields/InputSmall";
 import DropDown from "../DropDown";
 import PrimaryBtn from "../buttons/PrimaryBtn";
 import { useState } from "react";
+import DeleteBtn from "../buttons/DeleteBtn";
 
 export default function Course() {
     const [numberOfModules, setNumberOfModules] = useState<number[]>([0]);
@@ -26,6 +27,12 @@ export default function Course() {
         setNumberOfModules(editedModules);
     }
 
+    const handleDeleteModule = () => {
+        const editedModules = [...numberOfModules];
+        editedModules.pop();
+        setNumberOfModules(editedModules);
+    }
+
     return (
         <section className="px-4">
             <form className="flex flex-col gap-4 ">
@@ -38,6 +45,7 @@ export default function Course() {
                 {numberOfModules.map((num, index) =>
                     <div key={index} className="flex space-x-8">
                         <DropDown modules={moduleNames} />
+                        <DeleteBtn handleDelete={handleDeleteModule}/>
                         {index + 1 == numberOfModules.length &&
                             <PrimaryBtn onClick={handleAddModules}>+</PrimaryBtn>}
                     </div>)}
