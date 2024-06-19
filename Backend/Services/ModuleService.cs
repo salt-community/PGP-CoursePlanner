@@ -16,17 +16,6 @@ public class ModuleService : IService<Module>
         _context = context;
     }
 
-    public async Task<Module> CreateAsync(Module module)
-    {
-        try
-        {
-            _context.Modules.Add(module);
-            await _context.SaveChangesAsync();
-            return module;
-        }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return null!;
-    }
     public async Task<List<Module>> GetAllAsync()
     {
         try
@@ -48,6 +37,17 @@ public class ModuleService : IService<Module>
                         .Include(module => module.Days)
                         .ThenInclude(day => day.Events)
                         .FirstOrDefaultAsync(module => module.Id == id) ?? null!;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
+    }
+    public async Task<Module> CreateAsync(Module module)
+    {
+        try
+        {
+            _context.Modules.Add(module);
+            await _context.SaveChangesAsync();
+            return module;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;

@@ -1,4 +1,7 @@
+using Backend.Data;
 using Backend.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Linq;
 using static Backend.Repositories.SpecificRepo;
 
@@ -6,28 +9,56 @@ namespace Backend.Services;
 
 public class CourseService : IService<Course>
 {
-    public Task<Course> CreateAsync(Course T)
-    {
-        throw new NotImplementedException();
-    }
+    private readonly DataContext _context;
 
-    public Task<bool> DeleteAsync(int id)
+    public CourseService(DataContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
     }
-
-    public Task<List<Course>> GetAllAsync()
+    public async Task<List<Course>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        try
+        {
+            var result = await _context.Courses
+                            .Include(m => m.Modules)
+                            .ThenInclude(t => t.Days)
+                            .ThenInclude(w => w.Events)
+                            .ToListAsync();
+            return result;
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
     }
-
-    public Task<Course> GetOneAsync(int id)
+    public async Task<Course> GetOneAsync(int id)
     {
-        throw new NotImplementedException();
+        try
+        {
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
     }
-
-    public Task<Course> UpdateAsync(Course T)
+    public async Task<Course> CreateAsync(Course T)
     {
-        throw new NotImplementedException();
+        try
+        {
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
+    }
+    public async Task<Course> UpdateAsync(Course T)
+    {
+        try
+        {
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return null!;
+    }
+    public async Task<bool> DeleteAsync(int id)
+    {
+        try
+        {
+        }
+        catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        return false;
     }
 }
