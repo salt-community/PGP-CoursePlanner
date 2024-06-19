@@ -20,11 +20,11 @@ public class ModuleService : IService<Module>
     {
         try
         {
-            var result = await _context.Modules
+            var modules = await _context.Modules
                             .Include(module => module.Days)
                             .ThenInclude(day => day.Events)
                             .ToListAsync();
-            return result;
+            return modules;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;

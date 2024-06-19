@@ -19,12 +19,12 @@ public class CourseService : IService<Course>
     {
         try
         {
-            var result = await _context.Courses
+            var courses = await _context.Courses
                             .Include(m => m.Modules)
                             .ThenInclude(t => t.Days)
                             .ThenInclude(w => w.Events)
                             .ToListAsync();
-            return result;
+            return courses;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
@@ -33,6 +33,11 @@ public class CourseService : IService<Course>
     {
         try
         {
+            return await _context.Courses
+                            .Include(m => m.Modules)
+                            .ThenInclude(t => t.Days)
+                            .ThenInclude(w => w.Events)
+                            .FirstOrDefaultAsync(course => course.Id == id) ?? null!;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
