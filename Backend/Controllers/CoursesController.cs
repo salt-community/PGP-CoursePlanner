@@ -6,11 +6,11 @@ namespace Backend.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CourseController : ControllerBase
+public class CoursesController : ControllerBase
 {
     private readonly IService<Course> _service;
 
-    public CourseController(IService<Course> service)
+    public CoursesController(IService<Course> service)
     {
         _service = service;
     }
