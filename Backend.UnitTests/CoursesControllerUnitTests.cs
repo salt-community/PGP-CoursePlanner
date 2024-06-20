@@ -118,7 +118,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             var course = new Course() { Id = 1, Name = "TestCourse" };
-            _mockService.Setup(service => service.UpdateAsync(course)).ReturnsAsync(course);
+            _mockService.Setup(service => service.UpdateAsync(1, course)).ReturnsAsync(course);
             var controller = new CoursesController(_mockService.Object);
 
             //Act
@@ -134,7 +134,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             var course = new Course() { Id = 1, Name = "TestCourse" };
-            _mockService.Setup(service => service.UpdateAsync(course)).ReturnsAsync((Course)null);
+            _mockService.Setup(service => service.UpdateAsync(1, course)).ReturnsAsync((Course)null);
             var controller = new CoursesController(_mockService.Object);
 
             //Act

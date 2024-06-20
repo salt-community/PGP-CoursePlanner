@@ -118,7 +118,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             var module = new Module() { Id = 1, Name = "TestModule" };
-            _mockService.Setup(service => service.UpdateAsync(module)).ReturnsAsync(module);
+            _mockService.Setup(service => service.UpdateAsync(1, module)).ReturnsAsync(module);
             var controller = new ModulesController(_mockService.Object);
 
             //Act
@@ -134,7 +134,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             var module = new Module() { Id = 1, Name = "TestModule" };
-            _mockService.Setup(service => service.UpdateAsync(module)).ReturnsAsync((Module)null);
+            _mockService.Setup(service => service.UpdateAsync(1, module)).ReturnsAsync((Module)null);
             var controller = new ModulesController(_mockService.Object);
 
             //Act
