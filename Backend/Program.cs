@@ -1,13 +1,12 @@
 using Backend.Data;
 using Backend.Services;
 using Microsoft.EntityFrameworkCore;
-using static Backend.Repositories.SpecificRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -17,8 +16,8 @@ options.UseSqlite(builder.Configuration.GetConnectionString("DataContext") ?? th
 
 builder.Services.AddCors();
 
-builder.Services.AddScoped<ModuleRepo>();
-builder.Services.AddScoped<IService, ModuleService>();
+builder.Services.AddScoped<IService<Backend.Models.Module>, ModuleService>();
+builder.Services.AddScoped<IService<Backend.Models.Course>, CourseService>();
 
 var app = builder.Build();
 
@@ -42,6 +41,4 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program {
-    
-}
+public partial class Program {}
