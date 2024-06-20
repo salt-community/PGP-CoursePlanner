@@ -20,7 +20,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         const editedDays = days.slice();
         numOfDaysArray.map((num) => {
             const newDay = {
-                dayNumber: num +1,
+                dayNumber: num + days.length,
                 description: "",
                 events: []
             };
