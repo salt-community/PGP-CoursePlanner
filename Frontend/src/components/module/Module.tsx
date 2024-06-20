@@ -55,7 +55,6 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
             days: days
         };
 
-        console.log("New module: ",newModule);
         mutation.mutate(newModule);
     }
 
