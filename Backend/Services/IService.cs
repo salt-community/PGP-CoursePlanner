@@ -1,7 +1,3 @@
-using Backend.Models;
-using System.Linq;
-
-
 namespace Backend.Services;
 
 public interface IService <T>
