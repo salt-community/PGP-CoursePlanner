@@ -5,6 +5,7 @@ type Props = {
     modules: ModuleType[];
     setModules: React.Dispatch<React.SetStateAction<ModuleType[]>>
     selectedModules: ModuleType[];
+    index: number;
 }
 
 export default function DropDown({selectedModules, modules, setModules }: Props) {
