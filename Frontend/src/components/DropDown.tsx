@@ -7,10 +7,10 @@ type Props = {
     selectedModules: ModuleType[];
 }
 
-export default function DropDown({modules, setModules }: Props) {
+export default function DropDown({selectedModules, modules, setModules }: Props) {
 
     const handleChange = (event: SyntheticEvent) => {
-        const addedModules: ModuleType[] = [];
+        const addedModules: ModuleType[] = [...selectedModules];
         const moduleToAdd = modules.find(module => module.id == parseInt((event.target as HTMLSelectElement).value));
         moduleToAdd && addedModules.push(moduleToAdd);
         setModules(addedModules);
