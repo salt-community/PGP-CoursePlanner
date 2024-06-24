@@ -80,15 +80,15 @@ public class CourseService : IService<Course>
                 return null!;
             }
 
-            var modulesToDelete = courseToUpdate.Modules
-                .Where(module => !course.Modules.Any(m => m.Id == module.Id))
-                .ToList();
-            foreach (var module in modulesToDelete)
-            {
-                courseToUpdate.Modules.Remove(module);
-                await _context.SaveChangesAsync();
+            // var modulesToDelete = courseToUpdate.Modules
+            //     .Where(module => !course.Modules.Any(m => m.Id == module.Id))
+            //     .ToList();
+            // foreach (var module in modulesToDelete)
+            // {
+            //     courseToUpdate.Modules.Remove(module);
+            //     await _context.SaveChangesAsync();
 
-            }
+            // }
 
             courseToUpdate = updateCourse(course, courseToUpdate);
             _context.Set<Course>().Update(courseToUpdate);
