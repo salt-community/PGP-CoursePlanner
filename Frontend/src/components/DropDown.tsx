@@ -4,14 +4,16 @@ import { ModuleType } from "./module/Types";
 type Props = {
     modules: ModuleType[];
     setModules: React.Dispatch<React.SetStateAction<ModuleType[]>>
+    selectedModules: ModuleType[];
+    index: number;
 }
 
-export default function DropDown({modules, setModules }: Props) {
+export default function DropDown({index, selectedModules, modules, setModules }: Props) {
 
     const handleChange = (event: SyntheticEvent) => {
-        const addedModules: ModuleType[] = [];
+        const addedModules: ModuleType[] = [...selectedModules];
         const moduleToAdd = modules.find(module => module.id == parseInt((event.target as HTMLSelectElement).value));
-        moduleToAdd && addedModules.push(moduleToAdd);
+        addedModules[index] = moduleToAdd!;
         setModules(addedModules);
     }
     return (
