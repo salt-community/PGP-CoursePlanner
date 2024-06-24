@@ -1,8 +1,8 @@
-import { Course } from "../components/course/Types";
+import { CourseType } from "../components/course/Types";
 
 const BASE_URL = "http://localhost:5268/Courses";
 
-export async function postCourse(course: Course) {
+export async function postCourse(course: CourseType) {
     const response = await fetch(BASE_URL, {
       method: "POST",
       headers: {
