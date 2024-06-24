@@ -73,7 +73,6 @@ public class CourseService : IService<Course>
                         .Include(course => course.Modules)
                         .ThenInclude(module => module.Days)
                         .ThenInclude(day => day.Events)
-                        .AsNoTracking()
                         .FirstOrDefaultAsync(m => m.Id == id);
 
             if (courseToUpdate == null)
@@ -86,7 +85,9 @@ public class CourseService : IService<Course>
                 .ToList();
             foreach (var module in modulesToDelete)
             {
-                _context.Modules.Remove(module);
+                courseToUpdate.Modules.Remove(module);
+                await _context.SaveChangesAsync();
+
             }
 
             courseToUpdate = updateCourse(course, courseToUpdate);
