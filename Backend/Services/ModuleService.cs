@@ -65,12 +65,23 @@ public class ModuleService : IService<Module>
                 return null!;
             }
 
-            var daysToDelete = moduleToUpdate.Days
-                .Where(day => !module.Days.Any(d => d.Id == day.Id))
-                .ToList();
-            foreach (var day in daysToDelete)
+            foreach (var oldDay in moduleToUpdate.Days)
             {
-                _context.Days.Remove(day);
+                var newDay = module.Days.FirstOrDefault(d => d.Id == oldDay.Id);
+                if (newDay != null)
+                {
+                    var eventsToDelete = oldDay.Events
+                        .Where(eventItem => !newDay.Events.Any(e => e.Id == eventItem.Id))
+                        .ToList();
+                    foreach (var eventItem in eventsToDelete)
+                    {
+                        _context.Events.Remove(eventItem);
+                    }
+                }
+                else
+                {
+                    _context.Days.Remove(oldDay);
+                }
             }
 
             moduleToUpdate = updateModule(module, moduleToUpdate);
