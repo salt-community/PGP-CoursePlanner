@@ -48,6 +48,8 @@ export default function Course() {
             modules: courseModules,
         };
 
+        console.log("course to post: ", newCourse);
+
         postCourse(newCourse);
     }
 
