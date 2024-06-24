@@ -1,6 +1,7 @@
 import { EventType } from "../event/Types";
 
 export type DayType = {
+  id?: number;
   dayNumber: number;
   description: string;
   events: EventType[];

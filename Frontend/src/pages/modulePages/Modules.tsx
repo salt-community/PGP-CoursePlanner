@@ -1,7 +1,8 @@
 import { useQuery } from "react-query";
-import { getAllModules } from "../api/ModuleApi";
+import { getAllModules } from "../../api/ModuleApi";
+import Page from "../../components/Page";
 import { Link } from "react-router-dom";
-import Page from "../components/Page";
+
 
 export default function Modules() {
 

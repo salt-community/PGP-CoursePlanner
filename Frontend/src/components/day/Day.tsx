@@ -27,7 +27,6 @@ export default function Day({ day, setDays, days }: DayProps) {
         setDays(editedDays);
     }
 
-    console.log("day:", day)
 
     return (
         <>

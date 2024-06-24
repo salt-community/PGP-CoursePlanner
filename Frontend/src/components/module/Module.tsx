@@ -15,18 +15,25 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     const [days, setDays] = useState<DayType[]>(module.days);
 
     const handleDays = () => {
-        const numOfDaysArray = ([...Array(numOfDays - days.length).keys()].map(i => i + 1));
-
         const editedDays = days.slice();
-        numOfDaysArray.map((num) => {
-            const newDay = {
-                dayNumber: num +1,
-                description: "",
-                events: []
-            };
+        if (numOfDays < days.length) {
+            editedDays.splice(numOfDays, days.length - numOfDays);
+        }
 
-            editedDays.push(newDay)
-        })
+        else {
+            const numOfDaysArray = ([...Array(numOfDays - days.length).keys()].map(i => i + 1));
+
+            numOfDaysArray.map((num) => {
+                const newDay = {
+                    dayNumber: num + days.length,
+                    description: "",
+                    events: []
+                };
+
+                editedDays.push(newDay)
+            })
+
+        }
         setDays(editedDays);
     }
 
