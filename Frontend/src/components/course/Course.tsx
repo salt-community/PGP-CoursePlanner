@@ -22,12 +22,6 @@ export default function Course() {
         queryFn: getAllModules
     });
 
-    // const moduleNames: string[] = [];
-
-    // if (modules) {
-    //     modules.forEach(module => moduleNames.push(module.name));
-    // }
-
     const handleAddModules = () => {
         const editedModules = [...courseModules];
         editedModules.push(newModule);
