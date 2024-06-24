@@ -49,7 +49,7 @@ export default function Course() {
 
                 {modules && numberOfModules.map((num, index) =>
                     <div key={index} className="flex space-x-8">
-                        <DropDown modules={modules} setModules={setCourseModules} />
+                        <DropDown selectedModules={courseModules} modules={modules} setModules={setCourseModules} />
                         <DeleteBtn handleDelete={handleDeleteModule}/>
                         {index + 1 == numberOfModules.length &&
                             <PrimaryBtn onClick={handleAddModules}>+</PrimaryBtn>}

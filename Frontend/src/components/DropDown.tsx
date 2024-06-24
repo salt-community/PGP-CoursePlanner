@@ -4,6 +4,7 @@ import { ModuleType } from "./module/Types";
 type Props = {
     modules: ModuleType[];
     setModules: React.Dispatch<React.SetStateAction<ModuleType[]>>
+    selectedModules: ModuleType[];
 }
 
 export default function DropDown({modules, setModules }: Props) {
