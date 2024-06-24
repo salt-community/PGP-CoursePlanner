@@ -1,6 +1,6 @@
 import { ModuleType } from "../module/Types";
 
-export type Course = {
+export type CourseType = {
     name: string;
     numberOfWeeks: number;
     modules: ModuleType[];
