@@ -28,7 +28,7 @@ export default function DropDown({ index, selectedModules, modules, setModules }
                     : <>
                         {modules.map(module =>
                             <> {module.id == selectedModules[index].id
-                                ? <option value="DEFAULT" >{module.name}</option>
+                                ? <option key={module.id} value="DEFAULT">{module.name}</option>
                                 : <option key={module.id} value={module.id}>{module.name}</option>}
                             </>)}
                     </>}

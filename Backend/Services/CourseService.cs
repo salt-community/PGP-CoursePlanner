@@ -79,6 +79,15 @@ public class CourseService : IService<Course>
 
             // }
 
+            List<Module> modulesInList = new List<Module>(0);
+            foreach (var module in course.Modules)
+            {
+                var moduleInDb = await _context.Modules.FirstAsync(m => m.Id == module.Id);
+                modulesInList.Add(moduleInDb);
+            }
+            // var modulesInList = _context.Modules.Where(module => course.Modules.Contains(module)).ToList();
+            course.Modules = modulesInList;
+
             courseToUpdate = updateCourse(course, courseToUpdate);
             _context.Set<Course>().Update(courseToUpdate);
             await _context.SaveChangesAsync();
