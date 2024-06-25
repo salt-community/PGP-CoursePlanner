@@ -19,6 +19,7 @@ export default function DropDown({index, selectedModules, modules, setModules }:
     return (
         <div className="flex flex-col justify-center">
             <select className="border border-gray-300 rounded-lg mt-2 max-w-xs p-1" onChange={handleChange} >
+                <option>Select module</option>
                 {modules.map(module =>
                     <option key={module.id} value={module.id}>{module.name}</option>)}
             </select>

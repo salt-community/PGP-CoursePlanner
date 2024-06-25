@@ -17,7 +17,7 @@ export default function Courses() {
                 {isLoading && <p>Loading...</p>}
                 {isError && <p>An error occured...</p>}
                 {data &&
-                    <Link to={"/courses/create"} className="border border-black bg-base-300 pb-[100%] relative">
+                    <Link to={"/courses/create"} className="border border-black bg-primary text-white pb-[100%] relative">
                         <div className="absolute inset-0 flex items-center justify-center flex-col gap-4">
                             Create new course
                         </div>

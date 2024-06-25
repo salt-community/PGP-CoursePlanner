@@ -10,6 +10,8 @@ import Modules from './pages/modulePages/Modules.tsx'
 import CreateModule from './pages/modulePages/CreateModule.tsx'
 import Courses from './pages/coursePages/Courses.tsx'
 import CreateCourse from './pages/coursePages/CreateCourse.tsx'
+import CourseDetails from './pages/coursePages/CourseDetails.tsx'
+import EditCourse from './pages/coursePages/EditCourse.tsx'
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,14 @@ const router = createBrowserRouter([
   {
     path: "/courses",
     element: <Courses/>,
+  },
+  {
+    path: "/courses/details/*",
+    element: <CourseDetails/>,
+  },
+  {
+    path: "/courses/edit/*",
+    element: <EditCourse/>,
   },
   {
     path: "/courses/create/*",

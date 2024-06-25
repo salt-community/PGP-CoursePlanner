@@ -18,7 +18,7 @@ export default function NavBar() {
     // </div>
 
     <>
-      <div className="navbar mb-5 md:mb-10 animate-fade-down">
+      <div className="navbar mb-5 md:mb-10 animate-fade-down border-b">
         <div className="navbar-start">
           <div className="dropdown bg-white">
             <div
