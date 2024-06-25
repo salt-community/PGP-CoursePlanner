@@ -64,7 +64,7 @@ export default function Course() {
                     <button type="button" className="btn btn-sm max-w-48 btn-primary">Apply</button>
                 </div>
 
-                {modules && courseModules.map((num, index) =>
+                {modules && courseModules.map((_num, index) =>
                     <div key={index} className="flex space-x-8">
                         <DropDown index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} />
                         <DeleteBtn handleDelete={() => handleDeleteModule(index)} />
