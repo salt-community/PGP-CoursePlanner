@@ -46,18 +46,18 @@ public class CourseService : IService<Course>
         {
             await _context.Courses.AddAsync(course);
 
-            course.Modules.ToList().ForEach(module =>
-            {
-                _context.Modules.Add(module);
-                module.Days.ToList().ForEach(day =>
-                {
-                    _context.Days.Add(day);
-                    day.Events.ToList().ForEach(eventItem =>
-                    {
-                        _context.Events.Add(eventItem);
-                    });
-                });
-            });
+            // course.Modules.ToList().ForEach(module =>
+            // {
+            //     _context.Modules.Add(module);
+            //     module.Days.ToList().ForEach(day =>
+            //     {
+            //         _context.Days.Add(day);
+            //         day.Events.ToList().ForEach(eventItem =>
+            //         {
+            //             _context.Events.Add(eventItem);
+            //         });
+            //     });
+            // });
 
             await _context.SaveChangesAsync();
             return course;
