@@ -15,6 +15,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const [courseName, setCourseName] = useState<string>(course.name);
     const [numOfWeeks, setNumOfWeeks] = useState<number>(course.numberOfWeeks);
     const [courseModules, setCourseModules] = useState<ModuleType[]>(course.modules);
+    const [isIncorrectModuleInput, setIsIncorrectModuleInput] = useState<boolean>(false);
+    const [isIncorrectName, setIsIncorrectName] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const { data: modules } = useQuery({
@@ -61,16 +63,30 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         const { courseName } = e.target as typeof e.target & { courseName: { value: string } };
         const { numberOfWeeks } = e.target as typeof e.target & { numberOfWeeks: { value: number } };
 
-        const newCourse: CourseType = {
-            id: course.id ?? 0,
-            name: courseName.value,
-            numberOfWeeks: numberOfWeeks.value,
-            modules: courseModules,
-        };
+        setIsIncorrectModuleInput(false);
+        setIsIncorrectName(false);
 
-        console.log("course to post: ", newCourse);
+        const mySet = new Set(courseModules);
+        if (mySet.size !== courseModules.length || courseName.value == "" || numberOfWeeks.value == 0) {
+            if (mySet.size !== courseModules.length)
+                setIsIncorrectModuleInput(true);
+            if (courseName.value == "" || numberOfWeeks.value == 0)
+                setIsIncorrectName(true);
+        }
+        else {
+            setIsIncorrectModuleInput(false);
+            setIsIncorrectName(false);
 
-        mutation.mutate(newCourse);
+            const newCourse: CourseType = {
+                id: course.id ?? 0,
+                name: courseName.value,
+                numberOfWeeks: numberOfWeeks.value,
+                modules: courseModules,
+            };
+
+            console.log("course to post: ", newCourse);
+            mutation.mutate(newCourse);
+        }
     }
 
     console.log("Course modules: ", courseModules);
@@ -83,14 +99,18 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                     <input type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} className="input input-bordered input-sm max-w-xs" placeholder="Number of weeks" />
                     <PrimaryBtn onClick={handleNumberOfWeeks}>Apply</PrimaryBtn>
                 </div>
+                {isIncorrectName &&
+                    <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
                 {modules && courseModules.map((_num, index) =>
                     <div key={index} className="flex space-x-8">
-                        <DropDown index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules}/>
+                        <DropDown index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} isCreate={buttonText == "Create"} />
                         {courseModules.length > 1 &&
-                        <DeleteBtn handleDelete={() => handleDeleteModule(index)} />}
+                            <DeleteBtn handleDelete={() => handleDeleteModule(index)} />}
                         {index + 1 == courseModules.length &&
-                        <PrimaryBtn onClick={handleAddModules}>+</PrimaryBtn>}
+                            <PrimaryBtn onClick={handleAddModules}>+</PrimaryBtn>}
                     </div>)}
+                {isIncorrectModuleInput &&
+                    <p className="error-message text-red-600 text-sm" id="invalid-helper">Cannot select duplicate modules</p>}
                 <SuccessBtn value={buttonText} />
             </form>
         </section>
