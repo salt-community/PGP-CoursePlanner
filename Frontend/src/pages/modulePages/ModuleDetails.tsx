@@ -46,8 +46,8 @@ export default function ModuleDetails() {
                                     <tbody>
                                         {day.events.length > 0 &&
                                             <tr>
-                                                <th className="text-sm w-1/3">Summary</th>
-                                                <th className="text-sm w-1/3">Description</th>
+                                                <th className="text-sm w-1/3">Event summary</th>
+                                                <th className="text-sm w-1/3">Event description</th>
                                                 <th className="text-sm w-1/6">Start</th>
                                                 <th className="text-sm w-1/6">End</th>
                                             </tr>

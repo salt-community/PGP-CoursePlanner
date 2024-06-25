@@ -27,7 +27,6 @@ export default function CourseDetails() {
     })
 
     return (
-
         <Page>
             {isLoading && <p>Loading...</p>}
             {isError && <p>An error occured</p>}
@@ -40,38 +39,36 @@ export default function CourseDetails() {
                                 <table className="table table-sm lg:table-lg" key={"module_" + index}>
                                     <thead>
                                         <tr className="text-lg">
-                                            <th>{module.name} ({module.numberOfDays} days)</th>
+                                            <Link to={`/modules/details/${module.id}`}>
+                                                <th>Module {index+1}: {module.name}</th>
+                                            </Link>
                                         </tr>
                                     </thead>
-                                    {/* <tbody>
-                                        {day.events.length > 0 &&
-                                            <tr>
-                                                <th className="text-sm w-1/3">Summary</th>
-                                                <th className="text-sm w-1/3">Description</th>
-                                                <th className="text-sm w-1/6">Start</th>
-                                                <th className="text-sm w-1/6">End</th>
-                                            </tr>
-                                        }
-                                        {day.events.length > 0 && day.events.map((event, eventIndex) =>
-                                            <tr key={eventIndex}>
-                                                <td className="text-sm w-1/3">{event.name}</td>
-                                                <td className="text-sm w-1/3">{event.description}</td>
-                                                <td className="text-sm w-1/6">{event.startTime}</td>
-                                                <td className="text-sm w-1/6">{event.endTime}</td>
+                                    <tbody>
+                                        <tr>
+                                            <th className="text-sm w-1/6">Day</th>
+                                            <th className="text-sm w-1/2">Description</th>
+                                            <th className="text-sm w-1/3">Number of events</th>
+                                        </tr>
+                                        {module.days.map((day, dayIndex) =>
+                                            <tr key={dayIndex}>
+                                                <td className="text-sm w-1/6">{day.dayNumber}</td>
+                                                <td className="text-sm w-1/2">{day.description}</td>
+                                                <td className="text-sm w-1/3">{day.events.length}</td>
                                             </tr>
                                         )}
                                         <tr></tr>
-                                    </tbody> */}
+                                    </tbody>
                                 </table>
                             )}
                         </section>
                     </div>
                     <div className="pt-4 flex gap-4 flex-col sm:flex-row">
                         <button onClick={() => mutation.mutate(parseInt(courseId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Course</button>
-                        <Link to={`/modules/edit/${courseId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Course</Link>
+                        <Link to={`/courses/edit/${courseId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Course</Link>
                     </div>
-                </section>
+                </section >
             }
-        </Page>
+        </Page >
     )
 }

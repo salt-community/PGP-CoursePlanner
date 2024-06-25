@@ -65,7 +65,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             id: course.id ?? 0,
             name: courseName.value,
             numberOfWeeks: numberOfWeeks.value,
-            modules: courseModules.value,
+            modules: courseModules,
         };
 
         console.log("course to post: ", newCourse);

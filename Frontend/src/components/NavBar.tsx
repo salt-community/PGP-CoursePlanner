@@ -61,7 +61,7 @@ export default function NavBar() {
           </div>
           <div>
             <Link to="/">
-              <a className="btn btn-ghost text-l lg:text-xl">Course Planner</a>
+              <a className="btn btn-ghost text-l text-xl">Course Planner</a>
             </Link>
           </div>
         </div>
