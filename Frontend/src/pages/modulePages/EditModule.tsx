@@ -19,7 +19,7 @@ export default function () {
         <Page>
             {isLoading && <LoadingMessage />}
             {isError && <ErrorMessage />}
-            {module && <Module module={module} submitFunction={editModule} buttonText="Edit"/>}
+            {module && <Module module={module} submitFunction={editModule} buttonText="Save changes"/>}
         </Page>
     )
 }
