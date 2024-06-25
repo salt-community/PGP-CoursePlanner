@@ -1,7 +1,7 @@
 # Use the official ASP.NET runtime as a parent image
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
-EXPOSE 80
+EXPOSE 90
 
 # Use the official .NET SDK image to build the application
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
