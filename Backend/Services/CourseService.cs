@@ -44,13 +44,10 @@ public class CourseService : IService<Course>
     {
         try
         {
-
             var modulesInList = _context.Modules.Where(module => course.Modules.Contains(module)).ToList();
-
             course.Modules = modulesInList;
 
             await _context.Courses.AddAsync(course);
-
             await _context.SaveChangesAsync();
             return course;
         }
