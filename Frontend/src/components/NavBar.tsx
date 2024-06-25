@@ -47,10 +47,6 @@ export default function NavBar() {
               className={`menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 ${isOpen ? "block" : "hidden"
                 }`}
             >
-              <Link to="/"><li>
-                <a onClick={toggleDropdown}>Home</a>
-              </li>
-              </Link>
               <li>
                 <Link to="/Modules">
                   <a onClick={toggleDropdown}>Modules</a>
@@ -63,34 +59,29 @@ export default function NavBar() {
               </li>
             </ul>
           </div>
+          <div>
+            <Link to="/">
+              <a className="btn btn-ghost text-l lg:text-xl">Course Planner</a>
+            </Link>
+          </div>
         </div>
-        <div>
-          <Link to="/">
-            <a className="btn btn-ghost text-xl">Course Planner</a>
-          </Link>
-        </div >
         <div className="navbar-center hidden md:flex">
           <ul className="menu menu-horizontal px-1 text-xl">
-            <Link to="/">
-              <li>
-                <a>Home</a>
+          <li>
+                <Link to="/Modules">
+                  <a onClick={toggleDropdown}>Modules</a>
+                </Link>
               </li>
-            </Link>
-            <li>
-              <Link to="/Modules">
-                <a>Modules</a>
-              </Link>
-            </li>
-
-            <li>
-              <Link to="/Courses">
-                <a>Courses</a>
-              </Link>
-            </li>
+              <li>
+                <Link to="/Courses">
+                  <a onClick={toggleDropdown}>Courses</a>
+                </Link>
+              </li>
           </ul>
         </div>
-
-        <PrimaryBtn onClick={emptyFunction}>Login</PrimaryBtn>
+        <div className="navbar-end">
+          <PrimaryBtn onClick={emptyFunction}>Login</PrimaryBtn>
+        </div>
       </div >
     </>
   )

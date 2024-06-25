@@ -26,7 +26,6 @@ export default function ModuleDetails() {
         }
     })
 
-
     return (
 
         <Page>
@@ -34,34 +33,34 @@ export default function ModuleDetails() {
             {isError && <p>An error occured</p>}
             {module &&
                 <section className="w-11/12 mx-auto flex flex-col gap-4">
-                    <h1 className="pb-4">{module.name}</h1>
                     <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                         <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
+                            <h1 className="pb-4 text-xl text-primary font-bold">{module.name}</h1>
                             {module.days.map((day, index) =>
-                                <table className="table  table-sm" key={"day_" + index}>
+                                <table className="table table-sm lg:table-lg" key={"day_" + index}>
                                     <thead>
-                                        <tr>
-                                            <th>Day</th>
-                                            <th>{day.dayNumber}</th>
+                                        <tr className="text-lg">
+                                            <th>Day {day.dayNumber}: {day.description}</th>
                                         </tr>
-                                        {day.events.length > 0 &&
-                                            <tr>
-                                                <th className="w-1/4">Summary</th>
-                                                <th className="w-1/4">Description</th>
-                                                <th className="w-1/4">Start</th>
-                                                <th className="w-1/4">End</th>
-                                            </tr>
-                                        }
                                     </thead>
                                     <tbody>
+                                        {day.events.length > 0 &&
+                                            <tr>
+                                                <th className="text-sm w-1/3">Summary</th>
+                                                <th className="text-sm w-1/3">Description</th>
+                                                <th className="text-sm w-1/6">Start</th>
+                                                <th className="text-sm w-1/6">End</th>
+                                            </tr>
+                                        }
                                         {day.events.length > 0 && day.events.map((event, eventIndex) =>
                                             <tr key={eventIndex}>
-                                                <td className="w-1/4">{event.name}</td>
-                                                <td className="w-1/4">{event.description}</td>
-                                                <td className="w-1/4">{event.startTime}</td>
-                                                <td className="w-1/4">{event.endTime}</td>
+                                                <td className="text-sm w-1/3">{event.name}</td>
+                                                <td className="text-sm w-1/3">{event.description}</td>
+                                                <td className="text-sm w-1/6">{event.startTime}</td>
+                                                <td className="text-sm w-1/6">{event.endTime}</td>
                                             </tr>
                                         )}
+                                        <tr></tr>
                                     </tbody>
                                 </table>
                             )}
