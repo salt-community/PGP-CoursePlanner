@@ -1,4 +1,4 @@
-export const daysOfWeek: string[] = [
+export const weekDays: string[] = [
     "Monday",
     "Tuesday",
     "Wednsday",
