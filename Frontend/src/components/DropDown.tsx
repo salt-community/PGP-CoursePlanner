@@ -8,7 +8,7 @@ type Props = {
     index: number;
 }
 
-export default function DropDown({index, selectedModules, modules, setModules }: Props) {
+export default function DropDown({ index, selectedModules, modules, setModules }: Props) {
 
     const handleChange = (event: SyntheticEvent) => {
         const addedModules: ModuleType[] = [...selectedModules];
@@ -18,10 +18,20 @@ export default function DropDown({index, selectedModules, modules, setModules }:
     }
     return (
         <div className="flex flex-col justify-center">
-            <select className="border border-gray-300 rounded-lg mt-2 max-w-xs p-1" onChange={handleChange} >
-                <option>Select module</option>
-                {modules.map(module =>
-                    <option key={module.id} value={module.id}>{module.name}</option>)}
+            <select className="border border-gray-300 rounded-lg mt-2 max-w-xs p-1" onChange={handleChange} defaultValue={'DEFAULT'} >
+                {selectedModules[0].name == ""
+                    ? <>
+                        <option value="DEFAULT" disabled>Select</option>
+                        {modules.map(module =>
+                            <option key={module.id} value={module.id}>{module.name}</option>)}
+                    </>
+                    : <>
+                        {modules.map(module =>
+                            <> {module.id == selectedModules[index].id
+                                ? <option value="DEFAULT" >{module.name}</option>
+                                : <option key={module.id} value={module.id}>{module.name}</option>}
+                            </>)}
+                    </>}
             </select>
 
         </div>
