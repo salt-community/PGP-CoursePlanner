@@ -8,13 +8,13 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 
 # Copy the project files and restore any dependencies
-COPY ["Backend/Backend.csproj", "Backend/"]
-COPY ["Backend.IntegrationTests/Backend.IntegrationTests.csproj", "Backend.IntegrationTests/"]
-RUN dotnet restore "Backend/Backend.csproj"
+COPY Backend/Backend.csproj Backend/
+# COPY Backend.IntegrationTests/Backend.IntegrationTests.csproj Backend.IntegrationTests/
+# RUN dotnet restore "Backend/Backend.csproj"
 
 # Copy the remaining source code and build the application
-COPY . .
-WORKDIR "/src/Backend"
+COPY Backend/ Backend/
+WORKDIR /src/Backend
 RUN dotnet build "Backend.csproj" -c Release -o /app/build
 
 # Publish the application
