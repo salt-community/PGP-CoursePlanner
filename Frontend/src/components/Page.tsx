@@ -7,7 +7,7 @@ type Props = {
 export default function Page({ children }: Props) {
 
     return (
-        <section className="w-screen h-screen">
+        <section className="w-screen h-screen flex flex-col items-center">
             <NavBar />
             {children}
         </section>
