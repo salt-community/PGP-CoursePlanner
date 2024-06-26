@@ -1,6 +1,6 @@
 import { addDays, eachDayOfInterval, format, startOfWeek } from "date-fns";
 
-export const firstDayOfWeek = startOfWeek(new Date());
+export const firstDayOfWeek = startOfWeek(new Date(), { weekStartsOn: 1 });
 
 export const formatDate = (date: Date) => {
     return format(date, 'MM/dd/yyyy')
