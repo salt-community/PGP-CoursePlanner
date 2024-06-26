@@ -8,7 +8,6 @@ import { FormEvent, useState } from "react";
 import DeleteBtn from "../buttons/DeleteBtn";
 import { ModuleType } from "../module/Types";
 import { CourseProps, CourseType } from "./Types";
-import { postCourse } from "../../api/CourseApi";
 import { useNavigate } from "react-router-dom";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
@@ -66,9 +65,9 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         setIsIncorrectModuleInput(false);
         setIsIncorrectName(false);
 
-        const mySet = new Set(courseModules);
-        if (mySet.size !== courseModules.length || courseName.value == "" || numberOfWeeks.value == 0) {
-            if (mySet.size !== courseModules.length)
+        const isDuplicate = findDuplicates(courseModules);
+        if (isDuplicate || courseName.value == "" || numberOfWeeks.value == 0) {
+            if (isDuplicate)
                 setIsIncorrectModuleInput(true);
             if (courseName.value == "" || numberOfWeeks.value == 0)
                 setIsIncorrectName(true);
@@ -89,7 +88,19 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         }
     }
 
-    console.log("Course modules: ", courseModules);
+    const findDuplicates = (arr: Array<ModuleType>) => {
+        var results = false;
+        for (var i = 0; i < arr.length; i++) {
+          if (arr.filter(m => m.id == arr[i].id).length > 1) {
+            results = true;
+            break;
+          }
+        }
+        return results;
+      }
+      
+      let duplicatedArray = [9, 9, 111, 2, 3, 4, 4, 5, 7];
+      console.log(`The duplicates in ${duplicatedArray} are ${findDuplicates(duplicatedArray)}`);
 
     return (
         <section className="px-4">
