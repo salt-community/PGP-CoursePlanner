@@ -10,5 +10,5 @@ export const today = formatDate(new Date());
 
 export const weekDays  = eachDayOfInterval({
     start: firstDayOfWeek,
-    end: addDays(firstDayOfWeek, 6)
+    end: addDays(firstDayOfWeek, 4)
   })
