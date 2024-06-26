@@ -1,7 +1,7 @@
 import { format, getWeek } from "date-fns";
-import Page from "../components/Page";
-import { formatDate, weekDays } from "../helpers/dateHelpers";
-import WeekDay from "../components/weekDay/WeekDay";
+import Page from "../../components/Page";
+import { formatDate, weekDays } from "../../helpers/dateHelpers";
+import WeekDay from "../../components/weekDay/WeekDay";
 
 export default function Home() {
     return (
