@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getAllModules } from "../../api/ModuleApi";
+import { getAllCourseModules, getAllModules } from "../../api/ModuleApi";
 import SuccessBtn from "../buttons/SuccessBtn";
 import InputSmall from "../inputFields/InputSmall";
 import DropDown from "../DropDown";
@@ -7,13 +7,12 @@ import PrimaryBtn from "../buttons/PrimaryBtn";
 import { FormEvent, useState } from "react";
 import DeleteBtn from "../buttons/DeleteBtn";
 import { ModuleType } from "../module/Types";
-import { CourseProps, CourseType } from "./Types";
+import { CourseModule, CourseProps, CourseType } from "./Types";
 import { useNavigate } from "react-router-dom";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);
     const [numOfWeeks, setNumOfWeeks] = useState<number>(course.numberOfWeeks);
-    const [courseModules, setCourseModules] = useState<ModuleType[]>(course.modules);
     const [isIncorrectModuleInput, setIsIncorrectModuleInput] = useState<boolean>(false);
     const [isIncorrectName, setIsIncorrectName] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -23,14 +22,45 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         queryFn: getAllModules
     });
 
+    var selectedModules: CourseModule[] = [{
+        course: course,
+        courseId: course.id,
+        module: {
+            name: "",
+            numberOfDays: 0,
+            days: [],
+            courseModules: []
+        },
+        moduleId: 0,
+    }];
+    if (course.moduleIds[0] != 0) {
+        selectedModules = [];
+        course?.moduleIds.forEach(element => {
+            var module = modules?.find(m => m.id == element);
+
+            var cm: CourseModule = {
+                course: course,
+                courseId: course.id,
+                module: module,
+                moduleId: element
+            }
+            selectedModules.push(cm);
+        });
+    }
+    const [courseModules, setCourseModules] = useState<CourseModule[]>(selectedModules);
+
     const handleAddModules = () => {
         const newModule: ModuleType = {
             name: "",
             numberOfDays: 0,
-            days: []
+            days: [],
+            courseModules: []
+        }
+        const newCourseModule: CourseModule = {
+            module: newModule,
         }
         const editedModules = [...courseModules];
-        editedModules.push(newModule);
+        editedModules.push(newCourseModule);
         setCourseModules(editedModules);
     }
 
@@ -62,45 +92,48 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         const { courseName } = e.target as typeof e.target & { courseName: { value: string } };
         const { numberOfWeeks } = e.target as typeof e.target & { numberOfWeeks: { value: number } };
 
+        var courseModuleIds: number[] = [];
+        courseModules.forEach(element => {
+            courseModuleIds.push(element.moduleId!);
+        });
+
         setIsIncorrectModuleInput(false);
         setIsIncorrectName(false);
 
-        const isDuplicate = findDuplicates(courseModules);
-        if (isDuplicate || courseName.value == "" || numberOfWeeks.value == 0) {
-            if (isDuplicate)
-                setIsIncorrectModuleInput(true);
-            if (courseName.value == "" || numberOfWeeks.value == 0)
-                setIsIncorrectName(true);
-        }
-        else {
-            setIsIncorrectModuleInput(false);
-            setIsIncorrectName(false);
+        // const isDuplicate = findDuplicates(courseModules);
+        // if (isDuplicate || courseName.value == "" || numberOfWeeks.value == 0) {
+        //     if (isDuplicate)
+        //         setIsIncorrectModuleInput(true);
+        //     if (courseName.value == "" || numberOfWeeks.value == 0)
+        //         setIsIncorrectName(true);
+        // }
+        // else {
+        setIsIncorrectModuleInput(false);
+        setIsIncorrectName(false);
 
-            const newCourse: CourseType = {
-                id: course.id ?? 0,
-                name: courseName.value,
-                numberOfWeeks: numberOfWeeks.value,
-                modules: courseModules,
-            };
+        const newCourse: CourseType = {
+            id: course.id ?? 0,
+            name: courseName.value,
+            numberOfWeeks: numberOfWeeks.value,
+            moduleIds: courseModuleIds,
+            modules: courseModules,
+        };
 
-            console.log("course to post: ", newCourse);
-            mutation.mutate(newCourse);
-        }
+        console.log("course to post: ", newCourse);
+        mutation.mutate(newCourse);
+        //}
     }
 
     const findDuplicates = (arr: Array<ModuleType>) => {
         var results = false;
         for (var i = 0; i < arr.length; i++) {
-          if (arr.filter(m => m.id == arr[i].id).length > 1) {
-            results = true;
-            break;
-          }
+            if (arr.filter(m => m.id == arr[i].id).length > 1) {
+                results = true;
+                break;
+            }
         }
         return results;
-      }
-      
-      let duplicatedArray = [9, 9, 111, 2, 3, 4, 4, 5, 7];
-      console.log(`The duplicates in ${duplicatedArray} are ${findDuplicates(duplicatedArray)}`);
+    }
 
     return (
         <section className="px-4">

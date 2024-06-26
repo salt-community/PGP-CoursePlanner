@@ -3,6 +3,7 @@ import { deleteModule, getModuleById } from "../../api/ModuleApi";
 import Page from "../../components/Page";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getIdFromPath } from "../../helpers/helperMethods";
+import { getAllCourses } from "../../api/CourseApi";
 
 export default function ModuleDetails() {
     const navigate = useNavigate();
@@ -14,7 +15,30 @@ export default function ModuleDetails() {
         queryFn: () => getModuleById(parseInt(moduleId))
     });
 
+    const { data: allCourses } = useQuery({
+        queryKey: ['courses'],
+        queryFn: () => getAllCourses()
+    });
+    const usedModules: number[] = [];
+    if (allCourses) {
+        allCourses.forEach(c => {
+            c.moduleIds.forEach(element => {
+                usedModules.push(element);
+            });
+        });
+    }
+
     const queryClient = useQueryClient();
+
+    const handleDelete = (id: number) => {
+        if (!usedModules.find(m => m == id)) {
+            mutation.mutate(id);
+        }
+        else {
+            document.getElementById("invalid-module-delete")?.classList.remove("hidden");
+            return;
+        }
+    }
 
     const mutation = useMutation({
         mutationFn: (id: number) => {
@@ -67,9 +91,11 @@ export default function ModuleDetails() {
                         </section>
                     </div>
                     <div className="pt-4 flex gap-4 flex-col sm:flex-row">
-                        <button onClick={() => mutation.mutate(parseInt(moduleId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module</button>
+                        <button onClick={() => handleDelete(parseInt(moduleId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module</button>
                         <Link to={`/modules/edit/${moduleId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Module</Link>
                     </div>
+                    <p className="error-message text-red-600 text-sm hidden" id="invalid-module-delete">Cannot delete this module, it is used in a course!</p>
+                
                 </section>
             }
         </Page>

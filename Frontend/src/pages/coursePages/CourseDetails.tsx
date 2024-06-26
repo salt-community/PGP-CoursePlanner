@@ -3,6 +3,8 @@ import { deleteCourse, getCourseById } from "../../api/CourseApi";
 import Page from "../../components/Page";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getIdFromPath } from "../../helpers/helperMethods";
+import { ModuleType } from "../../components/module/Types";
+import { getAllModules, getModuleById } from "../../api/ModuleApi";
 
 export default function CourseDetails() {
     const navigate = useNavigate();
@@ -12,6 +14,17 @@ export default function CourseDetails() {
     const { data: course, isLoading, isError } = useQuery({
         queryKey: ['courses', courseId],
         queryFn: () => getCourseById(parseInt(courseId))
+    });
+
+    const { data: allModules} = useQuery({
+        queryKey: ['modules'],
+        queryFn: () => getAllModules()
+    });
+
+    var modules: ModuleType[] = [];
+    course?.moduleIds.forEach(element => {
+        var module = allModules?.find(m => m.id == element);
+        modules.push(module!)
     });
 
     const queryClient = useQueryClient();
@@ -26,6 +39,8 @@ export default function CourseDetails() {
         }
     })
 
+    console.log(course)
+
     return (
         <Page>
             {isLoading && <p>Loading...</p>}
@@ -35,7 +50,7 @@ export default function CourseDetails() {
                     <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                         <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
                             <h1 className="pb-4 text-xl text-primary font-bold">{course.name}</h1>
-                            {course.modules.map((module, index) =>
+                            {modules.map((module, index) =>
                                 <table className="table table-sm lg:table-lg" key={"module_" + index}>
                                     <thead>
                                         <tr className="text-lg">
