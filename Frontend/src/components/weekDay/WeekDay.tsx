@@ -7,12 +7,12 @@ type Props = {
 
 export default function WeekDay({ date }: Props) {
 
-    const color = today == date ? "orange" : "black";
+    const color = today == date ? "border-orange-300" : "border-black";
 
     console.log(date + " : " + color);
     console.log("Today = ", today);
     return (
-        <article className={`border border-${color} rounded-lg w-40 my-4 flex justify-center`}>
+        <article className={`border ${color} rounded-lg w-40 my-4 flex justify-center`}>
             <h1>{format(date, 'EEEE')}</h1>
         </article>
 
