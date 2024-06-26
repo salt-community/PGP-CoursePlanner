@@ -10,6 +10,7 @@ import Modules from './pages/modulePages/Modules.tsx'
 import CreateModule from './pages/modulePages/CreateModule.tsx'
 import Courses from './pages/coursePages/Courses.tsx'
 import CreateCourse from './pages/coursePages/CreateCourse.tsx'
+import DayDetails from './pages/Home/DayDetails.tsx'
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/home/*",
     element: <Home />,
+  },
+  {
+    path: "/home/details/*",
+    element: <DayDetails/>,
   },
   {
     path: "/modules",
