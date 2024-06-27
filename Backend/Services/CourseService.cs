@@ -17,7 +17,6 @@ public class CourseService : IService<Course>
     {
         try
         {
-            //_context.Database.EnsureDeleted();
             var courses = await _context.Courses
                 .Include(c => c.Modules)
                     .ThenInclude(cm => cm.Module)
