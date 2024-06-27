@@ -48,35 +48,35 @@ export default function NavBar() {
                 }`}
             >
               <li>
-                <Link to="/Modules">
-                  <a onClick={toggleDropdown}>Modules</a>
+                <Link onClick={toggleDropdown} to="/Modules">
+                  Modules
                 </Link>
               </li>
               <li>
-                <Link to="/Courses">
-                  <a onClick={toggleDropdown}>Courses</a>
+                <Link onClick={toggleDropdown} to="/Courses">
+                  Courses
                 </Link>
               </li>
             </ul>
           </div>
           <div>
-            <Link to="/">
-              <a className="btn btn-ghost text-l text-xl">Course Planner</a>
+            <Link className="btn btn-ghost text-l text-xl" to="/">
+              Course Planner
             </Link>
           </div>
         </div>
         <div className="navbar-center hidden md:flex">
           <ul className="menu menu-horizontal px-1 text-xl">
-          <li>
-                <Link to="/Modules">
-                  <a onClick={toggleDropdown}>Modules</a>
-                </Link>
-              </li>
-              <li>
-                <Link to="/Courses">
-                  <a onClick={toggleDropdown}>Courses</a>
-                </Link>
-              </li>
+            <li>
+              <Link onClick={toggleDropdown} to="/Modules">
+                Modules
+              </Link>
+            </li>
+            <li>
+              <Link onClick={toggleDropdown} to="/Courses">
+                Courses
+              </Link>
+            </li>
           </ul>
         </div>
         <div className="navbar-end">
