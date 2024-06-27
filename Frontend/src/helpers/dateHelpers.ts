@@ -36,3 +36,8 @@ export const weekDays = eachDayOfInterval({
   start: firstDayOfWeek,
   end: addDays(firstDayOfWeek, 4),
 });
+
+export const fullWeek = eachDayOfInterval({
+  start: firstDayOfWeek,
+  end: addDays(firstDayOfWeek, 6),
+});
