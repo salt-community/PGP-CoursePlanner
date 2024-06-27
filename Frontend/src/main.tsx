@@ -11,6 +11,7 @@ import CreateModule from './pages/modulePages/CreateModule.tsx'
 import Courses from './pages/coursePages/Courses.tsx'
 import CreateCourse from './pages/coursePages/CreateCourse.tsx'
 import DayDetails from './pages/Home/DayDetails.tsx'
+import MonthView from './pages/calendar/MonthView.tsx'
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
   {
     path: "/courses/create/*",
     element: <CreateCourse/>,
+  },
+  {
+    path: "/calendar/month/*",
+    element: <MonthView/>,
   },
 ]);
 

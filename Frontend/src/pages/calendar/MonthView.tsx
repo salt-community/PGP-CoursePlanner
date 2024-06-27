@@ -1,5 +1,5 @@
 import { format } from "date-fns"
-import { daysBeforeMonth, month, weekDays } from "../../helpers/dateHelpers"
+import { allDaysInMonth, daysBeforeMonth, month, weekDays } from "../../helpers/dateHelpers"
 import CalendarLine from "../../components/CalendarLine"
 
 export default function MonthView() {
@@ -19,8 +19,8 @@ export default function MonthView() {
                     <button key={format(emptyDayIndex, 'EEEEEE')} className="w-1/7"></button>
                 ))}
 
-                {[...color.keys()].map((thisDate) => {
-                    return <CalenderDate date={thisDate} color={color} key={thisDate} />
+                {allDaysInMonth.map((thisDate) => {
+                    return <button key={format(thisDate, 'EEEEEE')}>{format(thisDate, 'EEEEEE')}</button>
                 })
                 }
             </div>
