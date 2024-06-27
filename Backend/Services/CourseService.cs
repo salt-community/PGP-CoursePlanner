@@ -18,10 +18,11 @@ public class CourseService : IService<Course>
         try
         {
             var courses = await _context.Courses
-                            .Include(m => m.Modules)
-                            .ThenInclude(t => t.Days)
-                            .ThenInclude(w => w.Events)
-                            .ToListAsync();
+                .Include(c => c.Modules)
+                    .ThenInclude(cm => cm.Module)
+                    .ThenInclude(t => t.Days)
+                           .ThenInclude(w => w.Events)
+                        .ToListAsync();
             return courses;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
@@ -31,11 +32,13 @@ public class CourseService : IService<Course>
     {
         try
         {
-            return await _context.Courses
-                            .Include(m => m.Modules)
-                            .ThenInclude(t => t.Days)
-                            .ThenInclude(w => w.Events)
-                            .FirstOrDefaultAsync(course => course.Id == id) ?? null!;
+            var course = await _context.Courses
+               .Include(c => c.Modules)
+                    .ThenInclude(cm => cm.Module)
+                    .ThenInclude(t => t.Days)
+                        .ThenInclude(w => w.Events)
+                        .FirstOrDefaultAsync(c => c.Id == id);
+            return course;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
@@ -44,14 +47,30 @@ public class CourseService : IService<Course>
     {
         try
         {
-
-            var modulesInList = _context.Modules.Where(module => course.Modules.Contains(module)).ToList();
-
-            course.Modules = modulesInList;
-
-            await _context.Courses.AddAsync(course);
-
+            var moduleIds = course.moduleIds;
+            
+            List<CourseModule> courseModulesToAdd = [];
+            course.Modules = courseModulesToAdd;
+            _context.Courses.Add(course);
             await _context.SaveChangesAsync();
+
+            foreach (var moduleId in moduleIds)
+            {
+                _context.CourseModules.Add(new CourseModule
+                {
+                    Course = course,
+                    CourseId = course.Id,
+                    Module = _context.Modules.First(m => m.Id == moduleId),
+                    ModuleId = moduleId
+                });
+            }
+            await _context.SaveChangesAsync();
+
+            courseModulesToAdd = _context.CourseModules.Where(m => m.CourseId == course.Id).ToList();
+            course.Modules = courseModulesToAdd;            
+            _context.Set<Course>().Update(course);
+            await _context.SaveChangesAsync();
+
             return course;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
@@ -62,30 +81,39 @@ public class CourseService : IService<Course>
         try
         {
             var courseToUpdate = await _context.Courses
-                        .Include(course => course.Modules)
-                        .ThenInclude(module => module.Days)
-                        .ThenInclude(day => day.Events)
-                        .FirstOrDefaultAsync(m => m.Id == id);
+            .Include(c => c.Modules)
+                .ThenInclude(cm => cm.Module)
+                    .ThenInclude(m => m.Days)
+                        .ThenInclude(d => d.Events)
+                            .FirstOrDefaultAsync(c => c.Id == id);
 
             if (courseToUpdate == null)
             {
                 return null!;
             }
 
-            // var modulesToDelete = courseToUpdate.Modules
-            //     .Where(module => !course.Modules.Any(m => m.Id == module.Id))
-            //     .ToList();
-            // foreach (var module in modulesToDelete)
-            // {
-            //     courseToUpdate.Modules.Remove(module);
-            //     await _context.SaveChangesAsync();
+            var moduleIds = course.moduleIds;
+            var modulesInDb = await _context.Modules
+                .Where(m => moduleIds.Contains(m.Id))
+                .ToListAsync();
 
-            // }
-
-            courseToUpdate = updateCourse(course, courseToUpdate);
-            _context.Set<Course>().Update(courseToUpdate);
+            courseToUpdate.Name = course.Name;
+            courseToUpdate.NumberOfWeeks = course.NumberOfWeeks;
+            courseToUpdate.moduleIds = course.moduleIds;
+            
+            courseToUpdate.Modules.Clear();
+            foreach (var module in modulesInDb)
+            {
+                courseToUpdate.Modules.Add(new CourseModule
+                {
+                    CourseId = courseToUpdate.Id,
+                    ModuleId = module.Id
+                });
+            }
+            _context.Courses.Update(courseToUpdate);
             await _context.SaveChangesAsync();
-            return course;
+
+            return courseToUpdate;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
@@ -95,25 +123,20 @@ public class CourseService : IService<Course>
         try
         {
             var course = await _context.Courses
-                .Include(course => course.Modules)
-                .ThenInclude(module => module.Days)
-                .ThenInclude(day => day.Events)
-                .FirstAsync(course => course.Id == id);
-            await _context.Courses.FirstAsync(course => course.Id == id);
+            .Include(c => c.Modules)
+            .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (course == null)
+            {
+                return false;
+            }
+
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
+
             return true;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return false;
-    }
-
-    private Course updateCourse(Course newCourse, Course course)
-    {
-        course.Name = newCourse.Name;
-        course.NumberOfWeeks = newCourse.NumberOfWeeks;
-        course.Modules = newCourse.Modules;
-
-        return course;
     }
 }

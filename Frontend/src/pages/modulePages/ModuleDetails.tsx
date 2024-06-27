@@ -3,6 +3,7 @@ import { deleteModule, getModuleById } from "../../api/ModuleApi";
 import Page from "../../components/Page";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getIdFromPath } from "../../helpers/helperMethods";
+import { getAllCourses } from "../../api/CourseApi";
 
 export default function ModuleDetails() {
     const navigate = useNavigate();
@@ -14,7 +15,30 @@ export default function ModuleDetails() {
         queryFn: () => getModuleById(parseInt(moduleId))
     });
 
+    const { data: allCourses } = useQuery({
+        queryKey: ['courses'],
+        queryFn: () => getAllCourses()
+    });
+    const usedModules: number[] = [];
+    if (allCourses) {
+        allCourses.forEach(c => {
+            c.moduleIds.forEach(element => {
+                usedModules.push(element);
+            });
+        });
+    }
+
     const queryClient = useQueryClient();
+
+    const handleDelete = (id: number) => {
+        if (!usedModules.find(m => m == id)) {
+            mutation.mutate(id);
+        }
+        else {
+            document.getElementById("invalid-module-delete")?.classList.remove("hidden");
+            return;
+        }
+    }
 
     const mutation = useMutation({
         mutationFn: (id: number) => {
@@ -26,7 +50,6 @@ export default function ModuleDetails() {
         }
     })
 
-
     return (
 
         <Page>
@@ -34,43 +57,45 @@ export default function ModuleDetails() {
             {isError && <p>An error occured</p>}
             {module &&
                 <section className="w-11/12 mx-auto flex flex-col gap-4">
-                    <h1 className="pb-4">{module.name}</h1>
                     <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                         <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
+                            <h1 className="pb-4 text-xl text-primary font-bold">{module.name}</h1>
                             {module.days.map((day, index) =>
-                                <table className="table  table-sm" key={"day_" + index}>
+                                <table className="table table-sm lg:table-lg" key={"day_" + index}>
                                     <thead>
-                                        <tr>
-                                            <th>Day</th>
-                                            <th>{day.dayNumber}</th>
+                                        <tr className="text-lg">
+                                            <th>Day {day.dayNumber}: {day.description}</th>
                                         </tr>
-                                        {day.events.length > 0 &&
-                                            <tr>
-                                                <th className="w-1/4">Summary</th>
-                                                <th className="w-1/4">Description</th>
-                                                <th className="w-1/4">Start</th>
-                                                <th className="w-1/4">End</th>
-                                            </tr>
-                                        }
                                     </thead>
                                     <tbody>
+                                        {day.events.length > 0 &&
+                                            <tr>
+                                                <th className="text-sm w-1/3">Event summary</th>
+                                                <th className="text-sm w-1/3">Event description</th>
+                                                <th className="text-sm w-1/6">Start</th>
+                                                <th className="text-sm w-1/6">End</th>
+                                            </tr>
+                                        }
                                         {day.events.length > 0 && day.events.map((event, eventIndex) =>
                                             <tr key={eventIndex}>
-                                                <td className="w-1/4">{event.name}</td>
-                                                <td className="w-1/4">{event.description}</td>
-                                                <td className="w-1/4">{event.startTime}</td>
-                                                <td className="w-1/4">{event.endTime}</td>
+                                                <td className="text-sm w-1/3">{event.name}</td>
+                                                <td className="text-sm w-1/3">{event.description}</td>
+                                                <td className="text-sm w-1/6">{event.startTime}</td>
+                                                <td className="text-sm w-1/6">{event.endTime}</td>
                                             </tr>
                                         )}
+                                        <tr></tr>
                                     </tbody>
                                 </table>
                             )}
                         </section>
                     </div>
                     <div className="pt-4 flex gap-4 flex-col sm:flex-row">
-                        <button onClick={() => mutation.mutate(parseInt(moduleId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module </button>
-                        <Link to={`/modules/edit/${moduleId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white"> Edit Module </Link>
+                        <button onClick={() => handleDelete(parseInt(moduleId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module</button>
+                        <Link to={`/modules/edit/${moduleId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Module</Link>
                     </div>
+                    <p className="error-message text-red-600 text-sm hidden" id="invalid-module-delete">Cannot delete this module, it is used in a course!</p>
+                
                 </section>
             }
         </Page>
