@@ -167,7 +167,6 @@ import { FormEvent, useState } from "react";
 import DeleteBtn from "../buttons/DeleteBtn";
 import { CourseModule, CourseProps, CourseType } from "./Types";
 import { useNavigate } from "react-router-dom";
-import { ModuleType } from "../module/Types";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);

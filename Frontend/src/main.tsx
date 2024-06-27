@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Home from './pages/Home.tsx'
+import Home from './pages/Home/Home.tsx'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import ModuleDetails from './pages/modulePages/ModuleDetails.tsx'
 import EditModule from './pages/modulePages/EditModule.tsx'
@@ -12,6 +12,8 @@ import Courses from './pages/coursePages/Courses.tsx'
 import CreateCourse from './pages/coursePages/CreateCourse.tsx'
 import CourseDetails from './pages/coursePages/CourseDetails.tsx'
 import EditCourse from './pages/coursePages/EditCourse.tsx'
+import DayDetails from './pages/Home/DayDetails.tsx'
+import MonthView from './pages/calendar/MonthView.tsx'
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/home/*",
     element: <Home />,
+  },
+  {
+    path: "/home/details/*",
+    element: <DayDetails/>,
   },
   {
     path: "/modules",
@@ -57,6 +63,10 @@ const router = createBrowserRouter([
   {
     path: "/courses/create/*",
     element: <CreateCourse/>,
+  },
+  {
+    path: "/calendar/month/*",
+    element: <MonthView/>,
   },
 ]);
 
