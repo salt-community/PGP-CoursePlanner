@@ -295,7 +295,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 {isIncorrectName &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
                 {modules && courseModules.map((_cm, index) =>
-                    <div key={index} className="flex space-x-8">
+                    <div key={_cm.moduleId} className="flex space-x-8">
                         {_cm.moduleId == 0 || _cm.course?.moduleIds[0] == 0
                             ? <DropDown index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={false} />
                             : <DropDown index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={true} />}
