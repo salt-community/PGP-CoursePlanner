@@ -24,7 +24,7 @@ export default function Modules() {
                     </Link>}
                 {data && data.map((module, index) =>
                     <Link to={`/modules/details/${module.id}`} key={module.name + index} className="border border-black pb-[100%] relative">
-                        <div className="flex items-center justify-center flex-col w-80">
+                        <div className="absolute inset-0 flex items-center justify-center flex-col gap-4">
                             {module.name}
                         </div>
                     </Link>
