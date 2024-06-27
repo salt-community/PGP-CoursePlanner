@@ -1,5 +1,5 @@
 import { format } from "date-fns"
-import { allDaysInMonth, daysBeforeMonth, fullWeek, month, weekDays } from "../../helpers/dateHelpers"
+import { allDaysInMonth, daysBeforeMonth, fullWeek, month} from "../../helpers/dateHelpers"
 import CalendarLine from "../../components/CalendarLine"
 
 export default function MonthView() {
