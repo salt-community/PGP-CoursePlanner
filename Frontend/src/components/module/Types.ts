@@ -6,7 +6,7 @@ export type ModuleType = {
   name: string;
   numberOfDays: number;
   days: DayType[];
-  courseModules: CourseModule[];
+  courseModules?: CourseModule[];
 };
 
 export type ModuleProps = {

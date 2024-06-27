@@ -4,7 +4,7 @@ import Page from "../../components/Page";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getIdFromPath } from "../../helpers/helperMethods";
 import { ModuleType } from "../../components/module/Types";
-import { getAllModules, getModuleById } from "../../api/ModuleApi";
+import { getAllModules } from "../../api/ModuleApi";
 
 export default function CourseDetails() {
     const navigate = useNavigate();
@@ -38,8 +38,6 @@ export default function CourseDetails() {
             navigate(`/courses`);
         }
     })
-
-    console.log(course)
 
     return (
         <Page>

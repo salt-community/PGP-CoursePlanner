@@ -35,7 +35,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     }];
     if (course.moduleIds[0] != 0) {
         selectedModules = [];
-        course?.moduleIds.forEach(element => {
+        course.moduleIds.forEach(element => {
             var module = modules?.find(m => m.id == element);
 
             var cm: CourseModule = {
@@ -50,17 +50,16 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const [courseModules, setCourseModules] = useState<CourseModule[]>(selectedModules);
 
     const handleAddModules = () => {
-        const newModule: ModuleType = {
+        const emptyModule: ModuleType = {
             name: "",
             numberOfDays: 0,
-            days: [],
-            courseModules: []
+            days: []
         }
-        const newCourseModule: CourseModule = {
-            module: newModule,
+        const emptyCourseModule: CourseModule = {
+            module: emptyModule,
         }
         const editedModules = [...courseModules];
-        editedModules.push(newCourseModule);
+        editedModules.push(emptyCourseModule);
         setCourseModules(editedModules);
     }
 
@@ -100,34 +99,31 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         setIsIncorrectModuleInput(false);
         setIsIncorrectName(false);
 
-        // const isDuplicate = findDuplicates(courseModules);
-        // if (isDuplicate || courseName.value == "" || numberOfWeeks.value == 0) {
-        //     if (isDuplicate)
-        //         setIsIncorrectModuleInput(true);
-        //     if (courseName.value == "" || numberOfWeeks.value == 0)
-        //         setIsIncorrectName(true);
-        // }
-        // else {
-        setIsIncorrectModuleInput(false);
-        setIsIncorrectName(false);
+        const isDuplicate = findDuplicates(courseModules);
+        if (isDuplicate || courseName.value == "" || numberOfWeeks.value == 0) {
+            if (isDuplicate)
+                setIsIncorrectModuleInput(true);
+            if (courseName.value == "" || numberOfWeeks.value == 0)
+                setIsIncorrectName(true);
+        }
+        else {
+            const newCourse: CourseType = {
+                id: course.id ?? 0,
+                name: courseName.value,
+                numberOfWeeks: numberOfWeeks.value,
+                moduleIds: courseModuleIds,
+                modules: courseModules,
+            };
 
-        const newCourse: CourseType = {
-            id: course.id ?? 0,
-            name: courseName.value,
-            numberOfWeeks: numberOfWeeks.value,
-            moduleIds: courseModuleIds,
-            modules: courseModules,
-        };
-
-        console.log("course to post: ", newCourse);
-        mutation.mutate(newCourse);
-        //}
+            console.log("course to post: ", newCourse);
+            mutation.mutate(newCourse);
+        }
     }
 
-    const findDuplicates = (arr: Array<ModuleType>) => {
+    const findDuplicates = (arr: Array<CourseModule>) => {
         var results = false;
         for (var i = 0; i < arr.length; i++) {
-            if (arr.filter(m => m.id == arr[i].id).length > 1) {
+            if (arr.filter(m => m.moduleId == arr[i].moduleId).length > 1) {
                 results = true;
                 break;
             }
