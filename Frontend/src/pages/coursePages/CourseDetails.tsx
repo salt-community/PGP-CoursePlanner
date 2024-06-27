@@ -16,7 +16,7 @@ export default function CourseDetails() {
         queryFn: () => getCourseById(parseInt(courseId))
     });
 
-    const { data: allModules} = useQuery({
+    const { data: allModules } = useQuery({
         queryKey: ['modules'],
         queryFn: () => getAllModules()
     });
@@ -52,9 +52,11 @@ export default function CourseDetails() {
                                 <table className="table table-sm lg:table-lg" key={"module_" + index}>
                                     <thead>
                                         <tr className="text-lg">
-                                            <Link to={`/modules/details/${module.id}`}>
-                                                <th>Module {index+1}: {module.name}</th>
-                                            </Link>
+                                            <th>
+                                                <Link to={`/modules/details/${module.id}`}>
+                                                    Module {index + 1}: {module.name}
+                                                </Link>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
