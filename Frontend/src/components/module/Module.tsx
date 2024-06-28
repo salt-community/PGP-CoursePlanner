@@ -66,15 +66,16 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     }
 
     return (
-        <section className="px-56">
+        <section className="px-4 md:px-24 lg:px-56">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-                <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto flex space-x-8">
+                <div className="w-auto flex justify-between space-x-2">
                     <InputSmall type="text" name="moduleName" onChange={(e) => setModuleName(e.target.value)} placeholder="Module name" value={moduleName} />
                     <input type="number" name="numberOfDays" onChange={(e) => setNumOfDays(parseInt(e.target.value))} value={numOfDays} className="input input-bordered input-sm max-w-xs" placeholder="Number of days" />
                     <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
                 </div>
-                <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
-                    {days.map((day) => <Day key={"day_" + day.dayNumber} setDays={setDays} days={days} day={day} />)}
+                <div className="flex flex-col space-y-2">
+                    {days.map((day) =>
+                        <Day key={"day_" + day.dayNumber} setDays={setDays} days={days} day={day} />)}
                 </div>
                 <SuccessBtn value={buttonText} />
             </form>
