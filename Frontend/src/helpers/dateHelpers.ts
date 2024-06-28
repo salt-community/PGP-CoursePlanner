@@ -14,23 +14,35 @@ export const formatDate = (date: Date) => {
   return format(date, "MM/dd/yyyy");
 };
 
-export const month = format(new Date(), "MMMM");
 export const today = formatDate(new Date());
 export const currentYear = getYear(new Date());
 export const currentMonth = getMonth(new Date());
-export const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-export const lastDayOfMonth = endOfMonth(new Date());
-export const firstWeekDay = parseInt(format(firstDayOfMonth, "i")) - 1;
 
-export const daysBeforeMonth = eachDayOfInterval({
-  start: firstDayOfMonth,
-  end: addDays(firstDayOfMonth, firstWeekDay),
-});
+export const firstDayOfMonth = (month: number) => {
+  return new Date(currentYear, month, 1);
+};
 
-export const allDaysInMonth = eachDayOfInterval({
-  start: firstDayOfMonth,
-  end: lastDayOfMonth,
-});
+export const lastDayOfMonth = (month: number) => {
+  return endOfMonth(new Date(currentYear, month, 1));
+};
+
+export const firstWeekDay = (date: Date) => {
+  return parseInt(format(date, "i")) - 1;
+};
+
+export const daysBeforeMonth = (startDate: Date, daysToAdd: number) => {
+  return eachDayOfInterval({
+    start: startDate,
+    end: addDays(startDate, daysToAdd),
+  });
+};
+
+export const allDaysInMonth = (startDate: Date, endDate: Date) => {
+  return eachDayOfInterval({
+    start: startDate,
+    end: endDate,
+  });
+};
 
 export const weekDays = eachDayOfInterval({
   start: firstDayOfWeek,
