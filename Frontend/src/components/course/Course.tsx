@@ -286,11 +286,11 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     }
 
     return (
-        <section className="px-4">
+        <section className="px-4 md:px-24 lg:px-56">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-                <div className="w-auto overflow-scroll sm:overflow-auto flex justify-between space-x-8">
+                <div className="w-auto flex justify-between space-x-2">
                     <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
-                    {numOfWeeks == 0 
+                    {numOfWeeks == 0
                         ? <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" />
                         : <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
                     }
@@ -299,14 +299,18 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 {isIncorrectName &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
                 {modules && courseModules.map((thisCourseModule, index) =>
-                    <div key={thisCourseModule.moduleId} className="flex space-x-8">
+                    <div key={thisCourseModule.moduleId} className="flex space-x-2">
                         {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds[0] == 0
                             ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={false} />
                             : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={true} />}
                         {courseModules.length > 1 &&
-                            <DeleteBtn handleDelete={() => handleDeleteModule(index)} />}
+                            <div className="flex items-end">
+                                <DeleteBtn handleDelete={() => handleDeleteModule(index)} />
+                            </div>}
                         {index + 1 == courseModules.length &&
-                            <PrimaryBtn onClick={handleAddModules}>+</PrimaryBtn>}
+                            <div className="flex items-end">
+                                <PrimaryBtn onClick={handleAddModules}>+</PrimaryBtn>
+                            </div>}
                     </div>)}
                 {isIncorrectModuleInput &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Cannot select duplicate modules</p>}

@@ -56,7 +56,7 @@ export default function ModuleDetails() {
             {isLoading && <p>Loading...</p>}
             {isError && <p>An error occured</p>}
             {module &&
-                <section className="w-11/12 mx-auto flex flex-col gap-4">
+                <section className="mx-auto flex flex-col gap-4 px-56">
                     <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                         <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
                             <h1 className="pb-4 text-xl text-primary font-bold">{module.name}</h1>

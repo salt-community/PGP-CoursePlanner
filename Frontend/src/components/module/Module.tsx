@@ -66,7 +66,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     }
 
     return (
-        <section className="px-4">
+        <section className="px-56">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
                 <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto flex space-x-8">
                     <InputSmall type="text" name="moduleName" onChange={(e) => setModuleName(e.target.value)} placeholder="Module name" value={moduleName} />
