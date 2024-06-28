@@ -8,15 +8,14 @@ type Props = {
     selectedModules: CourseModule[];
     index: number;
     selected: boolean;
+    thisCourseModule: CourseModule
 }
 
-export default function DropDown({ index, selectedModules, modules, setModules, selected}: Props) {
+export default function DropDown({ thisCourseModule, index, selectedModules, modules, setModules, selected}: Props) {
 
     console.log("!!Dropdown!! " + index);
     console.log(selectedModules);
     console.log(selected);
-
-    const thisModule: CourseModule = selectedModules[index];
     
     const handleChange = (event: SyntheticEvent) => {
         const addedModules: CourseModule[] = [...selectedModules];
@@ -39,7 +38,7 @@ export default function DropDown({ index, selectedModules, modules, setModules, 
                     </>
                     : <>
                         {modules.map(module =>
-                            <> {module.id == thisModule.moduleId
+                            <> {module.id == thisCourseModule.moduleId
                                 ? <option key={module.id} value="DEFAULT">{module.name}</option>
                                 : <option key={module.id} value={module.id}>{module.name}</option>}
                             </>)}

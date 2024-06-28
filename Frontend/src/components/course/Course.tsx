@@ -167,6 +167,7 @@ import { FormEvent, useState } from "react";
 import DeleteBtn from "../buttons/DeleteBtn";
 import { CourseModule, CourseProps, CourseType } from "./Types";
 import { useNavigate } from "react-router-dom";
+import { th } from "date-fns/locale";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);
@@ -294,11 +295,11 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 </div>
                 {isIncorrectName &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
-                {modules && courseModules.map((_cm, index) =>
-                    <div key={_cm.moduleId} className="flex space-x-8">
-                        {_cm.moduleId == 0 || _cm.course?.moduleIds[0] == 0
-                            ? <DropDown index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={false} />
-                            : <DropDown index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={true} />}
+                {modules && courseModules.map((thisCourseModule, index) =>
+                    <div key={thisCourseModule.moduleId} className="flex space-x-8">
+                        {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds[0] == 0
+                            ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={false} />
+                            : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={true} />}
                         {courseModules.length > 1 &&
                             <DeleteBtn handleDelete={() => handleDeleteModule(index)} />}
                         {index + 1 == courseModules.length &&
