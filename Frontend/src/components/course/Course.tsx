@@ -174,6 +174,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const [numOfWeeks, setNumOfWeeks] = useState<number>(course.numberOfWeeks);
     const [isIncorrectModuleInput, setIsIncorrectModuleInput] = useState<boolean>(false);
     const [isIncorrectName, setIsIncorrectName] = useState<boolean>(false);
+    const [isNotSelected, setIsNotSelected] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const { data: modules } = useQuery({
@@ -259,6 +260,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 setIsIncorrectModuleInput(true);
             if (courseName.value == "" || numberOfWeeks.value == 0)
                 setIsIncorrectName(true);
+            if (courseModuleIds[0] == 0)
+                setIsNotSelected(true);
         }
         else {
             const newCourse: CourseType = {
@@ -314,6 +317,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                     </div>)}
                 {isIncorrectModuleInput &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Cannot select duplicate modules</p>}
+                {isNotSelected &&
+                    <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a module from the dropdown menu</p>}
                 <SuccessBtn value={buttonText} />
             </form>
         </section>
