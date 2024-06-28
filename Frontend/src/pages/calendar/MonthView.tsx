@@ -1,5 +1,5 @@
 import { format } from "date-fns"
-import { allDaysInMonth, currentMonth, daysBeforeMonth, firstDayOfMonth, firstWeekDay, fullWeek, lastDayOfMonth } from "../../helpers/dateHelpers"
+import { allDaysInMonth, currentMonth, currentYear, daysBeforeMonth, firstDayOfMonth, firstWeekDay, fullWeek, lastDayOfMonth } from "../../helpers/dateHelpers"
 import CalendarLine from "../../components/CalendarLine"
 import NextBtn from "../../components/buttons/NextBtn"
 import PreviousBtn from "../../components/buttons/PreviousBtn"
@@ -12,15 +12,16 @@ export default function MonthView() {
     const startOfMonth = firstDayOfMonth(month);
     const endOfMonth = lastDayOfMonth(month);
     const daysInMonth = allDaysInMonth(startOfMonth, endOfMonth);
+    const monthInText = format(new Date(currentYear, month, 1), "MMMM");
 
     return (
         <Page>
             <section className="px-20 flex items-center justify-between">
-                <PreviousBtn />
+                <PreviousBtn onClick={() => setMonth(month - 1)} />
                 <div className="flex flex-col items-center w-full">
                     <header className="mt-5 mb-5">
                         <h1 className="text-3xl">
-                            {format(new Date(), "MMMM")}
+                            {monthInText}
                         </h1>
                     </header>
                     <div className="justify-center w-80 h-64 shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 rounded-md bg-white lg:w-3/5 lg:h-[65vh]">
@@ -38,7 +39,7 @@ export default function MonthView() {
                         }
                     </div>
                 </div>
-                <NextBtn />
+                <NextBtn onClick={() => setMonth(month + 1)} />
             </section>
         </Page>
     )
