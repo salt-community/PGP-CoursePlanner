@@ -1,10 +1,11 @@
 import { format } from "date-fns"
-import { allDaysInMonth, currentMonth, currentYear, daysBeforeMonth, firstDayOfMonth, firstWeekDay, fullWeek, lastDayOfMonth } from "../../helpers/dateHelpers"
-import CalendarLine from "../../components/CalendarLine"
+import { allDaysInMonth, currentMonth, currentYear, daysBeforeMonth, firstDayOfMonth, firstWeekDay, formatDate, fullWeek, lastDayOfMonth } from "../../helpers/dateHelpers"
+import CalendarLine from "../../components/calendar/CalendarLine"
 import NextBtn from "../../components/buttons/NextBtn"
 import PreviousBtn from "../../components/buttons/PreviousBtn"
 import Page from "../../sections/Page"
 import { useState } from "react"
+import CalendarDate from "../../components/calendar/CalendarDate"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(currentMonth);
@@ -34,7 +35,7 @@ export default function MonthView() {
                         ))}
 
                         {daysInMonth.map((thisDate) => {
-                            return <button className="w-1/7" key={format(thisDate, 'd')}>{format(thisDate, 'd')}</button>
+                            return <CalendarDate key={format(thisDate, 'd')} date={formatDate(thisDate)} />
                         })
                         }
                     </div>

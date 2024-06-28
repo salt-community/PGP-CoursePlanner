@@ -14,7 +14,7 @@ export default function DayDetails() {
         <Page>
             <ModalCard
                 button={
-                    <CloseBtn onClick={() => navigate("/")} />
+                    <CloseBtn onClick={() => navigate("/calendar/month")} />
                 }
                 content={
                     <h1 className="text-xl font-semibold">{format(date, 'EEEE')}</h1>
