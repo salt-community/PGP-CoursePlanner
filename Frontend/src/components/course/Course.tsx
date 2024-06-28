@@ -290,7 +290,10 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
                 <div className="w-auto overflow-scroll sm:overflow-auto flex justify-between space-x-8">
                     <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
-                    <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
+                    {numOfWeeks == 0 
+                        ? <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" />
+                        : <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
+                    }
                     <PrimaryBtn onClick={handleNumberOfWeeks}>Apply</PrimaryBtn>
                 </div>
                 {isIncorrectName &&
