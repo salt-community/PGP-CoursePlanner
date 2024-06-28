@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import { getAllCourses } from "../../api/CourseApi";
-import Page from "../../components/Page";
+import Page from "../../sections/Page";
 import { Link } from "react-router-dom";
 
 export default function Courses() {

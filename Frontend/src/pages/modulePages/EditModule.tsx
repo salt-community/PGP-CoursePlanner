@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { editModule, getModuleById } from "../../api/ModuleApi";
-import Page from "../../components/Page";
-import Module from "../../components/module/Module";
+import Page from "../../sections/Page";
+import Module from "../../sections/module/Module";
 import { getIdFromPath } from "../../helpers/helperMethods";
 import LoadingMessage from "../../components/LoadingMessage";
 import ErrorMessage from "../../components/ErrorMessage";
