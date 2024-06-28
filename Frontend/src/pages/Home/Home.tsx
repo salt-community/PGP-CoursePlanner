@@ -1,5 +1,5 @@
 import { format, getWeek } from "date-fns";
-import Page from "../../components/Page";
+import Page from "../../sections/Page";
 import { formatDate, weekDays } from "../../helpers/dateHelpers";
 import WeekDay from "../../components/weekDay/WeekDay";
 

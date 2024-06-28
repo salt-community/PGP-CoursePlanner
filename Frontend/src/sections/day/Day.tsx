@@ -1,7 +1,7 @@
 import { DayProps } from './Types'
 import CalendarEvent from '../event/CalendarEvent';
-import PrimaryBtn from '../buttons/PrimaryBtn';
-import InputSmall from '../inputFields/InputSmall';
+import PrimaryBtn from '../../components/buttons/PrimaryBtn';
+import InputSmall from '../../components/inputFields/InputSmall';
 import { useState } from 'react';
 
 

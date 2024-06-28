@@ -1,7 +1,7 @@
 import { postModule } from "../../api/ModuleApi"
-import Page from "../../components/Page"
-import Module from "../../components/module/Module"
-import { ModuleType } from "../../components/module/Types"
+import Page from "../../sections/Page"
+import Module from "../../sections/module/Module"
+import { ModuleType } from "../../sections/module/Types"
 
 export default function CreateModule() {
 

@@ -3,7 +3,7 @@ import { allDaysInMonth, currentMonth, currentYear, daysBeforeMonth, firstDayOfM
 import CalendarLine from "../../components/CalendarLine"
 import NextBtn from "../../components/buttons/NextBtn"
 import PreviousBtn from "../../components/buttons/PreviousBtn"
-import Page from "../../components/Page"
+import Page from "../../sections/Page"
 import { useState } from "react"
 
 export default function MonthView() {

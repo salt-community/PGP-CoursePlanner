@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { deleteModule, getModuleById } from "../../api/ModuleApi";
-import Page from "../../components/Page";
+import Page from "../../sections/Page";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getIdFromPath } from "../../helpers/helperMethods";
 import { getAllCourses } from "../../api/CourseApi";

@@ -1,5 +1,5 @@
-import DeleteBtn from "../buttons/DeleteBtn";
-import InputSmall from "../inputFields/InputSmall";
+import DeleteBtn from "../../components/buttons/DeleteBtn";
+import InputSmall from "../../components/inputFields/InputSmall";
 import { EventProps } from "./Types"
 
 export default function CalendarEvent({ dayNumber, setDays, days, index, event}: EventProps) {
