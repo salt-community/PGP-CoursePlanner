@@ -13,10 +13,6 @@ type Props = {
 
 export default function DropDown({ thisCourseModule, index, selectedModules, modules, setModules, selected}: Props) {
 
-    console.log("!!Dropdown!! " + index);
-    console.log(selectedModules);
-    console.log(selected);
-    
     const handleChange = (event: SyntheticEvent) => {
         const addedModules: CourseModule[] = [...selectedModules];
         const courseModuleToAdd: CourseModule = {
