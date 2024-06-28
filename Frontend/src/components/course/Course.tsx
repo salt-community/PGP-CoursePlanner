@@ -253,14 +253,15 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
 
         setIsIncorrectModuleInput(false);
         setIsIncorrectName(false);
+        setIsNotSelected(false);
 
         const isDuplicate = findDuplicates(courseModules);
-        if (isDuplicate || courseName.value == "" || numberOfWeeks.value == 0) {
+        if (isDuplicate || courseName.value == "" || numberOfWeeks.value == 0 || courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0))) {
             if (isDuplicate)
                 setIsIncorrectModuleInput(true);
             if (courseName.value == "" || numberOfWeeks.value == 0)
                 setIsIncorrectName(true);
-            if (courseModuleIds[0] == 0)
+            if (courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0)))
                 setIsNotSelected(true);
         }
         else {
@@ -303,7 +304,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
                 {modules && courseModules.map((thisCourseModule, index) =>
                     <div key={thisCourseModule.moduleId} className="flex space-x-2">
-                        {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds[0] == 0
+                        {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds.some(mid => mid == 0)
                             ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={false} />
                             : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={true} />}
                         {courseModules.length > 1 &&
