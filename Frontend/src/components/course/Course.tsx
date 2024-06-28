@@ -288,9 +288,9 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     return (
         <section className="px-4">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-                <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto flex space-x-8">
+                <div className="w-auto overflow-scroll sm:overflow-auto flex justify-between space-x-8">
                     <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
-                    <input type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} className="input input-bordered input-sm max-w-xs" placeholder="Number of weeks" />
+                    <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
                     <PrimaryBtn onClick={handleNumberOfWeeks}>Apply</PrimaryBtn>
                 </div>
                 {isIncorrectName &&
