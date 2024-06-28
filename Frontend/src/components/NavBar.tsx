@@ -48,6 +48,11 @@ export default function NavBar() {
                 }`}
             >
               <li>
+                <Link onClick={toggleDropdown} to="/Calendar/month">
+                  Calendar
+                </Link>
+              </li>
+              <li>
                 <Link onClick={toggleDropdown} to="/Modules">
                   Modules
                 </Link>
@@ -67,6 +72,11 @@ export default function NavBar() {
         </div>
         <div className="navbar-center hidden md:flex">
           <ul className="menu menu-horizontal px-1 text-xl">
+            <li>
+              <Link onClick={toggleDropdown} to="/Calendar/month">
+                Calendar
+              </Link>
+            </li>
             <li>
               <Link onClick={toggleDropdown} to="/Modules">
                 Modules
