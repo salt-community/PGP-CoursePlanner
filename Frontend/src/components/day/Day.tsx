@@ -69,7 +69,7 @@ export default function Day({ day, setDays, days, setNumOfDays }: DayProps) {
                     <table className="table table-sm table-fixed">
                         <thead>
                             <tr>
-                                <th className="w-3/12">Name</th>
+                                <th className="w-3/12">Event name</th>
                                 <th className="w-4/12">Description</th>
                                 <th className="w-1/6">Start</th>
                                 <th className="w-1/6">End</th>
