@@ -25,14 +25,27 @@ export default function Day({ day, setDays, days, setNumOfDays }: DayProps) {
         setDays(editedDays);
     }
 
+    const handleAddDays = (index: number) => {
+        setNumOfDays(days.length + 1)
+        const emptyDay = {
+            dayNumber: index + 2,
+            description: "",
+            events: []
+        };
+        const editedDays = [...days];
+        editedDays.splice(index + 1, 0, emptyDay);
+        for (var i = index; i < editedDays.length; i++) {
+            editedDays[i].dayNumber = i + 1;
+        }
+        setDays(editedDays);
+    }
+
     const handleDeleteDay = (index: number) => {
         setNumOfDays(days.length - 1)
         const editedDays = [...days];
         editedDays.splice(index, 1);
-        for (var i=index; i<editedDays.length; i++) {
-            editedDays[i].dayNumber = i+1;
-            //editedDays[i].description = days[i+1].description;
-            //editedDays[i].events = days[i+1].events;
+        for (var i = index; i < editedDays.length; i++) {
+            editedDays[i].dayNumber = i + 1;
         }
         setDays(editedDays);
     }
@@ -44,8 +57,11 @@ export default function Day({ day, setDays, days, setNumOfDays }: DayProps) {
                 <div className="flex w-[800px]">
                     <InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={day.description} />
                 </div>
-                    <PrimaryBtn onClick={handleAddEvent}> + Add Event</PrimaryBtn>
-                    <DeleteBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
+                <PrimaryBtn onClick={handleAddEvent}> + Add Event</PrimaryBtn>
+                <div className="flex items-end">
+                    <PrimaryBtn onClick={() => handleAddDays(day.dayNumber - 1)}>+</PrimaryBtn>
+                </div>
+                <DeleteBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
             </div>
             <div>
                 {day.events.length > 0

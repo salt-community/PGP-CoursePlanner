@@ -50,7 +50,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             filledDays = filledDays + mod?.numberOfDays;
     });
 
-    const handleAddModules = () => {
+    const handleAddModules = (index: number) => {
         const emptyCourseModule: CourseModule = {
             course: {
                 name: "",
@@ -60,7 +60,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             }
         }
         const editedModules = [...courseModules];
-        editedModules.push(emptyCourseModule);
+        editedModules.splice(index + 1, 0, emptyCourseModule);
+        //editedModules.push(emptyCourseModule);
         setCourseModules(editedModules);
     }
 
@@ -156,7 +157,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                             : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setSelectedModules={setCourseModules} isSelected={true} />}
                         {courseModules &&
                             <div className="flex items-end">
-                                <PrimaryBtn onClick={() => handleAddModules()}>+</PrimaryBtn>
+                                <PrimaryBtn onClick={() => handleAddModules(index)}>+</PrimaryBtn>
                             </div>}
                         {courseModules.length > 1 &&
                             <div className="flex items-end">
