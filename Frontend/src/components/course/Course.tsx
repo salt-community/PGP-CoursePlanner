@@ -21,7 +21,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         queryKey: ['modules'],
         queryFn: getAllModules
     });
-    console.log(modules);
 
     var selectedModules: CourseModule[] = [{
         courseId: 0,
