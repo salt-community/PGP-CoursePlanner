@@ -7,6 +7,7 @@ import SuccessBtn from "../buttons/SuccessBtn";
 import InputSmall from "../inputFields/InputSmall";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
+import DeleteBtn from "../buttons/DeleteBtn";
 
 export default function Module({ submitFunction, module, buttonText }: ModuleProps) {
     const navigate = useNavigate();
@@ -75,7 +76,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                 </div>
                 <div className="flex flex-col space-y-2">
                     {days.map((day) =>
-                        <Day key={"day_" + day.dayNumber} setDays={setDays} days={days} day={day} />)}
+                        <Day key={"day_" + day.dayNumber} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays} />)}
                 </div>
                 <SuccessBtn value={buttonText} />
             </form>

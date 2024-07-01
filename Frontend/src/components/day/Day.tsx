@@ -3,9 +3,10 @@ import CalendarEvent from '../event/CalendarEvent';
 import PrimaryBtn from '../buttons/PrimaryBtn';
 import InputSmall from '../inputFields/InputSmall';
 import { useState } from 'react';
+import DeleteBtn from '../buttons/DeleteBtn';
 
 
-export default function Day({ day, setDays, days }: DayProps) {
+export default function Day({ day, setDays, days, setNumOfDays }: DayProps) {
     const [dayTheme, setDayTheme] = useState<string>(day.description)
 
     const handleAddEvent = () => {
@@ -27,17 +28,25 @@ export default function Day({ day, setDays, days }: DayProps) {
         setDays(editedDays);
     }
 
+    const handleDeleteDay = (index: number) => {
+        setNumOfDays(days.length - 1)
+        const editedDays = [...days];
+        editedDays.splice(index, 1);
+        for (var i=index; i<editedDays.length; i++) {
+            editedDays[i].dayNumber = i+1;
+        }
+        setDays(editedDays);
+    }
 
     return (
         <>
             <div className="w-auto space-x-2 flex flex-row justify-between">
-                <h2 className="flex items-center min-w-20 align-bottom">Day {day.dayNumber}</h2>
-                <div className="flex w-full">
+                <h2 className="flex items-center min-w-14 align-bottom">Day {day.dayNumber}</h2>
+                <div className="flex w-[800px]">
                     <InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={dayTheme} />
                 </div>
-                <div className="flex items-end">
                     <PrimaryBtn onClick={handleAddEvent}> + Add Event</PrimaryBtn>
-                </div>
+                    <DeleteBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
             </div>
             <div>
                 {day.events.length > 0
