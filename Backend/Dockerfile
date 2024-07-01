@@ -5,11 +5,11 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
 
 # Copy the project file and restore dependencies
-COPY Backend.csproj .
+COPY Backend/Backend.csproj . 
 RUN dotnet restore Backend.csproj
 
 # Copy the source code and build the application
-COPY . .
+COPY Backend/. . 
 RUN dotnet publish -c Release -o out
 
 # Runtime image
