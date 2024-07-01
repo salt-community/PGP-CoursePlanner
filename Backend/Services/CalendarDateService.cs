@@ -1,9 +1,17 @@
+using Backend.Data;
 using Backend.Models;
 
 namespace Backend.Services
 {
     public class CalendarDateService : IService<CalendarDate>
     {
+        private readonly DataContext _context;
+
+        public CalendarDateService(DataContext context)
+        {
+            _context = context;
+        }
+
         public Task<CalendarDate> CreateAsync(CalendarDate T)
         {
             throw new NotImplementedException();
