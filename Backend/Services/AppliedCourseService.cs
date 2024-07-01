@@ -1,6 +1,7 @@
 
 using Backend.Data;
 using Backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Services
 {
@@ -15,7 +16,7 @@ namespace Backend.Services
 
         public async Task<AppliedCourse> CreateAsync(AppliedCourse appliedCourse)
         {
-            var course = _context.Courses.FirstOrDefault(course => course.Id == appliedCourse.CourseId);
+            var course = await _context.Courses.FirstOrDefaultAsync(course => course.Id == appliedCourse.CourseId);
 
             if (course == null)
             {
@@ -39,7 +40,7 @@ namespace Backend.Services
                         Events = day.Events
                     };
 
-                    var date = _context.CalendarDates.FirstOrDefault(date => date.Date == currentDate);
+                    var date = await _context.CalendarDates.FirstOrDefaultAsync(date => date.Date == currentDate);
 
                     if (date == null)
                     {
