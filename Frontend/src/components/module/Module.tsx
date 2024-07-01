@@ -8,12 +8,14 @@ import InputSmall from "../inputFields/InputSmall";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import DeleteBtn from "../buttons/DeleteBtn";
+import { EventType } from "../event/Types";
 
 export default function Module({ submitFunction, module, buttonText }: ModuleProps) {
     const navigate = useNavigate();
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
     const [days, setDays] = useState<DayType[]>(module.days);
+    const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
 
     const handleDays = () => {
         const editedDays = days.slice();
@@ -55,15 +57,29 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
 
         const { moduleName } = e.target as typeof e.target & { moduleName: { value: string } };
         const { numberOfDays } = e.target as typeof e.target & { numberOfDays: { value: number } };
+        const events: EventType[] = [];
+        days.forEach(day => {
+            var eventsOfDay = day.events;
+            eventsOfDay.forEach(event => {
+                events.push(event);
+            })
+        });
 
-        const newModule: ModuleType = {
-            id: module.id ?? 0,
-            name: moduleName.value,
-            numberOfDays: numberOfDays.value,
-            days: days
-        };
+        setIsIncompleteInput(false);
 
-        mutation.mutate(newModule);
+        if (moduleName.value == "" || numberOfDays.value == 0 || days.some(d => d.description == "") || events.some(e => e.name == "") || events.some(e => e.startTime == "") || events.some(e => e.endTime == "")) {
+            setIsIncompleteInput(true);
+        }
+        else {
+            const newModule: ModuleType = {
+                id: module.id ?? 0,
+                name: moduleName.value,
+                numberOfDays: numberOfDays.value,
+                days: days
+            };
+
+            mutation.mutate(newModule);
+        }
     }
 
     return (
@@ -78,6 +94,9 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                     {days.map((day) =>
                         <Day key={"day_" + day.dayNumber} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays} />)}
                 </div>
+                {isIncompleteInput &&
+                    <p className="error-message text-red-600 text-sm" id="invalid-helper">Please fill in all the fields</p>}
+
                 <SuccessBtn value={buttonText} />
             </form>
         </section>
