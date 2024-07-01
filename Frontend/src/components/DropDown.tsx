@@ -29,14 +29,14 @@ export default function DropDown({ thisCourseModule, index, selectedModules, mod
                 {!isSelected
                     ? <>
                         <option value="DEFAULT" disabled>Select</option>
-                        {modules.map(module =>
-                            <option value={module.id}>{module.name}</option>)}
+                        {modules.map((module, modIndex) =>
+                            <option key={module.id + "," + modIndex} value={module.id}>{module.name}</option>)}
                     </>
                     : <>
-                        {modules.map(module =>
+                        {modules.map((module, modIndex) =>
                             <> {module.id == thisCourseModule.moduleId
                                 ? <option value="DEFAULT">{module.name}</option>
-                                : <option value={module.id}>{module.name}</option>}
+                                : <option key={module.id + "," + modIndex} value={module.id}>{module.name}</option>}
                             </>)}
                     </>}
             </select>

@@ -67,6 +67,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const handleDeleteModule = (index: number) => {
         const editedModules = [...courseModules];
         editedModules.splice(index, 1);
+        console.log(editedModules);
         setCourseModules(editedModules);
     }
 
@@ -149,7 +150,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 {isIncorrectName &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
                 {modules && courseModules.map((thisCourseModule, index) =>
-                    <div key={thisCourseModule.moduleId} className="flex space-x-2">
+                    <div key={thisCourseModule.moduleId + "," + index} className="flex space-x-2">
                         {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds.some(mid => mid == 0)
                             ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setSelectedModules={setCourseModules} isSelected={false} />
                             : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setSelectedModules={setCourseModules} isSelected={true} />}

@@ -31,8 +31,8 @@ export default function Day({ day, setDays, days, setNumOfDays }: DayProps) {
         editedDays.splice(index, 1);
         for (var i=index; i<editedDays.length; i++) {
             editedDays[i].dayNumber = i+1;
-            editedDays[i].description = days[i+1].description;
-            editedDays[i].events = days[i+1].events;
+            //editedDays[i].description = days[i+1].description;
+            //editedDays[i].events = days[i+1].events;
         }
         setDays(editedDays);
     }
