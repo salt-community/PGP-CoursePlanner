@@ -75,9 +75,9 @@ namespace Backend.Services
             throw new NotImplementedException();
         }
 
-        public Task<AppliedCourse> GetOneAsync(int id)
+        public async Task<AppliedCourse> GetOneAsync(int id)
         {
-            throw new NotImplementedException();
+           return await _context.AppliedCourses.FirstOrDefaultAsync(course => course.Id == id) ?? null!;
         }
 
         public Task<AppliedCourse> UpdateAsync(int id, AppliedCourse T)
