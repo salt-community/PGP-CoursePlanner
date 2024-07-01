@@ -1,24 +1,24 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/course-planner-02/backend:latest', '-f', 'Dockerfile', '.']
-    dir: backend
+  - name: 'gcr.io/pgp-sandbox/docker'
+    args: ['build', '-t', 'gcr.io/pgp-sandbox/backend:latest', '-f', 'Dockerfile', '.']
+    dir: Backend
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/course-planner-02/frontend:latest', '-f', 'Dockerfile', '.']
-    dir: frontend
+    args: ['build', '-t', 'gcr.io/pgp-sandbox/frontend:latest', '-f', 'Dockerfile', '.']
+    dir: Frontend
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/course-planner-02/backend:latest']
+    args: ['push', 'gcr.io/pgp-sandbox/backend:latest']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/course-planner-02/frontend:latest']
+    args: ['push', 'gcr.io/pgp-sandbox/frontend:latest']
 
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['run', 'deploy', 'backend', '--image', 'gcr.io/course-planner-02/backend:latest', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
+    args: ['run', 'deploy', 'backend', '--image', 'gcr.io/pgp-sandbox/backend:latest', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
 
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['run', 'deploy', 'frontend', '--image', 'gcr.io/course-planner-02/frontend:latest', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
+    args: ['run', 'deploy', 'frontend', '--image', 'gcr.io/pgp-sandbox/frontend:latest', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
 
 images:
-  - 'gcr.io/course-planner-02/backend:latest'
-  - 'gcr.io/course-planner-02/frontend:latest'
+  - 'gcr.io/pgp-sandbox/backend:latest'
+  - 'gcr.io/pgp-sandbox/frontend:latest'
