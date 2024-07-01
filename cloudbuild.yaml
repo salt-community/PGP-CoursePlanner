@@ -1,5 +1,5 @@
 steps:
-  - name: 'gcr.io/pgp-sandbox/docker'
+  - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/pgp-sandbox/backend:latest', '-f', 'Dockerfile', '.']
     dir: Backend
 
