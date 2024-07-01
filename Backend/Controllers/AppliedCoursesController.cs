@@ -27,5 +27,17 @@ namespace Backend.Controllers
             return CreatedAtAction("GetAppliedCourse", new { id = appliedCourse.Id }, appliedCourse);
         }
 
+        [HttpGet("{id}")]
+
+        public async Task<ActionResult<AppliedCourse>> GetAppliedCourse(int id)
+        {
+            var response = await _service.GetOneAsync(id);
+            if (response != null)
+            {
+                return Ok(response);
+            }
+            return NotFound("Course does not exist");
+        }
+
     }
 }
