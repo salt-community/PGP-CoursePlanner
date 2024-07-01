@@ -1,7 +1,7 @@
 
-namespace Backend.Models.DTOs
+namespace Backend.Models
 {
-    public class StartDateRequest
+    public class AppliedCourse
     {
         public int Id { get; set; }
         public DateTime StartDate { get; set;}
