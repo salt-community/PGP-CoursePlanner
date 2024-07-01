@@ -4,7 +4,7 @@ using Backend.Models;
 
 namespace Backend.Services
 {
-    public class AppliedCourseService: IService<AppliedCourse>
+    public class AppliedCourseService : IService<AppliedCourse>
     {
         private readonly DataContext _context;
 
@@ -13,9 +13,53 @@ namespace Backend.Services
             _context = context;
         }
 
-        public Task<AppliedCourse> CreateAsync(AppliedCourse T)
+        public async Task<AppliedCourse> CreateAsync(AppliedCourse appliedCourse)
         {
-            throw new NotImplementedException();
+            var course = _context.Courses.FirstOrDefault(course => course.Id == appliedCourse.CourseId);
+
+            if (course == null)
+            {
+                return null!;
+            }
+
+            var currentDate = appliedCourse.StartDate;
+
+
+            foreach (var courseModule in course.Modules)
+            {
+                foreach (var day in courseModule.Module!.Days)
+                {
+                    currentDate = currentDate.AddDays(1);
+
+                    var dateContent = new DateContent()
+                    {
+                        CourseName = course.Name,
+                        ModuleName = courseModule.Module!.Name,
+                        DayOfModule = day.DayNumber,
+                        TotalDaysInModule = courseModule.Module.NumberOfDays,
+                        Events = day.Events
+                    };
+
+                    var date = _context.CalendarDates.FirstOrDefault(date => date.Date == currentDate);
+
+                    if (date == null)
+                    {
+                        date = new CalendarDate()
+                        {
+                            Date = currentDate,
+                        };
+
+                        await _context.CalendarDates.AddAsync(date);
+                    }
+
+                    date.DateContent.Add(dateContent);
+
+                    await _context.SaveChangesAsync();
+                }
+
+            }
+
+            return appliedCourse;
         }
 
         public Task<bool> DeleteAsync(int id)
