@@ -36,7 +36,7 @@ namespace Backend.Controllers
             {
                 return Ok(response);
             }
-            return NotFound("Course does not exist");
+            return NotFound("Applied course does not exist");
         }
 
     }
