@@ -13,29 +13,11 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/course-planner-02/frontend:latest']
 
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'backend-deployment.yaml']
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
-    dir: .
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['run', 'deploy', 'backend', '--image', 'gcr.io/course-planner-02/backend:latest', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
 
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'backend-service.yaml']
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
-    dir: .
-
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'frontend-deployment.yaml']
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
-    dir: .
-
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'frontend-service.yaml']
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
-    dir: .
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['run', 'deploy', 'frontend', '--image', 'gcr.io/course-planner-02/frontend:latest', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
 
 images:
   - 'gcr.io/course-planner-02/backend:latest'
