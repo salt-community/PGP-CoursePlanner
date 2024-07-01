@@ -30,13 +30,13 @@ export default function DropDown({ thisCourseModule, index, selectedModules, mod
                     ? <>
                         <option value="DEFAULT" disabled>Select</option>
                         {modules.map((module, modIndex) =>
-                            <option key={module.id + "," + modIndex} value={module.id}>{module.name}</option>)}
+                            <option key={module.id + "," + modIndex} value={module.id}>{module.name} ({module.numberOfDays} days)</option>)}
                     </>
                     : <>
                         {modules.map((module, modIndex) =>
                             <> {module.id == thisCourseModule.moduleId
-                                ? <option value="DEFAULT">{module.name}</option>
-                                : <option key={module.id + "," + modIndex} value={module.id}>{module.name}</option>}
+                                ? <option value="DEFAULT">{module.name} ({module.numberOfDays} days)</option>
+                                : <option key={module.id + "," + modIndex} value={module.id}>{module.name} ({module.numberOfDays} days)</option>}
                             </>)}
                     </>}
             </select>
