@@ -29,7 +29,6 @@ namespace Backend.Services
             {
                 foreach (var day in courseModule.Module!.Days)
                 {
-                    currentDate = currentDate.AddDays(1);
 
                     var dateContent = new DateContent()
                     {
@@ -55,6 +54,9 @@ namespace Backend.Services
                     date.DateContent.Add(dateContent);
 
                     await _context.SaveChangesAsync();
+
+                    currentDate = currentDate.AddDays(1);
+
                 }
 
             }
