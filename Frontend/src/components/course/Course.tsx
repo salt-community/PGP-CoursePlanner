@@ -44,7 +44,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const [courseModules, setCourseModules] = useState<CourseModule[]>(selectedModules);
     console.log(courseModules);
 
-    const handleAddModules = () => {
+    const handleAddModules = (index: number) => {
         const emptyCourseModule: CourseModule = {
             course: {
                 name: "",
@@ -54,7 +54,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             }
         }
         const editedModules = [...courseModules];
-        editedModules.push(emptyCourseModule);
+        editedModules.splice(index + 1, 0, emptyCourseModule);
         setCourseModules(editedModules);
     }
 
@@ -147,13 +147,13 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                         {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds.some(mid => mid == 0)
                             ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={false} />
                             : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={true} />}
+                        {courseModules &&
+                            <div className="flex items-end">
+                                <PrimaryBtn onClick={() => handleAddModules(index)}>+</PrimaryBtn>
+                            </div>}
                         {courseModules.length > 1 &&
                             <div className="flex items-end">
                                 <DeleteBtn handleDelete={() => handleDeleteModule(index)} />
-                            </div>}
-                        {index + 1 == courseModules.length &&
-                            <div className="flex items-end">
-                                <PrimaryBtn onClick={handleAddModules}>+</PrimaryBtn>
                             </div>}
                     </div>)}
                 {isIncorrectModuleInput &&

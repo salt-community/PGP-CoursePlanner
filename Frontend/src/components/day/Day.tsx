@@ -7,8 +7,6 @@ import DeleteBtn from '../buttons/DeleteBtn';
 
 
 export default function Day({ day, setDays, days, setNumOfDays }: DayProps) {
-    const [dayTheme, setDayTheme] = useState<string>(day.description)
-
     const handleAddEvent = () => {
         const editedDays = [...days];
 
@@ -22,7 +20,6 @@ export default function Day({ day, setDays, days, setNumOfDays }: DayProps) {
     }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setDayTheme(e.target.value);
         const editedDays = [...days];
         editedDays[day.dayNumber - 1].description = e.target.value
         setDays(editedDays);
@@ -34,6 +31,8 @@ export default function Day({ day, setDays, days, setNumOfDays }: DayProps) {
         editedDays.splice(index, 1);
         for (var i=index; i<editedDays.length; i++) {
             editedDays[i].dayNumber = i+1;
+            editedDays[i].description = days[i+1].description;
+            editedDays[i].events = days[i+1].events;
         }
         setDays(editedDays);
     }
@@ -43,7 +42,7 @@ export default function Day({ day, setDays, days, setNumOfDays }: DayProps) {
             <div className="w-auto space-x-2 flex flex-row justify-between">
                 <h2 className="flex items-center min-w-14 align-bottom">Day {day.dayNumber}</h2>
                 <div className="flex w-[800px]">
-                    <InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={dayTheme} />
+                    <InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={day.description} />
                 </div>
                     <PrimaryBtn onClick={handleAddEvent}> + Add Event</PrimaryBtn>
                     <DeleteBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
