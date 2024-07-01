@@ -43,7 +43,14 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const [courseModules, setCourseModules] = useState<CourseModule[]>(selectedModules);
     console.log(courseModules);
 
-    const handleAddModules = (index: number) => {
+    var filledDays: number = 0;
+    courseModules.forEach(cm => {
+        var mod = modules?.find(m => m.id == cm.moduleId);
+        if (mod)
+            filledDays = filledDays + mod?.numberOfDays;
+    });
+
+    const handleAddModules = () => {
         const emptyCourseModule: CourseModule = {
             course: {
                 name: "",
@@ -53,7 +60,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             }
         }
         const editedModules = [...courseModules];
-        editedModules.splice(index + 1, 0, emptyCourseModule);
+        editedModules.push(emptyCourseModule);
         setCourseModules(editedModules);
     }
 
@@ -144,11 +151,11 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 {modules && courseModules.map((thisCourseModule, index) =>
                     <div key={thisCourseModule.moduleId} className="flex space-x-2">
                         {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds.some(mid => mid == 0)
-                            ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={false} />
-                            : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setModules={setCourseModules} selected={true} />}
+                            ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setSelectedModules={setCourseModules} isSelected={false} />
+                            : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setSelectedModules={setCourseModules} isSelected={true} />}
                         {courseModules &&
                             <div className="flex items-end">
-                                <PrimaryBtn onClick={() => handleAddModules(index)}>+</PrimaryBtn>
+                                <PrimaryBtn onClick={() => handleAddModules()}>+</PrimaryBtn>
                             </div>}
                         {courseModules.length > 1 &&
                             <div className="flex items-end">
@@ -159,8 +166,10 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Cannot select duplicate modules</p>}
                 {isNotSelected &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a module from the dropdown menu</p>}
+                <p>You have selected {Math.floor(filledDays/5)} weeks and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>
                 <SuccessBtn value={buttonText} />
             </form>
         </section>
     )
 }
+

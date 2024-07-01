@@ -3,15 +3,15 @@ import { ModuleType } from "./module/Types";
 import { CourseModule } from "./course/Types";
 
 type Props = {
-    modules: ModuleType[];
-    setModules: React.Dispatch<React.SetStateAction<CourseModule[]>>
-    selectedModules: CourseModule[];
-    index: number;
-    selected: boolean;
     thisCourseModule: CourseModule
+    index: number;
+    selectedModules: CourseModule[];
+    modules: ModuleType[];
+    setSelectedModules: React.Dispatch<React.SetStateAction<CourseModule[]>>
+    isSelected: boolean;
 }
 
-export default function DropDown({ thisCourseModule, index, selectedModules, modules, setModules, selected}: Props) {
+export default function DropDown({ thisCourseModule, index, selectedModules, modules, setSelectedModules, isSelected}: Props) {
 
     const handleChange = (event: SyntheticEvent) => {
         const addedModules: CourseModule[] = [...selectedModules];
@@ -20,23 +20,23 @@ export default function DropDown({ thisCourseModule, index, selectedModules, mod
             module: modules.find(m => m.id == parseInt((event.target as HTMLSelectElement).value))!
         }
         addedModules[index] = courseModuleToAdd!;
-        setModules(addedModules);
+        setSelectedModules(addedModules);
     }
 
     return (
         <div className="flex flex-col">
             <select className="border border-gray-300 rounded-lg mt-2 p-1 w-48" onChange={handleChange} defaultValue={'DEFAULT'} >
-                {!selected
+                {!isSelected
                     ? <>
                         <option value="DEFAULT" disabled>Select</option>
                         {modules.map(module =>
-                            <option key={module.id} value={module.id}>{module.name}</option>)}
+                            <option value={module.id}>{module.name}</option>)}
                     </>
                     : <>
                         {modules.map(module =>
                             <> {module.id == thisCourseModule.moduleId
-                                ? <option key={module.id} value="DEFAULT">{module.name}</option>
-                                : <option key={module.id} value={module.id}>{module.name}</option>}
+                                ? <option value="DEFAULT">{module.name}</option>
+                                : <option value={module.id}>{module.name}</option>}
                             </>)}
                     </>}
             </select>
