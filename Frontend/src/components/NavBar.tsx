@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import PrimaryBtn from "./buttons/PrimaryBtn";
 
-
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
 

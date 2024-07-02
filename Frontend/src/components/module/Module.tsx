@@ -7,7 +7,6 @@ import SuccessBtn from "../buttons/SuccessBtn";
 import InputSmall from "../inputFields/InputSmall";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import DeleteBtn from "../buttons/DeleteBtn";
 import { EventType } from "../event/Types";
 
 export default function Module({ submitFunction, module, buttonText }: ModuleProps) {
@@ -66,7 +65,6 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         });
 
         setIsIncompleteInput(false);
-
         if (moduleName.value == "" || numberOfDays.value == 0 || days.some(d => d.description == "") || events.some(e => e.name == "") || events.some(e => e.startTime == "") || events.some(e => e.endTime == "")) {
             setIsIncompleteInput(true);
         }

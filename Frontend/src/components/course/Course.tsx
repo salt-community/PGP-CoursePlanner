@@ -41,7 +41,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         });
     }
     const [courseModules, setCourseModules] = useState<CourseModule[]>(selectedModules);
-    console.log(courseModules);
 
     var filledDays: number = 0;
     courseModules.forEach(cm => {
@@ -61,7 +60,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         }
         const editedModules = [...courseModules];
         editedModules.splice(index + 1, 0, emptyCourseModule);
-        //editedModules.push(emptyCourseModule);
         setCourseModules(editedModules);
     }
 
@@ -70,10 +68,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         editedModules.splice(index, 1);
         console.log(editedModules);
         setCourseModules(editedModules);
-    }
-
-    const handleNumberOfWeeks = () => {
-        // change counter of days filled with modules
     }
 
     const queryClient = useQueryClient();
@@ -102,7 +96,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         setIsIncorrectModuleInput(false);
         setIsIncorrectName(false);
         setIsNotSelected(false);
-
         const isDuplicate = findDuplicates(courseModules);
         if (isDuplicate || courseName.value == "" || numberOfWeeks.value == 0 || courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0))) {
             if (isDuplicate)
@@ -146,7 +139,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                         ? <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" />
                         : <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
                     }
-                    <PrimaryBtn onClick={handleNumberOfWeeks}>Apply</PrimaryBtn>
                 </div>
                 {isIncorrectName &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
@@ -168,7 +160,14 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Cannot select duplicate modules</p>}
                 {isNotSelected &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a module from the dropdown menu</p>}
-                <p>You have selected {Math.floor(filledDays/5)} weeks and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>
+                {Math.floor(filledDays/5) == 1 && numOfWeeks == 1 &&
+                <p>You have selected {Math.floor(filledDays/5)} week and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
+                {Math.floor(filledDays/5) == 1 && numOfWeeks != 1 &&
+                <p>You have selected {Math.floor(filledDays/5)} week and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
+                {Math.floor(filledDays/5) != 1 && numOfWeeks == 1 &&
+                <p>You have selected {Math.floor(filledDays/5)} weeks and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
+                {Math.floor(filledDays/5) != 1 && numOfWeeks != 1 &&
+                <p>You have selected {Math.floor(filledDays/5)} weeks and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
                 <SuccessBtn value={buttonText} />
             </form>
         </section>
