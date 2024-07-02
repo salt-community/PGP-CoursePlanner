@@ -1,5 +1,5 @@
-import { CourseModule } from "../components/course/Types";
-import { ModuleType } from "../components/module/Types";
+import { CourseModule } from "../sections/course/Types";
+import { ModuleType } from "../sections/module/Types";
 
 const BASE_URL = "http://localhost:5268/Modules";
 

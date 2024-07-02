@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { editCourse, getCourseById } from "../../api/CourseApi";
-import Page from "../../components/Page";
-import Course from "../../components/course/Course";
+import Page from "../../sections/Page";
+import Course from "../../sections/course/Course";
 import { getIdFromPath } from "../../helpers/helperMethods";
 import LoadingMessage from "../../components/LoadingMessage";
 import ErrorMessage from "../../components/ErrorMessage";

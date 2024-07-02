@@ -1,7 +1,7 @@
 import { postCourse } from "../../api/CourseApi";
-import Page from "../../components/Page";
-import Course from "../../components/course/Course";
-import { CourseType } from "../../components/course/Types";
+import Page from "../../sections/Page";
+import Course from "../../sections/course/Course";
+import { CourseType } from "../../sections/course/Types";
 
 export default function CreateCourse() {
 

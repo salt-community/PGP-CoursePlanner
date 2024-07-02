@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { deleteCourse, getCourseById } from "../../api/CourseApi";
-import Page from "../../components/Page";
+import Page from "../../sections/Page";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getIdFromPath } from "../../helpers/helperMethods";
-import { ModuleType } from "../../components/module/Types";
+import { ModuleType } from "../../sections/module/Types";
 import { getAllModules } from "../../api/ModuleApi";
 
 export default function CourseDetails() {

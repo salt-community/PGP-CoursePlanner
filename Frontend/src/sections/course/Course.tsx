@@ -1,11 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getAllModules } from "../../api/ModuleApi";
-import SuccessBtn from "../buttons/SuccessBtn";
-import InputSmall from "../inputFields/InputSmall";
-import DropDown from "../DropDown";
-import PrimaryBtn from "../buttons/PrimaryBtn";
+import SuccessBtn from "../../components/buttons/SuccessBtn";
+import InputSmall from "../../components/inputFields/InputSmall";
+import DropDown from "../../components/DropDown";
+import PrimaryBtn from "../../components/buttons/PrimaryBtn";
 import { FormEvent, useState } from "react";
-import DeleteBtn from "../buttons/DeleteBtn";
+import DeleteBtn from "../../components/buttons/DeleteBtn";
 import { CourseModule, CourseProps, CourseType } from "./Types";
 import { useNavigate } from "react-router-dom";
 

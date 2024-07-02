@@ -1,4 +1,4 @@
-import { CourseType } from "../components/course/Types";
+import { CourseType } from "../sections/course/Types";
 
 const BASE_URL = "http://localhost:5268/Courses";
 
