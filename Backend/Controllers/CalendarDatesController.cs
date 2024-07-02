@@ -18,9 +18,13 @@ namespace Backend.Controllers
 
         [HttpGet("{date}")]
 
-        public async Task<ActionResult<CalendarDate>> GetCalendarDate(DateOnly date)
+        public async Task<ActionResult<CalendarDate>> GetCalendarDate(DateTime date)
         {
-            var response = await _context.CalendarDates.FirstOrDefaultAsync(calendarDate => calendarDate.Date == date);
+            var response = await _context.CalendarDates
+                            .Include(date => date.DateContent)
+                            .ThenInclude(content => content.Events)
+                            .FirstOrDefaultAsync(calendarDate => calendarDate.Date.Date == date.Date);
+
             if (response != null)
             {
                 return Ok(response);

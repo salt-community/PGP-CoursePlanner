@@ -23,23 +23,28 @@ namespace Backend.Services
                 return null!;
             }
 
-            var currentDate = appliedCourse.StartDate;
+            var currentDate = appliedCourse.StartDate.Date;
 
-            foreach (var courseModule in course.Modules)
+            foreach (var moduleId in course.moduleIds)
             {
-                foreach (var day in courseModule.Module!.Days)
+                var module = await _context.Modules
+                            .Include(module => module.Days)
+                            .ThenInclude(day => day.Events)
+                            .FirstOrDefaultAsync(module => module.Id == moduleId);
+
+                foreach (var day in module!.Days)
                 {
 
                     var dateContent = new DateContent()
                     {
                         CourseName = course.Name,
-                        ModuleName = courseModule.Module!.Name,
+                        ModuleName = module.Name,
                         DayOfModule = day.DayNumber,
-                        TotalDaysInModule = courseModule.Module.NumberOfDays,
+                        TotalDaysInModule = module.NumberOfDays,
                         Events = day.Events
                     };
 
-                    var date = await _context.CalendarDates.FirstOrDefaultAsync(date => date.Date == currentDate);
+                    var date = await _context.CalendarDates.FirstOrDefaultAsync(date => date.Date.Date == currentDate);
 
                     if (date == null)
                     {
@@ -78,7 +83,7 @@ namespace Backend.Services
 
         public async Task<AppliedCourse> GetOneAsync(int id)
         {
-           return await _context.AppliedCourses.FirstOrDefaultAsync(course => course.Id == id) ?? null!;
+            return await _context.AppliedCourses.FirstOrDefaultAsync(course => course.Id == id) ?? null!;
         }
 
         public Task<AppliedCourse> UpdateAsync(int id, AppliedCourse T)

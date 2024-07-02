@@ -27,13 +27,17 @@ export const lastDayOfMonth = (month: number) => {
 };
 
 export const firstWeekDay = (date: Date) => {
-  return parseInt(format(date, "i")) - 1;
+  return parseInt(format(date, "i"));
 };
 
 export const daysBeforeMonth = (startDate: Date, daysToAdd: number) => {
+  if(daysToAdd == 1){
+    return []
+  }
+
   return eachDayOfInterval({
     start: startDate,
-    end: addDays(startDate, daysToAdd),
+    end: addDays(startDate, daysToAdd -2),
   });
 };
 
