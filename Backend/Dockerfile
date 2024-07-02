@@ -22,7 +22,7 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 
 # Expose the port
-EXPOSE 90
+EXPOSE 5268
 
 # Start the application
 ENTRYPOINT ["dotnet", "Backend.dll"]
