@@ -20,3 +20,9 @@ export type CourseModule = {
     moduleId?: number;
     module?: ModuleType;
 }
+
+export type AppliedCourseType = {
+    id?: number;
+    startDate: Date;
+    courseId: number;
+}
