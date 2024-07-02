@@ -1,25 +1,25 @@
 import { useQuery } from "react-query";
-import { editModule, getModuleById } from "../../api/ModuleApi";
+import { editCourse, getCourseById } from "../../api/CourseApi";
 import Page from "../../sections/Page";
-import Module from "../../sections/module/Module";
+import Course from "../../sections/course/Course";
 import { getIdFromPath } from "../../helpers/helperMethods";
 import LoadingMessage from "../../components/LoadingMessage";
 import ErrorMessage from "../../components/ErrorMessage";
 
 export default function () {
 
-    const moduleId = getIdFromPath();
+    const courseId = getIdFromPath();
 
-    const { data: module, isLoading, isError } = useQuery({
-        queryKey: ['modules', moduleId],
-        queryFn: () => getModuleById(parseInt(moduleId))
+    const { data: course, isLoading, isError } = useQuery({
+        queryKey: ['courses', courseId],
+        queryFn: () => getCourseById(parseInt(courseId))
     });
 
     return (
         <Page>
             {isLoading && <LoadingMessage />}
             {isError && <ErrorMessage />}
-            {module && <Module module={module} submitFunction={editModule} buttonText="Save changes"/>}
+            {course && <Course course={course} submitFunction={editCourse} buttonText="Save changes"/>}
         </Page>
     )
 }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240614141225_initialCreate")]
+    [Migration("20240626172121_initialCreate")]
     partial class initialCreate
     {
         /// <inheritdoc />
@@ -32,6 +32,10 @@ namespace Backend.Migrations
 
                     b.Property<int>("NumberOfWeeks")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("moduleIds")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -97,9 +101,6 @@ namespace Backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CourseId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -109,9 +110,22 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
-
                     b.ToTable("Modules");
+                });
+
+            modelBuilder.Entity("CourseModule", b =>
+                {
+                    b.Property<int>("CourseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CourseId", "ModuleId");
+
+                    b.HasIndex("ModuleId");
+
+                    b.ToTable("CourseModules");
                 });
 
             modelBuilder.Entity("Backend.Models.Day", b =>
@@ -128,11 +142,23 @@ namespace Backend.Migrations
                         .HasForeignKey("DayId");
                 });
 
-            modelBuilder.Entity("Backend.Models.Module", b =>
+            modelBuilder.Entity("CourseModule", b =>
                 {
-                    b.HasOne("Backend.Models.Course", null)
+                    b.HasOne("Backend.Models.Course", "Course")
                         .WithMany("Modules")
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Models.Module", "Module")
+                        .WithMany("CourseModules")
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Module");
                 });
 
             modelBuilder.Entity("Backend.Models.Course", b =>
@@ -147,6 +173,8 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.Module", b =>
                 {
+                    b.Navigation("CourseModules");
+
                     b.Navigation("Days");
                 });
 #pragma warning restore 612, 618

@@ -1,4 +1,5 @@
-import { ModuleType } from "../components/module/Types";
+import { CourseModule } from "../sections/course/Types";
+import { ModuleType } from "../sections/module/Types";
 
 const BASE_URL = "http://localhost:5268/Modules";
 
@@ -6,6 +7,12 @@ export async function getAllModules() {
   const response = await fetch(BASE_URL);
   const data = await response.json();
   return data as ModuleType[];
+}
+
+export async function getAllCourseModules() {
+  const response = await fetch("http://localhost:5268/CourseModules");
+  const data = await response.json();
+  return data as CourseModule[];
 }
 
 export async function getModuleById(moduleId: number) {

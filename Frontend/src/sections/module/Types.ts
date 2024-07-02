@@ -1,3 +1,4 @@
+import { CourseModule } from "../course/Types";
 import { DayType } from "../day/Types";
 
 export type ModuleType = {
@@ -5,6 +6,7 @@ export type ModuleType = {
   name: string;
   numberOfDays: number;
   days: DayType[];
+  courseModules?: CourseModule[];
 };
 
 export type ModuleProps = {

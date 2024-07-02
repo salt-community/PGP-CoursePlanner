@@ -1,26 +1,44 @@
 import { SyntheticEvent } from "react";
-import { ModuleType } from "./module/Types";
+import { ModuleType } from "../sections/module/Types";
+import { CourseModule } from "../sections/course/Types";
 
 type Props = {
-    modules: ModuleType[];
-    setModules: React.Dispatch<React.SetStateAction<ModuleType[]>>
-    selectedModules: ModuleType[];
+    thisCourseModule: CourseModule
     index: number;
+    selectedModules: CourseModule[];
+    modules: ModuleType[];
+    setSelectedModules: React.Dispatch<React.SetStateAction<CourseModule[]>>
+    isSelected: boolean;
 }
 
-export default function DropDown({index, selectedModules, modules, setModules }: Props) {
+export default function DropDown({ thisCourseModule, index, selectedModules, modules, setSelectedModules, isSelected}: Props) {
 
     const handleChange = (event: SyntheticEvent) => {
-        const addedModules: ModuleType[] = [...selectedModules];
-        const moduleToAdd = modules.find(module => module.id == parseInt((event.target as HTMLSelectElement).value));
-        addedModules[index] = moduleToAdd!;
-        setModules(addedModules);
+        const addedModules: CourseModule[] = [...selectedModules];
+        const courseModuleToAdd: CourseModule = {
+            moduleId: parseInt((event.target as HTMLSelectElement).value),
+            module: modules.find(m => m.id == parseInt((event.target as HTMLSelectElement).value))!
+        }
+        addedModules[index] = courseModuleToAdd!;
+        setSelectedModules(addedModules);
     }
+
     return (
-        <div className="flex flex-col justify-center">
-            <select className="border border-gray-300 rounded-lg mt-2 max-w-xs p-1" onChange={handleChange} >
-                {modules.map(module =>
-                    <option key={module.id} value={module.id}>{module.name}</option>)}
+        <div className="flex flex-col">
+            <select className="border border-gray-300 rounded-lg mt-2 p-1 w-48" onChange={handleChange} defaultValue={'DEFAULT'} >
+                {!isSelected
+                    ? <>
+                        <option value="DEFAULT" disabled>Select</option>
+                        {modules.map((module, modIndex) =>
+                            <option key={module.id + "," + modIndex} value={module.id}>{module.name} ({module.numberOfDays} days)</option>)}
+                    </>
+                    : <>
+                        {modules.map((module, modIndex) =>
+                            <> {module.id == thisCourseModule.moduleId
+                                ? <option value="DEFAULT">{module.name} ({module.numberOfDays} days)</option>
+                                : <option key={module.id + "," + modIndex} value={module.id}>{module.name} ({module.numberOfDays} days)</option>}
+                            </>)}
+                    </>}
             </select>
 
         </div>

@@ -11,4 +11,5 @@ export type DayProps = {
   day: DayType;
   setDays: React.Dispatch<React.SetStateAction<DayType[]>>;
   days: DayType[];
+  setNumOfDays: React.Dispatch<React.SetStateAction<number>>
 };
