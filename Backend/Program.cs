@@ -1,4 +1,5 @@
 using Backend.Data;
+using Backend.Models;
 using Backend.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,8 +17,9 @@ options.UseSqlite(builder.Configuration.GetConnectionString("DataContext") ?? th
 
 builder.Services.AddCors();
 
-builder.Services.AddScoped<IService<Backend.Models.Module>, ModuleService>();
-builder.Services.AddScoped<IService<Backend.Models.Course>, CourseService>();
+builder.Services.AddScoped<IService<Module>, ModuleService>();
+builder.Services.AddScoped<IService<Course>, CourseService>();
+builder.Services.AddScoped<IService<AppliedCourse>, AppliedCourseService>();    
 
 var app = builder.Build();
 
