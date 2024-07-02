@@ -14,6 +14,8 @@ import CourseDetails from './pages/coursePages/CourseDetails.tsx'
 import EditCourse from './pages/coursePages/EditCourse.tsx'
 import DayDetails from './pages/Home/DayDetails.tsx'
 import MonthView from './pages/calendar/MonthView.tsx'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
 
 const router = createBrowserRouter([
   {
@@ -30,43 +32,43 @@ const router = createBrowserRouter([
   },
   {
     path: "/home/details/*",
-    element: <DayDetails/>,
+    element: <DayDetails />,
   },
   {
     path: "/modules",
-    element: <Modules/>,
+    element: <Modules />,
   },
   {
     path: "/modules/details/*",
-    element: <ModuleDetails/>,
+    element: <ModuleDetails />,
   },
   {
     path: "/modules/edit/*",
-    element: <EditModule/>,
+    element: <EditModule />,
   },
   {
     path: "/modules/create/*",
-    element: <CreateModule/>,
+    element: <CreateModule />,
   },
   {
     path: "/courses",
-    element: <Courses/>,
+    element: <Courses />,
   },
   {
     path: "/courses/details/*",
-    element: <CourseDetails/>,
+    element: <CourseDetails />,
   },
   {
     path: "/courses/edit/*",
-    element: <EditCourse/>,
+    element: <EditCourse />,
   },
   {
     path: "/courses/create/*",
-    element: <CreateCourse/>,
+    element: <CreateCourse />,
   },
   {
     path: "/calendar/month/*",
-    element: <MonthView/>,
+    element: <MonthView />,
   },
 ]);
 
@@ -76,7 +78,9 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <RouterProvider router={router} />
+      </LocalizationProvider>
     </QueryClientProvider>
   </React.StrictMode>,
 )
