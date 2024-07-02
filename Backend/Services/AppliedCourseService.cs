@@ -61,6 +61,8 @@ namespace Backend.Services
                 }
 
             }
+            await _context.AppliedCourses.AddAsync(appliedCourse);
+            await _context.SaveChangesAsync();
 
             return appliedCourse;
         }
