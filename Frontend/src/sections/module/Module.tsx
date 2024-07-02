@@ -2,12 +2,12 @@ import { FormEvent, useState } from "react";
 import Day from "../day/Day";
 import { DayType } from "../day/Types";
 import { ModuleProps, ModuleType } from "./Types";
-import PrimaryBtn from "../../components/buttons/PrimaryBtn";
-import SuccessBtn from "../../components/buttons/SuccessBtn";
-import InputSmall from "../../components/inputFields/InputSmall";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { EventType } from "../event/Types";
+import InputSmall from "../../components/inputFields/InputSmall";
+import PrimaryBtn from "../../components/buttons/PrimaryBtn";
+import SuccessBtn from "../../components/buttons/SuccessBtn";
 
 export default function Module({ submitFunction, module, buttonText }: ModuleProps) {
     const navigate = useNavigate();
