@@ -8,7 +8,7 @@ export default function CreateCourse() {
     const emptyCourse: CourseType =
     {
         name: "",
-        numberOfWeeks: 1,
+        numberOfWeeks: 0,
         modules: [],
         moduleIds: [0]
     }
