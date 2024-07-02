@@ -12,7 +12,7 @@ export default function Courses() {
 
     return (
         <Page>
-            <section className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 px-4">
+            <section className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 md:px-24 lg:px-56">
                 {isLoading && <p>Loading...</p>}
                 {isError && <p>An error occured...</p>}
                 {data &&

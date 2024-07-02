@@ -3,21 +3,16 @@ import { ModuleType } from "../sections/module/Types";
 import { CourseModule } from "../sections/course/Types";
 
 type Props = {
-    modules: ModuleType[];
-    setModules: React.Dispatch<React.SetStateAction<CourseModule[]>>
-    selectedModules: CourseModule[];
+    thisCourseModule: CourseModule
     index: number;
-    selected: boolean;
+    selectedModules: CourseModule[];
+    modules: ModuleType[];
+    setSelectedModules: React.Dispatch<React.SetStateAction<CourseModule[]>>
+    isSelected: boolean;
 }
 
-export default function DropDown({ index, selectedModules, modules, setModules, selected}: Props) {
+export default function DropDown({ thisCourseModule, index, selectedModules, modules, setSelectedModules, isSelected}: Props) {
 
-    console.log("!!Dropdown!! " + index);
-    console.log(selectedModules);
-    console.log(selected);
-
-    const thisModule: CourseModule = selectedModules[index];
-    
     const handleChange = (event: SyntheticEvent) => {
         const addedModules: CourseModule[] = [...selectedModules];
         const courseModuleToAdd: CourseModule = {
@@ -25,23 +20,23 @@ export default function DropDown({ index, selectedModules, modules, setModules, 
             module: modules.find(m => m.id == parseInt((event.target as HTMLSelectElement).value))!
         }
         addedModules[index] = courseModuleToAdd!;
-        setModules(addedModules);
+        setSelectedModules(addedModules);
     }
 
     return (
-        <div className="flex flex-col justify-center">
-            <select className="border border-gray-300 rounded-lg mt-2 max-w-xs p-1" onChange={handleChange} defaultValue={'DEFAULT'} >
-                {!selected
+        <div className="flex flex-col">
+            <select className="border border-gray-300 rounded-lg mt-2 p-1 w-48" onChange={handleChange} defaultValue={'DEFAULT'} >
+                {!isSelected
                     ? <>
                         <option value="DEFAULT" disabled>Select</option>
-                        {modules.map(module =>
-                            <option key={module.id} value={module.id}>{module.name}</option>)}
+                        {modules.map((module, modIndex) =>
+                            <option key={module.id + "," + modIndex} value={module.id}>{module.name} ({module.numberOfDays} days)</option>)}
                     </>
                     : <>
-                        {modules.map(module =>
-                            <> {module.id == thisModule.moduleId
-                                ? <option key={module.id} value="DEFAULT">{module.name}</option>
-                                : <option key={module.id} value={module.id}>{module.name}</option>}
+                        {modules.map((module, modIndex) =>
+                            <> {module.id == thisCourseModule.moduleId
+                                ? <option value="DEFAULT">{module.name} ({module.numberOfDays} days)</option>
+                                : <option key={module.id + "," + modIndex} value={module.id}>{module.name} ({module.numberOfDays} days)</option>}
                             </>)}
                     </>}
             </select>
