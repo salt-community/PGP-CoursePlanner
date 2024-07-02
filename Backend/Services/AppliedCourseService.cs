@@ -25,7 +25,6 @@ namespace Backend.Services
 
             var currentDate = appliedCourse.StartDate;
 
-
             foreach (var courseModule in course.Modules)
             {
                 foreach (var day in courseModule.Module!.Days)
