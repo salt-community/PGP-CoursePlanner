@@ -9,9 +9,13 @@ import { useState } from "react";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { postAppliedCourse } from "../../api/AppliedCourseApi";
 import { AppliedCourseType } from "../../sections/course/Types";
+import PrimaryBtn from "../../components/buttons/PrimaryBtn";
+import ColorSelection from "../../components/ColorSelection";
+import ColorBtn from "../../components/buttons/ColorButton";
 
 export default function CourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
+    const [color, setColor] = useState("#aabbcc");
 
     const navigate = useNavigate();
 
@@ -40,6 +44,18 @@ export default function CourseDetails() {
         };
         postAppliedCourse(appliedCourse);
         navigate('/calendar/month')
+    }
+
+    const handleColorSelector = () => {
+        var classes = document.getElementById("colorSelector")!.classList;
+        if (classes.contains("hidden")) {
+            classes.remove("hidden");
+            classes.add("visible");
+        }
+        else {
+            classes.remove("visible");
+            classes.add("hidden");
+        }
     }
 
     const queryClient = useQueryClient();
@@ -96,18 +112,28 @@ export default function CourseDetails() {
                         </section>
                     </div>
 
-                    <label htmlFor="startDate" className="font-bold text-[var(--fallback-bc,oklch(var(--bc)/0.6))] text-sm">Enter Start Date: </label>
-                    <DatePicker name="startDate" value={startDate} onChange={(date) => setStartDate(date!)} className="max-w-xs" sx={
-                        {
-                            height: "35px",
-                            padding: "0px",
-                            "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
-                                fontFamily: 'Montserrat',
-                                color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
-                                padding: "6px"
+                    <div className="flex gap-4 mt-10">
+                        <div className="self-start mt-2">
+                            <h1 className="font-bold text-black] text-sm">Enter Start Date: </h1>
+                        </div>
+                        <DatePicker name="startDate" value={startDate} onChange={(date) => setStartDate(date!)} className="max-w-xs" sx={
+                            {
+                                height: "35px",
+                                padding: "0px",
+                                "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+                                    fontFamily: 'Montserrat',
+                                    color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
+                                    padding: "6px"
+                                }
                             }
-                        }
-                    } />
+                        } />
+                        <div className="items-center">
+                            <ColorBtn onClick={handleColorSelector} color={color}>Select color</ColorBtn>
+                        </div>
+                        <div id="colorSelector" className="hidden">
+                            <ColorSelection color={color} setColor={setColor}></ColorSelection>
+                        </div>
+                    </div>
                     <div className="pt-4 flex gap-4 flex-col sm:flex-row">
                         <button onClick={() => mutation.mutate(parseInt(courseId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Course</button>
                         <Link to={`/courses/edit/${courseId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Course</Link>
