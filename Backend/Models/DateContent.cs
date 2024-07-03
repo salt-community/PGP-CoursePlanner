@@ -8,5 +8,6 @@ namespace Backend.Models
         public int TotalDaysInModule { get; set; }
         public required string CourseName { get; set; }
         public List<Event> Events { get; set; } = [];
+        public string? Color { get; set;}
     }
 }
