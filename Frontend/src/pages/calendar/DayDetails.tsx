@@ -4,11 +4,27 @@ import CloseBtn from "../../components/buttons/CloseBtn";
 import Page from "../../sections/Page";
 import { format } from "date-fns";
 import { getDateFromPath } from "../../helpers/helperMethods";
+import { getCalendarDate } from "../../api/CalendarDateApi";
+import { useQuery } from "react-query";
 
 
 export default function DayDetails() {
     const navigate = useNavigate();
     const date = getDateFromPath();
+
+    const dateForApi = date.replaceAll("/", "-");
+
+
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ['modules'],
+        queryFn: () => getCalendarDate(dateForApi)
+    });
+
+    console.log("Date: ", dateForApi);
+    data && console.log("result: ",data);
+   
+
+    
 
     return (
         <Page>
