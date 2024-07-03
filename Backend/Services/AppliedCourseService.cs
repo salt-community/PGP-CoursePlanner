@@ -34,7 +34,6 @@ namespace Backend.Services
 
                 foreach (var day in module!.Days)
                 {
-
                     var dateContent = new DateContent()
                     {
                         CourseName = course.Name,
@@ -43,25 +42,27 @@ namespace Backend.Services
                         TotalDaysInModule = module.NumberOfDays,
                         Events = day.Events
                     };
+                    await _context.DateContent.AddAsync(dateContent);
+                    await _context.SaveChangesAsync();
 
-                    var date = await _context.CalendarDates.FirstOrDefaultAsync(date => date.Date.Date == currentDate);
-
+                    var date = await _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefaultAsync(date => date.Date.Date == currentDate);
                     if (date == null)
                     {
                         date = new CalendarDate()
                         {
                             Date = currentDate,
+                            DateContent = new List<DateContent> { dateContent }
                         };
-
                         await _context.CalendarDates.AddAsync(date);
+                        await _context.SaveChangesAsync();
                     }
-
-                    date.DateContent.Add(dateContent);
-
-                    await _context.SaveChangesAsync();
-
+                    else
+                    {
+                        date.DateContent.Add(dateContent);
+                        _context.CalendarDates.Update(date);
+                        await _context.SaveChangesAsync();
+                    }
                     currentDate = currentDate.AddDays(1);
-
                 }
 
             }
