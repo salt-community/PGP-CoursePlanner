@@ -111,7 +111,10 @@ export default function CourseDetails() {
 
                         </section>
                     </div>
-
+                    <div className="pt-4 flex gap-4 flex-col sm:flex-row">
+                        <button onClick={() => mutation.mutate(parseInt(courseId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Course</button>
+                        <Link to={`/courses/edit/${courseId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Course</Link>
+                    </div>
                     <div className="flex gap-4 mt-10">
                         <div className="self-start mt-2">
                             <h1 className="font-bold text-black] text-sm">Enter Start Date: </h1>
@@ -134,11 +137,7 @@ export default function CourseDetails() {
                             <ColorSelection color={color} setColor={setColor}></ColorSelection>
                         </div>
                     </div>
-                    <div className="pt-4 flex gap-4 flex-col sm:flex-row">
-                        <button onClick={() => mutation.mutate(parseInt(courseId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Course</button>
-                        <Link to={`/courses/edit/${courseId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Course</Link>
-                        <button onClick={handleApplyTemplate} className="btn btn-sm py-1 max-w-xs btn-success text-white">Apply Template </button>
-                    </div>
+                    <button onClick={handleApplyTemplate} className="mt-2 btn btn-sm py-1 max-w-fit btn-success text-white">Apply Template </button>
                 </section >
             }
         </Page >
