@@ -34,7 +34,7 @@ export default function Home() {
                             {formatDate(day) == today
                                 ?
                                 <section className="flex flex-col border-2 border-black rounded-lg w-full gap-3">
-                                    <Link to={`/home/details/date=${formatDate(day)}`}>
+                                    <Link to={`/calendar/day/date=${formatDate(day)}`}>
                                         <h1 className="item-center text-xl font-bold text-center">{format(formatDate(day), 'EEEE')}
                                             <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                         </h1>
@@ -42,7 +42,7 @@ export default function Home() {
                                     <WeekDay key={format(day, 'd')} dateContent={weekDayDateContent[index]} />
                                 </section>
                                 : <section className="flex flex-col border border-black rounded-lg w-full gap-3">
-                                    <Link to={`/home/details/date=${formatDate(day)}`}>
+                                    <Link to={`/calendar/day/date=${formatDate(day)}`}>
                                         <h1 className="item-center text-lg text-center">{format(formatDate(day), 'EEEE')}
                                             <br /> {day.getDay()} {monthNames[day.getMonth()]}
                                         </h1>

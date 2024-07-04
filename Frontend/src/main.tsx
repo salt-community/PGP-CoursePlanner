@@ -32,10 +32,6 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
-    path: "/home/details/*",
-    element: <DayDetails />,
-  },
-  {
     path: "/modules",
     element: <Modules />,
   },
@@ -71,6 +67,10 @@ const router = createBrowserRouter([
     path: "/calendar/month/*",
     element: <MonthView />,
   },
+  {
+    path: "/calendar/day/*",
+    element: <DayDetails />,
+  }
 ]);
 
 const queryClient = new QueryClient();
