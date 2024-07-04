@@ -113,7 +113,7 @@ export default function CourseDetails() {
                         <button onClick={() => mutation.mutate(parseInt(courseId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Course</button>
                         <Link to={`/courses/edit/${courseId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Course</Link>
                         <button onClick={handleApplyTemplate} className="btn btn-sm py-1 max-w-xs btn-success text-white">Save Course </button>
-                        <button onClick={() => convertToGoogle(modules, startDate)} className="btn btn-sm py-1 max-w-xs btn-success text-white">Add to google calendar </button>
+                        <button onClick={() => convertToGoogle(modules, startDate, course.name)} className="btn btn-sm py-1 max-w-xs btn-success text-white">Add to google calendar </button>
                     </div>
                 </section >
             }
