@@ -1,3 +1,5 @@
+import { GoogleEvent } from "../helpers/googleHelpers";
+
 interface EventData {
   summary: string;
   start: { dateTime: string };

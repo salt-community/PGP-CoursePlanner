@@ -14,7 +14,7 @@ export type GoogleEvent = {
   };
   extendedProperties: {
     shared: {
-      template: string;
+      course: string;
     };
   };
 };
@@ -39,7 +39,7 @@ export function converToDate(
   return date;
 }
 
-export const convertToGoogle = (modules: ModuleType[], templateStart: Date) => {
+export const convertToGoogle = (modules: ModuleType[], templateStart: Date, courseName: string) => {
   const googleEvents: GoogleEvent[] = [];
 
   modules.forEach((module, moduleIndex) => {
@@ -71,7 +71,7 @@ export const convertToGoogle = (modules: ModuleType[], templateStart: Date) => {
           },
           extendedProperties: {
             shared: {
-              template: "sprint",
+              course: courseName,
             },
           },
         };
