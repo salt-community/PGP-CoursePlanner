@@ -19,7 +19,7 @@ export type GoogleEvent = {
   };
 };
 
-export function converToDate(
+export function converToGoogleDate(
   date: Date,
   moduleNumber: number,
   eventTime: string,
@@ -45,13 +45,13 @@ export const convertToGoogle = (modules: ModuleType[], templateStart: Date, cour
   modules.forEach((module, moduleIndex) => {
     module.days.forEach((day) => {
       day.events.forEach((event) => {
-        const startDate = converToDate(
+        const startDate = converToGoogleDate(
           templateStart,
           moduleIndex,
           event.startTime,
           day.dayNumber
         );
-        const endDate = converToDate(
+        const endDate = converToGoogleDate(
           templateStart,
           moduleIndex,
           event.endTime,
