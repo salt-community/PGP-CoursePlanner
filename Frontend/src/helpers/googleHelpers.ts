@@ -3,7 +3,7 @@ import { ModuleType } from "../sections/module/Types";
 
 export type GoogleEvent = {
   summary: string;
-  location?: string;
+  description?: string;
   start: {
     dateTime: string;
     timeZone: string;
@@ -60,7 +60,7 @@ export const convertToGoogle = (modules: ModuleType[], templateStart: Date) => {
 
         const googleEvent: GoogleEvent = {
           summary: event.name,
-          location: event.description,
+          description: event.description,
           start: {
             dateTime: startDate.toISOString(),
             timeZone: "Europe/Stockholm",
