@@ -30,31 +30,16 @@ export function converToDate(
   dayNumber: number
 ) {
   date = startOfDay(date);
-  console.log("start of course: ", date);
-
   const daysToAdd = moduleNumber + dayNumber;
-  console.log("days to add: ", daysToAdd);
-
   date = addDays(date, daysToAdd);
-  console.log("date after adding days: ", date);
 
   const [hoursString, minutesString] = eventTime.split(":");
-  console.log("Hours of start time: ", hoursString);
-  console.log("Minutes of start time: ", minutesString);
-
   const hours = parseInt(hoursString, 10);
-  console.log("hours after parsing with base 10: ", hours);
-
   const minutes = parseInt(minutesString, 10);
-  console.log("minutes after parsing with base 10: ", minutes);
 
   date = addHours(date, hours + 2);
-  console.log("Date after adding hours: ", date);
-
   date = addMinutes(date, minutes);
-  console.log("Date after adding minutes: ", date);
 
-  console.log("date after adding time: ", date);
   return date;
 }
 
