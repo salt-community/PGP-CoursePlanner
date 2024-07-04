@@ -26,7 +26,7 @@ export function converToDate(
   dayNumber: number
 ) {
   date = startOfDay(date);
-  const daysToAdd = moduleNumber + dayNumber;
+  const daysToAdd = moduleNumber + dayNumber -1;
   date = addDays(date, daysToAdd);
 
   const [hoursString, minutesString] = eventTime.split(":");
