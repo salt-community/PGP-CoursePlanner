@@ -30,35 +30,49 @@ export function converToDate(
   dayNumber: number
 ) {
   date = startOfDay(date);
-  const daysToAdd = (moduleNumber - 1) * 7 + dayNumber;
-  date = addDays(date, daysToAdd);
-  const [hoursString, minutesString] = eventTime.split(":");
-  const hours = parseInt(hoursString, 10);
-  const minutes = parseInt(minutesString, 10);
-  date = addHours(date, hours + 2);
-  date = addMinutes(date, minutes);
+  console.log("start of course: ", date);
 
+  const daysToAdd = moduleNumber + dayNumber;
+  console.log("days to add: ", daysToAdd);
+
+  date = addDays(date, daysToAdd);
+  console.log("date after adding days: ", date);
+
+  const [hoursString, minutesString] = eventTime.split(":");
+  console.log("Hours of start time: ", hoursString);
+  console.log("Minutes of start time: ", minutesString);
+
+  const hours = parseInt(hoursString, 10);
+  console.log("hours after parsing with base 10: ", hours);
+
+  const minutes = parseInt(minutesString, 10);
+  console.log("minutes after parsing with base 10: ", minutes);
+
+  date = addHours(date, hours + 2);
+  console.log("Date after adding hours: ", date);
+
+  date = addMinutes(date, minutes);
+  console.log("Date after adding minutes: ", date);
+
+  console.log("date after adding time: ", date);
   return date;
 }
 
-export const convertToGoogle = (
-  courseModules: CourseModule[],
-  templateStart: Date
-) => {
+export const convertToGoogle = (modules: ModuleType[], templateStart: Date) => {
   const googleEvents: GoogleEvent[] = [];
 
-  const modules: ModuleType[] = courseModules.map((courseModule) =>
-    getModule(courseModule.moduleId!)
-  );
+  // const modules: ModuleType[] = courseModules.map((courseModule) =>
+  //   getModule(courseModule.moduleId!)
+  // );
 
-  const getModule = (moduleId: number) => {
-    const { data } = useQuery({
-      queryKey: ["modules"],
-      queryFn: () => getModuleById(moduleId!),
-    });
+  // const getModule = (moduleId: number) => {
+  //   const { data } = useQuery({
+  //     queryKey: ["modules"],
+  //     queryFn: () => getModuleById(moduleId!),
+  //   });
 
-    return data ?? null!;
-  };
+  //   return data ?? null!;
+  // };
 
   modules.forEach((module, moduleIndex) => {
     module.days.forEach((day) => {

@@ -20,8 +20,8 @@ public static class SeedData
                     Events = [
                         new Event {
                             Name = "Lecture",
-                            StartTime = "9.00",
-                            EndTime = "10.00",
+                            StartTime = "9:00",
+                            EndTime = "10:00",
                             Description = "Lecture about the topic of today"
                             }
                     ]
@@ -32,8 +32,8 @@ public static class SeedData
                     Events = [
                         new Event {
                             Name = "Lecture",
-                            StartTime = "9.00",
-                            EndTime = "10.00",
+                            StartTime = "9:00",
+                            EndTime = "10:00",
                             Description = "Lecture about the topic of today"
                             }
                     ]
@@ -44,8 +44,8 @@ public static class SeedData
                     Events = [
                         new Event {
                             Name = "Lecture",
-                            StartTime = "9.00",
-                            EndTime = "10.00",
+                            StartTime = "9:00",
+                            EndTime = "10:00",
                             Description = "Lecture about the topic of today"
                             }
                     ]
@@ -56,8 +56,8 @@ public static class SeedData
                     Events = [
                         new Event {
                             Name = "Lecture",
-                            StartTime = "9.00",
-                            EndTime = "10.00",
+                            StartTime = "9:00",
+                            EndTime = "10:00",
                             Description = "Lecture about the topic of today"
                             }
                     ]
@@ -68,20 +68,20 @@ public static class SeedData
                     Events = [
                         new Event {
                             Name = "Lecture",
-                            StartTime = "9.00",
-                            EndTime = "10.00",
+                            StartTime = "9:00",
+                            EndTime = "10:00",
                             Description = "Lecture about the topic of today"
                             },
                         new Event{
                             Name = "Demo",
-                            StartTime = "15.00",
-                            EndTime = "16.00",
+                            StartTime = "15:00",
+                            EndTime = "16:00",
                             Description = "Presentation of today's topic"
                             },
                         new Event{
                             Name = "After Work",
-                            StartTime = "17.00",
-                            EndTime = "22.00",
+                            StartTime = "17:00",
+                            EndTime = "22:00",
                             Description = "Drink and make friends"
                         }
                     ]
@@ -95,14 +95,14 @@ public static class SeedData
                     Events = [
                         new Event {
                             Name = "Lecture",
-                            StartTime = "9.00",
-                            EndTime = "10.00",
+                            StartTime = "9:00",
+                            EndTime = "10:00",
                             Description = "Lecture about the topic of today"
                             },
                         new Event{
                             Name = "Demo",
-                            StartTime = "15.00",
-                            EndTime = "16.00",
+                            StartTime = "15:00",
+                            EndTime = "16:00",
                             Description = "Presentation of today's topic"
                             }],
                 },
@@ -112,8 +112,8 @@ public static class SeedData
                     Events = [
                         new Event {
                             Name = "Lecture",
-                            StartTime = "9.00",
-                            EndTime = "10.00",
+                            StartTime = "9:00",
+                            EndTime = "10:00",
                             Description = "Lecture about the topic of today"
                             }
                     ]
@@ -124,8 +124,8 @@ public static class SeedData
                     Events = [
                         new Event {
                             Name = "Lecture",
-                            StartTime = "9.00",
-                            EndTime = "10.00",
+                            StartTime = "9:00",
+                            EndTime = "10:00",
                             Description = "Lecture about the topic of today"
                             }
                     ]
@@ -139,8 +139,8 @@ public static class SeedData
                     Events = [
                         new Event {
                             Name = "Lecture",
-                            StartTime = "9.00",
-                            EndTime = "10.00",
+                            StartTime = "9:00",
+                            EndTime = "10:00",
                             Description = "Lecture about the topic of today"
                             }
                     ]
@@ -151,14 +151,14 @@ public static class SeedData
                     Events = [
                         new Event {
                             Name = "Lecture",
-                            StartTime = "9.00",
-                            EndTime = "10.00",
+                            StartTime = "9:00",
+                            EndTime = "10:00",
                             Description = "Lecture about the topic of today"
                             },
                         new Event{
                             Name = "Demo",
-                            StartTime = "15.00",
-                            EndTime = "16.00",
+                            StartTime = "15:00",
+                            EndTime = "16:00",
                             Description = "Presentation of today's topic"
                             }],
                 }
@@ -171,8 +171,8 @@ public static class SeedData
                     Events = [
                         new Event {
                             Name = "Lecture",
-                            StartTime = "9.00",
-                            EndTime = "10.00",
+                            StartTime = "9:00",
+                            EndTime = "10:00",
                             Description = "Lecture about the topic of today"
                             }
                     ]
@@ -183,8 +183,8 @@ public static class SeedData
                     Events = [
                         new Event {
                             Name = "Lecture",
-                            StartTime = "9.00",
-                            EndTime = "10.00",
+                            StartTime = "9:00",
+                            EndTime = "10:00",
                             Description = "Lecture about the topic of today"
                             }
                     ]
@@ -195,14 +195,14 @@ public static class SeedData
                     Events = [
                         new Event {
                             Name = "Lecture",
-                            StartTime = "9.00",
-                            EndTime = "10.00",
+                            StartTime = "9:00",
+                            EndTime = "10:00",
                             Description = "Lecture about the topic of today"
                             },
                         new Event{
                             Name = "Demo",
-                            StartTime = "15.00",
-                            EndTime = "16.00",
+                            StartTime = "15:00",
+                            EndTime = "16:00",
                             Description = "Presentation of today's topic"
                             }],
                 }];
