@@ -1,8 +1,4 @@
 import { addDays, addHours, addMinutes, startOfDay } from "date-fns";
-import { DayType } from "../sections/day/Types";
-import { CourseModule } from "../sections/course/Types";
-import { useQuery } from "react-query";
-import { getAllModules, getModuleById } from "../api/ModuleApi";
 import { ModuleType } from "../sections/module/Types";
 
 export type GoogleEvent = {
@@ -45,19 +41,6 @@ export function converToDate(
 
 export const convertToGoogle = (modules: ModuleType[], templateStart: Date) => {
   const googleEvents: GoogleEvent[] = [];
-
-  // const modules: ModuleType[] = courseModules.map((courseModule) =>
-  //   getModule(courseModule.moduleId!)
-  // );
-
-  // const getModule = (moduleId: number) => {
-  //   const { data } = useQuery({
-  //     queryKey: ["modules"],
-  //     queryFn: () => getModuleById(moduleId!),
-  //   });
-
-  //   return data ?? null!;
-  // };
 
   modules.forEach((module, moduleIndex) => {
     module.days.forEach((day) => {
