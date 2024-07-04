@@ -65,7 +65,7 @@ export default function CourseDetails() {
                         <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
                             <h1 className="pb-4 text-xl text-primary font-bold">{course.name}</h1>
                             {modules.map((module, index) =>
-                                <>
+                                <div key={module.id}>
                                     <h1 className="text-lg text-black font-bold self-start">
                                         <Link to={`/modules/details/${module.id}`}>
                                             Module {index + 1}: {module.name}
@@ -91,7 +91,7 @@ export default function CourseDetails() {
                                             <tr></tr>
                                         </tbody>
                                     </table>
-                                </>
+                                </div>
                             )}
 
                         </section>
