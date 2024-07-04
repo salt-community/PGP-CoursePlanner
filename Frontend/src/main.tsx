@@ -60,10 +60,6 @@ const router = createBrowserRouter([
     element: <CourseDetails />,
   },
   {
-    path: "/courses/details/colorselection",
-    element: <ColorSelection />,
-  },
-  {
     path: "/courses/edit/*",
     element: <EditCourse />,
   },

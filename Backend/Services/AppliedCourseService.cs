@@ -40,7 +40,8 @@ namespace Backend.Services
                         ModuleName = module.Name,
                         DayOfModule = day.DayNumber,
                         TotalDaysInModule = module.NumberOfDays,
-                        Events = day.Events
+                        Events = day.Events,
+                        Color = appliedCourse.Color
                     };
                     await _context.DateContent.AddAsync(dateContent);
                     await _context.SaveChangesAsync();

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240703133054_initialDB")]
+    [Migration("20240704111520_initialDB")]
     partial class initialDB
     {
         /// <inheritdoc />
@@ -25,6 +25,9 @@ namespace Backend.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Color")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("CourseId")
                         .HasColumnType("INTEGER");

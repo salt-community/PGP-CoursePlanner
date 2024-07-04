@@ -6,5 +6,6 @@ namespace Backend.Models
         public int Id { get; set; }
         public DateTime StartDate { get; set;}
         public int CourseId { get; set; }
+        public string? Color { get; set; }
     }
 }

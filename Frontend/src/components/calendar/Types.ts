@@ -12,7 +12,8 @@ export type DateContent = {
     dayOfModule: number;
     totalDaysInModule: number;
     courseName: string;
-    events: EventType[]
+    events: EventType[];
+    color: string
 }
 
 

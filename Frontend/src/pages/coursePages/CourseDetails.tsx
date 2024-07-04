@@ -11,21 +11,19 @@ import { postAppliedCourse } from "../../api/AppliedCourseApi";
 import { AppliedCourseType } from "../../sections/course/Types";
 import ColorSelection from "../../components/ColorSelection";
 import ColorBtn from "../../components/buttons/ColorButton";
-
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import CloseBtn from "../../components/buttons/CloseBtn";
 
 export default function CourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [color, setColor] = useState("#FFFFFF");
     const [isColorSelected, setIsColorSelected] = useState<boolean>(false);
     const [isOpened, setIsOpened] = useState<boolean>(false);
-    console.log(isOpened);
 
     const navigate = useNavigate();
 
     const courseId = getIdFromPath();
-
     const { data: course, isLoading, isError } = useQuery({
         queryKey: ['courses', courseId],
         queryFn: () => getCourseById(parseInt(courseId))
@@ -35,6 +33,22 @@ export default function CourseDetails() {
         queryKey: ['modules'],
         queryFn: () => getAllModules()
     });
+
+
+    const popupRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+                setIsOpened(false);
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     var modules: ModuleType[] = [];
     course?.moduleIds.forEach(element => {
@@ -50,31 +64,15 @@ export default function CourseDetails() {
         else {
             const appliedCourse: AppliedCourseType = {
                 startDate: startDate,
-                courseId: parseInt(courseId)
+                courseId: parseInt(courseId),
+                color: color
             };
             postAppliedCourse(appliedCourse);
             navigate('/calendar/month')
         }
     }
 
-    const popupRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-                setIsOpened(false);
-            }
-        }
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
     const queryClient = useQueryClient();
-
     const mutation = useMutation({
         mutationFn: (id: number) => {
             return deleteCourse(id);
@@ -154,22 +152,23 @@ export default function CourseDetails() {
                             {
                                 <div ref={popupRef}>
 
-                                <div className="flex flex-col">
-                                    <button type="button" className="self-end mt-1 mr-1 btn btn-sm max-w-48" onClick={() => setIsOpened(false)}>x</button>
-                                    <div className="self-center mt-2 mb-4">
-                                        <ColorSelection color={color} setColor={setColor}></ColorSelection>
+                                    <div className="flex flex-col">
+                                        <div className="flex justify-end">
+                                            <CloseBtn onClick={() => setIsOpened(false)} />
+                                        </div><div className="self-center mt-2 mb-4">
+                                            <ColorSelection color={color} setColor={setColor}></ColorSelection>
+                                        </div>
+                                        <div className="self-center mb-4">
+                                            <ColorBtn onClick={() => setIsOpened(false)} color={color}>Select color</ColorBtn>
+                                        </div>
                                     </div>
-                                    <div className="self-center mb-4">
-                                        <ColorBtn onClick={() => setIsOpened(false)} color={color}>Select color</ColorBtn>
-                                    </div>
-                                </div>
                                 </div>
                             }
                         </Popup>
                     </div>
                     {isColorSelected &&
                         <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a color for the calendar items</p>}
-                    <button onClick={handleApplyTemplate} className="mt-2 btn btn-sm py-1 max-w-fit btn-success text-white">Add to calendar</button>
+                    <button onClick={handleApplyTemplate} className="mt-2 mb-6 btn btn-sm py-1 max-w-fit btn-success text-white">Add to calendar</button>
                 </section >
             }
         </Page >
