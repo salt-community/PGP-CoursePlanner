@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import ModalCard from "../../components/ModalCard";
 import CloseBtn from "../../components/buttons/CloseBtn";
 import Page from "../../sections/Page";
 import { getDateFromPath } from "../../helpers/helperMethods";
@@ -29,14 +28,16 @@ export default function DayDetails() {
 
     return (
         <Page>
-            <ModalCard
-                button={
-                    <CloseBtn onClick={() => navigate("/calendar/month")} />
-                }
-                content={
-                    <WeekDay date={formatDate(new Date(date))} dateContent={dateContent} />
-                }
-            />
+            <section className="flex justify-center bg-background">
+                <div className="w-1/2 bg-base-100 shadow-xl p-5">
+                    <div className="flex justify-end">
+                        <CloseBtn onClick={() => navigate("/calendar/month")} />
+                    </div>
+                    <div>
+                        <WeekDay date={formatDate(new Date(date))} dateContent={dateContent} />
+                    </div>
+                </div>
+            </section>
         </Page>
     )
 

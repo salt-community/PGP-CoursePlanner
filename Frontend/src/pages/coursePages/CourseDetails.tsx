@@ -9,13 +9,13 @@ import { useState } from "react";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { postAppliedCourse } from "../../api/AppliedCourseApi";
 import { AppliedCourseType } from "../../sections/course/Types";
-import PrimaryBtn from "../../components/buttons/PrimaryBtn";
 import ColorSelection from "../../components/ColorSelection";
 import ColorBtn from "../../components/buttons/ColorButton";
 
 export default function CourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
-    const [color, setColor] = useState("#aabbcc");
+    const [color, setColor] = useState("#FFFFFF");
+    const [isColorSelected, setIsColorSelected] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
@@ -38,12 +38,18 @@ export default function CourseDetails() {
     });
 
     const handleApplyTemplate = () => {
-        const appliedCourse: AppliedCourseType = {
-            startDate: startDate,
-            courseId: parseInt(courseId)
-        };
-        postAppliedCourse(appliedCourse);
-        navigate('/calendar/month')
+        setIsColorSelected(false);
+        if (color == "#FFFFFF") {
+            setIsColorSelected(true);
+        }
+        else {
+            const appliedCourse: AppliedCourseType = {
+                startDate: startDate,
+                courseId: parseInt(courseId)
+            };
+            postAppliedCourse(appliedCourse);
+            navigate('/calendar/month')
+        }
     }
 
     const handleColorSelector = () => {
@@ -137,6 +143,8 @@ export default function CourseDetails() {
                             <ColorSelection color={color} setColor={setColor}></ColorSelection>
                         </div>
                     </div>
+                    {isColorSelected &&
+                        <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a color for the calendar items</p>}
                     <button onClick={handleApplyTemplate} className="mt-2 btn btn-sm py-1 max-w-fit btn-success text-white">Apply Template </button>
                 </section >
             }
