@@ -5,17 +5,22 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getIdFromPath } from "../../helpers/helperMethods";
 import { ModuleType } from "../../sections/module/Types";
 import { getAllModules } from "../../api/ModuleApi";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { postAppliedCourse } from "../../api/AppliedCourseApi";
 import { AppliedCourseType } from "../../sections/course/Types";
 import ColorSelection from "../../components/ColorSelection";
 import ColorBtn from "../../components/buttons/ColorButton";
 
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+
 export default function CourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [color, setColor] = useState("#FFFFFF");
     const [isColorSelected, setIsColorSelected] = useState<boolean>(false);
+    const [isOpened, setIsOpened] = useState<boolean>(false);
+    console.log(isOpened);
 
     const navigate = useNavigate();
 
@@ -52,17 +57,21 @@ export default function CourseDetails() {
         }
     }
 
-    const handleColorSelector = () => {
-        var classes = document.getElementById("colorSelector")!.classList;
-        if (classes.contains("hidden")) {
-            classes.remove("hidden");
-            classes.add("visible");
+    const popupRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+                setIsOpened(false);
+            }
         }
-        else {
-            classes.remove("visible");
-            classes.add("hidden");
-        }
-    }
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const queryClient = useQueryClient();
 
@@ -136,16 +145,31 @@ export default function CourseDetails() {
                                 }
                             }
                         } />
-                        <div className="items-center">
-                            <ColorBtn onClick={handleColorSelector} color={color}>Select color</ColorBtn>
-                        </div>
-                        <div id="colorSelector" className="hidden">
-                            <ColorSelection color={color} setColor={setColor}></ColorSelection>
-                        </div>
+                        <Popup
+                            open={isOpened}
+                            onOpen={() => setIsOpened(true)}
+                            trigger={<ColorBtn color={color}>Select color</ColorBtn>}
+                            modal
+                        >
+                            {
+                                <div ref={popupRef}>
+
+                                <div className="flex flex-col">
+                                    <button type="button" className="self-end mt-1 mr-1 btn btn-sm max-w-48" onClick={() => setIsOpened(false)}>x</button>
+                                    <div className="self-center mt-2 mb-4">
+                                        <ColorSelection color={color} setColor={setColor}></ColorSelection>
+                                    </div>
+                                    <div className="self-center mb-4">
+                                        <ColorBtn onClick={() => setIsOpened(false)} color={color}>Select color</ColorBtn>
+                                    </div>
+                                </div>
+                                </div>
+                            }
+                        </Popup>
                     </div>
                     {isColorSelected &&
                         <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a color for the calendar items</p>}
-                    <button onClick={handleApplyTemplate} className="mt-2 btn btn-sm py-1 max-w-fit btn-success text-white">Apply Template </button>
+                    <button onClick={handleApplyTemplate} className="mt-2 btn btn-sm py-1 max-w-fit btn-success text-white">Add to calendar</button>
                 </section >
             }
         </Page >
