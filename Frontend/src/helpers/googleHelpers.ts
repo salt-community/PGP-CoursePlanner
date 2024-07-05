@@ -1,6 +1,6 @@
 import { addDays, addHours, addMinutes, startOfDay } from "date-fns";
 import { ModuleType } from "../sections/module/Types";
-import { postCourseToGoogle} from "../api/GoogleCalendarApi";
+import { postCourseToGoogle } from "../api/GoogleCalendarApi";
 
 export type GoogleEvent = {
   summary: string;
@@ -22,12 +22,10 @@ export type GoogleEvent = {
 
 export function converToGoogleDate(
   date: Date,
-  moduleNumber: number,
   eventTime: string,
-  dayNumber: number
+  daysToAdd: number
 ) {
   date = startOfDay(date);
-  const daysToAdd = moduleNumber + dayNumber - 1;
   date = addDays(date, daysToAdd);
 
   const [hoursString, minutesString] = eventTime.split(":");
@@ -46,21 +44,20 @@ export const convertToGoogle = (
   courseName: string
 ) => {
   const googleEvents: GoogleEvent[] = [];
+  let daysToAdd = 0;
 
-  modules.forEach((module, moduleIndex) => {
+  modules.forEach((module) => {
     module.days.forEach((day) => {
       day.events.forEach((event) => {
         const startDate = converToGoogleDate(
           templateStart,
-          moduleIndex,
           event.startTime,
-          day.dayNumber
+          daysToAdd
         );
         const endDate = converToGoogleDate(
           templateStart,
-          moduleIndex,
           event.endTime,
-          day.dayNumber
+          daysToAdd
         );
 
         const googleEvent: GoogleEvent = {
@@ -83,6 +80,7 @@ export const convertToGoogle = (
 
         googleEvents.push(googleEvent);
       });
+      daysToAdd += 1;
     });
   });
   console.log(googleEvents);
