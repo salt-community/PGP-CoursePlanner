@@ -1,3 +1,4 @@
+import { getCookie } from "../helpers/cookieHelpers";
 import { GoogleEvent } from "../helpers/googleHelpers";
 
 interface EventData {
@@ -15,7 +16,9 @@ interface EventDataArr {
 const BASE_URL =
   "https://www.googleapis.com/calendar/v3/calendars/primary/events";
 
-export async function createCalendarTemplate(eventTemplate: GoogleEvent[]) {
+
+export async function postGoogleEvent(eventTemplate: GoogleEvent[]) {
+
   eventTemplate.map(async (event) => {
     const response = await fetch(BASE_URL, {
       method: "POST",
@@ -26,6 +29,7 @@ export async function createCalendarTemplate(eventTemplate: GoogleEvent[]) {
       body: JSON.stringify(event),
     });
     const data = await response.json();
+    console.log("response after post: ", data);
     return data;
   });
 
