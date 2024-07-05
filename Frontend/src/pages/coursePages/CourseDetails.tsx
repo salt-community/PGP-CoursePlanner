@@ -7,7 +7,7 @@ import { ModuleType } from "../../sections/module/Types";
 import { getAllModules } from "../../api/ModuleApi";
 import { useEffect, useRef, useState } from "react";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { postAppliedCourse } from "../../api/AppliedCourseApi";
+import { getAllAppliedCourses, postAppliedCourse } from "../../api/AppliedCourseApi";
 import { AppliedCourseType } from "../../sections/course/Types";
 import ColorSelection from "../../components/ColorSelection";
 import ColorBtn from "../../components/buttons/ColorButton";
@@ -34,6 +34,16 @@ export default function CourseDetails() {
         queryFn: () => getAllModules()
     });
 
+    const { data: allAppliedCourses } = useQuery({
+        queryKey: ['appliedCourses'],
+        queryFn: () => getAllAppliedCourses()
+    });
+    const usedCourses: number[] = [];
+    if (allAppliedCourses) {
+        allAppliedCourses.forEach(element => {
+                usedCourses.push(element.courseId);
+        });
+    }
 
     const popupRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -55,6 +65,16 @@ export default function CourseDetails() {
         var module = allModules?.find(m => m.id == element);
         modules.push(module!)
     });
+
+    const handleDelete = (id: number) => {
+        if (!usedCourses.find(c => c == id)) {
+            mutation.mutate(id);
+        }
+        else {
+            document.getElementById("invalid-module-delete")?.classList.remove("hidden");
+            return;
+        }
+    }
 
     const handleApplyTemplate = () => {
         setIsColorSelected(false);
@@ -125,9 +145,10 @@ export default function CourseDetails() {
                         </section>
                     </div>
                     <div className="pt-4 flex gap-4 flex-col sm:flex-row">
-                        <button onClick={() => mutation.mutate(parseInt(courseId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Course</button>
+                        <button onClick={() => handleDelete(parseInt(courseId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Course</button>
                         <Link to={`/courses/edit/${courseId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Course</Link>
                     </div>
+                    <p className="error-message text-red-600 text-sm hidden" id="invalid-module-delete">Cannot delete this course, it is used in the calendar!</p>
                     <div className="flex gap-4 mt-10">
                         <div className="self-start mt-2">
                             <h1 className="font-bold text-black] text-sm">Enter Start Date: </h1>

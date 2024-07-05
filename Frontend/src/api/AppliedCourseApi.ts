@@ -7,17 +7,22 @@ import { AppliedCourseType } from "../sections/course/Types";
 
 const BASE_URL = "http://localhost:5268/AppliedCourses";
 
-  export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
-    const response = await fetch(BASE_URL, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-      body: JSON.stringify(appliedCourse),
-    });
-  
-    if (!response.ok) {
-      throw new Error("Failed to create course");
-    }
+export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
+  const response = await fetch(BASE_URL, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(appliedCourse),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create course");
   }
-  
+}
+
+export async function getAllAppliedCourses() {
+  const response = await fetch(BASE_URL);
+  const data = await response.json();
+  return data as AppliedCourseType[];
+}

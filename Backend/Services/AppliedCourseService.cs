@@ -108,7 +108,7 @@ namespace Backend.Services
                         var contentIdToBeDeleted = date!.DateContent.FirstOrDefault(c => c.appliedCourseId == id)!.Id;
                         var contentToBeDeleted = await _context.DateContent.FirstOrDefaultAsync(c => c.Id == contentIdToBeDeleted);
                         _context.DateContent.Remove(contentToBeDeleted!);
-                        
+
                         date.DateContent.Remove(contentToBeDeleted!);
                         if (date.DateContent.Count() == 0)
                             _context.CalendarDates.Remove(date);
@@ -128,9 +128,15 @@ namespace Backend.Services
             return false;
         }
 
-        public Task<List<AppliedCourse>> GetAllAsync()
+        public async Task<List<AppliedCourse>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var appliedCourses = await _context.AppliedCourses.ToListAsync();
+                return appliedCourses;
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message); }
+            return null!;
         }
 
         public async Task<AppliedCourse> GetOneAsync(int id)

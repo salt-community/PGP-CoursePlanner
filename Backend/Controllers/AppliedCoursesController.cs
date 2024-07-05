@@ -39,6 +39,13 @@ namespace Backend.Controllers
             return NotFound("Applied course does not exist");
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Course>>> GetAppliedCourses()
+        {
+            var response = await _service.GetAllAsync();
+            return Ok(response);
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAppliedCourse(int id)
         {
