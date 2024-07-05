@@ -98,6 +98,9 @@ namespace Backend.Migrations
                     b.Property<int>("TotalDaysInModule")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("appliedCourseId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CalendarDateId");

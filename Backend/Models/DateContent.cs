@@ -11,6 +11,7 @@ namespace Backend.Models
         public required string CourseName { get; set; }
         public List<Event> Events { get; set; } = [];
         public string? Color { get; set; }
+        public int appliedCourseId { get; set;}
         
     }
 }

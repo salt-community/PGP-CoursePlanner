@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240704111520_initialDB")]
+    [Migration("20240705085340_initialDB")]
     partial class initialDB
     {
         /// <inheritdoc />
@@ -99,6 +99,9 @@ namespace Backend.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("TotalDaysInModule")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("appliedCourseId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

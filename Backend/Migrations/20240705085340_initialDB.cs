@@ -79,6 +79,7 @@ namespace Backend.Migrations
                     TotalDaysInModule = table.Column<int>(type: "INTEGER", nullable: false),
                     CourseName = table.Column<string>(type: "TEXT", nullable: false),
                     Color = table.Column<string>(type: "TEXT", nullable: true),
+                    appliedCourseId = table.Column<int>(type: "INTEGER", nullable: false),
                     CalendarDateId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>

@@ -39,5 +39,15 @@ namespace Backend.Controllers
             return NotFound("Applied course does not exist");
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAppliedCourse(int id)
+        {
+            if (!await _service.DeleteAsync(id))
+            {
+                return BadRequest("Unable to delete applied course");
+            }
+            return NoContent();
+        }
+
     }
 }
