@@ -1,4 +1,4 @@
-import DeleteBtn from "../../components/buttons/DeleteBtn";
+import TrashBtn from "../../components/buttons/TrashBtn";
 import InputSmall from "../../components/inputFields/InputSmall";
 import InputSmallTime from "../../components/inputFields/InputSmallTime";
 import { EventProps } from "./Types"
@@ -54,7 +54,7 @@ export default function CalendarEvent({ dayNumber, setDays, days, index, event }
             <td><InputSmallTime onChange={handleTimeChange} name="startTime" value={startTimeDefault} type="time" /></td>
             <td><InputSmallTime onChange={handleTimeChange} name="endTime" value={endTimeDefault} type="time" /></td>
             <td className="text-end">
-                <DeleteBtn handleDelete={handleDeleteEvent} />
+                <TrashBtn handleDelete={handleDeleteEvent} />
             </td>
         </tr>
 

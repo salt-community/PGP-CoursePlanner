@@ -2,7 +2,7 @@ import { DayProps } from './Types'
 import CalendarEvent from '../event/CalendarEvent';
 import InputSmall from '../../components/inputFields/InputSmall';
 import PrimaryBtn from '../../components/buttons/PrimaryBtn';
-import DeleteBtn from '../../components/buttons/DeleteBtn';
+import TrashBtn from '../../components/buttons/TrashBtn';
 
 
 export default function Day({ day, setDays, days, setNumOfDays }: DayProps) {
@@ -60,7 +60,7 @@ export default function Day({ day, setDays, days, setNumOfDays }: DayProps) {
                 <div className="flex items-end">
                     <PrimaryBtn onClick={() => handleAddDays(day.dayNumber - 1)}>+</PrimaryBtn>
                 </div>
-                <DeleteBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
+                <TrashBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
             </div>
             <div>
                 {day.events.length > 0

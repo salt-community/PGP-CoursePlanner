@@ -5,9 +5,9 @@ import InputSmall from "../../components/inputFields/InputSmall";
 import DropDown from "../../components/DropDown";
 import PrimaryBtn from "../../components/buttons/PrimaryBtn";
 import { FormEvent, useState } from "react";
-import DeleteBtn from "../../components/buttons/DeleteBtn";
 import { CourseModule, CourseProps, CourseType } from "./Types";
 import { useNavigate } from "react-router-dom";
+import TrashBtn from "../../components/buttons/TrashBtn";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);
@@ -153,7 +153,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                             </div>}
                         {courseModules.length > 1 &&
                             <div className="flex items-end">
-                                <DeleteBtn handleDelete={() => handleDeleteModule(index)} />
+                                <TrashBtn handleDelete={() => handleDeleteModule(index)} />
                             </div>}
                     </div>)}
                 {isIncorrectModuleInput &&
