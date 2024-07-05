@@ -51,7 +51,6 @@ export async function deleteSingleGoogleEvent(eventId: string) {
       },
     }
   );
-  alert("Event deleted, check your Google Calendar!");
 }
 
 export const getGoogleCourseEvents = async(course: string): Promise<string[] | null> => {
