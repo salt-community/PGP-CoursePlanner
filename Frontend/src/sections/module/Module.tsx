@@ -183,7 +183,3 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         </section>
     )
 }
-
-function getOneCourse(element: number): any {
-    throw new Error("Function not implemented.");
-}
