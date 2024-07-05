@@ -4,10 +4,13 @@ import SuccessBtn from "../../components/buttons/SuccessBtn";
 import InputSmall from "../../components/inputFields/InputSmall";
 import DropDown from "../../components/DropDown";
 import PrimaryBtn from "../../components/buttons/PrimaryBtn";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import DeleteBtn from "../../components/buttons/DeleteBtn";
 import { CourseModule, CourseProps, CourseType } from "./Types";
 import { useNavigate } from "react-router-dom";
+import CloseBtn from "../../components/buttons/CloseBtn";
+import Popup from "reactjs-popup";
+import { getAllAppliedCourses } from "../../api/AppliedCourseApi";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);
@@ -15,6 +18,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const [isIncorrectModuleInput, setIsIncorrectModuleInput] = useState<boolean>(false);
     const [isIncorrectName, setIsIncorrectName] = useState<boolean>(false);
     const [isNotSelected, setIsNotSelected] = useState<boolean>(false);
+    const [isOpened, setIsOpened] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const { data: modules } = useQuery({
@@ -48,6 +52,32 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         if (mod)
             filledDays = filledDays + mod?.numberOfDays;
     });
+
+    const { data: allAppliedCourses } = useQuery({
+        queryKey: ['appliedCourses'],
+        queryFn: () => getAllAppliedCourses()
+    });
+    const usedCourses: number[] = [];
+    if (allAppliedCourses) {
+        allAppliedCourses.forEach(element => {
+            usedCourses.push(element.courseId);
+        });
+    }
+
+    const popupRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+                setIsOpened(false);
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const handleAddModules = (index: number) => {
         const emptyCourseModule: CourseModule = {
@@ -132,7 +162,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
 
     return (
         <section className="px-4 md:px-24 lg:px-56">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
+            <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 ">
                 <div className="w-auto flex justify-between space-x-2">
                     <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
                     {numOfWeeks == 0
@@ -160,15 +190,40 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Cannot select duplicate modules</p>}
                 {isNotSelected &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a module from the dropdown menu</p>}
-                {Math.floor(filledDays/5) == 1 && numOfWeeks == 1 &&
-                <p>You have selected {Math.floor(filledDays/5)} week and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
-                {Math.floor(filledDays/5) == 1 && numOfWeeks != 1 &&
-                <p>You have selected {Math.floor(filledDays/5)} week and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
-                {Math.floor(filledDays/5) != 1 && numOfWeeks == 1 &&
-                <p>You have selected {Math.floor(filledDays/5)} weeks and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
-                {Math.floor(filledDays/5) != 1 && numOfWeeks != 1 &&
-                <p>You have selected {Math.floor(filledDays/5)} weeks and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
-                <SuccessBtn value={buttonText} />
+                {Math.floor(filledDays / 5) == 1 && numOfWeeks == 1 &&
+                    <p>You have selected {Math.floor(filledDays / 5)} week and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
+                {Math.floor(filledDays / 5) == 1 && numOfWeeks != 1 &&
+                    <p>You have selected {Math.floor(filledDays / 5)} week and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
+                {Math.floor(filledDays / 5) != 1 && numOfWeeks == 1 &&
+                    <p>You have selected {Math.floor(filledDays / 5)} weeks and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
+                {Math.floor(filledDays / 5) != 1 && numOfWeeks != 1 &&
+                    <p>You have selected {Math.floor(filledDays / 5)} weeks and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
+
+                {usedCourses.find(c => c == course.id) 
+                    ? <Popup
+                        open={isOpened}
+                        onOpen={() => setIsOpened(true)}
+                        trigger={<input className="btn btn-sm mt-4 max-w-48 btn-success text-white" value={buttonText} />}
+                        modal
+                    >
+                        {
+                            <div ref={popupRef}>
+                                <div className="flex flex-col">
+                                    <div className="flex justify-end">
+                                        <CloseBtn onClick={() => setIsOpened(false)} />
+                                    </div>
+                                    <h1 className="self-center m-2">This course is used in the calendar. Changing it will change the calendar entries.</h1>
+                                    <h1 className="font-bold m-2">Do you want to continue?</h1>
+                                    <div className="flex items-center justify-center mb-4 gap-2">
+                                        <input type="submit" form="editCourse-form" className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
+                                        <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={() => setIsOpened(false)} />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </Popup>
+                    : <SuccessBtn value={buttonText}></SuccessBtn>
+                    }
             </form>
         </section>
     )

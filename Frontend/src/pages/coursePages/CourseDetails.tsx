@@ -41,7 +41,7 @@ export default function CourseDetails() {
     const usedCourses: number[] = [];
     if (allAppliedCourses) {
         allAppliedCourses.forEach(element => {
-                usedCourses.push(element.courseId);
+            usedCourses.push(element.courseId);
         });
     }
 
@@ -176,7 +176,8 @@ export default function CourseDetails() {
                                     <div className="flex flex-col">
                                         <div className="flex justify-end">
                                             <CloseBtn onClick={() => setIsOpened(false)} />
-                                        </div><div className="self-center mt-2 mb-4">
+                                        </div>
+                                        <div className="self-center mt-2 mb-4">
                                             <ColorSelection color={color} setColor={setColor}></ColorSelection>
                                         </div>
                                         <div className="self-center mb-4">
