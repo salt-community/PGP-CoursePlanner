@@ -1,6 +1,6 @@
 import { addDays, addHours, addMinutes, startOfDay } from "date-fns";
 import { ModuleType } from "../sections/module/Types";
-import { postGoogleEvent } from "../api/GoogleCalendarApi";
+import { postCourseToGoogle} from "../api/GoogleCalendarApi";
 
 export type GoogleEvent = {
   summary: string;
@@ -86,5 +86,5 @@ export const convertToGoogle = (
     });
   });
   console.log(googleEvents);
-  postGoogleEvent(googleEvents);
+  postCourseToGoogle(googleEvents);
 };
