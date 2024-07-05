@@ -11,6 +11,7 @@ import { postAppliedCourse } from "../../api/AppliedCourseApi";
 import { AppliedCourseType } from "../../sections/course/Types";
 import { convertToGoogle } from "../../helpers/googleHelpers";
 import DeleteBtn from "../../components/buttons/DeleteBtn";
+import { deleteCourseFromGoogle } from "../../api/GoogleCalendarApi";
 
 export default function CourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
@@ -56,9 +57,6 @@ export default function CourseDetails() {
         }
     })
 
-    const handleDelete = () => {
-
-    }
 
     return (
         <Page>
@@ -119,7 +117,7 @@ export default function CourseDetails() {
                         <Link to={`/courses/edit/${courseId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Course</Link>
                         <button onClick={handleApplyTemplate} className="btn btn-sm py-1 max-w-xs btn-success text-white">Save Course </button>
                         <button onClick={() => convertToGoogle(modules, startDate, course.name)} className="btn btn-sm py-1 max-w-xs btn-success text-white">Add to google calendar </button>
-                        <DeleteBtn onClick={handleDelete}>Remove from google calendar</DeleteBtn>
+                        <DeleteBtn onClick={() => deleteCourseFromGoogle(course.name)}>Remove from google calendar</DeleteBtn>
                     </div>
                 </section >
             }
