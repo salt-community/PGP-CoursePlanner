@@ -1,15 +1,21 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PrimaryBtn from "../components/buttons/PrimaryBtn";
+import { deleteCookie } from "../helpers/cookieHelpers";
 
 export default function NavBar() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const emptyFunction = () => { };
+  const handleLogOut = () => {
+    deleteCookie("access_token");
+    navigate(`/`)
+    window.location.reload();
+  };
 
   return (
     // <div className="navbar bg-base-100">
@@ -89,7 +95,7 @@ export default function NavBar() {
           </ul>
         </div>
         <div className="navbar-end">
-          <PrimaryBtn onClick={emptyFunction}>Login</PrimaryBtn>
+          <PrimaryBtn onClick={handleLogOut}>Log Out</PrimaryBtn>
         </div>
       </div >
     </>

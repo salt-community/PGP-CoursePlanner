@@ -9,6 +9,9 @@ import { useState } from "react";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { postAppliedCourse } from "../../api/AppliedCourseApi";
 import { AppliedCourseType } from "../../sections/course/Types";
+import { convertToGoogle } from "../../helpers/googleHelpers";
+import DeleteBtn from "../../components/buttons/DeleteBtn";
+import { deleteCourseFromGoogle } from "../../api/GoogleCalendarApi";
 
 export default function CourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
@@ -54,6 +57,7 @@ export default function CourseDetails() {
         }
     })
 
+
     return (
         <Page>
             {isLoading && <p>Loading...</p>}
@@ -64,7 +68,7 @@ export default function CourseDetails() {
                         <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
                             <h1 className="pb-4 text-xl text-primary font-bold">{course.name}</h1>
                             {modules.map((module, index) =>
-                                <>
+                                <div key={module.id}>
                                     <h1 className="text-lg text-black font-bold self-start">
                                         <Link to={`/modules/details/${module.id}`}>
                                             Module {index + 1}: {module.name}
@@ -90,7 +94,7 @@ export default function CourseDetails() {
                                             <tr></tr>
                                         </tbody>
                                     </table>
-                                </>
+                                </div>
                             )}
 
                         </section>
@@ -109,9 +113,11 @@ export default function CourseDetails() {
                         }
                     } />
                     <div className="pt-4 flex gap-4 flex-col sm:flex-row">
-                        <button onClick={() => mutation.mutate(parseInt(courseId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Course</button>
+                        <DeleteBtn onClick={() => mutation.mutate(parseInt(courseId))} >Delete Course</DeleteBtn>
                         <Link to={`/courses/edit/${courseId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Course</Link>
-                        <button onClick={handleApplyTemplate} className="btn btn-sm py-1 max-w-xs btn-success text-white">Apply Template </button>
+                        <button onClick={handleApplyTemplate} className="btn btn-sm py-1 max-w-xs btn-success text-white">Save Course </button>
+                        <button onClick={() => convertToGoogle(modules, startDate, course.name)} className="btn btn-sm py-1 max-w-xs btn-success text-white">Add to google calendar </button>
+                        <DeleteBtn onClick={() => deleteCourseFromGoogle(course.name)}>Remove from google calendar</DeleteBtn>
                     </div>
                 </section >
             }
