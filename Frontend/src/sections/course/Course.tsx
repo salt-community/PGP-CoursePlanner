@@ -212,7 +212,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                                     <div className="flex justify-end">
                                         <CloseBtn onClick={() => setIsOpened(false)} />
                                     </div>
-                                    <h1 className="self-center m-2">This course is used in the calendar. Changing it will change the calendar entries.</h1>
+                                    <h1 className="m-2">This course is used in the calendar. Changing it will change the calendar entries.</h1>
                                     <h1 className="font-bold m-2">Do you want to continue?</h1>
                                     <div className="flex items-center justify-center mb-4 gap-2">
                                         <input type="submit" form="editCourse-form" className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
