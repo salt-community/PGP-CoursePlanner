@@ -70,7 +70,7 @@ const router = createBrowserRouter([
   {
     path: "/calendar/day/*",
     element: <DayDetails />,
-  }
+  },
 ]);
 
 const queryClient = new QueryClient();

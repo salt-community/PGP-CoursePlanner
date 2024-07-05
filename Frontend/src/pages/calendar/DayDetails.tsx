@@ -6,11 +6,11 @@ import { getCalendarDate } from "../../api/CalendarDateApi";
 import { useQuery } from "react-query";
 import WeekDay from "../../components/weekDay/WeekDay";
 import { formatDate } from "../../helpers/dateHelpers";
-import { DateContent } from "../../components/calendar/Types";
+import { CalendarDateType, DateContent } from "../../components/calendar/Types";
 import { format } from "date-fns";
 import NextBtn from "../../components/buttons/NextBtn";
 import PreviousBtn from "../../components/buttons/PreviousBtn";
-
+import { useEffect, useState } from "react";
 
 export default function DayDetails() {
     const navigate = useNavigate();
@@ -27,10 +27,16 @@ export default function DayDetails() {
     const previousDay = formatDate(previousDate)
 
     const dateForApi = date.replaceAll("/", "-");
-    const { data, isLoading, isError } = useQuery({
-        queryKey: ['calendarDates', dateForApi],
-        queryFn: () => getCalendarDate(dateForApi)
-    });
+    // const { data, isLoading, isError } = useQuery({
+    //     queryKey: ['calendarDates', dateForApi],
+    //     queryFn: () => getCalendarDate(dateForApi)
+    // });
+    
+    const [data, setData] = useState<CalendarDateType>();
+    useEffect(() => {
+        getCalendarDate(dateForApi)
+            .then(setData);
+    }, [dateForApi]);
 
     let dateContent: DateContent[] = [];
     if (data != undefined)
