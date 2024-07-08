@@ -63,6 +63,11 @@ export default function NavBar() {
                   Courses
                 </Link>
               </li>
+              <li>
+                <Link onClick={toggleDropdown} to="/activecourses">
+                  Active courses
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
@@ -86,6 +91,11 @@ export default function NavBar() {
             <li>
               <Link onClick={toggleDropdown} to="/courses">
                 Courses
+              </Link>
+            </li>
+            <li>
+              <Link onClick={toggleDropdown} to="/activecourses">
+                Active courses
               </Link>
             </li>
           </ul>

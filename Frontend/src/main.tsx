@@ -17,6 +17,8 @@ import MonthView from './pages/calendar/MonthView.tsx'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
 import ColorSelection from './components/ColorSelection.tsx'
+import AppliedCourses from './pages/appliedCoursePages/AppliedCourses.tsx'
+import EditAppliedCourse from './pages/appliedCoursePages/EditAppliedCourse.tsx'
 
 const router = createBrowserRouter([
   {
@@ -71,6 +73,14 @@ const router = createBrowserRouter([
     path: "/calendar/day/*",
     element: <DayDetails />,
   },
+  {
+    path: "/activecourses",
+    element: <AppliedCourses />,
+  },
+  {
+    path: "/activecourses/edit/*",
+    element: <EditAppliedCourse />,
+  }
 ]);
 
 const queryClient = new QueryClient();
