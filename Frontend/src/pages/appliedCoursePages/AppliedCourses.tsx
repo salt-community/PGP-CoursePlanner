@@ -10,12 +10,12 @@ export default function AppliedCourses() {
     const navigate = useNavigate();
 
     const { data: allAppliedCourses, isLoading, isError } = useQuery({
-        queryKey: ['appliedCourses'],
+        queryKey: ['allAppliedCourses'],
         queryFn: getAllAppliedCourses
     });
 
     const { data: allCourses } = useQuery({
-        queryKey: ['courses'],
+        queryKey: ['allCourses'],
         queryFn: getAllCourses
     });
 

@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import Page from "../../sections/Page";
 import { getIdFromPath } from "../../helpers/helperMethods";
 import LoadingMessage from "../../components/LoadingMessage";
@@ -61,10 +61,20 @@ export default function () {
                 startDate: startDate,
                 color: color
             };
-            editAppliedCourse(newAppliedCourse);
-            navigate('/activecourses')
+            mutation.mutate(newAppliedCourse);
+
         }
     }
+    const queryClient = useQueryClient();
+    const mutation = useMutation({
+        mutationFn: (newAppliedCourse: AppliedCourseType) => {
+            return editAppliedCourse(newAppliedCourse);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['allAppliedCourses'] })
+            navigate(`/activecourses`);
+        }
+    })
 
     return (
         <Page>
