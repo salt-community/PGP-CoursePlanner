@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import CloseBtn from "../../components/buttons/CloseBtn";
 import Popup from "reactjs-popup";
 import { getAllAppliedCourses } from "../../api/AppliedCourseApi";
+import TrashBtn from "../../components/buttons/TrashBtn";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);
@@ -182,7 +183,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                             </div>}
                         {courseModules.length > 1 &&
                             <div className="flex items-end">
-                                <DeleteBtn handleDelete={() => handleDeleteModule(index)} />
+                                <TrashBtn handleDelete={() => handleDeleteModule(index)} />
                             </div>}
                     </div>)}
                 {isIncorrectModuleInput &&

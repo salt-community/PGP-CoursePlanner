@@ -9,6 +9,9 @@ import { useEffect, useRef, useState } from "react";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { getAllAppliedCourses, postAppliedCourse } from "../../api/AppliedCourseApi";
 import { AppliedCourseType } from "../../sections/course/Types";
+import { convertToGoogle } from "../../helpers/googleHelpers";
+import DeleteBtn from "../../components/buttons/DeleteBtn";
+import { deleteCourseFromGoogle } from "../../api/GoogleCalendarApi";
 import ColorSelection from "../../components/ColorSelection";
 import ColorBtn from "../../components/buttons/ColorButton";
 import Popup from 'reactjs-popup';
@@ -103,6 +106,7 @@ export default function CourseDetails() {
         }
     })
 
+
     return (
         <Page>
             {isLoading && <p>Loading...</p>}
@@ -113,7 +117,7 @@ export default function CourseDetails() {
                         <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
                             <h1 className="pb-4 text-xl text-primary font-bold">{course.name}</h1>
                             {modules.map((module, index) =>
-                                <>
+                                <div key={module.id}>
                                     <h1 className="text-lg text-black font-bold self-start">
                                         <Link to={`/modules/details/${module.id}`}>
                                             Module {index + 1}: {module.name}
@@ -139,13 +143,14 @@ export default function CourseDetails() {
                                             <tr></tr>
                                         </tbody>
                                     </table>
-                                </>
+                                </div>
                             )}
 
                         </section>
                     </div>
+
                     <div className="pt-4 flex gap-4 flex-col sm:flex-row">
-                        <button onClick={() => handleDelete(parseInt(courseId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Course</button>
+                        <DeleteBtn onClick={() => mutation.mutate(parseInt(courseId))} >Delete Course</DeleteBtn>
                         <Link to={`/courses/edit/${courseId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Course</Link>
                     </div>
                     <p className="error-message text-red-600 text-sm hidden" id="invalid-module-delete">Cannot delete this course, it is used in the calendar!</p>
@@ -164,29 +169,33 @@ export default function CourseDetails() {
                                 }
                             }
                         } />
-                        <Popup
-                            open={isOpened}
-                            onOpen={() => setIsOpened(true)}
-                            trigger={<ColorBtn color={color}>Select color</ColorBtn>}
-                            modal
-                        >
-                            {
-                                <div ref={popupRef}>
+                        <div className="pt-4 flex gap-4 flex-col sm:flex-row">
+                            <Popup
+                                open={isOpened}
+                                onOpen={() => setIsOpened(true)}
+                                trigger={<ColorBtn color={color}>Select color</ColorBtn>}
+                                modal
+                            >
+                                {
+                                    <div ref={popupRef}>
 
-                                    <div className="flex flex-col">
-                                        <div className="flex justify-end">
-                                            <CloseBtn onClick={() => setIsOpened(false)} />
-                                        </div>
-                                        <div className="self-center mt-2 mb-4">
-                                            <ColorSelection color={color} setColor={setColor}></ColorSelection>
-                                        </div>
-                                        <div className="self-center mb-4">
-                                            <ColorBtn onClick={() => setIsOpened(false)} color={color}>Select color</ColorBtn>
+                                        <div className="flex flex-col">
+                                            <div className="flex justify-end">
+                                                <CloseBtn onClick={() => setIsOpened(false)} />
+                                            </div>
+                                            <div className="self-center mt-2 mb-4">
+                                                <ColorSelection color={color} setColor={setColor}></ColorSelection>
+                                            </div>
+                                            <div className="self-center mb-4">
+                                                <ColorBtn onClick={() => setIsOpened(false)} color={color}>Select color</ColorBtn>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            }
-                        </Popup>
+                                }
+                            </Popup>
+                            <button onClick={() => convertToGoogle(modules, startDate, course.name)} className="btn btn-sm py-1 max-w-xs btn-success text-white">Add to Google calendar </button>
+                            <DeleteBtn onClick={() => deleteCourseFromGoogle(course.name)}>Remove from Google calendar</DeleteBtn>
+                        </div>
                     </div>
                     {isColorSelected &&
                         <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a color for the calendar items</p>}

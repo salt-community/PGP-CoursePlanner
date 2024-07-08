@@ -2,12 +2,28 @@ import { format, getWeek } from "date-fns";
 import Page from "../../sections/Page";
 import { formatDate, today, weekDays } from "../../helpers/dateHelpers";
 import WeekDay from "../../components/weekDay/WeekDay";
+import { getCookie, setCookie } from "../../helpers/cookieHelpers";
+const redirectLink = "http://localhost:5173";
+const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com`;
 import { getCalendarDate } from "../../api/CalendarDateApi";
 import { useQuery } from "react-query";
 import { DateContent } from "../../components/calendar/Types";
 import { Link } from "react-router-dom";
 
 export default function Home() {
+
+    if (location.hash) {
+        const params = new URLSearchParams(location.hash);
+        const accessToken = params.get('access_token');
+        setCookie('access_token', accessToken!, 1);
+        console.log("access token: ", accessToken);
+        location.href = redirectLink;
+
+    };
+
+    if (!getCookie("access_token")) {
+        location.href = LOGIN_URL;
+    }
 
     const weekDayDateContent: DateContent[][] = [];
     weekDays.forEach(day => {
