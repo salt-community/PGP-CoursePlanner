@@ -5,7 +5,6 @@ import InputSmall from "../../components/inputFields/InputSmall";
 import DropDown from "../../components/DropDown";
 import PrimaryBtn from "../../components/buttons/PrimaryBtn";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import DeleteBtn from "../../components/buttons/DeleteBtn";
 import { CourseModule, CourseProps, CourseType } from "./Types";
 import { useNavigate } from "react-router-dom";
 import CloseBtn from "../../components/buttons/CloseBtn";
