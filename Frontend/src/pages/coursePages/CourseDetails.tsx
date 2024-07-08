@@ -69,15 +69,15 @@ export default function CourseDetails() {
         modules.push(module!)
     });
 
-    const handleDelete = (id: number) => {
-        if (!usedCourses.find(c => c == id)) {
-            mutation.mutate(id);
-        }
-        else {
-            document.getElementById("invalid-module-delete")?.classList.remove("hidden");
-            return;
-        }
-    }
+    // const handleDelete = (id: number) => {
+    //     if (!usedCourses.find(c => c == id)) {
+    //         mutation.mutate(id);
+    //     }
+    //     else {
+    //         document.getElementById("invalid-module-delete")?.classList.remove("hidden");
+    //         return;
+    //     }
+    // }
 
     const handleApplyTemplate = () => {
         setIsColorSelected(false);
