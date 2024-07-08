@@ -56,5 +56,16 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCourse(int id, [FromBody] AppliedCourse appliedCourse)
+        {
+            var response = await _service.UpdateAsync(id, appliedCourse);
+            if (response == null)
+            {
+                return BadRequest("Unable to update course");
+            }
+            return NoContent();
+        }
+
     }
 }

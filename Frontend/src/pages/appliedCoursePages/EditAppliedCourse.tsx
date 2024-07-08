@@ -12,9 +12,11 @@ import ColorBtn from "../../components/buttons/ColorButton";
 import CloseBtn from "../../components/buttons/CloseBtn";
 import ColorSelection from "../../components/ColorSelection";
 import { AppliedCourseType } from "../../sections/course/Types";
+import { useNavigate } from "react-router-dom";
 
 export default function () {
     const [isOpened, setIsOpened] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const appliedCourseId = getIdFromPath();
 
@@ -48,7 +50,14 @@ export default function () {
     }, []);
 
     const handleEdit = () => {
-
+        const newAppliedCourse: AppliedCourseType = {
+            id: appliedCourse?.id,
+            courseId: appliedCourse?.courseId!,
+            startDate: startDate,
+            color: color
+        };
+        editAppliedCourse(newAppliedCourse);
+        navigate('/activecourses')
     }
 
     return (
