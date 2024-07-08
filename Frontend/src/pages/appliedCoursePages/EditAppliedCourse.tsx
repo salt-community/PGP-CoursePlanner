@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function () {
     const [isOpened, setIsOpened] = useState<boolean>(false);
+    const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const appliedCourseId = getIdFromPath();
@@ -26,7 +27,7 @@ export default function () {
     const [appliedCourse, setAppliedCourse] = useState<AppliedCourseType>();
     useEffect(() => {
         getAppliedCourseById(parseInt(appliedCourseId))
-            .then(result => {setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setColor(result!.color!);})
+            .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setColor(result!.color!); })
     }, [appliedCourseId]);
 
     const { data: course, isLoading, isError } = useQuery({
@@ -50,14 +51,19 @@ export default function () {
     }, []);
 
     const handleEdit = () => {
-        const newAppliedCourse: AppliedCourseType = {
-            id: appliedCourse?.id,
-            courseId: appliedCourse?.courseId!,
-            startDate: startDate,
-            color: color
-        };
-        editAppliedCourse(newAppliedCourse);
-        navigate('/activecourses')
+        setIsInvalidDate(false);
+        if (startDate.getDate() == 6 || startDate.getDate() == 0)
+            setIsInvalidDate(true);
+        else {
+            const newAppliedCourse: AppliedCourseType = {
+                id: appliedCourse?.id,
+                courseId: appliedCourse?.courseId!,
+                startDate: startDate,
+                color: color
+            };
+            editAppliedCourse(newAppliedCourse);
+            navigate('/activecourses')
+        }
     }
 
     return (
@@ -110,6 +116,8 @@ export default function () {
                                     </div>
                                 }
                             </Popup>
+                            {isInvalidDate &&
+                                <p className="error-message text-red-600 text-sm mt-4" id="invalid-helper">Please select a weekday for the start date</p>}
                             <button onClick={handleEdit} className="btn btn-sm mt-6 max-w-48 btn-success text-white">Save changes</button>
                         </div>
                     </div>

@@ -46,24 +46,27 @@ export default function AppliedCourses() {
                 {isLoading && <p>Loading...</p>}
                 {isError && <p>An error occured...</p>}
                 {allAppliedCourses && allAppliedCourses?.length > 0
-                    ? allAppliedCourses.map((appliedCourse, index) =>
-                        <>
-                            <div className="flex flex-row justify-center">
-                                <div className="w-1/2">
-                                    <h1 className="text-xl font-bold mb-2">{appliedCourseNames[index]}</h1>
-                                    <h2 className="text-lg mb-2 mt-4">Start date: {new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]}, {new Date(appliedCourse.startDate).getFullYear()}</h2>
-                                    <h2 className=" text-lg flex items-center">Calendar color:
-                                        <div style={{ backgroundColor: appliedCourse.color }} className="w-5 h-5 ml-2"></div>
-                                    </h2>
+                    ? <>
+                        <h1 className="flex justify-center text-xl mb-6">The following courses are currently in the calendar</h1>
+                        {allAppliedCourses && allAppliedCourses.map((appliedCourse, index) =>
+                            <>
+                                <div className="flex flex-row justify-center">
+                                    <div className="w-1/2">
+                                        <h1 className="text-xl font-bold mb-2">{appliedCourseNames[index]}</h1>
+                                        <h2 className="text-lg mb-2 mt-4">Start date: {new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]}, {new Date(appliedCourse.startDate).getFullYear()}</h2>
+                                        <h2 className=" text-lg flex items-center">Calendar color:
+                                            <div style={{ backgroundColor: appliedCourse.color }} className="w-5 h-5 ml-2"></div>
+                                        </h2>
+                                    </div>
+                                    <div className="w-1/2 flex flex-row gap-2 items-end">
+                                        <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
+                                        <Link to={`/activecourses/edit/${appliedCourse.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit</Link>
+                                    </div>
                                 </div>
-                                <div className="w-1/2 flex flex-row gap-2 items-end">
-                                    <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
-                                    <Link to={`/activecourses/edit/${appliedCourse.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit</Link>
-                                </div>
-                            </div>
-                            <div className="mt-6 mb-4 border-b-2 border-gray-100"></div>
-                        </>
-                    )
+                                <div className="mt-6 mb-4 border-b-2 border-gray-100"></div>
+                            </>
+                        )}
+                    </>
                     : <div className="text-xl">There are currently no active courses in the calendar</div>}
             </section>
         </Page>

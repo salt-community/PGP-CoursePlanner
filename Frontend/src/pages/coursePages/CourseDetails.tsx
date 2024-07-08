@@ -21,7 +21,8 @@ import CloseBtn from "../../components/buttons/CloseBtn";
 export default function CourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [color, setColor] = useState("#FFFFFF");
-    const [isColorSelected, setIsColorSelected] = useState<boolean>(false);
+    const [isColorNotSelected, setIsColorNotSelected] = useState<boolean>(false);
+    const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
     const [isOpened, setIsOpened] = useState<boolean>(false);
 
     const navigate = useNavigate();
@@ -70,9 +71,13 @@ export default function CourseDetails() {
     });
 
     const handleApplyTemplate = () => {
-        setIsColorSelected(false);
-        if (color == "#FFFFFF") {
-            setIsColorSelected(true);
+        setIsColorNotSelected(false);
+        setIsInvalidDate(false);
+        if (color == "#FFFFFF" || startDate.getDay() == 6 || startDate.getDay() == 0) {
+            if (color == "#FFFFFF")
+                setIsColorNotSelected(true);
+            if (startDate.getDay() == 6 || startDate.getDay() == 0)
+                setIsInvalidDate(true);
         }
         else {
             const appliedCourse: AppliedCourseType = {
@@ -146,7 +151,7 @@ export default function CourseDetails() {
                     <p className="error-message text-red-600 text-sm hidden" id="invalid-module-delete">Cannot delete this course, it is used in the calendar!</p>
                     <div className="flex gap-4 mt-10">
                         <div className="self-start mt-2">
-                            <h1 className="font-bold text-black] text-sm">Enter Start Date: </h1>
+                            <h1 className="font-bold text-black] text-sm">Enter start date: </h1>
                         </div>
                         <DatePicker name="startDate" value={startDate} onChange={(date) => setStartDate(date!)} className="max-w-xs" sx={
                             {
@@ -185,8 +190,10 @@ export default function CourseDetails() {
                         </Popup>
 
                     </div>
-                    {isColorSelected &&
+                    {isColorNotSelected &&
                         <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a color for the calendar items</p>}
+                    {isInvalidDate &&
+                        <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a weekday for the start date</p>}
                     <div className="pt-4 mb-4 flex gap-4 flex-col sm:flex-row">
                         <button onClick={handleApplyTemplate} className="btn btn-sm py-1 max-w-fit btn-primary text-white">Add to calendar</button>
                         <button onClick={() => convertToGoogle(modules, startDate, course.name)} className="btn btn-sm py-1 max-w-xs btn-success text-white">Add to Google calendar </button>
