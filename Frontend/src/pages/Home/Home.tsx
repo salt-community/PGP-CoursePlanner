@@ -7,30 +7,42 @@ import { getCalendarDate } from "../../api/CalendarDateApi";
 import { useQuery } from "react-query";
 import { DateContent } from "../../components/calendar/Types";
 import { Link } from "react-router-dom";
+import { getAccessToken } from "../../api/UserApi";
 
 export default function Home() {
 
     const redirectLink = "http://localhost:5173";
     const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com`;
-    if (location.search) {
+
+
+    if (location.search && !getCookie("access_token")) {
         const params = new URLSearchParams(location.search);
         const auth_code = params.get('code');
-        setCookie('auth_code', auth_code!, 1);
-        console.log('auth code: ', auth_code);
-        location.href = redirectLink;
-    }
+        console.log("auth code:", auth_code);
 
-    if (location.hash) {
-        const params = new URLSearchParams(location.hash);
-        const accessToken = params.get('access_token');
-        setCookie('access_token', accessToken!, 1);
-        console.log("access token: ", accessToken);
-        location.href = redirectLink;
-    };
+        const { data, isLoading, isError } = useQuery({
+            queryKey: ['access_token'],
+            queryFn: () => getAccessToken(auth_code!)
+        });
+
+        if (data) {
+            setCookie('access_token', data.access_token, 1);
+        }
+    }
 
     if (!getCookie("access_token")) {
         location.href = LOGIN_URL;
     }
+
+
+    // if (location.hash) {
+    //     const params = new URLSearchParams(location.hash);
+    //     const accessToken = params.get('access_token');
+    //     setCookie('access_token', accessToken!, 1);
+    //     console.log("access token: ", accessToken);
+    //     location.href = redirectLink;
+    // };
+
 
     const weekDayDateContent: DateContent[][] = [];
     weekDays.forEach(day => {
