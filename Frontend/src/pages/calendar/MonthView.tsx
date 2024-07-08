@@ -1,5 +1,5 @@
-import { format } from "date-fns"
-import { allDaysInMonth, currentMonth, currentYear, daysBeforeMonth, firstDayOfMonth, firstWeekDay, formatDate, fullWeek, getWeekNumber, lastDayOfMonth } from "../../helpers/dateHelpers"
+import { format, getWeek } from "date-fns"
+import { allDaysInMonth, currentMonth, currentYear, daysBeforeMonth, firstDayOfMonth, firstWeekDay, formatDate, fullWeek, lastDayOfMonth } from "../../helpers/dateHelpers"
 import NextBtn from "../../components/buttons/NextBtn"
 import PreviousBtn from "../../components/buttons/PreviousBtn"
 import Page from "../../sections/Page"
@@ -14,7 +14,7 @@ export default function MonthView() {
     const daysInMonth = allDaysInMonth(startOfMonth, endOfMonth);
     const monthInText = format(new Date(currentYear, month, 1), "MMMM");
 
-    const numberOfWeeks = getWeekNumber(endOfMonth) - getWeekNumber(startOfMonth) + 1;
+    const numberOfWeeks = getWeek(endOfMonth) - getWeek(startOfMonth) + 1;
     const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
     return (
