@@ -11,7 +11,14 @@ import { Link } from "react-router-dom";
 export default function Home() {
 
     const redirectLink = "http://localhost:5173";
-    const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com`;
+    const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com`;
+    if (location.search) {
+        const params = new URLSearchParams(location.search);
+        const auth_code = params.get('code');
+        setCookie('auth_code', auth_code!, 1);
+        console.log('auth code: ', auth_code);
+        location.href = redirectLink;
+    }
 
     if (location.hash) {
         const params = new URLSearchParams(location.hash);
@@ -19,7 +26,6 @@ export default function Home() {
         setCookie('access_token', accessToken!, 1);
         console.log("access token: ", accessToken);
         location.href = redirectLink;
-
     };
 
     if (!getCookie("access_token")) {
