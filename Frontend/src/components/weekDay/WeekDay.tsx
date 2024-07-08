@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { DateContent } from "../calendar/Types";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
