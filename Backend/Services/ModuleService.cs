@@ -111,7 +111,7 @@ public class ModuleService : IService<Module>
                                 _context.DateContent.Remove(dc);
                                 await _context.SaveChangesAsync();
                             }
-                           
+
                         }
 
                         var currentDate = appliedCourse.StartDate.Date;
@@ -184,6 +184,8 @@ public class ModuleService : IService<Module>
                                     await _context.SaveChangesAsync();
                                 }
                                 currentDate = currentDate.AddDays(1);
+                                if (currentDate.DayOfWeek == DayOfWeek.Saturday)
+                                    currentDate = currentDate.AddDays(2);
                             }
                         }
                     }

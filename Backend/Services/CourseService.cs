@@ -202,6 +202,8 @@ public class CourseService : IService<Course>
                                 await _context.SaveChangesAsync();
                             }
                             currentDate = currentDate.AddDays(1);
+                            if (currentDate.DayOfWeek == DayOfWeek.Saturday)
+                                currentDate = currentDate.AddDays(2);
                         }
                     }
                 }

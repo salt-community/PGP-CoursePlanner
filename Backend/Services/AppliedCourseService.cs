@@ -69,6 +69,8 @@ namespace Backend.Services
                         await _context.SaveChangesAsync();
                     }
                     currentDate = currentDate.AddDays(1);
+                    if (currentDate.DayOfWeek == DayOfWeek.Saturday)
+                        currentDate = currentDate.AddDays(2);
                 }
             }
             return appliedCourse;
@@ -117,6 +119,8 @@ namespace Backend.Services
                         await _context.SaveChangesAsync();
 
                         currentDate = currentDate.AddDays(1);
+                        if (currentDate.DayOfWeek == DayOfWeek.Saturday)
+                            currentDate = currentDate.AddDays(2);
                     }
                 }
                 _context.AppliedCourses.Remove(appliedCourse);
