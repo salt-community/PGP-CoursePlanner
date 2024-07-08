@@ -24,6 +24,7 @@ export default function CourseDetails() {
     const [isColorNotSelected, setIsColorNotSelected] = useState<boolean>(false);
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
     const [isOpened, setIsOpened] = useState<boolean>(false);
+    const [isOpenedDelete, setIsOpenedDelete] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
@@ -145,7 +146,31 @@ export default function CourseDetails() {
                     </div>
 
                     <div className="pt-4 flex gap-4 flex-col sm:flex-row">
-                        <DeleteBtn onClick={() => mutation.mutate(parseInt(courseId))} >Delete Course</DeleteBtn>
+                    {usedCourses.find(c => c == course.id) 
+                    ? <Popup
+                        open={isOpenedDelete}
+                        onOpen={() => setIsOpenedDelete(true)}
+                        trigger={<DeleteBtn onClick={() => {}} >Delete Course</DeleteBtn>}
+                        modal
+                    >
+                        {
+                            <div ref={popupRef}>
+                                <div className="flex flex-col">
+                                    <div className="flex justify-end">
+                                        <CloseBtn onClick={() => setIsOpenedDelete(false)} />
+                                    </div>
+                                    <h1 className="m-2">This course is used in the calendar. Deleting it will remove all calendar entries using this course.</h1>
+                                    <h1 className="font-bold m-2">Do you want to continue?</h1>
+                                    <div className="flex items-center justify-center mb-4 gap-2">
+                                        <input onClick={() => mutation.mutate(parseInt(courseId))} className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
+                                        <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={() => setIsOpenedDelete(false)} />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </Popup>
+                    : <DeleteBtn onClick={() => mutation.mutate(parseInt(courseId))} >Delete Course</DeleteBtn>
+                    }
                         <Link to={`/courses/edit/${courseId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Course</Link>
                     </div>
                     <p className="error-message text-red-600 text-sm hidden" id="invalid-module-delete">Cannot delete this course, it is used in the calendar!</p>

@@ -22,8 +22,8 @@ export default function AppliedCourses() {
     const appliedCourseNames: string[] = [];
     if (allAppliedCourses && allCourses) {
         allAppliedCourses.forEach(ac => {
-            var course: CourseType = allCourses.find(c => c.id == ac.courseId)!;
-            appliedCourseNames.push(course.name)
+            var course: CourseType = allCourses?.find(c => c.id == ac.courseId)!;
+            appliedCourseNames.push(course?.name)
         });
     }
 
@@ -45,7 +45,7 @@ export default function AppliedCourses() {
             <section className="px-4 md:px-24 lg:px-56">
                 {isLoading && <p>Loading...</p>}
                 {isError && <p>An error occured...</p>}
-                {allAppliedCourses && allAppliedCourses?.length > 0
+                {allAppliedCourses && allAppliedCourses?.length > 0 && appliedCourseNames.length > 0
                     ? <>
                         <h1 className="flex justify-center text-xl mb-6">The following courses are currently in the calendar</h1>
                         {allAppliedCourses && allAppliedCourses.map((appliedCourse, index) =>

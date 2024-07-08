@@ -229,6 +229,29 @@ public class CourseService : IService<Course>
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
 
+            // update appliedCourse, CalendarDays and DateContent
+            var appliedCourses = _context.AppliedCourses.Where(ac => ac.CourseId == id).ToList();
+            if (appliedCourses.Count() > 0)
+            {
+                foreach (var appliedCourse in appliedCourses)
+                {
+                    var allDateContents = _context.DateContent.Where(dc => dc.appliedCourseId == appliedCourse.Id);
+                    foreach (var dc in allDateContents)
+                    {
+                        _context.DateContent.Remove(dc);
+                        var cdList = _context.CalendarDates.Where(cd => cd.DateContent.Contains(dc)).ToList();
+                        foreach (var cd in cdList)
+                        {
+                            cd.DateContent.Remove(dc);
+                            _context.CalendarDates.Update(cd);
+                        }
+                        await _context.SaveChangesAsync();
+                    }
+                    _context.AppliedCourses.Remove(appliedCourse);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
             return true;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
