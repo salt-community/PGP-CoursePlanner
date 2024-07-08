@@ -12,10 +12,6 @@ export default function NavBar() {
   const emptyFunction = () => { };
 
   return (
-    // <div className="navbar bg-base-100">
-
-    // </div>
-
     <>
       <div className="navbar mb-5 md:mb-10 animate-fade-down border-b">
         <div className="navbar-start">

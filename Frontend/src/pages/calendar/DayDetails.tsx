@@ -27,11 +27,6 @@ export default function DayDetails() {
     const previousDay = formatDate(previousDate)
 
     const dateForApi = date.replaceAll("/", "-");
-    // const { data, isLoading, isError } = useQuery({
-    //     queryKey: ['calendarDates', dateForApi],
-    //     queryFn: () => getCalendarDate(dateForApi)
-    // });
-    
     const [data, setData] = useState<CalendarDateType>();
     useEffect(() => {
         getCalendarDate(dateForApi)

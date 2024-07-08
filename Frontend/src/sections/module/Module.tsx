@@ -12,7 +12,6 @@ import Popup from "reactjs-popup";
 import { getAllAppliedCourses } from "../../api/AppliedCourseApi";
 import CloseBtn from "../../components/buttons/CloseBtn";
 import { getAllCourses } from "../../api/CourseApi";
-import { CourseType } from "../course/Types";
 
 export default function Module({ submitFunction, module, buttonText }: ModuleProps) {
     const navigate = useNavigate();
@@ -50,17 +49,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         });
     }
 
-
-
-    //const usedModules: number[] = [];
-
-    //     const moduleIds = course.moduleIds as number[];
-    //     moduleIds.forEach(element => {
-    //         usedModules.push(element)
-    //     });
-    // });
-
-    const popupRef = useRef<HTMLDivElement>(null);
+const popupRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (popupRef.current && !popupRef.current.contains(event.target as Node)) {

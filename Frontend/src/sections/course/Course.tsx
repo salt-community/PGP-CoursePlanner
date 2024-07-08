@@ -96,7 +96,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const handleDeleteModule = (index: number) => {
         const editedModules = [...courseModules];
         editedModules.splice(index, 1);
-        console.log(editedModules);
         setCourseModules(editedModules);
     }
 
