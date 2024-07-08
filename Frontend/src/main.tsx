@@ -16,6 +16,7 @@ import DayDetails from './pages/calendar/DayDetails.tsx'
 import MonthView from './pages/calendar/MonthView.tsx'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
+import ColorSelection from './components/ColorSelection.tsx'
 
 const router = createBrowserRouter([
   {
@@ -29,10 +30,6 @@ const router = createBrowserRouter([
   {
     path: "/home/*",
     element: <Home />,
-  },
-  {
-    path: "/home/details/*",
-    element: <DayDetails />,
   },
   {
     path: "/modules",
@@ -69,6 +66,10 @@ const router = createBrowserRouter([
   {
     path: "/calendar/month/*",
     element: <MonthView />,
+  },
+  {
+    path: "/calendar/day/*",
+    element: <DayDetails />,
   },
 ]);
 

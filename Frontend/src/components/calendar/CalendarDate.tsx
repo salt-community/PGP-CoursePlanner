@@ -10,7 +10,7 @@ export default function CalenderDate({ date }: Props) {
 
     return (
         <>
-            <Link to={`/home/details/date=${date}`}
+            <Link to={`/calendar/day/date=${date}`}
                 className={`${border} flex justify-center items-center hover:shadow-md rounded-sm mx-px w-1/7`}>
                 {format(date, 'd')}
             </Link>

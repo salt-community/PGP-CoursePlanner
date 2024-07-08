@@ -17,9 +17,11 @@
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
     "date-fns": "^3.6.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-query": "^3.39.3"
+    "react": "^18.3.1",
+    "react-colorful": "^5.6.1",
+    "react-dom": "^17.0.0 || ^18.0.0",
+    "react-query": "^3.39.3",
+    "reactjs-popup": "^2.0.6"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
@@ -39,7 +41,6 @@
     "vite": "^5.2.0"
   },
   "peerDependencies": {
-    "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0"
   }
 }

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Backend.Models
 {
     public class DateContent
@@ -8,5 +10,8 @@ namespace Backend.Models
         public int TotalDaysInModule { get; set; }
         public required string CourseName { get; set; }
         public List<Event> Events { get; set; } = [];
+        public string? Color { get; set; }
+        public int appliedCourseId { get; set;}
+        
     }
 }

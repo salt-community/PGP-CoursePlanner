@@ -25,4 +25,5 @@ export type AppliedCourseType = {
     id?: number;
     startDate: Date;
     courseId: number;
+    color: string
 }

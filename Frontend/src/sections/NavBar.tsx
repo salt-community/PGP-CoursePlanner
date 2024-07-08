@@ -18,10 +18,6 @@ export default function NavBar() {
   };
 
   return (
-    // <div className="navbar bg-base-100">
-
-    // </div>
-
     <>
       <div className="navbar mb-5 md:mb-10 animate-fade-down border-b">
         <div className="navbar-start">
@@ -53,17 +49,17 @@ export default function NavBar() {
                 }`}
             >
               <li>
-                <Link onClick={toggleDropdown} to="/Calendar/month">
+                <Link onClick={toggleDropdown} to="/calendar/month">
                   Calendar
                 </Link>
               </li>
               <li>
-                <Link onClick={toggleDropdown} to="/Modules">
+                <Link onClick={toggleDropdown} to="/modules">
                   Modules
                 </Link>
               </li>
               <li>
-                <Link onClick={toggleDropdown} to="/Courses">
+                <Link onClick={toggleDropdown} to="/courses">
                   Courses
                 </Link>
               </li>
@@ -78,17 +74,17 @@ export default function NavBar() {
         <div className="navbar-center hidden md:flex">
           <ul className="menu menu-horizontal px-1 text-xl">
             <li>
-              <Link onClick={toggleDropdown} to="/Calendar/month">
+              <Link onClick={toggleDropdown} to="/calendar/month">
                 Calendar
               </Link>
             </li>
             <li>
-              <Link onClick={toggleDropdown} to="/Modules">
+              <Link onClick={toggleDropdown} to="/modules">
                 Modules
               </Link>
             </li>
             <li>
-              <Link onClick={toggleDropdown} to="/Courses">
+              <Link onClick={toggleDropdown} to="/courses">
                 Courses
               </Link>
             </li>
