@@ -29,7 +29,7 @@ export default function Home() {
     const weekDayDateContent: DateContent[][] = [];
     weekDays.forEach(day => {
         const dayString = formatDate(day).replaceAll("/", "-");
-        const { data, isLoading, isError } = useQuery({
+        const { data } = useQuery({
             queryKey: ['calendarDates', dayString],
             queryFn: () => getCalendarDate(dayString)
         });
