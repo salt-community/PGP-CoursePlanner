@@ -169,37 +169,39 @@ export default function CourseDetails() {
                                 }
                             }
                         } />
-                        <div className="pt-4 flex gap-4 flex-col sm:flex-row">
-                            <Popup
-                                open={isOpened}
-                                onOpen={() => setIsOpened(true)}
-                                trigger={<ColorBtn color={color}>Select color</ColorBtn>}
-                                modal
-                            >
-                                {
-                                    <div ref={popupRef}>
 
-                                        <div className="flex flex-col">
-                                            <div className="flex justify-end">
-                                                <CloseBtn onClick={() => setIsOpened(false)} />
-                                            </div>
-                                            <div className="self-center mt-2 mb-4">
-                                                <ColorSelection color={color} setColor={setColor}></ColorSelection>
-                                            </div>
-                                            <div className="self-center mb-4">
-                                                <ColorBtn onClick={() => setIsOpened(false)} color={color}>Select color</ColorBtn>
-                                            </div>
+                        <Popup
+                            open={isOpened}
+                            onOpen={() => setIsOpened(true)}
+                            trigger={<ColorBtn color={color}>Select color</ColorBtn>}
+                            modal
+                        >
+                            {
+                                <div ref={popupRef}>
+
+                                    <div className="flex flex-col">
+                                        <div className="flex justify-end">
+                                            <CloseBtn onClick={() => setIsOpened(false)} />
+                                        </div>
+                                        <div className="self-center mt-2 mb-4">
+                                            <ColorSelection color={color} setColor={setColor}></ColorSelection>
+                                        </div>
+                                        <div className="self-center mb-4">
+                                            <ColorBtn onClick={() => setIsOpened(false)} color={color}>Select color</ColorBtn>
                                         </div>
                                     </div>
-                                }
-                            </Popup>
-                            <button onClick={() => convertToGoogle(modules, startDate, course.name)} className="btn btn-sm py-1 max-w-xs btn-success text-white">Add to Google calendar </button>
-                            <DeleteBtn onClick={() => deleteCourseFromGoogle(course.name)}>Remove from Google calendar</DeleteBtn>
-                        </div>
+                                </div>
+                            }
+                        </Popup>
+
                     </div>
                     {isColorSelected &&
                         <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a color for the calendar items</p>}
-                    <button onClick={handleApplyTemplate} className="mt-2 mb-6 btn btn-sm py-1 max-w-fit btn-success text-white">Add to calendar</button>
+                    <div className="pt-4 mb-4 flex gap-4 flex-col sm:flex-row">
+                        <button onClick={handleApplyTemplate} className="btn btn-sm py-1 max-w-fit btn-primary text-white">Add to calendar</button>
+                        <button onClick={() => convertToGoogle(modules, startDate, course.name)} className="btn btn-sm py-1 max-w-xs btn-success text-white">Add to Google calendar </button>
+                        <DeleteBtn onClick={() => deleteCourseFromGoogle(course.name)}>Remove from Google calendar</DeleteBtn>
+                    </div>
                 </section >
             }
         </Page >
