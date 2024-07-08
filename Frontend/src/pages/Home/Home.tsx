@@ -14,20 +14,24 @@ export default function Home() {
     const redirectLink = "http://localhost:5173";
     const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com`;
 
+    let auth_code = "";
 
-    if (location.search && !getCookie("access_token")) {
+    if (location.search) {
         const params = new URLSearchParams(location.search);
-        const auth_code = params.get('code');
-        console.log("auth code:", auth_code);
+        auth_code = params.get('code')!;
+        console.log("setting cookie auth code:", auth_code);
+        setCookie('auth_code', auth_code!, 1);
+    }
+    
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ['access_token'],
+        queryFn: () => getAccessToken(auth_code)
+    });
 
-        const { data, isLoading, isError } = useQuery({
-            queryKey: ['access_token'],
-            queryFn: () => getAccessToken(auth_code!)
-        });
-
-        if (data) {
-            setCookie('access_token', data.access_token, 1);
-        }
+    if (data) {
+        console.log("Setting access_token: ", data.access_token)
+        setCookie('access_token', data.access_token, 1);
+        // location.href = redirectLink;
     }
 
     if (!getCookie("access_token")) {
