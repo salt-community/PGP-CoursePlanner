@@ -19,8 +19,7 @@ export default function Home() {
     if (location.search) {
         const params = new URLSearchParams(location.search);
         auth_code = params.get('code')!;
-        console.log("setting cookie auth code:", auth_code);
-        setCookie('auth_code', auth_code!, 1);
+        location.href = redirectLink;
     }
     
     const { data, isLoading, isError } = useQuery({
@@ -29,9 +28,7 @@ export default function Home() {
     });
 
     if (data) {
-        console.log("Setting access_token: ", data.access_token)
         setCookie('access_token', data.access_token, 1);
-        // location.href = redirectLink;
     }
 
     if (!getCookie("access_token")) {

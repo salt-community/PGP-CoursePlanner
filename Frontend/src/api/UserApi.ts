@@ -1,4 +1,3 @@
-import { setCookie } from "../helpers/cookieHelpers";
 
 const BASE_URL = "https://accounts.google.com/o/oauth2/token";
 
