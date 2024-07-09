@@ -11,16 +11,19 @@ import { Link } from "react-router-dom";
 export default function Home() {
 
     const redirectLink = "http://localhost:5173";
-    const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com`;
+    const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=token id_token&nonce=mst3k&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com`;
+
 
     if (location.hash) {
         const params = new URLSearchParams(location.hash);
-        const accessToken = params.get('access_token');
-        setCookie('access_token', accessToken!, 1);
-        console.log("access token: ", accessToken);
-        location.href = redirectLink;
+        const access_token = params.get('access_token')!;
+        setCookie('access_token', access_token, 1);
 
-    };
+        const JWT = params.get('id_token');
+        setCookie('JWT', JWT!, 1);
+
+        location.href = redirectLink;
+    }
 
     if (!getCookie("access_token")) {
         location.href = LOGIN_URL;
