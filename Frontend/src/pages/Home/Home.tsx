@@ -2,52 +2,32 @@ import { format, getWeek } from "date-fns";
 import Page from "../../sections/Page";
 import { formatDate, today, weekDays } from "../../helpers/dateHelpers";
 import WeekDay from "../../components/weekDay/WeekDay";
-import { deleteCookie, getCookie, setCookie } from "../../helpers/cookieHelpers";
+import { getCookie, setCookie } from "../../helpers/cookieHelpers";
 import { getCalendarDate } from "../../api/CalendarDateApi";
 import { useQuery } from "react-query";
 import { DateContent } from "../../components/calendar/Types";
 import { Link } from "react-router-dom";
-import { getAccessToken } from "../../api/UserApi";
 
 export default function Home() {
 
     const redirectLink = "http://localhost:5173";
-    const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com`;
+    const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=token id_token&nonce=mst3k&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com`;
 
 
-    if (location.search) {
-        const params = new URLSearchParams(location.search);
-        const auth_code = params.get('code')!;
-        console.log("auth_code: ", auth_code);
-        setCookie('auth_code', auth_code, 1);
-    }
+    if (location.hash) {
+        const params = new URLSearchParams(location.hash);
+        const access_token = params.get('access_token')!;
+        setCookie('access_token', access_token, 1);
 
-    const {data} = useQuery({
-        queryKey: ['access_token'],
-        queryFn: () => getAccessToken(getCookie('auth_code')!)
-    });
+        const JWT = params.get('id_token');
+        setCookie('JWT', JWT!, 1);
 
-    if (data && data.access_token != undefined) {
-        console.log("data from get accesstoken: ", data)
-        console.log("setting access_token to: ", data.access_token)
-        setCookie('access_token', data.access_token, 1);
-        deleteCookie('auth_code');
         location.href = redirectLink;
     }
 
     if (!getCookie("access_token")) {
         location.href = LOGIN_URL;
     }
-
-
-    // if (location.hash) {
-    //     const params = new URLSearchParams(location.hash);
-    //     const accessToken = params.get('access_token');
-    //     setCookie('access_token', accessToken!, 1);
-    //     console.log("access token: ", accessToken);
-    //     location.href = redirectLink;
-    // };
-
 
     const weekDayDateContent: DateContent[][] = [];
     weekDays.forEach(day => {
