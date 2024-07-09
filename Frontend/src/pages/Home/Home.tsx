@@ -2,7 +2,7 @@ import { format, getWeek } from "date-fns";
 import Page from "../../sections/Page";
 import { formatDate, today, weekDays } from "../../helpers/dateHelpers";
 import WeekDay from "../../components/weekDay/WeekDay";
-import { getCookie, setCookie } from "../../helpers/cookieHelpers";
+import { deleteCookie, getCookie, setCookie } from "../../helpers/cookieHelpers";
 import { getCalendarDate } from "../../api/CalendarDateApi";
 import { useQuery } from "react-query";
 import { DateContent } from "../../components/calendar/Types";
@@ -14,21 +14,25 @@ export default function Home() {
     const redirectLink = "http://localhost:5173";
     const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com`;
 
-    let auth_code = "";
 
     if (location.search) {
         const params = new URLSearchParams(location.search);
-        auth_code = params.get('code')!;
-        location.href = redirectLink;
+        const auth_code = params.get('code')!;
+        console.log("auth_code: ", auth_code);
+        setCookie('auth_code', auth_code, 1);
     }
-    
+
     const { data, isLoading, isError } = useQuery({
         queryKey: ['access_token'],
-        queryFn: () => getAccessToken(auth_code)
+        queryFn: () => getAccessToken(getCookie('auth_code')!)
     });
 
-    if (data) {
+    if (data && data.access_token != undefined) {
+        console.log("data from get accesstoken: ", data)
+        console.log("setting access_token to: ", data.access_token)
         setCookie('access_token', data.access_token, 1);
+        deleteCookie('auth_code');
+        location.href = redirectLink;
     }
 
     if (!getCookie("access_token")) {

@@ -16,24 +16,21 @@ interface EventDataArr {
 const BASE_URL =
   "https://www.googleapis.com/calendar/v3/calendars/primary/events";
 
-
 export async function postCourseToGoogle(eventTemplate: GoogleEvent[]) {
-
-  eventTemplate.map(async (event) => {
-    const response = await fetch(BASE_URL, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        Authorization: `Bearer ${getCookie("access_token")}`,
-      },
-      body: JSON.stringify(event),
-    });
-    const data = await response.json();
-    console.log("response after post: ", data);
-    return data;
-  });
-
   try {
+    eventTemplate.map(async (event) => {
+      const response = await fetch(BASE_URL, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${getCookie("access_token")}`,
+        },
+        body: JSON.stringify(event),
+      });
+      const data = await response.json();
+      console.log("response after post: ", data);
+      return data;
+    });
   } catch (error) {
     console.error("Error creating events", error);
     alert("Failed to create events");
@@ -53,7 +50,9 @@ export async function deleteSingleGoogleEvent(eventId: string) {
   );
 }
 
-export const getGoogleCourseEvents = async(course: string): Promise<string[] | null> => {
+export const getGoogleCourseEvents = async (
+  course: string
+): Promise<string[] | null> => {
   try {
     const response = await fetch(
       BASE_URL +
@@ -84,6 +83,7 @@ export async function deleteCourseFromGoogle(course: string) {
   if (result) {
     result.map((event) => deleteSingleGoogleEvent(event));
     alert("Event deleted, check your Google Calendar!");
+  } else {
+    console.log("Could not find any events with course ", course);
   }
-  else{console.log("Could not find any events with course ", course)}
 }
