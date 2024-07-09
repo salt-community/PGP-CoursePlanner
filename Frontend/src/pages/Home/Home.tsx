@@ -22,7 +22,7 @@ export default function Home() {
         setCookie('auth_code', auth_code, 1);
     }
 
-    const { data, isLoading, isError } = useQuery({
+    const {data} = useQuery({
         queryKey: ['access_token'],
         queryFn: () => getAccessToken(getCookie('auth_code')!)
     });
