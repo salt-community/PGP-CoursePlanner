@@ -1,9 +1,10 @@
+import { getCookie } from "../helpers/cookieHelpers";
 import { AppliedCourseType } from "../sections/course/Types";
 
-//call to env 
-//2 variables 
+//call to env
+//2 variables
 //one for baseurl one for port
-//add slash api 
+//add slash api
 
 const BASE_URL = "http://localhost:5268/AppliedCourses";
 
@@ -12,6 +13,8 @@ export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
+      Authorization: `Bearer ${getCookie("JWT")}`,
+      Accept: "application/json",
     },
     body: JSON.stringify(appliedCourse),
   });
@@ -24,7 +27,12 @@ export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
 }
 
 export async function getAllAppliedCourses() {
-  const response = await fetch(BASE_URL);
+  const response = await fetch(BASE_URL, {
+    headers: {
+      Authorization: `Bearer ${getCookie("JWT")}`,
+      Accept: "application/json",
+    },
+  });
   const data = await response.json();
   return data as AppliedCourseType[];
 }

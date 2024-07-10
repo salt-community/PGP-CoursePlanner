@@ -86,6 +86,7 @@ export default function CourseDetails() {
                 navigate('/calendar/month')
             }
         }
+    }
         
         const queryClient = useQueryClient();
         const mutation = useMutation({
@@ -208,4 +209,4 @@ export default function CourseDetails() {
             </Page >
         )
     }
-}
+
