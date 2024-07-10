@@ -1,9 +1,11 @@
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Backend.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class CourseModulesController : ControllerBase
