@@ -1,11 +1,6 @@
 import { getCookie } from "../helpers/cookieHelpers";
 import { CourseType } from "../sections/course/Types";
 
-//call to env
-//2 variables
-//one for baseurl one for port
-//add slash api
-
 const BASE_URL = "http://localhost:5268/Courses";
 
 export async function getAllCourses() {
