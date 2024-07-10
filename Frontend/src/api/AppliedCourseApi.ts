@@ -17,8 +17,10 @@ export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to create course");
+    alert("Failed to apply course");
+    throw new Error("Failed to apply course");
   }
+  return response;
 }
 
 export async function getAllAppliedCourses() {
