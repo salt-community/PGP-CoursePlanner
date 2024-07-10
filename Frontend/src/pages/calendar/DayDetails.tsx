@@ -3,7 +3,6 @@ import CloseBtn from "../../components/buttons/CloseBtn";
 import Page from "../../sections/Page";
 import { getDateFromPath } from "../../helpers/helperMethods";
 import { getCalendarDate } from "../../api/CalendarDateApi";
-import { useQuery } from "react-query";
 import WeekDay from "../../components/weekDay/WeekDay";
 import { formatDate } from "../../helpers/dateHelpers";
 import { CalendarDateType, DateContent } from "../../components/calendar/Types";
