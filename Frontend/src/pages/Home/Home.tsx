@@ -50,7 +50,7 @@ export default function Home() {
                 <h1 className="text-2xl font-semibold">We are in week {getWeek(new Date())}</h1>
                 <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-3">
                     {weekDays.map((day, index) =>
-                        <>
+                        <div key={index}>
                             {formatDate(day) == today
                                 ?
                                 <section className="flex flex-col border-2 border-black rounded-lg w-full gap-3">
@@ -70,7 +70,7 @@ export default function Home() {
                                     <WeekDay key={format(day, 'd')} dateContent={weekDayDateContent[index]} />
                                 </section>
                             }
-                        </>
+                        </div>
                     )}
                 </section>
             </section>
