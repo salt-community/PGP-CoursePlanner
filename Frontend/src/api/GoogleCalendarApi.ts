@@ -28,7 +28,6 @@ export async function postCourseToGoogle(eventTemplate: GoogleEvent[]) {
         body: JSON.stringify(event),
       });
       const data = await response.json();
-      console.log("response after post: ", data);
       return data;
     });
   } catch (error) {
