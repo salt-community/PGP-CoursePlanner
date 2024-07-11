@@ -1,5 +1,5 @@
 import React, { useState, useEffect, act } from "react";
-import { format, addDays, subDays } from "date-fns"; // Import date-fns for date manipulation
+import { format, addDays, subDays, getWeek } from "date-fns"; // Import date-fns for date manipulation
 import Page from "../../sections/Page";
 import { useQuery } from "react-query";
 import { getAllAppliedCourses } from "../../api/AppliedCourseApi";
@@ -7,6 +7,8 @@ import TimeLineXaxis from "../../components/calendar/TimeLineXaxis";
 import TimeLineCourse from "../../components/calendar/TimeLineCourse";
 import { getAllCourses } from "../../api/CourseApi";
 import { getAllModules } from "../../api/ModuleApi";
+import { currentMonth, firstDayOfMonth } from "../../helpers/dateHelpers";
+import { Link } from "react-router-dom";
 
 export type Activity = {
   id: number;
@@ -37,7 +39,7 @@ const HorizontalCalendar: React.FC = () => {
   const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 21)); // End 14 days ahead
 
   useEffect(() => {
-    if (appliedCourses) {
+    if (appliedCourses && courses && modules) {
       const newActivities: Activity[] = [];
       appliedCourses.forEach(ac => {
         var c = courses?.find(c => c.id == ac.courseId)!;
@@ -68,7 +70,7 @@ const HorizontalCalendar: React.FC = () => {
       });
       setActivities(newActivities);
     }
-  }, [appliedCourses]
+  }, [appliedCourses, courses, modules]
   );
   console.log(activities[0])
 
@@ -103,6 +105,11 @@ const HorizontalCalendar: React.FC = () => {
           }
         </div>
       </div >
+      <div className="border-b-2 border-gray-100"></div>
+      <div className="flex flex-row justify-center gap-2">
+        <Link to={`/calendar/week/weeknumber=${getWeek(firstDayOfMonth(currentMonth))}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
+        <Link to={`/calendar/month`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to month view</Link>
+      </div>
     </Page >
   );
 };

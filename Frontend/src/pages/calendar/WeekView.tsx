@@ -5,10 +5,12 @@ import PreviousBtn from "../../components/buttons/PreviousBtn"
 import Page from "../../sections/Page"
 import { useState } from "react"
 import CalendarDate from "../../components/calendar/CalendarDate"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { getWeekFromPath } from "../../helpers/helperMethods"
 
 export default function MonthView() {
-    // const [month, setMonth] = useState<number>(currentMonth);
+    const [week, setWeek] = useState<number>(parseInt(getWeekFromPath()));
+    const navigate = useNavigate();
 
     // const startOfMonth = firstDayOfMonth(month);
     // const endOfMonth = lastDayOfMonth(month);
@@ -21,35 +23,38 @@ export default function MonthView() {
     return (
         <Page>
             <section className="flex justify-around">
-                {/* <div></div>
+                <div></div>
                 <div className="h-[100px] flex items-end">
-                    <PreviousBtn onClick={() => setMonth(month - 1)} />
+                    <PreviousBtn onClick={() => { setWeek(week - 1); navigate(`/calendar/week/weeknumber=${week - 1}`); }} />
                 </div>
                 <div className="flex flex-col items-center w-1/2">
                     <header className="mt-5 mb-5">
                         <h1 className="text-3xl">
-                            {monthInText}
+                            Week {week}
                         </h1>
                     </header>
-                    <div className={`justify-center w-full shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white lg:w-3/5`}>
+                    <div className={`justify-center w-full shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 grid-rows-2 rounded-md bg-white lg:w-3/5`}>
                         {fullWeek.map(day => (
                             <div key={format(day, 'E')} className="h-16 w-1/7 flex items-center justify-center py-1 px-1 border-b-2 border-gray-100 border-3">{format(day, 'E')}</div>
                         ))}
-                        {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
+                        {/* {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
                             <button key={format(emptyDayIndex, 'd')} className="w-1/7 h-16"></button>
                         ))}
 
                         {daysInMonth.map((thisDate) => {
                             return <CalendarDate key={format(thisDate, 'd')} date={formatDate(thisDate)} />
                         })
-                        }
+                        } */}
                     </div>
-                    <Link to={`/calender/week/weeknumber=${getWeek(startOfMonth)}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
+                    <div className="flex flex-row gap-2">
+                        <Link to={`/calendar/month`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to month view</Link>
+                        <Link to={`/calendar/timeline`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to timeline</Link>
+                    </div>
                 </div>
                 <div className="h-[100px] flex items-end">
-                    <NextBtn onClick={() => setMonth(month + 1)} />
+                    <NextBtn onClick={() => { setWeek(week + 1); navigate(`/calendar/week/weeknumber=${week + 1}`); }} />
                 </div>
-                <div></div> */}
+                <div></div>
             </section>
         </Page>
     )
