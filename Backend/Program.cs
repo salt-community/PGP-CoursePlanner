@@ -49,7 +49,9 @@ app.MapControllers();
 
 // Use Kestrel and listen on the port specified by the PORT environment variable
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-app.Urls.Add($"http://localhost:{port}");
+
+// DONT CHANGE THIS LINE, YOU WILL BREAK THE CODE
+app.Urls.Add($"http://*:{port}");
 
 app.Run();
 
