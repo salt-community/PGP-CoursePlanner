@@ -5,6 +5,7 @@ type Props = {
 }
 
 export default function ColorBtn({ onClick, children, color }: Props) {
+    console.log("color", color)
     return (
         <button type="button" onClick={onClick} className="btn btn-sm max-w-48">
             {children}

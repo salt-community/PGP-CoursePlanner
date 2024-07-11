@@ -98,16 +98,6 @@ export default function CourseDetails() {
                 navigate(`/courses`);
             }
         })
-        
-        const handleDelete = (id: number) => {
-            if (!usedCourses.find(c => c == id)) {
-                mutation.mutate(id);
-            }
-            else {
-                document.getElementById("invalid-module-delete")?.classList.remove("hidden");
-                return;
-            }
-        }
 
         return (
             <Page>
