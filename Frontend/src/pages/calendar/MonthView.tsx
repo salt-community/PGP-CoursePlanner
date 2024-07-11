@@ -5,6 +5,7 @@ import PreviousBtn from "../../components/buttons/PreviousBtn"
 import Page from "../../sections/Page"
 import { useState } from "react"
 import CalendarDate from "../../components/calendar/CalendarDate"
+import { Link } from "react-router-dom"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(currentMonth);
@@ -42,6 +43,10 @@ export default function MonthView() {
                             return <CalendarDate key={format(thisDate, 'd')} date={formatDate(thisDate)} />
                         })
                         }
+                    </div>
+                    <div className="flex flex-row gap-2">
+                    <Link to={`/calendar/week/weeknumber=${getWeek(startOfMonth)}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
+                    <Link to={`/calendar/timeline`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to timeline</Link>
                     </div>
                 </div>
                 <div className="h-[100px] flex items-end">

@@ -14,11 +14,13 @@ import CourseDetails from './pages/coursePages/CourseDetails.tsx'
 import EditCourse from './pages/coursePages/EditCourse.tsx'
 import DayDetails from './pages/calendar/DayDetails.tsx'
 import MonthView from './pages/calendar/MonthView.tsx'
+import WeekView from './pages/calendar/WeekView.tsx'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
 import ColorSelection from './components/ColorSelection.tsx'
 import AppliedCourses from './pages/appliedCoursePages/AppliedCourses.tsx'
 import EditAppliedCourse from './pages/appliedCoursePages/EditAppliedCourse.tsx'
+import HorizontalCalendar from './pages/calendar/HorizontalCalendar.tsx'
 
 const router = createBrowserRouter([
   {
@@ -66,8 +68,16 @@ const router = createBrowserRouter([
     element: <CreateCourse />,
   },
   {
+    path: "/calendar/timeline/*",
+    element: <HorizontalCalendar />,
+  },
+  {
     path: "/calendar/month/*",
     element: <MonthView />,
+  },
+  {
+    path: "/calendar/week/*",
+    element: <WeekView />,
   },
   {
     path: "/calendar/day/*",
