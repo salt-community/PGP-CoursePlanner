@@ -35,7 +35,7 @@ export default function DropDown({ thisCourseModule, index, selectedModules, mod
                     : <>
                         {modules.map((module, modIndex) =>
                             <> {module.id == thisCourseModule.moduleId
-                                ? <option value="DEFAULT">{module.name} ({module.numberOfDays} days)</option>
+                                ? <option key={module.id + "," + modIndex} value="DEFAULT">{module.name} ({module.numberOfDays} days)</option>
                                 : <option key={module.id + "," + modIndex} value={module.id}>{module.name} ({module.numberOfDays} days)</option>}
                             </>)}
                     </>}

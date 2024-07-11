@@ -23,7 +23,6 @@ export async function getAccessToken(auth_code: string) {
     }),
   });
   const data = await response.json();
-  console.log("response from get access_token: ", data as tokenResponse);
   return data as tokenResponse;
 }
 

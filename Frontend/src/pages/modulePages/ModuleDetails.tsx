@@ -60,12 +60,12 @@ export default function ModuleDetails() {
                     <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                         <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
                             <h1 className="pb-4 text-xl text-primary font-bold">{module.name}</h1>
-                            {module.days.map((day, index) =>
-                                <>
+                            {module.days.map((day) =>
+                                <div key={"day_" + day.dayNumber}>
                                     <h1 className="text-lg text-black font-bold self-start">
                                         Day {day.dayNumber}: {day.description}
                                     </h1>
-                                    <table className="table table-sm lg:table-lg" key={"day_" + index}>
+                                    <table className="table table-sm lg:table-lg">
                                         <thead>
                                             {day.events.length > 0 &&
                                                 <tr>
@@ -88,7 +88,7 @@ export default function ModuleDetails() {
                                             <tr></tr>
                                         </tbody>
                                     </table>
-                                </>
+                                </div>
                             )}
                         </section>
                     </div>
