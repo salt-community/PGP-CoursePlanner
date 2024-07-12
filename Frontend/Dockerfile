@@ -9,7 +9,10 @@ COPY package*.json ./
 RUN npm install
 
 # Copy the rest of the application files
-COPY . . 
+COPY . .
+
+# Debug step: list files in /app
+RUN ls -la /app
 
 # Build the application
 RUN npm run build

@@ -15,7 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>(options =>
-options.UseSqlite(builder.Configuration.GetConnectionString("DataContext") ?? throw new InvalidOperationException("Connection string 'DataContext' not found.")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DataContext") ?? throw new InvalidOperationException("Connection string 'DataContext' not found.")));
 
 var JwtSecurityScheme = new OpenApiSecurityScheme()
 {
@@ -47,9 +47,9 @@ builder.Services.AddScoped<IService<AppliedCourse>, AppliedCourseService>();
 var app = builder.Build();
 
 app.UseCors(x => x
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowAnyOrigin());
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowAnyOrigin());
 
 using (var scope = app.Services.CreateScope())
 {
@@ -69,6 +69,12 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Use Kestrel and listen on the port specified by the PORT environment variable
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+
+// DONT CHANGE THIS LINE, YOU WILL BREAK THE CODE
+app.Urls.Add($"http://*:{port}");
 
 app.Run();
 

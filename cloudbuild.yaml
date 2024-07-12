@@ -1,24 +1,30 @@
 steps:
+  # Build and push backend image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/pgp-sandbox/backend:latest', '-f', 'Dockerfile', '.']
+    args: ['build', '-t', 'gcr.io/pgp-sandbox/backend', '.']
     dir: Backend
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/pgp-sandbox/frontend:latest', '-f', 'Dockerfile', '.']
+    args: ['push', 'gcr.io/pgp-sandbox/backend']
+    dir: Backend
+
+  # Build and push frontend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/pgp-sandbox/frontend', '.']
     dir: Frontend
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/pgp-sandbox/backend:latest']
+    args: ['push', 'gcr.io/pgp-sandbox/frontend']
+    dir: Frontend
 
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/pgp-sandbox/frontend:latest']
-
+  # Deploy backend to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['run', 'deploy', 'backend', '--image', 'gcr.io/pgp-sandbox/backend:latest', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
+    args: ['run', 'deploy', 'backend', '--image', 'gcr.io/pgp-sandbox/backend', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
 
+  # Deploy frontend to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['run', 'deploy', 'frontend', '--image', 'gcr.io/pgp-sandbox/frontend:latest', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
+    args: ['run', 'deploy', 'frontend', '--image', 'gcr.io/pgp-sandbox/frontend', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
 
 images:
-  - 'gcr.io/pgp-sandbox/backend:latest'
-  - 'gcr.io/pgp-sandbox/frontend:latest'
+  - 'gcr.io/pgp-sandbox/backend'
+  - 'gcr.io/pgp-sandbox/frontend'
