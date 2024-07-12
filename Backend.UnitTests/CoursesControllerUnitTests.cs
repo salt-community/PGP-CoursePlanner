@@ -59,7 +59,7 @@ namespace Backend.Tests.UnitTests
             //Assert
             resultValue.Should().NotBeNull();
             resultValue.Should().BeOfType<Course>();
-            resultValue.Name.Should().Be("TestCourse");
+            resultValue!.Name.Should().Be("TestCourse");
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             var course = new Course() { Name = "TestCourse" };
-            _mockService.Setup(service => service.CreateAsync(course)).ReturnsAsync((Course)null);
+            _mockService.Setup(service => service.CreateAsync(course)).ReturnsAsync((Course)null!);
             var controller = new CoursesController(_mockService.Object);
 
             //Act
@@ -93,7 +93,7 @@ namespace Backend.Tests.UnitTests
             //Assert
             resultValue.Should().NotBeNull();
             resultValue.Should().BeOfType<Course>();
-            resultValue.Name.Should().Be("TestCourse");
+            resultValue!.Name.Should().Be("TestCourse");
         }
 
         [Fact]
@@ -134,7 +134,7 @@ namespace Backend.Tests.UnitTests
         {
             //Arrange
             var course = new Course() { Id = 1, Name = "TestCourse" };
-            _mockService.Setup(service => service.UpdateAsync(1, course)).ReturnsAsync((Course)null);
+            _mockService.Setup(service => service.UpdateAsync(1, course)).ReturnsAsync((Course)null!);
             var controller = new CoursesController(_mockService.Object);
 
             //Act

@@ -26,7 +26,7 @@ namespace Backend.Tests.UnitTests
             //Assert
             resultValue.Should().NotBeNull();
             resultValue.Should().BeOfType<AppliedCourse>();
-            resultValue.StartDate.Should().Be(new DateTime(2024-07-12));
+            resultValue!.StartDate.Should().Be(new DateTime(2024-07-12));
         }
 
         // [Fact]
