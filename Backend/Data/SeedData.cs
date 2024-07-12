@@ -213,7 +213,6 @@ public static class SeedData
 
             for (var i = 0; i < module_names.Length; i++)
             {
-                Console.WriteLine("Element At i: " + module_days.ElementAt(i).Count());
                 var module = new Module
                 {
                     Name = module_names[i],
@@ -228,9 +227,6 @@ public static class SeedData
             int[] course_numOfWeeks = { 2, 3, 2 };
 
             var moduleDays = _context.Modules.Select(m => m.Days);
-            foreach (var days in moduleDays)
-                foreach (var day in days)
-                    Console.WriteLine(day.Events.Count());
 
             List<List<int>> course_moduleIds = [[1, 2, 3], [1, 2, 3, 4], [1, 3, 4]];
 

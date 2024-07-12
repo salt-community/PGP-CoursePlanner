@@ -83,6 +83,5 @@ export const convertToGoogle = (
       daysToAdd += 1;
     });
   });
-  console.log(googleEvents);
   postCourseToGoogle(googleEvents);
 };

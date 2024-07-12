@@ -21,7 +21,6 @@ export default function CalendarEvent({ dayNumber, setDays, days, index, event }
         const { name, value } = e.target;
         const editedDays = [...days];
 
-        console.log(value)
         let correctTime = value.replaceAll(".", ":");
         editedDays[dayNumber - 1].events[index] = {
             ...editedDays[dayNumber - 1].events[index],
