@@ -9,6 +9,7 @@ namespace Backend.IntegrationTests
         {
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
+            db.Modules.AddRange(GetModule());
             db.Courses.AddRange(GetCourses());
             db.SaveChanges();
         }
@@ -52,6 +53,11 @@ namespace Backend.IntegrationTests
                 new Module(){Name = "TestModule2"}
             };
 
+            // var courseModuleList1 = new List<CourseModule>(){
+            //     new CourseModule(){CourseId = 1, ModuleId = 1},
+            //     new CourseModule(){CourseId = 1, ModuleId = 2}
+            // };
+
             var moduleList2 = new List<Module>()
             {
                 new Module(){Name = "TestModule3",},
@@ -65,10 +71,15 @@ namespace Backend.IntegrationTests
                 ]}
             };
 
+            // var courseModuleList2 = new List<CourseModule>(){
+            //     new CourseModule(){CourseId = 2, ModuleId = 3},
+            //     new CourseModule(){CourseId = 2, ModuleId = 4}
+            // };
+
             return new List<Course>()
             {
-                new Course(){Name = "TestCourse1", NumberOfWeeks = 2, Modules = moduleList1},
-                new Course(){Name = "TestCourse2", NumberOfWeeks = 1, Modules = moduleList2}
+                new Course(){Name = "TestCourse1", NumberOfWeeks = 2},
+                new Course(){Name = "TestCourse2", NumberOfWeeks = 1}
             };
         }
 
