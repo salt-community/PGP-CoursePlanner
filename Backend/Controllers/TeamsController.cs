@@ -33,4 +33,14 @@ public class TeamsController : ControllerBase
         }
         return NotFound("Team does not exist");
     }
+    [HttpPost]
+    public async Task<ActionResult<Team>> CreateTeam([FromBody] Team team)
+    {
+        var response = await _service.CreateAsync(team);
+        if (response == null)
+        {
+            return BadRequest("Unable to create team");
+        }
+        return CreatedAtAction("GetTeam", new { id = team.Id }, team);
+    }
 }
