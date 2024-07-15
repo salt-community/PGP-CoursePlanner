@@ -4,9 +4,7 @@ using System.Text;
 using Backend.Data;
 using Backend.Models;
 using FluentAssertions;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
@@ -20,22 +18,14 @@ namespace Backend.IntegrationTests
         public CoursesControllerIntegrationTests(CustomWebApplicationFactory<Program> factory)
         {
             _factory = factory;
-            _client = factory.WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureTestServices(services =>
-            {
-                services.AddAuthentication(defaultScheme: "TestScheme")
-                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
-                        "TestScheme", options => { });
-            });
-        })
+            _client = factory
             .CreateClient(new WebApplicationFactoryClientOptions
             {
                 AllowAutoRedirect = false
             });
 
-            _client.DefaultRequestHeaders.Authorization =
-           new AuthenticationHeaderValue(scheme: "TestScheme");
+                _client.DefaultRequestHeaders.Authorization =
+               new AuthenticationHeaderValue(scheme: "TestScheme");
         }
 
         [Fact]
