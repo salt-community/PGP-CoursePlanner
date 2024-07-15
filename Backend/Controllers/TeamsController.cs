@@ -43,4 +43,23 @@ public class TeamsController : ControllerBase
         }
         return CreatedAtAction("GetTeam", new { id = team.Id }, team);
     }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateTeam(int id, [FromBody] Team team)
+    {
+        var response = await _service.UpdateAsync(id, team);
+        if (response == null)
+        {
+            return BadRequest("Unable to update team");
+        }
+        return NoContent();
+    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTeam(int id)
+    {
+        if (!await _service.DeleteAsync(id))
+        {
+            return BadRequest("Unable to delete team");
+        }
+        return NoContent();
+    }
 }
