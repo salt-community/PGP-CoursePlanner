@@ -135,10 +135,6 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            var updatedCourseModules = new List<CourseModule>(){
-                new CourseModule(){CourseId = 1, ModuleId = 3}
-            };
-
             var updatedCourse = new Course()
             {
                 Name = "UpdatedCourse",
