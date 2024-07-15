@@ -7,7 +7,8 @@ namespace Backend.Models
         public int Id { get; set; }
         [Required(ErrorMessage = "Team name is required.")]
         public required string Name { get; set; }
-        public List<string> Emails { get; set; } = [];
+        public List<string> Emails { get; set; } = new List<string>();
+        
 
     }
 }
