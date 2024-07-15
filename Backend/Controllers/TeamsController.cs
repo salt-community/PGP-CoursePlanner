@@ -23,4 +23,6 @@ public class TeamsController : ControllerBase
         var response = await _service.GetAllAsync();
         return Ok(response);
     }
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Teams>
 }
