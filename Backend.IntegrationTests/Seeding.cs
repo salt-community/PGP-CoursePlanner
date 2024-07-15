@@ -11,6 +11,7 @@ namespace Backend.IntegrationTests
             db.Database.EnsureCreated();
             db.Modules.AddRange(GetModule());
             db.Courses.AddRange(GetCourses());
+            db.AppliedCourses.AddRange(GetAppliedCourses());
             db.SaveChanges();
         }
 
@@ -50,6 +51,14 @@ namespace Backend.IntegrationTests
             {
                 new Course(){Name = "TestCourse1", NumberOfWeeks = 2, moduleIds = [1,2]},
                 new Course(){Name = "TestCourse2", NumberOfWeeks = 1, moduleIds = [1]}
+            };
+        }
+
+        private static List<AppliedCourse> GetAppliedCourses()
+        {
+            return new List<AppliedCourse>()
+            {
+                new AppliedCourse(){StartDate = DateTime.Now, CourseId = 1}
             };
         }
 
