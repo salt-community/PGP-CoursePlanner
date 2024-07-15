@@ -83,21 +83,21 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            var newCourse = new Course() { Name = "CreatedCourse" };
-            var content = JsonConvert.SerializeObject(newCourse);
+            var newAppliedCourse = new AppliedCourse() { StartDate = DateTime.Now, CourseId = 2 };
+            var content = JsonConvert.SerializeObject(newAppliedCourse);
 
             var body = new StringContent(content, Encoding.UTF8, "application/json");
             body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             // act 
             var response = await _client.PostAsync("/AppliedCourses", body);
-            var deserializedResponse = JsonConvert.DeserializeObject<Course>(
+            var deserializedResponse = JsonConvert.DeserializeObject<AppliedCourse>(
                 await response.Content.ReadAsStringAsync());
 
             // assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             response.Content.Headers.ContentType.Should().BeOfType<MediaTypeHeaderValue>();
-            deserializedResponse!.Name.Should().Be("CreatedCourse");
+            deserializedResponse!.CourseId.Should().Be(2);
         }
 
     }
