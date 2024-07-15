@@ -58,7 +58,7 @@ namespace Backend.IntegrationTests
         {
             return new List<AppliedCourse>()
             {
-                new AppliedCourse(){StartDate = DateTime.Now, CourseId = 1}
+                new AppliedCourse(){StartDate = new DateTime(2024, 1, 13), CourseId = 1}
             };
         }
 
