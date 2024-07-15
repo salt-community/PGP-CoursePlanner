@@ -135,26 +135,7 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            var updatedModule1 = new Module()
-            {
-                Name = "UpdatedModule1",
-                NumberOfDays = 2,
-                Id = 1,
-                Days =
-                [
-                    new Day(){Description = "UpdatedDay1 for UpdatedCourse", DayNumber = 1, Events =
-                    [
-                        new Event() { Name = "UpdatedEvent1", StartTime = "10:00", EndTime = "11:00", Description = "UpdatedEvent1 for UpdatedCourse"}
-                    ]},
-                    new Day() {Description = "UpdatedDay2 for UpdatedCourse", DayNumber = 2}
-                ]
-            };
-            var updatedModule2 = new Module() { Name = "UpdatedModule2", Id = 2 };
-            var updatedModule3 = new Module() { Name = "UpdatedModule3", Id = 3 };
-
             var updatedCourseModules = new List<CourseModule>(){
-                new CourseModule(){CourseId = 1, ModuleId = 1},
-                new CourseModule(){CourseId = 1, ModuleId = 2},
                 new CourseModule(){CourseId = 1, ModuleId = 3}
             };
 
@@ -163,7 +144,7 @@ namespace Backend.IntegrationTests
                 Name = "UpdatedCourse",
                 Id = 2,
                 NumberOfWeeks = 2,
-                Modules = updatedCourseModules,
+                moduleIds = [3]
             };
 
             var content = JsonConvert.SerializeObject(updatedCourse);
@@ -180,12 +161,12 @@ namespace Backend.IntegrationTests
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             deserializedResponse!.Name.Should().Be("UpdatedCourse");
             deserializedResponse!.NumberOfWeeks.Should().Be(2);
-            var modules = deserializedResponse!.Modules.ToList();
-            modules.Count.Should().Be(3);
+            var modulesIds = deserializedResponse!.moduleIds.ToList();
+            modulesIds.Count.Should().Be(1);
 
-            var firstModule = await _client.GetAsync($"/Modules/{modules.First().ModuleId}");
+            var firstModule = await _client.GetAsync($"/Modules/{modulesIds.First()}");
             var deserializedModule = JsonConvert.DeserializeObject<Module>(
-                await response.Content.ReadAsStringAsync());
+                await firstModule.Content.ReadAsStringAsync());
             deserializedModule!.NumberOfDays.Should().Be(2);
             deserializedModule.Days.First().Description.Should().Be("UpdatedDay1 for UpdatedCourse");
             deserializedModule.Days.First().Events.Count.Should().Be(1);
