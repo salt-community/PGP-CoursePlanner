@@ -31,7 +31,16 @@ namespace Backend.IntegrationTests
                     ]},
                     new Day() {Description = "TestDay3 for TestModule1", DayNumber = 3}
                 ]},
-                new Module(){Name = "TestModule2"}
+                new Module(){Name = "TestModule2"},
+
+                new Module(){Name = "UpdatedModule1", NumberOfDays = 2, Days =
+                [
+                    new Day(){Description = "UpdatedDay1 for UpdatedCourse", DayNumber = 1, Events =
+                    [
+                        new Event() { Name = "UpdatedEvent1", StartTime = "10:00", EndTime = "11:00", Description = "UpdatedEvent1 for UpdatedCourse"}
+                    ]},
+                    new Day() {Description = "UpdatedDay2 for UpdatedCourse", DayNumber = 2}
+                ]}
             };
         }
 
