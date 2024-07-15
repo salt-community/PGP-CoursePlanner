@@ -12,17 +12,25 @@ namespace Backend.Controllers;
 public class TeamsController : ControllerBase
 {
 
-    private readonly IService<Teams> _service;
-    public TeamsController(IService<Teams> service)
+    private readonly IService<Team> _service;
+    public TeamsController(IService<Team> service)
     {
         _service = service;
     }
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Teams>>> GetTeams()
+    public async Task<ActionResult<IEnumerable<Team>>> GetTeams()
     {
         var response = await _service.GetAllAsync();
         return Ok(response);
     }
     [HttpGet("{id}")]
-    public async Task<ActionResult<Teams>
+    public async Task<ActionResult<Team>> GetTeam(int id)
+    {
+        var response = await _service.GetOneAsync(id);
+        if (response != null)
+        {
+            return Ok(response);
+        }
+        return NotFound("Team does not exist");
+    }
 }
