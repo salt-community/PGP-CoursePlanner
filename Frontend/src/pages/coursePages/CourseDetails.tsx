@@ -71,7 +71,7 @@ export default function CourseDetails() {
         modules.push(module!)
     });
 
-    const handleApplyTemplate = () => {
+    const handleApplyTemplate = async () => {
         setIsColorNotSelected(false);
         setIsInvalidDate(false);
         if (color == "#FFFFFF" || startDate.getDay() == 6 || startDate.getDay() == 0) {
