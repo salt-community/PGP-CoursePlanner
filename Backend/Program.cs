@@ -1,7 +1,9 @@
+using Backend.Config;
 using Backend.Data;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,20 +15,41 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>(options =>
-options.UseSqlite(builder.Configuration.GetConnectionString("DataContext") ?? throw new InvalidOperationException("Connection string 'DataContext' not found.")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("DataContext") ?? throw new InvalidOperationException("Connection string 'DataContext' not found.")));
+
+var JwtSecurityScheme = new OpenApiSecurityScheme()
+{
+    Type = SecuritySchemeType.Http,
+    Scheme = "bearer"
+};
+var JwtSecurityRequirement = new OpenApiSecurityRequirement()
+{
+    [new() { Reference = new() { Type = ReferenceType.SecurityScheme, Id = "Bearer" } }] = []
+};
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", JwtSecurityScheme);
+    options.AddSecurityRequirement(SecurityConfig.JwtSecurityRequirement);
+});
+
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+{
+    options.Authority = "https://accounts.google.com";
+    options.Audience = "735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com";
+});
 
 builder.Services.AddCors();
 
 builder.Services.AddScoped<IService<Module>, ModuleService>();
 builder.Services.AddScoped<IService<Course>, CourseService>();
-builder.Services.AddScoped<IService<AppliedCourse>, AppliedCourseService>();    
+builder.Services.AddScoped<IService<AppliedCourse>, AppliedCourseService>();
 
 var app = builder.Build();
 
 app.UseCors(x => x
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowAnyOrigin());
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowAnyOrigin());
 
 using (var scope = app.Services.CreateScope())
 {
@@ -47,6 +70,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Use Kestrel and listen on the port specified by the PORT environment variable
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+
+// DONT CHANGE THIS LINE, YOU WILL BREAK THE CODE
+app.Urls.Add($"http://*:{port}");
+
 app.Run();
 
-public partial class Program {}
+public partial class Program { }

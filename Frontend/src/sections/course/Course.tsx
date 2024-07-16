@@ -143,7 +143,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 modules: courseModules,
             };
 
-            console.log("course to post: ", newCourse);
             mutation.mutate(newCourse);
         }
     }

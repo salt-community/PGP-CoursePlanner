@@ -22,7 +22,14 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 
 # Expose the port
-EXPOSE 5268
+EXPOSE 8080
+
+# Set the PORT environment variable for ASP.NET Core
+ENV ASPNETCORE_URLS=http://+:8080
+ENV PORT=8080
+
+# Set environment variables for the application
+ENV ConnectionStrings__DataContext="Data Source=your-database.db"
 
 # Start the application
 ENTRYPOINT ["dotnet", "Backend.dll"]

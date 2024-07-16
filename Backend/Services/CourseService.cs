@@ -18,11 +18,11 @@ public class CourseService : IService<Course>
         try
         {
             var courses = await _context.Courses
-                .Include(c => c.Modules)
-                    .ThenInclude(cm => cm.Module)
-                    .ThenInclude(t => t.Days)
-                           .ThenInclude(w => w.Events)
-                        .ToListAsync();
+                .Include(course => course.Modules)
+                    .ThenInclude(courseModule => courseModule.Module)
+                    .ThenInclude(module => module!.Days)
+                    .ThenInclude(day => day.Events)
+                    .ToListAsync();
             return courses;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
@@ -33,12 +33,12 @@ public class CourseService : IService<Course>
         try
         {
             var course = await _context.Courses
-               .Include(c => c.Modules)
-                    .ThenInclude(cm => cm.Module)
-                    .ThenInclude(t => t.Days)
-                        .ThenInclude(w => w.Events)
-                        .FirstOrDefaultAsync(c => c.Id == id);
-            return course;
+               .Include(course => course.Modules)
+                    .ThenInclude(courseModule => courseModule.Module)
+                    .ThenInclude(module => module!.Days)
+                    .ThenInclude(day => day.Events)
+                    .FirstOrDefaultAsync(course => course.Id == id);
+            return course ?? null!;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
         return null!;
@@ -81,11 +81,11 @@ public class CourseService : IService<Course>
         try
         {
             var courseToUpdate = await _context.Courses
-                    .Include(c => c.Modules)
-                    .ThenInclude(cm => cm.Module)
-                    .ThenInclude(m => m.Days)
-                    .ThenInclude(d => d.Events)
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                    .Include(course => course.Modules)
+                    .ThenInclude(courseModule => courseModule.Module)
+                    .ThenInclude(module => module!.Days)
+                    .ThenInclude(day => day.Events)
+                    .FirstOrDefaultAsync(course => course.Id == id);
 
             if (courseToUpdate == null)
             {
