@@ -4,6 +4,8 @@ import Page from "../../../components/Page";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getIdFromPath } from "../../../helpers/helperMethods";
 import { getAllCourses } from "../../../api/CourseApi";
+import LoadingMessage from "../../../components/LoadingMessage";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 export default function ModuleDetails() {
     const navigate = useNavigate();
@@ -53,8 +55,8 @@ export default function ModuleDetails() {
     return (
 
         <Page>
-            {isLoading && <p>Loading...</p>}
-            {isError && <p>An error occured</p>}
+            {isLoading && <LoadingMessage/>}
+            {isError && <ErrorMessage/>}
             {module &&
                 <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
                     <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
