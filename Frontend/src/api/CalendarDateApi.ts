@@ -1,5 +1,5 @@
-import { CalendarDateType } from "../components/calendar/Types";
 import { getCookie } from "../helpers/cookieHelpers";
+import { CalendarDateType } from "../models/calendar/Types";
 
 const BASE_URL = "http://localhost:8080/CalendarDates";
 

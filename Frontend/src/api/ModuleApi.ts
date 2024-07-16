@@ -1,6 +1,6 @@
 import { getCookie } from "../helpers/cookieHelpers";
-import { CourseModule } from "../sections/course/Types";
-import { ModuleType } from "../sections/module/Types";
+import { CourseModule } from "../models/course/Types";
+import { ModuleType } from "../models/module/Types";
 
 const BASE_URL = "http://localhost:8080/Modules";
 

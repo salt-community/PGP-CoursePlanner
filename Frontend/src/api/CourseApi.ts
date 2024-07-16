@@ -1,5 +1,5 @@
 import { getCookie } from "../helpers/cookieHelpers";
-import { CourseType } from "../sections/course/Types";
+import { CourseType } from "../models/course/Types";
 
 const BASE_URL = "http://localhost:8080/Courses";
 

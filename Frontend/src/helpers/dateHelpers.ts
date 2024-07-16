@@ -7,15 +7,14 @@ import {
   getYear,
   startOfWeek,
 } from "date-fns";
-import * as moment from 'moment';
 
 export const firstDayOfWeek = startOfWeek(new Date(), { weekStartsOn: 1 });
 
-export const formatDate = (date: Date) => {
+export const getDateAsString = (date: Date) => {
   return format(date, "MM/dd/yyyy");
 };
 
-export const today = formatDate(new Date());
+export const today = getDateAsString(new Date());
 export const currentYear = getYear(new Date());
 export const currentMonth = getMonth(new Date());
 
