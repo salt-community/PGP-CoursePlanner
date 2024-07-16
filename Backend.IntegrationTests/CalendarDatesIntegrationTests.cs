@@ -39,7 +39,7 @@ namespace Backend.IntegrationTests
             }
 
             //act
-            var response = await _client.GetAsync("/CalendarDates/1");
+            var response = await _client.GetAsync($"/CalendarDates/{new DateTime(2024, 12, 24)}");
             var deserializedResponse = JsonConvert.DeserializeObject<CalendarDate>(
                 await response.Content.ReadAsStringAsync());
 
