@@ -1,7 +1,7 @@
 import { getCookie } from "../helpers/cookieHelpers";
 import { CourseType } from "../sections/course/Types";
 
-const BASE_URL = "http://localhost:5268/Courses";
+const BASE_URL = "http://localhost:8080/Courses";
 
 export async function getAllCourses() {
   const response = await fetch(BASE_URL, {

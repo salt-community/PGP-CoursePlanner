@@ -1,4 +1,3 @@
-
 using System.Diagnostics;
 using Backend.Data;
 using Backend.Models;
@@ -68,11 +67,15 @@ namespace Backend.Services
                         _context.CalendarDates.Update(date);
                         await _context.SaveChangesAsync();
                     }
+                    appliedCourse.EndDate = currentDate;
                     currentDate = currentDate.AddDays(1);
                     if (currentDate.DayOfWeek == DayOfWeek.Saturday)
                         currentDate = currentDate.AddDays(2);
                 }
             }
+            _context.AppliedCourses.Update(appliedCourse);
+            await _context.SaveChangesAsync();
+            Console.WriteLine("!!!!!!!" + appliedCourse.EndDate);
             return appliedCourse;
         }
 
@@ -250,12 +253,14 @@ namespace Backend.Services
                             await _context.CalendarDates.AddAsync(date);
                             await _context.SaveChangesAsync();
                         }
+                        appliedCourseToUpdate.EndDate = currentDate;
                         currentDate = currentDate.AddDays(1);
                         if (currentDate.DayOfWeek == DayOfWeek.Saturday)
                             currentDate = currentDate.AddDays(2);
                     }
                 }
-
+                _context.AppliedCourses.Update(appliedCourseToUpdate);
+                await _context.SaveChangesAsync();
                 return appliedCourseToUpdate;
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message); }

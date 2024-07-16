@@ -13,6 +13,7 @@ export default function AppliedCourses() {
         queryKey: ['allAppliedCourses'],
         queryFn: getAllAppliedCourses
     });
+    console.log(allAppliedCourses)
 
     const { data: allCourses } = useQuery({
         queryKey: ['allCourses'],
@@ -33,7 +34,7 @@ export default function AppliedCourses() {
             return deleteAppliedCourse(id);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['courses'] })
+            queryClient.invalidateQueries({ queryKey: ['allAppliedCourses'] })
             navigate(`/activecourses`);
         }
     })

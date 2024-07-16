@@ -2,7 +2,7 @@ import { getCookie } from "../helpers/cookieHelpers";
 import { CourseModule } from "../sections/course/Types";
 import { ModuleType } from "../sections/module/Types";
 
-const BASE_URL = "http://localhost:5268/Modules";
+const BASE_URL = "http://localhost:8080/Modules";
 
 export async function getAllModules() {
   const response = await fetch(BASE_URL, {
@@ -16,7 +16,7 @@ export async function getAllModules() {
 }
 
 export async function getAllCourseModules() {
-  const response = await fetch("http://localhost:5268/CourseModules", {
+  const response = await fetch("http://localhost:8080/CourseModules", {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",
