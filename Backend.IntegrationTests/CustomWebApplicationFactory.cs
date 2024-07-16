@@ -1,5 +1,6 @@
 using System.Data.Common;
 using Backend.Data;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -44,6 +45,10 @@ namespace Backend.IntegrationTests
                     var connection = container.GetRequiredService<DbConnection>();
                     options.UseSqlite(connection);
                 });
+
+                services.AddAuthentication(defaultScheme: "TestScheme")
+                        .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                            "TestScheme", options => { });
             });
 
             builder.UseEnvironment("Development");

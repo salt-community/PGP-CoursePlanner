@@ -43,7 +43,7 @@ namespace Backend.IntegrationTests
             // assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             deserializedResponse.Should().NotBeNull();
-            deserializedResponse.Should().HaveCount(4);
+            deserializedResponse.Should().HaveCount(3);
         }
 
         [Fact]
