@@ -241,6 +241,27 @@ public static class SeedData
                 _context.Courses.Add(course);
                 _context.SaveChanges();
             }
+            List<Team> teams = new List<Team>
+            {
+                new Team
+                {
+                    Name = "Alpha Team",
+                    Emails = new List<string> { "alpha1@example.com", "alpha2@example.com" }
+                },
+                new Team
+                {
+                    Name = "Beta Team",
+                    Emails = new List<string> { "beta1@example.com", "beta2@example.com" }
+                },
+                new Team
+                {
+                    Name = "Gamma Team",
+                    Emails = new List<string> { "gamma1@example.com", "gamma2@example.com" }
+                }
+            };
+
+            _context.Team.AddRange(teams);
+            _context.SaveChanges();
         }
     }
 }
