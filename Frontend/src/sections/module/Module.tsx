@@ -147,7 +147,7 @@ const popupRef = useRef<HTMLDivElement>(null);
                     ? <Popup
                         open={isOpened}
                         onOpen={() => setIsOpened(true)}
-                        trigger={<input className="btn btn-sm mt-4 max-w-48 btn-success text-white" value={buttonText} />}
+                        trigger={<input className="mb-4 btn btn-sm mt-4 max-w-48 btn-success text-white" value={buttonText} />}
                         modal
                     >
                         {

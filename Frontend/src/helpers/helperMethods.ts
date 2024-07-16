@@ -11,3 +11,9 @@ export function getDateFromPath() {
   const pathArray = pathname.split("=");
   return pathArray[pathArray.length - 1];
 }
+
+export function getWeekFromPath() {
+  const { pathname } = useLocation();
+  const pathArray = pathname.split("=");
+  return pathArray[pathArray.length - 1];
+}
