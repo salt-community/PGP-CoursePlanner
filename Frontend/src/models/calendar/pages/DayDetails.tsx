@@ -39,9 +39,7 @@ export default function DayDetails() {
     return (
         <Page>
             <section className="flex justify-around">
-                <div className="h-[100px] flex items-end ml-28">
                     <PreviousBtn onClick={() => navigate("/calendar/day/date=" + previousDay)} />
-                </div>
                 <section className="w-1/2 flex justify-center bg-background">
                     <div className="w-full bg-base-100 shadow-xl p-5">
                         <div className="flex justify-end">
@@ -55,9 +53,7 @@ export default function DayDetails() {
                         </div>
                     </div>
                 </section>
-                <div className="h-[100px] flex items-end mr-28">
                     <NextBtn onClick={() => navigate("/calendar/day/date=" + nextDay)} />
-                </div>
             </section>
         </Page>
     )

@@ -20,11 +20,8 @@ export default function MonthView() {
 
     return (
         <Page>
-            <section className="flex justify-around">
-                <div></div>
-                <div className="h-[100px] flex items-end">
-                    <PreviousBtn onClick={() => setMonth(month - 1)} />
-                </div>
+            <section className="flex justify-around items-center">
+                <PreviousBtn onClick={() => setMonth(month - 1)} />
                 <div className="flex flex-col items-center w-1/2">
                     <header className="mt-5 mb-5">
                         <h1 className="text-3xl">
@@ -45,14 +42,11 @@ export default function MonthView() {
                         }
                     </div>
                     <div className="flex flex-row gap-2">
-                    <Link to={`/calendar/week/weeknumber=${getWeek(startOfMonth)}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
-                    <Link to={`/calendar/timeline`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to timeline</Link>
+                        <Link to={`/calendar/week/weeknumber=${getWeek(startOfMonth)}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
+                        <Link to={`/calendar/timeline`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to timeline</Link>
                     </div>
                 </div>
-                <div className="h-[100px] flex items-end">
-                    <NextBtn onClick={() => setMonth(month + 1)} />
-                </div>
-                <div></div>
+                <NextBtn onClick={() => setMonth(month + 1)} />
             </section>
         </Page>
     )
