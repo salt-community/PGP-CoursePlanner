@@ -12,6 +12,7 @@ namespace Backend.IntegrationTests
             db.Modules.AddRange(GetModule());
             db.Courses.AddRange(GetCourses());
             db.AppliedCourses.AddRange(GetAppliedCourses());
+            db.CalendarDates.AddRange(GetCalendarDates());
             db.SaveChanges();
         }
 
@@ -59,6 +60,18 @@ namespace Backend.IntegrationTests
             return new List<AppliedCourse>()
             {
                 new AppliedCourse(){StartDate = new DateTime(2024, 1, 13), CourseId = 1}
+            };
+        }
+
+        private static List<CalendarDate> GetCalendarDates()
+        {
+            return new List<CalendarDate>()
+            {
+                new CalendarDate(){Date = new DateTime(2024, 12, 24), 
+                DateContent = new List<DateContent>()
+                {
+                    new DateContent(){CourseName = "Java"}
+                }}
             };
         }
 
