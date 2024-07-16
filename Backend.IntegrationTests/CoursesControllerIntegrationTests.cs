@@ -18,10 +18,14 @@ namespace Backend.IntegrationTests
         public CoursesControllerIntegrationTests(CustomWebApplicationFactory<Program> factory)
         {
             _factory = factory;
-            _client = factory.CreateClient(new WebApplicationFactoryClientOptions
+            _client = factory
+            .CreateClient(new WebApplicationFactoryClientOptions
             {
                 AllowAutoRedirect = false
             });
+
+                _client.DefaultRequestHeaders.Authorization =
+               new AuthenticationHeaderValue(scheme: "TestScheme");
         }
 
         [Fact]
@@ -131,28 +135,12 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            var updatedModule1 = new Module()
-            {
-                Name = "UpdatedModule1",
-                NumberOfDays = 2,
-                Days =
-                [
-                    new Day(){Description = "UpdatedDay1 for UpdatedCourse", DayNumber = 1, Events =
-                    [
-                        new Event() { Name = "UpdatedEvent1", StartTime = "10:00", EndTime = "11:00", Description = "UpdatedEvent1 for UpdatedCourse"}
-                    ]},
-                    new Day() {Description = "UpdatedDay2 for UpdatedCourse", DayNumber = 2}
-                ]
-            };
-            var updatedModule2 = new Module() { Name = "UpdatedModule2" };
-            var updatedModule3 = new Module() { Name = "UpdatedModule3" };
-
             var updatedCourse = new Course()
             {
                 Name = "UpdatedCourse",
-                Id = 1,
+                Id = 2,
                 NumberOfWeeks = 2,
-                Modules = [updatedModule1, updatedModule2, updatedModule3],
+                moduleIds = [3]
             };
 
             var content = JsonConvert.SerializeObject(updatedCourse);
@@ -164,19 +152,21 @@ namespace Backend.IntegrationTests
             //act
             var response = await _client.GetAsync("/Courses/2");
             var deserializedResponse = JsonConvert.DeserializeObject<Course>(
-                await response.Content.ReadAsStringAsync()
-);
+                await response.Content.ReadAsStringAsync());
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             deserializedResponse!.Name.Should().Be("UpdatedCourse");
             deserializedResponse!.NumberOfWeeks.Should().Be(2);
-            var modules = deserializedResponse!.Modules.ToList();
-            modules.Count.Should().Be(3);
-            var firstModule = modules.First();
-            firstModule.NumberOfDays.Should().Be(2);
-            firstModule.Days.First().Description.Should().Be("UpdatedDay1 for UpdatedCourse");
-            firstModule.Days.First().Events.Count.Should().Be(1);
-            firstModule.Days.First().Events.First().Name.Should().Be("UpdatedEvent1");
+            var modulesIds = deserializedResponse!.moduleIds.ToList();
+            modulesIds.Count.Should().Be(1);
+
+            var firstModule = await _client.GetAsync($"/Modules/{modulesIds.First()}");
+            var deserializedModule = JsonConvert.DeserializeObject<Module>(
+                await firstModule.Content.ReadAsStringAsync());
+            deserializedModule!.NumberOfDays.Should().Be(2);
+            deserializedModule.Days.First().Description.Should().Be("UpdatedDay1 for UpdatedCourse");
+            deserializedModule.Days.First().Events.Count.Should().Be(1);
+            deserializedModule.Days.First().Events.First().Name.Should().Be("UpdatedEvent1");
         }
 
         [Fact]
