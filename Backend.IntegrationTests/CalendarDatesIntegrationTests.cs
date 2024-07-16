@@ -50,5 +50,25 @@ namespace Backend.IntegrationTests
             deserializedResponse!.DateContent.Count().Should().Be(1);
             deserializedResponse!.DateContent.First().CourseName.Should().Be("Java");
         }
+
+        [Fact]
+        public async void GetNonExistingCalendarDate_Should_Return_NotFound()
+        {
+            //arrange
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<DataContext>();
+                Seeding.InitializeTestDB(db);
+            }
+
+            //act
+            var response = await _client.GetAsync($"/CalendarDates/{new DateTime(2024, 12, 25)}");
+            var deserializedResponse = JsonConvert.DeserializeObject<CalendarDate>(
+                await response.Content.ReadAsStringAsync());
+
+            //assert
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
     }
 }
