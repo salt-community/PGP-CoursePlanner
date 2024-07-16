@@ -10,7 +10,6 @@ type Props = {
 }
 
 export default function TimeLineCourse({ dates, course, width }: Props) {
-  console.log(width)
 
   const startIndex = dates.findIndex(d => d.getDate() == course.startDate.getDate() && d.getMonth() == course.startDate.getMonth())
   const endIndex = dates.findIndex(d => d.getDate() == course.endDate.getDate() && d.getMonth() == course.endDate.getMonth())
