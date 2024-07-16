@@ -5,6 +5,7 @@ import { getAllCourses } from "../../../api/CourseApi";
 import DeleteBtn from "../../../components/buttons/DeleteBtn";
 import { Link, useNavigate } from "react-router-dom";
 import { CourseType } from "../../course/Types";
+import LoadingMessage from "../../../components/LoadingMessage";
 
 export default function AppliedCourses() {
     const navigate = useNavigate();
@@ -43,7 +44,7 @@ export default function AppliedCourses() {
     return (
         <Page>
             <section className="px-4 md:px-24 lg:px-56">
-                {isLoading && <p>Loading...</p>}
+                {isLoading && <LoadingMessage/>}
                 {isError && <p>An error occured...</p>}
                 {allAppliedCourses && allAppliedCourses?.length > 0 && appliedCourseNames.length > 0
                     ? <>
