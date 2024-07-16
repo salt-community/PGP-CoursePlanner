@@ -32,11 +32,7 @@ export default function DayDetails() {
             .then(setData);
     }, [dateForApi]);
 
-    let dateContent: DateContent[] = [];
-    if (data != undefined)
-        dateContent = data.dateContent;
-    else
-        dateContent = [];
+    const dateContent: DateContent[] = data != undefined ? data.dateContent : [];
 
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
