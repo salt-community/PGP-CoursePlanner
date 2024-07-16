@@ -64,8 +64,6 @@ namespace Backend.IntegrationTests
 
             //act
             var response = await _client.GetAsync($"/CalendarDates/{new DateTime(2024, 12, 25)}");
-            var deserializedResponse = JsonConvert.DeserializeObject<CalendarDate>(
-                await response.Content.ReadAsStringAsync());
 
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
