@@ -35,8 +35,8 @@ const HorizontalCalendar: React.FC = () => {
   });
 
   const [activities, setActivities] = useState<Activity[]>([]);
-  const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 21)); 
-  const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 21)); 
+  const [startDate, setStartDate] = useState<Date>(subDays(new Date(),7)); 
+  const [endDate, setEndDate] = useState<Date>(addDays(new Date(),7)); 
 
   useEffect(() => {
     if (appliedCourses && courses && modules) {
@@ -52,12 +52,16 @@ const HorizontalCalendar: React.FC = () => {
           color: ac.color,
         };
         newActivities.push(newActivity);
+
+        if (subDays(ac.startDate,7) < startDate)
+          setStartDate(subDays(ac.startDate,7));
+        if (addDays(ac.endDate!, 7) > endDate)
+          setEndDate(addDays(ac.endDate!,7))
       });
       setActivities(newActivities);
     }
   }, [appliedCourses, courses, modules]
   );
-  console.log(activities[0])
 
   // Calculate the maximum number of days to display
   const numDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
