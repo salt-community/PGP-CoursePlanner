@@ -1,21 +1,25 @@
 import { addDays, format } from "date-fns";
 
 type Props = {
-  dates: Date[]
+  dates: Date[],
+  width: number
 }
 
-export default function TimeLineXaxis({ dates }: Props) {
+export default function TimeLineXaxis({ dates, width }: Props) {
+
+  var widthString = width + "px";
 
   return (
     <>
       {dates.map((currentDate) => {
         return (
-        <div className="w-full mb-2 flex">
+        <div className="mb-2 flex">
           {currentDate.getDay() == 1
-            ? <div className="font-bold w-10">{format(currentDate, "MMM d")}</div>
-            : <div className="font-bold w-10"></div>
+            ? <div style={{ "width": widthString}} className="font-bold">{format(currentDate, "MMM d")}</div>
+            : <div style={{ "width": widthString}} className="font-bold"></div>
           }
-        </div>)
+        </div>
+        )
       })}
     </>
   )
