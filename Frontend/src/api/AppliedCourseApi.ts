@@ -1,7 +1,8 @@
 import { getCookie } from "../helpers/cookieHelpers";
 import { AppliedCourseType } from "../models/course/Types";
+import { BACKEND_URL } from "./BackendUrl";
 
-const BASE_URL = "http://localhost:8080/AppliedCourses";
+const BASE_URL = `${BACKEND_URL}/AppliedCourses`;
 
 export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
   const response = await fetch(BASE_URL, {
