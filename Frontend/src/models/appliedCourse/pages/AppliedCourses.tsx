@@ -13,7 +13,6 @@ export default function AppliedCourses() {
         queryKey: ['allAppliedCourses'],
         queryFn: getAllAppliedCourses
     });
-    console.log(allAppliedCourses)
 
     const { data: allCourses } = useQuery({
         queryKey: ['allCourses'],
