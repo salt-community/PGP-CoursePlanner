@@ -81,57 +81,55 @@ export default function () {
             <section className="px-4 md:px-24 lg:px-56">
                 {isLoading && <LoadingMessage />}
                 {isError && <ErrorMessage />}
-                {appliedCourse !== undefined && course !== undefined && <>
-                    <div className="">
-                        <div className="">
-                            <h1 className="text-xl font-bold mb-2">{course.name}</h1>
-                            <div className="flex flex-row gap-4 items-center">
-                                <div className="self-start mt-2">
-                                    <h2 className="text-lg mb-2">Enter Start Date: </h2>
-                                </div>
-                                <DatePicker name="startDate" value={startDate} onChange={(date) => setStartDate(date!)} className="max-w-xs" sx={
-                                    {
-                                        height: "35px",
-                                        padding: "0px",
-                                        "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
-                                            fontFamily: 'Montserrat',
-                                            color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
-                                            padding: "6px"
-                                        }
-                                    }
-                                } />
+                {appliedCourse !== undefined && course !== undefined &&
+                    <div>
+                        <h1 className="text-xl font-bold mb-2">{course.name}</h1>
+                        <div className="flex flex-row gap-4 items-center">
+                            <div className="self-start mt-2">
+                                <h2 className="text-lg mb-2">Enter Start Date: </h2>
                             </div>
-
-
-                            <Popup
-                                open={isOpened}
-                                onOpen={() => setIsOpened(true)}
-                                trigger={<h2 className=" text-lg flex items-center">Change color: <div style={{ backgroundColor: color }} className="w-5 h-5 ml-2"></div></h2>}
-                                modal
-                            >
+                            <DatePicker name="startDate" value={startDate} onChange={(date) => setStartDate(date!)} className="max-w-xs" sx={
                                 {
-                                    <div ref={popupRef}>
+                                    height: "35px",
+                                    padding: "0px",
+                                    "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+                                        fontFamily: 'Montserrat',
+                                        color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
+                                        padding: "6px"
+                                    }
+                                }
+                            } />
+                        </div>
 
-                                        <div className="flex flex-col">
-                                            <div className="flex justify-end">
-                                                <CloseBtn onClick={() => setIsOpened(false)} />
-                                            </div>
-                                            <div className="self-center mt-2 mb-4">
-                                                <ColorSelection color={color} setColor={setColor}></ColorSelection>
-                                            </div>
-                                            <div className="self-center mb-4">
-                                                <ColorBtn onClick={() => setIsOpened(false)} color={color}>Select color</ColorBtn>
-                                            </div>
+
+                        <Popup
+                            open={isOpened}
+                            onOpen={() => setIsOpened(true)}
+                            trigger={<h2 className=" text-lg flex items-center">Change color: <div style={{ backgroundColor: color }} className="w-5 h-5 ml-2"></div></h2>}
+                            modal
+                        >
+                            {
+                                <div ref={popupRef}>
+
+                                    <div className="flex flex-col">
+                                        <div className="flex justify-end">
+                                            <CloseBtn onClick={() => setIsOpened(false)} />
+                                        </div>
+                                        <div className="self-center mt-2 mb-4">
+                                            <ColorSelection color={color} setColor={setColor}></ColorSelection>
+                                        </div>
+                                        <div className="self-center mb-4">
+                                            <ColorBtn onClick={() => setIsOpened(false)} color={color}>Select color</ColorBtn>
                                         </div>
                                     </div>
-                                }
-                            </Popup>
-                            {isInvalidDate &&
-                                <p className="error-message text-red-600 text-sm mt-4" id="invalid-helper">Please select a weekday for the start date</p>}
-                            <button onClick={handleEdit} className="btn btn-sm mt-6 max-w-48 btn-success text-white">Save changes</button>
-                        </div>
+                                </div>
+                            }
+                        </Popup>
+                        {isInvalidDate &&
+                            <p className="error-message text-red-600 text-sm mt-4" id="invalid-helper">Please select a weekday for the start date</p>}
+                        <button onClick={handleEdit} className="btn btn-sm mt-6 max-w-48 btn-success text-white">Save changes</button>
                     </div>
-                </>}
+                }
             </section>
         </Page>
     )
