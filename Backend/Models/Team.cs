@@ -9,6 +9,5 @@ namespace Backend.Models
         public required string Name { get; set; }
         public List<string> Emails { get; set; } = new List<string>();
         
-
     }
 }
