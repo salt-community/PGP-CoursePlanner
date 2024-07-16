@@ -1,11 +1,11 @@
-import { format, getWeek, lastDayOfMonth } from "date-fns"
 import NextBtn from "../../../components/buttons/NextBtn"
 import PreviousBtn from "../../../components/buttons/PreviousBtn"
 import Page from "../../../components/Page"
 import { useState } from "react"
 import CalendarDate from "../sections/CalendarDate"
 import { Link } from "react-router-dom"
-import { currentMonth, firstDayOfMonth, allDaysInMonth, currentYear, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString } from "../../../helpers/dateHelpers"
+import { currentMonth, firstDayOfMonth, allDaysInMonth, currentYear, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
+import { format, getWeek } from "date-fns"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(currentMonth);
