@@ -56,7 +56,7 @@ export default function () {
             setIsInvalidDate(true);
         else {
             const newAppliedCourse: AppliedCourseType = {
-                id: appliedCourse?.id,
+                id: appliedCourse!.id,
                 courseId: appliedCourse?.courseId!,
                 startDate: startDate,
                 color: color

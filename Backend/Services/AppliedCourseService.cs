@@ -253,13 +253,13 @@ namespace Backend.Services
                             await _context.CalendarDates.AddAsync(date);
                             await _context.SaveChangesAsync();
                         }
-                        appliedCourse.EndDate = currentDate;
+                        appliedCourseToUpdate.EndDate = currentDate;
                         currentDate = currentDate.AddDays(1);
                         if (currentDate.DayOfWeek == DayOfWeek.Saturday)
                             currentDate = currentDate.AddDays(2);
                     }
                 }
-                _context.AppliedCourses.Update(appliedCourse);
+                _context.AppliedCourses.Update(appliedCourseToUpdate);
                 await _context.SaveChangesAsync();
                 return appliedCourseToUpdate;
             }

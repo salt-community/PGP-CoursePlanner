@@ -1,5 +1,6 @@
 import { addDays, format } from "date-fns";
 import { Activity } from "../../pages/calendar/HorizontalCalendar";
+import { daysBetweenDates, formatDate } from "../../helpers/dateHelpers";
 
 type Props = {
   dates: Date[],
@@ -10,7 +11,7 @@ export default function TimeLineCourse({ dates, course }: Props) {
 
   const startIndex = dates.findIndex(d => d.getDate() == course.startDate.getDate() && d.getMonth() == course.startDate.getMonth())
   const endIndex = dates.findIndex(d => d.getDate() == course.endDate.getDate() && d.getMonth() == course.endDate.getMonth())
-  const width: string = ((course.endDate.getDate() - course.startDate.getDate() + 1) * 40).toString() + "px";
+  const width: string = ((daysBetweenDates(course.startDate, course.endDate) + 1) * 40).toString() + "px";
 
   return (
     <>
