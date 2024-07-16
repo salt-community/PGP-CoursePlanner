@@ -1,5 +1,5 @@
-import React, { useState, useEffect, act } from "react";
-import { format, addDays, subDays, getWeek } from "date-fns"; // Import date-fns for date manipulation
+import React, { useState, useEffect } from "react";
+import { addDays, subDays, getWeek } from "date-fns"; // Import date-fns for date manipulation
 import Page from "../../sections/Page";
 import { useQuery } from "react-query";
 import { getAllAppliedCourses } from "../../api/AppliedCourseApi";
@@ -43,27 +43,12 @@ const HorizontalCalendar: React.FC = () => {
       const newActivities: Activity[] = [];
       appliedCourses.forEach(ac => {
         var c = courses?.find(c => c.id == ac.courseId)!;
-        var modIds = c.moduleIds!;
-        var totalDays = 0;
-        modIds.forEach(mId => {
-          var m = modules?.find(m => m.id == mId)!;
-          totalDays = totalDays + m.numberOfDays;
-        });
-        var endDate = new Date(ac.startDate);
-        var currentDate = new Date(ac.startDate);
-        for (i = 0; i < totalDays; i++) {
-          var endDate = currentDate;
-          if (currentDate.getDay() == 5)
-            currentDate = addDays(currentDate, 3)
-          else
-            currentDate = addDays(currentDate, 1)
-        }
 
         var newActivity: Activity = {
           id: ac.id!,
           title: c.name,
           startDate: new Date(ac.startDate),
-          endDate: endDate,
+          endDate: new Date(ac.endDate!),
           color: ac.color,
         };
         newActivities.push(newActivity);

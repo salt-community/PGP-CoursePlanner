@@ -1,7 +1,7 @@
 import { getCookie } from "../helpers/cookieHelpers";
 import { AppliedCourseType } from "../sections/course/Types";
 
-const BASE_URL = "http://localhost:5268/AppliedCourses";
+const BASE_URL = "http://localhost:8080/AppliedCourses";
 
 export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
   const response = await fetch(BASE_URL, {
@@ -36,6 +36,7 @@ export async function deleteAppliedCourse(id: number) {
   const response = await fetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
     headers: {
+      Authorization: `Bearer ${getCookie("JWT")}`,
       "Content-type": "application/json; charset=UTF-8",
     },
   });
@@ -45,7 +46,12 @@ export async function deleteAppliedCourse(id: number) {
 }
 
 export async function getAppliedCourseById(id: number) {
-  const response = await fetch(`${BASE_URL}/${id}`);
+  const response = await fetch(`${BASE_URL}/${id}`, {
+    headers: {
+      Authorization: `Bearer ${getCookie("JWT")}`,
+      "Content-type": "application/json; charset=UTF-8",
+    }
+  });
   if (response.ok) {
     const data = await response.json();
     return data as AppliedCourseType;
@@ -57,6 +63,7 @@ export async function editAppliedCourse(appliedCourse: AppliedCourseType) {
   const response = await fetch(`${BASE_URL}/${appliedCourse.id}`, {
     method: "PUT",
     headers: {
+      Authorization: `Bearer ${getCookie("JWT")}`,
       "Content-type": "application/json; charset=UTF-8",
     },
     body: JSON.stringify(appliedCourse),

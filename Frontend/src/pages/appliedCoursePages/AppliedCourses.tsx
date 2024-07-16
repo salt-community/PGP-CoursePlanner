@@ -33,7 +33,7 @@ export default function AppliedCourses() {
             return deleteAppliedCourse(id);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['courses'] })
+            queryClient.invalidateQueries({ queryKey: ['allAppliedCourses'] })
             navigate(`/activecourses`);
         }
     })
