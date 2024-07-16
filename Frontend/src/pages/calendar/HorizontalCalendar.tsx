@@ -35,8 +35,8 @@ const HorizontalCalendar: React.FC = () => {
   });
 
   const [activities, setActivities] = useState<Activity[]>([]);
-  const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 21)); // Start 14 days ago
-  const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 21)); // End 14 days ahead
+  const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 21)); 
+  const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 21)); 
 
   useEffect(() => {
     if (appliedCourses && courses && modules) {
