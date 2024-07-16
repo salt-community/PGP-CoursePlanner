@@ -6,6 +6,7 @@ import DeleteBtn from "../../../components/buttons/DeleteBtn";
 import { Link, useNavigate } from "react-router-dom";
 import { CourseType } from "../../course/Types";
 import LoadingMessage from "../../../components/LoadingMessage";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 export default function AppliedCourses() {
     const navigate = useNavigate();
@@ -45,7 +46,7 @@ export default function AppliedCourses() {
         <Page>
             <section className="px-4 md:px-24 lg:px-56">
                 {isLoading && <LoadingMessage/>}
-                {isError && <p>An error occured...</p>}
+                {isError && <ErrorMessage/>}
                 {allAppliedCourses && allAppliedCourses?.length > 0 && appliedCourseNames.length > 0
                     ? <>
                         <h1 className="flex justify-center text-xl mb-6">The following courses are currently in the calendar</h1>
