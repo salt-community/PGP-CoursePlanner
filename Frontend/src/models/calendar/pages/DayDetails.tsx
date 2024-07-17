@@ -10,6 +10,8 @@ import { getCalendarDate } from "../../../api/CalendarDateApi";
 import { getDateFromPath } from "../../../helpers/helperMethods";
 import WeekDay from "../sections/WeekDay";
 import { getDateAsString } from "../../../helpers/dateHelpers";
+import { getCookie } from "../../../helpers/cookieHelpers";
+import NavigateToLogin from "../../login/NavigateToLogin";
 
 export default function DayDetails() {
     const navigate = useNavigate();
@@ -37,25 +39,28 @@ export default function DayDetails() {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     return (
-        <Page>
-            <section className="flex justify-around">
+        !getCookie("access_token") ?
+            <NavigateToLogin />
+            :
+            <Page>
+                <section className="flex justify-around">
                     <PreviousBtn onClick={() => navigate("/calendar/day/date=" + previousDay)} />
-                <section className="w-1/2 flex justify-center bg-background">
-                    <div className="w-full bg-base-100 shadow-xl p-5">
-                        <div className="flex justify-end">
-                            <CloseBtn onClick={() => navigate("/calendar/month")} />
+                    <section className="w-1/2 flex justify-center bg-background">
+                        <div className="w-full bg-base-100 shadow-xl p-5">
+                            <div className="flex justify-end">
+                                <CloseBtn onClick={() => navigate("/calendar/month")} />
+                            </div>
+                            <h1 className="mb-4 item-center text-xl font-bold text-center">{format(getDateAsString(dateAsDate), 'EEEE')}
+                                <br /> {dateAsDate.getDate()} {monthNames[dateAsDate.getMonth()]}
+                            </h1>
+                            <div>
+                                <WeekDay dateContent={dateContent} />
+                            </div>
                         </div>
-                        <h1 className="mb-4 item-center text-xl font-bold text-center">{format(getDateAsString(dateAsDate), 'EEEE')}
-                            <br /> {dateAsDate.getDate()} {monthNames[dateAsDate.getMonth()]}
-                        </h1>
-                        <div>
-                            <WeekDay dateContent={dateContent} />
-                        </div>
-                    </div>
-                </section>
+                    </section>
                     <NextBtn onClick={() => navigate("/calendar/day/date=" + nextDay)} />
-            </section>
-        </Page>
+                </section>
+            </Page>
     )
 
 }
