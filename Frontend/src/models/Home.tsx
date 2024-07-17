@@ -16,10 +16,11 @@ export default function Home() {
     if (location.hash) {
         const params = new URLSearchParams(location.hash);
         const access_token = params.get('access_token')!;
-        setCookie('access_token', access_token, 1);
+        const expires_in = parseInt(params.get('expires_in')!);
+        setCookie('access_token', access_token, expires_in);
 
         const JWT = params.get('id_token');
-        setCookie('JWT', JWT!, 1);
+        setCookie('JWT', JWT!, expires_in);
 
         location.href = redirectLink;
     }
