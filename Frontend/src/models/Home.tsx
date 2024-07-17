@@ -15,6 +15,7 @@ export default function Home() {
 
     if (location.hash) {
         const params = new URLSearchParams(location.hash);
+        const code = params.get('code')!;
         const access_token = params.get('access_token')!;
         const expires_in = parseInt(params.get('expires_in')!);
         setCookie('access_token', access_token, expires_in);
@@ -22,7 +23,7 @@ export default function Home() {
         const JWT = params.get('id_token');
         setCookie('JWT', JWT!, expires_in);
 
-        location.href = redirectLink;
+        // location.href = redirectLink;
     }
 
     const weekDayDateContent: DateContent[][] = [];
