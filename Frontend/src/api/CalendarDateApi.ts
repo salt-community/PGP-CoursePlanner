@@ -1,7 +1,8 @@
-import { CalendarDateType } from "../components/calendar/Types";
 import { getCookie } from "../helpers/cookieHelpers";
+import { CalendarDateType } from "../models/calendar/Types";
+import { BACKEND_URL } from "./BackendUrl";
 
-const BASE_URL = "http://localhost:8080/CalendarDates";
+const BASE_URL = `${BACKEND_URL}/CalendarDates`;
 
 export async function getCalendarDate(date: string) {
   const response = await fetch(`${BASE_URL}/${date}`, {
