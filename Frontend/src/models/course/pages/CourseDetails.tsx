@@ -17,6 +17,8 @@ import 'reactjs-popup/dist/index.css';
 import CloseBtn from "../../../components/buttons/CloseBtn";
 import { ModuleType } from "../../module/Types";
 import { AppliedCourseType } from "../Types";
+import LoadingMessage from "../../../components/LoadingMessage";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 export default function CourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
@@ -106,8 +108,8 @@ export default function CourseDetails() {
 
         return (
             <Page>
-                {isLoading && <p>Loading...</p>}
-                {isError && <p>An error occured</p>}
+                {isLoading && <LoadingMessage/>}
+                {isError && <ErrorMessage/>}
                 {course &&
                     <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
                         <div className="">
