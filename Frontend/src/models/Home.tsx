@@ -9,7 +9,6 @@ import WeekDay from "./calendar/sections/WeekDay";
 import { DateContent } from "./calendar/Types";
 import NavigateToLogin from "./login/NavigateToLogin";
 import { getTokens } from "../api/UserApi";
-import { setNewTokenCookies } from "../helpers/helperMethods";
 
 export default function Home() {
 
@@ -35,16 +34,13 @@ export default function Home() {
             console.log("response from code: ", response);
             const { access_token, id_token, refresh_token } = response;
 
-            const expires_in = 15;
+            const expires_in = 5;
 
             setCookie('access_token', access_token, expires_in);
             setCookie('JWT', id_token, expires_in);
             setCookie('refresh_token', refresh_token);
 
-            const refreshingTokens = setInterval(setNewTokenCookies, expires_in -10);
-
             location.href = redirectLink;
-
         }
 
 

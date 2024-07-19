@@ -1,3 +1,5 @@
+import { getCookie } from "../../helpers/cookieHelpers";
+import { setNewTokenCookies } from "../../helpers/helperMethods";
 
 const redirectLink = "http://localhost:5173";
 const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=code&nonce=mst3k&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com&access_type=offline`;
@@ -8,6 +10,11 @@ export default function Login() {
     const login = () => {
         location.href = LOGIN_URL;
     }
+
+    if (getCookie("refresh_token")) {
+        setNewTokenCookies();
+    }
+
 
     return (
         <section className="px-5 text-center w-full h-screen flex justify-center items-center flex-col gap-4">
