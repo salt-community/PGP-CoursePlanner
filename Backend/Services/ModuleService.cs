@@ -218,6 +218,7 @@ public class ModuleService : IService<Module>
         module.Name = newModule.Name;
         module.NumberOfDays = newModule.NumberOfDays;
         module.Days = newModule.Days;
+        module.Track = newModule.Track;
 
         return module;
     }

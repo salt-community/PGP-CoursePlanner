@@ -10,5 +10,7 @@ namespace Backend.Models
         public List<Day> Days { get; set; } = [];
         [JsonIgnore]
         public List<CourseModule> CourseModules { get; set; } = new List<CourseModule>();
+
+        public string? Track {get; set;}
     }
 }
