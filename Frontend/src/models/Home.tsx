@@ -8,6 +8,7 @@ import Page from "../components/Page";
 import WeekDay from "./calendar/sections/WeekDay";
 import { DateContent } from "./calendar/Types";
 import NavigateToLogin from "./login/NavigateToLogin";
+import { getAccessToken } from "../api/UserApi";
 
 export default function Home() {
 
@@ -22,6 +23,14 @@ export default function Home() {
 
         const JWT = params.get('id_token');
         setCookie('JWT', JWT!, expires_in);
+
+        console.log("code: ", code);
+        const {data: response} = useQuery({
+            queryKey: ['accessCode'],
+            queryFn: () => getAccessToken(code)
+        })
+        response && console.log("response from code: ", response);
+
 
         // location.href = redirectLink;
     }
