@@ -4,6 +4,8 @@ const BASE_URL = "https://accounts.google.com/o/oauth2/token";
 export type tokenResponse = {
     access_token: string;
     expires_in: number;
+    id_token: string;
+    refresh_token: string;
     scope: string;
     token_type: string;
 }
