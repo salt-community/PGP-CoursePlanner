@@ -8,7 +8,7 @@ import Page from "../components/Page";
 import WeekDay from "./calendar/sections/WeekDay";
 import { DateContent } from "./calendar/Types";
 import NavigateToLogin from "./login/NavigateToLogin";
-import { getAccessToken } from "../api/UserApi";
+import { getTokens } from "../api/UserApi";
 
 export default function Home() {
 
@@ -20,7 +20,7 @@ export default function Home() {
 
         const { data: response, isLoading, isError } = useQuery({
             queryKey: ['accessCode'],
-            queryFn: () => getAccessToken(code)
+            queryFn: () => getTokens(code)
         })
 
         if (isLoading) {

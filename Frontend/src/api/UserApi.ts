@@ -10,7 +10,7 @@ export type tokenResponse = {
     token_type: string;
 }
 
-export async function getAccessToken(auth_code: string) {
+export async function getTokens(auth_code: string) {
   const response = await fetch(BASE_URL, {
     method: "POST",
     headers: {
