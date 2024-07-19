@@ -119,7 +119,9 @@ const popupRef = useRef<HTMLDivElement>(null);
                 id: module.id ?? 0,
                 name: moduleName.value,
                 numberOfDays: numberOfDays.value,
-                days: days
+                days: days,
+                track: "None"
+
             };
 
             mutation.mutate(newModule);
