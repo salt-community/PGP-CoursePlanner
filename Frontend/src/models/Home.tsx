@@ -17,19 +17,19 @@ export default function Home() {
     if (location.hash) {
         const params = new URLSearchParams(location.hash);
         const code = params.get('code')!;
-        const access_token = params.get('access_token')!;
-        const expires_in = parseInt(params.get('expires_in')!);
-        setCookie('access_token', access_token, expires_in);
 
-        const JWT = params.get('id_token');
-        setCookie('JWT', JWT!, expires_in);
-
-        console.log("code: ", code);
-        const {data: response} = useQuery({
+        const { data: response } = useQuery({
             queryKey: ['accessCode'],
             queryFn: () => getAccessToken(code)
         })
-        response && console.log("response from code: ", response);
+
+        if (response) {
+            const { access_token, expires_in, id_token, refresh_token } = response;
+
+            setCookie('access_token', access_token, expires_in);
+            setCookie('JWT', id_token, expires_in);
+            setCookie('refresh_token', refresh_token);
+        }
 
 
         // location.href = redirectLink;
@@ -51,9 +51,9 @@ export default function Home() {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     return (
-        !getCookie("access_token") ?
-            <NavigateToLogin />
-            :
+        // !getCookie("access_token") ?
+        //     <NavigateToLogin />
+        //     :
             <Page>
                 <section className="p-20 flex flex-col items-center">
                     <h1 className="text-2xl font-semibold">We are in week {getWeek(new Date())}</h1>
