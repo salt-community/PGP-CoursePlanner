@@ -1,4 +1,7 @@
 import { useLocation } from "react-router-dom";
+import { refreshTokens } from "../api/UserApi";
+import { deleteCookie, setCookie } from "./cookieHelpers";
+import { useQuery } from "react-query";
 
 export function getIdFromPath() {
   const { pathname } = useLocation();
@@ -17,3 +20,28 @@ export function getWeekFromPath() {
   const pathArray = pathname.split("=");
   return pathArray[pathArray.length - 1];
 }
+
+export function setNewTokenCookies() {
+  alert("refreshing tokens!!!")
+  const { data: response, isLoading, isError } = useQuery({
+    queryKey: ['accessCode'],
+    queryFn: () => refreshTokens()
+})
+
+if (isLoading) {
+  console.log("loading...")
+  setCookie('access_token', "soon to be set!");
+}
+
+isError && deleteCookie('access_token');
+
+if (response) {
+  console.log("response from refresh tokens: ", response);
+  const { access_token, expires_in, id_token, refresh_token } = response;
+
+  setCookie('access_token', access_token, expires_in);
+  setCookie('JWT', id_token, expires_in);
+  setCookie('refresh_token', refresh_token);
+}
+}
+
