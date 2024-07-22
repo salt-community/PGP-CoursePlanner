@@ -6,7 +6,7 @@ export type tokenResponse = {
   access_token: string;
   expires_in: number;
   id_token: string;
-  refresh_token: string;
+  refresh_token?: string;
   scope: string;
   token_type: string;
 };
@@ -25,8 +25,8 @@ export async function getTokens(auth_code: string) {
       redirect_uri: "http://localhost:5173",
     }),
   });
-  const data = await response.json();
-  return data;
+  const data = (await response.json());
+  return data as tokenResponse;
 }
 
 try {
@@ -48,8 +48,8 @@ export async function refreshTokens() {
       refresh_token: getCookie("refresh_token")!,
     }),
   });
-  const data = await response.json();
-  return data;
+  const data = (await response.json());
+  return data as tokenResponse;
 }
 
 try {
