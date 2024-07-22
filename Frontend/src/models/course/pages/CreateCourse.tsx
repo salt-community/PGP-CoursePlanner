@@ -16,7 +16,7 @@ export default function CreateCourse() {
     }
 
     return (
-        !getCookie("access_token") ?
+        getCookie("access_token") == undefined ?
             <NavigateToLogin />
             :
             <Page>

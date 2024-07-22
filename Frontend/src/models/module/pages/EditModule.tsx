@@ -18,7 +18,7 @@ export default function () {
     });
 
     return (
-        !getCookie("access_token") ?
+        getCookie("access_token") == undefined ?
             <NavigateToLogin />
             :
             <Page>

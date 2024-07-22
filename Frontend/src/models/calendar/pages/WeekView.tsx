@@ -23,7 +23,7 @@ export default function MonthView() {
     // const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
     return (
-        !getCookie("access_token") ?
+        getCookie("access_token") == undefined ?
             <NavigateToLogin />
             :
             <Page>

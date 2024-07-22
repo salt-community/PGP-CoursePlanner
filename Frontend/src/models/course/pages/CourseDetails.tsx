@@ -109,7 +109,7 @@ export default function CourseDetails() {
     })
 
     return (
-        !getCookie("access_token") ?
+        getCookie("access_token") == undefined ?
             <NavigateToLogin />
             :
             <Page>

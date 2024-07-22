@@ -79,7 +79,7 @@ const HorizontalCalendar: React.FC = () => {
     height = ((activities.length + 1) * 80) + "px";
 
   return (
-    !getCookie("access_token") ?
+    getCookie("access_token") == undefined ?
       <NavigateToLogin />
       :
       <Page>

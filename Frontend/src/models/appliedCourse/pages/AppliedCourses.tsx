@@ -45,7 +45,7 @@ export default function AppliedCourses() {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     return (
-        !getCookie("access_token") ?
+        getCookie("access_token") == undefined ?
             <NavigateToLogin />
             :
             <Page>

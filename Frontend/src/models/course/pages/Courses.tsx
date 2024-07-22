@@ -15,7 +15,7 @@ export default function Courses() {
     });
 
     return (
-        !getCookie("access_token") ?
+        getCookie("access_token") == undefined ?
             <NavigateToLogin />
             :
             <Page>
