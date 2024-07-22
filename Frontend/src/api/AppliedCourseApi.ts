@@ -18,6 +18,7 @@ export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
 
     if (!response.ok || response == null) {
       alert("Failed to apply course");
+      return;
     }
 
     return response;
@@ -38,6 +39,7 @@ export async function getAllAppliedCourses() {
 
     if (!response.ok || response == null) {
       alert("Failed to get applied courses");
+      return;
     }
 
     const data = await response.json();
@@ -59,6 +61,7 @@ export async function deleteAppliedCourse(id: number) {
     });
     if (!response.ok || response == null) {
       alert("Failed to delete applied courses");
+      return;
     }
   } catch (error) {
     console.error(error);
@@ -76,6 +79,7 @@ export async function getAppliedCourseById(id: number) {
     });
     if (!response.ok || response == null) {
       alert("Failed to get applied course");
+      return;
     }
     const data = await response.json();
     return data as AppliedCourseType;
@@ -97,6 +101,7 @@ export async function editAppliedCourse(appliedCourse: AppliedCourseType) {
     });
     if (!response.ok || response == null) {
       alert("Failed to edit applied course");
+      return;
     }
   } catch (error) {
     console.error(error);
