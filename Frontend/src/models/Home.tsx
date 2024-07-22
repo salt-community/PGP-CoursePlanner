@@ -32,13 +32,11 @@ export default function Home() {
 
         if (response) {
             console.log("response from code: ", response);
-            const { access_token, id_token, refresh_token } = response;
-
-            const expires_in = 5;
+            const { access_token, id_token, expires_in, refresh_token } = response;
 
             setCookie('access_token', access_token, expires_in);
             setCookie('JWT', id_token, expires_in);
-            setCookie('refresh_token', refresh_token);
+            refresh_token && setCookie('refresh_token', refresh_token);
 
             location.href = redirectLink;
         }
