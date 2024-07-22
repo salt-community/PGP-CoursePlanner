@@ -20,6 +20,7 @@ import CreateModule from './models/module/pages/CreateModule'
 import EditModule from './models/module/pages/EditModule'
 import ModuleDetails from './models/module/pages/ModuleDetails'
 import Modules from './models/module/pages/Modules'
+import Login from './models/login/Login.tsx'
 
 const router = createBrowserRouter([
   {
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
   {
     path: "/activecourses/edit/*",
     element: <EditAppliedCourse />,
+  },
+  {
+    path: "/login",
+    element: <Login/>,
   }
 ]);
 

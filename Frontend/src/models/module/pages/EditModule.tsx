@@ -5,6 +5,8 @@ import { getIdFromPath } from "../../../helpers/helperMethods";
 import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import Module from "../sections/Module";
+import { getCookie } from "../../../helpers/cookieHelpers";
+import NavigateToLogin from "../../login/NavigateToLogin";
 
 export default function () {
 
@@ -16,10 +18,13 @@ export default function () {
     });
 
     return (
-        <Page>
-            {isLoading && <LoadingMessage />}
-            {isError && <ErrorMessage />}
-            {module && <Module module={module} submitFunction={editModule} buttonText="Save changes"/>}
-        </Page>
+        getCookie("access_token") == undefined ?
+            <NavigateToLogin />
+            :
+            <Page>
+                {isLoading && <LoadingMessage />}
+                {isError && <ErrorMessage />}
+                {module && <Module module={module} submitFunction={editModule} buttonText="Save changes" />}
+            </Page>
     )
 }

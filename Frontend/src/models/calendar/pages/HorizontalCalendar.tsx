@@ -9,6 +9,8 @@ import { getAllModules } from "../../../api/ModuleApi";
 import { firstDayOfMonth, currentMonth } from "../../../helpers/dateHelpers";
 import TimeLineCourse from "../sections/TimeLineCourse";
 import TimeLineXaxis from "../sections/TimeLineXaxis";
+import { getCookie } from "../../../helpers/cookieHelpers";
+import NavigateToLogin from "../../login/NavigateToLogin";
 
 export type Activity = {
   id: number;
@@ -26,7 +28,7 @@ const HorizontalCalendar: React.FC = () => {
   var width = [16, 24, 32, 40, 48, 56, 64, 80, 96];
   const [widthIndex, setWidthIndex] = useState<number>(3);
 
-  const { data: appliedCourses} = useQuery({
+  const { data: appliedCourses } = useQuery({
     queryKey: ["appliedCourses"],
     queryFn: getAllAppliedCourses,
   });
@@ -77,50 +79,53 @@ const HorizontalCalendar: React.FC = () => {
     height = ((activities.length + 1) * 80) + "px";
 
   return (
-    <Page>
-      <div style={{ "height": height }} className="overflow-x-auto px-4 flex flex-col">
-        {/* <div className="flex flex-col"> */}
-        <div className="flex flex-row">
+    getCookie("access_token") == undefined ?
+      <NavigateToLogin />
+      :
+      <Page>
+        <div style={{ "height": height }} className="overflow-x-auto px-4 flex flex-col">
+          {/* <div className="flex flex-col"> */}
+          <div className="flex flex-row">
 
+            {activities.length > 0 &&
+              <TimeLineXaxis dates={dates} width={width[widthIndex]}></TimeLineXaxis>
+            }
+
+          </div>
           {activities.length > 0 &&
-            <TimeLineXaxis dates={dates} width={width[widthIndex]}></TimeLineXaxis>
+            <>
+              {activities.map(course => {
+                return (
+                  <div className="flex flex-row"><TimeLineCourse dates={dates} course={course} width={width[widthIndex]}></TimeLineCourse></div>)
+              })}
+            </>
           }
-
+          {/* </div> */}
+        </div >
+        <div className="border-b-2 border-gray-100"></div>
+        <div className="ml-10 mr-10 flex flex-row justify-between">
+          <div className="flex flex-row gap-2">
+            <Link to={`/calendar/week/weeknumber=${getWeek(firstDayOfMonth(currentMonth))}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
+            <Link to={`/calendar/month`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to month view</Link>
+          </div>
+          <div className="flex flex-row gap-2">
+            {widthIndex != 0
+              ? <svg onClick={() => setWidthIndex(widthIndex - 1)} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM13.5 10.5h-6" />
+              </svg>
+              : <svg className="btn btn-sm py-1 mt-4 max-w-xs btn-disabled" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM13.5 10.5h-6" />
+              </svg>}
+            {widthIndex != width.length - 1
+              ? <svg onClick={() => setWidthIndex(widthIndex + 1)} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6" />
+              </svg>
+              : <svg className="btn btn-sm py-1 mt-4 max-w-xs btn-disabled" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6" />
+              </svg>}
+          </div>
         </div>
-        {activities.length > 0 &&
-          <>
-            {activities.map(course => {
-              return (
-                <div className="flex flex-row"><TimeLineCourse dates={dates} course={course} width={width[widthIndex]}></TimeLineCourse></div>)
-            })}
-          </>
-        }
-        {/* </div> */}
-      </div >
-      <div className="border-b-2 border-gray-100"></div>
-      <div className="ml-10 mr-10 flex flex-row justify-between">
-        <div className="flex flex-row gap-2">
-          <Link to={`/calendar/week/weeknumber=${getWeek(firstDayOfMonth(currentMonth))}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
-          <Link to={`/calendar/month`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to month view</Link>
-        </div>
-        <div className="flex flex-row gap-2">
-          {widthIndex != 0
-            ? <svg onClick={() => setWidthIndex(widthIndex - 1)} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM13.5 10.5h-6" />
-            </svg>
-            : <svg className="btn btn-sm py-1 mt-4 max-w-xs btn-disabled" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM13.5 10.5h-6" />
-            </svg>}
-          {widthIndex != width.length - 1
-            ? <svg onClick={() => setWidthIndex(widthIndex + 1)} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6" />
-            </svg>
-            : <svg className="btn btn-sm py-1 mt-4 max-w-xs btn-disabled" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6" />
-            </svg>}
-        </div>
-      </div>
-    </Page >
+      </Page >
   );
 };
 
