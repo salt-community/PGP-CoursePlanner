@@ -27,6 +27,11 @@ export async function postCourseToGoogle(eventTemplate: GoogleEvent[]) {
         },
         body: JSON.stringify(event),
       });
+
+      if (!response.ok || response == null) {
+        alert("Failed to add course to google calendar!");
+        return;
+      }
       const data = await response.json();
       return data;
     });
@@ -37,21 +42,26 @@ export async function postCourseToGoogle(eventTemplate: GoogleEvent[]) {
 }
 
 export async function deleteSingleGoogleEvent(eventId: string) {
-  await fetch(
-    BASE_URL + `/${eventId}?key=${import.meta.env.VITE_APP_API_KEY}`,
-    {
-      method: "DELETE",
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${getCookie("access_token")}`,
-      },
-    }
-  );
+  try {
+    await fetch(
+      BASE_URL + `/${eventId}?key=${import.meta.env.VITE_APP_API_KEY}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${getCookie("access_token")}`,
+        },
+      }
+    );
+  } catch (error) {
+    console.error(error);
+    alert("Failed to delete events");
+  }
 }
 
 export const getGoogleCourseEvents = async (
   course: string
-): Promise<string[] | null> => {
+): Promise<string[] | undefined> => {
   try {
     const response = await fetch(
       BASE_URL +
@@ -65,24 +75,29 @@ export const getGoogleCourseEvents = async (
         },
       }
     );
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
+    if (!response.ok || response == undefined) {
+      alert("Failed to get google events");
+      return;
     }
 
     const eventDataArr: EventDataArr = await response.json();
     return eventDataArr.items.map((event) => event.id);
   } catch (error) {
-    console.error("There was a problem with the fetch operation:", error);
-    return null;
+    console.error("There was a problem with the fetch operation: ", error);
+    return;
   }
 };
 
 export async function deleteCourseFromGoogle(course: string) {
-  const result = await getGoogleCourseEvents(course);
-  if (result) {
-    result.map((event) => deleteSingleGoogleEvent(event));
-    alert("Event deleted, check your Google Calendar!");
-  } else {
-    console.log("Could not find any events with course ", course);
+  try {
+    const result = await getGoogleCourseEvents(course);
+    if (result) {
+      result.map((event) => deleteSingleGoogleEvent(event));
+      alert("Event deleted, check your Google Calendar!");
+    } else {
+      console.log("Could not find any events with course ", course);
+    }
+  } catch (error){
+    console.error(error);
   }
 }

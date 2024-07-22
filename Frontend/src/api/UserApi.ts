@@ -12,48 +12,55 @@ export type tokenResponse = {
 };
 
 export async function getTokens(auth_code: string) {
-  const response = await fetch(BASE_URL, {
-    method: "POST",
-    headers: {
-      "content-type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams({
-      grant_type: "authorization_code",
-      code: auth_code,
-      client_id: import.meta.env.VITE_APP_CLIENT_ID,
-      client_secret: import.meta.env.VITE_APP_CLIENT_SECRET,
-      redirect_uri: "http://localhost:5173",
-    }),
-  });
-  const data = (await response.json());
-  return data as tokenResponse;
-}
+  try {
+    const response = await fetch(BASE_URL, {
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "authorization_code",
+        code: auth_code,
+        client_id: import.meta.env.VITE_APP_CLIENT_ID,
+        client_secret: import.meta.env.VITE_APP_CLIENT_SECRET,
+        redirect_uri: "http://localhost:5173",
+      }),
+    });
 
-try {
-} catch (error) {
-  console.error("Error getting access token", error);
-  alert("Failed to get access token");
+    if (!response.ok || response == undefined) {
+      alert("failed get access token");
+      return;
+    }
+    const data = await response.json();
+    return data as tokenResponse;
+  } catch (error) {
+    console.error("Error getting access token", error);
+    alert("Failed to get access token");
+  }
 }
 
 export async function refreshTokens() {
-  const response = await fetch(BASE_URL, {
-    method: "POST",
-    headers: {
-      "content-type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams({
-      grant_type: "refresh_token",
-      client_id: import.meta.env.VITE_APP_CLIENT_ID,
-      client_secret: import.meta.env.VITE_APP_CLIENT_SECRET,
-      refresh_token: getCookie("refresh_token")!,
-    }),
-  });
-  const data = (await response.json());
-  return data as tokenResponse;
-}
-
-try {
-} catch (error) {
-  console.error("Error refreshing token", error);
-  alert("Failed refresh token");
+  try {
+    const response = await fetch(BASE_URL, {
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "refresh_token",
+        client_id: import.meta.env.VITE_APP_CLIENT_ID,
+        client_secret: import.meta.env.VITE_APP_CLIENT_SECRET,
+        refresh_token: getCookie("refresh_token")!,
+      }),
+    });
+    if (!response.ok || response == undefined) {
+      alert("failed to refresh tokens");
+      return;
+    }
+    const data = await response.json();
+    return data as tokenResponse;
+  } catch (error) {
+    console.error("Error refreshing token", error);
+    alert("Failed refresh token");
+  }
 }
