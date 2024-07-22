@@ -11,7 +11,7 @@ export default function Login() {
         location.href = LOGIN_URL;
     }
 
-    if (getCookie("refresh_token")) {
+    if (getCookie("refresh_token") != undefined) {
         setNewTokenCookies();
     }
 
