@@ -91,7 +91,7 @@ export default function CourseDetails() {
                 color: color
             };
             const response = postAppliedCourse(appliedCourse);
-            if ((await response).ok) {
+            if ((await response) != null && (await response).ok) {
                 navigate('/calendar/month')
             }
         }

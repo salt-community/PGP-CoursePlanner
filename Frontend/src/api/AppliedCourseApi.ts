@@ -5,21 +5,26 @@ import { BACKEND_URL } from "./BackendUrl";
 const BASE_URL = `${BACKEND_URL}/AppliedCourses`;
 
 export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
-  const response = await fetch(BASE_URL, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
-      Accept: "application/json",
-    },
-    body: JSON.stringify(appliedCourse),
-  });
+  try {
+    const response = await fetch(BASE_URL, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${getCookie("JWT")}`,
+        Accept: "application/json",
+      },
+      body: JSON.stringify(appliedCourse),
+    });
 
-  if (!response.ok) {
+    if (!response.ok || response == null) {
+      alert("Failed to apply course");
+    }
+
+    return response;
+  } catch {
     alert("Failed to apply course");
     throw new Error("Failed to apply course");
   }
-  return response;
 }
 
 export async function getAllAppliedCourses() {
@@ -51,7 +56,7 @@ export async function getAppliedCourseById(id: number) {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       "Content-type": "application/json; charset=UTF-8",
-    }
+    },
   });
   if (response.ok) {
     const data = await response.json();
@@ -60,7 +65,6 @@ export async function getAppliedCourseById(id: number) {
 }
 
 export async function editAppliedCourse(appliedCourse: AppliedCourseType) {
-
   const response = await fetch(`${BASE_URL}/${appliedCourse.id}`, {
     method: "PUT",
     headers: {
@@ -72,5 +76,4 @@ export async function editAppliedCourse(appliedCourse: AppliedCourseType) {
   if (!response.ok) {
     throw new Error("Failed to edit applied course");
   }
-
 }
