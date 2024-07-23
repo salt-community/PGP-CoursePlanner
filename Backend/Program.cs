@@ -69,6 +69,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseExceptionHandler();
+
 app.MapControllers();
 
 // Use Kestrel and listen on the port specified by the PORT environment variable
