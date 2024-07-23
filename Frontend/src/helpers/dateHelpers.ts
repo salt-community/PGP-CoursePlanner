@@ -10,11 +10,11 @@ import {
 
 export const firstDayOfWeek = startOfWeek(new Date(), { weekStartsOn: 1 });
 
-export const formatDate = (date: Date) => {
+export const getDateAsString = (date: Date) => {
   return format(date, "MM/dd/yyyy");
 };
 
-export const today = formatDate(new Date());
+export const today = getDateAsString(new Date());
 export const currentYear = getYear(new Date());
 export const currentMonth = getMonth(new Date());
 
@@ -31,13 +31,13 @@ export const firstWeekDay = (date: Date) => {
 };
 
 export const daysBeforeMonth = (startDate: Date, daysToAdd: number) => {
-  if(daysToAdd == 1){
+  if (daysToAdd == 1) {
     return []
   }
 
   return eachDayOfInterval({
     start: startDate,
-    end: addDays(startDate, daysToAdd -2),
+    end: addDays(startDate, daysToAdd - 2),
   });
 };
 
@@ -57,3 +57,9 @@ export const fullWeek = eachDayOfInterval({
   start: firstDayOfWeek,
   end: addDays(firstDayOfWeek, 6),
 });
+
+export function daysBetweenDates(date1: Date, date2: Date): number {
+  var diff = Math.abs(date1.getTime() - date2.getTime());
+  var diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+  return diffDays;
+}

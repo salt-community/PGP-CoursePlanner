@@ -1,4 +1,3 @@
-
 using System.Diagnostics;
 using Backend.Data;
 using Backend.Models;
@@ -68,9 +67,15 @@ namespace Backend.Services
                         _context.CalendarDates.Update(date);
                         await _context.SaveChangesAsync();
                     }
+                    appliedCourse.EndDate = currentDate;
                     currentDate = currentDate.AddDays(1);
+                    if (currentDate.DayOfWeek == DayOfWeek.Saturday)
+                        currentDate = currentDate.AddDays(2);
                 }
             }
+            _context.AppliedCourses.Update(appliedCourse);
+            await _context.SaveChangesAsync();
+            Console.WriteLine("!!!!!!!" + appliedCourse.EndDate);
             return appliedCourse;
         }
 
@@ -117,6 +122,8 @@ namespace Backend.Services
                         await _context.SaveChangesAsync();
 
                         currentDate = currentDate.AddDays(1);
+                        if (currentDate.DayOfWeek == DayOfWeek.Saturday)
+                            currentDate = currentDate.AddDays(2);
                     }
                 }
                 _context.AppliedCourses.Remove(appliedCourse);
@@ -144,9 +151,120 @@ namespace Backend.Services
             return await _context.AppliedCourses.FirstOrDefaultAsync(course => course.Id == id) ?? null!;
         }
 
-        public Task<AppliedCourse> UpdateAsync(int id, AppliedCourse T)
+        public async Task<AppliedCourse> UpdateAsync(int id, AppliedCourse appliedCourse)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var appliedCourseToUpdate = await _context.AppliedCourses.FirstOrDefaultAsync(ac => ac.Id == id);
+
+                if (appliedCourseToUpdate == null)
+                {
+                    return null!;
+                }
+
+                appliedCourseToUpdate.StartDate = appliedCourse.StartDate;
+                appliedCourseToUpdate.Color = appliedCourse.Color;
+
+                _context.AppliedCourses.Update(appliedCourseToUpdate);
+                await _context.SaveChangesAsync();
+
+                // update appliedCourse, CalendarDays and DateContent
+                var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == appliedCourseToUpdate.CourseId);
+                var allDateContents = _context.DateContent.Where(dc => dc.appliedCourseId == id);
+                foreach (var dc in allDateContents)
+                {
+                    _context.DateContent.Remove(dc);
+                    var cdList = _context.CalendarDates.Where(cd => cd.DateContent.Contains(dc)).ToList();
+                    foreach (var cd in cdList)
+                    {
+                        cd.DateContent.Remove(dc);
+                        _context.CalendarDates.Update(cd);
+                    }
+                    await _context.SaveChangesAsync();
+                }
+
+                var currentDate = appliedCourse.StartDate.Date;
+
+                foreach (var moduleId in course!.moduleIds)
+                {
+                    var module = await _context.Modules
+                                .Include(module => module.Days)
+                                .ThenInclude(day => day.Events)
+                                .FirstOrDefaultAsync(module => module.Id == moduleId);
+
+                    foreach (var day in module!.Days)
+                    {
+                        var date = await _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefaultAsync(date => date.Date.Date == currentDate)!;
+                        if (date != null)
+                        {
+                            var dateContentToBeUpdated = date.DateContent.FirstOrDefault(dc => dc.appliedCourseId == appliedCourse.Id);
+
+                            if (dateContentToBeUpdated != null)
+                            {
+                                dateContentToBeUpdated.CourseName = course.Name;
+                                dateContentToBeUpdated.ModuleName = module.Name;
+                                dateContentToBeUpdated.DayOfModule = day.DayNumber;
+                                dateContentToBeUpdated.TotalDaysInModule = module.NumberOfDays;
+                                dateContentToBeUpdated.Events = day.Events;
+                                dateContentToBeUpdated.Color = appliedCourseToUpdate.Color;
+                                _context.DateContent.Update(dateContentToBeUpdated);
+                                await _context.SaveChangesAsync();
+                            }
+                            else
+                            {
+                                var dateContent = new DateContent()
+                                {
+                                    CourseName = course.Name,
+                                    ModuleName = module.Name,
+                                    DayOfModule = day.DayNumber,
+                                    TotalDaysInModule = module.NumberOfDays,
+                                    Events = day.Events,
+                                    Color = appliedCourseToUpdate.Color,
+                                    appliedCourseId = id
+                                };
+                                await _context.DateContent.AddAsync(dateContent);
+                                await _context.SaveChangesAsync();
+
+                                date.DateContent.Add(dateContent);
+                                _context.CalendarDates.Update(date);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                        else
+                        {
+                            var dateContent = new DateContent()
+                            {
+                                CourseName = course.Name,
+                                ModuleName = module.Name,
+                                DayOfModule = day.DayNumber,
+                                TotalDaysInModule = module.NumberOfDays,
+                                Events = day.Events,
+                                Color = appliedCourseToUpdate.Color,
+                                appliedCourseId = id
+                            };
+                            await _context.DateContent.AddAsync(dateContent);
+                            await _context.SaveChangesAsync();
+
+                            date = new CalendarDate()
+                            {
+                                Date = currentDate,
+                                DateContent = new List<DateContent> { dateContent }
+                            };
+                            await _context.CalendarDates.AddAsync(date);
+                            await _context.SaveChangesAsync();
+                        }
+                        appliedCourseToUpdate.EndDate = currentDate;
+                        currentDate = currentDate.AddDays(1);
+                        if (currentDate.DayOfWeek == DayOfWeek.Saturday)
+                            currentDate = currentDate.AddDays(2);
+                    }
+                }
+                _context.AppliedCourses.Update(appliedCourseToUpdate);
+                await _context.SaveChangesAsync();
+                return appliedCourseToUpdate;
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message); }
+            return null!;
         }
     }
 }

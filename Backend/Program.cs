@@ -36,6 +36,7 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
 {
     options.Authority = "https://accounts.google.com";
     options.Audience = "735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com";
+    options.TokenValidationParameters.ValidIssuer = "accounts.google.com";
 });
 
 builder.Services.AddCors();

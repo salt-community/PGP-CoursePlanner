@@ -2,20 +2,25 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Home from './pages/Home/Home.tsx'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import ModuleDetails from './pages/modulePages/ModuleDetails.tsx'
-import EditModule from './pages/modulePages/EditModule.tsx'
-import Modules from './pages/modulePages/Modules.tsx'
-import CreateModule from './pages/modulePages/CreateModule.tsx'
-import Courses from './pages/coursePages/Courses.tsx'
-import CreateCourse from './pages/coursePages/CreateCourse.tsx'
-import CourseDetails from './pages/coursePages/CourseDetails.tsx'
-import EditCourse from './pages/coursePages/EditCourse.tsx'
-import DayDetails from './pages/calendar/DayDetails.tsx'
-import MonthView from './pages/calendar/MonthView.tsx'
+import Courses from './models/course/pages/Courses.tsx'
+import CreateCourse from './models/course/pages/CreateCourse.tsx'
+import CourseDetails from './models/course/pages/CourseDetails.tsx'
+import EditCourse from './models/course/pages/EditCourse.tsx'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3'
+import AppliedCourses from './models/appliedCourse/pages/AppliedCourses.tsx'
+import EditAppliedCourse from './models/appliedCourse/pages/EditAppliedCourse.tsx'
+import DayDetails from './models/calendar/pages/DayDetails'
+import HorizontalCalendar from './models/calendar/pages/HorizontalCalendar'
+import MonthView from './models/calendar/pages/MonthView'
+import WeekView from './models/calendar/pages/WeekView'
+import Home from './models/Home'
+import CreateModule from './models/module/pages/CreateModule'
+import EditModule from './models/module/pages/EditModule'
+import ModuleDetails from './models/module/pages/ModuleDetails'
+import Modules from './models/module/pages/Modules'
+import Login from './models/login/Login.tsx'
 
 const router = createBrowserRouter([
   {
@@ -63,13 +68,33 @@ const router = createBrowserRouter([
     element: <CreateCourse />,
   },
   {
+    path: "/calendar/timeline/*",
+    element: <HorizontalCalendar />,
+  },
+  {
     path: "/calendar/month/*",
     element: <MonthView />,
+  },
+  {
+    path: "/calendar/week/*",
+    element: <WeekView />,
   },
   {
     path: "/calendar/day/*",
     element: <DayDetails />,
   },
+  {
+    path: "/activecourses",
+    element: <AppliedCourses />,
+  },
+  {
+    path: "/activecourses/edit/*",
+    element: <EditAppliedCourse />,
+  },
+  {
+    path: "/login",
+    element: <Login/>,
+  }
 ]);
 
 const queryClient = new QueryClient();

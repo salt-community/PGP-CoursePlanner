@@ -1,6 +1,6 @@
 import { addDays, addHours, addMinutes, startOfDay } from "date-fns";
-import { ModuleType } from "../sections/module/Types";
 import { postCourseToGoogle } from "../api/GoogleCalendarApi";
+import { ModuleType } from "../models/module/Types";
 
 export type GoogleEvent = {
   summary: string;
