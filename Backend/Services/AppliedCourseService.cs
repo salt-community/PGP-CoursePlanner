@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Reflection;
 using Backend.Data;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,7 @@ namespace Backend.Services
 
             var currentDate = appliedCourse.StartDate.Date;
 
+            var listOfAppliedModules = new List<AppliedModule>();
             foreach (var moduleId in course.moduleIds)
             {
                 var module = await _context.Modules
@@ -35,8 +37,39 @@ namespace Backend.Services
                             .ThenInclude(day => day.Events)
                             .FirstOrDefaultAsync(module => module.Id == moduleId);
 
+                var appliedModule = new AppliedModule()
+                {
+                    Name = module!.Name,
+                    NumberOfDays = module.NumberOfDays,
+                    Track = module.Track
+                };
+
+                var listOfAppliedDays = new List<AppliedDay>();
                 foreach (var day in module!.Days)
                 {
+                    var appliedDay = new AppliedDay()
+                    {
+                        DayNumber = day.DayNumber,
+                        Description = day.Description
+                    };
+                    listOfAppliedDays.Add(appliedDay);
+
+                    var listOfAppliedEvents = new List<AppliedEvent>();
+                    foreach (var eventItem in day.Events)
+                    {
+                        var appliedEvent = new AppliedEvent()
+                        {
+                            Name = eventItem.Name,
+                            StartTime = eventItem.StartTime,
+                            EndTime = eventItem.EndTime,
+                            Description = eventItem.Description
+                        };
+                        _context.AppliedEvents.Add(appliedEvent);
+                        listOfAppliedEvents.Add(appliedEvent);
+                    }
+                    appliedDay.Events = listOfAppliedEvents;
+                    _context.AppliedDays.Add(appliedDay);
+
                     var dateContent = new DateContent()
                     {
                         CourseName = course.Name,
@@ -72,10 +105,14 @@ namespace Backend.Services
                     if (currentDate.DayOfWeek == DayOfWeek.Saturday)
                         currentDate = currentDate.AddDays(2);
                 }
+                appliedModule.Days = listOfAppliedDays;
+                _context.AppliedModules.Add(appliedModule);
+
+                listOfAppliedModules.Add(appliedModule);
             }
+            appliedCourse.Modules = listOfAppliedModules;
             _context.AppliedCourses.Update(appliedCourse);
             await _context.SaveChangesAsync();
-            Console.WriteLine("!!!!!!!" + appliedCourse.EndDate);
             return appliedCourse;
         }
 
@@ -139,7 +176,11 @@ namespace Backend.Services
         {
             try
             {
-                var appliedCourses = await _context.AppliedCourses.ToListAsync();
+                var appliedCourses = await _context.AppliedCourses
+                    .Include(course => course.Modules!)
+                    .ThenInclude(module => module!.Days)
+                    .ThenInclude(day => day.Events)
+                .ToListAsync();
                 return appliedCourses;
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
@@ -148,14 +189,23 @@ namespace Backend.Services
 
         public async Task<AppliedCourse> GetOneAsync(int id)
         {
-            return await _context.AppliedCourses.FirstOrDefaultAsync(course => course.Id == id) ?? null!;
+            var course = await _context.AppliedCourses
+                    .Include(course => course.Modules!)
+                    .ThenInclude(module => module!.Days)
+                    .ThenInclude(day => day.Events)
+                    .FirstOrDefaultAsync(course => course.Id == id);
+            return course ?? null!;
         }
 
         public async Task<AppliedCourse> UpdateAsync(int id, AppliedCourse appliedCourse)
         {
             try
             {
-                var appliedCourseToUpdate = await _context.AppliedCourses.FirstOrDefaultAsync(ac => ac.Id == id);
+                var appliedCourseToUpdate = await _context.AppliedCourses
+                        .Include(course => course.Modules!)
+                        .ThenInclude(module => module!.Days)
+                        .ThenInclude(day => day.Events)
+                        .FirstOrDefaultAsync(ac => ac.Id == id);
 
                 if (appliedCourseToUpdate == null)
                 {

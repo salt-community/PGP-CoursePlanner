@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240719104506_ModuleTrack")]
-    partial class ModuleTrack
+    [Migration("20240723090524_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,85 @@ namespace Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppliedCourses");
+                });
+
+            modelBuilder.Entity("Backend.Models.AppliedDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AppliedModuleId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DayNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppliedModuleId");
+
+                    b.ToTable("AppliedDays");
+                });
+
+            modelBuilder.Entity("Backend.Models.AppliedEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AppliedDayId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EndTime")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StartTime")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppliedDayId");
+
+                    b.ToTable("AppliedEvents");
+                });
+
+            modelBuilder.Entity("Backend.Models.AppliedModule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("AppliedCourseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("NumberOfDays")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Track")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppliedCourseId");
+
+                    b.ToTable("AppliedModules");
                 });
 
             modelBuilder.Entity("Backend.Models.CalendarDate", b =>
@@ -218,6 +297,27 @@ namespace Backend.Migrations
                     b.ToTable("DateContentEvent");
                 });
 
+            modelBuilder.Entity("Backend.Models.AppliedDay", b =>
+                {
+                    b.HasOne("Backend.Models.AppliedModule", null)
+                        .WithMany("Days")
+                        .HasForeignKey("AppliedModuleId");
+                });
+
+            modelBuilder.Entity("Backend.Models.AppliedEvent", b =>
+                {
+                    b.HasOne("Backend.Models.AppliedDay", null)
+                        .WithMany("Events")
+                        .HasForeignKey("AppliedDayId");
+                });
+
+            modelBuilder.Entity("Backend.Models.AppliedModule", b =>
+                {
+                    b.HasOne("Backend.Models.AppliedCourse", null)
+                        .WithMany("Modules")
+                        .HasForeignKey("AppliedCourseId");
+                });
+
             modelBuilder.Entity("Backend.Models.DateContent", b =>
                 {
                     b.HasOne("Backend.Models.CalendarDate", null)
@@ -271,6 +371,21 @@ namespace Backend.Migrations
                         .HasForeignKey("EventsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Models.AppliedCourse", b =>
+                {
+                    b.Navigation("Modules");
+                });
+
+            modelBuilder.Entity("Backend.Models.AppliedDay", b =>
+                {
+                    b.Navigation("Events");
+                });
+
+            modelBuilder.Entity("Backend.Models.AppliedModule", b =>
+                {
+                    b.Navigation("Days");
                 });
 
             modelBuilder.Entity("Backend.Models.CalendarDate", b =>

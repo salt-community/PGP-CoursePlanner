@@ -33,7 +33,7 @@ public class CourseService : IService<Course>
         try
         {
             var course = await _context.Courses
-               .Include(course => course.Modules)
+                    .Include(course => course.Modules)
                     .ThenInclude(courseModule => courseModule.Module)
                     .ThenInclude(module => module!.Days)
                     .ThenInclude(day => day.Events)

@@ -62,11 +62,33 @@ namespace Backend.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    NumberOfDays = table.Column<int>(type: "INTEGER", nullable: false)
+                    NumberOfDays = table.Column<int>(type: "INTEGER", nullable: false),
+                    Track = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Modules", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppliedModules",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    NumberOfDays = table.Column<int>(type: "INTEGER", nullable: false),
+                    Track = table.Column<string>(type: "TEXT", nullable: true),
+                    AppliedCourseId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppliedModules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppliedModules_AppliedCourses_AppliedCourseId",
+                        column: x => x.AppliedCourseId,
+                        principalTable: "AppliedCourses",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -138,6 +160,26 @@ namespace Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppliedDays",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DayNumber = table.Column<int>(type: "INTEGER", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    AppliedModuleId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppliedDays", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppliedDays_AppliedModules_AppliedModuleId",
+                        column: x => x.AppliedModuleId,
+                        principalTable: "AppliedModules",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
                 {
@@ -156,6 +198,28 @@ namespace Backend.Migrations
                         name: "FK_Events_Days_DayId",
                         column: x => x.DayId,
                         principalTable: "Days",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppliedEvents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    StartTime = table.Column<string>(type: "TEXT", nullable: false),
+                    EndTime = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    AppliedDayId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppliedEvents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppliedEvents_AppliedDays_AppliedDayId",
+                        column: x => x.AppliedDayId,
+                        principalTable: "AppliedDays",
                         principalColumn: "Id");
                 });
 
@@ -182,6 +246,21 @@ namespace Backend.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppliedDays_AppliedModuleId",
+                table: "AppliedDays",
+                column: "AppliedModuleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppliedEvents_AppliedDayId",
+                table: "AppliedEvents",
+                column: "AppliedDayId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppliedModules_AppliedCourseId",
+                table: "AppliedModules",
+                column: "AppliedCourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseModules_ModuleId",
@@ -213,13 +292,16 @@ namespace Backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AppliedCourses");
+                name: "AppliedEvents");
 
             migrationBuilder.DropTable(
                 name: "CourseModules");
 
             migrationBuilder.DropTable(
                 name: "DateContentEvent");
+
+            migrationBuilder.DropTable(
+                name: "AppliedDays");
 
             migrationBuilder.DropTable(
                 name: "Courses");
@@ -231,10 +313,16 @@ namespace Backend.Migrations
                 name: "Events");
 
             migrationBuilder.DropTable(
+                name: "AppliedModules");
+
+            migrationBuilder.DropTable(
                 name: "CalendarDates");
 
             migrationBuilder.DropTable(
                 name: "Days");
+
+            migrationBuilder.DropTable(
+                name: "AppliedCourses");
 
             migrationBuilder.DropTable(
                 name: "Modules");
