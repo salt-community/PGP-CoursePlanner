@@ -16,7 +16,6 @@ export default function NavBar() {
     deleteCookie("access_token");
     deleteCookie('email');
     deleteCookie('refresh_token');
-    clearInterval('refreshingTokens');
     navigate(`/`)
     window.location.reload();
   };

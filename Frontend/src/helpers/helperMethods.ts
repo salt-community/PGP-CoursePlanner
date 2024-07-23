@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { refreshTokens } from "../api/UserApi";
-import { deleteCookie, setCookie } from "./cookieHelpers";
+import { setCookie } from "./cookieHelpers";
 import { useQuery } from "react-query";
 
 export function getIdFromPath() {
