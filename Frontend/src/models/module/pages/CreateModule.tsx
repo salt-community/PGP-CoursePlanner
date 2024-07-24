@@ -14,7 +14,7 @@ export default function CreateModule() {
                 description: "",
                 events: []
             }],
-            track: ""
+            track: []
         } 
     
     return (
