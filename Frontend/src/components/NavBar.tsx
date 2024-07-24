@@ -56,7 +56,7 @@ export default function NavBar() {
               </li>
               <li>
                 <Link onClick={toggleDropdown} to="/modules">
-                  Modules
+                  Module template 
                 </Link>
               </li>
               <li>
