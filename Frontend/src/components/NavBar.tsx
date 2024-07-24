@@ -58,12 +58,12 @@ export default function NavBar() {
               </li>
               <li>
                 <Link onClick={toggleDropdown} to="/modules">
-                  Modules
+                  Modules 
                 </Link>
               </li>
               <li>
                 <Link onClick={toggleDropdown} to="/courses">
-                  Courses
+                  Course Templates  
                 </Link>
               </li>
               <li>
