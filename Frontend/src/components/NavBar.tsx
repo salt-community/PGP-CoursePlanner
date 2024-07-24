@@ -51,22 +51,22 @@ export default function NavBar() {
             >
               <li>
                 <Link onClick={toggleDropdown} to="/calendar/month">
-                  Calendar
+                Course Templates
                 </Link>
               </li>
               <li>
                 <Link onClick={toggleDropdown} to="/modules">
-                  Modules
+                  Module Templates
                 </Link>
               </li>
               <li>
                 <Link onClick={toggleDropdown} to="/courses">
-                  Courses
+              Course Planner
                 </Link>
               </li>
               <li>
                 <Link onClick={toggleDropdown} to="/activecourses">
-                  Active courses
+                  Bootcamps
                 </Link>
               </li>
             </ul>
