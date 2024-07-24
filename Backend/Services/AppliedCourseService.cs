@@ -212,14 +212,48 @@ namespace Backend.Services
                     return null!;
                 }
 
+                foreach (var oldModule in appliedCourseToUpdate.Modules!)
+                {
+                    var newModule = appliedCourse.Modules!.FirstOrDefault(d => d.Id == oldModule.Id);
+                    if (newModule != null)
+                    {
+                        foreach (var oldDay in oldModule.Days)
+                        {
+                            var newDay = newModule!.Days.FirstOrDefault(d => d.Id == oldDay.Id);
+                            if (newDay != null)
+                            {
+                                var eventsToDelete = oldDay.Events
+                                    .Where(eventItem => !newDay.Events.Any(e => e.Id == eventItem.Id))
+                                    .ToList();
+                                foreach (var eventItem in eventsToDelete)
+                                {
+                                    _context.AppliedEvents.Remove(eventItem);
+                                }
+                            }
+                            else
+                            {
+                                _context.AppliedDays.Remove(oldDay);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        _context.AppliedModules.Remove(oldModule);
+                    }
+                }
+                await _context.SaveChangesAsync();
+
                 appliedCourseToUpdate.StartDate = appliedCourse.StartDate;
                 appliedCourseToUpdate.Color = appliedCourse.Color;
+                appliedCourseToUpdate.Modules = appliedCourse.Modules;
 
+                _context.ChangeTracker.Clear();
                 _context.AppliedCourses.Update(appliedCourseToUpdate);
                 await _context.SaveChangesAsync();
 
                 // update appliedCourse, CalendarDays and DateContent
                 var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == appliedCourseToUpdate.CourseId);
+                var moduleIds = appliedCourse.Modules!.Select(m => m.Id);
                 var allDateContents = _context.DateContent.Where(dc => dc.appliedCourseId == id);
                 foreach (var dc in allDateContents)
                 {
@@ -235,7 +269,7 @@ namespace Backend.Services
 
                 var currentDate = appliedCourse.StartDate.Date;
 
-                foreach (var moduleId in course!.moduleIds)
+                foreach (var moduleId in moduleIds)
                 {
                     var module = await _context.Modules
                                 .Include(module => module.Days)
