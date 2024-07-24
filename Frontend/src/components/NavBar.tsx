@@ -14,8 +14,6 @@ export default function NavBar() {
   const handleLogOut = () => {
     deleteCookie('JWT');
     deleteCookie("access_token");
-    deleteCookie('email');
-    deleteCookie('refresh_token');
     navigate(`/`)
     window.location.reload();
   };
@@ -58,12 +56,12 @@ export default function NavBar() {
               </li>
               <li>
                 <Link onClick={toggleDropdown} to="/modules">
-                  Modules 
+                  Modules
                 </Link>
               </li>
               <li>
                 <Link onClick={toggleDropdown} to="/courses">
-                  Course Templates  
+                  Courses
                 </Link>
               </li>
               <li>
@@ -88,12 +86,12 @@ export default function NavBar() {
             </li>
             <li>
               <Link onClick={toggleDropdown} to="/modules">
-                Modules
+                Module Templates
               </Link>
             </li>
             <li>
               <Link onClick={toggleDropdown} to="/courses">
-                Courses
+                Course Templates
               </Link>
             </li>
             <li>
