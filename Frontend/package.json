@@ -13,7 +13,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/material": "^5.15.21",
-    "@mui/x-date-pickers": "^7.7.1",
+    "@mui/x-date-pickers": "^7.11.0",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
     "date-fns": "^3.6.0",
