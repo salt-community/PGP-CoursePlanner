@@ -71,6 +71,9 @@ namespace Backend.Migrations
                     b.Property<int?>("AppliedDayId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("DateContentId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
@@ -89,6 +92,8 @@ namespace Backend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AppliedDayId");
+
+                    b.HasIndex("DateContentId");
 
                     b.ToTable("AppliedEvents");
                 });
@@ -174,6 +179,9 @@ namespace Backend.Migrations
                     b.Property<int>("DayOfModule")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("EventId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ModuleName")
                         .HasColumnType("TEXT");
 
@@ -186,6 +194,8 @@ namespace Backend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CalendarDateId");
+
+                    b.HasIndex("EventId");
 
                     b.ToTable("DateContent");
                 });
@@ -279,21 +289,6 @@ namespace Backend.Migrations
                     b.ToTable("CourseModules");
                 });
 
-            modelBuilder.Entity("DateContentEvent", b =>
-                {
-                    b.Property<int>("DateContentsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("EventsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("DateContentsId", "EventsId");
-
-                    b.HasIndex("EventsId");
-
-                    b.ToTable("DateContentEvent");
-                });
-
             modelBuilder.Entity("Backend.Models.AppliedDay", b =>
                 {
                     b.HasOne("Backend.Models.AppliedModule", null)
@@ -306,6 +301,10 @@ namespace Backend.Migrations
                     b.HasOne("Backend.Models.AppliedDay", null)
                         .WithMany("Events")
                         .HasForeignKey("AppliedDayId");
+
+                    b.HasOne("Backend.Models.DateContent", null)
+                        .WithMany("Events")
+                        .HasForeignKey("DateContentId");
                 });
 
             modelBuilder.Entity("Backend.Models.AppliedModule", b =>
@@ -320,6 +319,10 @@ namespace Backend.Migrations
                     b.HasOne("Backend.Models.CalendarDate", null)
                         .WithMany("DateContent")
                         .HasForeignKey("CalendarDateId");
+
+                    b.HasOne("Backend.Models.Event", null)
+                        .WithMany("DateContents")
+                        .HasForeignKey("EventId");
                 });
 
             modelBuilder.Entity("Backend.Models.Day", b =>
@@ -355,21 +358,6 @@ namespace Backend.Migrations
                     b.Navigation("Module");
                 });
 
-            modelBuilder.Entity("DateContentEvent", b =>
-                {
-                    b.HasOne("Backend.Models.DateContent", null)
-                        .WithMany()
-                        .HasForeignKey("DateContentsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.Models.Event", null)
-                        .WithMany()
-                        .HasForeignKey("EventsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Backend.Models.AppliedCourse", b =>
                 {
                     b.Navigation("Modules");
@@ -395,9 +383,19 @@ namespace Backend.Migrations
                     b.Navigation("Modules");
                 });
 
+            modelBuilder.Entity("Backend.Models.DateContent", b =>
+                {
+                    b.Navigation("Events");
+                });
+
             modelBuilder.Entity("Backend.Models.Day", b =>
                 {
                     b.Navigation("Events");
+                });
+
+            modelBuilder.Entity("Backend.Models.Event", b =>
+                {
+                    b.Navigation("DateContents");
                 });
 
             modelBuilder.Entity("Backend.Models.Module", b =>

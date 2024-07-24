@@ -76,7 +76,7 @@ namespace Backend.Services
                         ModuleName = module.Name,
                         DayOfModule = day.DayNumber,
                         TotalDaysInModule = module.NumberOfDays,
-                        Events = day.Events,
+                        Events = listOfAppliedEvents,
                         Color = appliedCourse.Color,
                         appliedCourseId = appliedCourse.Id
                     };
@@ -120,26 +120,17 @@ namespace Backend.Services
         {
             try
             {
-                var appliedCourse = await _context.AppliedCourses
-                .FirstOrDefaultAsync(c => c.Id == id);
-
+                var appliedCourse = await _context.AppliedCourses.FirstOrDefaultAsync(c => c.Id == id);
                 if (appliedCourse == null)
                 {
                     return false;
                 }
-
-                var course = await _context.Courses.FirstOrDefaultAsync(course => course.Id == appliedCourse.CourseId);
-
-                if (course == null)
-                {
-                    return false;
-                }
+                var moduleIds = appliedCourse.Modules!.Select(m => m.Id);
 
                 var currentDate = appliedCourse.StartDate.Date;
-
-                foreach (var moduleId in course.moduleIds)
+                foreach (var moduleId in moduleIds)
                 {
-                    var module = await _context.Modules
+                    var module = await _context.AppliedModules
                                 .Include(module => module.Days)
                                 .ThenInclude(day => day.Events)
                                 .FirstOrDefaultAsync(module => module.Id == moduleId);
@@ -268,10 +259,9 @@ namespace Backend.Services
                 }
 
                 var currentDate = appliedCourse.StartDate.Date;
-
                 foreach (var moduleId in moduleIds)
                 {
-                    var module = await _context.Modules
+                    var module = await _context.AppliedModules
                                 .Include(module => module.Days)
                                 .ThenInclude(day => day.Events)
                                 .FirstOrDefaultAsync(module => module.Id == moduleId);
@@ -285,7 +275,7 @@ namespace Backend.Services
 
                             if (dateContentToBeUpdated != null)
                             {
-                                dateContentToBeUpdated.CourseName = course.Name;
+                                dateContentToBeUpdated.CourseName = course!.Name;
                                 dateContentToBeUpdated.ModuleName = module.Name;
                                 dateContentToBeUpdated.DayOfModule = day.DayNumber;
                                 dateContentToBeUpdated.TotalDaysInModule = module.NumberOfDays;
@@ -298,7 +288,7 @@ namespace Backend.Services
                             {
                                 var dateContent = new DateContent()
                                 {
-                                    CourseName = course.Name,
+                                    CourseName = course!.Name,
                                     ModuleName = module.Name,
                                     DayOfModule = day.DayNumber,
                                     TotalDaysInModule = module.NumberOfDays,
@@ -318,7 +308,7 @@ namespace Backend.Services
                         {
                             var dateContent = new DateContent()
                             {
-                                CourseName = course.Name,
+                                CourseName = course!.Name,
                                 ModuleName = module.Name,
                                 DayOfModule = day.DayNumber,
                                 TotalDaysInModule = module.NumberOfDays,

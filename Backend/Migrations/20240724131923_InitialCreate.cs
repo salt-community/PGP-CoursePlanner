@@ -92,30 +92,6 @@ namespace Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DateContent",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ModuleName = table.Column<string>(type: "TEXT", nullable: true),
-                    DayOfModule = table.Column<int>(type: "INTEGER", nullable: false),
-                    TotalDaysInModule = table.Column<int>(type: "INTEGER", nullable: false),
-                    CourseName = table.Column<string>(type: "TEXT", nullable: false),
-                    Color = table.Column<string>(type: "TEXT", nullable: true),
-                    appliedCourseId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CalendarDateId = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DateContent", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DateContent_CalendarDates_CalendarDateId",
-                        column: x => x.CalendarDateId,
-                        principalTable: "CalendarDates",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CourseModules",
                 columns: table => new
                 {
@@ -202,6 +178,36 @@ namespace Backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DateContent",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ModuleName = table.Column<string>(type: "TEXT", nullable: true),
+                    DayOfModule = table.Column<int>(type: "INTEGER", nullable: false),
+                    TotalDaysInModule = table.Column<int>(type: "INTEGER", nullable: false),
+                    CourseName = table.Column<string>(type: "TEXT", nullable: false),
+                    Color = table.Column<string>(type: "TEXT", nullable: true),
+                    appliedCourseId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CalendarDateId = table.Column<int>(type: "INTEGER", nullable: true),
+                    EventId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DateContent", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DateContent_CalendarDates_CalendarDateId",
+                        column: x => x.CalendarDateId,
+                        principalTable: "CalendarDates",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DateContent_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AppliedEvents",
                 columns: table => new
                 {
@@ -211,7 +217,8 @@ namespace Backend.Migrations
                     StartTime = table.Column<string>(type: "TEXT", nullable: false),
                     EndTime = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
-                    AppliedDayId = table.Column<int>(type: "INTEGER", nullable: true)
+                    AppliedDayId = table.Column<int>(type: "INTEGER", nullable: true),
+                    DateContentId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -221,30 +228,11 @@ namespace Backend.Migrations
                         column: x => x.AppliedDayId,
                         principalTable: "AppliedDays",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DateContentEvent",
-                columns: table => new
-                {
-                    DateContentsId = table.Column<int>(type: "INTEGER", nullable: false),
-                    EventsId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DateContentEvent", x => new { x.DateContentsId, x.EventsId });
                     table.ForeignKey(
-                        name: "FK_DateContentEvent_DateContent_DateContentsId",
-                        column: x => x.DateContentsId,
+                        name: "FK_AppliedEvents_DateContent_DateContentId",
+                        column: x => x.DateContentId,
                         principalTable: "DateContent",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_DateContentEvent_Events_EventsId",
-                        column: x => x.EventsId,
-                        principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -256,6 +244,11 @@ namespace Backend.Migrations
                 name: "IX_AppliedEvents_AppliedDayId",
                 table: "AppliedEvents",
                 column: "AppliedDayId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppliedEvents_DateContentId",
+                table: "AppliedEvents",
+                column: "DateContentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppliedModules_AppliedCourseId",
@@ -273,9 +266,9 @@ namespace Backend.Migrations
                 column: "CalendarDateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DateContentEvent_EventsId",
-                table: "DateContentEvent",
-                column: "EventsId");
+                name: "IX_DateContent_EventId",
+                table: "DateContent",
+                column: "EventId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Days_ModuleId",
@@ -298,19 +291,13 @@ namespace Backend.Migrations
                 name: "CourseModules");
 
             migrationBuilder.DropTable(
-                name: "DateContentEvent");
-
-            migrationBuilder.DropTable(
                 name: "AppliedDays");
-
-            migrationBuilder.DropTable(
-                name: "Courses");
 
             migrationBuilder.DropTable(
                 name: "DateContent");
 
             migrationBuilder.DropTable(
-                name: "Events");
+                name: "Courses");
 
             migrationBuilder.DropTable(
                 name: "AppliedModules");
@@ -319,10 +306,13 @@ namespace Backend.Migrations
                 name: "CalendarDates");
 
             migrationBuilder.DropTable(
-                name: "Days");
+                name: "Events");
 
             migrationBuilder.DropTable(
                 name: "AppliedCourses");
+
+            migrationBuilder.DropTable(
+                name: "Days");
 
             migrationBuilder.DropTable(
                 name: "Modules");
