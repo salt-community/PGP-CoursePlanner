@@ -16,6 +16,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
     const [days, setDays] = useState<DayType[]>(module.days);
+    const [track, setTrack] = useState<string>(module.track || "dotnet");
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
     const [isOpened, setIsOpened] = useState<boolean>(false);
 
@@ -47,7 +48,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         });
     }
 
-const popupRef = useRef<HTMLDivElement>(null);
+    const popupRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
@@ -102,6 +103,7 @@ const popupRef = useRef<HTMLDivElement>(null);
 
         const { moduleName } = e.target as typeof e.target & { moduleName: { value: string } };
         const { numberOfDays } = e.target as typeof e.target & { numberOfDays: { value: number } };
+        const { track } = e.target as typeof e.target & { track: { value: string } };
         const events: EventType[] = [];
         days.forEach(day => {
             var eventsOfDay = day.events;
@@ -120,8 +122,7 @@ const popupRef = useRef<HTMLDivElement>(null);
                 name: moduleName.value,
                 numberOfDays: numberOfDays.value,
                 days: days,
-                track: "None"
-
+                track: track.value
             };
 
             mutation.mutate(newModule);
@@ -134,6 +135,11 @@ const popupRef = useRef<HTMLDivElement>(null);
                 <div className="w-auto flex justify-between space-x-2">
                     <InputSmall type="text" name="moduleName" onChange={(e) => setModuleName(e.target.value)} placeholder="Module name" value={moduleName} />
                     <input type="number" name="numberOfDays" onChange={(e) => setNumOfDays(parseInt(e.target.value))} value={numOfDays} className="input input-bordered input-sm max-w-xs" placeholder="Number of days" />
+                    <select name="track" onChange={(e) => setTrack(e.target.value)} value={track} className="input input-bordered input-sm max-w-xs">
+                        <option value="dotnet">.NET</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="java">Java</option>
+                    </select>
                     <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
                 </div>
                 <div className="flex flex-col space-y-2">
