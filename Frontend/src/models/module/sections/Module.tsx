@@ -1,13 +1,9 @@
 import InputSmall from "../../../components/inputFields/InputSmall";
 import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
 import SuccessBtn from "../../../components/buttons/SuccessBtn";
-import Popup from "reactjs-popup";
-import { getAllAppliedCourses } from "../../../api/AppliedCourseApi";
-import CloseBtn from "../../../components/buttons/CloseBtn";
-import { getAllCourses } from "../../../api/CourseApi";
 import { useNavigate } from "react-router-dom";
-import { useState, useRef, useEffect, FormEvent } from "react";
-import { useQuery, useQueryClient, useMutation } from "react-query";
+import { useState, FormEvent } from "react";
+import { useQueryClient, useMutation } from "react-query";
 import { ModuleProps, DayType, ModuleType, EventType } from "../Types";
 import Day from "./Day";
 
@@ -17,50 +13,6 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
     const [days, setDays] = useState<DayType[]>(module.days);
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
-    const [isOpened, setIsOpened] = useState<boolean>(false);
-
-    const { data: allAppliedCourses } = useQuery({
-        queryKey: ['appliedCourses'],
-        queryFn: () => getAllAppliedCourses()
-    });
-
-    const { data: allCourses } = useQuery({
-        queryKey: ['courses'],
-        queryFn: () => getAllCourses()
-    });
-
-    const usedCoursesIds: number[] = [];
-    if (allAppliedCourses) {
-        allAppliedCourses.forEach(element => {
-            usedCoursesIds.push(element.courseId);
-        });
-    }
-    const usedModules: number[] = [];
-    if (allCourses) {
-        usedCoursesIds.forEach(courseId => {
-            var course = allCourses.find(c => c.id == courseId);
-            var moduleIds = course?.moduleIds;
-            moduleIds?.forEach(mId => {
-                usedModules.push(mId)
-            }
-            )
-        });
-    }
-
-const popupRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-                setIsOpened(false);
-            }
-        }
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
 
     const handleDays = () => {
         const editedDays = days.slice();
@@ -140,32 +92,7 @@ const popupRef = useRef<HTMLDivElement>(null);
                 </div>
                 {isIncompleteInput &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Please fill in all the fields</p>}
-
-                {usedModules.find(m => m == module.id)
-                    ? <Popup
-                        open={isOpened}
-                        onOpen={() => setIsOpened(true)}
-                        trigger={<input className="mb-4 btn btn-sm mt-4 max-w-48 btn-success text-white" value={buttonText} />}
-                        modal
-                    >
-                        {
-                            <div ref={popupRef}>
-                                <div className="flex flex-col">
-                                    <div className="flex justify-end">
-                                        <CloseBtn onClick={() => setIsOpened(false)} />
-                                    </div>
-                                    <h1 className="m-2">This module is part of a course used in the calendar. Changing it will change the calendar entries.</h1>
-                                    <h1 className="font-bold m-2">Do you want to continue?</h1>
-                                    <div className="flex items-center justify-center mb-4 gap-2">
-                                        <input type="submit" form="editCourse-form" className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
-                                        <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={() => setIsOpened(false)} />
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </Popup>
-                    : <SuccessBtn value={buttonText}></SuccessBtn>
-                }
+                <SuccessBtn value={buttonText}></SuccessBtn>
             </form>
         </section>
     )

@@ -96,7 +96,7 @@ namespace Backend.Services
 
                     var dateContent = new DateContent()
                     {
-                        CourseName = course.Name,
+                        CourseName = appliedCourse.Name!,
                         ModuleName = module.Name,
                         DayOfModule = day.DayNumber,
                         TotalDaysInModule = module.NumberOfDays,
@@ -195,7 +195,6 @@ namespace Backend.Services
                 await _context.SaveChangesAsync();
 
                 // update appliedCourse, CalendarDays and DateContent
-                var course = await _context.Courses.FirstOrDefaultAsync(c => c.Id == appliedCourseToUpdate.CourseId);
                 var moduleIds = appliedCourse.Modules!.Select(m => m.Id);
                 var allDateContents = _context.DateContent.Where(dc => dc.appliedCourseId == id);
                 foreach (var dc in allDateContents)
@@ -227,7 +226,7 @@ namespace Backend.Services
 
                             if (dateContentToBeUpdated != null)
                             {
-                                dateContentToBeUpdated.CourseName = course!.Name;
+                                dateContentToBeUpdated.CourseName = appliedCourse.Name!;
                                 dateContentToBeUpdated.ModuleName = module.Name;
                                 dateContentToBeUpdated.DayOfModule = day.DayNumber;
                                 dateContentToBeUpdated.TotalDaysInModule = module.NumberOfDays;
@@ -240,7 +239,7 @@ namespace Backend.Services
                             {
                                 var dateContent = new DateContent()
                                 {
-                                    CourseName = course!.Name,
+                                    CourseName = appliedCourse.Name!,
                                     ModuleName = module.Name,
                                     DayOfModule = day.DayNumber,
                                     TotalDaysInModule = module.NumberOfDays,
@@ -260,7 +259,7 @@ namespace Backend.Services
                         {
                             var dateContent = new DateContent()
                             {
-                                CourseName = course!.Name,
+                                CourseName = appliedCourse.Name!,
                                 ModuleName = module.Name,
                                 DayOfModule = day.DayNumber,
                                 TotalDaysInModule = module.NumberOfDays,

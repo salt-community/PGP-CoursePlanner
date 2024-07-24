@@ -26,8 +26,7 @@ export default function AppliedCourses() {
     const appliedCourseNames: string[] = [];
     if (allAppliedCourses && allCourses) {
         allAppliedCourses.forEach(ac => {
-            var course: CourseType = allCourses?.find(c => c.id == ac.courseId)!;
-            appliedCourseNames.push(course?.name)
+            appliedCourseNames.push(ac.name)
         });
     }
 

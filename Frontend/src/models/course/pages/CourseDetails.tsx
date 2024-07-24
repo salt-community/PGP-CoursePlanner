@@ -86,6 +86,7 @@ export default function CourseDetails() {
         }
         else {
             const appliedCourse: AppliedCourseType = {
+                name: course?.name!,
                 startDate: startDate,
                 courseId: parseInt(courseId),
                 color: color
