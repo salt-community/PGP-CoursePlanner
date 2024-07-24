@@ -96,7 +96,7 @@ export default function NavBar() {
             </li>
             <li>
               <Link onClick={toggleDropdown} to="/activecourses">
-                Active courses
+                Bootcamps
               </Link>
             </li>
           </ul>
