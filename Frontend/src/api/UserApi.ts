@@ -22,7 +22,7 @@ export async function getTokens(auth_code: string) {
       code: auth_code,
       client_id: import.meta.env.VITE_APP_CLIENT_ID,
       client_secret: import.meta.env.VITE_APP_CLIENT_SECRET,
-      redirect_uri: "http://localhost:5173",
+      redirect_uri: import.meta.env.VITE_APP_NEXTAUTH_URL,
     }),
   });
   const data = (await response.json());
