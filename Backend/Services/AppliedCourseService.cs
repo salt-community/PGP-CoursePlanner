@@ -14,6 +14,30 @@ namespace Backend.Services
         {
             _context = context;
         }
+        public async Task<List<AppliedCourse>> GetAllAsync()
+        {
+            try
+            {
+                var appliedCourses = await _context.AppliedCourses
+                    .Include(course => course.Modules!)
+                    .ThenInclude(module => module!.Days)
+                    .ThenInclude(day => day.Events)
+                .ToListAsync();
+                return appliedCourses;
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message); }
+            return null!;
+        }
+
+        public async Task<AppliedCourse> GetOneAsync(int id)
+        {
+            var course = await _context.AppliedCourses
+                    .Include(course => course.Modules!)
+                    .ThenInclude(module => module!.Days)
+                    .ThenInclude(day => day.Events)
+                    .FirstOrDefaultAsync(course => course.Id == id);
+            return course ?? null!;
+        }
 
         public async Task<AppliedCourse> CreateAsync(AppliedCourse appliedCourse)
         {
@@ -114,78 +138,6 @@ namespace Backend.Services
             _context.AppliedCourses.Update(appliedCourse);
             await _context.SaveChangesAsync();
             return appliedCourse;
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            try
-            {
-                var appliedCourse = await _context.AppliedCourses.FirstOrDefaultAsync(c => c.Id == id);
-                if (appliedCourse == null)
-                {
-                    return false;
-                }
-                var moduleIds = appliedCourse.Modules!.Select(m => m.Id);
-
-                var currentDate = appliedCourse.StartDate.Date;
-                foreach (var moduleId in moduleIds)
-                {
-                    var module = await _context.AppliedModules
-                                .Include(module => module.Days)
-                                .ThenInclude(day => day.Events)
-                                .FirstOrDefaultAsync(module => module.Id == moduleId);
-
-                    foreach (var day in module!.Days)
-                    {
-                        var date = await _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefaultAsync(date => date.Date.Date == currentDate)!;
-                        var contentIdToBeDeleted = date!.DateContent.FirstOrDefault(c => c.appliedCourseId == id)!.Id;
-                        var contentToBeDeleted = await _context.DateContent.FirstOrDefaultAsync(c => c.Id == contentIdToBeDeleted);
-                        _context.DateContent.Remove(contentToBeDeleted!);
-
-                        date.DateContent.Remove(contentToBeDeleted!);
-                        if (date.DateContent.Count() == 0)
-                            _context.CalendarDates.Remove(date);
-                        else
-                            _context.CalendarDates.Update(date);
-                        await _context.SaveChangesAsync();
-
-                        currentDate = currentDate.AddDays(1);
-                        if (currentDate.DayOfWeek == DayOfWeek.Saturday)
-                            currentDate = currentDate.AddDays(2);
-                    }
-                }
-                _context.AppliedCourses.Remove(appliedCourse);
-                await _context.SaveChangesAsync();
-
-                return true;
-            }
-            catch (Exception ex) { Debug.WriteLine(ex.Message); }
-            return false;
-        }
-
-        public async Task<List<AppliedCourse>> GetAllAsync()
-        {
-            try
-            {
-                var appliedCourses = await _context.AppliedCourses
-                    .Include(course => course.Modules!)
-                    .ThenInclude(module => module!.Days)
-                    .ThenInclude(day => day.Events)
-                .ToListAsync();
-                return appliedCourses;
-            }
-            catch (Exception ex) { Debug.WriteLine(ex.Message); }
-            return null!;
-        }
-
-        public async Task<AppliedCourse> GetOneAsync(int id)
-        {
-            var course = await _context.AppliedCourses
-                    .Include(course => course.Modules!)
-                    .ThenInclude(module => module!.Days)
-                    .ThenInclude(day => day.Events)
-                    .FirstOrDefaultAsync(course => course.Id == id);
-            return course ?? null!;
         }
 
         public async Task<AppliedCourse> UpdateAsync(int id, AppliedCourse appliedCourse)
@@ -340,5 +292,53 @@ namespace Backend.Services
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
             return null!;
         }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            try
+            {
+                var appliedCourse = await _context.AppliedCourses.FirstOrDefaultAsync(c => c.Id == id);
+                if (appliedCourse == null)
+                {
+                    return false;
+                }
+                var moduleIds = appliedCourse.Modules!.Select(m => m.Id);
+
+                var currentDate = appliedCourse.StartDate.Date;
+                foreach (var moduleId in moduleIds)
+                {
+                    var module = await _context.AppliedModules
+                                .Include(module => module.Days)
+                                .ThenInclude(day => day.Events)
+                                .FirstOrDefaultAsync(module => module.Id == moduleId);
+
+                    foreach (var day in module!.Days)
+                    {
+                        var date = await _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefaultAsync(date => date.Date.Date == currentDate)!;
+                        var contentIdToBeDeleted = date!.DateContent.FirstOrDefault(c => c.appliedCourseId == id)!.Id;
+                        var contentToBeDeleted = await _context.DateContent.FirstOrDefaultAsync(c => c.Id == contentIdToBeDeleted);
+                        _context.DateContent.Remove(contentToBeDeleted!);
+
+                        date.DateContent.Remove(contentToBeDeleted!);
+                        if (date.DateContent.Count() == 0)
+                            _context.CalendarDates.Remove(date);
+                        else
+                            _context.CalendarDates.Update(date);
+                        await _context.SaveChangesAsync();
+
+                        currentDate = currentDate.AddDays(1);
+                        if (currentDate.DayOfWeek == DayOfWeek.Saturday)
+                            currentDate = currentDate.AddDays(2);
+                    }
+                }
+                _context.AppliedCourses.Remove(appliedCourse);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message); }
+            return false;
+        }
+
     }
 }
