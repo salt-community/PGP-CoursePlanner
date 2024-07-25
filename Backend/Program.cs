@@ -47,6 +47,8 @@ builder.Services.AddScoped<IService<AppliedCourse>, AppliedCourseService>();
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
+
 app.UseCors(x => x
     .AllowAnyMethod()
     .AllowAnyHeader()
@@ -69,7 +71,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.UseExceptionHandler();
 
 app.MapControllers();
 
