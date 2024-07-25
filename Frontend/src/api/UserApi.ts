@@ -1,6 +1,9 @@
 import { getCookie } from "../helpers/cookieHelpers";
+import { BACKEND_URL } from "./BackendUrl";
 
-const BASE_URL = "https://accounts.google.com/o/oauth2/token";
+// const BASE_URL = "https://accounts.google.com/o/oauth2/token";
+const BASE_URL = `${BACKEND_URL}/Tokens`;
+
 
 export type tokenResponse = {
   access_token: string;
