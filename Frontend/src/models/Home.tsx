@@ -12,7 +12,8 @@ import { getTokens } from "../api/UserApi";
 
 export default function Home() {
 
-    const redirectLink = "http://localhost:5173";
+    const redirectLink = "https://frontend-h7ia67qbhq-uc.a.run.app";
+    // const redirectLink = "http://localhost:5173";
 
     if (location.search) {
         const params = new URLSearchParams(location.search);
