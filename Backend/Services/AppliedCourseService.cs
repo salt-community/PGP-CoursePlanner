@@ -199,7 +199,6 @@ namespace Backend.Services
                 var allDateContents = _context.DateContent.Where(dc => dc.appliedCourseId == id);
                 foreach (var dc in allDateContents)
                 {
-                    _context.DateContent.Remove(dc);
                     var cdList = _context.CalendarDates.Where(cd => cd.DateContent.Contains(dc)).ToList();
                     foreach (var cd in cdList)
                     {
@@ -207,6 +206,8 @@ namespace Backend.Services
                         _context.CalendarDates.Update(cd);
                     }
                     await _context.SaveChangesAsync();
+                    //_context.DateContent.Remove(dc);
+                    //await _context.SaveChangesAsync();
                 }
 
                 var currentDate = appliedCourse.StartDate.Date;
