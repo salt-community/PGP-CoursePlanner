@@ -1,9 +1,9 @@
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import Page from "../../../components/Page";
 import { getIdFromPath } from "../../../helpers/helperMethods";
 import { editAppliedCourse, getAppliedCourseById } from "../../../api/AppliedCourseApi";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useEffect, useRef, useState } from "react";
+import { SyntheticEvent, useEffect, useRef, useState } from "react";
 import Popup from "reactjs-popup";
 import ColorBtn from "../../../components/buttons/ColorButton";
 import CloseBtn from "../../../components/buttons/CloseBtn";
@@ -14,11 +14,17 @@ import { getCookie } from "../../../helpers/cookieHelpers";
 import NavigateToLogin from "../../login/NavigateToLogin";
 import AppliedModule from "../sections/AppliedModule";
 import InputSmall from "../../../components/inputFields/InputSmall";
-import { AppliedModuleType } from "../Types";
+import { AppliedDayType, AppliedModuleType } from "../Types";
+import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
+import TrashBtn from "../../../components/buttons/TrashBtn";
+import AppliedDay from "../sections/AppliedDay";
+import DropDown from "../../../components/DropDown";
+import { getAllModules } from "../../../api/ModuleApi";
 
 export default function () {
     const [isOpened, setIsOpened] = useState<boolean>(false);
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
+    const [isInvalidModule, setIsInvalidModule] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const appliedCourseId = getIdFromPath();
@@ -27,6 +33,11 @@ export default function () {
     const [color, setColor] = useState<string>("");
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
     const [appliedModules, setAppliedModules] = useState<AppliedModuleType[]>();
+
+    const { data: modules, } = useQuery({
+        queryKey: ['modules'],
+        queryFn: getAllModules
+    });
 
     const [appliedCourse, setAppliedCourse] = useState<AppliedCourseType>();
     useEffect(() => {
@@ -51,8 +62,13 @@ export default function () {
 
     const handleEdit = () => {
         setIsInvalidDate(false);
-        if (startDate.getDate() == 6 || startDate.getDate() == 0)
-            setIsInvalidDate(true);
+        setIsInvalidModule(false);
+        if (startDate.getDate() == 6 || startDate.getDate() == 0 || appliedModules?.find(m => m.name == "")) {
+            if (startDate.getDate() == 6 || startDate.getDate() == 0)
+                setIsInvalidDate(true);
+            if (appliedModules?.find(m => m.name == ""))
+                setIsInvalidModule(true);
+        }
         else {
             const newAppliedCourse: AppliedCourseType = {
                 name: appliedCourseName,
@@ -78,10 +94,46 @@ export default function () {
     })
 
     async function editAppliedModule(index: number, appliedModule: AppliedModuleType) {
-        var newAppliedModules = appliedModules!;
+        const newAppliedModules = [...appliedModules!];
         newAppliedModules[index] = appliedModule;
         setAppliedModules(newAppliedModules);
     }
+
+    const handleAddModule = (index: number) => {
+        const emptyModule = {
+            name: "",
+            numberOfDays: 1,
+            days: []
+        };
+        const editedModules = [...appliedModules!];
+        editedModules.splice(index + 1, 0, emptyModule);
+        setAppliedModules(editedModules);
+    }
+
+    const handleDeleteModule = (index: number) => {
+        const editedModules = [...appliedModules!];
+        editedModules.splice(index, 1);
+        setAppliedModules(editedModules);
+    }
+
+    const handleChange = (event: SyntheticEvent) => {
+        const value = (event.target as HTMLSelectElement).value;
+        console.log(value);
+        const split = value.split("_");
+        console.log(split);
+        const module = modules!.find(m => m.id == parseInt(split[0]))!;
+        const moduleToAdd: AppliedModuleType = {
+            name: module.name,
+            numberOfDays: module.numberOfDays,
+            days: module.days
+        };
+
+        const index = parseInt(split[1]);
+        const updatedModules = [...appliedModules!];
+        updatedModules[index] = moduleToAdd;
+        setAppliedModules(updatedModules);
+    }
+    console.log(appliedModules);
 
     return (
         getCookie("access_token") == undefined
@@ -92,9 +144,9 @@ export default function () {
                         <div>
                             <div className="flex flex-row gap-4 items-center">
                                 <div className="self-start mt-2">
-                                    <h2 className="text-lg mb-2 w-[150px]">Course Name: </h2>
+                                    <h2 className="text-lg mb-2 w-[150px]">Bootcamp Name: </h2>
                                 </div>
-                                <InputSmall type="text" name="moduleName" onChange={(e) => setAppliedCourseName(e.target.value)} placeholder="Module name" value={appliedCourseName} />
+                                <InputSmall type="text" name="bootcampName" onChange={(e) => setAppliedCourseName(e.target.value)} placeholder="Module name" value={appliedCourseName} />
                             </div>
 
                             <div className="flex flex-row gap-4 items-center">
@@ -145,17 +197,53 @@ export default function () {
                                 }
                             </Popup>
 
-                            {appliedModules && appliedModules.map((appliedModule, index) =>
-                                <div className="collapse border-base-300 bg-base-200 border">
-                                    <input type="checkbox" id={`collapse-toggle-${index}`} />
-                                    <div className="collapse-title text-xl font-medium">Module {index + 1}: {appliedModule.name}</div>
-                                    <div className="collapse-content w-full">
-                                        <AppliedModule module={appliedModule} index={index} submitFunction={editAppliedModule} buttonText="Save module changes" />
-                                    </div>
-                                </div>)}
+
+                            {modules && appliedModules && appliedModules.map((appliedModule, index) =>
+                                <>
+                                    {appliedModule.name == ""
+                                        ? <div className="collapse border-primary border mb-2">
+                                            <input type="checkbox" id={`collapse-toggle-${index}`} className="hidden" />
+                                            <div className="collapse-title flex flex-row w-full gap-4">
+                                                <label htmlFor={`collapse-toggle-${index}`} className="cursor-pointer flex flex-row">
+                                                    <h1 className="text-lg text-primary">
+                                                        Module {index + 1}:
+                                                    </h1>
+                                                </label>
+                                                <div className="flex flex-col">
+                                                    <select className="border border-gray-300 rounded-lg p-1 w-48" onChange={handleChange} defaultValue={'DEFAULT'} >
+                                                        <option value="DEFAULT" disabled>Select</option>
+                                                        {modules.map((module) =>
+                                                            <option value={`${module.id}_${index}`}>{module.name} ({module.numberOfDays} days)</option>)}
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        : <div className="collapse border-primary border mb-2">
+                                            <input type="checkbox" id={`collapse-toggle-${index}`} className="hidden" />
+                                            <div className="collapse-title flex flex-row w-full gap-4">
+                                                <label htmlFor={`collapse-toggle-${index}`} className="cursor-pointer flex flex-row">
+                                                    <h1 className="text-lg text-primary w-[840px]">
+                                                        Module {index + 1}: {appliedModule.name}
+                                                    </h1>
+                                                </label>
+                                                <div className="flex gap-1">
+                                                    <PrimaryBtn onClick={() => handleAddModule(index)}>+</PrimaryBtn>
+                                                    <TrashBtn handleDelete={() => handleDeleteModule(index)} />
+                                                </div>
+                                            </div>
+                                            <div className="collapse-content w-full">
+                                                <AppliedModule module={appliedModule} index={index} submitFunction={editAppliedModule} buttonText="Save module changes" />
+                                            </div>
+                                        </div>}
+                                </>
+                            )}
 
                             {isInvalidDate &&
                                 <p className="error-message text-red-600 text-sm mt-4" id="invalid-helper">Please select a weekday for the start date</p>}
+                            {isInvalidModule &&
+                                <p className="error-message text-red-600 text-sm mt-4" id="invalid-helper">Please select a module</p>}
                             <button onClick={handleEdit} className="btn btn-sm mt-6 max-w-48 btn-success text-white">Save all changes</button>
                         </div>
                     }

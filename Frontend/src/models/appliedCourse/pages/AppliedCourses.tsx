@@ -9,6 +9,7 @@ import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import NavigateToLogin from "../../login/NavigateToLogin";
+import { useMemo } from "react";
 
 export default function AppliedCourses() {
     const navigate = useNavigate();
@@ -17,18 +18,7 @@ export default function AppliedCourses() {
         queryKey: ['allAppliedCourses'],
         queryFn: getAllAppliedCourses
     });
-
-    const { data: allCourses } = useQuery({
-        queryKey: ['allCourses'],
-        queryFn: getAllCourses
-    });
-
-    const appliedCourseNames: string[] = [];
-    if (allAppliedCourses && allCourses) {
-        allAppliedCourses.forEach(ac => {
-            appliedCourseNames.push(ac.name)
-        });
-    }
+    console.log(allAppliedCourses);
 
     const queryClient = useQueryClient();
     const mutation = useMutation({
@@ -51,14 +41,14 @@ export default function AppliedCourses() {
                 <section className="px-4 md:px-24 lg:px-56">
                     {isLoading && <LoadingMessage />}
                     {isError && <ErrorMessage />}
-                    {allAppliedCourses && allAppliedCourses?.length > 0 && appliedCourseNames.length > 0
+                    {allAppliedCourses && allAppliedCourses?.length > 0
                         ? <>
                             <h1 className="flex justify-center text-xl mb-6">The following courses are currently in the calendar</h1>
-                            {allAppliedCourses && allAppliedCourses.map((appliedCourse, index) =>
+                            {allAppliedCourses && allAppliedCourses.map((appliedCourse) =>
                                 <>
-                                    <div className="flex flex-row justify-center">
+                                    <div key={appliedCourse.id}  className="flex flex-row justify-center">
                                         <div className="w-1/2">
-                                            <h1 className="text-xl font-bold mb-2">{appliedCourseNames[index]}</h1>
+                                            <h1 className="text-xl font-bold mb-2">{appliedCourse.name}</h1>
                                             <h2 className="text-lg mb-2 mt-4">Start date: {new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]}, {new Date(appliedCourse.startDate).getFullYear()}</h2>
                                             <h2 className=" text-lg flex items-center">Calendar color:
                                                 <div style={{ backgroundColor: appliedCourse.color }} className="w-5 h-5 ml-2"></div>

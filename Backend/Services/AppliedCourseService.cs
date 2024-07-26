@@ -186,6 +186,7 @@ namespace Backend.Services
                 }
                 await _context.SaveChangesAsync();
 
+                appliedCourseToUpdate.Name = appliedCourse.Name;
                 appliedCourseToUpdate.StartDate = appliedCourse.StartDate;
                 appliedCourseToUpdate.Color = appliedCourse.Color;
                 appliedCourseToUpdate.Modules = appliedCourse.Modules;
@@ -297,7 +298,11 @@ namespace Backend.Services
         {
             try
             {
-                var appliedCourse = await _context.AppliedCourses.FirstOrDefaultAsync(c => c.Id == id);
+                var appliedCourse = await _context.AppliedCourses
+                            .Include(course => course.Modules!)
+                            .ThenInclude(module => module!.Days)
+                            .ThenInclude(day => day.Events)
+                            .FirstOrDefaultAsync(c => c.Id == id);
                 if (appliedCourse == null)
                 {
                     return false;

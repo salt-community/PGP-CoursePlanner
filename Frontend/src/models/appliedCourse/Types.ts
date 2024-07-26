@@ -24,6 +24,7 @@ export type AppliedDayType = {
 };
 
 export type AppliedDayProps = {
+  moduleIndex: number;
   day: AppliedDayType;
   setDays: React.Dispatch<React.SetStateAction<AppliedDayType[]>>;
   days: AppliedDayType[];
