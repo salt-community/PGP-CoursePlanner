@@ -49,7 +49,8 @@ export default function AppliedModule({ submitFunction, module, index, buttonTex
                 events.push(event);
             })
         });
-
+        
+        const collapseToggle: HTMLInputElement | null = document.getElementById("collapse-toggle-" + index) as HTMLInputElement;
         setIsIncompleteInput(false);
         if (moduleName.value == "" || numberOfDays.value == 0 || days.some(d => d.description == "") || events.some(e => e.name == "") || events.some(e => e.startTime == "") || events.some(e => e.endTime == "")) {
             setIsIncompleteInput(true);
@@ -63,12 +64,13 @@ export default function AppliedModule({ submitFunction, module, index, buttonTex
             };
 
             submitFunction(index, newModule);
+            collapseToggle.checked = false;
         }
     }
 
     return (
         
-            <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 ">
+            <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-min">
                 <div className="w-auto flex justify-between space-x-2">
                     <InputSmall type="text" name="moduleName" onChange={(e) => setModuleName(e.target.value)} placeholder="Module name" value={moduleName} />
                     <input type="number" name="numberOfDays" onChange={(e) => setNumOfDays(parseInt(e.target.value))} value={numOfDays} className="input input-bordered input-sm max-w-xs" placeholder="Number of days" />

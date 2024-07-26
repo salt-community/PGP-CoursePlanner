@@ -31,7 +31,7 @@ export default function () {
     const [appliedCourse, setAppliedCourse] = useState<AppliedCourseType>();
     useEffect(() => {
         getAppliedCourseById(parseInt(appliedCourseId))
-            .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setColor(result!.color!); setAppliedCourseName(result!.name!); setAppliedModules(result!.modules);})
+            .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setColor(result!.color!); setAppliedCourseName(result!.name!); setAppliedModules(result!.modules); })
     }, [appliedCourseId]);
 
     const popupRef = useRef<HTMLDivElement>(null);
@@ -91,8 +91,8 @@ export default function () {
                     {appliedCourse !== undefined &&
                         <div>
                             <div className="flex flex-row gap-4 items-center">
-                                <div className="self-start mt-2 w-[180px]">
-                                    <h2 className="text-lg mb-2">Course Name: </h2>
+                                <div className="self-start mt-2">
+                                    <h2 className="text-lg mb-2 w-[150px]">Course Name: </h2>
                                 </div>
                                 <InputSmall type="text" name="moduleName" onChange={(e) => setAppliedCourseName(e.target.value)} placeholder="Module name" value={appliedCourseName} />
                             </div>
@@ -123,8 +123,8 @@ export default function () {
                                             <h2 className="text-lg flex items-center">Color:  </h2>
                                         </div>
                                         <div style={{ backgroundColor: color }} className="w-5 h-5 ml-2"></div>
-                                    </div> 
-                            }
+                                    </div>
+                                }
                                 modal
                             >
                                 {
@@ -146,7 +146,13 @@ export default function () {
                             </Popup>
 
                             {appliedModules && appliedModules.map((appliedModule, index) =>
-                                <AppliedModule module={appliedModule} index={index} submitFunction={editAppliedModule} buttonText="Save module changes" />)}
+                                <div className="collapse border-base-300 bg-base-200 border">
+                                    <input type="checkbox" id={`collapse-toggle-${index}`} />
+                                    <div className="collapse-title text-xl font-medium">Module {index + 1}: {appliedModule.name}</div>
+                                    <div className="collapse-content w-full">
+                                        <AppliedModule module={appliedModule} index={index} submitFunction={editAppliedModule} buttonText="Save module changes" />
+                                    </div>
+                                </div>)}
 
                             {isInvalidDate &&
                                 <p className="error-message text-red-600 text-sm mt-4" id="invalid-helper">Please select a weekday for the start date</p>}
