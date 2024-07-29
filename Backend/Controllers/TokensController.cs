@@ -132,7 +132,8 @@ namespace Backend.Controllers
                 var responseData = (OkObjectResult)response.Result!;
                 var data = responseData.Value as TokenResponse;
 
-
+                var loggedInUser = new LoggedInUser(){Refresh_Token = data!.Refresh_token};
+                await _context.LoggedInUser.AddAsync(loggedInUser);
                 return new TokenResponse()
                 {
                     Access_token = data!.Access_token,
