@@ -8,7 +8,7 @@ import Page from "../components/Page";
 import WeekDay from "./calendar/sections/WeekDay";
 import { DateContent } from "./calendar/Types";
 import NavigateToLogin from "./login/NavigateToLogin";
-import { getTokens } from "../api/UserApi";
+import { getTokens, getTokensFromBackend } from "../api/UserApi";
 
 export default function Home() {
 
@@ -21,28 +21,27 @@ export default function Home() {
         setCookie('code', code);
 
 
-        // const { data: response, isLoading, isError } = useQuery({
-        //     queryKey: ['accessCode'],
-        //     queryFn: () => getTokens(code)
-        // })
+        const { data: response, isLoading, isError } = useQuery({
+            queryKey: ['accessCode'],
+            queryFn: () => getTokensFromBackend(code)
+        })
 
-        // if (isLoading) {
-        //     console.log("loading...")
-        //     setCookie('access_token', "soon to be set!");
-        // }
+        if (isLoading) {
+            console.log("loading...")
+            setCookie('access_token', "soon to be set!");
+        }
 
-        // isError && deleteCookie('access_token');
+        isError && deleteCookie('access_token');
 
-        // if (response) {
-        //     console.log("response from code: ", response);
-        //     const { access_token, id_token, expires_in, refresh_token } = response;
+        if (response) {
+            console.log("response from code: ", response);
+            const { access_token, id_token, expires_in } = response;
 
-        //     setCookie('access_token', access_token, expires_in);
-        //     setCookie('JWT', id_token, expires_in);
-        //     refresh_token && setCookie('refresh_token', refresh_token);
+            setCookie('access_token', access_token, expires_in);
+            setCookie('JWT', id_token, expires_in);
 
-        //     // location.href = redirectLink;
-        // }
+            //     // location.href = redirectLink;
+        }
 
 
     }

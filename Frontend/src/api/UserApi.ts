@@ -21,7 +21,8 @@ export type tokenResponseFromBackend = {
 
 export async function getTokensFromBackend(auth_code: string) {
   try {
-    const response = await fetch(`${BACKEND_URL}/Tokens/${auth_code}`, {
+    const code = encodeURIComponent(auth_code);
+    const response = await fetch(`${BACKEND_URL}/Tokens/${code}`, {
       headers: {
         Accept: "application/json",
       },
