@@ -13,6 +13,27 @@ export type tokenResponse = {
   token_type: string;
 };
 
+export type tokenResponseFromBackend = {
+  access_token: string;
+  expires_in: number;
+  id_token: string;
+};
+
+export async function getTokensFromBackend(auth_code: string) {
+  try {
+    const response = await fetch(`${BACKEND_URL}/Tokens/${auth_code}`, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    const responseAsJson = await response.json();
+    return responseAsJson as tokenResponseFromBackend;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export async function getTokens(auth_code: string) {
   try {
     const response = await fetch(BASE_URL, {
