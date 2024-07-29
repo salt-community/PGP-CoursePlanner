@@ -9,6 +9,7 @@ namespace Backend.Models
         public DateTime EndDate { get; set; }
         public int CourseId { get; set; }
         public string? Color { get; set; }
+        public List<int> moduleIds {get; set;} = [];
         public List<AppliedModule>? Modules { get; set;}
     }
 }

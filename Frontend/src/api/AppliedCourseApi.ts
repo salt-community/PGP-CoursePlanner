@@ -72,5 +72,4 @@ export async function editAppliedCourse(appliedCourse: AppliedCourseType) {
   if (!response.ok) {
     throw new Error("Failed to edit applied course");
   }
-
 }

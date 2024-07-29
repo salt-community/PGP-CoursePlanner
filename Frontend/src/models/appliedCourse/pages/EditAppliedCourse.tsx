@@ -14,12 +14,11 @@ import { getCookie } from "../../../helpers/cookieHelpers";
 import NavigateToLogin from "../../login/NavigateToLogin";
 import AppliedModule from "../sections/AppliedModule";
 import InputSmall from "../../../components/inputFields/InputSmall";
-import { AppliedDayType, AppliedModuleType } from "../Types";
+import { AppliedModuleType } from "../Types";
 import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
 import TrashBtn from "../../../components/buttons/TrashBtn";
-import AppliedDay from "../sections/AppliedDay";
-import DropDown from "../../../components/DropDown";
 import { getAllModules } from "../../../api/ModuleApi";
+import { postAppliedModule } from "../../../api/AppliedModuleApi";
 
 export default function () {
     const [isOpened, setIsOpened] = useState<boolean>(false);
@@ -118,22 +117,29 @@ export default function () {
 
     const handleChange = (event: SyntheticEvent) => {
         const value = (event.target as HTMLSelectElement).value;
-        console.log(value);
-        const split = value.split("_");
-        console.log(split);
-        const module = modules!.find(m => m.id == parseInt(split[0]))!;
-        const moduleToAdd: AppliedModuleType = {
+        const [moduleId, indexStr] = value.split("_"); // Parse index from the selected value
+        const moduleIndex = parseInt(indexStr); // Parse index as integer
+        const module = modules!.find(m => m.id === parseInt(moduleId))!; // Find the module based on the selected value
+        
+        const appliedModule: AppliedModuleType = {
+            id: module.id,
             name: module.name,
             numberOfDays: module.numberOfDays,
             days: module.days
-        };
+        };       
 
-        const index = parseInt(split[1]);
-        const updatedModules = [...appliedModules!];
-        updatedModules[index] = moduleToAdd;
-        setAppliedModules(updatedModules);
+        postAppliedModule(appliedModule)
+            .then(response => {
+                if (response) {
+                    const updatedModules = [...appliedModules!];
+                    updatedModules[moduleIndex] = response;
+                    setAppliedModules(updatedModules);
+                }
+            })
+            .catch(error => {
+                console.error("Error posting applied module:", error);
+            });
     }
-    console.log(appliedModules);
 
     return (
         getCookie("access_token") == undefined

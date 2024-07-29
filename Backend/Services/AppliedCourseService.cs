@@ -23,6 +23,15 @@ namespace Backend.Services
                     .ThenInclude(module => module!.Days)
                     .ThenInclude(day => day.Events)
                 .ToListAsync();
+
+                foreach (var course in appliedCourses)
+                {
+                    course.Modules = course.Modules.OrderBy(m => m.Order).ToList();
+                    foreach (var module in course.Modules)
+                    {
+                        module.Days = module.Days.OrderBy(d => d.DayNumber).ToList();
+                    }
+                }
                 return appliedCourses;
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
@@ -36,6 +45,16 @@ namespace Backend.Services
                     .ThenInclude(module => module!.Days)
                     .ThenInclude(day => day.Events)
                     .FirstOrDefaultAsync(course => course.Id == id);
+
+            if (course != null)
+            {
+                course.Modules = course.Modules.OrderBy(m => m.Order).ToList();
+                foreach (var module in course.Modules)
+                    {
+                        module.Days = module.Days.OrderBy(d => d.DayNumber).ToList();
+                    }
+            }
+
             return course ?? null!;
         }
 
@@ -54,6 +73,7 @@ namespace Backend.Services
             var currentDate = appliedCourse.StartDate.Date;
 
             var listOfAppliedModules = new List<AppliedModule>();
+            int order = 0;
             foreach (var moduleId in course.moduleIds)
             {
                 var module = await _context.Modules
@@ -65,7 +85,8 @@ namespace Backend.Services
                 {
                     Name = module!.Name,
                     NumberOfDays = module.NumberOfDays,
-                    Track = module.Track
+                    Track = module.Track,
+                    Order = order++
                 };
 
                 var listOfAppliedDays = new List<AppliedDay>();
@@ -148,6 +169,7 @@ namespace Backend.Services
                         .Include(course => course.Modules!)
                         .ThenInclude(module => module!.Days)
                         .ThenInclude(day => day.Events)
+                        .AsNoTracking()
                         .FirstOrDefaultAsync(ac => ac.Id == id);
 
                 if (appliedCourseToUpdate == null)
@@ -191,6 +213,12 @@ namespace Backend.Services
                 appliedCourseToUpdate.Color = appliedCourse.Color;
                 appliedCourseToUpdate.Modules = appliedCourse.Modules;
 
+                int order = 0;
+                foreach (var module in appliedCourseToUpdate.Modules)
+                {
+                    module.Order = order++;
+                }
+
                 _context.ChangeTracker.Clear();
                 _context.AppliedCourses.Update(appliedCourseToUpdate);
                 await _context.SaveChangesAsync();
@@ -212,12 +240,12 @@ namespace Backend.Services
                 }
 
                 var currentDate = appliedCourse.StartDate.Date;
-                foreach (var moduleId in moduleIds)
+                foreach (var moduleCorrectOrder in appliedCourse.Modules.OrderBy(m => m.Order))
                 {
                     var module = await _context.AppliedModules
                                 .Include(module => module.Days)
                                 .ThenInclude(day => day.Events)
-                                .FirstOrDefaultAsync(module => module.Id == moduleId);
+                                .FirstOrDefaultAsync(module => module.Id == moduleCorrectOrder.Id);
 
                     foreach (var day in module!.Days)
                     {

@@ -8,9 +8,10 @@ namespace Backend.Models
         public required string Name { get; set; }
         public int NumberOfDays { get; set; }
         public List<AppliedDay> Days { get; set; } = [];
+        public int Order { get; set; }
+        public string? Track {get; set;}
+        
         // [JsonIgnore]
         // public List<CourseModule> CourseModules { get; set; } = new List<CourseModule>();
-
-        public string? Track {get; set;}
     }
 }

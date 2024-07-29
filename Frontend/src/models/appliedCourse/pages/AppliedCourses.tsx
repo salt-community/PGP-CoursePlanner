@@ -1,15 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import Page from "../../../components/Page";
 import { deleteAppliedCourse, getAllAppliedCourses } from "../../../api/AppliedCourseApi";
-import { getAllCourses } from "../../../api/CourseApi";
 import DeleteBtn from "../../../components/buttons/DeleteBtn";
 import { Link, useNavigate } from "react-router-dom";
-import { CourseType } from "../../course/Types";
 import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import NavigateToLogin from "../../login/NavigateToLogin";
-import { useMemo } from "react";
 
 export default function AppliedCourses() {
     const navigate = useNavigate();
