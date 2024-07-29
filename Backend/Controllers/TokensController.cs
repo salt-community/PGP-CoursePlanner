@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using System.Web;
 using Backend.Models;
+using Backend.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -26,7 +27,7 @@ namespace Backend.Controllers
         //     IRestResponse response = client.Execute(request);
         // }
 
-        private async Task<IActionResult> GetTokensFromGoogle(string Url, string code, string ClientId, string ClientSecret, string redirectUrl)
+        private async Task<ActionResult<TokenResponse>> GetTokensFromGoogle(string Url, string code, string ClientId, string ClientSecret, string redirectUrl)
         {
             using HttpClient client = new();
 
@@ -54,8 +55,9 @@ namespace Backend.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var responseData = await response.Content.ReadAsStringAsync();
-                return Ok(responseData);
+                var deserializedResponse = JsonConvert.DeserializeObject<TokenResponse>(
+                await response.Content.ReadAsStringAsync());
+                return Ok(deserializedResponse);
             }
             else
             {
@@ -67,16 +69,28 @@ namespace Backend.Controllers
 
 
         [HttpGet("{code}")]
-        public async Task<IActionResult> GetTokens(string code)
+        public async Task<ActionResult<TokenResponse>> GetTokens(string code)
         {
             var builder = WebApplication.CreateBuilder();
             code = HttpUtility.UrlDecode(code);
-            return await GetTokensFromGoogle(
+            var response = await GetTokensFromGoogle(
                 "https://accounts.google.com/o/oauth2/token",
                 code,
                 builder.Configuration["AppInfo:ClientId"]!,
                 builder.Configuration["AppInfo:ClientSecret"]!,
                 "http://localhost:5173");
+
+            var responseData = (OkObjectResult)response.Result!;
+            var data = responseData.Value as TokenResponse;
+
+
+            return new TokenResponse()
+            {
+                Access_token = data.Access_token,
+                Id_token = data.Id_token,
+                Expires_in = data.Expires_in
+            };
+
         }
 
     }
