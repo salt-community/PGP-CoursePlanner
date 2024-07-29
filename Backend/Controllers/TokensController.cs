@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using System.Web;
+using Backend.Data;
 using Backend.Models;
 using Backend.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,13 @@ namespace Backend.Controllers
     [Route("[controller]")]
     public class TokensController : ControllerBase
     {
+        private readonly DataContext _context;
+
+        public TokensController(DataContext context)
+        {
+            _context = context;
+        }
+
         // private async Task<TokenResponse> GetTokensFromGoogle(string code, string ClientId, string ClientSecret)
         // {
         //     var client =  new HttpClient();
