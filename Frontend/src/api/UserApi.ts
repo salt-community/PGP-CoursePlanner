@@ -1,9 +1,8 @@
 import { getCookie } from "../helpers/cookieHelpers";
 import { BACKEND_URL } from "./BackendUrl";
 
-// const BASE_URL = "https://accounts.google.com/o/oauth2/token";
-const BASE_URL = `${BACKEND_URL}/Tokens`;
-
+const BASE_URL = "https://accounts.google.com/o/oauth2/token";
+// const BASE_URL = `${BACKEND_URL}/Tokens`;
 
 export type tokenResponse = {
   access_token: string;
@@ -31,14 +30,14 @@ export async function getTokens(auth_code: string) {
     });
 
     if (!response.ok || response == undefined) {
-      alert("failed get access token");
+      // alert("failed get access token");
       return;
     }
     const data = await response.json();
     return data as tokenResponse;
   } catch (error) {
     console.error("Error getting access token", error);
-    alert("Failed to get access token");
+    // alert("Failed to get access token");
   }
 }
 

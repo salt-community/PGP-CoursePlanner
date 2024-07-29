@@ -12,35 +12,37 @@ import { getTokens } from "../api/UserApi";
 
 export default function Home() {
 
-    const redirectLink = "https://frontend-h7ia67qbhq-uc.a.run.app";
-    // const redirectLink = "http://localhost:5173";
+    // const redirectLink = "https://frontend-h7ia67qbhq-uc.a.run.app";
+    const redirectLink = "http://localhost:5173";
 
     if (location.search) {
         const params = new URLSearchParams(location.search);
         const code = params.get('code')!;
+        setCookie('code', code);
 
-        const { data: response, isLoading, isError } = useQuery({
-            queryKey: ['accessCode'],
-            queryFn: () => getTokens(code)
-        })
 
-        if (isLoading) {
-            console.log("loading...")
-            setCookie('access_token', "soon to be set!");
-        }
+        // const { data: response, isLoading, isError } = useQuery({
+        //     queryKey: ['accessCode'],
+        //     queryFn: () => getTokens(code)
+        // })
 
-        isError && deleteCookie('access_token');
+        // if (isLoading) {
+        //     console.log("loading...")
+        //     setCookie('access_token', "soon to be set!");
+        // }
 
-        if (response) {
-            console.log("response from code: ", response);
-            const { access_token, id_token, expires_in, refresh_token } = response;
+        // isError && deleteCookie('access_token');
 
-            setCookie('access_token', access_token, expires_in);
-            setCookie('JWT', id_token, expires_in);
-            refresh_token && setCookie('refresh_token', refresh_token);
+        // if (response) {
+        //     console.log("response from code: ", response);
+        //     const { access_token, id_token, expires_in, refresh_token } = response;
 
-            location.href = redirectLink;
-        }
+        //     setCookie('access_token', access_token, expires_in);
+        //     setCookie('JWT', id_token, expires_in);
+        //     refresh_token && setCookie('refresh_token', refresh_token);
+
+        //     // location.href = redirectLink;
+        // }
 
 
     }

@@ -14,7 +14,7 @@ export async function getAllCourses() {
     });
 
     if (!response.ok || response == null) {
-      alert("Failed to get  courses");
+      // alert("Failed to get  courses");
       return;
     }
 
@@ -22,7 +22,7 @@ export async function getAllCourses() {
     return data as CourseType[];
   } catch (error) {
     console.error(error);
-    alert("Failed to get  courses");
+    // alert("Failed to get  courses");
   }
 }
 
