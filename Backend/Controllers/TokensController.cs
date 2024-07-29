@@ -80,16 +80,21 @@ namespace Backend.Controllers
                 builder.Configuration["AppInfo:ClientSecret"]!,
                 "http://localhost:5173");
 
-            var responseData = (OkObjectResult)response.Result!;
-            var data = responseData.Value as TokenResponse;
-
-
-            return new TokenResponse()
+            if (response.Result.GetType() == typeof(OkObjectResult))
             {
-                Access_token = data.Access_token,
-                Id_token = data.Id_token,
-                Expires_in = data.Expires_in
-            };
+                var responseData = (OkObjectResult)response.Result!;
+                var data = responseData.Value as TokenResponse;
+
+
+                return new TokenResponse()
+                {
+                    Access_token = data!.Access_token,
+                    Id_token = data.Id_token,
+                    Expires_in = data.Expires_in
+                };
+            }
+
+            return response;
 
         }
 
