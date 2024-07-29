@@ -67,6 +67,45 @@ namespace Backend.Controllers
 
         }
 
+        private async Task<ActionResult<TokenResponse>> RefreshTokensFromGoogle(string Url, string Refresh_token, string ClientId, string ClientSecret, string RefreshToken)
+        {
+            using HttpClient client = new();
+
+            var request = new HttpRequestMessage(HttpMethod.Post, Url);
+
+
+            var parameters = new Dictionary<string, string>
+        {
+
+            {"grant_type", "refresh_token"},
+            {$"client_id", ClientId},
+            {$"client_secret", ClientSecret},
+            {$"refresh_token", RefreshToken}
+        };
+
+            var encodedParameters = new FormUrlEncodedContent(parameters);
+            var paramText = await encodedParameters.ReadAsStringAsync();
+
+            request.Content = encodedParameters;
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var deserializedResponse = JsonConvert.DeserializeObject<TokenResponse>(
+                await response.Content.ReadAsStringAsync());
+                return Ok(deserializedResponse);
+            }
+            else
+            {
+                var errorData = await response.Content.ReadAsStringAsync();
+                return StatusCode((int)response.StatusCode, errorData);
+            }
+
+        }
+
 
         [HttpGet("{code}")]
         public async Task<ActionResult<TokenResponse>> GetTokens(string code)
