@@ -40,7 +40,7 @@ export default function Home() {
             setCookie('access_token', access_token, expires_in);
             setCookie('JWT', id_token, expires_in);
 
-            //     // location.href = redirectLink;
+            location.href = redirectLink;
         }
 
 
