@@ -35,6 +35,9 @@ export function setNewTokenCookies() {
     console.log("response from refresh tokens: ", response);
     const { access_token, id_token, expires_in } = response;
 
+    if (access_token || id_token == undefined) {
+      return;
+    }
     setCookie("access_token", access_token, expires_in);
     setCookie("JWT", id_token, expires_in);
 
