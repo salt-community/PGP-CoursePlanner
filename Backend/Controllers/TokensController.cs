@@ -159,7 +159,14 @@ namespace Backend.Controllers
             }
 
             return response;
+        }
 
+        [HttpDelete]
+        public async Task<IActionResult> DeleteRefreshTokens()
+        {
+            await _context.LoggedInUser.ForEachAsync(user => _context.LoggedInUser.Remove(user));
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
     }
