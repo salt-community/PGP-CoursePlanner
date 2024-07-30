@@ -35,6 +35,17 @@ export async function getTokensFromBackend(auth_code: string) {
   }
 }
 
+export async function refreshTokensFromBackend() {
+  try {
+    const response = await fetch(`${BACKEND_URL}/Tokens`);
+
+    const data = await response.json();
+    return data as tokenResponseFromBackend;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export async function getTokens(auth_code: string) {
   try {
     const response = await fetch(BASE_URL, {
