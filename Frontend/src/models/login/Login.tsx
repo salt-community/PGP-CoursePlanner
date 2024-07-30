@@ -11,8 +11,6 @@ export default function Login() {
         location.href = LOGIN_URL;
     }
 
-    setNewTokenCookies();
-
     return (
         <section className="px-5 text-center w-full h-screen flex justify-center items-center flex-col gap-4">
             <img src={"https://salt.dev/wp-content/uploads/2024/02/salt-logo-dark.svg"} alt="logo" className="w-[40%] h-auto mb-10" />

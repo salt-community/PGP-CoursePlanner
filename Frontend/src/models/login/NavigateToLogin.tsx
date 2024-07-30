@@ -1,14 +1,11 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import LoadingMessage from "../../components/LoadingMessage"
+import { setNewTokenCookies } from "../../helpers/helperMethods";
 
 
 export default function NavigateToLogin() {
-
-    useEffect(() => {
-        navigate("/login")
-    }, [window.location.href])
-    const navigate = useNavigate()
+    setNewTokenCookies();
 
     return <LoadingMessage />
 }

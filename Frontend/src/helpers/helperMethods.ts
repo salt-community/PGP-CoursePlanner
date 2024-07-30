@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { refreshTokensFromBackend } from "../api/UserApi";
 import { getCookie, setCookie } from "./cookieHelpers";
 import { useQuery } from "react-query";
+import { useEffect } from "react";
 
 export function getIdFromPath() {
   const { pathname } = useLocation();
@@ -29,20 +30,26 @@ export function setNewTokenCookies() {
     queryFn: () => refreshTokensFromBackend(),
   });
 
-  if (isError) {
-    return;
-  }
-  if (response) {
-    console.log("response from refresh tokens: ", response);
-    const { access_token, id_token, expires_in } = response;
-
-    if (access_token == undefined || id_token == undefined) {
-      return;
+  useEffect(() => {
+    if (isError) {
+      navigate("/login");
+      window.location.reload();
     }
+    if (response) {
+      console.log("response from refresh tokens: ", response);
+      const { access_token, id_token, expires_in } = response;
 
-    setCookie("access_token", access_token, expires_in);
-    setCookie("JWT", id_token, expires_in);
+      if (access_token != undefined && id_token != undefined) {
+        setCookie("access_token", access_token, expires_in);
+        setCookie("JWT", id_token, expires_in);
 
-    navigate(getCookie("go_to")!);
-  }
+        const goTo = getCookie("go_to") ?? "/home";
+        navigate(goTo);
+        window.location.reload();
+      } else {
+        navigate("/login");
+        window.location.reload();
+      }
+    }
+  }, [response, isError]);
 }
