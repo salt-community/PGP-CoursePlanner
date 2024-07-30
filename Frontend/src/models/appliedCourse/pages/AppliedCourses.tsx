@@ -46,9 +46,8 @@ export default function AppliedCourses() {
                                     <div className="collapse border-primary border mb-2">
                                         <input type="checkbox" id={`collapse-toggle-${appliedCourse.id}`} className="hidden" />
                                         <div className="collapse-title flex flex-row w-full gap-4">
-                                            <div className="w-1/2">
-                                                <h1 className="text-xl font-bold mb-2 text-primary">{appliedCourse.name}</h1>
-                                                <h2 className="text-lg mb-2 mt-4">Start date: {new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]}, {new Date(appliedCourse.startDate).getFullYear()}</h2>
+                                            <div className="w-full">
+                                                <h1 className="text-xl font-bold mb-2 text-primary">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</h1>
                                                 <h2 className=" text-lg flex items-center">Calendar color:
                                                     <div style={{ backgroundColor: appliedCourse.color }} className="w-5 h-5 ml-2"></div>
                                                 </h2>
