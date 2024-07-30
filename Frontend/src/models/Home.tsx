@@ -8,7 +8,7 @@ import Page from "../components/Page";
 import WeekDay from "./calendar/sections/WeekDay";
 import { DateContent } from "./calendar/Types";
 import NavigateToLogin from "./login/NavigateToLogin";
-import { getTokens, getTokensFromBackend } from "../api/UserApi";
+import {getTokensFromBackend } from "../api/UserApi";
 
 export default function Home() {
 

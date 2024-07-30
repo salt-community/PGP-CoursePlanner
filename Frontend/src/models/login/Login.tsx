@@ -1,8 +1,4 @@
-import { useEffect } from "react";
-import { getCookie } from "../../helpers/cookieHelpers";
 import { setNewTokenCookies } from "../../helpers/helperMethods";
-import { useQuery } from "react-query";
-import { refreshTokensFromBackend } from "../../api/UserApi";
 
 // const redirectLink = "https://frontend-h7ia67qbhq-uc.a.run.app";
 const redirectLink = "http://localhost:5173";

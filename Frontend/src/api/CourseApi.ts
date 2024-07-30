@@ -89,9 +89,6 @@ export async function editCourse(course: CourseType) {
       alert("Failed to edit course");
       return;
     }
-
-    const data = await response.json();
-    return data as CourseType;
   } catch (error) {
     console.error(error);
     alert("Failed to edit course");
