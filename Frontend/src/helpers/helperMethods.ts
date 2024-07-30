@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { refreshTokens } from "../api/UserApi";
+import { refreshTokens, refreshTokensFromBackend } from "../api/UserApi";
 import { setCookie } from "./cookieHelpers";
 import { useQuery } from "react-query";
 
@@ -23,14 +23,14 @@ export function getWeekFromPath() {
 
 export function setNewTokenCookies() {
   console.log("refreshing tokens!!!");
-  const {
-    data: response
-  } = useQuery({
+  const { data: response, isError } = useQuery({
     queryKey: ["accessCode"],
-    queryFn: () => refreshTokens(),
+    queryFn: () => refreshTokensFromBackend(),
   });
 
-
+  if (isError) {
+    return;
+  }
   if (response) {
     console.log("response from refresh tokens: ", response);
     const { access_token, id_token, expires_in } = response;

@@ -1,5 +1,8 @@
+import { useEffect } from "react";
 import { getCookie } from "../../helpers/cookieHelpers";
 import { setNewTokenCookies } from "../../helpers/helperMethods";
+import { useQuery } from "react-query";
+import { refreshTokensFromBackend } from "../../api/UserApi";
 
 // const redirectLink = "https://frontend-h7ia67qbhq-uc.a.run.app";
 const redirectLink = "http://localhost:5173";
@@ -12,10 +15,7 @@ export default function Login() {
         location.href = LOGIN_URL;
     }
 
-    if (getCookie("refresh_token") != undefined) {
-        setNewTokenCookies();
-    }
-
+    setNewTokenCookies();
 
     return (
         <section className="px-5 text-center w-full h-screen flex justify-center items-center flex-col gap-4">
