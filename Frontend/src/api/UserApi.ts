@@ -46,6 +46,20 @@ export async function refreshTokensFromBackend() {
   }
 }
 
+export async function deleteRefreshTokenFromBackend() {
+  try {
+    await fetch(`${BACKEND_URL}/Tokens`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Accept: "application/json",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export async function getTokens(auth_code: string) {
   try {
     const response = await fetch(BASE_URL, {

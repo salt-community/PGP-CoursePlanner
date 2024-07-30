@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PrimaryBtn from "./buttons/PrimaryBtn";
 import { deleteCookie } from "../helpers/cookieHelpers";
+import { deleteRefreshTokenFromBackend } from "../api/UserApi";
 
 export default function NavBar() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function NavBar() {
   const handleLogOut = () => {
     deleteCookie('JWT');
     deleteCookie("access_token");
-    deleteCookie("code");
+    deleteRefreshTokenFromBackend();
     navigate(`/`)
     window.location.reload();
   };
