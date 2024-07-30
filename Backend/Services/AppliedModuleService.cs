@@ -1,9 +1,6 @@
-using System.Diagnostics;
-using System.Reflection;
 using Backend.Data;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
-using Module = Backend.Models.Module;
 
 namespace Backend.Services
 {

@@ -149,7 +149,6 @@ export default function CourseDetails() {
                                     </table>
                                 </div>
                             )}
-
                         </section>
 
                         <div className="pt-4 flex gap-4 flex-col sm:flex-row">

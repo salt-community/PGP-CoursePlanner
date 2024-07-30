@@ -82,7 +82,7 @@ export default function AppliedModule({ submitFunction, module, index, buttonTex
                 <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
                 </div>
             </div>
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 w-full">
                 {days.map((day) =>
                     <AppliedDay key={"day_" + day.dayNumber} moduleIndex={index} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays} />)}
             </div>

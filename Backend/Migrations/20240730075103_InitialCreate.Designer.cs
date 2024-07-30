@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240729100633_InitialCreate")]
+    [Migration("20240730075103_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -39,10 +39,6 @@ namespace Backend.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("moduleIds")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

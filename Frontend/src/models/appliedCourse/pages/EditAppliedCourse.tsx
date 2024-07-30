@@ -59,6 +59,55 @@ export default function () {
         };
     }, []);
 
+    async function editAppliedModule(index: number, appliedModule: AppliedModuleType) {
+        const newAppliedModules = [...appliedModules!];
+        newAppliedModules[index] = appliedModule;
+        setAppliedModules(newAppliedModules);
+    }
+    
+    const handleAddModule = (index: number) => {
+        const emptyModule = {
+            name: "",
+            numberOfDays: 1,
+            days: []
+        };
+        const editedModules = [...appliedModules!];
+        editedModules.splice(index + 1, 0, emptyModule);
+        setAppliedModules(editedModules);
+    }
+    
+    const handleDeleteModule = (index: number) => {
+        const editedModules = [...appliedModules!];
+        editedModules.splice(index, 1);
+        setAppliedModules(editedModules);
+    }
+    
+    const handleChange = (event: SyntheticEvent) => {
+        const value = (event.target as HTMLSelectElement).value;
+        const [moduleId, indexStr] = value.split("_"); // Parse index from the selected value
+        const moduleIndex = parseInt(indexStr); // Parse index as integer
+        const module = modules!.find(m => m.id === parseInt(moduleId))!; // Find the module based on the selected value
+        
+        const appliedModule: AppliedModuleType = {
+            id: module.id,
+            name: module.name,
+            numberOfDays: module.numberOfDays,
+            days: module.days
+        };       
+        
+        postAppliedModule(appliedModule)
+        .then(response => {
+            if (response) {
+                const updatedModules = [...appliedModules!];
+                updatedModules[moduleIndex] = response;
+                setAppliedModules(updatedModules);
+            }
+        })
+        .catch(error => {
+            console.error("Error posting applied module:", error);
+        });
+    }
+
     const handleEdit = () => {
         setIsInvalidDate(false);
         setIsInvalidModule(false);
@@ -91,56 +140,7 @@ export default function () {
             navigate(`/activecourses`);
         }
     })
-
-    async function editAppliedModule(index: number, appliedModule: AppliedModuleType) {
-        const newAppliedModules = [...appliedModules!];
-        newAppliedModules[index] = appliedModule;
-        setAppliedModules(newAppliedModules);
-    }
-
-    const handleAddModule = (index: number) => {
-        const emptyModule = {
-            name: "",
-            numberOfDays: 1,
-            days: []
-        };
-        const editedModules = [...appliedModules!];
-        editedModules.splice(index + 1, 0, emptyModule);
-        setAppliedModules(editedModules);
-    }
-
-    const handleDeleteModule = (index: number) => {
-        const editedModules = [...appliedModules!];
-        editedModules.splice(index, 1);
-        setAppliedModules(editedModules);
-    }
-
-    const handleChange = (event: SyntheticEvent) => {
-        const value = (event.target as HTMLSelectElement).value;
-        const [moduleId, indexStr] = value.split("_"); // Parse index from the selected value
-        const moduleIndex = parseInt(indexStr); // Parse index as integer
-        const module = modules!.find(m => m.id === parseInt(moduleId))!; // Find the module based on the selected value
-        
-        const appliedModule: AppliedModuleType = {
-            id: module.id,
-            name: module.name,
-            numberOfDays: module.numberOfDays,
-            days: module.days
-        };       
-
-        postAppliedModule(appliedModule)
-            .then(response => {
-                if (response) {
-                    const updatedModules = [...appliedModules!];
-                    updatedModules[moduleIndex] = response;
-                    setAppliedModules(updatedModules);
-                }
-            })
-            .catch(error => {
-                console.error("Error posting applied module:", error);
-            });
-    }
-
+    
     return (
         getCookie("access_token") == undefined
             ? <NavigateToLogin />
@@ -222,15 +222,14 @@ export default function () {
                                                             <option value={`${module.id}_${index}`}>{module.name} ({module.numberOfDays} days)</option>)}
                                                     </select>
                                                 </div>
-
                                             </div>
                                         </div>
 
-                                        : <div className="collapse border-primary border mb-2">
+                                        : <div className="collapse border-primary border mb-2 w-full">
                                             <input type="checkbox" id={`collapse-toggle-${index}`} className="hidden" />
                                             <div className="collapse-title flex flex-row w-full gap-4">
                                                 <label htmlFor={`collapse-toggle-${index}`} className="cursor-pointer flex flex-row">
-                                                    <h1 className="text-lg text-primary w-[840px]">
+                                                    <h1 className="text-lg text-primary w-[680px]">
                                                         Module {index + 1}: {appliedModule.name}
                                                     </h1>
                                                 </label>

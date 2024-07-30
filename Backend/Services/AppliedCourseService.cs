@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Reflection;
 using Backend.Data;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +29,10 @@ namespace Backend.Services
                     foreach (var module in course.Modules)
                     {
                         module.Days = module.Days.OrderBy(d => d.DayNumber).ToList();
+                        foreach (var day in module.Days)
+                        {
+                            day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
+                        }
                     }
                 }
                 return appliedCourses;
@@ -50,9 +53,13 @@ namespace Backend.Services
             {
                 course.Modules = course.Modules.OrderBy(m => m.Order).ToList();
                 foreach (var module in course.Modules)
+                {
+                    module.Days = module.Days.OrderBy(d => d.DayNumber).ToList();
+                    foreach (var day in module.Days)
                     {
-                        module.Days = module.Days.OrderBy(d => d.DayNumber).ToList();
+                        day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
                     }
+                }
             }
 
             return course ?? null!;
@@ -109,6 +116,10 @@ namespace Backend.Services
                             EndTime = eventItem.EndTime,
                             Description = eventItem.Description
                         };
+                        if (appliedEvent.StartTime.Length == 4)
+                            appliedEvent.StartTime = "0" + appliedEvent.StartTime;
+                        if (appliedEvent.EndTime.Length == 4)
+                            appliedEvent.EndTime = "0" + appliedEvent.EndTime;
                         _context.AppliedEvents.Add(appliedEvent);
                         listOfAppliedEvents.Add(appliedEvent);
                     }

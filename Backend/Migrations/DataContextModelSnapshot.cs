@@ -38,10 +38,6 @@ namespace Backend.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("moduleIds")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.ToTable("AppliedCourses");

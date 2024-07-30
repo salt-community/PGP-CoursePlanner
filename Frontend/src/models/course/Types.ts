@@ -29,5 +29,5 @@ export type AppliedCourseType = {
     endDate?: Date;
     courseId: number;
     color: string;
-    modules: AppliedModuleType[]
+    modules?: AppliedModuleType[]
 }
