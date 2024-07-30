@@ -62,7 +62,7 @@ export default function Home() {
 
     return (
         getCookie("access_token") == undefined ?
-            <NavigateToLogin />
+            <NavigateToLogin path={window.location.href} />
             :
             <Page>
                 <section className="p-20 flex flex-col items-center">
