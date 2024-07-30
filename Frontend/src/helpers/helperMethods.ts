@@ -22,7 +22,6 @@ export function getWeekFromPath() {
 }
 
 export function setNewTokenCookies() {
-  console.log("refreshing tokens!!!");
   const { data: response, isError } = useQuery({
     queryKey: ["accessCode"],
     queryFn: () => refreshTokensFromBackend(),
@@ -35,9 +34,10 @@ export function setNewTokenCookies() {
     console.log("response from refresh tokens: ", response);
     const { access_token, id_token, expires_in } = response;
 
-    if (access_token || id_token == undefined) {
+    if (access_token == undefined || id_token == undefined) {
       return;
     }
+
     setCookie("access_token", access_token, expires_in);
     setCookie("JWT", id_token, expires_in);
 
