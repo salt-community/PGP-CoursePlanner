@@ -1,20 +1,22 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PrimaryBtn from "./buttons/PrimaryBtn";
-import { deleteCookie } from "../helpers/cookieHelpers";
+import { deleteCookie, setCookie } from "../helpers/cookieHelpers";
 import { deleteRefreshTokenFromBackend } from "../api/UserApi";
 
 export default function NavBar() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleDropdown = () => {
+  const toggleDropdown = (path?: string) => {
+    path && setCookie("go_to", path);
     setIsOpen(!isOpen);
   };
 
   const handleLogOut = () => {
     deleteCookie('JWT');
     deleteCookie("access_token");
+    deleteCookie("go_to");
     deleteRefreshTokenFromBackend();
     navigate(`/`)
     window.location.reload();
@@ -29,7 +31,7 @@ export default function NavBar() {
               tabIndex={0}
               role="button"
               className="btn btn-ghost md:hidden"
-              onClick={toggleDropdown}
+              onClick={() => toggleDropdown}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -52,29 +54,29 @@ export default function NavBar() {
                 }`}
             >
               <li>
-                <Link onClick={toggleDropdown} to="/calendar/month">
-                Course Templates
+                <Link onClick={() => toggleDropdown("/calendar/month")} to="/calendar/month">
+                  Course Templates
                 </Link>
               </li>
               <li>
-                <Link onClick={toggleDropdown} to="/modules">
+                <Link onClick={() => toggleDropdown("/modules")} to="/modules">
                   Module Templates
                 </Link>
               </li>
               <li>
-                <Link onClick={toggleDropdown} to="/courses">
-              Course Planner
+                <Link onClick={() => toggleDropdown("/courses")} to="/courses">
+                  Course Planner
                 </Link>
               </li>
               <li>
-                <Link onClick={toggleDropdown} to="/activecourses">
+                <Link onClick={() => toggleDropdown("/activecourses")} to="/activecourses">
                   Bootcamps
                 </Link>
               </li>
             </ul>
           </div>
           <div>
-            <Link className="btn btn-ghost text-l text-xl" to="/">
+            <Link onClick={() => setCookie("go_to", "/home")} className="btn btn-ghost text-l text-xl" to="/">
               Course Planner
             </Link>
           </div>
@@ -82,22 +84,22 @@ export default function NavBar() {
         <div className="navbar-center hidden md:flex">
           <ul className="menu menu-horizontal px-1 text-xl">
             <li>
-              <Link onClick={toggleDropdown} to="/calendar/month">
+              <Link onClick={() => toggleDropdown("/calendar/month")} to="/calendar/month">
                 Calendar
               </Link>
             </li>
             <li>
-              <Link onClick={toggleDropdown} to="/modules">
+              <Link onClick={() => toggleDropdown("/modules")} to="/modules">
                 Module Templates
               </Link>
             </li>
             <li>
-              <Link onClick={toggleDropdown} to="/courses">
+              <Link onClick={() => toggleDropdown("/courses")} to="/courses">
                 Course Templates
               </Link>
             </li>
             <li>
-              <Link onClick={toggleDropdown} to="/activecourses">
+              <Link onClick={() => toggleDropdown("/activecourses")} to="/activecourses">
                 Bootcamps
               </Link>
             </li>

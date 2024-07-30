@@ -1,6 +1,6 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { refreshTokensFromBackend } from "../api/UserApi";
-import { setCookie } from "./cookieHelpers";
+import { getCookie, setCookie } from "./cookieHelpers";
 import { useQuery } from "react-query";
 
 export function getIdFromPath() {
@@ -22,6 +22,8 @@ export function getWeekFromPath() {
 }
 
 export function setNewTokenCookies() {
+  const navigate = useNavigate();
+
   const { data: response, isError } = useQuery({
     queryKey: ["accessCode"],
     queryFn: () => refreshTokensFromBackend(),
@@ -41,6 +43,6 @@ export function setNewTokenCookies() {
     setCookie("access_token", access_token, expires_in);
     setCookie("JWT", id_token, expires_in);
 
-    history.back();
+    navigate(getCookie("go_to")!);
   }
 }
