@@ -16,7 +16,7 @@ export default function Courses() {
 
     return (
         getCookie("access_token") == undefined ?
-            <NavigateToLogin path={window.location.href} />
+            <NavigateToLogin />
             :
             <Page>
                 <section className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 md:px-24 lg:px-56">
