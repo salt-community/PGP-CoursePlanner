@@ -39,8 +39,11 @@ export async function refreshTokensFromBackend() {
   try {
     const response = await fetch(`${BACKEND_URL}/Tokens`);
 
-    const data = await response.json();
-    return data as tokenResponseFromBackend;
+    if (response && response.ok) {
+      const data = await response.json();
+      return data as tokenResponseFromBackend;
+    }
+    return null;
   } catch (error) {
     console.error(error);
   }

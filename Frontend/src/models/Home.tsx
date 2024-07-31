@@ -8,7 +8,8 @@ import Page from "../components/Page";
 import WeekDay from "./calendar/sections/WeekDay";
 import { DateContent } from "./calendar/Types";
 import NavigateToLogin from "./login/NavigateToLogin";
-import {getTokensFromBackend } from "../api/UserApi";
+import { getTokensFromBackend } from "../api/UserApi";
+import Login from "./login/Login";
 
 export default function Home() {
 
@@ -62,7 +63,7 @@ export default function Home() {
 
     return (
         getCookie("access_token") == undefined ?
-            <NavigateToLogin />
+            <Login />
             :
             <Page>
                 <section className="p-20 flex flex-col items-center">

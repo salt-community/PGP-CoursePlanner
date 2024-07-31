@@ -5,7 +5,10 @@ import { setNewTokenCookies } from "../../helpers/helperMethods";
 
 
 export default function NavigateToLogin() {
-    setNewTokenCookies();
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        navigate("/login");
+    }, [])
     return <LoadingMessage />
 }
