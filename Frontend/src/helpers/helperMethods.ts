@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { refreshTokens, refreshTokensFromBackend } from "../api/UserApi";
+import { refreshTokensFromBackend } from "../api/UserApi";
 import { setCookie } from "./cookieHelpers";
 import { useQuery } from "react-query";
 
