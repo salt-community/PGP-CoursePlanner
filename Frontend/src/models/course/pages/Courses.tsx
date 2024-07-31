@@ -1,12 +1,13 @@
 import { useQuery } from "react-query";
 import { getAllCourses } from "../../../api/CourseApi";
 import Page from "../../../components/Page";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import NavigateToLogin from "../../login/NavigateToLogin";
 import Login from "../../login/Login";
+import { useEffect } from "react";
 
 export default function Courses() {
 
@@ -14,6 +15,14 @@ export default function Courses() {
         queryKey: ['courses'],
         queryFn: getAllCourses
     });
+
+    const location = useLocation()
+
+    useEffect(() => {
+        console.log("route for courses: ", location)
+
+    }, [])
+
 
     return (
         getCookie("access_token") == undefined ?

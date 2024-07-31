@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import Page from "../components/Page";
 import WeekDay from "./calendar/sections/WeekDay";
 import { DateContent } from "./calendar/Types";
-import NavigateToLogin from "./login/NavigateToLogin";
 import { getTokensFromBackend } from "../api/UserApi";
 import Login from "./login/Login";
 
@@ -42,8 +41,6 @@ export default function Home() {
 
             location.href = redirectLink;
         }
-
-
     }
 
     const weekDayDateContent: DateContent[][] = [];

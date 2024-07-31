@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import LoadingMessage from "../../components/LoadingMessage";
 import { setCookie } from "../../helpers/cookieHelpers";
 import { refreshTokensFromBackend } from "../../api/UserApi";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 // const redirectLink = "https://frontend-h7ia67qbhq-uc.a.run.app";
@@ -17,12 +17,15 @@ export default function Login() {
         location.href = LOGIN_URL;
     }
 
+    const loc = useLocation();
+
     const { data: response, isLoading } = useQuery({
         queryKey: ["accessCode"],
         queryFn: () => refreshTokensFromBackend(),
     });
 
     if (response) {
+        console.log("route for login: ", loc)
         console.log("response from refresh tokens: ", response);
         const { access_token, id_token, expires_in } = response;
 
@@ -30,12 +33,12 @@ export default function Login() {
         setCookie("JWT", id_token, expires_in);
         window.location.reload();
     }
-    else if (!response && !isLoading) {
-        useEffect(() => {
+    useEffect(() => {
+        if (!response && !isLoading) {
             console.log("response was null");
             navigate("/login");
-        }, [])
-    }
+        }
+    }, [response])
 
     return (
         isLoading || response ?
