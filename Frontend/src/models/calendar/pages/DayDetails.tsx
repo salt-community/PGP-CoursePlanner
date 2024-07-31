@@ -12,6 +12,7 @@ import WeekDay from "../sections/WeekDay";
 import { getDateAsString } from "../../../helpers/dateHelpers";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import NavigateToLogin from "../../login/NavigateToLogin";
+import Login from "../../login/Login";
 
 export default function DayDetails() {
     const navigate = useNavigate();
@@ -40,7 +41,7 @@ export default function DayDetails() {
 
     return (
         getCookie("access_token") == undefined ?
-            <NavigateToLogin />
+            <Login />
             :
             <Page>
                 <section className="flex justify-around">

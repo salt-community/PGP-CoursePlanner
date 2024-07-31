@@ -11,6 +11,7 @@ import TimeLineCourse from "../sections/TimeLineCourse";
 import TimeLineXaxis from "../sections/TimeLineXaxis";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import NavigateToLogin from "../../login/NavigateToLogin";
+import Login from "../../login/Login";
 
 export type Activity = {
   id: number;
@@ -80,7 +81,7 @@ const HorizontalCalendar: React.FC = () => {
 
   return (
     getCookie("access_token") == undefined ?
-      <NavigateToLogin />
+      <Login />
       :
       <Page>
         <div style={{ "height": height }} className="overflow-x-auto px-4 flex flex-col">

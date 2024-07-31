@@ -8,6 +8,7 @@ import { fullWeek } from "../../../helpers/dateHelpers";
 import { getWeekFromPath } from "../../../helpers/helperMethods";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import NavigateToLogin from "../../login/NavigateToLogin";
+import Login from "../../login/Login";
 
 
 export default function MonthView() {
@@ -24,7 +25,7 @@ export default function MonthView() {
 
     return (
         getCookie("access_token") == undefined ?
-            <NavigateToLogin />
+            <Login />
             :
             <Page>
                 <section className="flex justify-around">

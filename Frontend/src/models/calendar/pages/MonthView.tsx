@@ -8,6 +8,7 @@ import { currentMonth, firstDayOfMonth, allDaysInMonth, currentYear, fullWeek, d
 import { format, getWeek } from "date-fns"
 import { getCookie } from "../../../helpers/cookieHelpers"
 import NavigateToLogin from "../../login/NavigateToLogin"
+import Login from "../../login/Login"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(currentMonth);
@@ -22,7 +23,7 @@ export default function MonthView() {
 
     return (
         getCookie("access_token") == undefined ?
-            <NavigateToLogin />
+            <Login />
             :
             <Page>
                 <section className="flex justify-around items-center">

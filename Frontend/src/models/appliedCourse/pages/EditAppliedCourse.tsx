@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { AppliedCourseType } from "../../course/Types";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import NavigateToLogin from "../../login/NavigateToLogin";
+import Login from "../../login/Login";
 
 export default function () {
     const [isOpened, setIsOpened] = useState<boolean>(false);
@@ -80,7 +81,7 @@ export default function () {
 
     return (
         getCookie("access_token") == undefined ?
-            <NavigateToLogin />
+            <Login />
             :
             <Page>
                 <section className="px-4 md:px-24 lg:px-56">

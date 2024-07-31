@@ -7,6 +7,7 @@ import ErrorMessage from "../../../components/ErrorMessage";
 import Module from "../sections/Module";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import NavigateToLogin from "../../login/NavigateToLogin";
+import Login from "../../login/Login";
 
 export default function () {
 
@@ -19,7 +20,7 @@ export default function () {
 
     return (
         getCookie("access_token") == undefined ?
-            <NavigateToLogin />
+            <Login />
             :
             <Page>
                 {isLoading && <LoadingMessage />}

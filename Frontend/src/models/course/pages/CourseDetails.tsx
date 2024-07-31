@@ -21,6 +21,7 @@ import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import NavigateToLogin from "../../login/NavigateToLogin";
+import Login from "../../login/Login";
 
 export default function CourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
@@ -110,7 +111,7 @@ export default function CourseDetails() {
 
     return (
         getCookie("access_token") == undefined ?
-            <NavigateToLogin />
+            <Login />
             :
             <Page>
                 {isLoading && <LoadingMessage />}
