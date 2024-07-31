@@ -10,7 +10,6 @@ import { firstDayOfMonth, currentMonth } from "../../../helpers/dateHelpers";
 import TimeLineCourse from "../sections/TimeLineCourse";
 import TimeLineXaxis from "../sections/TimeLineXaxis";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
 import Login from "../../login/Login";
 
 export type Activity = {

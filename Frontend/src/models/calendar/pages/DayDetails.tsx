@@ -11,7 +11,6 @@ import { getDateFromPath } from "../../../helpers/helperMethods";
 import WeekDay from "../sections/WeekDay";
 import { getDateAsString } from "../../../helpers/dateHelpers";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
 import Login from "../../login/Login";
 
 export default function DayDetails() {

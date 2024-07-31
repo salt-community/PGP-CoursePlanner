@@ -36,8 +36,8 @@ export default function Home() {
             console.log("response from code: ", response);
             const { access_token, id_token, expires_in } = response;
 
-            setCookie('access_token', access_token, 10);
-            setCookie('JWT', id_token, 10);
+            setCookie('access_token', access_token, expires_in);
+            setCookie('JWT', id_token, expires_in);
 
             location.href = redirectLink;
         }

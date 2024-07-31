@@ -6,7 +6,6 @@ import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import Module from "../sections/Module";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
 import Login from "../../login/Login";
 
 export default function () {

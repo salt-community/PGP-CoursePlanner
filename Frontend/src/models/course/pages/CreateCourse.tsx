@@ -2,7 +2,6 @@ import { postCourse } from "../../../api/CourseApi";
 import Page from "../../../components/Page";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
-import NavigateToLogin from "../../login/NavigateToLogin";
 import Course from "../sections/Course";
 import { CourseType } from "../Types";
 

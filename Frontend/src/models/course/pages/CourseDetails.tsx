@@ -20,7 +20,6 @@ import { AppliedCourseType } from "../Types";
 import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
 import Login from "../../login/Login";
 
 export default function CourseDetails() {

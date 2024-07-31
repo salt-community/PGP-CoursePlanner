@@ -7,7 +7,6 @@ import { Link } from "react-router-dom"
 import { currentMonth, firstDayOfMonth, allDaysInMonth, currentYear, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
 import { format, getWeek } from "date-fns"
 import { getCookie } from "../../../helpers/cookieHelpers"
-import NavigateToLogin from "../../login/NavigateToLogin"
 import Login from "../../login/Login"
 
 export default function MonthView() {

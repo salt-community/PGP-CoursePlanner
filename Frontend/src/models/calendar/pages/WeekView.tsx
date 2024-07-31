@@ -7,7 +7,6 @@ import Page from "../../../components/Page";
 import { fullWeek } from "../../../helpers/dateHelpers";
 import { getWeekFromPath } from "../../../helpers/helperMethods";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
 import Login from "../../login/Login";
 
 

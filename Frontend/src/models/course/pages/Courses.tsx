@@ -5,7 +5,6 @@ import { Link, useLocation } from "react-router-dom";
 import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
 import Login from "../../login/Login";
 import { useEffect } from "react";
 

@@ -14,7 +14,6 @@ import ColorSelection from "../../../components/ColorSelection";
 import { useNavigate } from "react-router-dom";
 import { AppliedCourseType } from "../../course/Types";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
 import Login from "../../login/Login";
 
 export default function () {
