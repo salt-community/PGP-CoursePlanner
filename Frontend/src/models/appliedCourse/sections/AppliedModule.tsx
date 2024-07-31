@@ -66,23 +66,21 @@ export default function AppliedModule({ submitFunction, module, index, buttonTex
     }
 
     return (
-        <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-min">
-            <div className="w-auto flex flex-col justify-between">
-                <div className="flex flex-row w-[800px] gap-4 items-center">
-                    <div className="self-start mt-2">
-                        <h2 className="text-lg mb-2 w-[150px]">Module Name: </h2>
+        <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+            <div className="flex flex-col justify-between">
+                <div className="flex flex-row items-center">
+                    <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Module Name: </h2>
+                    <div className="w-3/4">
+                        <InputSmall type="text" name="moduleName" onChange={(e) => setModuleName(e.target.value)} placeholder="Module name" value={moduleName} />
                     </div>
-                    <InputSmall type="text" name="moduleName" onChange={(e) => setModuleName(e.target.value)} placeholder="Module name" value={moduleName} />
                 </div>
-                <div className="flex flex-row gap-4 items-center">
-                    <div className="self-start mt-2">
-                        <h2 className="text-lg mb-2 w-[150px]">Number of days: </h2>
-                    </div>
-                    <input type="number" name="numberOfDays" onChange={(e) => setNumOfDays(parseInt(e.target.value))} value={numOfDays} className="input input-bordered input-sm max-w-xs" placeholder="Number of days" />
-                <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
+                <div className="flex flex-row items-center">
+                    <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Number of days:</h2>
+                    <input type="number" name="numberOfDays" onChange={(e) => setNumOfDays(parseInt(e.target.value))} value={numOfDays} className="input input-bordered input-sm w-3/5 mr-4" placeholder="Number of days" />
+                    <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
                 </div>
             </div>
-            <div className="flex flex-col space-y-2 w-full">
+            <div className="flex flex-col space-y-2">
                 {days.map((day) =>
                     <AppliedDay key={"day_" + day.dayNumber} moduleIndex={index} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays} />)}
             </div>

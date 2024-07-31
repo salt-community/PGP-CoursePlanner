@@ -209,13 +209,13 @@ export default function () {
                                     {appliedModule.name == ""
                                         ? <div className="collapse border-primary border mb-2">
                                             <input type="checkbox" id={`collapse-toggle-${index}`} className="hidden" />
-                                            <div className="collapse-title flex flex-row w-full gap-4">
+                                            <div className="collapse-title flex flex-row"> 
                                                 <label htmlFor={`collapse-toggle-${index}`} className="cursor-pointer flex flex-row">
                                                     <h1 className="text-lg text-primary">
-                                                        Module {index + 1}:
+                                                        Module {index + 1}: 
                                                     </h1>
                                                 </label>
-                                                <div className="flex flex-col">
+                                                <div className="flex flex-col ml-1">
                                                     <select className="border border-gray-300 rounded-lg p-1 w-48" onChange={handleChange} defaultValue={'DEFAULT'} >
                                                         <option value="DEFAULT" disabled>Select</option>
                                                         {modules.map((module) =>
@@ -225,20 +225,20 @@ export default function () {
                                             </div>
                                         </div>
 
-                                        : <div className="collapse border-primary border mb-2 w-full">
+                                        : <div className="collapse border-primary border mb-2 ">
                                             <input type="checkbox" id={`collapse-toggle-${index}`} className="hidden" />
-                                            <div className="collapse-title flex flex-row w-full gap-4">
-                                                <label htmlFor={`collapse-toggle-${index}`} className="cursor-pointer flex flex-row">
-                                                    <h1 className="text-lg text-primary w-[680px]">
+                                            <div className="collapse-title flex flex-row">
+                                                <label htmlFor={`collapse-toggle-${index}`} className="cursor-pointer flex flex-row w-5/6">
+                                                    <h1 className="text-lg text-primary self-center">
                                                         Module {index + 1}: {appliedModule.name}
                                                     </h1>
                                                 </label>
-                                                <div className="flex gap-1">
+                                                <div className="w-1/6 flex gap-1 justify-end">
                                                     <PrimaryBtn onClick={() => handleAddModule(index)}>+</PrimaryBtn>
                                                     <TrashBtn handleDelete={() => handleDeleteModule(index)} />
                                                 </div>
                                             </div>
-                                            <div className="collapse-content w-full">
+                                            <div className="collapse-content">
                                                 <AppliedModule module={appliedModule} index={index} submitFunction={editAppliedModule} buttonText="Save module changes" />
                                             </div>
                                         </div>}
