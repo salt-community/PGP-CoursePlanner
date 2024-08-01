@@ -16,57 +16,53 @@ public class CourseService : IService<Course>
     }
     public async Task<List<Course>> GetAllAsync()
     {
-            var courses = await _context.Courses
-                .Include(course => course.Modules)
-                    .ThenInclude(courseModule => courseModule.Module)
-                    .ThenInclude(module => module!.Days)
-                    .ThenInclude(day => day.Events)
-                    .ToListAsync();
-            return courses;
-       
+        var courses = await _context.Courses
+            .Include(course => course.Modules)
+                .ThenInclude(courseModule => courseModule.Module)
+                .ThenInclude(module => module!.Days)
+                .ThenInclude(day => day.Events)
+                .ToListAsync();
+        return courses;
+
     }
     public async Task<Course> GetOneAsync(int id)
     {
-            var course = await _context.Courses
-               .Include(course => course.Modules)
-                    .ThenInclude(courseModule => courseModule.Module)
-                    .ThenInclude(module => module!.Days)
-                    .ThenInclude(day => day.Events)
-                    .FirstOrDefaultAsync(course => course.Id == id);
-            return course ?? throw new NotFoundByIdException("Course", id);
+        var course = await _context.Courses
+           .Include(course => course.Modules)
+                .ThenInclude(courseModule => courseModule.Module)
+                .ThenInclude(module => module!.Days)
+                .ThenInclude(day => day.Events)
+                .FirstOrDefaultAsync(course => course.Id == id);
+        return course ?? throw new NotFoundByIdException("Course", id);
     }
     public async Task<Course> CreateAsync(Course course)
     {
-        try
+        var moduleIds = course.moduleIds;
+
+        List<CourseModule> courseModulesToAdd = [];
+        course.Modules = courseModulesToAdd;
+        _context.Courses.Add(course);
+        await _context.SaveChangesAsync();
+
+        foreach (var moduleId in moduleIds)
         {
-            var moduleIds = course.moduleIds;
-
-            List<CourseModule> courseModulesToAdd = [];
-            course.Modules = courseModulesToAdd;
-            _context.Courses.Add(course);
-            await _context.SaveChangesAsync();
-
-            foreach (var moduleId in moduleIds)
+            _context.CourseModules.Add(new CourseModule
             {
-                _context.CourseModules.Add(new CourseModule
-                {
-                    Course = course,
-                    CourseId = course.Id,
-                    Module = _context.Modules.First(m => m.Id == moduleId),
-                    ModuleId = moduleId
-                });
-            }
-            await _context.SaveChangesAsync();
-
-            courseModulesToAdd = _context.CourseModules.Where(m => m.CourseId == course.Id).ToList();
-            course.Modules = courseModulesToAdd;
-            _context.Set<Course>().Update(course);
-            await _context.SaveChangesAsync();
-
-            return course;
+                Course = course,
+                CourseId = course.Id,
+                Module = _context.Modules.First(m => m.Id == moduleId),
+                ModuleId = moduleId
+            });
         }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return null!;
+        await _context.SaveChangesAsync();
+
+        courseModulesToAdd = _context.CourseModules.Where(m => m.CourseId == course.Id).ToList();
+        course.Modules = courseModulesToAdd;
+        _context.Set<Course>().Update(course);
+        await _context.SaveChangesAsync();
+
+        return course;
+
     }
     public async Task<Course> UpdateAsync(int id, Course course)
     {
