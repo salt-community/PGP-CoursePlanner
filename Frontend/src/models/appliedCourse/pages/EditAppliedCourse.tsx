@@ -20,7 +20,6 @@ import TrashBtn from "../../../components/buttons/TrashBtn";
 import { getAllModules } from "../../../api/ModuleApi";
 import { postAppliedModule, updateAppliedModule } from "../../../api/AppliedModuleApi";
 import { postAppliedEvent } from "../../../api/AppliedEventApi";
-import { list } from "postcss";
 import { postAppliedDay } from "../../../api/AppliedDayApi";
 
 export default function () {

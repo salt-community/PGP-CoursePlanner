@@ -112,102 +112,6 @@ public class CourseService : IService<Course>
             }
             _context.Courses.Update(courseToUpdate);
             await _context.SaveChangesAsync();
-
-            // // update appliedCourse, CalendarDays and DateContent
-            // var appliedCourses = _context.AppliedCourses.Where(ac => ac.CourseId == id).ToList();
-            // if (appliedCourses.Count() > 0)
-            // {
-            //     foreach (var appliedCourse in appliedCourses)
-            //     {
-            //         var allDateContents = _context.DateContent.Where(dc => dc.appliedCourseId == appliedCourse.Id);
-            //         foreach (var dc in allDateContents)
-            //         {
-            //             _context.DateContent.Remove(dc);
-            //             var cdList = _context.CalendarDates.Where(cd => cd.DateContent.Contains(dc)).ToList();
-            //             foreach (var cd in cdList)
-            //             {
-            //                 cd.DateContent.Remove(dc);
-            //                 _context.CalendarDates.Update(cd);
-            //             }
-            //             await _context.SaveChangesAsync();
-            //         }
-
-            //         var currentDate = appliedCourse.StartDate.Date;
-
-            //         foreach (var moduleId in courseToUpdate.moduleIds)
-            //         {
-            //             var module = await _context.Modules
-            //                         .Include(module => module.Days)
-            //                         .ThenInclude(day => day.Events)
-            //                         .FirstOrDefaultAsync(module => module.Id == moduleId);
-
-            //             foreach (var day in module!.Days)
-            //             {
-            //                 var date = await _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefaultAsync(date => date.Date.Date == currentDate)!;
-            //                 if (date != null)
-            //                 {
-            //                     var dateContentToBeUpdated = date.DateContent.FirstOrDefault(dc => dc.appliedCourseId == appliedCourse.Id);
-
-            //                     if (dateContentToBeUpdated != null)
-            //                     {
-            //                         dateContentToBeUpdated.CourseName = courseToUpdate.Name;
-            //                         dateContentToBeUpdated.ModuleName = module.Name;
-            //                         dateContentToBeUpdated.DayOfModule = day.DayNumber;
-            //                         dateContentToBeUpdated.TotalDaysInModule = module.NumberOfDays;
-            //                         dateContentToBeUpdated.Events = day.Events;
-            //                         _context.DateContent.Update(dateContentToBeUpdated);
-            //                         await _context.SaveChangesAsync();
-            //                     }
-            //                     else
-            //                     {
-            //                         var dateContent = new DateContent()
-            //                         {
-            //                             CourseName = courseToUpdate.Name,
-            //                             ModuleName = module.Name,
-            //                             DayOfModule = day.DayNumber,
-            //                             TotalDaysInModule = module.NumberOfDays,
-            //                             Events = day.Events,
-            //                             Color = appliedCourse.Color,
-            //                             appliedCourseId = appliedCourse.Id
-            //                         };
-            //                         await _context.DateContent.AddAsync(dateContent);
-            //                         await _context.SaveChangesAsync();
-
-            //                         date.DateContent.Add(dateContent);
-            //                         _context.CalendarDates.Update(date);
-            //                         await _context.SaveChangesAsync();
-            //                     }
-            //                 }
-            //                 else
-            //                 {
-            //                     var dateContent = new DateContent()
-            //                     {
-            //                         CourseName = courseToUpdate.Name,
-            //                         ModuleName = module.Name,
-            //                         DayOfModule = day.DayNumber,
-            //                         TotalDaysInModule = module.NumberOfDays,
-            //                         Events = day.Events,
-            //                         Color = appliedCourse.Color,
-            //                         appliedCourseId = appliedCourse.Id
-            //                     };
-            //                     await _context.DateContent.AddAsync(dateContent);
-            //                     await _context.SaveChangesAsync();
-
-            //                     date = new CalendarDate()
-            //                     {
-            //                         Date = currentDate,
-            //                         DateContent = new List<DateContent> { dateContent }
-            //                     };
-            //                     await _context.CalendarDates.AddAsync(date);
-            //                     await _context.SaveChangesAsync();
-            //                 }
-            //                 currentDate = currentDate.AddDays(1);
-            //                 if (currentDate.DayOfWeek == DayOfWeek.Saturday)
-            //                     currentDate = currentDate.AddDays(2);
-            //             }
-            //         }
-            //     }
-            // }
             return courseToUpdate;
         }
         catch (Exception ex) { Debug.WriteLine(ex.Message); }
@@ -228,29 +132,6 @@ public class CourseService : IService<Course>
 
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
-
-            // // update appliedCourse, CalendarDays and DateContent
-            // var appliedCourses = _context.AppliedCourses.Where(ac => ac.CourseId == id).ToList();
-            // if (appliedCourses.Count() > 0)
-            // {
-            //     foreach (var appliedCourse in appliedCourses)
-            //     {
-            //         var allDateContents = _context.DateContent.Where(dc => dc.appliedCourseId == appliedCourse.Id);
-            //         foreach (var dc in allDateContents)
-            //         {
-            //             _context.DateContent.Remove(dc);
-            //             var cdList = _context.CalendarDates.Where(cd => cd.DateContent.Contains(dc)).ToList();
-            //             foreach (var cd in cdList)
-            //             {
-            //                 cd.DateContent.Remove(dc);
-            //                 _context.CalendarDates.Update(cd);
-            //             }
-            //             await _context.SaveChangesAsync();
-            //         }
-            //         _context.AppliedCourses.Remove(appliedCourse);
-            //         await _context.SaveChangesAsync();
-            //     }
-            // }
 
             return true;
         }

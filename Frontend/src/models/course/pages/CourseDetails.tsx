@@ -93,7 +93,7 @@ export default function CourseDetails() {
             };
             const response = postAppliedCourse(appliedCourse);
             if ((await response).ok) {
-                navigate('/calendar/month')
+                navigate('/activecourses')
             }
         }
     }
