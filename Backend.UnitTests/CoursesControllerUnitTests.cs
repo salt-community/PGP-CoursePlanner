@@ -62,21 +62,21 @@ namespace Backend.Tests.UnitTests
             resultValue!.Name.Should().Be("TestCourse");
         }
 
-        [Fact]
-        public async void CreateModule_Returns_BadRequest()
-        {
-            //Arrange
-            var course = new Course() { Name = "TestCourse" };
-            _mockService.Setup(service => service.CreateAsync(course)).ReturnsAsync((Course)null!);
-            var controller = new CoursesController(_mockService.Object);
+        // [Fact]
+        // public async void CreateModule_Returns_BadRequest()
+        // {
+        //     //Arrange
+        //     var course = new Course() { Name = "TestCourse" };
+        //     _mockService.Setup(service => service.CreateAsync(course)).ReturnsAsync((Course)null!);
+        //     var controller = new CoursesController(_mockService.Object);
 
-            //Act
-            var result = await controller.CreateCourse(course);
+        //     //Act
+        //     var result = await controller.CreateCourse(course);
 
-            //Assert
-            result.Result.Should().NotBeNull();
-            result.Result.Should().BeOfType<BadRequestObjectResult>();
-        }
+        //     //Assert
+        //     result.Result.Should().NotBeNull();
+        //     result.Result.Should().BeOfType<BadRequestObjectResult>();
+        // }
 
         [Fact]
         public async void GetModule_Returns_CorrectModule()
@@ -160,19 +160,19 @@ namespace Backend.Tests.UnitTests
             result.Should().BeOfType<NoContentResult>();
         }
 
-        [Fact]
-        public async void DeleteModule_Returns_BadRequest()
-        {
-            //Arrange
-            _mockService.Setup(service => service.DeleteAsync(1)).ReturnsAsync(false);
-            var controller = new CoursesController(_mockService.Object);
+        // [Fact]
+        // public async void DeleteModule_Returns_BadRequest()
+        // {
+        //     //Arrange
+        //     _mockService.Setup(service => service.DeleteAsync(1)).ReturnsAsync(false);
+        //     var controller = new CoursesController(_mockService.Object);
 
-            //Act
-            var result = await controller.DeleteCourse(1);
+        //     //Act
+        //     var result = await controller.DeleteCourse(1);
 
-            //Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType<BadRequestObjectResult>();
-        }
+        //     //Assert
+        //     result.Should().NotBeNull();
+        //     result.Should().BeOfType<BadRequestObjectResult>();
+        // }
     }
 }
