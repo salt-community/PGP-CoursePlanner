@@ -30,7 +30,7 @@ public class ModuleService : IService<Module>
         return await _context.Modules
                     .Include(module => module.Days)
                     .ThenInclude(day => day.Events)
-                    .FirstOrDefaultAsync(module => module.Id == id) ?? null!;
+                    .FirstOrDefaultAsync(module => module.Id == id) ?? throw new NotFoundByIdException("Module", id);
 
     }
     public async Task<Module> CreateAsync(Module module)
