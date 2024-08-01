@@ -12,7 +12,7 @@ namespace Backend.Tests.UnitTests
         readonly Mock<IService<Course>> _mockService = new Mock<IService<Course>>();
 
         [Fact]
-        public async void GetModules_Returns_Ok()
+        public async void GetCourses_Returns_Ok()
         {
             //Arrange
             var course = new Course() { Name = "TestCourse" };
@@ -27,7 +27,7 @@ namespace Backend.Tests.UnitTests
         }
 
         [Fact]
-        public async void GetModules_Returns_CollectionOfModules()
+        public async void GetCourses_Returns_CollectionOfCourses()
         {
             //Arrange
             var course = new Course() { Name = "TestCourse" };
@@ -45,7 +45,7 @@ namespace Backend.Tests.UnitTests
         }
 
         [Fact]
-        public async void CreateModule_Returns_CreatedModule()
+        public async void CreateCourse_Returns_CreatedCourse()
         {
             //Arrange
             var course = new Course() { Name = "TestCourse" };
@@ -63,7 +63,7 @@ namespace Backend.Tests.UnitTests
         }
 
         // [Fact]
-        // public async void CreateModule_Returns_BadRequest()
+        // public async void CreateCourse_Returns_BadRequest()
         // {
         //     //Arrange
         //     var course = new Course() { Name = "TestCourse" };
@@ -79,7 +79,7 @@ namespace Backend.Tests.UnitTests
         // }
 
         [Fact]
-        public async void GetModule_Returns_CorrectModule()
+        public async void GetCourse_Returns_CorrectCourse()
         {
             //Arrange
             var course = new Course() { Id = 1, Name = "TestCourse" };
@@ -97,7 +97,7 @@ namespace Backend.Tests.UnitTests
         }
 
         [Fact]
-        public async void GetModule_Returns_NotFound()
+        public async void GetCourse_Returns_NotFound()
         {
             //Arrange
             var course = new Course() { Id = 1, Name = "TestCourse" };
@@ -114,7 +114,7 @@ namespace Backend.Tests.UnitTests
         }
 
         [Fact]
-        public async void UpdateModule_Returns_NoContent()
+        public async void UpdateCourse_Returns_NoContent()
         {
             //Arrange
             var course = new Course() { Id = 1, Name = "TestCourse" };
@@ -146,7 +146,7 @@ namespace Backend.Tests.UnitTests
         }
 
         [Fact]
-        public async void DeleteModule_Returns_NoContent()
+        public async void DeleteCourse_Returns_NoContent()
         {
             //Arrange
             _mockService.Setup(service => service.DeleteAsync(1)).ReturnsAsync(true);
@@ -161,7 +161,7 @@ namespace Backend.Tests.UnitTests
         }
 
         // [Fact]
-        // public async void DeleteModule_Returns_BadRequest()
+        // public async void DeleteCourse_Returns_BadRequest()
         // {
         //     //Arrange
         //     _mockService.Setup(service => service.DeleteAsync(1)).ReturnsAsync(false);
