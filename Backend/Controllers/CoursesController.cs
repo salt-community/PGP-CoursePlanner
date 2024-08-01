@@ -48,10 +48,7 @@ public class CoursesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCourse(int id)
     {
-        if (!await _service.DeleteAsync(id))
-        {
-            return BadRequest("Unable to delete course");
-        }
+        await _service.DeleteAsync(id);
         return NoContent();
     }
 }
