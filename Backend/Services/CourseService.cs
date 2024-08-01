@@ -1,4 +1,5 @@
 using Backend.Data;
+using Backend.ExceptionHandler.Exceptions;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -26,18 +27,13 @@ public class CourseService : IService<Course>
     }
     public async Task<Course> GetOneAsync(int id)
     {
-        try
-        {
             var course = await _context.Courses
                .Include(course => course.Modules)
                     .ThenInclude(courseModule => courseModule.Module)
                     .ThenInclude(module => module!.Days)
                     .ThenInclude(day => day.Events)
                     .FirstOrDefaultAsync(course => course.Id == id);
-            return course ?? null!;
-        }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return null!;
+            return course ?? throw new NotFoundByIdException("Course", id);
     }
     public async Task<Course> CreateAsync(Course course)
     {
