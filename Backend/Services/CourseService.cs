@@ -195,8 +195,7 @@ public class CourseService : IService<Course>
     }
     public async Task<bool> DeleteAsync(int id)
     {
-        try
-        {
+        
             var course = await _context.Courses
             .Include(c => c.Modules)
             .FirstOrDefaultAsync(c => c.Id == id);
@@ -233,8 +232,5 @@ public class CourseService : IService<Course>
             }
 
             return true;
-        }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return false;
     }
 }
