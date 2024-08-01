@@ -35,11 +35,7 @@ public class CoursesController : ControllerBase
     public async Task<ActionResult<Course>> CreateCourse([FromBody] Course course)
     {
         var response = await _service.CreateAsync(course);
-        if (response == null)
-        {
-            return BadRequest("Unable to create course");
-        }
-        return CreatedAtAction("GetCourse", new { id = course.Id }, course);
+        return CreatedAtAction("GetCourse", new { id = response.Id }, response);
     }
 
     [HttpPut("{id}")]
