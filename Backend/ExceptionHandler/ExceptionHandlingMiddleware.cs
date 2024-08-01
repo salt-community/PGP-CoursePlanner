@@ -1,5 +1,6 @@
 
 using System.Net;
+using Backend.ExceptionHandler.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.ExceptionHandler
@@ -33,15 +34,27 @@ namespace Backend.ExceptionHandler
         {
             context.Response.ContentType = "application/json";
 
-            if (exception is NotFoundException<int> ex)
+            if (exception is NotFoundException<int> notFoundEx)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 return context.Response.WriteAsJsonAsync(new
                 {
                     status = context.Response.StatusCode,
-                    message = ex.Message,
-                    resource = ex.ResourceName,
-                    resourceId = ex.ResourceId
+                    message = notFoundEx.Message,
+                    resource = notFoundEx.ResourceName,
+                    resourceId = notFoundEx.ResourceId
+                });
+            }
+
+            if (exception is BadRequestException<int> badReqEx)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return context.Response.WriteAsJsonAsync(new
+                {
+                    status = context.Response.StatusCode,
+                    message = badReqEx.Message,
+                    resource = badReqEx.ResourceName,
+                    resourceId = badReqEx.ResourceId
                 });
             }
 
