@@ -24,8 +24,8 @@ namespace Backend.IntegrationTests
                 AllowAutoRedirect = false
             });
 
-                _client.DefaultRequestHeaders.Authorization =
-               new AuthenticationHeaderValue(scheme: "TestScheme");
+            _client.DefaultRequestHeaders.Authorization =
+           new AuthenticationHeaderValue(scheme: "TestScheme");
         }
 
         [Fact]
@@ -122,6 +122,30 @@ namespace Backend.IntegrationTests
 
             //assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+
+        [Fact]
+        public async Task UpdateCourse_WithWrongId_Should_Return_404()
+        {
+            //arrange
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<DataContext>();
+                Seeding.InitializeTestDB(db);
+            }
+
+            var updatedCourse = new Course() { Name = "UpdatedCourse", Id = 7 };
+            var content = JsonConvert.SerializeObject(updatedCourse);
+
+            var body = new StringContent(content, Encoding.UTF8, "application/json");
+            body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            //act
+            var response = await _client.PutAsync("/Courses/7", body);
+
+            //assert
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
