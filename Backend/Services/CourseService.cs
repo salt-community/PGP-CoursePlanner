@@ -2,7 +2,6 @@ using Backend.Data;
 using Backend.ExceptionHandler.Exceptions;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace Backend.Services;
 
