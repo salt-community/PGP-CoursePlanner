@@ -1,6 +1,6 @@
 namespace Backend.ExceptionHandler
 {
-    internal class NotFoundException<T> : Exception
+    public class NotFoundException<T> : Exception
     {
         public string? ResourceName {get;}
         public T? ResourceId {get;}
