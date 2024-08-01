@@ -1,4 +1,5 @@
 using Backend.Data;
+using Backend.ExceptionHandler.Exceptions;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -47,12 +48,7 @@ public class ModuleService : IService<Module>
                     .Include(module => module.Days)
                     .ThenInclude(day => day.Events)
                     .AsNoTracking()
-                    .FirstOrDefaultAsync(m => m.Id == id);
-
-        if (moduleToUpdate == null)
-        {
-            return null!;
-        }
+                    .FirstOrDefaultAsync(m => m.Id == id) ?? throw new NotFoundByIdException("Module", id);
 
         foreach (var oldDay in moduleToUpdate.Days)
         {
