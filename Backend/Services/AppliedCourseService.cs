@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Backend.Data;
+using Backend.ExceptionHandler.Exceptions;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,12 +20,8 @@ namespace Backend.Services
             await _context.AppliedCourses.AddAsync(appliedCourse);
             await _context.SaveChangesAsync();
 
-            var course = await _context.Courses.FirstOrDefaultAsync(course => course.Id == appliedCourse.CourseId);
-
-            if (course == null)
-            {
-                return null!;
-            }
+            var course = await _context.Courses.FirstOrDefaultAsync(course => course.Id == appliedCourse.CourseId)
+                ?? throw new NotFoundByIdException("Course", appliedCourse.CourseId);
 
             var currentDate = appliedCourse.StartDate.Date;
 
