@@ -28,11 +28,7 @@ public class CoursesController : ControllerBase
     public async Task<ActionResult<Course>> GetCourse(int id)
     {
         var response = await _service.GetOneAsync(id);
-        if (response != null)
-        {
-            return Ok(response);
-        }
-        return NotFound("Course does not exist");
+        return Ok(response);
     }
 
     [HttpPost]
