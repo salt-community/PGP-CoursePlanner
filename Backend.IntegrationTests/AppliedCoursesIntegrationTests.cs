@@ -101,7 +101,7 @@ namespace Backend.IntegrationTests
         }
 
         [Fact]
-        public async Task CreateAppliedCourse_Returns_NotFound()
+        public async Task CreateAppliedCourse_WithWrongId_Returns_NotFound()
         {
             //  arrange
             using (var scope = _factory.Services.CreateScope())
