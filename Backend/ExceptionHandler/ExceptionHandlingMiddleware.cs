@@ -1,4 +1,5 @@
 
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.ExceptionHandler
@@ -22,19 +23,37 @@ namespace Backend.ExceptionHandler
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Exception occured: {Message}", exception.Message);
+                _logger.LogError(exception, "An unhandled exception has occured: {Message}", exception.Message);
 
-                var problemDetails = new ProblemDetails
-                {
-                    Status = StatusCodes.Status500InternalServerError,
-                    Title = "Server Error",
-                    Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1"
-                };
-
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
-                await context.Response.WriteAsJsonAsync(problemDetails);
+                await HandleExceptionAsync(context, exception);
             }
+        }
+
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        {
+            context.Response.ContentType = "application/json";
+
+            if (exception is NotFoundException<int> ex)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return context.Response.WriteAsJsonAsync(new
+                {
+                    status = context.Response.StatusCode,
+                    message = ex.Message,
+                    resource = ex.ResourceName,
+                    resourceId = ex.ResourceId
+                });
+            }
+
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            var response = new
+            {
+                status = context.Response.StatusCode,
+                message = "An error occurres while processing your request.",
+                detailed = exception.Message
+            };
+
+            return context.Response.WriteAsJsonAsync(response);
         }
     }
 }
