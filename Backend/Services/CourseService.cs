@@ -15,8 +15,6 @@ public class CourseService : IService<Course>
     }
     public async Task<List<Course>> GetAllAsync()
     {
-        try
-        {
             var courses = await _context.Courses
                 .Include(course => course.Modules)
                     .ThenInclude(courseModule => courseModule.Module)
@@ -24,9 +22,7 @@ public class CourseService : IService<Course>
                     .ThenInclude(day => day.Events)
                     .ToListAsync();
             return courses;
-        }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return null!;
+       
     }
     public async Task<Course> GetOneAsync(int id)
     {
