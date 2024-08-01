@@ -66,8 +66,7 @@ public class CourseService : IService<Course>
     }
     public async Task<Course> UpdateAsync(int id, Course course)
     {
-        try
-        {
+       
             var courseToUpdate = await _context.Courses
                     .Include(course => course.Modules)
                     .ThenInclude(courseModule => courseModule.Module)
@@ -197,9 +196,6 @@ public class CourseService : IService<Course>
                 }
             }
             return courseToUpdate;
-        }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return null!;
     }
     public async Task<bool> DeleteAsync(int id)
     {
