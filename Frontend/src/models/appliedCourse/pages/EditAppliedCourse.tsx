@@ -14,11 +14,14 @@ import { getCookie } from "../../../helpers/cookieHelpers";
 import NavigateToLogin from "../../login/NavigateToLogin";
 import AppliedModule from "../sections/AppliedModule";
 import InputSmall from "../../../components/inputFields/InputSmall";
-import { AppliedModuleType } from "../Types";
+import { AppliedDayType, AppliedEventType, AppliedModuleType } from "../Types";
 import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
 import TrashBtn from "../../../components/buttons/TrashBtn";
 import { getAllModules } from "../../../api/ModuleApi";
-import { postAppliedModule } from "../../../api/AppliedModuleApi";
+import { postAppliedModule, updateAppliedModule } from "../../../api/AppliedModuleApi";
+import { postAppliedEvent } from "../../../api/AppliedEventApi";
+import { list } from "postcss";
+import { postAppliedDay } from "../../../api/AppliedDayApi";
 
 export default function () {
     const [isOpened, setIsOpened] = useState<boolean>(false);
@@ -64,48 +67,96 @@ export default function () {
         newAppliedModules[index] = appliedModule;
         setAppliedModules(newAppliedModules);
     }
-    
+
     const handleAddModule = (index: number) => {
-        const emptyModule = {
+        const emptyModule: AppliedModuleType = {
+            id: 0,
             name: "",
             numberOfDays: 1,
             days: []
         };
-        const editedModules = [...appliedModules!];
-        editedModules.splice(index + 1, 0, emptyModule);
-        setAppliedModules(editedModules);
+
+        postAppliedModule(emptyModule)
+            .then(response => {
+                if (response) {
+                    const editedModules = [...appliedModules!];
+                    editedModules.splice(index + 1, 0, response);
+                    console.log(response)
+                    setAppliedModules(editedModules);
+                }
+            })
+            .catch(error => {
+                console.error("Error posting applied module:", error);
+            });
     }
-    
+
     const handleDeleteModule = (index: number) => {
         const editedModules = [...appliedModules!];
         editedModules.splice(index, 1);
         setAppliedModules(editedModules);
     }
-    
-    const handleChange = (event: SyntheticEvent) => {
+
+    const handleChange = async (event: SyntheticEvent) => {
         const value = (event.target as HTMLSelectElement).value;
-        const [moduleId, indexStr] = value.split("_"); // Parse index from the selected value
+        const [moduleId, indexStr, appModuleId] = value.split("_"); // Parse index from the selected value
         const moduleIndex = parseInt(indexStr); // Parse index as integer
+        const appliedModuleId = parseInt(appModuleId);
         const module = modules!.find(m => m.id === parseInt(moduleId))!; // Find the module based on the selected value
-        
-        const appliedModule: AppliedModuleType = {
-            id: module.id,
-            name: module.name,
-            numberOfDays: module.numberOfDays,
-            days: module.days
-        };       
-        
-        postAppliedModule(appliedModule)
-        .then(response => {
-            if (response) {
-                const updatedModules = [...appliedModules!];
-                updatedModules[moduleIndex] = response;
-                setAppliedModules(updatedModules);
+
+        var listDays: AppliedDayType[] = []
+
+        await Promise.all(module.days.map(async (day) => {
+            let listEvents: AppliedEventType[] = [];
+            await Promise.all(day.events.map(async (eventItem) => {
+                try {
+                    const newEvent = {
+                        id: 0,
+                        name: eventItem.name,
+                        description: eventItem.description,
+                        startTime: eventItem.startTime,
+                        endTime: eventItem.endTime
+                    };
+                    const response = await postAppliedEvent(newEvent);
+                    if (response) listEvents.push(response);
+                } catch (error) {
+                    console.error("Error posting applied event:", error);
+                }
+            }));
+
+            const newDay = {
+                id: 0,
+                dayNumber: day.dayNumber,
+                description: day.description,
+                events: listEvents
+            };
+
+            try {
+                const response = await postAppliedDay(newDay);
+                if (response) listDays.push(response);
+            } catch (error) {
+                console.error("Error posting applied day:", error);
             }
-        })
-        .catch(error => {
-            console.error("Error posting applied module:", error);
-        });
+        }));
+
+        const newAppliedModule: AppliedModuleType = {
+            id: appliedModuleId,
+            name: module.name,
+            numberOfDays: listDays.length,
+            days: listDays.sort((a, b) => a.dayNumber - b.dayNumber)
+        };
+
+        updateAppliedModule(newAppliedModule)
+            .then(response => {
+                if (response) {
+                    const updatedModules = [...appliedModules!];
+                    updatedModules[moduleIndex] = newAppliedModule;
+                    console.log(newAppliedModule)
+                    setAppliedModules(updatedModules);
+                }
+            })
+            .catch(error => {
+                console.error("Error posting applied module:", error);
+            });
     }
 
     const handleEdit = () => {
@@ -114,7 +165,7 @@ export default function () {
         if (startDate.getDate() == 6 || startDate.getDate() == 0 || appliedModules?.find(m => m.name == "")) {
             if (startDate.getDate() == 6 || startDate.getDate() == 0)
                 setIsInvalidDate(true);
-            if (appliedModules?.find(m => m.name == ""))
+            if (appliedModules?.find(m => m.name == "a"))
                 setIsInvalidModule(true);
         }
         else {
@@ -140,7 +191,7 @@ export default function () {
             navigate(`/activecourses`);
         }
     })
-    
+
     return (
         getCookie("access_token") == undefined
             ? <NavigateToLogin />
@@ -209,17 +260,17 @@ export default function () {
                                     {appliedModule.name == ""
                                         ? <div className="collapse border-primary border mb-2">
                                             <input type="checkbox" id={`collapse-toggle-${index}`} className="hidden" />
-                                            <div className="collapse-title flex flex-row"> 
+                                            <div className="collapse-title flex flex-row">
                                                 <label htmlFor={`collapse-toggle-${index}`} className="cursor-pointer flex flex-row">
                                                     <h1 className="text-lg text-primary">
-                                                        Module {index + 1}: 
+                                                        Module {index + 1}:
                                                     </h1>
                                                 </label>
                                                 <div className="flex flex-col ml-1">
                                                     <select className="border border-gray-300 rounded-lg p-1 w-48" onChange={handleChange} defaultValue={'DEFAULT'} >
                                                         <option value="DEFAULT" disabled>Select</option>
                                                         {modules.map((module) =>
-                                                            <option value={`${module.id}_${index}`}>{module.name} ({module.numberOfDays} days)</option>)}
+                                                            <option value={`${module.id}_${index}_${appliedModule.id}`}>{module.name} ({module.numberOfDays} days)</option>)}
                                                     </select>
                                                 </div>
                                             </div>

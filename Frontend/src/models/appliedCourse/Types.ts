@@ -32,6 +32,7 @@ export type AppliedDayProps = {
 };
 
 export type AppliedEventType = {
+  id?: number;
   name: string;
   startTime: string;
   endTime: string;

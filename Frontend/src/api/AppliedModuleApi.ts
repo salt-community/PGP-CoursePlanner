@@ -22,3 +22,18 @@ export async function postAppliedModule(module: AppliedModuleType) {
   var data = await response.json();
   return data as AppliedModuleType;
 }
+
+export async function updateAppliedModule(appliedModule: AppliedModuleType) {
+  const response = await fetch(`${BASE_URL}/${appliedModule.id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${getCookie("JWT")}`,
+      "Content-type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(appliedModule),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to edit applied module");
+  }
+  return true;
+}

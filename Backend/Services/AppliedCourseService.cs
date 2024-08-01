@@ -251,7 +251,7 @@ namespace Backend.Services
                 }
 
                 var currentDate = appliedCourse.StartDate.Date;
-                foreach (var moduleCorrectOrder in appliedCourse.Modules.OrderBy(m => m.Order))
+                foreach (var moduleCorrectOrder in appliedCourseToUpdate.Modules.OrderBy(m => m.Order))
                 {
                     var module = await _context.AppliedModules
                                 .Include(module => module.Days)
