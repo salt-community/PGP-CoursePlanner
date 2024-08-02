@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import LoadingMessage from "../../components/LoadingMessage";
 import { setCookie } from "../../helpers/cookieHelpers";
 import { refreshTokensFromBackend } from "../../api/UserApi";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 // const redirectLink = "https://frontend-h7ia67qbhq-uc.a.run.app";
