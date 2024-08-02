@@ -1,4 +1,5 @@
 using Backend.Data;
+using Backend.ExceptionHandler.Exceptions;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,9 +16,9 @@ namespace Backend.Services
 
         public async Task<AppliedEvent> GetOneAsync(int id)
         {
-            var appliedEvent = await _context.AppliedEvents
-                    .FirstOrDefaultAsync(eventItem => eventItem.Id == id);
-            return appliedEvent ?? null!;
+            return  await _context.AppliedEvents
+                    .FirstOrDefaultAsync(eventItem => eventItem.Id == id)
+                    ?? throw new NotFoundByIdException("Applied event", id);
         }
 
         public async Task<AppliedEvent> CreateAsync(AppliedEvent appliedEvent)

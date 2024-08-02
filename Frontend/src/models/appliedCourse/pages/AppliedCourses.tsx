@@ -78,7 +78,7 @@ export default function AppliedCourses() {
                                                             Module {index + 1}: {module.name}
                                                         </h1>
 
-                                                        {module.days.map((day, dayIndex) =>
+                                                        {module.days.map((day) =>
                                                             <div className="w-full">
                                                                 {day.events.length > 0
                                                                     ? <div className="collapse w-full">
@@ -103,7 +103,7 @@ export default function AppliedCourses() {
                                                                                     </tr>
                                                                                 </thead>
                                                                                 <tbody>
-                                                                                    {day.events.map((event, index) => (
+                                                                                    {day.events.map((event) => (
                                                                                         <tr className="gap-2">
                                                                                             <td>{event.name}</td>
                                                                                             <td>{event.description}</td>
