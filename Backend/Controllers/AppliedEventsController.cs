@@ -21,11 +21,7 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<AppliedModule>> CreateAppliedEvent(AppliedEvent appliedEvent)
         {
-            var response = await _service.CreateAsync(appliedEvent);
-            if (response == null)
-            {
-                return BadRequest("Unable to create appliedEvent");
-            }
+            await _service.CreateAsync(appliedEvent);
             return CreatedAtAction("GetAppliedEvent", new { id = appliedEvent.Id }, appliedEvent);
         }
 
@@ -33,11 +29,7 @@ namespace Backend.Controllers
         public async Task<ActionResult<AppliedEvent>> GetAppliedEvent(int id)
         {
             var response = await _service.GetOneAsync(id);
-            if (response != null)
-            {
-                return Ok(response);
-            }
-            return NotFound("Applied event does not exist");
+            return Ok(response);
         }
     }
 }
