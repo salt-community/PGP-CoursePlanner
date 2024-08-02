@@ -1,4 +1,6 @@
 
+using System.Net;
+using Backend.ExceptionHandler.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.ExceptionHandler
@@ -10,8 +12,8 @@ namespace Backend.ExceptionHandler
 
         public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {
-            _next = next;
-            _logger = logger;
+            _next = next ?? throw new ArgumentNullException(nameof(next));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -22,19 +24,49 @@ namespace Backend.ExceptionHandler
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Exception occured: {Message}", exception.Message);
+                _logger.LogError(exception, "An unhandled exception has occured: {Message}", exception.Message);
 
-                var problemDetails = new ProblemDetails
-                {
-                    Status = StatusCodes.Status500InternalServerError,
-                    Title = "Server Error",
-                    Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.1"
-                };
-
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
-                await context.Response.WriteAsJsonAsync(problemDetails);
+                await HandleExceptionAsync(context, exception);
             }
+        }
+
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        {
+            context.Response.ContentType = "application/json";
+
+            if (exception is NotFoundException<int> notFoundEx)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                return context.Response.WriteAsJsonAsync(new
+                {
+                    status = context.Response.StatusCode,
+                    message = notFoundEx.Message,
+                    resource = notFoundEx.ResourceName,
+                    resourceId = notFoundEx.ResourceId
+                });
+            }
+
+            if (exception is BadRequestException<int> badReqEx)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return context.Response.WriteAsJsonAsync(new
+                {
+                    status = context.Response.StatusCode,
+                    message = badReqEx.Message,
+                    resource = badReqEx.ResourceName,
+                    resourceId = badReqEx.ResourceId
+                });
+            }
+
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            var response = new
+            {
+                status = context.Response.StatusCode,
+                message = "An error occurres while processing your request.",
+                detailed = exception.Message
+            };
+
+            return context.Response.WriteAsJsonAsync(response);
         }
     }
 }

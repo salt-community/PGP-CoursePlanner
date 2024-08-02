@@ -16,10 +16,9 @@ export default function CreateCourse() {
     }
 
     return (
-        getCookie("access_token") == undefined ?
-            <Login />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 <Course course={emptyCourse} submitFunction={postCourse} buttonText="Create" />
             </Page>
     )

@@ -23,10 +23,9 @@ export default function MonthView() {
     // const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
     return (
-        getCookie("access_token") == undefined ?
-            <Login />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 <section className="flex justify-around">
                     <div></div>
                     <div className="h-[100px] flex items-end">

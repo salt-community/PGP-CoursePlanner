@@ -17,10 +17,9 @@ export default function Courses() {
 
 
     return (
-        getCookie("access_token") == undefined ?
-            <Login />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 <section className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 md:px-24 lg:px-56">
                     {isLoading && <LoadingMessage />}
                     {isError && <ErrorMessage />}

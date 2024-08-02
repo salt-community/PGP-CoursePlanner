@@ -19,10 +19,9 @@ export default function CreateModule() {
     }
 
     return (
-        getCookie("access_token") == undefined ?
-            <Login />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 <Module module={emptyModule} submitFunction={postModule} buttonText="Create" />
             </Page>
     )

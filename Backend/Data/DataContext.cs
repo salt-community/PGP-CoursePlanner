@@ -15,6 +15,10 @@ namespace Backend.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<CourseModule> CourseModules { get; set; }
         public DbSet<AppliedCourse> AppliedCourses {get; set;}
+        public DbSet<AppliedModule> AppliedModules {get; set;}
+        public DbSet<AppliedDay> AppliedDays {get; set;}
+        public DbSet<AppliedEvent> AppliedEvents {get; set;}
+
         public DbSet<CalendarDate> CalendarDates {get; set;}
         public DbSet<DateContent> DateContent {get; set;}
         public DbSet<LoggedInUser> LoggedInUser {get; set;}

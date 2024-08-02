@@ -39,10 +39,9 @@ export default function DayDetails() {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     return (
-        getCookie("access_token") == undefined ?
-            <Login />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 <section className="flex justify-around">
                     <PreviousBtn onClick={() => navigate("/calendar/day/date=" + previousDay)} />
                     <section className="w-1/2 flex justify-center bg-background">

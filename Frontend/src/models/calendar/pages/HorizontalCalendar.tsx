@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { addDays, subDays, getWeek } from "date-fns"; // Import date-fns for date manipulation
+import { addDays, subDays, getWeek } from "date-fns";
 import Page from "../../../components/Page";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -68,7 +68,6 @@ const HorizontalCalendar: React.FC = () => {
   }, [appliedCourses, courses, modules]
   );
 
-  // Calculate the maximum number of days to display
   const numDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
   var dates: Date[] = [startDate];
   for (var i = 1; i < numDays + 1; i++)

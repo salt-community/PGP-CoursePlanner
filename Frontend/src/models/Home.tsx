@@ -57,10 +57,9 @@ export default function Home() {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     return (
-        getCookie("access_token") == undefined ?
-            <Login />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 <section className="p-20 flex flex-col items-center">
                     <h1 className="text-2xl font-semibold">We are in week {getWeek(new Date())}</h1>
                     <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-3">

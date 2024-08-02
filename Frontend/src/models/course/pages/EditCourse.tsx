@@ -18,10 +18,9 @@ export default function () {
     });
 
     return (
-        getCookie("access_token") == undefined ?
-            <Login />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 {isLoading && <LoadingMessage />}
                 {isError && <ErrorMessage />}
                 {course && <Course course={course} submitFunction={editCourse} buttonText="Save changes" />}

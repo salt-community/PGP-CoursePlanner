@@ -21,10 +21,9 @@ export default function MonthView() {
     const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
     return (
-        getCookie("access_token") == undefined ?
-            <Login />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 <section className="flex justify-around items-center">
                     <PreviousBtn onClick={() => setMonth(month - 1)} />
                     <div className="flex flex-col items-center w-1/2">
