@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { refreshTokensFromBackend } from "../api/UserApi";
+import { refreshTokens } from "../api/UserApi";
 import { setCookie } from "./cookieHelpers";
 import { useQuery } from "@tanstack/react-query";
 
@@ -24,7 +24,7 @@ export function getWeekFromPath() {
 export function setNewTokenCookies() {
   const { data: response, isError } = useQuery({
     queryKey: ["accessCode"],
-    queryFn: () => refreshTokensFromBackend(),
+    queryFn: () => refreshTokens(),
   });
 
   if (isError) {

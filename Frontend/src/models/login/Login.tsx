@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import LoadingMessage from "../../components/LoadingMessage";
 import { setCookie } from "../../helpers/cookieHelpers";
-import { refreshTokensFromBackend } from "../../api/UserApi";
+import { refreshTokens } from "../../api/UserApi";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -20,7 +20,7 @@ export default function Login() {
 
     const { data: response, isLoading } = useQuery({
         queryKey: ["accessCode"],
-        queryFn: () => refreshTokensFromBackend(),
+        queryFn: () => refreshTokens(),
     });
 
     if (response) {

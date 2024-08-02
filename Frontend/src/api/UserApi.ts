@@ -19,7 +19,7 @@ export type tokenResponseFromBackend = {
   id_token: string;
 };
 
-export async function getTokensFromBackend(auth_code: string) {
+export async function getTokens(auth_code: string) {
   try {
     const code = encodeURIComponent(auth_code);
     const response = await fetch(`${BACKEND_URL}/Tokens/${code}`, {
@@ -35,7 +35,7 @@ export async function getTokensFromBackend(auth_code: string) {
   }
 }
 
-export async function refreshTokensFromBackend() {
+export async function refreshTokens() {
   try {
     const response = await fetch(`${BACKEND_URL}/Tokens`);
 
@@ -49,7 +49,7 @@ export async function refreshTokensFromBackend() {
   }
 }
 
-export async function deleteRefreshTokenFromBackend() {
+export async function deleteRefreshToken() {
   try {
     await fetch(`${BACKEND_URL}/Tokens`, {
       method: "DELETE",

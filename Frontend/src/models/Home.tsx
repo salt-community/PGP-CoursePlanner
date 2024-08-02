@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import Page from "../components/Page";
 import WeekDay from "./calendar/sections/WeekDay";
 import { DateContent } from "./calendar/Types";
-import { getTokensFromBackend } from "../api/UserApi";
+import { getTokens } from "../api/UserApi";
 import Login from "./login/Login";
 
 export default function Home() {
@@ -22,7 +22,7 @@ export default function Home() {
 
         const { data: response, isLoading, isError } = useQuery({
             queryKey: ['accessCode'],
-            queryFn: () => getTokensFromBackend(code)
+            queryFn: () => getTokens(code)
         })
 
         if (isLoading) {
