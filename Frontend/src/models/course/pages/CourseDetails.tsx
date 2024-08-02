@@ -86,13 +86,14 @@ export default function CourseDetails() {
         }
         else {
             const appliedCourse: AppliedCourseType = {
+                name: course?.name!,
                 startDate: startDate,
                 courseId: parseInt(courseId),
                 color: color
             };
             const response = postAppliedCourse(appliedCourse);
             if ((await response) != undefined && (await response)!.ok) {
-                navigate('/calendar/month')
+                navigate('/activecourses')
             }
         }
     }
@@ -148,7 +149,6 @@ export default function CourseDetails() {
                                     </table>
                                 </div>
                             )}
-
                         </section>
 
                         <div className="pt-4 flex gap-4 flex-col sm:flex-row">

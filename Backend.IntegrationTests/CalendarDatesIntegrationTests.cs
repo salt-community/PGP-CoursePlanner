@@ -30,7 +30,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async void GetCalendarDate_Should_Return_OK_CalendarDate()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -38,12 +38,12 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            //act
+            // act
             var response = await _client.GetAsync($"/CalendarDates/{new DateTime(2024, 12, 24)}");
             var deserializedResponse = JsonConvert.DeserializeObject<CalendarDate>(
                 await response.Content.ReadAsStringAsync());
 
-            //assert
+            // assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             deserializedResponse!.Date.Year.Should().Be(2024);
             deserializedResponse!.Date.Month.Should().Be(12);
@@ -54,7 +54,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async void GetNonExistingCalendarDate_Should_Return_NotFound()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -62,10 +62,10 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            //act
+            // act
             var response = await _client.GetAsync($"/CalendarDates/{new DateTime(2024, 12, 25)}");
 
-            //assert
+            // assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }

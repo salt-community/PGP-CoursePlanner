@@ -31,7 +31,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async Task GetCourses_Returns_ListOfCourses()
         {
-            //  arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -53,7 +53,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async void GetCourse_Should_Return_OK_Course()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -61,12 +61,12 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            //act
+            // act
             var response = await _client.GetAsync("/Courses/1");
             var deserializedResponse = JsonConvert.DeserializeObject<Course>(
                 await response.Content.ReadAsStringAsync());
 
-            //assert
+            // assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             deserializedResponse!.Name.Length.Should().NotBe(0);
             deserializedResponse!.Name.Should().Be("TestCourse1");
@@ -75,7 +75,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async Task CreateCourse_Returns_Success()
         {
-            //  arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -103,7 +103,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async Task UpdateCourse_Should_Return_204()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -117,17 +117,17 @@ namespace Backend.IntegrationTests
             var body = new StringContent(content, Encoding.UTF8, "application/json");
             body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            //act
+            // act
             var response = await _client.PutAsync("/Courses/2", body);
 
-            //assert
+            // assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
         [Fact]
         public async Task UpdatedCourse_Should_Have_Correct_Parameters()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -149,11 +149,11 @@ namespace Backend.IntegrationTests
             body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             await _client.PutAsync("/Courses/2", body);
 
-            //act
+            // act
             var response = await _client.GetAsync("/Courses/2");
             var deserializedResponse = JsonConvert.DeserializeObject<Course>(
                 await response.Content.ReadAsStringAsync());
-            //assert
+            // assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             deserializedResponse!.Name.Should().Be("UpdatedCourse");
             deserializedResponse!.NumberOfWeeks.Should().Be(2);
@@ -172,7 +172,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async void DeleteCourse_Should_Return_204()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -180,17 +180,17 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            //act
+            // act
             var response = await _client.DeleteAsync("/Courses/1");
 
-            //assert
+            // assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
         [Fact]
         public async void GetDeletedCourse_Should_Return_404()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -199,7 +199,7 @@ namespace Backend.IntegrationTests
             }
             await _client.DeleteAsync("/Courses/1");
 
-            //act
+            // act
             var response = await _client.GetAsync("/Courses/1");
 
             // assert
