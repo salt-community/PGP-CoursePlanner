@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240730075103_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240802140223_initialCreate")]
+    partial class initialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -260,6 +260,21 @@ namespace Backend.Migrations
                     b.HasIndex("DayId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("Backend.Models.LoggedInUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Refresh_Token")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LoggedInUser");
                 });
 
             modelBuilder.Entity("Backend.Models.Module", b =>
