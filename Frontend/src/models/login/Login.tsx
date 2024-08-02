@@ -17,7 +17,6 @@ export default function Login() {
         location.href = LOGIN_URL;
     }
 
-    const loc = useLocation();
 
     const { data: response, isLoading } = useQuery({
         queryKey: ["accessCode"],
@@ -25,8 +24,6 @@ export default function Login() {
     });
 
     if (response) {
-        console.log("route for login: ", loc)
-        console.log("response from refresh tokens: ", response);
         const { access_token, id_token, expires_in } = response;
 
         setCookie("access_token", access_token, expires_in);
@@ -35,7 +32,6 @@ export default function Login() {
     }
     useEffect(() => {
         if (!response && !isLoading) {
-            console.log("response was null");
             navigate("/login");
         }
     }, [response])

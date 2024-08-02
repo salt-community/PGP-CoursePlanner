@@ -9,7 +9,6 @@ export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = (path?: string) => {
-    console.log("changing url: ", path);
     path && setCookie("go_to", path);
     setIsOpen(!isOpen);
   };

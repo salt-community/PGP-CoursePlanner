@@ -26,14 +26,12 @@ export default function Home() {
         })
 
         if (isLoading) {
-            console.log("loading...")
             setCookie('access_token', "soon to be set!");
         }
 
         isError && deleteCookie('access_token');
 
         if (response) {
-            console.log("response from code: ", response);
             const { access_token, id_token, expires_in } = response;
 
             setCookie('access_token', access_token, expires_in);

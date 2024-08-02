@@ -31,7 +31,6 @@ export function setNewTokenCookies() {
     return;
   }
   if (response) {
-    console.log("response from refresh tokens: ", response);
     const { access_token, id_token, expires_in } = response;
 
     if (access_token == undefined || id_token == undefined) {
