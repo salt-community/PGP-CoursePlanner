@@ -6,15 +6,6 @@ export type tokenResponse = {
   access_token: string;
   expires_in: number;
   id_token: string;
-  refresh_token?: string;
-  scope: string;
-  token_type: string;
-};
-
-export type tokenResponseFromBackend = {
-  access_token: string;
-  expires_in: number;
-  id_token: string;
 };
 
 export async function getTokens(auth_code: string) {
@@ -27,7 +18,7 @@ export async function getTokens(auth_code: string) {
     });
 
     const responseAsJson = await response.json();
-    return responseAsJson as tokenResponseFromBackend;
+    return responseAsJson as tokenResponse;
   } catch (error) {
     console.error(error);
   }
@@ -39,7 +30,7 @@ export async function refreshTokens() {
 
     if (response && response.ok) {
       const data = await response.json();
-      return data as tokenResponseFromBackend;
+      return data as tokenResponse;
     }
     return null;
   } catch (error) {
