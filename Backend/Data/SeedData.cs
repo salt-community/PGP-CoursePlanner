@@ -9,9 +9,9 @@ public static class SeedData
         using (var _context = new DataContext(
                    serviceProvider.GetRequiredService<DbContextOptions<DataContext>>()))
         {
-            _context.Database.EnsureDeleted(); // Clear the database
+            _context.Database.EnsureDeleted();
             _context.Database.Migrate();
-            _context.Database.EnsureCreated(); // Create the database if not exists
+            _context.Database.EnsureCreated();
 
             List<Day> hellWeekDays = [
                 new Day{

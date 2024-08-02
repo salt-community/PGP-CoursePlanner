@@ -1,3 +1,4 @@
+import { AppliedModuleType } from "../appliedCourse/Types";
 import { ModuleType } from "../module/Types";
 
 export type CourseType = {
@@ -23,8 +24,10 @@ export type CourseModule = {
 
 export type AppliedCourseType = {
     id?: number;
+    name: string;
     startDate: Date;
     endDate?: Date;
     courseId: number;
-    color: string
+    color: string;
+    modules?: AppliedModuleType[]
 }

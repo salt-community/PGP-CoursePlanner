@@ -1,4 +1,3 @@
-
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -59,7 +58,7 @@ namespace Backend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCourse(int id, [FromBody] AppliedCourse appliedCourse)
+        public async Task<IActionResult> UpdateAppliedCourse(int id, [FromBody] AppliedCourse appliedCourse)
         {
             var response = await _service.UpdateAsync(id, appliedCourse);
             if (response == null)
@@ -68,6 +67,5 @@ namespace Backend.Controllers
             }
             return NoContent();
         }
-
     }
 }
