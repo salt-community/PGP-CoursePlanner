@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Page from "../../../components/Page";
 import { getIdFromPath } from "../../../helpers/helperMethods";
 import { editAppliedCourse, getAppliedCourseById } from "../../../api/AppliedCourseApi";
@@ -11,7 +11,7 @@ import ColorSelection from "../../../components/ColorSelection";
 import { useNavigate } from "react-router-dom";
 import { AppliedCourseType } from "../../course/Types";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
+import Login from "../../login/Login";
 import AppliedModule from "../sections/AppliedModule";
 import InputSmall from "../../../components/inputFields/InputSmall";
 import { AppliedDayType, AppliedEventType, AppliedModuleType } from "../Types";
@@ -97,10 +97,10 @@ export default function () {
 
     const handleChange = async (event: SyntheticEvent) => {
         const value = (event.target as HTMLSelectElement).value;
-        const [moduleId, indexStr, appModuleId] = value.split("_"); 
-        const moduleIndex = parseInt(indexStr); 
+        const [moduleId, indexStr, appModuleId] = value.split("_");
+        const moduleIndex = parseInt(indexStr);
         const appliedModuleId = parseInt(appModuleId);
-        const module = modules!.find(m => m.id === parseInt(moduleId))!; 
+        const module = modules!.find(m => m.id === parseInt(moduleId))!;
 
         var listDays: AppliedDayType[] = []
 
@@ -193,8 +193,9 @@ export default function () {
 
     return (
         getCookie("access_token") == undefined
-            ? <NavigateToLogin />
-            : <Page>
+            ? <Login />
+            :
+            <Page>
                 <section className="px-4 md:px-24 lg:px-56">
                     {appliedCourse !== undefined &&
                         <div>

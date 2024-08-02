@@ -38,7 +38,7 @@ export async function getAllAppliedCourses() {
     });
 
     if (!response.ok || response == null) {
-      alert("Failed to get applied courses");
+      // alert("Failed to get applied courses");
       return;
     }
 
@@ -46,7 +46,7 @@ export async function getAllAppliedCourses() {
     return data as AppliedCourseType[];
   } catch (error) {
     console.error(error);
-    alert("Failed to get applied courses");
+    // alert("Failed to get applied courses");
   }
 }
 

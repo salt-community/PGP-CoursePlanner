@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { addDays, subDays, getWeek } from "date-fns";
 import Page from "../../../components/Page";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { getAllAppliedCourses } from "../../../api/AppliedCourseApi";
 import { getAllCourses } from "../../../api/CourseApi";
@@ -10,7 +10,7 @@ import { firstDayOfMonth, currentMonth } from "../../../helpers/dateHelpers";
 import TimeLineCourse from "../sections/TimeLineCourse";
 import TimeLineXaxis from "../sections/TimeLineXaxis";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
+import Login from "../../login/Login";
 
 export type Activity = {
   id: number;
@@ -79,7 +79,7 @@ const HorizontalCalendar: React.FC = () => {
 
   return (
     getCookie("access_token") == undefined ?
-      <NavigateToLogin />
+      <Login />
       :
       <Page>
         <div style={{ "height": height }} className="overflow-x-auto px-4 flex flex-col">

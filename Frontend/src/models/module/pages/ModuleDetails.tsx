@@ -1,13 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { deleteModule, getModuleById } from "../../../api/ModuleApi";
 import Page from "../../../components/Page";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getIdFromPath } from "../../../helpers/helperMethods";
 import { getAllCourses } from "../../../api/CourseApi";
 import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
+import Login from "../../login/Login";
 
 export default function ModuleDetails() {
     const navigate = useNavigate();
@@ -55,10 +55,9 @@ export default function ModuleDetails() {
     })
 
     return (
-        getCookie("access_token") == undefined ?
-            <NavigateToLogin />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 {isLoading && <LoadingMessage />}
                 {isError && <ErrorMessage />}
                 {module &&

@@ -15,7 +15,7 @@ export async function getAllModules() {
     });
 
     if (!response.ok || response == null) {
-      alert("Failed to get modules");
+      // alert("Failed to get modules");
       return;
     }
 
@@ -23,7 +23,7 @@ export async function getAllModules() {
     return data as ModuleType[];
   } catch (error) {
     console.error(error);
-    alert("Failed to get modules");
+    // alert("Failed to get modules");
   }
 }
 
@@ -109,9 +109,6 @@ export async function editModule(module: ModuleType) {
       alert("Failed to edit module");
       return;
     }
-
-    const data = await response.json();
-    return data as ModuleType;
   } catch (error) {
     console.error(error);
     alert("Failed to edit module");

@@ -3,7 +3,7 @@ import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
 import SuccessBtn from "../../../components/buttons/SuccessBtn";
 import { useNavigate } from "react-router-dom";
 import { useState, FormEvent } from "react";
-import { useQueryClient, useMutation } from "react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { ModuleProps, DayType, ModuleType, EventType } from "../Types";
 import Day from "./Day";
 

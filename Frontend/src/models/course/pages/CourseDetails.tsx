@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { deleteCourse, getCourseById } from "../../../api/CourseApi";
 import Page from "../../../components/Page";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getIdFromPath } from "../../../helpers/helperMethods";
 import { getAllModules } from "../../../api/ModuleApi";
 import { useEffect, useRef, useState } from "react";
@@ -20,7 +20,7 @@ import { AppliedCourseType } from "../Types";
 import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
+import Login from "../../login/Login";
 
 export default function CourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
@@ -110,10 +110,9 @@ export default function CourseDetails() {
     })
 
     return (
-        getCookie("access_token") == undefined ?
-            <NavigateToLogin />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 {isLoading && <LoadingMessage />}
                 {isError && <ErrorMessage />}
                 {course &&

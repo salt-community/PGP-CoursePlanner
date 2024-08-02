@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Page from "../../../components/Page";
 import { deleteAppliedCourse, getAllAppliedCourses } from "../../../api/AppliedCourseApi";
 import DeleteBtn from "../../../components/buttons/DeleteBtn";
@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
+import Login from "../../login/Login";
 
 export default function AppliedCourses() {
     const navigate = useNavigate();
@@ -32,7 +32,7 @@ export default function AppliedCourses() {
 
     return (
         getCookie("access_token") == undefined ?
-            <NavigateToLogin />
+            <Login/>
             :
             <Page>
                 <section className="px-4 md:px-24 lg:px-56">

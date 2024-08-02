@@ -1,11 +1,11 @@
-import { useQuery } from "react-query";
 import { getAllModules } from "../../../api/ModuleApi";
 import Page from "../../../components/Page";
 import { Link } from "react-router-dom";
 import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
+import Login from "../../login/Login";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Modules() {
 
@@ -15,10 +15,9 @@ export default function Modules() {
     });
 
     return (
-        getCookie("access_token") == undefined ?
-            <NavigateToLogin />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 <section className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 md:px-24 lg:px-56">
                     {isLoading && <LoadingMessage />}
                     {isError && <ErrorMessage />}

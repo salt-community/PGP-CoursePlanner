@@ -7,7 +7,7 @@ import { Link } from "react-router-dom"
 import { currentMonth, firstDayOfMonth, allDaysInMonth, currentYear, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
 import { format, getWeek } from "date-fns"
 import { getCookie } from "../../../helpers/cookieHelpers"
-import NavigateToLogin from "../../login/NavigateToLogin"
+import Login from "../../login/Login"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(currentMonth);
@@ -21,10 +21,9 @@ export default function MonthView() {
     const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
     return (
-        getCookie("access_token") == undefined ?
-            <NavigateToLogin />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 <section className="flex justify-around items-center">
                     <PreviousBtn onClick={() => setMonth(month - 1)} />
                     <div className="flex flex-col items-center w-1/2">

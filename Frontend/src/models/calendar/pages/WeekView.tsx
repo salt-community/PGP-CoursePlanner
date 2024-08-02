@@ -7,7 +7,7 @@ import Page from "../../../components/Page";
 import { fullWeek } from "../../../helpers/dateHelpers";
 import { getWeekFromPath } from "../../../helpers/helperMethods";
 import { getCookie } from "../../../helpers/cookieHelpers";
-import NavigateToLogin from "../../login/NavigateToLogin";
+import Login from "../../login/Login";
 
 
 export default function MonthView() {
@@ -23,10 +23,9 @@ export default function MonthView() {
     // const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
     return (
-        getCookie("access_token") == undefined ?
-            <NavigateToLogin />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 <section className="flex justify-around">
                     <div></div>
                     <div className="h-[100px] flex items-end">

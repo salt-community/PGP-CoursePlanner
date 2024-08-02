@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { deleteCookie, getCookie, setCookie } from "../helpers/cookieHelpers";
 import { getDateAsString, today, weekDays } from "../helpers/dateHelpers";
 import { getCalendarDate } from "../api/CalendarDateApi";
@@ -7,17 +7,18 @@ import { Link } from "react-router-dom";
 import Page from "../components/Page";
 import WeekDay from "./calendar/sections/WeekDay";
 import { DateContent } from "./calendar/Types";
-import NavigateToLogin from "./login/NavigateToLogin";
 import { getTokens } from "../api/UserApi";
+import Login from "./login/Login";
 
 export default function Home() {
 
-    const redirectLink = "https://frontend-h7ia67qbhq-uc.a.run.app";
-    // const redirectLink = "http://localhost:5173";
+    // const redirectLink = "https://frontend-h7ia67qbhq-uc.a.run.app";
+    const redirectLink = "http://localhost:5173";
 
     if (location.search) {
         const params = new URLSearchParams(location.search);
         const code = params.get('code')!;
+
 
         const { data: response, isLoading, isError } = useQuery({
             queryKey: ['accessCode'],
@@ -25,24 +26,19 @@ export default function Home() {
         })
 
         if (isLoading) {
-            console.log("loading...")
             setCookie('access_token', "soon to be set!");
         }
 
         isError && deleteCookie('access_token');
 
         if (response) {
-            console.log("response from code: ", response);
-            const { access_token, id_token, expires_in, refresh_token } = response;
+            const { access_token, id_token, expires_in } = response;
 
             setCookie('access_token', access_token, expires_in);
             setCookie('JWT', id_token, expires_in);
-            refresh_token && setCookie('refresh_token', refresh_token);
 
             location.href = redirectLink;
         }
-
-
     }
 
     const weekDayDateContent: DateContent[][] = [];
@@ -61,10 +57,9 @@ export default function Home() {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     return (
-        getCookie("access_token") == undefined ?
-            <NavigateToLogin />
-            :
-            <Page>
+        getCookie("access_token") == undefined
+            ? <Login />
+            : <Page>
                 <section className="p-20 flex flex-col items-center">
                     <h1 className="text-2xl font-semibold">We are in week {getWeek(new Date())}</h1>
                     <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-3">
