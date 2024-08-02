@@ -31,7 +31,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async Task GetAppliedCourses_Returns_ListOfAppliedCourses()
         {
-            //  arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -53,7 +53,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async void GetAppliedCourse_Should_Return_OK_AppliedCourse()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -61,12 +61,12 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            //act
+            // act
             var response = await _client.GetAsync("/AppliedCourses/1");
             var deserializedResponse = JsonConvert.DeserializeObject<AppliedCourse>(
                 await response.Content.ReadAsStringAsync());
 
-            //assert
+            // assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             deserializedResponse!.StartDate.Year.Should().Be(2024);
             deserializedResponse!.CourseId.Should().Be(1);
@@ -75,7 +75,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async Task CreateAppliedCourse_Returns_Success()
         {
-            //  arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;

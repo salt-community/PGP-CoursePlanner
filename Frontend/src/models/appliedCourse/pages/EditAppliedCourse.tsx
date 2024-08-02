@@ -97,10 +97,10 @@ export default function () {
 
     const handleChange = async (event: SyntheticEvent) => {
         const value = (event.target as HTMLSelectElement).value;
-        const [moduleId, indexStr, appModuleId] = value.split("_"); // Parse index from the selected value
-        const moduleIndex = parseInt(indexStr); // Parse index as integer
+        const [moduleId, indexStr, appModuleId] = value.split("_"); 
+        const moduleIndex = parseInt(indexStr); 
         const appliedModuleId = parseInt(appModuleId);
-        const module = modules!.find(m => m.id === parseInt(moduleId))!; // Find the module based on the selected value
+        const module = modules!.find(m => m.id === parseInt(moduleId))!; 
 
         var listDays: AppliedDayType[] = []
 

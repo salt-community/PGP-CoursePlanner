@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Backend.Data;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -23,8 +22,8 @@ namespace Backend.Services
 
         public async Task<AppliedEvent> CreateAsync(AppliedEvent appliedEvent)
         {
-            _context.ChangeTracker.Clear(); // Clear change tracker
-            _context.Entry(appliedEvent).State = EntityState.Added; // Mark as Added
+            _context.ChangeTracker.Clear();
+            _context.Entry(appliedEvent).State = EntityState.Added; 
             await _context.AppliedEvents.AddAsync(appliedEvent);
             await _context.SaveChangesAsync();
 

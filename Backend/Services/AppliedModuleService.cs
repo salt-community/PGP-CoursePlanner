@@ -25,8 +25,8 @@ namespace Backend.Services
 
         public async Task<AppliedModule> CreateAsync(AppliedModule appliedModule)
         {
-            _context.ChangeTracker.Clear(); // Clear change tracker
-            _context.Entry(appliedModule).State = EntityState.Added; // Mark as Added
+            _context.ChangeTracker.Clear(); 
+            _context.Entry(appliedModule).State = EntityState.Added;
             await _context.AppliedModules.AddAsync(appliedModule);
             await _context.SaveChangesAsync();
 

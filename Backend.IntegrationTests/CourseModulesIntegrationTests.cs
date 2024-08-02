@@ -29,7 +29,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async Task GetCourseModules_Returns_ListOfCourseModules()
         {
-            //  arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;

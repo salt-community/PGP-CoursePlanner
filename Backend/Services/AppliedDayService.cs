@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Backend.Data;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +23,7 @@ namespace Backend.Services
 
         public async Task<AppliedDay> CreateAsync(AppliedDay appliedDay)
         {
-            _context.Entry(appliedDay).State = EntityState.Added; // Mark as Added
+            _context.Entry(appliedDay).State = EntityState.Added;
             await _context.AppliedDays.AddAsync(appliedDay);
             await _context.SaveChangesAsync();
 
