@@ -30,6 +30,7 @@ export default function Home() {
         }
 
         isError && deleteCookie('access_token');
+        console.log(response)
 
         if (response) {
             const { access_token, id_token, expires_in } = response;
