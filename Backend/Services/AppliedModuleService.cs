@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Backend.Data;
+using Backend.ExceptionHandler.Exceptions;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,16 +17,16 @@ namespace Backend.Services
 
         public async Task<AppliedModule> GetOneAsync(int id)
         {
-            var appliedModule = await _context.AppliedModules
+            return await _context.AppliedModules
                     .Include(module => module!.Days)
                     .ThenInclude(day => day.Events)
-                    .FirstOrDefaultAsync(module => module.Id == id);
-            return appliedModule ?? null!;
+                    .FirstOrDefaultAsync(module => module.Id == id)
+                    ?? throw new NotFoundByIdException("Applied module", id);
         }
 
         public async Task<AppliedModule> CreateAsync(AppliedModule appliedModule)
         {
-            _context.ChangeTracker.Clear(); 
+            _context.ChangeTracker.Clear();
             _context.Entry(appliedModule).State = EntityState.Added;
             await _context.AppliedModules.AddAsync(appliedModule);
             await _context.SaveChangesAsync();
@@ -40,45 +41,33 @@ namespace Backend.Services
 
         public async Task<List<AppliedModule>> GetAllAsync()
         {
-            try
-            {
-                var appliedModules = await _context.AppliedModules
-                    .Include(module => module!.Days)
-                    .ThenInclude(day => day.Events)
-                    .ToListAsync();
 
-                return appliedModules;
-            }
-            catch (Exception ex) { Debug.WriteLine(ex.Message); }
-            return null!;
+            var appliedModules = await _context.AppliedModules
+                .Include(module => module!.Days)
+                .ThenInclude(day => day.Events)
+                .ToListAsync();
+
+            return appliedModules;
+
         }
 
         public async Task<AppliedModule> UpdateAsync(int id, AppliedModule appliedModule)
         {
-            try
-            {
-                var appliedModuleToUpdate = await _context.AppliedModules
-                        .Include(module => module!.Days)
-                        .ThenInclude(day => day.Events)
-                        .AsNoTracking()
-                        .FirstOrDefaultAsync(ac => ac.Id == id);
+            var appliedModuleToUpdate = await _context.AppliedModules
+                    .Include(module => module!.Days)
+                    .ThenInclude(day => day.Events)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(ac => ac.Id == id)
+                    ?? throw new NotFoundByIdException("Applied module", id);
 
-                if (appliedModuleToUpdate == null)
-                {
-                    return null!;
-                }
+            appliedModuleToUpdate.Name = appliedModule.Name;
+            appliedModuleToUpdate.NumberOfDays = appliedModule.NumberOfDays;
+            appliedModuleToUpdate.Days = appliedModule.Days;
 
-                appliedModuleToUpdate.Name = appliedModule.Name;
-                appliedModuleToUpdate.NumberOfDays = appliedModule.NumberOfDays;
-                appliedModuleToUpdate.Days = appliedModule.Days;
-
-                _context.ChangeTracker.Clear();
-                _context.AppliedModules.Update(appliedModuleToUpdate);
-                await _context.SaveChangesAsync();
-                return appliedModuleToUpdate;
-            }
-            catch (Exception ex) { Debug.WriteLine(ex.Message); }
-            return null!;
+            _context.ChangeTracker.Clear();
+            _context.AppliedModules.Update(appliedModuleToUpdate);
+            await _context.SaveChangesAsync();
+            return appliedModuleToUpdate;
         }
     }
 }
