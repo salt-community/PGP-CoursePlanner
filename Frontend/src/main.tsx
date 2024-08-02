@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from 'react-query'
 import Courses from './models/course/pages/Courses.tsx'
 import CreateCourse from './models/course/pages/CreateCourse.tsx'
 import CourseDetails from './models/course/pages/CourseDetails.tsx'
@@ -21,6 +20,10 @@ import EditModule from './models/module/pages/EditModule'
 import ModuleDetails from './models/module/pages/ModuleDetails'
 import Modules from './models/module/pages/Modules'
 import Login from './models/login/Login.tsx'
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 
 const router = createBrowserRouter([
   {

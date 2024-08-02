@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getAllCourses } from "../../../api/CourseApi";
 import Page from "../../../components/Page";
 import { Link, useLocation } from "react-router-dom";

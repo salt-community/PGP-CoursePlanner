@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { deleteCookie, getCookie, setCookie } from "../helpers/cookieHelpers";
 import { getDateAsString, today, weekDays } from "../helpers/dateHelpers";
 import { getCalendarDate } from "../api/CalendarDateApi";

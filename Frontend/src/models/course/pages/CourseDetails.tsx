@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { deleteCourse, getCourseById } from "../../../api/CourseApi";
 import Page from "../../../components/Page";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getIdFromPath } from "../../../helpers/helperMethods";
 import { getAllModules } from "../../../api/ModuleApi";
 import { useEffect, useRef, useState } from "react";

@@ -7,7 +7,7 @@ import CloseBtn from "../../../components/buttons/CloseBtn";
 import { getAllCourses } from "../../../api/CourseApi";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect, FormEvent } from "react";
-import { useQuery, useQueryClient, useMutation } from "react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { ModuleProps, DayType, ModuleType, EventType } from "../Types";
 import Day from "./Day";
 

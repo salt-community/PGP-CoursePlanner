@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import LoadingMessage from "../../components/LoadingMessage";
 import { setCookie } from "../../helpers/cookieHelpers";
 import { refreshTokensFromBackend } from "../../api/UserApi";

@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Page from "../../../components/Page";
 import { deleteAppliedCourse, getAllAppliedCourses } from "../../../api/AppliedCourseApi";
 import { getAllCourses } from "../../../api/CourseApi";

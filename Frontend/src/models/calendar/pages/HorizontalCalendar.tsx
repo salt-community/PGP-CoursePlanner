@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { addDays, subDays, getWeek } from "date-fns"; // Import date-fns for date manipulation
 import Page from "../../../components/Page";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { getAllAppliedCourses } from "../../../api/AppliedCourseApi";
 import { getAllCourses } from "../../../api/CourseApi";

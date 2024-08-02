@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Page from "../../../components/Page";
 import { getIdFromPath } from "../../../helpers/helperMethods";
 import LoadingMessage from "../../../components/LoadingMessage";
