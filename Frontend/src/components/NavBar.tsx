@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PrimaryBtn from "./buttons/PrimaryBtn";
-import { deleteCookie, setCookie } from "../helpers/cookieHelpers";
+import { deleteCookie} from "../helpers/cookieHelpers";
 import { deleteRefreshToken } from "../api/UserApi";
 
 export default function NavBar() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleDropdown = (path?: string) => {
-    path && setCookie("go_to", path);
+  const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
@@ -54,29 +53,29 @@ export default function NavBar() {
                 }`}
             >
               <li>
-                <Link onClick={() => toggleDropdown("/calendar/month")} to="/calendar/month">
+                <Link onClick={() => toggleDropdown()} to="/calendar/month">
                   Course Templates
                 </Link>
               </li>
               <li>
-                <Link onClick={() => toggleDropdown("/modules")} to="/modules">
+                <Link onClick={() => toggleDropdown()} to="/modules">
                   Module Templates
                 </Link>
               </li>
               <li>
-                <Link onClick={() => toggleDropdown("/courses")} to="/courses">
+                <Link onClick={() => toggleDropdown()} to="/courses">
                   Course Planner
                 </Link>
               </li>
               <li>
-                <Link onClick={() => toggleDropdown("/activecourses")} to="/activecourses">
+                <Link onClick={() => toggleDropdown()} to="/activecourses">
                   Bootcamps
                 </Link>
               </li>
             </ul>
           </div>
           <div>
-            <Link onClick={() => setCookie("go_to", "/home")} className="btn btn-ghost text-l text-xl" to="/">
+            <Link className="btn btn-ghost text-l text-xl" to="/">
               Course Planner
             </Link>
           </div>
@@ -84,22 +83,22 @@ export default function NavBar() {
         <div className="navbar-center hidden md:flex">
           <ul className="menu menu-horizontal px-1 text-xl">
             <li>
-              <Link onClick={() => toggleDropdown("/calendar/month")} to="/calendar/month">
+              <Link onClick={() => toggleDropdown()} to="/calendar/month">
                 Calendar
               </Link>
             </li>
             <li>
-              <Link onClick={() => toggleDropdown("/modules")} to="/modules">
+              <Link onClick={() => toggleDropdown()} to="/modules">
                 Module Templates
               </Link>
             </li>
             <li>
-              <Link onClick={() => toggleDropdown("/courses")} to="/courses">
+              <Link onClick={() => toggleDropdown()} to="/courses">
                 Course Templates
               </Link>
             </li>
             <li>
-              <Link onClick={() => toggleDropdown("/activecourses")} to="/activecourses">
+              <Link onClick={() => toggleDropdown()} to="/activecourses">
                 Bootcamps
               </Link>
             </li>
