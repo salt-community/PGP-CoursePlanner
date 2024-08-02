@@ -97,12 +97,13 @@ namespace Backend.Tests.UnitTests
             resultValue!.Name.Should().Be("TestModule");
         }
 
+        // //TODO: Fix so that it works or remove!!
         // [Fact]
         // public async void GetModule_Returns_NotFound()
         // {
         //     //Arrange
         //     var module = new Module() { Id = 1, Name = "TestModule" };
-        //     _mockService.Setup(service => service.GetOneAsync(1)).Throws(new NotFoundByIdException("Module", 2));
+        //     _mockService.Setup(service => service.GetOneAsync(2)).ThrowsAsync(new NotFoundByIdException("Module", 2));
         //     var controller = new ModulesController(_mockService.Object);
 
         //     //Act
