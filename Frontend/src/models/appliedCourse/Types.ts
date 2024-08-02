@@ -1,4 +1,4 @@
-import { AppliedCourseType, CourseModule } from "../course/Types";
+import { CourseModule } from "../course/Types";
 
 
 export type AppliedModuleType = {
