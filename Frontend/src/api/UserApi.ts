@@ -1,8 +1,6 @@
-import { getCookie } from "../helpers/cookieHelpers";
 import { BACKEND_URL } from "./BackendUrl";
 
-const BASE_URL = "https://accounts.google.com/o/oauth2/token";
-// const BASE_URL = `${BACKEND_URL}/Tokens`;
+const BASE_URL = `${BACKEND_URL}/Tokens`;
 
 export type tokenResponse = {
   access_token: string;
@@ -22,7 +20,7 @@ export type tokenResponseFromBackend = {
 export async function getTokens(auth_code: string) {
   try {
     const code = encodeURIComponent(auth_code);
-    const response = await fetch(`${BACKEND_URL}/Tokens/${code}`, {
+    const response = await fetch(`${BASE_URL}/${code}`, {
       headers: {
         Accept: "application/json",
       },
@@ -37,7 +35,7 @@ export async function getTokens(auth_code: string) {
 
 export async function refreshTokens() {
   try {
-    const response = await fetch(`${BACKEND_URL}/Tokens`);
+    const response = await fetch(BASE_URL);
 
     if (response && response.ok) {
       const data = await response.json();
@@ -51,7 +49,7 @@ export async function refreshTokens() {
 
 export async function deleteRefreshToken() {
   try {
-    await fetch(`${BACKEND_URL}/Tokens`, {
+    await fetch(BASE_URL, {
       method: "DELETE",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
