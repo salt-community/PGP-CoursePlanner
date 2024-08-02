@@ -92,7 +92,7 @@ export default function CourseDetails() {
                 color: color
             };
             const response = postAppliedCourse(appliedCourse);
-            if ((await response).ok) {
+            if ((await response) != undefined && (await response)!.ok) {
                 navigate('/activecourses')
             }
         }

@@ -5,71 +5,106 @@ import { BACKEND_URL } from "./BackendUrl";
 const BASE_URL = `${BACKEND_URL}/AppliedCourses`;
 
 export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
-  const response = await fetch(BASE_URL, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
-      Accept: "application/json",
-    },
-    body: JSON.stringify(appliedCourse),
-  });
+  try {
+    const response = await fetch(BASE_URL, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${getCookie("JWT")}`,
+        Accept: "application/json",
+      },
+      body: JSON.stringify(appliedCourse),
+    });
 
-  if (!response.ok) {
+    if (!response.ok || response == null) {
+      alert("Failed to apply course");
+      return;
+    }
+
+    return response;
+  } catch (error) {
+    console.error(error);
     alert("Failed to apply course");
-    throw new Error("Failed to apply course");
   }
-  return response;
 }
 
 export async function getAllAppliedCourses() {
-  const response = await fetch(BASE_URL, {
-    headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
-      Accept: "application/json",
-    },
-  });
-  const data = await response.json();
-  return data as AppliedCourseType[];
+  try {
+    const response = await fetch(BASE_URL, {
+      headers: {
+        Authorization: `Bearer ${getCookie("JWT")}`,
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok || response == null) {
+      alert("Failed to get applied courses");
+      return;
+    }
+
+    const data = await response.json();
+    return data as AppliedCourseType[];
+  } catch (error) {
+    console.error(error);
+    alert("Failed to get applied courses");
+  }
 }
 
 export async function deleteAppliedCourse(id: number) {
-  const response = await fetch(`${BASE_URL}/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  });
-  if (!response.ok) {
-    throw new Error("Failed to delete applied course");
+  try {
+    const response = await fetch(`${BASE_URL}/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${getCookie("JWT")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    if (!response.ok || response == null) {
+      alert("Failed to delete applied courses");
+      return;
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Failed to delete applied courses");
   }
 }
 
 export async function getAppliedCourseById(id: number) {
-  const response = await fetch(`${BASE_URL}/${id}`, {
-    headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
-      "Content-type": "application/json; charset=UTF-8",
+  try {
+    const response = await fetch(`${BASE_URL}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${getCookie("JWT")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+    if (!response.ok || response == null) {
+      alert("Failed to get applied course");
+      return;
     }
-  });
-  if (response.ok) {
     const data = await response.json();
     return data as AppliedCourseType;
+  } catch (error) {
+    console.error(error);
+    alert("Failed to get applied course");
   }
 }
 
 export async function editAppliedCourse(appliedCourse: AppliedCourseType) {
-
-  const response = await fetch(`${BASE_URL}/${appliedCourse.id}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify(appliedCourse),
-  });
-  if (!response.ok) {
-    throw new Error("Failed to edit applied course");
+  try {
+    const response = await fetch(`${BASE_URL}/${appliedCourse.id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${getCookie("JWT")}`,
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(appliedCourse),
+    });
+    if (!response.ok || response == null) {
+      alert("Failed to edit applied course");
+      return;
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Failed to edit applied courses");
   }
 }

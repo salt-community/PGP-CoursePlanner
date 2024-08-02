@@ -50,6 +50,8 @@ builder.Services.AddScoped<IService<AppliedEvent>, AppliedEventService>();
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
+
 app.UseCors(x => x
     .AllowAnyMethod()
     .AllowAnyHeader()
@@ -71,6 +73,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
 
 app.MapControllers();
 
