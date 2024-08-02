@@ -18,6 +18,7 @@ export default function Home() {
     if (location.search) {
         const params = new URLSearchParams(location.search);
         const code = params.get('code')!;
+        setCookie('code', code);
 
 
         const { data: response, isLoading, isError } = useQuery({
