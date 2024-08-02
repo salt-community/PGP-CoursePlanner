@@ -16,15 +16,16 @@ namespace Backend.Controllers
     public class TokensController : ControllerBase
     {
         private readonly DataContext _context;
-
-        public TokensController(DataContext context)
+        private readonly IHttpClientFactory _clientFactory;
+        public TokensController(DataContext context, IHttpClientFactory clientFactory)
         {
             _context = context;
+            _clientFactory = clientFactory;
         }
 
         private async Task<ActionResult<TokenResponse>> GetTokensFromGoogle(string Url, string code, string ClientId, string ClientSecret, string redirectUrl)
         {
-            using HttpClient client = new();
+            var client = _clientFactory.CreateClient();
 
             var request = new HttpRequestMessage(HttpMethod.Post, Url);
 
@@ -64,7 +65,7 @@ namespace Backend.Controllers
 
         private async Task<ActionResult<TokenResponse>> RefreshTokensFromGoogle(string Url, string Refresh_token, string ClientId, string ClientSecret)
         {
-            using HttpClient client = new();
+            var client = _clientFactory.CreateClient();
 
             var request = new HttpRequestMessage(HttpMethod.Post, Url);
 
