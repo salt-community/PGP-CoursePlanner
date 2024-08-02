@@ -1,4 +1,5 @@
 using Backend.Data;
+using Backend.ExceptionHandler.Exceptions;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -16,96 +17,74 @@ public class ModuleService : IService<Module>
 
     public async Task<List<Module>> GetAllAsync()
     {
-        try
-        {
-            var modules = await _context.Modules
-                            .Include(module => module.Days)
-                            .ThenInclude(day => day.Events)
-                            .ToListAsync();
-            return modules;
-        }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return null!;
+
+        var modules = await _context.Modules
+                        .Include(module => module.Days)
+                        .ThenInclude(day => day.Events)
+                        .ToListAsync();
+        return modules;
     }
     public async Task<Module> GetOneAsync(int id)
     {
-        try
-        {
-            return await _context.Modules
-                        .Include(module => module.Days)
-                        .ThenInclude(day => day.Events)
-                        .FirstOrDefaultAsync(module => module.Id == id) ?? null!;
-        }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return null!;
+
+        return await _context.Modules
+                    .Include(module => module.Days)
+                    .ThenInclude(day => day.Events)
+                    .FirstOrDefaultAsync(module => module.Id == id) ?? throw new NotFoundByIdException("Module", id);
+
     }
     public async Task<Module> CreateAsync(Module module)
     {
-        try
-        {
-            _context.Modules.Add(module);
-            await _context.SaveChangesAsync();
-            return module;
-        }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return null!;
+
+        _context.Modules.Add(module);
+        await _context.SaveChangesAsync();
+        return module;
+
     }
     public async Task<Module> UpdateAsync(int id, Module module)
     {
-        try
+
+        var moduleToUpdate = await _context.Modules
+                    .Include(module => module.Days)
+                    .ThenInclude(day => day.Events)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(m => m.Id == id) ?? throw new NotFoundByIdException("Module", id);
+
+        foreach (var oldDay in moduleToUpdate.Days)
         {
-            var moduleToUpdate = await _context.Modules
-                        .Include(module => module.Days)
-                        .ThenInclude(day => day.Events)
-                        .AsNoTracking()
-                        .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (moduleToUpdate == null)
+            var newDay = module.Days.FirstOrDefault(d => d.Id == oldDay.Id);
+            if (newDay != null)
             {
-                return null!;
-            }
-
-            foreach (var oldDay in moduleToUpdate.Days)
-            {
-                var newDay = module.Days.FirstOrDefault(d => d.Id == oldDay.Id);
-                if (newDay != null)
+                var eventsToDelete = oldDay.Events
+                    .Where(eventItem => !newDay.Events.Any(e => e.Id == eventItem.Id))
+                    .ToList();
+                foreach (var eventItem in eventsToDelete)
                 {
-                    var eventsToDelete = oldDay.Events
-                        .Where(eventItem => !newDay.Events.Any(e => e.Id == eventItem.Id))
-                        .ToList();
-                    foreach (var eventItem in eventsToDelete)
-                    {
-                        _context.Events.Remove(eventItem);
-                    }
-                }
-                else
-                {
-                    _context.Days.Remove(oldDay);
+                    _context.Events.Remove(eventItem);
                 }
             }
-
-            moduleToUpdate = updateModule(module, moduleToUpdate);
-            _context.Set<Module>().Update(moduleToUpdate);
-            await _context.SaveChangesAsync();
-            return module;
+            else
+            {
+                _context.Days.Remove(oldDay);
+            }
         }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return null!;
+
+        moduleToUpdate = updateModule(module, moduleToUpdate);
+        _context.Set<Module>().Update(moduleToUpdate);
+        await _context.SaveChangesAsync();
+        return module;
     }
     public async Task<bool> DeleteAsync(int id)
     {
-        try
-        {
-            var module = await _context.Modules
-                .Include(module => module.Days)
-                .ThenInclude(day => day.Events)
-                .FirstAsync(module => module.Id == id);
-            _context.Remove(module);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        catch (Exception ex) { Debug.WriteLine(ex.Message); }
-        return false;
+
+        var module = await _context.Modules
+            .Include(module => module.Days)
+            .ThenInclude(day => day.Events)
+            .FirstAsync(module => module.Id == id);
+        _context.Remove(module);
+        await _context.SaveChangesAsync();
+        return true;
+
     }
 
     private Module updateModule(Module newModule, Module module)

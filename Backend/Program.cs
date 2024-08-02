@@ -1,5 +1,6 @@
 using Backend.Config;
 using Backend.Data;
+using Backend.ExceptionHandler;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +51,7 @@ builder.Services.AddScoped<IService<AppliedEvent>, AppliedEventService>();
 
 var app = builder.Build();
 
-app.UseExceptionHandler();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseCors(x => x
     .AllowAnyMethod()
