@@ -50,7 +50,7 @@ export default function AppliedCourses() {
                                             <div className="collapse border-primary border mb-2">
                                                 <input type="checkbox" id={`collapse-toggle-${appliedCourse.id}`} className="hidden" />
                                                 <div className="collapse-title flex flex-col w-full gap-4">
-                                                    <h1 className="text-lg font-bold mb-2 text-primary">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</h1>
+                                                    <h1 className="text-lg font-bold mb-2">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</h1>
                                                     <div className="flex flex-row">
                                                         <div className=" flex flex-row w-1/2">
                                                             <h2 className=" text-lg flex items-center">Calendar color:
@@ -146,13 +146,13 @@ export default function AppliedCourses() {
                                 </>}
                             {allAppliedCourses && allAppliedCourses.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today }).length > 0
                                 ? <>
-                                    <h1 className="text-xl mt-6 mb-2 font-bold">Future bootcamps</h1>
+                                    <h1 className="text-xl text-primary mt-6 mb-2 font-bold">Future bootcamps</h1>
                                     {allAppliedCourses.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today }).map((appliedCourse) =>
                                         <>
                                             <div className="collapse border-primary border mb-2">
                                                 <input type="checkbox" id={`collapse-toggle-${appliedCourse.id}`} className="hidden" />
                                                 <div className="collapse-title flex flex-col w-full gap-4">
-                                                    <h1 className="text-lg font-bold mb-2 text-primary">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</h1>
+                                                    <h1 className="text-lg font-bold mb-2">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</h1>
                                                     <div className="flex flex-row">
                                                         <div className=" flex flex-row w-1/2">
                                                             <h2 className=" text-lg flex items-center">Calendar color:
@@ -241,19 +241,19 @@ export default function AppliedCourses() {
                                     <div className="border border-1 border-gray-200 mt-6"></div>
                                 </>
                                 : <>
-                                    <h1 className="text-xl font-bold mt-8 mb-2">Future bootcamps</h1>
+                                    <h1 className="text-xl text-primary font-bold mt-8 mb-2">Future bootcamps</h1>
                                     <h1 className="text-lg">No future bootcamps</h1>
                                     <div className="border border-1 border-gray-200 mt-6"></div>
                                 </>}
                             {allAppliedCourses && allAppliedCourses.filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today }).length > 0
                                 ? <>
-                                    <h1 className="text-xl font-bold mt-6 mb-2">Completed bootcamps</h1>
+                                    <h1 className="text-xl text-primary font-bold mt-6 mb-2">Completed bootcamps</h1>
                                     {allAppliedCourses.filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today }).map((appliedCourse) =>
                                         <>
                                             <div className="collapse border-primary border mb-2">
                                                 <input type="checkbox" id={`collapse-toggle-${appliedCourse.id}`} className="hidden" />
                                                 <div className="collapse-title flex flex-col w-full gap-4">
-                                                    <h1 className="text-lg font-bold mb-2 text-primary">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</h1>
+                                                    <h1 className="text-lg font-bold mb-2">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</h1>
                                                     <div className="flex flex-row">
                                                         <div className=" flex flex-row w-1/2">
                                                             <h2 className=" text-lg flex items-center">Calendar color:
@@ -342,7 +342,7 @@ export default function AppliedCourses() {
                                     )}
                                 </>
                                 : <>
-                                    <h1 className="text-xl font-bold mt-8 mb-2">Completed bootcamps</h1>
+                                    <h1 className="text-xl text-primary font-bold mt-8 mb-2">Completed bootcamps</h1>
                                     <h1 className="text-lg">No completed bootcamps</h1>
                                 </>}
                         </>
