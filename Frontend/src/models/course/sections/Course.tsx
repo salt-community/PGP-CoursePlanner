@@ -138,13 +138,21 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
 
     return (
         <section className="px-4 md:px-24 lg:px-56">
-            <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-                <div className="w-auto flex justify-between space-x-2">
-                    <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
-                    {numOfWeeks == 0
-                        ? <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" />
-                        : <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
-                    }
+            <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+                <div className="flex flex-col justify-between">
+                    <div className="flex flex-row items-center">
+                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Course Name: </h2>
+                        <div className="w-3/4">
+                            <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
+                        </div>
+                    </div>
+                    <div className="flex flex-row items-center">
+                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Number of weeks:</h2>
+                        {numOfWeeks == 0
+                            ? <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" />
+                            : <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
+                        }
+                    </div>
                 </div>
                 {isIncorrectName &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
