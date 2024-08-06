@@ -89,6 +89,5 @@ export default function AppliedModule({ submitFunction, module, index, buttonTex
             <SuccessBtn value={buttonText}></SuccessBtn>
             <div className="mb-4"></div>
         </form>
-
     )
 }

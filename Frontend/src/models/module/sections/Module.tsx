@@ -63,13 +63,13 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         });
 
         setIsIncompleteInput(false);
-        if (moduleName.value == "" || numberOfDays.value == 0 || days.some(d => d.description == "") || events.some(e => e.name == "") || events.some(e => e.startTime == "") || events.some(e => e.endTime == "")) {
+        if (isStringInputIncorrect(moduleName.value) || numberOfDays.value == 0 || days.some(d => d.description == "") || events.some(e => e.name == "") || events.some(e => e.startTime == "") || events.some(e => e.endTime == "")) {
             setIsIncompleteInput(true);
         }
         else {
             const newModule: ModuleType = {
                 id: module.id ?? 0,
-                name: moduleName.value,
+                name: moduleName.value.trim(),
                 numberOfDays: numberOfDays.value,
                 days: days
             };
@@ -78,17 +78,33 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         }
     }
 
+    const isStringInputIncorrect = (str: string) => {
+        var strNoSpace = str.replaceAll(" ", "");
+        if (strNoSpace.length > 0)
+            return false;
+        else
+            return true;
+    }
+
     return (
         <section className="px-4 md:px-24 lg:px-56">
-            <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-                <div className="w-auto flex justify-between space-x-2">
-                    <InputSmall type="text" name="moduleName" onChange={(e) => setModuleName(e.target.value)} placeholder="Module name" value={moduleName} />
-                    <input type="number" name="numberOfDays" onChange={(e) => setNumOfDays(parseInt(e.target.value))} value={numOfDays} className="input input-bordered input-sm max-w-xs" placeholder="Number of days" />
-                    <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
+            <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+                <div className="flex flex-col justify-between">
+                    <div className="flex flex-row items-center">
+                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Module Name: </h2>
+                        <div className="w-3/4">
+                            <InputSmall type="text" name="moduleName" onChange={(e) => setModuleName(e.target.value)} placeholder="Module name" value={moduleName} />
+                        </div>
+                    </div>
+                    <div className="flex flex-row items-center">
+                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Number of days:</h2>
+                        <input type="number" name="numberOfDays" onChange={(e) => setNumOfDays(parseInt(e.target.value))} value={numOfDays} className="input input-bordered input-sm w-3/5 mr-4" placeholder="Number of days" />
+                        <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
+                    </div>
                 </div>
                 <div className="flex flex-col space-y-2">
                     {days.map((day) =>
-                        <Day key={"day_" + day.dayNumber} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays} />)}
+                        <Day key={"day_" + day.dayNumber} moduleIndex={module.id!} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays} />)}
                 </div>
                 {isIncompleteInput &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Please fill in all the fields</p>}

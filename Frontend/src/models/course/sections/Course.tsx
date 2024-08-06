@@ -96,10 +96,10 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         setIsIncorrectName(false);
         setIsNotSelected(false);
         const isDuplicate = findDuplicates(courseModules);
-        if (isDuplicate || courseName.value == "" || numberOfWeeks.value == 0 || courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0))) {
+        if (isDuplicate || isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0 || courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0))) {
             if (isDuplicate)
                 setIsIncorrectModuleInput(true);
-            if (courseName.value == "" || numberOfWeeks.value == 0)
+            if (isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0)
                 setIsIncorrectName(true);
             if (courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0)))
                 setIsNotSelected(true);
@@ -107,7 +107,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         else {
             const newCourse: CourseType = {
                 id: course.id ?? 0,
-                name: courseName.value,
+                name: courseName.value.trim(),
                 numberOfWeeks: numberOfWeeks.value,
                 moduleIds: courseModuleIds,
                 modules: courseModules,
@@ -128,15 +128,31 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         return results;
     }
 
+    const isStringInputIncorrect = (str: string) => {
+        var strNoSpace = str.replaceAll(" ", "");
+        if (strNoSpace.length > 0)
+            return false;
+        else
+            return true;
+    }
+
     return (
         <section className="px-4 md:px-24 lg:px-56">
-            <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-                <div className="w-auto flex justify-between space-x-2">
-                    <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
-                    {numOfWeeks == 0
-                        ? <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" />
-                        : <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
-                    }
+            <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+                <div className="flex flex-col justify-between">
+                    <div className="flex flex-row items-center">
+                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Course Name: </h2>
+                        <div className="w-3/4">
+                            <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
+                        </div>
+                    </div>
+                    <div className="flex flex-row items-center">
+                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Number of weeks:</h2>
+                        {numOfWeeks == 0
+                            ? <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" />
+                            : <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
+                        }
+                    </div>
                 </div>
                 {isIncorrectName &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}

@@ -5,7 +5,7 @@ import { DayProps } from '../Types';
 import CalendarEvent from './CalendarEvent';
 
 
-export default function Day({ day, setDays, days, setNumOfDays }: DayProps) {
+export default function Day({ moduleIndex, day, setDays, days, setNumOfDays }: DayProps) {
     const handleAddEvent = () => {
         const editedDays = [...days];
 
@@ -51,37 +51,75 @@ export default function Day({ day, setDays, days, setNumOfDays }: DayProps) {
 
     return (
         <>
-            <div className="w-auto space-x-2 flex flex-row justify-between">
-                <h2 className="flex items-center min-w-14 align-bottom">Day {day.dayNumber}</h2>
-                <div className="flex w-[800px]">
-                    <InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={day.description} />
+        <div>
+            {day.events.length > 0
+                ? <div className="collapse">
+                    <input type="checkbox" id={`collapse-toggle-events-${moduleIndex}-${day.dayNumber}`} className="hidden" />
+                    <div className="collapse-title text-base w-100 flex flex-row">
+                        <h2 className="align-bottom font-bold w-1/12">Day {day.dayNumber}</h2>
+                        <div className="flex w-6/12 xl:w-7/12">
+                            <InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={day.description} />
+                        </div>
+                        <div className="w-2/12 flex justify-center">
+                            <PrimaryBtn onClick={handleAddEvent}> + Event</PrimaryBtn>
+                        </div>
+                        <div className="w-2/12 xl:w-1/12 flex justify-start gap-1">
+                            <PrimaryBtn onClick={() => handleAddDays(day.dayNumber - 1)}>+</PrimaryBtn>
+                            <TrashBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
+                        </div>
+                        <label htmlFor={`collapse-toggle-events-${moduleIndex}-${day.dayNumber}`} className=" w-1/12 cursor-pointer flex flex-row items-center justify-end">
+                            <h6 className='text-xs'>Events</h6>
+                            <svg className="fill-current w-4 h-4 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M15.3 9.3l-3.3 3.3-3.3-3.3-1.4 1.4 4.7 4.7 4.7-4.7z" />
+                            </svg>
+                        </label>
+                    </div>
+                    <div className="collapse-content">
+                        <table className="table table-sm table-fixed">
+                            <thead>
+                                <tr>
+                                    <th className="w-2/12">Event name</th>
+                                    <th className="w-4/12">Description</th>
+                                    <th className="w-1/6">Start</th>
+                                    <th className="w-1/6">End</th>
+                                    <th className="w-1/12"></th>
+                                    <th className="w-1/12"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {day.events.map((event, index) => (
+                                    <CalendarEvent
+                                        event={event}
+                                        key={index}
+                                        days={days}
+                                        setDays={setDays}
+                                        index={index}
+                                        dayNumber={day.dayNumber}
+                                    />
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <PrimaryBtn onClick={handleAddEvent}> + Add Event</PrimaryBtn>
-                <div className="flex items-end">
-                    <PrimaryBtn onClick={() => handleAddDays(day.dayNumber - 1)}>+</PrimaryBtn>
+                : <div className="collapse">
+                    <input type="checkbox" id={`collapse-toggle-events-${day.dayNumber}`} className="hidden" />
+                    <div className="collapse-title text-base w-100 flex flex-row">
+                        <h2 className="align-bottom font-bold w-1/12">Day {day.dayNumber}</h2>
+                        <div className="flex w-6/12 xl:w-7/12">
+                            <InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={day.description} />
+                        </div>
+                        <div className="w-2/12 flex justify-center">
+                            <PrimaryBtn onClick={handleAddEvent}> + Event</PrimaryBtn>
+                        </div>
+                        <div className="w-2/12 xl:w-1/12 flex justify-start gap-1">
+                            <PrimaryBtn onClick={() => handleAddDays(day.dayNumber - 1)}>+</PrimaryBtn>
+                            <TrashBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
+                        </div>
+                        <h6 className='w-1/12 text-xs'></h6>
+                    </div>
                 </div>
-                <TrashBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
-            </div>
-            <div>
-                {day.events.length > 0
-                    ?
-                    <table className="table table-sm table-fixed">
-                        <thead>
-                            <tr>
-                                <th className="w-3/12">Event name</th>
-                                <th className="w-4/12">Description</th>
-                                <th className="w-1/6">Start</th>
-                                <th className="w-1/6">End</th>
-                                <th className="w-1/12"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {day.events.map((event, index) => <CalendarEvent event={event} key={index} days={days} setDays={setDays} index={index} dayNumber={day.dayNumber} />)}
-                        </tbody>
-                    </table>
-                    : <></>
-                }
-            </div>
-        </>
+            }
+        </div>
+    </>
     )
 }

@@ -86,8 +86,14 @@ export default function ModuleDetails() {
                                                     <tr key={eventIndex}>
                                                         <td className="text-sm">{event.name}</td>
                                                         <td className="text-sm">{event.description}</td>
-                                                        <td className="text-sm">{event.startTime}</td>
-                                                        <td className="text-sm">{event.endTime}</td>
+                                                        {event.startTime[0] == "0"
+                                                        ? <td className="text-sm">{event.startTime.slice(1)}</td>
+                                                        : <td className="text-sm">{event.startTime}</td>
+                                                        }
+                                                        {event.endTime[0] == "0"
+                                                        ? <td className="text-sm">{event.endTime.slice(1)}</td>
+                                                        : <td className="text-sm">{event.endTime}</td>
+                                                        }
                                                     </tr>
                                                 )}
                                                 <tr></tr>
