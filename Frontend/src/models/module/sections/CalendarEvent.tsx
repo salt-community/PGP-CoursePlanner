@@ -22,6 +22,7 @@ export default function CalendarEvent({ dayNumber, setDays, days, index, event }
         const editedDays = [...days];
 
         let correctTime = value.replaceAll(".", ":");
+        console.log(correctTime)
         editedDays[dayNumber - 1].events[index] = {
             ...editedDays[dayNumber - 1].events[index],
             [name]: correctTime
@@ -43,8 +44,6 @@ export default function CalendarEvent({ dayNumber, setDays, days, index, event }
     var endTimeDefault = event.endTime + ":00";
     if (endTimeDefault.length == 7)
         endTimeDefault = "0" + endTimeDefault;
-
-
 
     return (
         <tr className="gap-2">

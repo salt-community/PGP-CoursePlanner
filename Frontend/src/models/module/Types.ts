@@ -23,6 +23,7 @@ export type DayType = {
 };
 
 export type DayProps = {
+  moduleIndex: number;
   day: DayType;
   setDays: React.Dispatch<React.SetStateAction<DayType[]>>;
   days: DayType[];
