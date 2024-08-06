@@ -3,7 +3,6 @@ import PrimaryBtn from '../../../components/buttons/PrimaryBtn';
 import TrashBtn from '../../../components/buttons/TrashBtn';
 import CalendarEvent from '../../module/sections/CalendarEvent';
 import { AppliedDayProps } from '../Types';
-import { ModuleNode } from 'vite';
 
 export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDays }: AppliedDayProps) {
     const handleAddEvent = () => {

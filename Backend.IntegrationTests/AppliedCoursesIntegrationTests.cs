@@ -83,7 +83,7 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            var newAppliedCourse = new AppliedCourse() { StartDate = DateTime.Now, CourseId = 2 };
+            var newAppliedCourse = new AppliedCourse() {Name = "JavaScript S24", StartDate = new DateTime(2024-08-06), CourseId = 2, Color = "#3a0909"};
             var content = JsonConvert.SerializeObject(newAppliedCourse);
 
             var body = new StringContent(content, Encoding.UTF8, "application/json");

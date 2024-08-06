@@ -21,44 +21,20 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<AppliedModule>> CreateAppliedModule(AppliedModule appliedModule)
         {
-            var response = await _service.CreateAsync(appliedModule);
-            if (response == null)
-            {
-                return BadRequest("Unable to create appliedModule");
-            }
+            await _service.CreateAsync(appliedModule);
             return CreatedAtAction("GetAppliedModule", new { id = appliedModule.Id }, appliedModule);
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<AppliedModule>>> GetAppliedModules()
-        {
-            var response = await _service.GetAllAsync();
-            if (response != null)
-            {
-                return Ok(response);
-            }
-            return NotFound("Unable to get appliedModules");
-        }
+        public async Task<ActionResult<List<AppliedModule>>> GetAppliedModules() => Ok(await _service.GetAllAsync());
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<AppliedModule>> GetAppliedModule(int id)
-        {
-            var response = await _service.GetOneAsync(id);
-            if (response != null)
-            {
-                return Ok(response);
-            }
-            return NotFound("Applied module does not exist");
-        }
+        public async Task<ActionResult<AppliedModule>> GetAppliedModule(int id) => Ok(await _service.GetOneAsync(id));
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAppliedModule(int id, [FromBody] AppliedModule appliedModule)
         {
-            var response = await _service.UpdateAsync(id, appliedModule);
-            if (response == null)
-            {
-                return BadRequest("Unable to update applied module");
-            }
+            await _service.UpdateAsync(id, appliedModule);
             return NoContent();
         }
     }

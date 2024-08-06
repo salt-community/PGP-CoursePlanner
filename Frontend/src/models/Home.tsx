@@ -19,7 +19,6 @@ export default function Home() {
         const params = new URLSearchParams(location.search);
         const code = params.get('code')!;
 
-
         const { data: response, isLoading, isError } = useQuery({
             queryKey: ['accessCode'],
             queryFn: () => getTokens(code)
