@@ -63,19 +63,27 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         });
 
         setIsIncompleteInput(false);
-        if (moduleName.value == "" || numberOfDays.value == 0 || days.some(d => d.description == "") || events.some(e => e.name == "") || events.some(e => e.startTime == "") || events.some(e => e.endTime == "")) {
+        if (isStringInputIncorrect(moduleName.value) || numberOfDays.value == 0 || days.some(d => d.description == "") || events.some(e => e.name == "") || events.some(e => e.startTime == "") || events.some(e => e.endTime == "")) {
             setIsIncompleteInput(true);
         }
         else {
             const newModule: ModuleType = {
                 id: module.id ?? 0,
-                name: moduleName.value,
+                name: moduleName.value.trim(),
                 numberOfDays: numberOfDays.value,
                 days: days
             };
 
             mutation.mutate(newModule);
         }
+    }
+
+    const isStringInputIncorrect = (str: string) => {
+        var strNoSpace = str.replaceAll(" ", "");
+        if (strNoSpace.length > 0)
+            return false;
+        else
+            return true;
     }
 
     return (

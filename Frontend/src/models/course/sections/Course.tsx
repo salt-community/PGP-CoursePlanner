@@ -96,10 +96,10 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         setIsIncorrectName(false);
         setIsNotSelected(false);
         const isDuplicate = findDuplicates(courseModules);
-        if (isDuplicate || courseName.value == "" || numberOfWeeks.value == 0 || courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0))) {
+        if (isDuplicate || isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0 || courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0))) {
             if (isDuplicate)
                 setIsIncorrectModuleInput(true);
-            if (courseName.value == "" || numberOfWeeks.value == 0)
+            if (isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0)
                 setIsIncorrectName(true);
             if (courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0)))
                 setIsNotSelected(true);
@@ -107,7 +107,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         else {
             const newCourse: CourseType = {
                 id: course.id ?? 0,
-                name: courseName.value,
+                name: courseName.value.trim(),
                 numberOfWeeks: numberOfWeeks.value,
                 moduleIds: courseModuleIds,
                 modules: courseModules,
@@ -126,6 +126,14 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             }
         }
         return results;
+    }
+
+    const isStringInputIncorrect = (str: string) => {
+        var strNoSpace = str.replaceAll(" ", "");
+        if (strNoSpace.length > 0)
+            return false;
+        else
+            return true;
     }
 
     return (
