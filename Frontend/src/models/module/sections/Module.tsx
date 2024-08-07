@@ -17,7 +17,6 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
     const [days, setDays] = useState<DayType[]>(module.days);
 
-    // Fix applied here for handling track as an array
     const [track, setTrack] = useState<string[]>(module.track || ["dotnet"]);
 
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
@@ -98,12 +97,19 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         }
     });
 
+    const handleTrackChange = (selectedTrack: string) => {
+        if (track.includes(selectedTrack)) {
+            setTrack(track.filter(t => t !== selectedTrack));
+        } else {
+            setTrack([...track, selectedTrack]);
+        }
+    };
+
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         const { moduleName } = e.target as typeof e.target & { moduleName: { value: string } };
         const { numberOfDays } = e.target as typeof e.target & { numberOfDays: { value: number } };
-        const { track } = e.target as typeof e.target & { track: { value: string } };
         const events: EventType[] = [];
         days.forEach(day => {
             var eventsOfDay = day.events;
@@ -128,7 +134,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                 name: moduleName.value,
                 numberOfDays: numberOfDays.value,
                 days: days,
-                track: [track.value]  // Ensure track is an array
+                track: track  // Track is an array of selected tracks
             };
 
             mutation.mutate(newModule);
@@ -154,16 +160,37 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                         className="input input-bordered input-sm max-w-xs" 
                         placeholder="Number of days" 
                     />
-                    <select 
-                        name="track" 
-                        onChange={(e) => setTrack([e.target.value])}  // Handle as array
-                        value={track[0]}  // Use first element of the array
-                        className="input input-bordered input-sm max-w-xs"
-                    >
-                        <option value="dotnet">.NET</option>
-                        <option value="javascript">JavaScript</option>
-                        <option value="java">Java</option>
-                    </select>
+
+                    <div className="flex flex-col space-y-2">
+                        <label>
+                            <input
+                                type="checkbox"
+                                value="dotnet"
+                                checked={track.includes("dotnet")}
+                                onChange={(e) => handleTrackChange(e.target.value)}
+                            />
+                            .NET
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                value="javascript"
+                                checked={track.includes("javascript")}
+                                onChange={(e) => handleTrackChange(e.target.value)}
+                            />
+                            JavaScript
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                value="java"
+                                checked={track.includes("java")}
+                                onChange={(e) => handleTrackChange(e.target.value)}
+                            />
+                            Java
+                        </label>
+                    </div>
+                    
                     <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
                 </div>
                 <div className="flex flex-col space-y-2">
