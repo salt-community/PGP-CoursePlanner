@@ -56,8 +56,6 @@ namespace Backend.Services
                     day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
                 }
             }
-
-
             return course;
         }
 

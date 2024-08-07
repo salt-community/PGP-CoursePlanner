@@ -21,6 +21,18 @@ public class CourseService : IService<Course>
                 .ThenInclude(module => module!.Days)
                 .ThenInclude(day => day.Events)
                 .ToListAsync();
+
+        foreach (var course in courses)
+        {
+            foreach (var courseModule in course.Modules)
+            {
+                courseModule.Module.Days = courseModule.Module.Days.OrderBy(d => d.DayNumber).ToList();
+                foreach (var day in courseModule.Module.Days)
+                {
+                    day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
+                }
+            }
+        }
         return courses;
 
     }
@@ -32,6 +44,15 @@ public class CourseService : IService<Course>
                 .ThenInclude(module => module!.Days)
                 .ThenInclude(day => day.Events)
                 .FirstOrDefaultAsync(course => course.Id == id);
+
+            foreach (var courseModule in course.Modules)
+            {
+                courseModule.Module.Days = courseModule.Module.Days.OrderBy(d => d.DayNumber).ToList();
+                foreach (var day in courseModule.Module.Days)
+                {
+                    day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
+                }
+            }
         return course ?? throw new NotFoundByIdException("Course", id);
     }
     public async Task<Course> CreateAsync(Course course)
