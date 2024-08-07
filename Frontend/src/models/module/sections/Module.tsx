@@ -16,7 +16,10 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
     const [days, setDays] = useState<DayType[]>(module.days);
-    const [track, setTrack] = useState<string>(module.track || "dotnet");
+
+    // Fix applied here for handling track as an array
+    const [track, setTrack] = useState<string[]>(module.track || ["dotnet"]);
+
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
     const [isOpened, setIsOpened] = useState<boolean>(false);
 
@@ -42,9 +45,8 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
             var course = allCourses.find(c => c.id == courseId);
             var moduleIds = course?.moduleIds;
             moduleIds?.forEach(mId => {
-                usedModules.push(mId)
-            }
-            )
+                usedModules.push(mId);
+            });
         });
     }
 
@@ -68,7 +70,6 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         if (numOfDays < days.length) {
             editedDays.splice(numOfDays, days.length - numOfDays);
         }
-
         else {
             const numOfDaysArray = ([...Array(numOfDays - days.length).keys()].map(i => i + 1));
 
@@ -79,12 +80,11 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                     events: []
                 };
 
-                editedDays.push(newDay)
-            })
-
+                editedDays.push(newDay);
+            });
         }
         setDays(editedDays);
-    }
+    };
 
     const queryClient = useQueryClient();
 
@@ -93,10 +93,10 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
             return submitFunction(module);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
-            navigate(`/modules`)
+            queryClient.invalidateQueries({ queryKey: ['modules'] });
+            navigate(`/modules`);
         }
-    })
+    });
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -109,33 +109,57 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
             var eventsOfDay = day.events;
             eventsOfDay.forEach(event => {
                 events.push(event);
-            })
+            });
         });
 
         setIsIncompleteInput(false);
-        if (moduleName.value == "" || numberOfDays.value == 0 || days.some(d => d.description == "") || events.some(e => e.name == "") || events.some(e => e.startTime == "") || events.some(e => e.endTime == "")) {
+        if (
+            moduleName.value == "" || 
+            numberOfDays.value == 0 || 
+            days.some(d => d.description == "") || 
+            events.some(e => e.name == "") || 
+            events.some(e => e.startTime == "") || 
+            events.some(e => e.endTime == "")
+        ) {
             setIsIncompleteInput(true);
-        }
-        else {
+        } else {
             const newModule: ModuleType = {
                 id: module.id ?? 0,
                 name: moduleName.value,
                 numberOfDays: numberOfDays.value,
                 days: days,
-                track: track.value
+                track: [track.value]  // Ensure track is an array
             };
 
             mutation.mutate(newModule);
         }
-    }
+    };
 
     return (
         <section className="px-4 md:px-24 lg:px-56">
             <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 ">
                 <div className="w-auto flex justify-between space-x-2">
-                    <InputSmall type="text" name="moduleName" onChange={(e) => setModuleName(e.target.value)} placeholder="Module name" value={moduleName} />
-                    <input type="number" name="numberOfDays" onChange={(e) => setNumOfDays(parseInt(e.target.value))} value={numOfDays} className="input input-bordered input-sm max-w-xs" placeholder="Number of days" />
-                    <select name="track" onChange={(e) => setTrack(e.target.value)} value={track} className="input input-bordered input-sm max-w-xs">
+                    <InputSmall 
+                        type="text" 
+                        name="moduleName" 
+                        onChange={(e) => setModuleName(e.target.value)} 
+                        placeholder="Module name" 
+                        value={moduleName} 
+                    />
+                    <input 
+                        type="number" 
+                        name="numberOfDays" 
+                        onChange={(e) => setNumOfDays(parseInt(e.target.value))} 
+                        value={numOfDays} 
+                        className="input input-bordered input-sm max-w-xs" 
+                        placeholder="Number of days" 
+                    />
+                    <select 
+                        name="track" 
+                        onChange={(e) => setTrack([e.target.value])}  // Handle as array
+                        value={track[0]}  // Use first element of the array
+                        className="input input-bordered input-sm max-w-xs"
+                    >
                         <option value="dotnet">.NET</option>
                         <option value="javascript">JavaScript</option>
                         <option value="java">Java</option>
@@ -144,37 +168,59 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                 </div>
                 <div className="flex flex-col space-y-2">
                     {days.map((day) =>
-                        <Day key={"day_" + day.dayNumber} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays} />)}
+                        <Day 
+                            key={"day_" + day.dayNumber} 
+                            setDays={setDays} 
+                            days={days} 
+                            day={day} 
+                            setNumOfDays={setNumOfDays} 
+                        />
+                    )}
                 </div>
                 {isIncompleteInput &&
-                    <p className="error-message text-red-600 text-sm" id="invalid-helper">Please fill in all the fields</p>}
+                    <p className="error-message text-red-600 text-sm" id="invalid-helper">
+                        Please fill in all the fields
+                    </p>
+                }
 
                 {usedModules.find(m => m == module.id)
                     ? <Popup
                         open={isOpened}
                         onOpen={() => setIsOpened(true)}
-                        trigger={<input className="mb-4 btn btn-sm mt-4 max-w-48 btn-success text-white" value={buttonText} />}
+                        trigger={
+                            <input 
+                                className="mb-4 btn btn-sm mt-4 max-w-48 btn-success text-white" 
+                                value={buttonText || "Submit"} 
+                            />
+                        }
                         modal
                     >
-                        {
-                            <div ref={popupRef}>
-                                <div className="flex flex-col">
-                                    <div className="flex justify-end">
-                                        <CloseBtn onClick={() => setIsOpened(false)} />
-                                    </div>
-                                    <h1 className="m-2">This module is part of a course used in the calendar. Changing it will change the calendar entries.</h1>
-                                    <h1 className="font-bold m-2">Do you want to continue?</h1>
-                                    <div className="flex items-center justify-center mb-4 gap-2">
-                                        <input type="submit" form="editCourse-form" className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
-                                        <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={() => setIsOpened(false)} />
-                                    </div>
+                        <div ref={popupRef}>
+                            <div className="flex flex-col">
+                                <div className="flex justify-end">
+                                    <CloseBtn onClick={() => setIsOpened(false)} />
+                                </div>
+                                <h1 className="m-2">This module is part of a course used in the calendar. Changing it will change the calendar entries.</h1>
+                                <h1 className="font-bold m-2">Do you want to continue?</h1>
+                                <div className="flex items-center justify-center mb-4 gap-2">
+                                    <input 
+                                        type="submit" 
+                                        form="editCourse-form" 
+                                        className="btn btn-sm mt-4 w-24 btn-success text-white" 
+                                        value={"Yes"} 
+                                    />
+                                    <input 
+                                        className="btn btn-sm mt-4 w-24 btn-error text-white" 
+                                        value={"No"} 
+                                        onClick={() => setIsOpened(false)} 
+                                    />
                                 </div>
                             </div>
-                        }
+                        </div>
                     </Popup>
                     : <SuccessBtn value={buttonText}></SuccessBtn>
                 }
             </form>
         </section>
-    )
+    );
 }

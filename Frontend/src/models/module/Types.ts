@@ -7,7 +7,7 @@ export type ModuleType = {
   numberOfDays: number;
   days: DayType[];
   courseModules?: CourseModule[];
-  track: [];
+  track: string[];
 };
 
 export type ModuleProps = {
