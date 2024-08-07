@@ -95,6 +95,56 @@ export default function () {
         setAppliedModules(editedModules);
     }
 
+    const moveDown = (index: number) => {
+        const editedModules = [...appliedModules!];
+        console.log(editedModules)
+
+        const tempIndex: AppliedModuleType = {
+            id: editedModules[index].id,
+            name: editedModules[index].name,
+            numberOfDays: editedModules[index].numberOfDays,
+            days: editedModules[index].days
+        };
+        console.log(tempIndex)
+
+        const tempIndexPlusOne: AppliedModuleType = {
+            id: editedModules[index + 1].id,
+            name: editedModules[index + 1].name,
+            numberOfDays: editedModules[index + 1].numberOfDays,
+            days: editedModules[index + 1].days
+        };
+        console.log(tempIndexPlusOne)
+
+        editedModules[index] = tempIndexPlusOne;
+        editedModules[index + 1] = tempIndex;
+        console.log(editedModules)
+
+        setAppliedModules(editedModules);
+    }
+
+    const moveUp = (index: number) => {
+        const editedModules = [...appliedModules!];
+
+        const tempIndex: AppliedModuleType = {
+            id: editedModules[index].id,
+            name: editedModules[index].name,
+            numberOfDays: editedModules[index].numberOfDays,
+            days: editedModules[index].days
+        };
+
+        const tempIndexMinusOne: AppliedModuleType = {
+            id: editedModules[index - 1].id,
+            name: editedModules[index - 1].name,
+            numberOfDays: editedModules[index - 1].numberOfDays,
+            days: editedModules[index - 1].days
+        };
+
+        editedModules[index] = tempIndexMinusOne;
+        editedModules[index - 1] = tempIndex;
+
+        setAppliedModules(editedModules);
+    }
+
     const handleChange = async (event: SyntheticEvent) => {
         const value = (event.target as HTMLSelectElement).value;
         const [moduleId, indexStr, appModuleId] = value.split("_");
@@ -279,18 +329,34 @@ export default function () {
                                         : <div className="collapse border-primary border mb-2 ">
                                             <input type="checkbox" id={`collapse-toggle-${index}`} className="hidden" />
                                             <div className="collapse-title flex flex-row">
+                                                {index == 0 &&
+                                                    <div className="flex flex-col w-[26px] mr-2">
+                                                        <button type="button" className="w-full h-full self-center" onClick={() => moveDown(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3F00E7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
+                                                    </div>
+                                                }
+                                                {index == appliedModules.length - 1 &&
+                                                    <div className="flex flex-col w-[26px] mr-2">
+                                                        <button type="button" className="w-full h-full self-center" onClick={() => moveUp(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3F00E7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
+                                                    </div>
+                                                }
+                                                {index != 0 && index != appliedModules.length - 1 &&
+                                                    <div className="flex flex-col w-[26px] mr-2">
+                                                        <button type="button" className="w-full h-full self-center" onClick={() => moveUp(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3F00E7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
+                                                        <button type="button" className="w-full h-full self-center" onClick={() => moveDown(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3F00E7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
+                                                    </div>
+                                                }
                                                 <label htmlFor={`collapse-toggle-${index}`} className="cursor-pointer flex flex-row w-5/6">
                                                     <h1 className="text-lg text-primary self-center">
                                                         Module {index + 1}: {appliedModule.name}
                                                     </h1>
                                                 </label>
-                                                <div className="w-1/6 flex gap-1 justify-end">
+                                                <div className="w-1/6 flex gap-1 justify-end items-center">
                                                     <PrimaryBtn onClick={() => handleAddModule(index)}>+</PrimaryBtn>
                                                     <TrashBtn handleDelete={() => handleDeleteModule(index)} />
                                                 </div>
                                             </div>
                                             <div className="collapse-content">
-                                                <AppliedModule module={appliedModule} index={index} submitFunction={editAppliedModule} buttonText="Save module changes" />
+                                                <AppliedModule key={appliedModule.id} module={appliedModule} index={index} submitFunction={editAppliedModule} buttonText="Save module changes" />
                                             </div>
                                         </div>}
                                 </>
