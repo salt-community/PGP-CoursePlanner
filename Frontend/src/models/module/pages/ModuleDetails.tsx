@@ -55,7 +55,7 @@ export default function ModuleDetails() {
                     <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                         <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
                             <h1 className="pb-4 text-xl text-primary font-bold">{module.name}</h1>
-                            <p className="text-lg font-medium">Track: {module.track}</p> {/* Display the track */}
+                            <p className="text-lg font-medium">Track: {module.track.join(', ')}</p>
                             {module.days.map((day) =>
                                 <div key={"day_" + day.dayNumber}>
                                     <h1 className="text-lg text-black font-bold self-start">
