@@ -205,6 +205,7 @@ export default function Day({ moduleIndex, day, setDays, days, setNumOfDays }: D
                                 <tbody>
                                     {day.events.map((event, index) => (
                                         <CalendarEvent
+                                            appliedTrue={false}
                                             event={event}
                                             key={index}
                                             days={days}

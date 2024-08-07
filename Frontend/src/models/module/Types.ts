@@ -39,6 +39,7 @@ export type EventType = {
 };
 
 export type EventProps = {
+  appliedTrue: boolean;
   setDays: React.Dispatch<React.SetStateAction<DayType[]>>;
   days: DayType[];
   index: number;

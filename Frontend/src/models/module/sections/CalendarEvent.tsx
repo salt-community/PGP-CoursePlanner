@@ -4,7 +4,7 @@ import InputSmall from "../../../components/inputFields/InputSmall";
 import InputSmallTime from "../../../components/inputFields/InputSmallTime";
 import { EventProps } from "../Types";
 
-export default function CalendarEvent({ dayNumber, setDays, days, index, event }: EventProps) {
+export default function CalendarEvent({appliedTrue, dayNumber, setDays, days, index, event }: EventProps) {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -98,13 +98,14 @@ export default function CalendarEvent({ dayNumber, setDays, days, index, event }
             <td><InputSmallTime onChange={handleTimeChange} name="endTime" value={endTimeDefault} type="time" /></td>
             <td className="text-end flex gap-1">
                 <TrashBtn handleDelete={handleDeleteEvent} />
+                {!appliedTrue &&
                 <div className="relative inline-block">
                     <button
                         ref={buttonRef}
                         type="button"
                         onClick={handleClick}
                         className="btn btn-sm max-w-48 bg-white border-black"
-                    >
+                        >
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="12" cy="12" r="1"></circle>
                             <circle cx="19" cy="12" r="1"></circle>
@@ -113,12 +114,12 @@ export default function CalendarEvent({ dayNumber, setDays, days, index, event }
                     </button>
                     {showOptions && popupPosition && (
                         <div
-                            ref={optionsRef}
-                            className="fixed w-60 bg-white border border-gray-200 shadow-lg rounded-md z-50"
-                            style={{
-                                top: popupPosition.top,
-                                left: popupPosition.left
-                            }}
+                        ref={optionsRef}
+                        className="fixed w-60 bg-white border border-gray-200 shadow-lg rounded-md z-50"
+                        style={{
+                            top: popupPosition.top,
+                            left: popupPosition.left
+                        }}
                         >
                             <ul className="py-1">
                                 <li>
@@ -126,7 +127,7 @@ export default function CalendarEvent({ dayNumber, setDays, days, index, event }
                                         type="button"
                                         onClick={handleMove}
                                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    >
+                                        >
                                         Move Event to another Day
                                     </button>
                                 </li>
@@ -135,7 +136,7 @@ export default function CalendarEvent({ dayNumber, setDays, days, index, event }
                                         type="button"
                                         onClick={handleMoveAnotherModule}
                                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    >
+                                        >
                                         Move Event to another Module
                                     </button>
                                 </li>
@@ -143,6 +144,7 @@ export default function CalendarEvent({ dayNumber, setDays, days, index, event }
                         </div>
                     )}
                 </div>
+                }
             </td>
         </tr>
 
