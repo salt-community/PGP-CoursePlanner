@@ -37,7 +37,7 @@ export default function AppliedCourses() {
             <Login />
             :
             <Page>
-                <section className="px-4 md:px-24 lg:px-56">
+                <section className="px-4 pb-10 md:px-24 lg:px-56">
                     {isLoading && <LoadingMessage />}
                     {isError && <ErrorMessage />}
                     {allAppliedCourses
