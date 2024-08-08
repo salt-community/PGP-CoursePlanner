@@ -12,6 +12,9 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
     const [days, setDays] = useState<DayType[]>(module.days);
+
+    const [track, setTrack] = useState<string[]>(module.track || ["dotnet"]);
+
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
 
     const handleDays = () => {
@@ -19,7 +22,6 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         if (numOfDays < days.length) {
             editedDays.splice(numOfDays, days.length - numOfDays);
         }
-
         else {
             const numOfDaysArray = ([...Array(numOfDays - days.length).keys()].map(i => i + 1));
 
@@ -30,12 +32,11 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                     events: []
                 };
 
-                editedDays.push(newDay)
-            })
-
+                editedDays.push(newDay);
+            });
         }
         setDays(editedDays);
-    }
+    };
 
     const queryClient = useQueryClient();
 
@@ -44,10 +45,18 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
             return submitFunction(module);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
-            navigate(`/modules`)
+            queryClient.invalidateQueries({ queryKey: ['modules'] });
+            navigate(`/modules`);
         }
-    })
+    });
+
+    const handleTrackChange = (selectedTrack: string) => {
+        if (track.includes(selectedTrack)) {
+            setTrack(track.filter(t => t !== selectedTrack));
+        } else {
+            setTrack([...track, selectedTrack]);
+        }
+    };
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -59,19 +68,19 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
             var eventsOfDay = day.events;
             eventsOfDay.forEach(event => {
                 events.push(event);
-            })
+            });
         });
 
         setIsIncompleteInput(false);
         if (isStringInputIncorrect(moduleName.value) || numberOfDays.value == 0 || days.some(d => d.description == "") || events.some(e => e.name == "") || events.some(e => e.startTime == "") || events.some(e => e.endTime == "")) {
             setIsIncompleteInput(true);
-        }
-        else {
+        } else {
             const newModule: ModuleType = {
                 id: module.id ?? 0,
                 name: moduleName.value.trim(),
                 numberOfDays: numberOfDays.value,
-                days: days
+                days: days,
+                track: track  // Track is an array of selected tracks
             };
 
             mutation.mutate(newModule);
@@ -95,12 +104,56 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                     <div className="flex flex-row items-center">
                         <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Module Name: </h2>
                         <div className="w-3/4">
-                            <InputSmall type="text" name="moduleName" onChange={(e) => setModuleName(e.target.value)} placeholder="Module name" value={moduleName} />
+                            <InputSmall 
+                        type="text" 
+                        name="moduleName" 
+                        onChange={(e) => setModuleName(e.target.value)} 
+                        placeholder="Module name" 
+                        value={moduleName} 
+                    />
                         </div>
                     </div>
                     <div className="flex flex-row items-center">
                         <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Number of days:</h2>
-                        <input type="number" name="numberOfDays" onChange={(e) => setNumOfDays(parseInt(e.target.value))} value={numOfDays} className="input input-bordered input-sm w-3/5 mr-4" placeholder="Number of days" />
+                        <input 
+                        type="number" 
+                        name="numberOfDays" 
+                        onChange={(e) => setNumOfDays(parseInt(e.target.value))} 
+                        value={numOfDays} 
+                        className="input input-bordered input-sm w-3/5 mr-4" 
+                        placeholder="Number of days" 
+                    />
+
+                    <div className="flex flex-col space-y-2">
+                        <label>
+                            <input
+                                type="checkbox"
+                                value="dotnet"
+                                checked={track.includes("dotnet")}
+                                onChange={(e) => handleTrackChange(e.target.value)}
+                            />
+                            .NET
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                value="javascript"
+                                checked={track.includes("javascript")}
+                                onChange={(e) => handleTrackChange(e.target.value)}
+                            />
+                            JavaScript
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                value="java"
+                                checked={track.includes("java")}
+                                onChange={(e) => handleTrackChange(e.target.value)}
+                            />
+                            Java
+                        </label>
+                    </div>
+                    
                         <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
                     </div>
                 </div>
@@ -113,5 +166,5 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                 <SuccessBtn value={buttonText}></SuccessBtn>
             </form>
         </section>
-    )
+    );
 }

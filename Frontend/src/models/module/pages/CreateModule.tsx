@@ -15,7 +15,8 @@ export default function CreateModule() {
             dayNumber: 1,
             description: "",
             events: []
-        }]
+        }],
+            track: []
     }
 
     return (

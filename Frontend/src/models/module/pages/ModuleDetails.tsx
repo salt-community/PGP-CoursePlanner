@@ -11,14 +11,11 @@ import Login from "../../login/Login";
 
 export default function ModuleDetails() {
     const navigate = useNavigate();
-
     const moduleId = getIdFromPath();
-
     const { data: module, isLoading, isError } = useQuery({
         queryKey: ['modules', moduleId],
         queryFn: () => getModuleById(parseInt(moduleId))
     });
-
     const { data: allCourses } = useQuery({
         queryKey: ['courses'],
         queryFn: () => getAllCourses()
@@ -31,9 +28,7 @@ export default function ModuleDetails() {
             });
         });
     }
-
     const queryClient = useQueryClient();
-
     const handleDelete = (id: number) => {
         if (!usedModules.find(m => m == id)) {
             mutation.mutate(id);
@@ -43,7 +38,6 @@ export default function ModuleDetails() {
             return;
         }
     }
-
     const mutation = useMutation({
         mutationFn: (id: number) => {
             return deleteModule(id);
@@ -56,16 +50,16 @@ export default function ModuleDetails() {
 
     return (
         getCookie("access_token") == undefined
-            ? <Login />
-            : <Page>
-                {isLoading && <LoadingMessage />}
-                {isError && <ErrorMessage />}
+            ? <Login />            : <Page>
+                {isLoading && <LoadingMessage  />}
+                {isError && <ErrorMessage  />}
                 {module &&
                     <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
                         <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                             <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
                                 <h1 className="pb-4 text-xl text-primary font-bold">{module.name}</h1>
-                                {module.days.map((day) =>
+                                <p className="text-lg font-medium">Track: {module.track.join(', ')}</p>
+                            {module.days.map((day) =>
                                     <div className="w-full" key={"day_" + day.dayNumber}>
                                         <h1 className="text-lg text-black font-bold self-start">
                                             Day {day.dayNumber}: {day.description}
