@@ -13,6 +13,6 @@ namespace Backend.Models
         public int NumberOfDays { get; set; }
         public List<AppliedDay> Days { get; set; } = [];
         public int Order { get; set; }
-        public string? Track { get; set; }
+        public string[]? Track { get; set; }
     }
 }

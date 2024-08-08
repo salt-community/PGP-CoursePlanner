@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240802140223_initialCreate")]
-    partial class initialCreate
+    [Migration("20240808101552_AppliedModuleUpdate")]
+    partial class AppliedModuleUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -291,6 +291,7 @@ namespace Backend.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Track")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
