@@ -288,7 +288,6 @@ export default function () {
                             >
                                 {
                                     <div ref={popupRef}>
-
                                         <div className="flex flex-col">
                                             <div className="flex justify-end">
                                                 <CloseBtn onClick={() => setIsOpened(false)} />

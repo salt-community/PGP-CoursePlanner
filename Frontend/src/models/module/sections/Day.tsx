@@ -73,7 +73,7 @@ export default function Day({ moduleIndex, day, setDays, days, setNumOfDays }: D
         setDays(editedDays);
     }
 
-    const [isMove, setIsMove] = useState<boolean>(false);
+    const [_isMove, setIsMove] = useState<boolean>(false);
 
     const popupRef = useRef<HTMLDivElement>(null);
     useEffect(() => {

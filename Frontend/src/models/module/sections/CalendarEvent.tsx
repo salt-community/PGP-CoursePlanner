@@ -15,7 +15,6 @@ export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, i
             ...editedDays[dayNumber - 1].events[index],
             [name]: value
         }
-
         setDays(editedDays);
     }
 
@@ -29,7 +28,6 @@ export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, i
             ...editedDays[dayNumber - 1].events[index],
             [name]: correctTime
         }
-
         setDays(editedDays);
     }
 
@@ -47,8 +45,8 @@ export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, i
     if (endTimeDefault.length == 7)
         endTimeDefault = "0" + endTimeDefault;
 
-    const [isMove, setIsMove] = useState<boolean>(false);
-    const [isMoveAnotherModule, setIsMoveAnotherModule] = useState<boolean>(false);
+    const [_isMove, setIsMove] = useState<boolean>(false);
+    const [_isMoveAnotherModule, setIsMoveAnotherModule] = useState<boolean>(false);
 
     const popupRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -84,6 +82,7 @@ export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, i
     const optionsRef = useRef<HTMLDivElement>(null);
 
     const handleClick = () => {
+        setIsMove(false);
         if (buttonRef.current) {
             const buttonRect = buttonRef.current.getBoundingClientRect();
             setPopupPosition({
@@ -120,9 +119,38 @@ export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, i
         };
     }, [showOptions]);
 
+    const [selectedDay, setSelectedDay] = useState('DEFAULT');
+    const handleSelectDay = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedDay(event.target.value);
+    };
+
     const handleMove = () => {
-        console.log('Event moves to another Day');
-        // Add your delete logic here
+        var originalDayIndex = days.findIndex(d => d.dayNumber == dayNumber);
+        var selectedDayIndex = days.findIndex(d => d.dayNumber == parseInt(selectedDay));
+
+        days[originalDayIndex].events.splice(index, 1);
+        days[originalDayIndex].events.sort((a, b) => {
+            if (a.startTime < b.startTime) return -1;
+            if (a.startTime > b.startTime) return 1;
+            if (a.endTime < b.endTime) return -1;
+            if (a.endTime > b.endTime) return 1;
+            return 0;
+        });
+        days[selectedDayIndex].events.push(event);
+        days[selectedDayIndex].events.sort((a, b) => {
+            if (a.startTime < b.startTime) return -1;
+            if (a.startTime > b.startTime) return 1;
+            if (a.endTime < b.endTime) return -1;
+            if (a.endTime > b.endTime) return 1;
+            return 0;
+        });
+
+        const editedDays = [...days];
+        setDays(editedDays);
+        console.log(days)
+
+        setShowOptions(false);
+        setIsMove(false);
     };
 
     const handleMoveAnotherModule = () => {
@@ -164,6 +192,7 @@ export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, i
                                 <ul className="py-1">
                                     <li>
                                         <Popup
+                                            open={_isMove}
                                             onOpen={() => setIsMove(true)}
                                             trigger={<button
                                                 type="button"
@@ -179,11 +208,19 @@ export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, i
                                                         <div className="flex justify-end">
                                                             <CloseBtn onClick={() => setIsMove(false)} />
                                                         </div>
-                                                        <h1 className="m-2">You want to move this event to another day.</h1>
-                                                        <h1 className="font-bold m-2">Do you want to continue?</h1>
+                                                        <h1 className="m-2 self-center">To which day do you want to move this event?</h1>
+                                                        <div className="flex flex-col self-center">
+                                                            <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
+                                                                {days.map((day, dayIndex) =>
+                                                                    <> {day.dayNumber == dayNumber
+                                                                        ? <option key={day.id + "," + dayIndex} value="DEFAULT">Day {day.dayNumber} ({day.description})</option>
+                                                                        : <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber} ({day.description})</option>}
+                                                                    </>)}
+                                                            </select>
+                                                        </div>
                                                         <div className="flex items-center justify-center mb-4 gap-2">
-                                                            <input onClick={handleMove} className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
-                                                            <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={() => setIsMove(false)} />
+                                                            <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-28 btn-success text-white" value={"Move event"} />
+                                                            <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"Cancel"} onClick={() => setIsMove(false)} />
                                                         </div>
                                                     </div>
                                                 </div>

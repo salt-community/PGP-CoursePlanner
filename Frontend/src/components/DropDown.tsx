@@ -41,7 +41,6 @@ export default function DropDown({ thisCourseModule, index, selectedModules, mod
                             </>)}
                     </>}
             </select>
-
         </div>
     )
 }
