@@ -86,10 +86,8 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
             return true;
     }
 
-    console.log(module)
-
     return (
-        <section className="px-4 md:px-24 lg:px-56">
+        <section className="px-4 pb-10 md:px-24 lg:px-56">
             <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
                 <div className="flex flex-col justify-between">
                     <div className="flex flex-row items-center">

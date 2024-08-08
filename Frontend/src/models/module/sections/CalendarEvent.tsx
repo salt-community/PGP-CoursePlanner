@@ -3,8 +3,10 @@ import TrashBtn from "../../../components/buttons/TrashBtn";
 import InputSmall from "../../../components/inputFields/InputSmall";
 import InputSmallTime from "../../../components/inputFields/InputSmallTime";
 import { EventProps } from "../Types";
+import Popup from "reactjs-popup";
+import CloseBtn from "../../../components/buttons/CloseBtn";
 
-export default function CalendarEvent({appliedTrue, dayNumber, setDays, days, index, event }: EventProps) {
+export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, index, event }: EventProps) {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -45,6 +47,37 @@ export default function CalendarEvent({appliedTrue, dayNumber, setDays, days, in
     if (endTimeDefault.length == 7)
         endTimeDefault = "0" + endTimeDefault;
 
+    const [isMove, setIsMove] = useState<boolean>(false);
+    const [isMoveAnotherModule, setIsMoveAnotherModule] = useState<boolean>(false);
+
+    const popupRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+                setIsMove(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const popupRefAnotherModule = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        function handleClickOutsideAnotherModule(event: MouseEvent) {
+            if (popupRefAnotherModule.current && !popupRefAnotherModule.current.contains(event.target as Node)) {
+                setIsMoveAnotherModule(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutsideAnotherModule);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutsideAnotherModule);
+        };
+    }, []);
+
     const [showOptions, setShowOptions] = useState(false);
     const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
@@ -69,13 +102,6 @@ export default function CalendarEvent({appliedTrue, dayNumber, setDays, days, in
     };
 
     const handleScroll = () => {
-        // if (buttonRef.current) {
-        //     const buttonRect = buttonRef.current.getBoundingClientRect();
-        //     setPopupPosition({
-        //         top: buttonRect.bottom,
-        //         left: buttonRect.left
-        //     });
-        // }
         setShowOptions(false);
     };
 
@@ -113,51 +139,89 @@ export default function CalendarEvent({appliedTrue, dayNumber, setDays, days, in
             <td className="text-end flex gap-1">
                 <TrashBtn handleDelete={handleDeleteEvent} />
                 {!appliedTrue &&
-                <div className="relative inline-block">
-                    <button
-                        ref={buttonRef}
-                        type="button"
-                        onClick={handleClick}
-                        className="btn btn-sm max-w-48 bg-white border-black"
+                    <div className="relative inline-block">
+                        <button
+                            ref={buttonRef}
+                            type="button"
+                            onClick={handleClick}
+                            className="btn btn-sm max-w-48 bg-white border-black"
                         >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="12" cy="12" r="1"></circle>
-                            <circle cx="19" cy="12" r="1"></circle>
-                            <circle cx="5" cy="12" r="1"></circle>
-                        </svg>
-                    </button>
-                    {showOptions && popupPosition && (
-                        <div
-                        ref={optionsRef}
-                        className="fixed w-60 bg-white border border-gray-200 shadow-lg rounded-md z-50"
-                        style={{
-                            top: popupPosition.top,
-                            left: popupPosition.left
-                        }}
-                        >
-                            <ul className="py-1">
-                                <li>
-                                    <button
-                                        type="button"
-                                        onClick={handleMove}
-                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="1"></circle>
+                                <circle cx="19" cy="12" r="1"></circle>
+                                <circle cx="5" cy="12" r="1"></circle>
+                            </svg>
+                        </button>
+                        {showOptions && popupPosition && (
+                            <div
+                                ref={optionsRef}
+                                className="fixed w-60 bg-white border border-gray-200 shadow-lg rounded-md z-50"
+                                style={{
+                                    top: popupPosition.top,
+                                    left: popupPosition.left
+                                }}
+                            >
+                                <ul className="py-1">
+                                    <li>
+                                        <Popup
+                                            onOpen={() => setIsMove(true)}
+                                            trigger={<button
+                                                type="button"
+                                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            >
+                                                Move Event to another Day
+                                            </button>}
+                                            modal
                                         >
-                                        Move Event to another Day
-                                    </button>
-                                </li>
-                                <li>
-                                    <button
-                                        type="button"
-                                        onClick={handleMoveAnotherModule}
-                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            {
+                                                <div ref={popupRef}>
+                                                    <div className="flex flex-col">
+                                                        <div className="flex justify-end">
+                                                            <CloseBtn onClick={() => setIsMove(false)} />
+                                                        </div>
+                                                        <h1 className="m-2">You want to move this event to another day.</h1>
+                                                        <h1 className="font-bold m-2">Do you want to continue?</h1>
+                                                        <div className="flex items-center justify-center mb-4 gap-2">
+                                                            <input onClick={handleMove} className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
+                                                            <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={() => setIsMove(false)} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </Popup>
+                                    </li>
+                                    <li>
+                                        <Popup
+                                            onOpen={() => setIsMoveAnotherModule(true)}
+                                            trigger={<button
+                                                type="button"
+                                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            >
+                                                Move Event to another Module
+                                            </button>}
+                                            modal
                                         >
-                                        Move Event to another Module
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    )}
-                </div>
+                                            {
+                                                <div ref={popupRefAnotherModule}>
+                                                    <div className="flex flex-col">
+                                                        <div className="flex justify-end">
+                                                            <CloseBtn onClick={() => setIsMoveAnotherModule(false)} />
+                                                        </div>
+                                                        <h1 className="m-2">You want to move this event to another module.</h1>
+                                                        <h1 className="font-bold m-2">Do you want to continue?</h1>
+                                                        <div className="flex items-center justify-center mb-4 gap-2">
+                                                            <input onClick={handleMoveAnotherModule} className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
+                                                            <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={() => setIsMoveAnotherModule(false)} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </Popup>
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
+                    </div>
                 }
             </td>
         </tr>
