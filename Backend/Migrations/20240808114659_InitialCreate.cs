@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -180,6 +180,7 @@ namespace Backend.Migrations
                     StartTime = table.Column<string>(type: "TEXT", nullable: false),
                     EndTime = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
+                    ImportantDate = table.Column<bool>(type: "INTEGER", nullable: false),
                     DayId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>

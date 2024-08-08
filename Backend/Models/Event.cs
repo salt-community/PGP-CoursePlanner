@@ -12,6 +12,5 @@ namespace Backend.Models
         [JsonIgnore]
         public List<DateContent>? DateContents { get; set; }
 
-        public bool ImportantDate { get; set; }
     }
 }

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240802140223_initialCreate")]
-    partial class initialCreate
+    [Migration("20240808114659_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -246,6 +246,9 @@ namespace Backend.Migrations
                     b.Property<string>("EndTime")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("ImportantDate")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
