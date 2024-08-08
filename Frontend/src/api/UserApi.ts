@@ -1,33 +1,53 @@
+import { BACKEND_URL } from "./BackendUrl";
 
-const BASE_URL = "https://accounts.google.com/o/oauth2/token";
+const BASE_URL = `${BACKEND_URL}/Tokens`;
 
 export type tokenResponse = {
-    access_token: string;
-    expires_in: number;
-    scope: string;
-    token_type: string;
+  access_token: string;
+  expires_in: number;
+  id_token: string;
+};
+
+export async function getTokens(auth_code: string) {
+  try {
+    const code = encodeURIComponent(auth_code);
+    const response = await fetch(`${BASE_URL}/${code}`, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    const responseAsJson = await response.json();
+    return responseAsJson as tokenResponse;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-export async function getAccessToken(auth_code: string) {
-  const response = await fetch(BASE_URL, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify({
-        "grant_type": "authorization_code",
-        "code": auth_code,
-        "client_id": import.meta.env.VITE_APP_CLIENT_ID,
-        "client_secret": import.meta.env.VITE_APP_CLIENT_SECRET,
-        "redirect_uri": "http://localhost:5173"
-    }),
-  });
-  const data = await response.json();
-  return data as tokenResponse;
+export async function refreshTokens() {
+  try {
+    const response = await fetch(BASE_URL);
+
+    if (response && response.ok) {
+      const data = await response.json();
+      return data as tokenResponse;
+    }
+    return null;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-try {
-} catch (error) {
-  console.error("Error getting access token", error);
-  alert("Failed to get access token");
+export async function deleteRefreshToken() {
+  try {
+    await fetch(BASE_URL, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Accept: "application/json",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }

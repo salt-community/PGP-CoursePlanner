@@ -1,4 +1,3 @@
-
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -21,11 +20,7 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<AppliedCourse>> CreateAppliedCourse(AppliedCourse appliedCourse)
         {
-            var response = await _service.CreateAsync(appliedCourse);
-            if (response == null)
-            {
-                return BadRequest("Unable to create appliedCourse");
-            }
+            await _service.CreateAsync(appliedCourse);
             return CreatedAtAction("GetAppliedCourse", new { id = appliedCourse.Id }, appliedCourse);
         }
 
@@ -34,11 +29,8 @@ namespace Backend.Controllers
         public async Task<ActionResult<AppliedCourse>> GetAppliedCourse(int id)
         {
             var response = await _service.GetOneAsync(id);
-            if (response != null)
-            {
-                return Ok(response);
-            }
-            return NotFound("Applied course does not exist");
+            return Ok(response);
+
         }
 
         [HttpGet]
@@ -51,23 +43,15 @@ namespace Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAppliedCourse(int id)
         {
-            if (!await _service.DeleteAsync(id))
-            {
-                return BadRequest("Unable to delete applied course");
-            }
+            await _service.DeleteAsync(id);
             return NoContent();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCourse(int id, [FromBody] AppliedCourse appliedCourse)
+        public async Task<IActionResult> UpdateAppliedCourse(int id, [FromBody] AppliedCourse appliedCourse)
         {
-            var response = await _service.UpdateAsync(id, appliedCourse);
-            if (response == null)
-            {
-                return BadRequest("Unable to update course");
-            }
+            await _service.UpdateAsync(id, appliedCourse);
             return NoContent();
         }
-
     }
 }

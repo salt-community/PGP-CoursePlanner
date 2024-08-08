@@ -9,6 +9,10 @@ import {
 } from "date-fns";
 
 export const firstDayOfWeek = startOfWeek(new Date(), { weekStartsOn: 1 });
+var thisWeek = new Date();
+const nextWeek = new Date(thisWeek);
+nextWeek.setDate(thisWeek.getDate() + 7)
+export const firstDayOfNextWeek = startOfWeek(nextWeek, { weekStartsOn: 1 });
 
 export const getDateAsString = (date: Date) => {
   return format(date, "MM/dd/yyyy");
@@ -51,6 +55,11 @@ export const allDaysInMonth = (startDate: Date, endDate: Date) => {
 export const weekDays = eachDayOfInterval({
   start: firstDayOfWeek,
   end: addDays(firstDayOfWeek, 4),
+});
+
+export const weekDaysNextWeek = eachDayOfInterval({
+  start: firstDayOfNextWeek,
+  end: addDays(firstDayOfNextWeek, 4),
 });
 
 export const fullWeek = eachDayOfInterval({

@@ -5,68 +5,116 @@ import { BACKEND_URL } from "./BackendUrl";
 const BASE_URL = `${BACKEND_URL}/Courses`;
 
 export async function getAllCourses() {
-  const response = await fetch(BASE_URL, {
-    headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
-      Accept: "application/json",
-    },
-  });
-  const data = await response.json();
-  return data as CourseType[];
+  try {
+    const response = await fetch(BASE_URL, {
+      headers: {
+        Authorization: `Bearer ${getCookie("JWT")}`,
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok || response == null) {
+      // alert("Failed to get  courses");
+      return;
+    }
+
+    const data = await response.json();
+    return data as CourseType[];
+  } catch (error) {
+    console.error(error);
+    // alert("Failed to get  courses");
+  }
 }
 
 export async function getCourseById(courseId: number) {
-  const response = await fetch(`${BASE_URL}/${courseId}`, {
-    headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
-      Accept: "application/json",
-    },
-  });
-  const data = await response.json();
-  return data as CourseType;
+  try {
+    const response = await fetch(`${BASE_URL}/${courseId}`, {
+      headers: {
+        Authorization: `Bearer ${getCookie("JWT")}`,
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok || response == null) {
+      //alert("Failed to get course");
+      return;
+    }
+
+    const data = await response.json();
+    return data as CourseType;
+  } catch (error) {
+    console.error(error);
+    //alert("Failed to get course");
+  }
 }
 
 export async function postCourse(course: CourseType) {
-  const response = await fetch(BASE_URL, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
-      Accept: "application/json",
-    },
-    body: JSON.stringify(course),
-  });
+  try {
+    const response = await fetch(BASE_URL, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${getCookie("JWT")}`,
+        Accept: "application/json",
+      },
+      body: JSON.stringify(course),
+    });
 
-  if (!response.ok) {
-    throw new Error("Failed to create course");
+    if (!response.ok || response == null) {
+      //alert("Failed to create course");
+      return;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    //alert("Failed to create course");
   }
 }
 
 export async function editCourse(course: CourseType) {
-  const response = await fetch(`${BASE_URL}/${course.id}`, {
-    method: "PUT",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
-      Accept: "application/json",
-    },
-    body: JSON.stringify(course),
-  });
-  if (!response.ok) {
-    throw new Error("Failed to edit course");
+  try {
+    const response = await fetch(`${BASE_URL}/${course.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${getCookie("JWT")}`,
+        Accept: "application/json",
+      },
+      body: JSON.stringify(course),
+    });
+
+    if (!response.ok || response == null) {
+      //alert("Failed to edit course");
+      return;
+    }
+  } catch (error) {
+    console.error(error);
+    //alert("Failed to edit course");
   }
 }
 
 export async function deleteCourse(id: number) {
-  const response = await fetch(`${BASE_URL}/${id}`, {
-    method: "DELETE",
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
-      Accept: "application/json",
-    },
-  });
-  if (!response.ok) {
-    throw new Error("Failed to delete course");
+  try {
+    const response = await fetch(`${BASE_URL}/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${getCookie("JWT")}`,
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok || response == null) {
+      //alert("Failed to delete course");
+      return;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    //alert("Failed to delete course");
   }
 }

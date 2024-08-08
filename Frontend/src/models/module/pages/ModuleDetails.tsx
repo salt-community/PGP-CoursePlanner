@@ -1,11 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { deleteModule, getModuleById } from "../../../api/ModuleApi";
 import Page from "../../../components/Page";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getIdFromPath } from "../../../helpers/helperMethods";
 import { getAllCourses } from "../../../api/CourseApi";
 import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
+import { getCookie } from "../../../helpers/cookieHelpers";
+import Login from "../../login/Login";
 
 export default function ModuleDetails() {
     const navigate = useNavigate();
@@ -47,54 +49,61 @@ export default function ModuleDetails() {
     })
 
     return (
-        <Page>
-            {isLoading && <LoadingMessage />}
-            {isError && <ErrorMessage />}
-            {module &&
-                <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
-                    <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
-                        <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
-                            <h1 className="pb-4 text-xl text-primary font-bold">{module.name}</h1>
-                            <p className="text-lg font-medium">Track: {module.track.join(', ')}</p>
+        getCookie("access_token") == undefined
+            ? <Login />            : <Page>
+                {isLoading && <LoadingMessage  />}
+                {isError && <ErrorMessage  />}
+                {module &&
+                    <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
+                        <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
+                            <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
+                                <h1 className="pb-4 text-xl text-primary font-bold">{module.name}</h1>
+                                <p className="text-lg font-medium">Track: {module.track.join(', ')}</p>
                             {module.days.map((day) =>
-                                <div key={"day_" + day.dayNumber}>
-                                    <h1 className="text-lg text-black font-bold self-start">
-                                        Day {day.dayNumber}: {day.description}
-                                    </h1>
-                                    <table className="table table-sm lg:table-lg">
-                                        <thead>
-                                            {day.events.length > 0 &&
-                                                <tr>
-                                                    <th className="text-sm w-1/6">Event</th>
-                                                    <th className="text-sm w-1/2">Event description</th>
-                                                    <th className="text-sm w-1/6">Start</th>
-                                                    <th className="text-sm w-1/6">End</th>
-                                                </tr>
-                                            }
-                                        </thead>
-                                        <tbody>
-                                            {day.events.length > 0 && day.events.map((event, eventIndex) =>
-                                                <tr key={eventIndex}>
-                                                    <td className="text-sm">{event.name}</td>
-                                                    <td className="text-sm">{event.description}</td>
-                                                    <td className="text-sm">{event.startTime}</td>
-                                                    <td className="text-sm">{event.endTime}</td>
-                                                </tr>
-                                            )}
-                                            <tr></tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            )}
-                        </section>
-                    </div>
-                    <div className="pt-4 mb-4 flex gap-4 flex-col sm:flex-row">
-                        <button onClick={() => handleDelete(parseInt(moduleId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module</button>
-                        <Link to={`/modules/edit/${moduleId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Module</Link>
-                    </div>
-                    <p className="error-message text-red-600 text-sm hidden" id="invalid-module-delete">Cannot delete this module, it is used in a course!</p>
-                </section>
-            }
-        </Page>
+                                    <div className="w-full" key={"day_" + day.dayNumber}>
+                                        <h1 className="text-lg text-black font-bold self-start">
+                                            Day {day.dayNumber}: {day.description}
+                                        </h1>
+                                        <table className="table table-sm lg:table-lg">
+                                            <thead>
+                                                {day.events.length > 0 &&
+                                                    <tr>
+                                                        <th className="text-sm w-1/6">Event</th>
+                                                        <th className="text-sm w-1/2">Event description</th>
+                                                        <th className="text-sm w-1/6">Start</th>
+                                                        <th className="text-sm w-1/6">End</th>
+                                                    </tr>
+                                                }
+                                            </thead>
+                                            <tbody>
+                                                {day.events.length > 0 && day.events.map((event, eventIndex) =>
+                                                    <tr key={eventIndex}>
+                                                        <td className="text-sm">{event.name}</td>
+                                                        <td className="text-sm">{event.description}</td>
+                                                        {event.startTime[0] == "0"
+                                                        ? <td className="text-sm">{event.startTime.slice(1)}</td>
+                                                        : <td className="text-sm">{event.startTime}</td>
+                                                        }
+                                                        {event.endTime[0] == "0"
+                                                        ? <td className="text-sm">{event.endTime.slice(1)}</td>
+                                                        : <td className="text-sm">{event.endTime}</td>
+                                                        }
+                                                    </tr>
+                                                )}
+                                                <tr></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                            </section>
+                        </div>
+                        <div className="pt-4 mb-4 flex gap-4 flex-col sm:flex-row">
+                            <button onClick={() => handleDelete(parseInt(moduleId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module</button>
+                            <Link to={`/modules/edit/${moduleId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Module</Link>
+                        </div>
+                        <p className="error-message text-red-600 text-sm hidden" id="invalid-module-delete">Cannot delete this module, it is used in a course!</p>
+                    </section>
+                }
+            </Page>
     )
 }

@@ -28,42 +28,27 @@ public class ModulesController : ControllerBase
     public async Task<ActionResult<Module>> GetModule(int id)
     {
         var response = await _service.GetOneAsync(id);
-        if (response != null)
-        {
-            return Ok(response);
-        }
-        return NotFound("Module does not exist");
+        return Ok(response);
     }
 
     [HttpPost]
     public async Task<ActionResult<Module>> CreateModule(Module module)
     {
         var response = await _service.CreateAsync(module);
-        if (response == null)
-        {
-            return BadRequest("Unable to create module");
-        }
-        return CreatedAtAction("GetModule", new { id = module.Id }, module);
+        return CreatedAtAction("GetModule", new { id = response.Id }, response);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateModule(int id, [FromBody] Module module)
     {
-        var response = await _service.UpdateAsync(id, module);
-        if (response == null)
-        {
-            return BadRequest("Unable to update module");
-        }
+        await _service.UpdateAsync(id, module);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteModule(int id)
     {
-        if (!await _service.DeleteAsync(id))
-        {
-            return BadRequest("Unable to delete module");
-        }
+        await _service.DeleteAsync(id);
         return NoContent();
     }
 }

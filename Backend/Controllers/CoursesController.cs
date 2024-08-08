@@ -28,42 +28,27 @@ public class CoursesController : ControllerBase
     public async Task<ActionResult<Course>> GetCourse(int id)
     {
         var response = await _service.GetOneAsync(id);
-        if (response != null)
-        {
-            return Ok(response);
-        }
-        return NotFound("Course does not exist");
+        return Ok(response);
     }
 
     [HttpPost]
     public async Task<ActionResult<Course>> CreateCourse([FromBody] Course course)
     {
         var response = await _service.CreateAsync(course);
-        if (response == null)
-        {
-            return BadRequest("Unable to create course");
-        }
-        return CreatedAtAction("GetCourse", new { id = course.Id }, course);
+        return CreatedAtAction("GetCourse", new { id = response.Id }, response);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCourse(int id, [FromBody] Course course)
     {
-        var response = await _service.UpdateAsync(id, course);
-        if (response == null)
-        {
-            return BadRequest("Unable to update course");
-        }
+        await _service.UpdateAsync(id, course);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCourse(int id)
     {
-        if (!await _service.DeleteAsync(id))
-        {
-            return BadRequest("Unable to delete course");
-        }
+        await _service.DeleteAsync(id);
         return NoContent();
     }
 }

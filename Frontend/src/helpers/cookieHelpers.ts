@@ -4,11 +4,10 @@ export function getCookie(name: string) {
   if (parts.length === 2) return parts.pop()?.split(";").shift();
 }
 
-export const setCookie = (name: string, value: string, days: number) => {
-  const expires = new Date(
-    Date.now() + days * 24 * 60 * 60 * 1000
-  ).toUTCString();
-  document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+export const setCookie = (name: string, value: string, seconds?: number) => {
+  document.cookie = seconds
+    ? (document.cookie = `${name}=${value}; Max-Age=${seconds};`)
+    : `${name}=${value};`;
 };
 
 export const deleteCookie = (name: string) => {

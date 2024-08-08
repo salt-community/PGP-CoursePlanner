@@ -1,14 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllModules } from "../../../api/ModuleApi";
 import SuccessBtn from "../../../components/buttons/SuccessBtn";
 import InputSmall from "../../../components/inputFields/InputSmall";
 import DropDown from "../../../components/DropDown";
 import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CloseBtn from "../../../components/buttons/CloseBtn";
-import Popup from "reactjs-popup";
-import { getAllAppliedCourses } from "../../../api/AppliedCourseApi";
 import TrashBtn from "../../../components/buttons/TrashBtn";
 import { CourseProps, CourseModule, CourseType } from "../Types";
 
@@ -18,7 +15,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const [isIncorrectModuleInput, setIsIncorrectModuleInput] = useState<boolean>(false);
     const [isIncorrectName, setIsIncorrectName] = useState<boolean>(false);
     const [isNotSelected, setIsNotSelected] = useState<boolean>(false);
-    const [isOpened, setIsOpened] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const { data: modules } = useQuery({
@@ -53,32 +49,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             filledDays = filledDays + mod?.numberOfDays;
     });
 
-    const { data: allAppliedCourses } = useQuery({
-        queryKey: ['appliedCourses'],
-        queryFn: () => getAllAppliedCourses()
-    });
-    const usedCourses: number[] = [];
-    if (allAppliedCourses) {
-        allAppliedCourses.forEach(element => {
-            usedCourses.push(element.courseId);
-        });
-    }
-
-    const popupRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-                setIsOpened(false);
-            }
-        }
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
     const handleAddModules = (index: number) => {
         const emptyCourseModule: CourseModule = {
             course: {
@@ -96,6 +66,26 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const handleDeleteModule = (index: number) => {
         const editedModules = [...courseModules];
         editedModules.splice(index, 1);
+        setCourseModules(editedModules);
+    }
+
+    const moveDown = (index: number) => {
+        const editedModules = [...courseModules];
+
+        const temp = editedModules[index];
+        editedModules[index] = editedModules[index + 1];
+        editedModules[index + 1] = temp;
+
+        setCourseModules(editedModules);
+    }
+
+    const moveUp = (index: number) => {
+        const editedModules = [...courseModules];
+
+        const temp = editedModules[index];
+        editedModules[index] = editedModules[index - 1];
+        editedModules[index - 1] = temp;
+
         setCourseModules(editedModules);
     }
 
@@ -126,10 +116,10 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         setIsIncorrectName(false);
         setIsNotSelected(false);
         const isDuplicate = findDuplicates(courseModules);
-        if (isDuplicate || courseName.value == "" || numberOfWeeks.value == 0 || courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0))) {
+        if (isDuplicate || isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0 || courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0))) {
             if (isDuplicate)
                 setIsIncorrectModuleInput(true);
-            if (courseName.value == "" || numberOfWeeks.value == 0)
+            if (isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0)
                 setIsIncorrectName(true);
             if (courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0)))
                 setIsNotSelected(true);
@@ -137,7 +127,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         else {
             const newCourse: CourseType = {
                 id: course.id ?? 0,
-                name: courseName.value,
+                name: courseName.value.trim(),
                 numberOfWeeks: numberOfWeeks.value,
                 moduleIds: courseModuleIds,
                 modules: courseModules,
@@ -158,31 +148,66 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         return results;
     }
 
+    const isStringInputIncorrect = (str: string) => {
+        var strNoSpace = str.replaceAll(" ", "");
+        if (strNoSpace.length > 0)
+            return false;
+        else
+            return true;
+    }
+
     return (
         <section className="px-4 md:px-24 lg:px-56">
-            <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 ">
-                <div className="w-auto flex justify-between space-x-2">
-                    <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
-                    {numOfWeeks == 0
-                        ? <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" />
-                        : <input className="input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
-                    }
+            <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+                <div className="flex flex-col justify-between">
+                    <div className="flex flex-row items-center">
+                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Course Name: </h2>
+                        <div className="w-3/4">
+                            <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
+                        </div>
+                    </div>
+                    <div className="flex flex-row items-center">
+                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Number of weeks:</h2>
+                        {numOfWeeks == 0
+                            ? <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" />
+                            : <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
+                        }
+                    </div>
                 </div>
                 {isIncorrectName &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
                 {modules && courseModules.map((thisCourseModule, index) =>
-                    <div key={thisCourseModule.moduleId + "," + index} className="flex space-x-2">
-                        {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds.some(mid => mid == 0)
-                            ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setSelectedModules={setCourseModules} isSelected={false} />
-                            : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setSelectedModules={setCourseModules} isSelected={true} />}
-                        {courseModules &&
-                            <div className="flex items-end">
-                                <PrimaryBtn onClick={() => handleAddModules(index)}>+</PrimaryBtn>
-                            </div>}
-                        {courseModules.length > 1 &&
-                            <div className="flex items-end">
-                                <TrashBtn handleDelete={() => handleDeleteModule(index)} />
-                            </div>}
+                    <div className="flex flex-row">
+                        {index == 0 &&
+                            <div className="flex flex-col w-[26px] mr-2">
+                                <button type="button" className="w-full h-full self-center" onClick={() => moveDown(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
+                            </div>
+                        }
+                        {index == courseModules.length - 1 &&
+                            <div className="flex flex-col w-[26px] mr-2">
+                                <button type="button" className="w-full h-full self-center" onClick={() => moveUp(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
+                            </div>
+                        }
+                        {index != 0 && index != courseModules.length - 1 &&
+                            <div className="flex flex-col w-[26px] mr-2">
+                                <button type="button" className="w-full h-full self-center" onClick={() => moveUp(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
+                                <button type="button" className="w-full h-full self-center" onClick={() => moveDown(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
+                            </div>
+                        }
+                        <h2 className="self-center font-bold w-[100px]">Module {index + 1}</h2>
+                        <div key={thisCourseModule.moduleId + "," + index} className="flex space-x-2">
+                            {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds.some(mid => mid == 0)
+                                ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setSelectedModules={setCourseModules} isSelected={false} />
+                                : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setSelectedModules={setCourseModules} isSelected={true} />}
+                            {courseModules &&
+                                <div className="flex items-end self-center">
+                                    <PrimaryBtn onClick={() => handleAddModules(index)}>+</PrimaryBtn>
+                                </div>}
+                            {courseModules.length > 1 &&
+                                <div className="flex items-end self-center">
+                                    <TrashBtn handleDelete={() => handleDeleteModule(index)} />
+                                </div>}
+                        </div>
                     </div>)}
                 {isIncorrectModuleInput &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Cannot select duplicate modules</p>}
@@ -196,32 +221,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                     <p>You have selected {Math.floor(filledDays / 5)} weeks and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
                 {Math.floor(filledDays / 5) != 1 && numOfWeeks != 1 &&
                     <p>You have selected {Math.floor(filledDays / 5)} weeks and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
-
-                {usedCourses.find(c => c == course.id) 
-                    ? <Popup
-                        open={isOpened}
-                        onOpen={() => setIsOpened(true)}
-                        trigger={<input className="btn btn-sm mt-4 max-w-48 btn-success text-white" value={buttonText} />}
-                        modal
-                    >
-                        {
-                            <div ref={popupRef}>
-                                <div className="flex flex-col">
-                                    <div className="flex justify-end">
-                                        <CloseBtn onClick={() => setIsOpened(false)} />
-                                    </div>
-                                    <h1 className="m-2">This course is used in the calendar. Changing it will change the calendar entries.</h1>
-                                    <h1 className="font-bold m-2">Do you want to continue?</h1>
-                                    <div className="flex items-center justify-center mb-4 gap-2">
-                                        <input type="submit" form="editCourse-form" className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
-                                        <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={() => setIsOpened(false)} />
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </Popup>
-                    : <SuccessBtn value={buttonText}></SuccessBtn>
-                    }
+                <SuccessBtn value={buttonText}></SuccessBtn>
             </form>
         </section>
     )

@@ -1,5 +1,6 @@
 using Backend.Config;
 using Backend.Data;
+using Backend.ExceptionHandler;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,8 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddProblemDetails();
+builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -36,6 +39,7 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
 {
     options.Authority = "https://accounts.google.com";
     options.Audience = "735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com";
+    options.TokenValidationParameters.ValidIssuer = "accounts.google.com";
 });
 
 builder.Services.AddCors();
@@ -43,8 +47,13 @@ builder.Services.AddCors();
 builder.Services.AddScoped<IService<Module>, ModuleService>();
 builder.Services.AddScoped<IService<Course>, CourseService>();
 builder.Services.AddScoped<IService<AppliedCourse>, AppliedCourseService>();
+builder.Services.AddScoped<IService<AppliedModule>, AppliedModuleService>();
+builder.Services.AddScoped<IService<AppliedDay>, AppliedDayService>();
+builder.Services.AddScoped<IService<AppliedEvent>, AppliedEventService>();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseCors(x => x
     .AllowAnyMethod()
@@ -67,6 +76,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
 
 app.MapControllers();
 
