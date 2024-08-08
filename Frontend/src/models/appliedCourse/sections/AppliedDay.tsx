@@ -98,13 +98,13 @@ export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDa
                                 }
                                 <h2 className="self-center font-bold">Day {day.dayNumber}</h2>
                             </div>
-                            <div className="flex w-5/12 xl:w-5/12">
+                            <div className="flex w-5/12 xl:w-5/12 self-center">
                                 <InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={day.description} />
                             </div>
-                            <div className="w-2/12 flex justify-center">
+                            <div className="w-2/12 flex justify-center self-center">
                                 <PrimaryBtn onClick={handleAddEvent}> + Event</PrimaryBtn>
                             </div>
-                            <div className="w-2/12 xl:w-2/12 flex justify-start gap-1">
+                            <div className="w-2/12 xl:w-2/12 flex justify-start gap-1 self-center">
                                 <PrimaryBtn onClick={() => handleAddDays(day.dayNumber - 1)}>+</PrimaryBtn>
                                 <TrashBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
                             </div>
