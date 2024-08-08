@@ -48,6 +48,30 @@ export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDa
         setDays(editedDays);
     }
 
+    const moveDown = (index: number) => {
+        const editedDays = [...days];
+
+        const temp = editedDays[index];
+        editedDays[index] = editedDays[index + 1];
+        editedDays[index].dayNumber = index + 1;
+        editedDays[index + 1] = temp;
+        editedDays[index + 1].dayNumber = index + 2;
+
+        setDays(editedDays);
+    }
+
+    const moveUp = (index: number) => {
+        const editedDays = [...days];
+
+        const temp = editedDays[index];
+        editedDays[index] = editedDays[index - 1];
+        editedDays[index].dayNumber = index + 1;
+        editedDays[index - 1] = temp;
+        editedDays[index - 1].dayNumber = index;
+
+        setDays(editedDays);
+    }
+
     return (
         <>
             <div>
@@ -55,14 +79,32 @@ export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDa
                     ? <div className="collapse">
                         <input type="checkbox" id={`collapse-toggle-events-${moduleIndex}-${day.dayNumber}`} className="hidden" />
                         <div className="collapse-title text-base w-100 flex flex-row">
-                            <h2 className="align-bottom font-bold w-1/12">Day {day.dayNumber}</h2>
-                            <div className="flex w-6/12 xl:w-7/12">
+                            <div className='flex flex-row w-2/12'>
+                                {day.dayNumber == 1 &&
+                                    <div className="flex flex-col w-[26px] mr-2">
+                                        <button type="button" className="w-full h-full self-center" onClick={() => moveDown(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
+                                    </div>
+                                }
+                                {day.dayNumber == days.length &&
+                                    <div className="flex flex-col w-[26px] mr-2">
+                                        <button type="button" className="w-full h-full self-center" onClick={() => moveUp(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
+                                    </div>
+                                }
+                                {day.dayNumber != 1 && day.dayNumber != days.length &&
+                                    <div className="flex flex-col w-[26px] mr-2">
+                                        <button type="button" className="w-full h-full self-center" onClick={() => moveUp(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
+                                        <button type="button" className="w-full h-full self-center" onClick={() => moveDown(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
+                                    </div>
+                                }
+                                <h2 className="self-center font-bold">Day {day.dayNumber}</h2>
+                            </div>
+                            <div className="flex w-5/12 xl:w-5/12 self-center">
                                 <InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={day.description} />
                             </div>
-                            <div className="w-2/12 flex justify-center">
+                            <div className="w-2/12 flex justify-center self-center">
                                 <PrimaryBtn onClick={handleAddEvent}> + Event</PrimaryBtn>
                             </div>
-                            <div className="w-2/12 xl:w-1/12 flex justify-start gap-1">
+                            <div className="w-2/12 xl:w-2/12 flex justify-start gap-1 self-center">
                                 <PrimaryBtn onClick={() => handleAddDays(day.dayNumber - 1)}>+</PrimaryBtn>
                                 <TrashBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
                             </div>
@@ -88,6 +130,7 @@ export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDa
                                 <tbody>
                                     {day.events.map((event, index) => (
                                         <CalendarEvent
+                                            appliedTrue={true}
                                             event={event}
                                             key={index}
                                             days={days}
@@ -103,14 +146,32 @@ export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDa
                     : <div className="collapse">
                         <input type="checkbox" id={`collapse-toggle-events-${day.dayNumber}`} className="hidden" />
                         <div className="collapse-title text-base w-100 flex flex-row">
-                            <h2 className="align-bottom font-bold w-1/12">Day {day.dayNumber}</h2>
-                            <div className="flex w-6/12 xl:w-7/12">
+                            <div className='flex flex-row w-2/12'>
+                                {day.dayNumber == 1 &&
+                                    <div className="flex flex-col w-[26px] mr-2">
+                                        <button type="button" className="w-full h-full self-center" onClick={() => moveDown(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
+                                    </div>
+                                }
+                                {day.dayNumber == days.length &&
+                                    <div className="flex flex-col w-[26px] mr-2">
+                                        <button type="button" className="w-full h-full self-center" onClick={() => moveUp(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
+                                    </div>
+                                }
+                                {day.dayNumber != 1 && day.dayNumber != days.length &&
+                                    <div className="flex flex-col w-[26px] mr-2">
+                                        <button type="button" className="w-full h-full self-center" onClick={() => moveUp(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
+                                        <button type="button" className="w-full h-full self-center" onClick={() => moveDown(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
+                                    </div>
+                                }
+                                <h2 className="self-center font-bold">Day {day.dayNumber}</h2>
+                            </div>
+                            <div className="flex w-5/12 xl:w-5/12">
                                 <InputSmall onChange={handleInputChange} type="text" placeholder="Theme" name="description" value={day.description} />
                             </div>
                             <div className="w-2/12 flex justify-center">
                                 <PrimaryBtn onClick={handleAddEvent}> + Event</PrimaryBtn>
                             </div>
-                            <div className="w-2/12 xl:w-1/12 flex justify-start gap-1">
+                            <div className="w-2/12 xl:w-2/12 flex justify-start gap-1">
                                 <PrimaryBtn onClick={() => handleAddDays(day.dayNumber - 1)}>+</PrimaryBtn>
                                 <TrashBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
                             </div>

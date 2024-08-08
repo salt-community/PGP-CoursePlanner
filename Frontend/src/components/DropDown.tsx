@@ -25,8 +25,8 @@ export default function DropDown({ thisCourseModule, index, selectedModules, mod
     }
 
     return (
-        <div className="flex flex-col">
-            <select className="border border-gray-300 rounded-lg mt-2 p-1 w-48" onChange={handleChange} defaultValue={'DEFAULT'} >
+        <div className="flex flex-col self-center">
+            <select className="border border-gray-300 rounded-lg p-1 w-48" onChange={handleChange} defaultValue={'DEFAULT'} >
                 {!isSelected
                     ? <>
                         <option value="DEFAULT" disabled>Select</option>

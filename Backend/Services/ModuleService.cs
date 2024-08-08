@@ -22,16 +22,44 @@ public class ModuleService : IService<Module>
                         .Include(module => module.Days)
                         .ThenInclude(day => day.Events)
                         .ToListAsync();
+
+        foreach (var module in modules)
+        {
+            module.Days = module.Days.OrderBy(d => d.DayNumber).ToList();
+            foreach (var day in module.Days)
+            {
+                foreach (var eventItem in day.Events)
+                {
+                    if (eventItem.StartTime.Length == 4)
+                        eventItem.StartTime = "0" + eventItem.StartTime;
+                    if (eventItem.EndTime.Length == 4)
+                        eventItem.EndTime = "0" + eventItem.EndTime;
+                }
+                day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
+            }
+        }
         return modules;
     }
     public async Task<Module> GetOneAsync(int id)
     {
-
-        return await _context.Modules
+        var module = await _context.Modules
                     .Include(module => module.Days)
                     .ThenInclude(day => day.Events)
                     .FirstOrDefaultAsync(module => module.Id == id) ?? throw new NotFoundByIdException("Module", id);
 
+        module.Days = module.Days.OrderBy(d => d.DayNumber).ToList();
+        foreach (var day in module.Days)
+        {
+            foreach (var eventItem in day.Events)
+            {
+                if (eventItem.StartTime.Length == 4)
+                    eventItem.StartTime = "0" + eventItem.StartTime;
+                if (eventItem.EndTime.Length == 4)
+                    eventItem.EndTime = "0" + eventItem.EndTime;
+            }
+            day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
+        }
+        return module;
     }
     public async Task<Module> CreateAsync(Module module)
     {

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { deleteCookie, getCookie, setCookie } from "../helpers/cookieHelpers";
-import { getDateAsString, today, weekDays } from "../helpers/dateHelpers";
+import { getDateAsString, today, weekDays, weekDaysNextWeek } from "../helpers/dateHelpers";
 import { getCalendarDate } from "../api/CalendarDateApi";
 import { getWeek, format } from "date-fns";
 import { Link } from "react-router-dom";
@@ -11,9 +11,12 @@ import { getTokens } from "../api/UserApi";
 import Login from "./login/Login";
 
 export default function Home() {
-
     // const redirectLink = "https://frontend-h7ia67qbhq-uc.a.run.app";
     const redirectLink = "http://localhost:5173";
+
+    const thisWeek = new Date();
+    const nextWeek = new Date(thisWeek);
+    nextWeek.setDate(thisWeek.getDate() + 7)
 
     if (location.search) {
         const params = new URLSearchParams(location.search);
@@ -54,22 +57,35 @@ export default function Home() {
             weekDayDateContent.push([]);
     });
 
+    const weekDayDateContentNextWeek: DateContent[][] = [];
+    weekDaysNextWeek.forEach(day => {
+        const dayString = getDateAsString(day).replaceAll("/", "-");
+        const { data } = useQuery({
+            queryKey: ['calendarDates', dayString],
+            queryFn: () => getCalendarDate(dayString)
+        });
+        if (data != undefined)
+            weekDayDateContentNextWeek.push(data.dateContent);
+        else
+            weekDayDateContentNextWeek.push([]);
+    });
+
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     return (
         getCookie("access_token") == undefined
             ? <Login />
             : <Page>
-                <section className="p-20 flex flex-col items-center">
+                <section className="pl-20 pr-20 pb-20 flex flex-col items-center">
                     <h1 className="text-2xl font-semibold">We are in week {getWeek(new Date())}</h1>
                     <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-3">
                         {weekDays.map((day, index) =>
                             <>
                                 {getDateAsString(day) == today
                                     ?
-                                    <section className="flex flex-col border-2 border-black rounded-lg w-full gap-3">
+                                    <section className="flex flex-col border-2 border-primary rounded-lg w-full gap-3">
                                         <Link to={`/calendar/day/date=${getDateAsString(day)}`}>
-                                            <h1 className="item-center text-xl font-bold text-center">{format(getDateAsString(day), 'EEEE')}
+                                            <h1 className="item-center text-xl font-bold text-center text-primary">{format(getDateAsString(day), 'EEEE')}
                                                 <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                             </h1>
                                         </Link>
@@ -84,6 +100,21 @@ export default function Home() {
                                         <WeekDay key={format(day, 'd')} dateContent={weekDayDateContent[index]} />
                                     </section>
                                 }
+                            </>
+                        )}
+                    </section>
+                    <h1 className="text-2xl font-semibold">Week {getWeek(nextWeek)}</h1>
+                    <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-3">
+                        {weekDaysNextWeek.map((day, index) =>
+                            <>
+                                <section className="flex flex-col border border-black rounded-lg w-full gap-3">
+                                    <Link to={`/calendar/day/date=${getDateAsString(day)}`}>
+                                        <h1 className="item-center text-lg text-center">{format(getDateAsString(day), 'EEEE')}
+                                            <br /> {day.getDate()} {monthNames[day.getMonth()]}
+                                        </h1>
+                                    </Link>
+                                    <WeekDay key={format(day, 'd')} dateContent={weekDayDateContentNextWeek[index]} />
+                                </section>
                             </>
                         )}
                     </section>
