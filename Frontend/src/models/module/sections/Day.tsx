@@ -4,6 +4,8 @@ import TrashBtn from '../../../components/buttons/TrashBtn';
 import { DayProps } from '../Types';
 import CalendarEvent from './CalendarEvent';
 import { useEffect, useRef, useState } from 'react';
+import Popup from 'reactjs-popup';
+import CloseBtn from '../../../components/buttons/CloseBtn';
 
 export default function Day({ moduleIndex, day, setDays, days, setNumOfDays }: DayProps) {
     const handleAddEvent = () => {
@@ -70,6 +72,22 @@ export default function Day({ moduleIndex, day, setDays, days, setNumOfDays }: D
 
         setDays(editedDays);
     }
+
+    const [isMove, setIsMove] = useState<boolean>(false);
+
+    const popupRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+                setIsMove(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const [showOptions, setShowOptions] = useState(false);
     const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
@@ -184,13 +202,32 @@ export default function Day({ moduleIndex, day, setDays, days, setNumOfDays }: D
                                         >
                                             <ul className="py-1">
                                                 <li>
-                                                    <button
-                                                        type="button"
-                                                        onClick={handleMove}
-                                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                    <Popup
+                                                        onOpen={() => setIsMove(true)}
+                                                        trigger={<button
+                                                            type="button"
+                                                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                        >
+                                                            Move Day to another Module
+                                                        </button>}
+                                                        modal
                                                     >
-                                                        Move Day to another Module
-                                                    </button>
+                                                        {
+                                                            <div ref={popupRef}>
+                                                                <div className="flex flex-col">
+                                                                    <div className="flex justify-end">
+                                                                        <CloseBtn onClick={() => setIsMove(false)} />
+                                                                    </div>
+                                                                    <h1 className="m-2">You want to move this day to another module.</h1>
+                                                                    <h1 className="font-bold m-2">Do you want to continue?</h1>
+                                                                    <div className="flex items-center justify-center mb-4 gap-2">
+                                                                        <input onClick={handleMove} className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
+                                                                        <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={() => setIsMove(false)} />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </Popup>
                                                 </li>
                                             </ul>
                                         </div>
