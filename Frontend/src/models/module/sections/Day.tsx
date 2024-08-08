@@ -80,8 +80,8 @@ export default function Day({ moduleIndex, day, setDays, days, setNumOfDays }: D
         if (buttonRef.current) {
             const buttonRect = buttonRef.current.getBoundingClientRect();
             setPopupPosition({
-                top: buttonRect.bottom + window.scrollY,
-                left: buttonRect.left + window.scrollX
+                top: buttonRect.bottom,
+                left: buttonRect.left
             });
         }
         setShowOptions(!showOptions);
@@ -94,15 +94,29 @@ export default function Day({ moduleIndex, day, setDays, days, setNumOfDays }: D
         }
     };
 
+    const handleScroll = () => {
+        // if (buttonRef.current) {
+        //     const buttonRect = buttonRef.current.getBoundingClientRect();
+        //     setPopupPosition({
+        //         top: buttonRect.bottom,
+        //         left: buttonRect.left
+        //     });
+        // }
+        setShowOptions(false);
+    };
+
     useEffect(() => {
         if (showOptions) {
             document.addEventListener('mousedown', handleOutsideClick);
+            document.addEventListener('scroll', handleScroll, true);
         } else {
             document.removeEventListener('mousedown', handleOutsideClick);
+            document.removeEventListener('scroll', handleScroll, true);
         }
 
         return () => {
             document.removeEventListener('mousedown', handleOutsideClick);
+            document.removeEventListener('scroll', handleScroll, true);
         };
     }, [showOptions]);
 
