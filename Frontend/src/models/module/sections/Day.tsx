@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import Popup from 'reactjs-popup';
 import CloseBtn from '../../../components/buttons/CloseBtn';
 
-export default function Day({ moduleIndex, day, setDays, days, setNumOfDays }: DayProps) {
+export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const handleAddEvent = () => {
         const editedDays = [...days];
         editedDays[day.dayNumber - 1].events.push({
@@ -148,7 +148,7 @@ export default function Day({ moduleIndex, day, setDays, days, setNumOfDays }: D
             <div className="relative">
                 {day.events.length > 0
                     ? <div className="collapse">
-                        <input type="checkbox" id={`collapse-toggle-events-${moduleIndex}-${day.dayNumber}`} className="hidden" />
+                        <input type="checkbox" id={`collapse-toggle-events-${moduleId}-${day.dayNumber}`} className="hidden" />
                         <div className="collapse-title text-base w-100 flex flex-row">
                             <div className='flex flex-row w-2/12'>
                                 {day.dayNumber == 1 &&
@@ -234,7 +234,7 @@ export default function Day({ moduleIndex, day, setDays, days, setNumOfDays }: D
                                     )}
                                 </div>
                             </div>
-                            <label htmlFor={`collapse-toggle-events-${moduleIndex}-${day.dayNumber}`} className="w-1/12 cursor-pointer flex flex-row items-center justify-end">
+                            <label htmlFor={`collapse-toggle-events-${moduleId}-${day.dayNumber}`} className="w-1/12 cursor-pointer flex flex-row items-center justify-end">
                                 <h6 className='text-xs ml-2'>Events</h6>
                                 <svg className="fill-current w-4 h-4 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path d="M15.3 9.3l-3.3 3.3-3.3-3.3-1.4 1.4 4.7 4.7 4.7-4.7z" />
@@ -256,6 +256,7 @@ export default function Day({ moduleIndex, day, setDays, days, setNumOfDays }: D
                                 <tbody>
                                     {day.events.map((event, index) => (
                                         <CalendarEvent
+                                            moduleId={moduleId}
                                             appliedTrue={false}
                                             event={event}
                                             key={index}

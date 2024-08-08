@@ -104,7 +104,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                 </div>
                 <div className="flex flex-col space-y-2">
                     {days.map((day) =>
-                        <Day key={"day_" + day.dayNumber} moduleIndex={module.id!} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays} />)}
+                        <Day key={"day_" + day.dayNumber} moduleId={module.id!} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays} />)}
                 </div>
                 {isIncompleteInput &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Please fill in all the fields</p>}

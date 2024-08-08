@@ -2,11 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import TrashBtn from "../../../components/buttons/TrashBtn";
 import InputSmall from "../../../components/inputFields/InputSmall";
 import InputSmallTime from "../../../components/inputFields/InputSmallTime";
-import { EventProps } from "../Types";
+import { EventProps, ModuleType } from "../Types";
 import Popup from "reactjs-popup";
 import CloseBtn from "../../../components/buttons/CloseBtn";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { editModule, getAllModules } from "../../../api/ModuleApi";
 
-export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, index, event }: EventProps) {
+export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDays, days, index, event }: EventProps) {
+
+    const { data: modules } = useQuery({
+        queryKey: ['modules'],
+        queryFn: getAllModules
+    });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -45,8 +52,8 @@ export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, i
     if (endTimeDefault.length == 7)
         endTimeDefault = "0" + endTimeDefault;
 
-    const [_isMove, setIsMove] = useState<boolean>(false);
-    const [_isMoveAnotherModule, setIsMoveAnotherModule] = useState<boolean>(false);
+    const [isMove, setIsMove] = useState<boolean>(false);
+    const [isMoveAnotherModule, setIsMoveAnotherModule] = useState<boolean>(false);
 
     const popupRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -119,43 +126,94 @@ export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, i
         };
     }, [showOptions]);
 
-    const [selectedDay, setSelectedDay] = useState('DEFAULT');
+    const [selectedDay, setSelectedDay] = useState<string>("DEFAULT");
     const handleSelectDay = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedDay(event.target.value);
     };
 
+    const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
+    const handleSelectModule = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedModule(event.target.value);
+        setSelectedModuleDay("DEFAULT");
+    };
+
+    const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
+    const handleSelectModuleDay = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedModuleDay(event.target.value);
+    };
+
     const handleMove = () => {
-        var originalDayIndex = days.findIndex(d => d.dayNumber == dayNumber);
-        var selectedDayIndex = days.findIndex(d => d.dayNumber == parseInt(selectedDay));
+        if (selectedDay != "DEFAULT") {
+            var originalDayIndex = days.findIndex(d => d.dayNumber == dayNumber);
+            var selectedDayIndex = days.findIndex(d => d.dayNumber == parseInt(selectedDay));
 
-        days[originalDayIndex].events.splice(index, 1);
-        days[originalDayIndex].events.sort((a, b) => {
-            if (a.startTime < b.startTime) return -1;
-            if (a.startTime > b.startTime) return 1;
-            if (a.endTime < b.endTime) return -1;
-            if (a.endTime > b.endTime) return 1;
-            return 0;
-        });
-        days[selectedDayIndex].events.push(event);
-        days[selectedDayIndex].events.sort((a, b) => {
-            if (a.startTime < b.startTime) return -1;
-            if (a.startTime > b.startTime) return 1;
-            if (a.endTime < b.endTime) return -1;
-            if (a.endTime > b.endTime) return 1;
-            return 0;
-        });
+            days[originalDayIndex].events.splice(index, 1);
+            days[originalDayIndex].events.sort((a, b) => {
+                if (a.startTime < b.startTime) return -1;
+                if (a.startTime > b.startTime) return 1;
+                if (a.endTime < b.endTime) return -1;
+                if (a.endTime > b.endTime) return 1;
+                return 0;
+            });
+            days[selectedDayIndex].events.push(event);
+            days[selectedDayIndex].events.sort((a, b) => {
+                if (a.startTime < b.startTime) return -1;
+                if (a.startTime > b.startTime) return 1;
+                if (a.endTime < b.endTime) return -1;
+                if (a.endTime > b.endTime) return 1;
+                return 0;
+            });
 
-        const editedDays = [...days];
-        setDays(editedDays);
-        console.log(days)
+            const editedDays = [...days];
+            setDays(editedDays);
+            console.log(days)
+        }
 
         setShowOptions(false);
         setIsMove(false);
     };
 
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation({
+        mutationFn: (module: ModuleType) => {
+            return editModule(module);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+            setShowOptions(false);
+            setIsMoveAnotherModule(false);
+            setSelectedModule("DEFAULT");
+            setSelectedModuleDay("DEFAULT");
+        }
+    })
+
     const handleMoveAnotherModule = () => {
-        console.log('Event moves to another Module');
-        // Add your move logic here
+        if (selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT") {
+            var originalDayIndex = days.findIndex(d => d.dayNumber == dayNumber);
+            days[originalDayIndex].events.splice(index, 1);
+
+            const editedDays = [...days];
+            setDays(editedDays);
+
+            var module = modules?.find(m => m.id == parseInt(selectedModule))!;
+            const newModule: ModuleType = {
+                id: module.id,
+                name: module.name,
+                numberOfDays: module.numberOfDays,
+                days: module.days
+            };
+            newModule.days.find(d => d.dayNumber == parseInt(selectedModuleDay))?.events.push(event);
+            newModule.days.find(d => d.dayNumber == parseInt(selectedModuleDay))?.events.sort((a, b) => {
+                if (a.startTime < b.startTime) return -1;
+                if (a.startTime > b.startTime) return 1;
+                if (a.endTime < b.endTime) return -1;
+                if (a.endTime > b.endTime) return 1;
+                return 0;
+            });
+
+            mutation.mutate(newModule);
+        }
     };
 
     return (
@@ -192,7 +250,7 @@ export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, i
                                 <ul className="py-1">
                                     <li>
                                         <Popup
-                                            open={_isMove}
+                                            open={isMove}
                                             onOpen={() => setIsMove(true)}
                                             trigger={<button
                                                 type="button"
@@ -213,7 +271,7 @@ export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, i
                                                             <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
                                                                 {days.map((day, dayIndex) =>
                                                                     <> {day.dayNumber == dayNumber
-                                                                        ? <option key={day.id + "," + dayIndex} value="DEFAULT">Day {day.dayNumber} ({day.description})</option>
+                                                                        ? <option key={day.id + "," + dayIndex} value="DEFAULT" disabled>Day {day.dayNumber} ({day.description})</option>
                                                                         : <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber} ({day.description})</option>}
                                                                     </>)}
                                                             </select>
@@ -229,6 +287,7 @@ export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, i
                                     </li>
                                     <li>
                                         <Popup
+                                            open={isMoveAnotherModule}
                                             onOpen={() => setIsMoveAnotherModule(true)}
                                             trigger={<button
                                                 type="button"
@@ -244,10 +303,31 @@ export default function CalendarEvent({ appliedTrue, dayNumber, setDays, days, i
                                                         <div className="flex justify-end">
                                                             <CloseBtn onClick={() => setIsMoveAnotherModule(false)} />
                                                         </div>
-                                                        <h1 className="m-2">You want to move this event to another module.</h1>
-                                                        <h1 className="font-bold m-2">Do you want to continue?</h1>
+                                                        <h1 className="m-2 self-center">To which module do you want to move this event?</h1>
+                                                        <div className="flex flex-col self-center">
+                                                            <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
+                                                                <option key={dayNumber + ",default"} value="DEFAULT" disabled>Select Module</option>
+                                                                {modules && modules.map((module, moduleIndex) =>
+                                                                    <> {module.id != moduleId &&
+                                                                        <option key={module.id + ":" + moduleIndex} value={module.id}>{module.name}</option>
+                                                                    }
+                                                                    </>)}
+                                                            </select>
+                                                        </div>
+                                                        {selectedModule != "DEFAULT" &&
+                                                            <div className="flex flex-col items-center">
+                                                                <h1 className="m-2 self-center">To which day of this module do you want to move this event?</h1>
+                                                                <div className="flex flex-col self-center">
+                                                                    <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModuleDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
+                                                                        <option key={dayNumber + ",default"} value="DEFAULT" disabled>Select Day</option>
+                                                                        {modules && modules.find(m => m.id == parseInt(selectedModule))!.days.map((day, dayIndex) =>
+                                                                            <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber} ({day.description})</option>
+                                                                        )}
+                                                                    </select>
+                                                                </div>
+                                                            </div>}
                                                         <div className="flex items-center justify-center mb-4 gap-2">
-                                                            <input onClick={handleMoveAnotherModule} className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
+                                                            <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMoveAnotherModule} className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
                                                             <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={() => setIsMoveAnotherModule(false)} />
                                                         </div>
                                                     </div>
