@@ -319,7 +319,7 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
                                                                 <h1 className="m-2 self-center">To which day of this module do you want to move this event?</h1>
                                                                 <div className="flex flex-col self-center">
                                                                     <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModuleDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
-                                                                        <option key={dayNumber + ",default"} value="DEFAULT" disabled>Select Day</option>
+                                                                        <option key={dayNumber + ",defaultDay"} value="DEFAULT" disabled>Select Day</option>
                                                                         {modules && modules.find(m => m.id == parseInt(selectedModule))!.days.map((day, dayIndex) =>
                                                                             <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber} ({day.description})</option>
                                                                         )}

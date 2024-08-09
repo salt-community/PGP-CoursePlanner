@@ -1,11 +1,13 @@
 import InputSmall from '../../../components/inputFields/InputSmall';
 import PrimaryBtn from '../../../components/buttons/PrimaryBtn';
 import TrashBtn from '../../../components/buttons/TrashBtn';
-import { DayProps } from '../Types';
+import { DayProps, ModuleType } from '../Types';
 import CalendarEvent from './CalendarEvent';
 import { useEffect, useRef, useState } from 'react';
 import Popup from 'reactjs-popup';
 import CloseBtn from '../../../components/buttons/CloseBtn';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { editModule, getAllModules } from '../../../api/ModuleApi';
 
 export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const handleAddEvent = () => {
@@ -113,13 +115,6 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
     };
 
     const handleScroll = () => {
-        // if (buttonRef.current) {
-        //     const buttonRect = buttonRef.current.getBoundingClientRect();
-        //     setPopupPosition({
-        //         top: buttonRect.bottom,
-        //         left: buttonRect.left
-        //     });
-        // }
         setShowOptions(false);
     };
 
@@ -138,9 +133,67 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
         };
     }, [showOptions]);
 
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation({
+        mutationFn: (module: ModuleType) => {
+            return editModule(module);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+            setShowOptions(false);
+            setIsMove(false);
+            setSelectedModule("DEFAULT");
+            setSelectedModuleDay("DEFAULT");
+        }
+    })
+
+    const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
+    const handleSelectModule = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedModule(event.target.value);
+        setSelectedModuleDay("DEFAULT");
+    };
+
+    const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
+    const handleSelectModuleDay = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedModuleDay(event.target.value);
+    };
+
+    const { data: modules } = useQuery({
+        queryKey: ['modules'],
+        queryFn: getAllModules
+    });
+
     const handleMove = () => {
-        console.log('Day moes to another Module');
-        // Add your move logic here
+        if (selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT") {
+            const originalDays = modules?.find(m => m.id == parseInt(selectedModule))!.days!;
+            const editedDays = [...originalDays];
+            editedDays.splice(parseInt(selectedModuleDay) - 1, 0, day);
+            for (var i = parseInt(selectedModuleDay) - 1; i < editedDays.length; i++) {
+                editedDays[i].dayNumber = i + 1;
+            }
+
+            var module = modules?.find(m => m.id == parseInt(selectedModule))!;
+            const newModule: ModuleType = {
+                id: module.id,
+                name: module.name,
+                numberOfDays: module.numberOfDays + 1,
+                days: editedDays
+            };
+
+            setNumOfDays(days.length - 1);
+            const editedDaysCurrent = [...days];
+            console.log(editedDaysCurrent)
+            // editedDaysCurrent.splice(day.dayNumber - 1, 1);
+            // console.log(editedDaysCurrent)
+            // for (var i = day.dayNumber - 1; i < editedDaysCurrent.length; i++) {
+            //     editedDaysCurrent[i].dayNumber = i + 1;
+            // }
+            // console.log(editedDaysCurrent)
+            // setDays(editedDaysCurrent);
+
+            mutation.mutate(newModule);
+        }
     };
 
     return (
@@ -151,12 +204,12 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                         <input type="checkbox" id={`collapse-toggle-events-${moduleId}-${day.dayNumber}`} className="hidden" />
                         <div className="collapse-title text-base w-100 flex flex-row">
                             <div className='flex flex-row w-2/12'>
-                                {day.dayNumber == 1 &&
+                                {day.dayNumber == 1 && day.dayNumber != days.length &&
                                     <div className="flex flex-col w-[26px] mr-2">
                                         <button type="button" className="w-full h-full self-center" onClick={() => moveDown(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
                                     </div>
                                 }
-                                {day.dayNumber == days.length &&
+                                {day.dayNumber != 1 && day.dayNumber == days.length &&
                                     <div className="flex flex-col w-[26px] mr-2">
                                         <button type="button" className="w-full h-full self-center" onClick={() => moveUp(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
                                     </div>
@@ -165,6 +218,10 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                                     <div className="flex flex-col w-[26px] mr-2">
                                         <button type="button" className="w-full h-full self-center" onClick={() => moveUp(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
                                         <button type="button" className="w-full h-full self-center" onClick={() => moveDown(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
+                                    </div>
+                                }
+                                {day.dayNumber == 1 && day.dayNumber == days.length &&
+                                    <div className="flex flex-col w-[26px] mr-2">
                                     </div>
                                 }
                                 <h2 className="self-center font-bold">Day {day.dayNumber}</h2>
@@ -218,10 +275,31 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                                                                     <div className="flex justify-end">
                                                                         <CloseBtn onClick={() => setIsMove(false)} />
                                                                     </div>
-                                                                    <h1 className="m-2">You want to move this day to another module.</h1>
-                                                                    <h1 className="font-bold m-2">Do you want to continue?</h1>
+                                                                    <h1 className="m-2 self-center">To which module do you want to move this event?</h1>
+                                                                    <div className="flex flex-col self-center">
+                                                                        <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
+                                                                            <option key={moduleId + ",default"} value="DEFAULT" disabled>Select Module</option>
+                                                                            {modules && modules.map((module, moduleIndex) =>
+                                                                                <> {module.id != moduleId &&
+                                                                                    <option key={module.id + ":" + moduleIndex} value={module.id}>{module.name}</option>
+                                                                                }
+                                                                                </>)}
+                                                                        </select>
+                                                                    </div>
+                                                                    {selectedModule != "DEFAULT" &&
+                                                                        <div className="flex flex-col items-center">
+                                                                            <h1 className="m-2 self-center">To which day of this module do you want to move this event?</h1>
+                                                                            <div className="flex flex-col self-center">
+                                                                                <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModuleDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
+                                                                                    <option key={moduleId + ",defaultDay"} value="DEFAULT" disabled>Select Day</option>
+                                                                                    {modules && modules.find(m => m.id == parseInt(selectedModule))!.days.map((day, dayIndex) =>
+                                                                                        <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber} ({day.description})</option>
+                                                                                    )}
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>}
                                                                     <div className="flex items-center justify-center mb-4 gap-2">
-                                                                        <input onClick={handleMove} className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
+                                                                        <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
                                                                         <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={() => setIsMove(false)} />
                                                                     </div>
                                                                 </div>
@@ -274,12 +352,12 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                         <input type="checkbox" id={`collapse-toggle-events-${day.dayNumber}`} className="hidden" />
                         <div className="collapse-title text-base w-100 flex flex-row">
                             <div className='flex flex-row w-2/12'>
-                                {day.dayNumber == 1 &&
+                                {day.dayNumber == 1 && day.dayNumber != days.length &&
                                     <div className="flex flex-col w-[26px] mr-2">
                                         <button type="button" className="w-full h-full self-center" onClick={() => moveDown(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
                                     </div>
                                 }
-                                {day.dayNumber == days.length &&
+                                {day.dayNumber != 1 && day.dayNumber == days.length &&
                                     <div className="flex flex-col w-[26px] mr-2">
                                         <button type="button" className="w-full h-full self-center" onClick={() => moveUp(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
                                     </div>
@@ -288,6 +366,10 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                                     <div className="flex flex-col w-[26px] mr-2">
                                         <button type="button" className="w-full h-full self-center" onClick={() => moveUp(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
                                         <button type="button" className="w-full h-full self-center" onClick={() => moveDown(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
+                                    </div>
+                                }
+                                {day.dayNumber == 1 && day.dayNumber == days.length &&
+                                    <div className="flex flex-col w-[26px] mr-2">
                                     </div>
                                 }
                                 <h2 className="self-center font-bold">Day {day.dayNumber}</h2>
