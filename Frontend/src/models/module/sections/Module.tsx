@@ -12,7 +12,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
     const [days, setDays] = useState<DayType[]>(module.days);
-    const [track, setTrack] = useState<string[]>(module.track || ["dotnet"]);
+    const [track, setTrack] = useState<string[]>(module.track || [".NET"]);
 
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
 
@@ -96,8 +96,8 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
 
     console.log(module)
 
-    let dropdownMenu = document.getElementById('dropdownMenu')!;
     function handleClick() {
+        let dropdownMenu = document.getElementById('dropdownMenu')!;
         if (dropdownMenu.className.includes('block')) {
             dropdownMenu.classList.add('hidden')
             dropdownMenu.classList.remove('block')
@@ -140,13 +140,13 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                             <button type="button" id="dropdownToggle" onClick={handleClick} className="h-8 text-start pl-3 text-sm text-gray-400 w-full border rounded-lg border-gray-300">
                                 Select
                             </button>
-                            <ul id="dropdownMenu" className='absolute block bg-white py-2 px-2 z-[1000] w-full shadow'>
+                            <ul id="dropdownMenu" className='absolute hidden bg-white py-2 px-2 z-[1000] w-full shadow'>
                                 <li>
                                     <label className="flex flex-row gap-2">
-                                        <input 
+                                        <input
                                             type="checkbox"
-                                            value="dotnet"
-                                            checked={track.includes("dotnet")}
+                                            value=".NET"
+                                            checked={track.includes(".NET")}
                                             onChange={(e) => handleTrackChange(e.target.value)}
                                         />
                                         <h1 className="text-md">.NET</h1>
@@ -156,19 +156,19 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                                     <label className="flex flex-row gap-2">
                                         <input
                                             type="checkbox"
-                                            value="javascript"
-                                            checked={track.includes("javascript")}
+                                            value="Javascript"
+                                            checked={track.includes("Javascript")}
                                             onChange={(e) => handleTrackChange(e.target.value)}
                                         />
-                                        <h1 className="text-md">JavaScript</h1>
+                                        <h1 className="text-md">Javascript</h1>
                                     </label>
                                 </li>
                                 <li >
                                     <label className="flex flex-row gap-2">
                                         <input
                                             type="checkbox"
-                                            value="java"
-                                            checked={track.includes("java")}
+                                            value="Java"
+                                            checked={track.includes("Java")}
                                             onChange={(e) => handleTrackChange(e.target.value)}
                                         />
                                         <h1 className="text-md">Java</h1>
