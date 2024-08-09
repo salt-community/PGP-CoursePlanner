@@ -50,16 +50,21 @@ export default function ModuleDetails() {
 
     return (
         getCookie("access_token") == undefined
-            ? <Login />            : <Page>
-                {isLoading && <LoadingMessage  />}
-                {isError && <ErrorMessage  />}
+            ? <Login /> : <Page>
+                {isLoading && <LoadingMessage />}
+                {isError && <ErrorMessage />}
                 {module &&
                     <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
                         <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                             <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
-                                <h1 className="pb-4 text-xl text-primary font-bold">{module.name}</h1>
-                                <p className="text-lg font-medium">Track: {module.track.join(', ')}</p>
-                            {module.days.map((day) =>
+                                <div className="flex flex-col items-center">
+                                    <h1 className="pb-0 text-xl text-primary font-bold">{module.name}</h1>
+                                    {module.track.length > 0
+                                        ? <p className="pb-4 text-lg font-medium">Track: {module.track.join(', ')}</p>
+                                        : <p className="pb-4 text-lg font-medium">Track: not selected</p>
+                                    }
+                                </div>
+                                {module.days.map((day) =>
                                     <div className="w-full" key={"day_" + day.dayNumber}>
                                         <h1 className="text-lg text-black font-bold self-start">
                                             Day {day.dayNumber}: {day.description}
@@ -81,12 +86,12 @@ export default function ModuleDetails() {
                                                         <td className="text-sm">{event.name}</td>
                                                         <td className="text-sm">{event.description}</td>
                                                         {event.startTime[0] == "0"
-                                                        ? <td className="text-sm">{event.startTime.slice(1)}</td>
-                                                        : <td className="text-sm">{event.startTime}</td>
+                                                            ? <td className="text-sm">{event.startTime.slice(1)}</td>
+                                                            : <td className="text-sm">{event.startTime}</td>
                                                         }
                                                         {event.endTime[0] == "0"
-                                                        ? <td className="text-sm">{event.endTime.slice(1)}</td>
-                                                        : <td className="text-sm">{event.endTime}</td>
+                                                            ? <td className="text-sm">{event.endTime.slice(1)}</td>
+                                                            : <td className="text-sm">{event.endTime}</td>
                                                         }
                                                     </tr>
                                                 )}

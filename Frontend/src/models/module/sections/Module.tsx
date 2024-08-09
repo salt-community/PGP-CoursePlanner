@@ -2,7 +2,7 @@ import InputSmall from "../../../components/inputFields/InputSmall";
 import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
 import SuccessBtn from "../../../components/buttons/SuccessBtn";
 import { useNavigate } from "react-router-dom";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect, useRef } from "react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { ModuleProps, DayType, ModuleType, EventType } from "../Types";
 import Day from "./Day";
@@ -12,10 +12,10 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
     const [days, setDays] = useState<DayType[]>(module.days);
-
-    const [track, setTrack] = useState<string[]>(module.track || ["dotnet"]);
-
+    const [track, setTrack] = useState<string[]>(module.track || [".NET"]);
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
+    const dropdownRef = useRef<HTMLUListElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
     const handleDays = () => {
         const editedDays = days.slice();
@@ -97,6 +97,29 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
 
     console.log(module)
 
+    function handleClick() {
+        let dropdownMenu = document.getElementById('dropdownMenu')!;
+        if (dropdownMenu.className.includes('block')) {
+            dropdownMenu.classList.add('hidden')
+            dropdownMenu.classList.remove('block')
+        } else {
+            dropdownMenu.classList.add('block')
+            dropdownMenu.classList.remove('hidden')
+        }
+    }
+
+    useEffect(() => {
+        function handleOutsideClick(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) &&
+                buttonRef.current && !buttonRef.current.contains(event.target as Node)) {
+                dropdownRef.current.classList.add('hidden');
+                dropdownRef.current.classList.remove('block');
+            }
+        }
+        document.addEventListener('mousedown', handleOutsideClick);
+        return () => document.removeEventListener('mousedown', handleOutsideClick);
+    }, []);
+
     return (
         <section className="px-4 md:px-24 lg:px-56">
             <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
@@ -104,56 +127,75 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                     <div className="flex flex-row items-center">
                         <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Module Name: </h2>
                         <div className="w-3/4">
-                            <InputSmall 
-                        type="text" 
-                        name="moduleName" 
-                        onChange={(e) => setModuleName(e.target.value)} 
-                        placeholder="Module name" 
-                        value={moduleName} 
-                    />
+                            <InputSmall
+                                type="text"
+                                name="moduleName"
+                                onChange={(e) => setModuleName(e.target.value)}
+                                placeholder="Module name"
+                                value={moduleName}
+                            />
                         </div>
                     </div>
                     <div className="flex flex-row items-center">
                         <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Number of days:</h2>
-                        <input 
-                        type="number" 
-                        name="numberOfDays" 
-                        onChange={(e) => setNumOfDays(parseInt(e.target.value))} 
-                        value={numOfDays} 
-                        className="input input-bordered input-sm w-3/5 mr-4" 
-                        placeholder="Number of days" 
-                    />
-
-                    <div className="flex flex-col space-y-2">
-                        <label>
-                            <input
-                                type="checkbox"
-                                value="dotnet"
-                                checked={track.includes("dotnet")}
-                                onChange={(e) => handleTrackChange(e.target.value)}
-                            />
-                            .NET
-                        </label>
-                        <label>
-                            <input
-                                type="checkbox"
-                                value="javascript"
-                                checked={track.includes("javascript")}
-                                onChange={(e) => handleTrackChange(e.target.value)}
-                            />
-                            JavaScript
-                        </label>
-                        <label>
-                            <input
-                                type="checkbox"
-                                value="java"
-                                checked={track.includes("java")}
-                                onChange={(e) => handleTrackChange(e.target.value)}
-                            />
-                            Java
-                        </label>
+                        <input
+                            type="number"
+                            name="numberOfDays"
+                            onChange={(e) => setNumOfDays(parseInt(e.target.value))}
+                            value={numOfDays}
+                            className="input input-bordered input-sm w-3/5 mr-4"
+                            placeholder="Number of days"
+                        />
                     </div>
-                    
+                    <div className="flex flex-row items-center">
+                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Track(s):</h2>
+                        <div className="relative w-3/5 mr-4">
+                            {track.length > 0
+                                ? <button ref={buttonRef} type="button" id="dropdownToggle" onClick={handleClick} className="h-8 text-start pl-3 text-sm text-black w-full border rounded-lg border-gray-300">
+                                    {track.join(", ")}
+                                </button>
+                                : <button ref={buttonRef} type="button" id="dropdownToggle" onClick={handleClick} className="h-8 text-start pl-3 text-sm text-gray-400 w-full border rounded-lg border-gray-300">
+                                    Select
+                                </button>
+                            }
+
+                            <ul ref={dropdownRef} id="dropdownMenu" className='absolute hidden bg-white py-2 px-2 z-[1000] w-full shadow'>
+                                <li>
+                                    <label className="flex flex-row gap-2">
+                                        <input
+                                            type="checkbox"
+                                            value=".NET"
+                                            checked={track.includes(".NET")}
+                                            onChange={(e) => handleTrackChange(e.target.value)}
+                                        />
+                                        <h1 className="text-md">.NET</h1>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label className="flex flex-row gap-2">
+                                        <input
+                                            type="checkbox"
+                                            value="Javascript"
+                                            checked={track.includes("Javascript")}
+                                            onChange={(e) => handleTrackChange(e.target.value)}
+                                        />
+                                        <h1 className="text-md">Javascript</h1>
+                                    </label>
+                                </li>
+                                <li >
+                                    <label className="flex flex-row gap-2">
+                                        <input
+                                            type="checkbox"
+                                            value="Java"
+                                            checked={track.includes("Java")}
+                                            onChange={(e) => handleTrackChange(e.target.value)}
+                                        />
+                                        <h1 className="text-md">Java</h1>
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+
                         <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
                     </div>
                 </div>
