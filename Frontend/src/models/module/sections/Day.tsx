@@ -166,12 +166,24 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
 
     const handleMove = () => {
         if (selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT") {
+            const editedDaysCurrent = [...days];
+            console.log(editedDaysCurrent)
+            editedDaysCurrent.splice(day.dayNumber - 1, 1);
+            console.log(editedDaysCurrent)
+            for (var i = day.dayNumber - 1; i < editedDaysCurrent.length; i++) {
+                editedDaysCurrent[i].dayNumber = i + 1;
+            }
+            console.log(editedDaysCurrent)
+            setDays(editedDaysCurrent);
+            setNumOfDays(days.length - 1);
+
             const originalDays = modules?.find(m => m.id == parseInt(selectedModule))!.days!;
             const editedDays = [...originalDays];
             editedDays.splice(parseInt(selectedModuleDay) - 1, 0, day);
             for (var i = parseInt(selectedModuleDay) - 1; i < editedDays.length; i++) {
                 editedDays[i].dayNumber = i + 1;
             }
+            console.log(editedDays)
 
             var module = modules?.find(m => m.id == parseInt(selectedModule))!;
             const newModule: ModuleType = {
@@ -181,18 +193,8 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                 days: editedDays
             };
 
-            setNumOfDays(days.length - 1);
-            const editedDaysCurrent = [...days];
-            console.log(editedDaysCurrent)
-            // editedDaysCurrent.splice(day.dayNumber - 1, 1);
-            // console.log(editedDaysCurrent)
-            // for (var i = day.dayNumber - 1; i < editedDaysCurrent.length; i++) {
-            //     editedDaysCurrent[i].dayNumber = i + 1;
-            // }
-            // console.log(editedDaysCurrent)
-            // setDays(editedDaysCurrent);
-
             mutation.mutate(newModule);
+            // GIVE WARNING IF MODULE IS ONE OR BOTH ARE USED IN A COURSE
         }
     };
 
@@ -293,8 +295,9 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                                                                                 <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModuleDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
                                                                                     <option key={moduleId + ",defaultDay"} value="DEFAULT" disabled>Select Day</option>
                                                                                     {modules && modules.find(m => m.id == parseInt(selectedModule))!.days.map((day, dayIndex) =>
-                                                                                        <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber} ({day.description})</option>
+                                                                                        <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber}</option>
                                                                                     )}
+                                                                                    <option key={day.id + "," + modules!.find(m => m.id == parseInt(selectedModule))!.days.length} value={modules!.find(m => m.id == parseInt(selectedModule))!.days.length + 1}>Day {modules!.find(m => m.id == parseInt(selectedModule))!.days.length + 1}</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>}
