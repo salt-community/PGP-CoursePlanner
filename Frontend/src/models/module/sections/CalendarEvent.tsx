@@ -44,7 +44,6 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
         const editedDays = [...days];
 
         let correctTime = value.replaceAll(".", ":");
-        console.log(correctTime)
         editedDays[dayNumber - 1].events[index] = {
             ...editedDays[dayNumber - 1].events[index],
             [name]: correctTime
@@ -197,8 +196,6 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
 
     const handleMoveAnotherModule = () => {
         setIsIncompleteInput(false);
-        console.log(selectedModule)
-        console.log(selectedModuleDay)
         if (selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT") {
             var originalDayIndex = days.findIndex(d => d.dayNumber == dayNumber);
             days[originalDayIndex].events.splice(index, 1);

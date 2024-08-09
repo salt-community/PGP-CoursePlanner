@@ -80,7 +80,6 @@ export default function () {
                 if (response) {
                     const editedModules = [...appliedModules!];
                     editedModules.splice(index + 1, 0, response);
-                    console.log(response)
                     setAppliedModules(editedModules);
                 }
             })
@@ -97,7 +96,6 @@ export default function () {
 
     const moveDown = (index: number) => {
         const editedModules = [...appliedModules!];
-        console.log(editedModules)
 
         const tempIndex: AppliedModuleType = {
             id: editedModules[index].id,
@@ -105,7 +103,6 @@ export default function () {
             numberOfDays: editedModules[index].numberOfDays,
             days: editedModules[index].days
         };
-        console.log(tempIndex)
 
         const tempIndexPlusOne: AppliedModuleType = {
             id: editedModules[index + 1].id,
@@ -113,11 +110,9 @@ export default function () {
             numberOfDays: editedModules[index + 1].numberOfDays,
             days: editedModules[index + 1].days
         };
-        console.log(tempIndexPlusOne)
 
         editedModules[index] = tempIndexPlusOne;
         editedModules[index + 1] = tempIndex;
-        console.log(editedModules)
 
         setAppliedModules(editedModules);
     }
@@ -199,7 +194,6 @@ export default function () {
                 if (response) {
                     const updatedModules = [...appliedModules!];
                     updatedModules[moduleIndex] = newAppliedModule;
-                    console.log(newAppliedModule)
                     setAppliedModules(updatedModules);
                 }
             })
@@ -227,7 +221,6 @@ export default function () {
                 modules: appliedModules!
             };
             mutation.mutate(newAppliedCourse);
-            console.log(newAppliedCourse)
         }
     }
     const queryClient = useQueryClient();
