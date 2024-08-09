@@ -121,7 +121,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     }, []);
 
     return (
-        <section className="px-4 md:px-24 lg:px-56">
+        <section className="px-4 pb-10 md:px-24 lg:px-56">
             <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
                 <div className="flex flex-col justify-between">
                     <div className="flex flex-row items-center">
@@ -201,7 +201,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                 </div>
                 <div className="flex flex-col space-y-2">
                     {days.map((day) =>
-                        <Day key={"day_" + day.dayNumber} moduleIndex={module.id!} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays} />)}
+                        <Day key={"day_" + day.dayNumber} moduleId={module.id!} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays}/>)}
                 </div>
                 {isIncompleteInput &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Please fill in all the fields</p>}

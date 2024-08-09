@@ -1,3 +1,4 @@
+import { FormEvent } from "react";
 import { CourseModule } from "../course/Types";
 
 
@@ -7,7 +8,7 @@ export type ModuleType = {
   numberOfDays: number;
   days: DayType[];
   courseModules?: CourseModule[];
-  track: string[];
+  track?: string[];
 };
 
 export type ModuleProps = {
@@ -24,11 +25,11 @@ export type DayType = {
 };
 
 export type DayProps = {
-  moduleIndex: number;
+  moduleId: number;
   day: DayType;
   setDays: React.Dispatch<React.SetStateAction<DayType[]>>;
   days: DayType[];
-  setNumOfDays: React.Dispatch<React.SetStateAction<number>>
+  setNumOfDays: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export type EventType = {
@@ -41,6 +42,7 @@ export type EventType = {
 
 export type EventProps = {
   appliedTrue: boolean;
+  moduleId: number;
   setDays: React.Dispatch<React.SetStateAction<DayType[]>>;
   days: DayType[];
   index: number;
