@@ -10,6 +10,14 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { editModule, getAllModules } from '../../../api/ModuleApi';
 
 export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayProps) {
+    const [_isMove, setIsMove] = useState<boolean>(false);
+    const [showOptions, setShowOptions] = useState(false);
+    const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const optionsRef = useRef<HTMLDivElement>(null);
+    const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
+    const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
+
     const handleAddEvent = () => {
         const editedDays = [...days];
         editedDays[day.dayNumber - 1].events.push({
@@ -71,17 +79,15 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
         editedDays[index].dayNumber = index + 1;
         editedDays[index - 1] = temp;
         editedDays[index - 1].dayNumber = index;
-
+        
         setDays(editedDays);
     }
-
-    const [_isMove, setIsMove] = useState<boolean>(false);
-
+    
     const popupRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-                setIsMove(false);
+                setAllToFalse()
             }
         }
         document.addEventListener('mousedown', handleClickOutside);
@@ -90,12 +96,8 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
-    const [showOptions, setShowOptions] = useState(false);
-    const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
-    const buttonRef = useRef<HTMLButtonElement>(null);
-    const optionsRef = useRef<HTMLDivElement>(null);
-
+    
+    
     const handleClick = () => {
         if (buttonRef.current) {
             const buttonRect = buttonRef.current.getBoundingClientRect();
@@ -143,18 +145,17 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
             queryClient.invalidateQueries({ queryKey: ['modules'] })
             setShowOptions(false);
             setIsMove(false);
+            setIsIncompleteInput(false);
             setSelectedModule("DEFAULT");
             setSelectedModuleDay("DEFAULT");
         }
     })
 
-    const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
     const handleSelectModule = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedModule(event.target.value);
         setSelectedModuleDay("DEFAULT");
     };
 
-    const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
     const handleSelectModuleDay = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedModuleDay(event.target.value);
     };
@@ -164,7 +165,17 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
         queryFn: getAllModules
     });
 
+    const setAllToFalse = () => {
+        setShowOptions(false);
+        setIsMove(false);
+        setIsIncompleteInput(false);
+        setSelectedModule("DEFAULT");
+        setSelectedModuleDay("DEFAULT");
+    }
+
+    const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
     const handleMove = () => {
+        setIsIncompleteInput(false);
         if (selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT") {
             const editedDaysCurrent = [...days];
             console.log(editedDaysCurrent)
@@ -195,6 +206,10 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
 
             mutation.mutate(newModule);
             // GIVE WARNING IF MODULE IS ONE OR BOTH ARE USED IN A COURSE
+            // Bij verwijderen laatste dag, komt er een lege dag
+        }
+        else {
+            setIsIncompleteInput(true);
         }
     };
 
@@ -263,6 +278,7 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                                                 <li>
                                                     <Popup
                                                         onOpen={() => setIsMove(true)}
+                                                        onClose={setAllToFalse}
                                                         trigger={<button
                                                             type="button"
                                                             className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -275,7 +291,7 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                                                             <div ref={popupRef}>
                                                                 <div className="flex flex-col">
                                                                     <div className="flex justify-end">
-                                                                        <CloseBtn onClick={() => setIsMove(false)} />
+                                                                        <CloseBtn onClick={setAllToFalse} />
                                                                     </div>
                                                                     <h1 className="m-2 self-center">To which module do you want to move this event?</h1>
                                                                     <div className="flex flex-col self-center">
@@ -303,8 +319,10 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                                                                         </div>}
                                                                     <div className="flex items-center justify-center mb-4 gap-2">
                                                                         <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
-                                                                        <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={() => setIsMove(false)} />
+                                                                        <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={setAllToFalse} />
                                                                     </div>
+                                                                    {isIncompleteInput &&
+                                                                        <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
                                                                 </div>
                                                             </div>
                                                         }
