@@ -17,6 +17,13 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
     const optionsRef = useRef<HTMLDivElement>(null);
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
     const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
+    const popupRef = useRef<HTMLDivElement>(null);
+    const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
+
+    const { data: modules } = useQuery({
+        queryKey: ['modules'],
+        queryFn: getAllModules
+    });
 
     const handleAddEvent = () => {
         const editedDays = [...days];
@@ -28,6 +35,7 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
         setDays(editedDays);
     }
 
+    // changes day description
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const editedDays = [...days];
         editedDays[day.dayNumber - 1].description = e.target.value;
@@ -79,25 +87,11 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
         editedDays[index].dayNumber = index + 1;
         editedDays[index - 1] = temp;
         editedDays[index - 1].dayNumber = index;
-        
+
         setDays(editedDays);
     }
-    
-    const popupRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-                setAllToFalse()
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutside);
 
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-    
-    
+    // handle clicking on three dots button
     const handleClick = () => {
         if (buttonRef.current) {
             const buttonRect = buttonRef.current.getBoundingClientRect();
@@ -135,21 +129,19 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
         };
     }, [showOptions]);
 
-    const queryClient = useQueryClient();
-
-    const mutation = useMutation({
-        mutationFn: (module: ModuleType) => {
-            return editModule(module);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
-            setShowOptions(false);
-            setIsMove(false);
-            setIsIncompleteInput(false);
-            setSelectedModule("DEFAULT");
-            setSelectedModuleDay("DEFAULT");
+    // handle clicking outside popup moveDay
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+                setAllToFalse()
+            }
         }
-    })
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const handleSelectModule = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedModule(event.target.value);
@@ -160,42 +152,41 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
         setSelectedModuleDay(event.target.value);
     };
 
-    const { data: modules } = useQuery({
-        queryKey: ['modules'],
-        queryFn: getAllModules
-    });
+    const queryClient = useQueryClient();
+    const mutation = useMutation({
+        mutationFn: (module: ModuleType) => {
+            return editModule(module);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
+            setAllToFalse()
+            const form = document.getElementById('editCourse-form') as HTMLFormElement;
 
-    const setAllToFalse = () => {
-        setShowOptions(false);
-        setIsMove(false);
-        setIsIncompleteInput(false);
-        setSelectedModule("DEFAULT");
-        setSelectedModuleDay("DEFAULT");
-    }
+            if (form) {
+                const syntheticEvent = new Event('submit', { bubbles: true, cancelable: true });
+                form.dispatchEvent(syntheticEvent);
+            }
+        }
+    })
 
-    const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
     const handleMove = () => {
         setIsIncompleteInput(false);
         if (selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT") {
             const editedDaysCurrent = [...days];
-            console.log(editedDaysCurrent)
             editedDaysCurrent.splice(day.dayNumber - 1, 1);
-            console.log(editedDaysCurrent)
             for (var i = day.dayNumber - 1; i < editedDaysCurrent.length; i++) {
                 editedDaysCurrent[i].dayNumber = i + 1;
             }
-            console.log(editedDaysCurrent)
-            setDays(editedDaysCurrent);
             setNumOfDays(days.length - 1);
-
+            setDays(editedDaysCurrent);
+            
             const originalDays = modules?.find(m => m.id == parseInt(selectedModule))!.days!;
             const editedDays = [...originalDays];
             editedDays.splice(parseInt(selectedModuleDay) - 1, 0, day);
             for (var i = parseInt(selectedModuleDay) - 1; i < editedDays.length; i++) {
                 editedDays[i].dayNumber = i + 1;
             }
-            console.log(editedDays)
-
+            
             var module = modules?.find(m => m.id == parseInt(selectedModule))!;
             const newModule: ModuleType = {
                 id: module.id,
@@ -203,16 +194,20 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                 numberOfDays: module.numberOfDays + 1,
                 days: editedDays
             };
-
             mutation.mutate(newModule);
-            // GIVE WARNING IF MODULE IS ONE OR BOTH ARE USED IN A COURSE
-            // Bij verwijderen laatste dag, komt er een lege dag
         }
         else {
             setIsIncompleteInput(true);
         }
     };
-
+    
+    const setAllToFalse = () => {
+        setShowOptions(false);
+        setIsMove(false);
+        setIsIncompleteInput(false);
+        setSelectedModule("DEFAULT");
+        setSelectedModuleDay("DEFAULT");
+    }
     return (
         <>
             <div className="relative">
@@ -251,87 +246,97 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                             </div>
                             <div className="w-3/12 xl:w-2/12 flex justify-start gap-1 self-center">
                                 <PrimaryBtn onClick={() => handleAddDays(day.dayNumber - 1)}>+</PrimaryBtn>
-                                <TrashBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
-                                <div className="relative inline-block">
-                                    <button
-                                        ref={buttonRef}
-                                        type="button"
-                                        onClick={handleClick}
-                                        className="btn btn-sm max-w-48 bg-white border-black"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <circle cx="12" cy="12" r="1"></circle>
-                                            <circle cx="19" cy="12" r="1"></circle>
-                                            <circle cx="5" cy="12" r="1"></circle>
-                                        </svg>
-                                    </button>
-                                    {showOptions && popupPosition && (
-                                        <div
-                                            ref={optionsRef}
-                                            className="fixed w-56 bg-white border border-gray-200 shadow-lg rounded-md z-50"
-                                            style={{
-                                                top: popupPosition.top,
-                                                left: popupPosition.left
-                                            }}
-                                        >
-                                            <ul className="py-1">
-                                                <li>
-                                                    <Popup
-                                                        onOpen={() => setIsMove(true)}
-                                                        onClose={setAllToFalse}
-                                                        trigger={<button
-                                                            type="button"
-                                                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                        >
-                                                            Move Day to another Module
-                                                        </button>}
-                                                        modal
-                                                    >
-                                                        {
-                                                            <div ref={popupRef}>
-                                                                <div className="flex flex-col">
-                                                                    <div className="flex justify-end">
-                                                                        <CloseBtn onClick={setAllToFalse} />
-                                                                    </div>
-                                                                    <h1 className="m-2 self-center">To which module do you want to move this event?</h1>
-                                                                    <div className="flex flex-col self-center">
-                                                                        <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
-                                                                            <option key={moduleId + ",default"} value="DEFAULT" disabled>Select Module</option>
-                                                                            {modules && modules.map((module, moduleIndex) =>
-                                                                                <> {module.id != moduleId &&
-                                                                                    <option key={module.id + ":" + moduleIndex} value={module.id}>{module.name}</option>
-                                                                                }
-                                                                                </>)}
-                                                                        </select>
-                                                                    </div>
-                                                                    {selectedModule != "DEFAULT" &&
-                                                                        <div className="flex flex-col items-center">
-                                                                            <h1 className="m-2 self-center">To which day of this module do you want to move this event?</h1>
+                                {days.length > 1 &&
+                                    <>
+                                        <TrashBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
+                                        <div className="relative inline-block">
+                                            <button
+                                                ref={buttonRef}
+                                                type="button"
+                                                onClick={handleClick}
+                                                className="btn btn-sm max-w-48 bg-white border-black"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <circle cx="12" cy="12" r="1"></circle>
+                                                    <circle cx="19" cy="12" r="1"></circle>
+                                                    <circle cx="5" cy="12" r="1"></circle>
+                                                </svg>
+                                            </button>
+                                            {showOptions && popupPosition && (
+                                                <div
+                                                    ref={optionsRef}
+                                                    className="fixed w-56 bg-white border border-gray-200 shadow-lg rounded-md z-50"
+                                                    style={{
+                                                        top: popupPosition.top,
+                                                        left: popupPosition.left
+                                                    }}
+                                                >
+                                                    <ul className="py-1">
+                                                        <li>
+                                                            <Popup
+                                                                onOpen={() => setIsMove(true)}
+                                                                onClose={setAllToFalse}
+                                                                trigger={<button
+                                                                    type="button"
+                                                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                                >
+                                                                    Move Day to another Module
+                                                                </button>}
+                                                                modal
+                                                            >
+                                                                {
+                                                                    <div ref={popupRef}>
+                                                                        <div className="flex flex-col">
+                                                                            <div className="flex justify-end">
+                                                                                <CloseBtn onClick={setAllToFalse} />
+                                                                            </div>
+                                                                            <h1 className="m-2 self-center">To which module do you want to move this event?</h1>
                                                                             <div className="flex flex-col self-center">
-                                                                                <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModuleDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
-                                                                                    <option key={moduleId + ",defaultDay"} value="DEFAULT" disabled>Select Day</option>
-                                                                                    {modules && modules.find(m => m.id == parseInt(selectedModule))!.days.map((day, dayIndex) =>
-                                                                                        <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber}</option>
-                                                                                    )}
-                                                                                    <option key={day.id + "," + modules!.find(m => m.id == parseInt(selectedModule))!.days.length} value={modules!.find(m => m.id == parseInt(selectedModule))!.days.length + 1}>Day {modules!.find(m => m.id == parseInt(selectedModule))!.days.length + 1}</option>
+                                                                                <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
+                                                                                    <option key={moduleId + ",default"} value="DEFAULT" disabled>Select Module</option>
+                                                                                    {modules && modules.map((module, moduleIndex) =>
+                                                                                        <> {module.id != moduleId &&
+                                                                                            <option key={module.id + ":" + moduleIndex} value={module.id}>{module.name}</option>
+                                                                                        }
+                                                                                        </>)}
                                                                                 </select>
                                                                             </div>
-                                                                        </div>}
-                                                                    <div className="flex items-center justify-center mb-4 gap-2">
-                                                                        <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
-                                                                        <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={setAllToFalse} />
+                                                                            {selectedModule != "DEFAULT" &&
+                                                                                <div className="flex flex-col items-center">
+                                                                                    <h1 className="m-2 self-center">To which day of this module do you want to move this event?</h1>
+                                                                                    <div className="flex flex-col self-center">
+                                                                                        <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModuleDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
+                                                                                            <option key={moduleId + ",defaultDay"} value="DEFAULT" disabled>Select Day</option>
+                                                                                            {modules && modules.find(m => m.id == parseInt(selectedModule))!.days.map((day, dayIndex) =>
+                                                                                                <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber}</option>
+                                                                                            )}
+                                                                                            <option key={day.id + "," + modules!.find(m => m.id == parseInt(selectedModule))!.days.length} value={modules!.find(m => m.id == parseInt(selectedModule))!.days.length + 1}>Day {modules!.find(m => m.id == parseInt(selectedModule))!.days.length + 1}</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>}
+                                                                            {selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT" &&
+                                                                                <>
+                                                                                    <h1 className="mt-4 self-center font-bold">Moving this day will save all changes!</h1>
+                                                                                    <h1 className="mt-4 self-center font-bold">If this module is part of a course, the course will also be modified!</h1>
+                                                                                </>
+                                                                            }
+                                                                            <div className="flex items-center justify-center mb-4 gap-2">
+                                                                                <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-40 btn-success text-white" value={"Move Day and Save"} />
+                                                                                <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"Cancel"} onClick={setAllToFalse} />
+                                                                            </div>
+                                                                            {isIncompleteInput &&
+                                                                                <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
+                                                                        </div>
                                                                     </div>
-                                                                    {isIncompleteInput &&
-                                                                        <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                    </Popup>
-                                                </li>
-                                            </ul>
+                                                                }
+                                                            </Popup>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
-                                </div>
+                                    </>
+                                }
                             </div>
                             <label htmlFor={`collapse-toggle-events-${moduleId}-${day.dayNumber}`} className="w-1/12 cursor-pointer flex flex-row items-center justify-end">
                                 <h6 className='text-xs ml-2'>Events</h6>
@@ -403,43 +408,94 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                             </div>
                             <div className="w-3/12 xl:w-2/12 flex justify-start gap-1 self-center">
                                 <PrimaryBtn onClick={() => handleAddDays(day.dayNumber - 1)}>+</PrimaryBtn>
-                                <TrashBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
-                                <div className="relative inline-block">
-                                    <button
-                                        ref={buttonRef}
-                                        type="button"
-                                        onClick={handleClick}
-                                        className="btn btn-sm max-w-48 bg-white border-black"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <circle cx="12" cy="12" r="1"></circle>
-                                            <circle cx="19" cy="12" r="1"></circle>
-                                            <circle cx="5" cy="12" r="1"></circle>
-                                        </svg>
-                                    </button>
-                                    {showOptions && popupPosition && (
-                                        <div
-                                            ref={optionsRef}
-                                            className="fixed w-56 bg-white border border-gray-200 shadow-lg rounded-md z-50"
-                                            style={{
-                                                top: popupPosition.top,
-                                                left: popupPosition.left
-                                            }}
-                                        >
-                                            <ul className="py-1">
-                                                <li>
-                                                    <button
-                                                        type="button"
-                                                        onClick={handleMove}
-                                                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                    >
-                                                        Move Day to another Module
-                                                    </button>
-                                                </li>
-                                            </ul>
+                                {days.length > 1 &&
+                                    <>
+                                        <TrashBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
+                                        <div className="relative inline-block">
+                                            <button
+                                                ref={buttonRef}
+                                                type="button"
+                                                onClick={handleClick}
+                                                className="btn btn-sm max-w-48 bg-white border-black"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <circle cx="12" cy="12" r="1"></circle>
+                                                    <circle cx="19" cy="12" r="1"></circle>
+                                                    <circle cx="5" cy="12" r="1"></circle>
+                                                </svg>
+                                            </button>
+                                            {showOptions && popupPosition && (
+                                                <div
+                                                    ref={optionsRef}
+                                                    className="fixed w-56 bg-white border border-gray-200 shadow-lg rounded-md z-50"
+                                                    style={{
+                                                        top: popupPosition.top,
+                                                        left: popupPosition.left
+                                                    }}
+                                                >
+                                                    <ul className="py-1">
+                                                        <li>
+                                                            <Popup
+                                                                onOpen={() => setIsMove(true)}
+                                                                onClose={setAllToFalse}
+                                                                trigger={<button
+                                                                    type="button"
+                                                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                                >
+                                                                    Move Day to another Module
+                                                                </button>}
+                                                                modal
+                                                            >
+                                                                {
+                                                                    <div ref={popupRef}>
+                                                                        <div className="flex flex-col">
+                                                                            <div className="flex justify-end">
+                                                                                <CloseBtn onClick={setAllToFalse} />
+                                                                            </div>
+                                                                            <h1 className="m-2 self-center">To which module do you want to move this event?</h1>
+                                                                            <div className="flex flex-col self-center">
+                                                                                <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
+                                                                                    <option key={moduleId + ",default"} value="DEFAULT" disabled>Select Module</option>
+                                                                                    {modules && modules.map((module, moduleIndex) =>
+                                                                                        <> {module.id != moduleId &&
+                                                                                            <option key={module.id + ":" + moduleIndex} value={module.id}>{module.name}</option>
+                                                                                        }
+                                                                                        </>)}
+                                                                                </select>
+                                                                            </div>
+                                                                            {selectedModule != "DEFAULT" &&
+                                                                                <div className="flex flex-col items-center">
+                                                                                    <h1 className="m-2 self-center">To which day of this module do you want to move this event?</h1>
+                                                                                    <div className="flex flex-col self-center">
+                                                                                        <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModuleDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
+                                                                                            <option key={moduleId + ",defaultDay"} value="DEFAULT" disabled>Select Day</option>
+                                                                                            {modules && modules.find(m => m.id == parseInt(selectedModule))!.days.map((day, dayIndex) =>
+                                                                                                <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber}</option>
+                                                                                            )}
+                                                                                            <option key={day.id + "," + modules!.find(m => m.id == parseInt(selectedModule))!.days.length} value={modules!.find(m => m.id == parseInt(selectedModule))!.days.length + 1}>Day {modules!.find(m => m.id == parseInt(selectedModule))!.days.length + 1}</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>}
+                                                                            {selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT" &&
+                                                                                <h1 className="m-2 self-center font-bold">Moving this day will save all changes!</h1>
+                                                                            }
+                                                                            <div className="flex items-center justify-center mb-4 gap-2">
+                                                                                <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-40 btn-success text-white" value={"Move Day and Save"} />
+                                                                                <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"Cancel"} onClick={setAllToFalse} />
+                                                                            </div>
+                                                                            {isIncompleteInput &&
+                                                                                <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                            </Popup>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
-                                </div>
+                                    </>
+                                }
                             </div>
                             <h6 className='w-1/12 text-xs'></h6>
                         </div>

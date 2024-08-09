@@ -9,12 +9,25 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { editModule, getAllModules } from "../../../api/ModuleApi";
 
 export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDays, days, index, event }: EventProps) {
+    const [isMove, setIsMove] = useState<boolean>(false);
+    const [isMoveAnotherModule, setIsMoveAnotherModule] = useState<boolean>(false);
+    const popupRef = useRef<HTMLDivElement>(null);
+    const popupRefAnotherModule = useRef<HTMLDivElement>(null);
+    const [showOptions, setShowOptions] = useState(false);
+    const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const optionsRef = useRef<HTMLDivElement>(null);
+    const [selectedDay, setSelectedDay] = useState<string>("DEFAULT");
+    const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
+    const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
+    const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
 
     const { data: modules } = useQuery({
         queryKey: ['modules'],
         queryFn: getAllModules
     });
 
+    // change event name or description
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         const editedDays = [...days];
@@ -25,6 +38,7 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
         setDays(editedDays);
     }
 
+    // change event startTime or endTime
     const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         const editedDays = [...days];
@@ -52,44 +66,9 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
     if (endTimeDefault.length == 7)
         endTimeDefault = "0" + endTimeDefault;
 
-    const [isMove, setIsMove] = useState<boolean>(false);
-    const [isMoveAnotherModule, setIsMoveAnotherModule] = useState<boolean>(false);
-
-    const popupRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-                setIsMove(false);
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const popupRefAnotherModule = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        function handleClickOutsideAnotherModule(event: MouseEvent) {
-            if (popupRefAnotherModule.current && !popupRefAnotherModule.current.contains(event.target as Node)) {
-                setIsMoveAnotherModule(false);
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutsideAnotherModule);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutsideAnotherModule);
-        };
-    }, []);
-
-    const [showOptions, setShowOptions] = useState(false);
-    const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
-    const buttonRef = useRef<HTMLButtonElement>(null);
-    const optionsRef = useRef<HTMLDivElement>(null);
-
+    // handle clicking the three dots button
     const handleClick = () => {
-        setIsMove(false);
+        setAllToFalse();
         if (buttonRef.current) {
             const buttonRect = buttonRef.current.getBoundingClientRect();
             setPopupPosition({
@@ -126,23 +105,26 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
         };
     }, [showOptions]);
 
-    const [selectedDay, setSelectedDay] = useState<string>("DEFAULT");
+    // handle clicking outside popup moveEvent
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+                setAllToFalse();
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     const handleSelectDay = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedDay(event.target.value);
     };
 
-    const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
-    const handleSelectModule = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedModule(event.target.value);
-        setSelectedModuleDay("DEFAULT");
-    };
-
-    const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
-    const handleSelectModuleDay = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedModuleDay(event.target.value);
-    };
-
     const handleMove = () => {
+        setIsIncompleteInput(false);
         if (selectedDay != "DEFAULT") {
             var originalDayIndex = days.findIndex(d => d.dayNumber == dayNumber);
             var selectedDayIndex = days.findIndex(d => d.dayNumber == parseInt(selectedDay));
@@ -166,29 +148,57 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
 
             const editedDays = [...days];
             setDays(editedDays);
-            console.log(days)
+            setAllToFalse()
         }
+        else {
+            setIsIncompleteInput(true);
+        }
+    };
 
-        setShowOptions(false);
-        setIsMove(false);
+    // handle clicking outside popup moveEventToAnotherModule
+    useEffect(() => {
+        function handleClickOutsideAnotherModule(event: MouseEvent) {
+            if (popupRefAnotherModule.current && !popupRefAnotherModule.current.contains(event.target as Node)) {
+                setAllToFalse();
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutsideAnotherModule);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutsideAnotherModule);
+        };
+    }, []);
+
+    const handleSelectModule = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedModule(event.target.value);
+        setSelectedModuleDay("DEFAULT");
+    };
+
+    const handleSelectModuleDay = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedModuleDay(event.target.value);
     };
 
     const queryClient = useQueryClient();
-
     const mutation = useMutation({
         mutationFn: (module: ModuleType) => {
             return editModule(module);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
-            setShowOptions(false);
-            setIsMoveAnotherModule(false);
-            setSelectedModule("DEFAULT");
-            setSelectedModuleDay("DEFAULT");
+            setAllToFalse();
+            const form = document.getElementById('editCourse-form') as HTMLFormElement;
+
+            if (form) {
+                const syntheticEvent = new Event('submit', { bubbles: true, cancelable: true });
+                form.dispatchEvent(syntheticEvent);
+            }
         }
     })
 
     const handleMoveAnotherModule = () => {
+        setIsIncompleteInput(false);
+        console.log(selectedModule)
+        console.log(selectedModuleDay)
         if (selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT") {
             var originalDayIndex = days.findIndex(d => d.dayNumber == dayNumber);
             days[originalDayIndex].events.splice(index, 1);
@@ -214,7 +224,19 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
 
             mutation.mutate(newModule);
         }
+        else {
+            setIsIncompleteInput(true);
+        }
     };
+
+    const setAllToFalse = () => {
+        setIsMove(false);
+        setIsMoveAnotherModule(false);
+        setIsIncompleteInput(false);
+        setSelectedDay("DEFAULT");
+        setSelectedModule("DEFAULT");
+        setSelectedModuleDay("DEFAULT");
+    }
 
     return (
         <tr className="gap-2">
@@ -224,7 +246,7 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
             <td><InputSmallTime onChange={handleTimeChange} name="endTime" value={endTimeDefault} type="time" /></td>
             <td className="text-end flex gap-1">
                 <TrashBtn handleDelete={handleDeleteEvent} />
-                {!appliedTrue &&
+                {!appliedTrue && event.name != "" && event.startTime != "" && event.endTime != "" &&
                     <div className="relative inline-block">
                         <button
                             ref={buttonRef}
@@ -248,47 +270,52 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
                                 }}
                             >
                                 <ul className="py-1">
-                                    <li>
-                                        <Popup
-                                            open={isMove}
-                                            onOpen={() => setIsMove(true)}
-                                            trigger={<button
-                                                type="button"
-                                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    {days.length > 1 &&
+                                        <li>
+                                            <Popup
+                                                open={isMove}
+                                                onOpen={() => setIsMove(true)}
+                                                onClose={setAllToFalse}
+                                                trigger={<button
+                                                    type="button"
+                                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                                >
+                                                    Move Event to another Day
+                                                </button>}
+                                                modal
                                             >
-                                                Move Event to another Day
-                                            </button>}
-                                            modal
-                                        >
-                                            {
-                                                <div ref={popupRef}>
-                                                    <div className="flex flex-col">
-                                                        <div className="flex justify-end">
-                                                            <CloseBtn onClick={() => setIsMove(false)} />
-                                                        </div>
-                                                        <h1 className="m-2 self-center">To which day do you want to move this event?</h1>
-                                                        <div className="flex flex-col self-center">
-                                                            <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
-                                                                {days.map((day, dayIndex) =>
-                                                                    <> {day.dayNumber == dayNumber
-                                                                        ? <option key={day.id + "," + dayIndex} value="DEFAULT" disabled>Day {day.dayNumber} ({day.description})</option>
-                                                                        : <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber} ({day.description})</option>}
-                                                                    </>)}
-                                                            </select>
-                                                        </div>
-                                                        <div className="flex items-center justify-center mb-4 gap-2">
-                                                            <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-28 btn-success text-white" value={"Move event"} />
-                                                            <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"Cancel"} onClick={() => setIsMove(false)} />
+                                                {
+                                                    <div ref={popupRef}>
+                                                        <div className="flex flex-col">
+                                                            <div className="flex justify-end">
+                                                                <CloseBtn onClick={setAllToFalse} />
+                                                            </div>
+                                                            <h1 className="m-2 self-center">To which day do you want to move this event?</h1>
+                                                            <div className="flex flex-col self-center">
+                                                                <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
+                                                                    {days.map((day, dayIndex) =>
+                                                                        <> {day.dayNumber == dayNumber
+                                                                            ? <option key={day.id + "," + dayIndex} value="DEFAULT" disabled>Day {day.dayNumber} ({day.description})</option>
+                                                                            : <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber} ({day.description})</option>}
+                                                                        </>)}
+                                                                </select>
+                                                            </div>
+                                                            <div className="flex items-center justify-center mb-4 gap-2">
+                                                                <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-28 btn-success text-white" value={"Move event"} />
+                                                                <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"Cancel"} onClick={setAllToFalse} />
+                                                            </div>
+                                                            {isIncompleteInput &&
+                                                                <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a day</p>}
                                                         </div>
                                                     </div>
-                                                </div>
-                                            }
-                                        </Popup>
-                                    </li>
+                                                }
+                                            </Popup>
+                                        </li>}
                                     <li>
                                         <Popup
                                             open={isMoveAnotherModule}
                                             onOpen={() => setIsMoveAnotherModule(true)}
+                                            onClose={setAllToFalse}
                                             trigger={<button
                                                 type="button"
                                                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -301,7 +328,7 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
                                                 <div ref={popupRefAnotherModule}>
                                                     <div className="flex flex-col">
                                                         <div className="flex justify-end">
-                                                            <CloseBtn onClick={() => setIsMoveAnotherModule(false)} />
+                                                            <CloseBtn onClick={setAllToFalse} />
                                                         </div>
                                                         <h1 className="m-2 self-center">To which module do you want to move this event?</h1>
                                                         <div className="flex flex-col self-center">
@@ -326,10 +353,18 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
                                                                     </select>
                                                                 </div>
                                                             </div>}
+                                                        {selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT" &&
+                                                            <>
+                                                                <h1 className="mt-4 self-center font-bold">Moving this event will save all changes!</h1>
+                                                                <h1 className="mt-4 self-center font-bold">If this module is part of a course, the course will also be modified!</h1>
+                                                            </>
+                                                        }
                                                         <div className="flex items-center justify-center mb-4 gap-2">
                                                             <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMoveAnotherModule} className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
-                                                            <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={() => setIsMoveAnotherModule(false)} />
+                                                            <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={setAllToFalse} />
                                                         </div>
+                                                        {isIncompleteInput &&
+                                                            <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
                                                     </div>
                                                 </div>
                                             }
