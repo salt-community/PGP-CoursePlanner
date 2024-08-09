@@ -10,7 +10,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { editModule, getAllModules } from '../../../api/ModuleApi';
 
 export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayProps) {
-    const [_isMove, setIsMove] = useState<boolean>(false);
+    const [isMove, setIsMove] = useState<boolean>(false);
     const [showOptions, setShowOptions] = useState(false);
     const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
@@ -93,6 +93,7 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
 
     // handle clicking on three dots button
     const handleClick = () => {
+        setAllToFalse();
         if (buttonRef.current) {
             const buttonRect = buttonRef.current.getBoundingClientRect();
             setPopupPosition({
@@ -179,14 +180,14 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
             }
             setNumOfDays(days.length - 1);
             setDays(editedDaysCurrent);
-            
+
             const originalDays = modules?.find(m => m.id == parseInt(selectedModule))!.days!;
             const editedDays = [...originalDays];
             editedDays.splice(parseInt(selectedModuleDay) - 1, 0, day);
             for (var i = parseInt(selectedModuleDay) - 1; i < editedDays.length; i++) {
                 editedDays[i].dayNumber = i + 1;
             }
-            
+
             var module = modules?.find(m => m.id == parseInt(selectedModule))!;
             const newModule: ModuleType = {
                 id: module.id,
@@ -200,9 +201,8 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
             setIsIncompleteInput(true);
         }
     };
-    
+
     const setAllToFalse = () => {
-        setShowOptions(false);
         setIsMove(false);
         setIsIncompleteInput(false);
         setSelectedModule("DEFAULT");
@@ -274,6 +274,7 @@ export default function Day({ moduleId, day, setDays, days, setNumOfDays }: DayP
                                                     <ul className="py-1">
                                                         <li>
                                                             <Popup
+                                                                open={isMove}
                                                                 onOpen={() => setIsMove(true)}
                                                                 onClose={setAllToFalse}
                                                                 trigger={<button
