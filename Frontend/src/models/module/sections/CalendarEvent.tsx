@@ -301,7 +301,7 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
                                                                 </select>
                                                             </div>
                                                             <div className="flex items-center justify-center mb-4 gap-2">
-                                                                <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-28 btn-success text-white" value={"Move event"} />
+                                                                <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-28 btn-success text-white" value={"Move Event"} />
                                                                 <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"Cancel"} onClick={setAllToFalse} />
                                                             </div>
                                                             {isIncompleteInput &&
@@ -360,8 +360,8 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
                                                             </>
                                                         }
                                                         <div className="flex items-center justify-center mb-4 gap-2">
-                                                            <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMoveAnotherModule} className="btn btn-sm mt-4 w-24 btn-success text-white" value={"Yes"} />
-                                                            <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"No"} onClick={setAllToFalse} />
+                                                            <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMoveAnotherModule} className="btn btn-sm mt-4 w-44 btn-success text-white" value={"Move Event and Save"} />
+                                                            <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"Cancel"} onClick={setAllToFalse} />
                                                         </div>
                                                         {isIncompleteInput &&
                                                             <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
