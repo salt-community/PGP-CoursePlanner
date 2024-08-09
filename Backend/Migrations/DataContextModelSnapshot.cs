@@ -288,6 +288,7 @@ namespace Backend.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Track")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

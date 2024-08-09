@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class AppliedModuleUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -77,7 +77,7 @@ namespace Backend.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     NumberOfDays = table.Column<int>(type: "INTEGER", nullable: false),
-                    Track = table.Column<string>(type: "TEXT", nullable: true)
+                    Track = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
