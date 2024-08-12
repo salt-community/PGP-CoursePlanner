@@ -22,10 +22,11 @@ namespace Backend.Controllers
 
         public async Task<ActionResult<CalendarDate>> GetCalendarDate(DateTime date)
         {
+            var convertedDate = date.ToUniversalTime();
             var response = await _context.CalendarDates
-                            .Include(date => date.DateContent)
+                            .Include(convertedDate => convertedDate.DateContent)
                             .ThenInclude(content => content.Events)
-                            .FirstOrDefaultAsync(calendarDate => calendarDate.Date.Date == date.Date);
+                            .FirstOrDefaultAsync(calendarDate => calendarDate.Date.Date == convertedDate.Date);
 
             if (response != null)
             {
