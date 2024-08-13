@@ -96,7 +96,7 @@ export default function CourseDetails() {
                 setIsInvalidDate(true);
         }
         else {
-            var appliedCoursesWithCourseId = allAppliedCourses!.filter(m => m.courseId! === course!.id);
+            var appliedCoursesWithCourseId = allAppliedCourses!.filter(m => m.courseId! == course!.id);
             if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
                 await Promise.all(appliedCoursesWithCourseId!.map(async appliedCourse => {
                     try {

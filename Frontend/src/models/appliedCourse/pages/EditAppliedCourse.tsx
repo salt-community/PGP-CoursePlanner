@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Page from "../../../components/Page";
 import { getIdFromPath } from "../../../helpers/helperMethods";
-import { editAppliedCourse, getAppliedCourseById } from "../../../api/AppliedCourseApi";
+import { editAppliedCourse, getAllAppliedCourses, getAppliedCourseById } from "../../../api/AppliedCourseApi";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { SyntheticEvent, useEffect, useRef, useState } from "react";
 import Popup from "reactjs-popup";
@@ -26,25 +26,30 @@ export default function () {
     const [isOpened, setIsOpened] = useState<boolean>(false);
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
     const [isInvalidModule, setIsInvalidModule] = useState<boolean>(false);
-    const navigate = useNavigate();
-
-    const appliedCourseId = getIdFromPath();
-
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [color, setColor] = useState<string>("");
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
     const [appliedModules, setAppliedModules] = useState<AppliedModuleType[]>();
 
+    const navigate = useNavigate();
+
     const { data: modules, } = useQuery({
         queryKey: ['modules'],
         queryFn: getAllModules
     });
-
+    
+    const { data: allAppliedCourses } = useQuery({
+        queryKey: ['appliedCourses'],
+        queryFn: () => getAllAppliedCourses()
+    });
+    
+    const appliedCourseId = getIdFromPath();
     const [appliedCourse, setAppliedCourse] = useState<AppliedCourseType>();
     useEffect(() => {
         getAppliedCourseById(parseInt(appliedCourseId))
             .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setColor(result!.color!); setAppliedCourseName(result!.name!); setAppliedModules(result!.modules); })
     }, [appliedCourseId]);
+    const defaultColor = appliedCourse?.color;
 
     const popupRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -202,7 +207,7 @@ export default function () {
             });
     }
 
-    const handleEdit = () => {
+    const handleEdit = async () => {
         setIsInvalidDate(false);
         setIsInvalidModule(false);
         if (startDate.getDate() == 6 || startDate.getDate() == 0 || appliedModules?.find(m => m.name == "")) {
@@ -212,6 +217,26 @@ export default function () {
                 setIsInvalidModule(true);
         }
         else {
+            var appliedCoursesWithCourseId = allAppliedCourses!.filter(m => m.courseId! == appliedCourse!.courseId);
+            if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
+                await Promise.all(appliedCoursesWithCourseId!.map(async appliedCourse => {
+                    try {
+                        const newAppliedCourse: AppliedCourseType = {
+                            id: appliedCourse.id,
+                            name: appliedCourse.name,
+                            startDate: appliedCourse.startDate,
+                            endDate: appliedCourse.endDate,
+                            courseId: appliedCourse.courseId,
+                            modules: appliedCourse.modules,
+                            color: color
+                        };
+                        await editAppliedCourse(newAppliedCourse);
+                    } catch (error) {
+                        console.error("Error posting applied event:", error);
+                    }
+                }));
+            }
+
             const newAppliedCourse: AppliedCourseType = {
                 name: appliedCourseName,
                 id: appliedCourse!.id,
