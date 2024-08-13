@@ -25,6 +25,7 @@ export type DayType = {
 };
 
 export type DayProps = {
+  editTrue: boolean;
   moduleId: number;
   day: DayType;
   setDays: React.Dispatch<React.SetStateAction<DayType[]>>;
@@ -42,6 +43,7 @@ export type EventType = {
 
 export type EventProps = {
   appliedTrue: boolean;
+  editTrue: boolean;
   moduleId: number;
   setDays: React.Dispatch<React.SetStateAction<DayType[]>>;
   days: DayType[];
