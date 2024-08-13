@@ -24,8 +24,6 @@ import Login from "../../login/Login";
 
 export default function CourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
-    const [color, setColor] = useState("#FFFFFF");
-    const [isColorNotSelected, setIsColorNotSelected] = useState<boolean>(false);
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
     const [isOpened, setIsOpened] = useState<boolean>(false);
 
@@ -37,12 +35,12 @@ export default function CourseDetails() {
         queryFn: () => getCourseById(parseInt(courseId))
     });
 
-    const { data: allModules } = useQuery({
+    const { data: allModules, isLoading: isLoadingModules, isError: isErrorModules } = useQuery({
         queryKey: ['modules'],
         queryFn: () => getAllModules()
     });
 
-    const { data: allAppliedCourses } = useQuery({
+    const { data: allAppliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQuery({
         queryKey: ['appliedCourses'],
         queryFn: () => getAllAppliedCourses()
     });
@@ -74,6 +72,14 @@ export default function CourseDetails() {
         modules.push(module!)
     });
 
+    var defaultColor = "#FFFFFF";
+    const appliedCoursesWithCourseId = allAppliedCourses?.filter(m => m.courseId! == course?.id);
+    if (allAppliedCourses && appliedCoursesWithCourseId!.length > 0) {
+        defaultColor = appliedCoursesWithCourseId![0].color;
+    }
+    const [color, setColor] = useState(defaultColor);
+    const [isColorNotSelected, setIsColorNotSelected] = useState<boolean>(false);
+
     const handleApplyTemplate = async () => {
         setIsColorNotSelected(false);
         setIsInvalidDate(false);
@@ -91,7 +97,7 @@ export default function CourseDetails() {
                 color: color
             };
             const response = postAppliedCourse(appliedCourse);
-            if ((await response) != undefined && (await response)!.ok) {
+            if ((await response) != undefined && (await response)!.ok) {             
                 navigate('/activecourses')
             }
         }
@@ -112,13 +118,13 @@ export default function CourseDetails() {
         getCookie("access_token") == undefined
             ? <Login />
             : <Page>
-                {isLoading && <LoadingMessage />}
-                {isError && <ErrorMessage />}
-                {course &&
+                {(isLoading || isLoadingModules || isLoadingAppliedCourses) && <LoadingMessage />}
+                {(isError || isErrorModules || isErrorAppliedCourses) && <ErrorMessage />}
+                {course  && allAppliedCourses &&
                     <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
                         <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
                             <h1 className="pb-4 text-xl text-primary font-bold">{course.name}</h1>
-                            {modules.map((module, index) =>
+                            {modules && modules.map((module, index) =>
                                 <div key={module.id}>
                                     <h1 className="text-lg text-black font-bold self-start">
                                         <Link to={`/modules/details/${module.id}`}>
