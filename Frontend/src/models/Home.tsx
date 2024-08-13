@@ -12,7 +12,7 @@ import Login from "./login/Login";
 
 export default function Home() {
     // const redirectLink = "https://frontend-h7ia67qbhq-uc.a.run.app";
-    const redirectLink = "http://localhost:5173";
+    // const redirectLink = "http://localhost:5173";
 
     const thisWeek = new Date();
     const nextWeek = new Date(thisWeek);
@@ -40,7 +40,7 @@ export default function Home() {
             setCookie('access_token', access_token, expires_in);
             setCookie('JWT', id_token, expires_in);
 
-            location.href = redirectLink;
+            location.href = import.meta.env.BASE_URL;
         }
     }
 
