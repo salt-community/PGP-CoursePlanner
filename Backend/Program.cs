@@ -1,3 +1,4 @@
+using System;
 using Backend.Config;
 using Backend.Data;
 using Backend.ExceptionHandler;
@@ -17,13 +18,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-
+string deploymentDevelop = Environment.GetEnvironmentVariable("ConnectionStringDeployedDevelop")!;
 string? connectionString = builder.Environment.IsDevelopment() ?
                         builder.Configuration.GetConnectionString("DevelopmentDb") :
                         Environment.GetEnvironmentVariable("ConnectionStringDeployed");
 
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseNpgsql(connectionString ?? throw new InvalidOperationException("Connection string 'DevelopmentDb' or 'ConnectionStringDeployed' not found.")));
+    options.UseNpgsql(connectionString ?? deploymentDevelop ?? throw new InvalidOperationException("Connection string 'DevelopmentDb' or 'ConnectionStringDeployed' not found.")));
 
 var JwtSecurityScheme = new OpenApiSecurityScheme()
 {
@@ -65,7 +66,7 @@ app.UseCors(x => x
     .AllowAnyHeader()
     .AllowAnyOrigin());
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || deploymentDevelop != null)
 {
     using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
