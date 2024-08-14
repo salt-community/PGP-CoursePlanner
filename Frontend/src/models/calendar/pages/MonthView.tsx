@@ -1,13 +1,17 @@
 import NextBtn from "../../../components/buttons/NextBtn"
 import PreviousBtn from "../../../components/buttons/PreviousBtn"
 import Page from "../../../components/Page"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import CalendarDate from "../sections/CalendarDate"
 import { Link } from "react-router-dom"
 import { currentMonth, firstDayOfMonth, allDaysInMonth, currentYear, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
 import { format, getWeek } from "date-fns"
 import { getCookie } from "../../../helpers/cookieHelpers"
 import Login from "../../login/Login"
+import { DateContent } from "../Types"
+import { useQuery } from "@tanstack/react-query"
+import { getCalendarDate } from "../../../api/CalendarDateApi"
+import { ClassNames } from "@emotion/react"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(currentMonth);
@@ -19,6 +23,22 @@ export default function MonthView() {
 
     const numberOfWeeks = getWeek(endOfMonth) - getWeek(startOfMonth) + 1;
     const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
+
+    const [weekDayDateContent, setWeekDayDateContent] = useState<DateContent[][]>([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            const promises = daysInMonth.map(day => {
+                const dayString = getDateAsString(day).replaceAll("/", "-");
+                return getCalendarDate(dayString);
+            });
+
+            const results = await Promise.all(promises);
+            const newWeekDayDateContent = results.map(result => result?.dateContent || []);
+            setWeekDayDateContent(newWeekDayDateContent);
+        };
+
+        fetchData();
+    }, [month]);
 
     return (
         getCookie("access_token") == undefined
@@ -34,16 +54,17 @@ export default function MonthView() {
                                 {monthInText}
                             </h1>
                         </header>
-                        <div className={`justify-center w-full shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white lg:w-full`}>
+                        <div className={`justify-center w-full shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
                             {fullWeek.map(day => (
-                                <div key={format(day, 'E')} className="h-16 w-1/7 flex items-center justify-center py-1 px-1 border-b-2 border-gray-100 border-3">{format(day, 'E')}</div>
+                                <div key={format(day, 'E')} className="h-28 w-1/7 flex items-center justify-center py-1 px-1 border-b-2 border-gray-100 border-3">{format(day, 'E')}</div>
                             ))}
                             {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
-                                <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-16"></div>
+                                <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-28"></div>
                             ))}
-
-                            {daysInMonth.map((thisDate) => {
-                                return <CalendarDate key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                            {daysInMonth.map((thisDate, dateIndex) => {
+                                return <div className="flex flex-col">
+                                    <CalendarDate dateContent={weekDayDateContent} dateIndex={dateIndex} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                </div>
                             })
                             }
                         </div>

@@ -9,6 +9,7 @@ import {
 } from "date-fns";
 
 export const firstDayOfWeek = startOfWeek(new Date(), { weekStartsOn: 1 });
+
 var thisWeek = new Date();
 const nextWeek = new Date(thisWeek);
 nextWeek.setDate(thisWeek.getDate() + 7)
@@ -30,6 +31,7 @@ export const lastDayOfMonth = (month: number) => {
   return endOfMonth(new Date(currentYear, month, 1));
 };
 
+
 export const firstWeekDay = (date: Date) => {
   return parseInt(format(date, "i"));
 };
@@ -38,7 +40,7 @@ export const daysBeforeMonth = (startDate: Date, daysToAdd: number) => {
   if (daysToAdd == 1) {
     return []
   }
-
+  
   return eachDayOfInterval({
     start: startDate,
     end: addDays(startDate, daysToAdd - 2),
