@@ -5,9 +5,8 @@ import { refreshTokens } from "../../api/UserApi";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-// const redirectLink = "https://frontend-h7ia67qbhq-uc.a.run.app";
-// const redirectLink = "http://localhost:5173";
-const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=${import.meta.env.BASE_URL}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com&access_type=offline&prompt=consent`;
+const redirectLink = import.meta.env.VITE_APP_REDIRECT_LINK;
+const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com&access_type=offline&prompt=consent`;
 
 
 export default function Login() {
@@ -31,6 +30,7 @@ export default function Login() {
         window.location.reload();
     }
     useEffect(() => {
+        console.log("Base url: ",import.meta.env.BASE_URL);
         if (!response && !isLoading) {
             navigate("/login");
         }
