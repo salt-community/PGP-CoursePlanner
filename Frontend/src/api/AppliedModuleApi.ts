@@ -1,7 +1,7 @@
 import { getCookie } from "../helpers/cookieHelpers";
 import { AppliedModuleType } from "../models/appliedCourse/Types";
 
-const BASE_URL = `${import.meta.env.VITE_APP_BACKEND_URL}/AppliedModules`;
+const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedModules`;
 
 export async function postAppliedModule(module: AppliedModuleType) {
   const response = await fetch(BASE_URL, {

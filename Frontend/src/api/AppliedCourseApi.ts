@@ -1,7 +1,7 @@
 import { getCookie } from "../helpers/cookieHelpers";
 import { AppliedCourseType } from "../models/course/Types";
 
-const BASE_URL = `${import.meta.env.VITE_APP_BACKEND_URL}/AppliedCourses`;
+const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedCourses`;
 
 export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
   try {
