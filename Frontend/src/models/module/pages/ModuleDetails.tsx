@@ -53,7 +53,7 @@ export default function ModuleDetails() {
             ? <Login /> : <Page>
                 {isLoading && <LoadingMessage />}
                 {isError && <ErrorMessage />}
-                {module &&
+                {module && module.track &&
                     <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
                         <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                             <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
