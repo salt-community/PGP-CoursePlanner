@@ -22,7 +22,7 @@ substitutions:
 
 
 #to build, deploy and run this file run the following command
-# gcloud builds submit --config cloudbuild.yaml --substitutions=_TAG=$(git rev-parse --short HEAD)
+# gcloud builds submit --config cloudbuild-backend-development.yaml --substitutions=_TAG=$(git rev-parse --short HEAD)
 
 #"git rev-parse --short HEAD"  will give you the short commit hash of the current commit
 #ensuring that the image tags are unique for each build 
