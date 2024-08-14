@@ -24,20 +24,22 @@ export default function MonthView() {
         getCookie("access_token") == undefined
             ? <Login />
             : <Page>
-                <section className="flex justify-around items-center">
-                    <PreviousBtn onClick={() => setMonth(month - 1)} />
-                    <div className="flex flex-col items-center w-1/2">
+                <section className="flex">
+                    <div className="flex w-1/6 justify-around">
+                        <PreviousBtn onClick={() => setMonth(month - 1)} />
+                    </div>
+                    <div className="flex flex-col items-center w-4/6">
                         <header className="mt-5 mb-5">
                             <h1 className="text-3xl">
                                 {monthInText}
                             </h1>
                         </header>
-                        <div className={`justify-center w-full shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white lg:w-3/5`}>
+                        <div className={`justify-center w-full shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white lg:w-full`}>
                             {fullWeek.map(day => (
                                 <div key={format(day, 'E')} className="h-16 w-1/7 flex items-center justify-center py-1 px-1 border-b-2 border-gray-100 border-3">{format(day, 'E')}</div>
                             ))}
                             {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
-                                <button key={format(emptyDayIndex, 'd')} className="w-1/7 h-16"></button>
+                                <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-16"></div>
                             ))}
 
                             {daysInMonth.map((thisDate) => {
@@ -50,7 +52,9 @@ export default function MonthView() {
                             <Link to={`/calendar/timeline`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to timeline</Link>
                         </div>
                     </div>
-                    <NextBtn onClick={() => setMonth(month + 1)} />
+                    <div className="flex w-1/6 justify-around">
+                        <NextBtn onClick={() => setMonth(month + 1)} />
+                    </div>
                 </section>
             </Page>
     )
