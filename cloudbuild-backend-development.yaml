@@ -1,0 +1,28 @@
+steps:
+  # Build and push backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    # build       Build an image from a Dockerfile
+    # we don't need to specify docker here
+    args: ['build', '-t', 'gcr.io/pgp-sandbox/courseplanner-backend-develop:${_TAG}', '.']
+    dir: Backend
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/pgp-sandbox/courseplanner-backend-develop:${_TAG}']
+    dir: Backend
+
+  # Deploy backend to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['run', 'deploy', 'courseplanner-backend-develop', '--image', 'gcr.io/pgp-sandbox/courseplanner-backend-develop:${_TAG}', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
+
+images:
+  - 'gcr.io/pgp-sandbox/courseplanner-backend-develop:${_TAG}'
+
+substitutions:
+  _TAG: $SHORT_SHA
+
+
+#to build, deploy and run this file run the following command
+# gcloud builds submit --config cloudbuild.yaml --substitutions=_TAG=$(git rev-parse --short HEAD)
+
+#"git rev-parse --short HEAD"  will give you the short commit hash of the current commit
+#ensuring that the image tags are unique for each build 
