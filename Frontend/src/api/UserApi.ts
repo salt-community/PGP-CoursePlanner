@@ -1,6 +1,5 @@
-import { BACKEND_URL } from "./BackendUrl";
 
-const BASE_URL = `${BACKEND_URL}/Tokens`;
+const BASE_URL = `${import.meta.env.VITE_APP_BACKEND_URL}/Tokens`;
 
 export type tokenResponse = {
   access_token: string;
