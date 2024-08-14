@@ -16,8 +16,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
+string? connectionString = builder.Environment.IsDevelopment() ?
+                        builder.Configuration.GetConnectionString("DevelopmentDb") :
+                        Environment.GetEnvironmentVariable("ConnectionStringDeployed");
+
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DevelopmentDb") ?? throw new InvalidOperationException("Connection string 'DevelopmentDb' not found.")));
+    options.UseNpgsql(connectionString ?? throw new InvalidOperationException("Connection string 'DevelopmentDb' or 'ConnectionStringDeployed' not found.")));
 
 var JwtSecurityScheme = new OpenApiSecurityScheme()
 {
