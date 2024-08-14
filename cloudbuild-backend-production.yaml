@@ -3,19 +3,19 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     # build       Build an image from a Dockerfile
     # we don't need to specify docker here
-    args: ['build', '-t', 'gcr.io/pgp-sandbox/backend:${_TAG}', '.']
+    args: ['build', '-t', 'gcr.io/pgp-sandbox/courseplanner-backend:${_TAG}', '.']
     dir: Backend
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/pgp-sandbox/backend:${_TAG}']
+    args: ['push', 'gcr.io/pgp-sandbox/courseplanner-backend:${_TAG}']
     dir: Backend
 
   # Deploy backend to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['run', 'deploy', 'backend', '--image', 'gcr.io/pgp-sandbox/backend:${_TAG}', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
+    args: ['run', 'deploy', 'courseplanner-backend', '--image', 'gcr.io/pgp-sandbox/courseplanner-backend:${_TAG}', '--platform', 'managed', '--region', 'us-central1', '--allow-unauthenticated']
 
 images:
-  - 'gcr.io/pgp-sandbox/backend:${_TAG}'
+  - 'gcr.io/pgp-sandbox/courseplanner-backend:${_TAG}'
 
 substitutions:
   _TAG: $SHORT_SHA
