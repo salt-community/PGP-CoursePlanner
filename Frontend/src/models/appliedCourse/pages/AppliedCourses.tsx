@@ -109,7 +109,7 @@ export default function AppliedCourses() {
                                                                                         </thead>
                                                                                         <tbody>
                                                                                             {day.events.map((event) => (
-                                                                                                <tr key ={event.name}className="gap-2">
+                                                                                                <tr key={event.name} className="gap-2">
                                                                                                     <td>{event.name}</td>
                                                                                                     <td>{event.description}</td>
                                                                                                     <td>{event.startTime}</td>

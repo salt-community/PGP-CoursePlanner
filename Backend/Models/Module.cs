@@ -11,6 +11,6 @@ namespace Backend.Models
         [JsonIgnore]
         public List<CourseModule> CourseModules { get; set; } = new List<CourseModule>();
 
-        public string[] Track {get; set;} = Array.Empty<string>();
+        public string[] Track {get; set;} = [];
     }
 }

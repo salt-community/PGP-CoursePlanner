@@ -67,7 +67,7 @@ namespace Backend.Services
             var course = await _context.Courses.FirstOrDefaultAsync(course => course.Id == appliedCourse.CourseId)
                 ?? throw new NotFoundByIdException("Course", appliedCourse.CourseId);
 
-            var currentDate = appliedCourse.StartDate.Date;
+            var currentDate = appliedCourse.StartDate.Date.ToUniversalTime();
 
             var listOfAppliedModules = new List<AppliedModule>();
             int order = 0;

@@ -1,8 +1,7 @@
 import { getCookie } from "../helpers/cookieHelpers";
 import { AppliedDayType } from "../models/appliedCourse/Types";
-import { BACKEND_URL } from "./BackendUrl";
 
-const BASE_URL = `${BACKEND_URL}/AppliedDays`;
+const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedDays`;
 
 export async function postAppliedDay(day: AppliedDayType) {
   const response = await fetch(BASE_URL, {

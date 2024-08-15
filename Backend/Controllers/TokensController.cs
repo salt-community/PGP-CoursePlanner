@@ -80,7 +80,6 @@ namespace Backend.Controllers
         };
 
             var encodedParameters = new FormUrlEncodedContent(parameters);
-            var paramText = await encodedParameters.ReadAsStringAsync();
 
             request.Content = encodedParameters;
             request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
@@ -111,8 +110,8 @@ namespace Backend.Controllers
             var response = await GetTokensFromGoogle(
                 "https://accounts.google.com/o/oauth2/token",
                 code,
-                builder.Configuration["AppInfo:ClientId"]!,
-                builder.Configuration["AppInfo:ClientSecret"]!,
+                builder.Configuration["AppInfo:ClientId"] ?? Environment.GetEnvironmentVariable("CLIENT_ID")!,
+                builder.Configuration["AppInfo:ClientSecret"] ?? Environment.GetEnvironmentVariable("CLIENT_SECRET")!,
                 "http://localhost:5173");
 
             if (response.Result.GetType() == typeof(OkObjectResult))
@@ -143,8 +142,8 @@ namespace Backend.Controllers
             var response = await RefreshTokensFromGoogle(
                 "https://accounts.google.com/o/oauth2/token",
                 refreshToken,
-                builder.Configuration["AppInfo:ClientId"]!,
-                builder.Configuration["AppInfo:ClientSecret"]!);
+                builder.Configuration["AppInfo:ClientId"] ?? Environment.GetEnvironmentVariable("CLIENT_ID")!,
+                builder.Configuration["AppInfo:ClientSecret"] ?? Environment.GetEnvironmentVariable("CLIENT_SECRET")!);
 
             if (response.Result.GetType() == typeof(OkObjectResult))
             {
