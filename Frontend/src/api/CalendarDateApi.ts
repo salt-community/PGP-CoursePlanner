@@ -20,7 +20,7 @@ export async function getCalendarDate(date: string) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     // alert("Failed to get applied courses");
   }
 }

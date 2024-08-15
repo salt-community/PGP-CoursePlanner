@@ -4,22 +4,26 @@ import Page from "../../../components/Page"
 import { useEffect, useState } from "react"
 import CalendarDate from "../sections/CalendarDate"
 import { Link } from "react-router-dom"
-import { currentMonth, firstDayOfMonth, allDaysInMonth, currentYear, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
-import { format, getWeek } from "date-fns"
+import { currentMonth, firstDayOfMonth, allDaysInInterval, currentYear, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth, today } from "../../../helpers/dateHelpers"
+import { format, getMonth, getWeek, getYear } from "date-fns"
 import { getCookie } from "../../../helpers/cookieHelpers"
 import Login from "../../login/Login"
 import { DateContent } from "../Types"
-import { useQuery } from "@tanstack/react-query"
 import { getCalendarDate } from "../../../api/CalendarDateApi"
-import { ClassNames } from "@emotion/react"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(currentMonth);
+    const [year, setYear] = useState<number>(currentYear);
 
-    const startOfMonth = firstDayOfMonth(month);
-    const endOfMonth = lastDayOfMonth(month);
-    const daysInMonth = allDaysInMonth(startOfMonth, endOfMonth);
-    const monthInText = format(new Date(currentYear, month, 1), "MMMM");
+    const startOfMonth = firstDayOfMonth(month, year);
+    const endOfMonth = lastDayOfMonth(month, year);
+    const daysInMonth = allDaysInInterval(startOfMonth, endOfMonth);
+    const monthInText = format(new Date(year, month, 1), "MMMM");
+
+    if (getMonth(startOfMonth) != month && getYear(endOfMonth) != year) {
+        setMonth(getMonth(startOfMonth));
+        setYear(getYear(endOfMonth));
+    }
 
     const numberOfWeeks = getWeek(endOfMonth) - getWeek(startOfMonth) + 1;
     const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
@@ -43,7 +47,6 @@ export default function MonthView() {
 
         fetchData();
     }, [month]);
-    console.log(weekDayDateContent)
 
     return (
         getCookie("access_token") == undefined
@@ -74,7 +77,13 @@ export default function MonthView() {
                             }
                         </div>
                         <div className="flex flex-row gap-2">
-                            <Link to={`/calendar/week/weeknumber=${getWeek(startOfMonth)}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
+                            {currentMonth == month && currentYear == year
+                                ? <Link to={`/calendar/week/weeknumberyear=${getWeek(today)}-${year}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
+                                : <>{startOfMonth.getDay() == 0
+                                    ? <Link to={`/calendar/week/weeknumberyear=${getWeek(startOfMonth) - 1}-${year}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
+                                    : <Link to={`/calendar/week/weeknumberyear=${getWeek(startOfMonth)}-${year}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
+                                }
+                            </>}
                             <Link to={`/calendar/timeline`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to timeline</Link>
                         </div>
                     </div>
