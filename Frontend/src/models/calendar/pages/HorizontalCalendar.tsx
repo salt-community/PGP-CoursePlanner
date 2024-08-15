@@ -105,7 +105,7 @@ const HorizontalCalendar: React.FC = () => {
         <div className="ml-10 mr-10 flex flex-row justify-between">
           <div className="flex flex-row gap-2">
             <Link to={`/calendar/week/weeknumberyear=${currentWeek}-${currentYear}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
-            <Link to={`/calendar/month`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to month view</Link>
+            <Link to={`/calendar/month/monthyear=${currentMonth}-${currentYear}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to month view</Link>
           </div>
           <div className="flex flex-row gap-2">
             {widthIndex != 0

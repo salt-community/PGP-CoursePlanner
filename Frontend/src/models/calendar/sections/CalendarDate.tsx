@@ -27,8 +27,8 @@ export default function CalenderDate({ dateContent, date, dateIndex }: Props) {
     return (
         <>
             <Link to={`/calendar/day/date=${date}`}
-                className={`${border} rounded-md hover:shadow-md mx-px w-1/7 h-28`}>
-                <h1 className={`${text} text-center self-start mb-4 mt-2`}>
+                className={`${border} rounded-md hover:shadow-md mx-px w-1/7 h-24`}>
+                <h1 className={`${text} text-center self-start mb-1 mt-2`}>
                     {format(date, 'd')}
                 </h1>
                 {appliedCourseColors.length > 0 && appliedCourseColors.map((color, appliedCourseIndex) =>
