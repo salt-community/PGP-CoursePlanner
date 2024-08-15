@@ -43,9 +43,14 @@ export default function WeekDay({ dateContent }: Props) {
                         </Link>
                     </h2>
                     <h3 style={{ color: content.color }}>
-                        <Link to={`/modules/details/${moduleIds[index]}`}>
-                            Module: {content.moduleName} (day {content.dayOfModule}/{content.totalDaysInModule})
-                        </Link>
+                        {content.moduleName?.includes("(weekend)")
+                            ? <>
+                                Weekend
+                            </>
+                            : <Link to={`/modules/details/${moduleIds[index]}`}>
+                                Module: {content.moduleName} (day {content.dayOfModule}/{content.totalDaysInModule})
+                            </Link>
+                        }
                     </h3>
                     {content.events.length > 0 && content.events.map(eventItem =>
                         <h3 key={eventItem.name} style={{ color: content.color }}>{eventItem.name}: {eventItem.startTime}-{eventItem.endTime}</h3>

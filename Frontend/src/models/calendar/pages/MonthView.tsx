@@ -29,7 +29,11 @@ export default function MonthView() {
         const fetchData = async () => {
             const promises = daysInMonth.map(day => {
                 const dayString = getDateAsString(day).replaceAll("/", "-");
-                return getCalendarDate(dayString);
+                const data = getCalendarDate(dayString);
+                if (data != undefined)
+                    return data
+                else
+                    return []
             });
 
             const results = await Promise.all(promises);
@@ -39,12 +43,13 @@ export default function MonthView() {
 
         fetchData();
     }, [month]);
+    console.log(weekDayDateContent)
 
     return (
         getCookie("access_token") == undefined
             ? <Login />
             : <Page>
-                <section className="flex">
+                <section className="flex pb-10">
                     <div className="flex w-1/6 justify-around">
                         <PreviousBtn onClick={() => setMonth(month - 1)} />
                     </div>

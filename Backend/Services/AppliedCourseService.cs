@@ -148,14 +148,102 @@ namespace Backend.Services
                     }
                     appliedCourse.EndDate = currentDate;
                     currentDate = currentDate.AddDays(1);
-                    if (currentDate.DayOfWeek == DayOfWeek.Saturday)
+
+                    if (currentDate.DayOfWeek == DayOfWeek.Saturday && !(day.DayNumber == module.NumberOfDays && moduleId == course.moduleIds.Last()))
+                    {
+                        var dateContentSaturday = new DateContent()
+                        {
+                            CourseName = appliedCourse.Name!,
+                            ModuleName = module.Name + " (weekend)",
+                            DayOfModule = 0,
+                            TotalDaysInModule = module.NumberOfDays,
+                            Events = [],
+                            Color = appliedCourse.Color,
+                            appliedCourseId = appliedCourse.Id
+                        };
+                        await _context.DateContent.AddAsync(dateContentSaturday);
+                        var dateContentSunday = new DateContent()
+                        {
+                            CourseName = appliedCourse.Name!,
+                            ModuleName = module.Name + " (weekend)",
+                            DayOfModule = 0,
+                            TotalDaysInModule = module.NumberOfDays,
+                            Events = [],
+                            Color = appliedCourse.Color,
+                            appliedCourseId = appliedCourse.Id
+                        };
+                        await _context.DateContent.AddAsync(dateContentSunday);
+                        await _context.SaveChangesAsync();
+
+                        var dateSaturday = await _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefaultAsync(date => date.Date.Date == currentDate);
+                        if (dateSaturday == null)
+                        {
+                            dateSaturday = new CalendarDate()
+                            {
+                                Date = currentDate,
+                                DateContent = new List<DateContent> { dateContentSaturday }
+                            };
+                            await _context.CalendarDates.AddAsync(dateSaturday);
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            dateSaturday.DateContent.Add(dateContentSaturday);
+                            _context.CalendarDates.Update(dateSaturday);
+                            await _context.SaveChangesAsync();
+                        }
+
+                        var dateSunday = await _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefaultAsync(date => date.Date.Date == currentDate.AddDays(1));
+                        if (dateSunday == null)
+                        {
+                            dateSunday = new CalendarDate()
+                            {
+                                Date = currentDate.AddDays(1),
+                                DateContent = new List<DateContent> { dateContentSunday }
+                            };
+                            await _context.CalendarDates.AddAsync(dateSunday);
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            dateSunday.DateContent.Add(dateContentSunday);
+                            _context.CalendarDates.Update(dateSunday);
+                            await _context.SaveChangesAsync();
+                        }
                         currentDate = currentDate.AddDays(2);
+                    }
                 }
                 appliedModule.Days = listOfAppliedDays;
                 _context.AppliedModules.Add(appliedModule);
 
                 listOfAppliedModules.Add(appliedModule);
             }
+
+            if (currentDate.DayOfWeek == DayOfWeek.Monday){
+                var dateSaturday = await _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefaultAsync(date => date.Date.Date == currentDate.AddDays(-2))!;
+                        var contentIdToBeDeletedSaturday = dateSaturday!.DateContent.FirstOrDefault(c => c.appliedCourseId == appliedCourse.Id)!.Id;
+                        var contentToBeDeletedSaturday = await _context.DateContent.FirstOrDefaultAsync(c => c.Id == contentIdToBeDeletedSaturday);
+                        _context.DateContent.Remove(contentToBeDeletedSaturday!);
+
+                        dateSaturday.DateContent.Remove(contentToBeDeletedSaturday!);
+                        if (dateSaturday.DateContent.Count() == 0)
+                            _context.CalendarDates.Remove(dateSaturday);
+                        else
+                            _context.CalendarDates.Update(dateSaturday);
+
+                        var dateSunday = await _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefaultAsync(date => date.Date.Date == currentDate.AddDays(-1))!;
+                        var contentIdToBeDeletedSunday = dateSunday!.DateContent.FirstOrDefault(c => c.appliedCourseId == appliedCourse.Id)!.Id;
+                        var contentToBeDeletedSunday = await _context.DateContent.FirstOrDefaultAsync(c => c.Id == contentIdToBeDeletedSunday);
+                        _context.DateContent.Remove(contentToBeDeletedSaturday!);
+
+                        dateSunday.DateContent.Remove(contentToBeDeletedSunday!);
+                        if (dateSunday.DateContent.Count() == 0)
+                            _context.CalendarDates.Remove(dateSunday);
+                        else
+                            _context.CalendarDates.Update(dateSunday);
+                        await _context.SaveChangesAsync();
+            }
+
             appliedCourse.Modules = listOfAppliedModules;
             _context.AppliedCourses.Update(appliedCourse);
             await _context.SaveChangesAsync();
@@ -305,8 +393,70 @@ namespace Backend.Services
                     }
                     appliedCourseToUpdate.EndDate = currentDate;
                     currentDate = currentDate.AddDays(1);
-                    if (currentDate.DayOfWeek == DayOfWeek.Saturday)
+
+                    if (currentDate.DayOfWeek == DayOfWeek.Saturday && !(day.DayNumber == module.NumberOfDays && moduleCorrectOrder.Id == appliedCourseToUpdate.Modules.OrderBy(m => m.Order).Last().Id))  
+                    {
+                        var dateContentSaturday = new DateContent()
+                        {
+                            CourseName = appliedCourse.Name!,
+                            ModuleName = module.Name + " (weekend)",
+                            DayOfModule = 0,
+                            TotalDaysInModule = module.NumberOfDays,
+                            Events = [],
+                            Color = appliedCourse.Color,
+                            appliedCourseId = appliedCourse.Id
+                        };
+                        await _context.DateContent.AddAsync(dateContentSaturday);
+                        var dateContentSunday = new DateContent()
+                        {
+                            CourseName = appliedCourse.Name!,
+                            ModuleName = module.Name + " (weekend)",
+                            DayOfModule = 0,
+                            TotalDaysInModule = module.NumberOfDays,
+                            Events = [],
+                            Color = appliedCourse.Color,
+                            appliedCourseId = appliedCourse.Id
+                        };
+                        await _context.DateContent.AddAsync(dateContentSunday);
+                        await _context.SaveChangesAsync();
+
+                        var dateSaturday = await _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefaultAsync(date => date.Date.Date == currentDate);
+                        if (dateSaturday == null)
+                        {
+                            dateSaturday = new CalendarDate()
+                            {
+                                Date = currentDate,
+                                DateContent = new List<DateContent> { dateContentSaturday }
+                            };
+                            await _context.CalendarDates.AddAsync(dateSaturday);
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            dateSaturday.DateContent.Add(dateContentSaturday);
+                            _context.CalendarDates.Update(dateSaturday);
+                            await _context.SaveChangesAsync();
+                        }
+
+                        var dateSunday = await _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefaultAsync(date => date.Date.Date == currentDate.AddDays(1));
+                        if (dateSunday == null)
+                        {
+                            dateSunday = new CalendarDate()
+                            {
+                                Date = currentDate.AddDays(1),
+                                DateContent = new List<DateContent> { dateContentSunday }
+                            };
+                            await _context.CalendarDates.AddAsync(dateSunday);
+                            await _context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            dateSunday.DateContent.Add(dateContentSunday);
+                            _context.CalendarDates.Update(dateSunday);
+                            await _context.SaveChangesAsync();
+                        }
                         currentDate = currentDate.AddDays(2);
+                    }
                 }
             }
             _context.AppliedCourses.Update(appliedCourseToUpdate);
@@ -316,7 +466,6 @@ namespace Backend.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-
             var appliedCourse = await _context.AppliedCourses
                         .Include(course => course.Modules!)
                         .ThenInclude(module => module!.Days)
@@ -349,8 +498,33 @@ namespace Backend.Services
                     await _context.SaveChangesAsync();
 
                     currentDate = currentDate.AddDays(1);
-                    if (currentDate.DayOfWeek == DayOfWeek.Saturday)
+                    if (currentDate.DayOfWeek == DayOfWeek.Saturday && !(day.DayNumber == module.NumberOfDays && moduleId == moduleIds.Last()))
+                    {
+                        var dateSaturday = await _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefaultAsync(date => date.Date.Date == currentDate)!;
+                        var contentIdToBeDeletedSaturday = dateSaturday!.DateContent.FirstOrDefault(c => c.appliedCourseId == id)!.Id;
+                        var contentToBeDeletedSaturday = await _context.DateContent.FirstOrDefaultAsync(c => c.Id == contentIdToBeDeletedSaturday);
+                        _context.DateContent.Remove(contentToBeDeletedSaturday!);
+
+                        dateSaturday.DateContent.Remove(contentToBeDeletedSaturday!);
+                        if (dateSaturday.DateContent.Count() == 0)
+                            _context.CalendarDates.Remove(dateSaturday);
+                        else
+                            _context.CalendarDates.Update(dateSaturday);
+
+                        var dateSunday = await _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefaultAsync(date => date.Date.Date == currentDate.AddDays(1))!;
+                        var contentIdToBeDeletedSunday = dateSunday!.DateContent.FirstOrDefault(c => c.appliedCourseId == id)!.Id;
+                        var contentToBeDeletedSunday = await _context.DateContent.FirstOrDefaultAsync(c => c.Id == contentIdToBeDeletedSunday);
+                        _context.DateContent.Remove(contentToBeDeletedSaturday!);
+
+                        dateSunday.DateContent.Remove(contentToBeDeletedSunday!);
+                        if (dateSunday.DateContent.Count() == 0)
+                            _context.CalendarDates.Remove(dateSunday);
+                        else
+                            _context.CalendarDates.Update(dateSunday);
+                        await _context.SaveChangesAsync();
+
                         currentDate = currentDate.AddDays(2);
+                    }
                 }
             }
             _context.AppliedCourses.Remove(appliedCourse);

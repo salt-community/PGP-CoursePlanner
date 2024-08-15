@@ -9,7 +9,8 @@ type Props = {
     dateIndex: number;
 }
 export default function CalenderDate({ dateContent, date, dateIndex }: Props) {
-    const border = today == date ? "border border-primary hover:border-primary" : "";
+    const border = today == date ? "border border-2 border-primary hover:border-primary" : "";
+    const text = today == date ? "text-primary font-bold" : "";
 
     var appliedCourseIds: number[] = [];
     var appliedCourseColors: string[] = [];
@@ -23,21 +24,18 @@ export default function CalenderDate({ dateContent, date, dateIndex }: Props) {
     });
     appliedCourseIds = [...new Set(appliedCourseIds.map(item => item))];
 
-    //door laten lopen in weekend!
-
     return (
         <>
             <Link to={`/calendar/day/date=${date}`}
                 className={`${border} rounded-md hover:shadow-md mx-px w-1/7 h-28`}>
-                <h1 className="text-center self-start mb-4 mt-2">
+                <h1 className={`${text} text-center self-start mb-4 mt-2`}>
                     {format(date, 'd')}
                 </h1>
                 {appliedCourseColors.length > 0 && appliedCourseColors.map((color, appliedCourseIndex) =>
                     <>
                         {dateContent[dateIndex] && appliedCourseIds.length > 0 && dateContent[dateIndex].find(dc => dc.appliedCourseId == appliedCourseIds[appliedCourseIndex])
-                            ? <div style={{ backgroundColor: color }} className="w-full h-1 mb-1"></div>
-                            : <div className="w-full h-1 mb-1"></div>
-                        }
+                            ? <div style={{ backgroundColor: color }} className="w-full h-2 mb-1"></div>
+                            : <div className="w-full h-2 mb-1"></div>}
                     </>
                 )}
             </Link>
