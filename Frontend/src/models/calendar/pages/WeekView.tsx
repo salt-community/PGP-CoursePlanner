@@ -4,13 +4,15 @@ import { useNavigate, Link } from "react-router-dom";
 import NextBtn from "../../../components/buttons/NextBtn";
 import PreviousBtn from "../../../components/buttons/PreviousBtn";
 import Page from "../../../components/Page";
-import { currentWeek, currentYear, fullWeekOfWeekNumber, getDateAsString } from "../../../helpers/dateHelpers";
+import { currentWeek, currentYear, fullWeekOfWeekNumber, getDateAsString, today } from "../../../helpers/dateHelpers";
 import { getWeekFromPath, getYearFromPath } from "../../../helpers/helperMethods";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
 import CalendarDate from "../sections/CalendarDate";
 import { getCalendarDate } from "../../../api/CalendarDateApi";
 import { DateContent } from "../Types";
+import WeekDay from "../sections/WeekDay";
+import WeekDayCalendar from "../sections/WeekDayCalendar";
 
 
 export default function MonthView() {
@@ -50,32 +52,32 @@ export default function MonthView() {
             ? <Login />
             : <Page>
                 <section className="flex pb-10">
-                    <div className="flex w-1/6 justify-around">
-                        <PreviousBtn onClick={() => { setWeek(week - 1); navigate(`/calendar/week/weeknumberyear=${week - 1}-${year}`);}} />
+                    <div className="flex w-1/12 justify-around">
+                        <PreviousBtn onClick={() => { setWeek(week - 1); navigate(`/calendar/week/weeknumberyear=${week - 1}-${year}`); }} />
                     </div>
-                    <div className="flex flex-col items-center w-4/6">
+                    <div className="flex flex-col items-center w-5/6">
                         <header className="mt-5 mb-5">
                             <h1 className="text-3xl">
-                                Week {week}
+                                Week {week} ({year})
                             </h1>
                         </header>
-                        <div className={`justify-center w-full shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 grid-rows-2 rounded-md bg-white`}>
+                        <div className={`justify-center w-full shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 rounded-md bg-white`}>
                             {allWeekDays.map(day => (
-                                <div key={format(day, 'E')} className="h-16 w-1/7 flex items-center justify-center py-1 px-1 border-b-2 border-gray-100 border-3">{format(day, 'E')}</div>
+                                <div key={format(day, 'E')} className="h-28 w-1/7 flex items-center justify-center py-1 px-1 border-b-2 border-gray-100 border-3">{format(day, 'E')}</div>
                             ))}
-
-                            {allWeekDays.map((thisDate, dateIndex) => {
-                                return <CalendarDate dateContent={weekDayDateContent} dateIndex={dateIndex} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                            })
+                            {allWeekDays.map((date, dateIndex) =>
+                                <WeekDayCalendar key={format(date, 'd')} dateContent={weekDayDateContent[dateIndex]} date={getDateAsString(date)}/>
+                            )
                             }
+                            <div className="h-2"></div>
                         </div>
                         <div className="flex flex-row gap-2">
                             <Link to={`/calendar/month`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to month view</Link>
                             <Link to={`/calendar/timeline`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to timeline</Link>
                         </div>
                     </div>
-                    <div className="flex w-1/6 justify-around">
-                        <NextBtn onClick={() => { setWeek(week + 1); navigate(`/calendar/week/weeknumberyear=${week + 1}-${year}`);}} />
+                    <div className="flex w-1/12 justify-around">
+                        <NextBtn onClick={() => { setWeek(week + 1); navigate(`/calendar/week/weeknumberyear=${week + 1}-${year}`); }} />
                     </div>
                 </section>
             </Page>

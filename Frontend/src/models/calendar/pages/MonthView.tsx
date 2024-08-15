@@ -53,13 +53,13 @@ export default function MonthView() {
             ? <Login />
             : <Page>
                 <section className="flex pb-10">
-                    <div className="flex w-1/6 justify-around">
+                    <div className="flex w-1/12 justify-around">
                         <PreviousBtn onClick={() => setMonth(month - 1)} />
                     </div>
-                    <div className="flex flex-col items-center w-4/6">
+                    <div className="flex flex-col items-center w-5/6">
                         <header className="mt-5 mb-5">
                             <h1 className="text-3xl">
-                                {monthInText}
+                                {monthInText} {year}
                             </h1>
                         </header>
                         <div className={`justify-center w-full shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
@@ -87,7 +87,7 @@ export default function MonthView() {
                             <Link to={`/calendar/timeline`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to timeline</Link>
                         </div>
                     </div>
-                    <div className="flex w-1/6 justify-around">
+                    <div className="flex w-1/12 justify-around">
                         <NextBtn onClick={() => setMonth(month + 1)} />
                     </div>
                 </section>

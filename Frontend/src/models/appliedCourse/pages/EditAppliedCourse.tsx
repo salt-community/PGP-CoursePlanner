@@ -208,12 +208,13 @@ export default function () {
     }
 
     const handleEdit = async () => {
+        console.log(startDate, "!!", startDate.getDay())
         setIsInvalidDate(false);
         setIsInvalidModule(false);
-        if (startDate.getDate() == 6 || startDate.getDate() == 0 || appliedModules?.find(m => m.name == "")) {
-            if (startDate.getDate() == 6 || startDate.getDate() == 0)
+        if (startDate.getDay() == 6 || startDate.getDay() == 0 || appliedModules?.find(m => m.name == "")) {
+            if (startDate.getDay() == 6 || startDate.getDay() == 0)
                 setIsInvalidDate(true);
-            if (appliedModules?.find(m => m.name == "a"))
+            if (appliedModules?.find(m => m.name == ""))
                 setIsInvalidModule(true);
         }
         else {
