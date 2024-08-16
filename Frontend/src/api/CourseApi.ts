@@ -35,7 +35,7 @@ export async function getCourseById(courseId: number) {
     });
 
     if (!response.ok || response == null) {
-      //alert("Failed to get course");
+      // alert("Failed to get course");
       return;
     }
 
@@ -43,7 +43,7 @@ export async function getCourseById(courseId: number) {
     return data as CourseType;
   } catch (error) {
     console.error(error);
-    //alert("Failed to get course");
+    // alert("Failed to get course");
   }
 }
 
@@ -60,7 +60,7 @@ export async function postCourse(course: CourseType) {
     });
 
     if (!response.ok || response == null) {
-      //alert("Failed to create course");
+      // alert("Failed to create course");
       return;
     }
 
@@ -68,7 +68,7 @@ export async function postCourse(course: CourseType) {
     return data;
   } catch (error) {
     console.error(error);
-    //alert("Failed to create course");
+    // alert("Failed to create course");
   }
 }
 
@@ -85,12 +85,12 @@ export async function editCourse(course: CourseType) {
     });
 
     if (!response.ok || response == null) {
-      //alert("Failed to edit course");
+      // alert("Failed to edit course");
       return;
     }
   } catch (error) {
     console.error(error);
-    //alert("Failed to edit course");
+    // alert("Failed to edit course");
   }
 }
 
@@ -106,7 +106,7 @@ export async function deleteCourse(id: number) {
     });
 
     if (!response.ok || response == null) {
-      //alert("Failed to delete course");
+      // alert("Failed to delete course");
       return;
     }
 
@@ -114,6 +114,6 @@ export async function deleteCourse(id: number) {
     return data;
   } catch (error) {
     console.error(error);
-    //alert("Failed to delete course");
+    // alert("Failed to delete course");
   }
 }

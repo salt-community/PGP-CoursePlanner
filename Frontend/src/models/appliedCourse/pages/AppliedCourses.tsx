@@ -15,7 +15,6 @@ export default function AppliedCourses() {
         queryKey: ['allAppliedCourses'],
         queryFn: getAllAppliedCourses
     });
-    console.log(allAppliedCourses);
 
     const queryClient = useQueryClient();
     const mutation = useMutation({

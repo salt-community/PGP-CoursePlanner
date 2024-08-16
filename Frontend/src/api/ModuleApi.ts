@@ -36,7 +36,7 @@ export async function getAllCourseModules() {
     });
 
     if (!response.ok || response == null) {
-      //alert("Failed to get course modules");
+      // alert("Failed to get course modules");
       return;
     }
 
@@ -44,7 +44,7 @@ export async function getAllCourseModules() {
     return data as CourseModule[];
   } catch (error) {
     console.error(error);
-    //alert("Failed to get course modules");
+    // alert("Failed to get course modules");
   }
 }
 
@@ -58,7 +58,7 @@ export async function getModuleById(moduleId: number) {
     });
 
     if (!response.ok || response == null) {
-      //alert("Failed to get module");
+      // alert("Failed to get module");
       return;
     }
 
@@ -66,7 +66,7 @@ export async function getModuleById(moduleId: number) {
     return data as ModuleType;
   } catch (error) {
     console.error(error);
-    //alert("Failed to get  courses");
+    // alert("Failed to get  courses");
   }
 }
 
@@ -83,12 +83,12 @@ export async function postModule(module: ModuleType) {
     });
 
     if (!response.ok || response == null) {
-      //alert("Failed to get create module");
+      // alert("Failed to get create module");
       return;
     }
   } catch (error) {
     console.error(error);
-    //alert("Failed to get create module");
+    // alert("Failed to get create module");
   }
 }
 
@@ -105,12 +105,12 @@ export async function editModule(module: ModuleType) {
     });
 
     if (!response.ok || response == null) {
-      //alert("Failed to edit module");
+      // alert("Failed to edit module");
       return;
     }
   } catch (error) {
     console.error(error);
-    //alert("Failed to edit module");
+    // alert("Failed to edit module");
   }
 }
 
@@ -125,11 +125,11 @@ export async function deleteModule(id: number) {
       },
     });
     if (!response.ok || response == null) {
-      //alert("Failed to delete module");
+      // alert("Failed to delete module");
       return;
     }
   } catch (error) {
     console.error(error);
-    //alert("Failed to delete module");
+    // alert("Failed to delete module");
   }
 }

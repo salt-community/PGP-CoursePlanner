@@ -27,7 +27,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async Task GetModules_Returns_ListOfModules()
         {
-            //  arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -49,7 +49,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async void GetModule_Should_Return_OK_Module()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -57,12 +57,12 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            //act
+            // act
             var response = await _client.GetAsync("/Modules/1");
             var deserializedResponse = JsonConvert.DeserializeObject<Module>(
                 await response.Content.ReadAsStringAsync());
 
-            //assert
+            // assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             deserializedResponse!.Name.Length.Should().NotBe(0);
             deserializedResponse!.Name.Should().Be("TestModule1");
@@ -71,7 +71,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async Task CreateModule_Returns_Success()
         {
-            //  arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -99,7 +99,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async Task UpdateModule_Should_Return_204()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -113,17 +113,17 @@ namespace Backend.IntegrationTests
             var body = new StringContent(content, Encoding.UTF8, "application/json");
             body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            //act
+            // act
             var response = await _client.PutAsync("/Modules/2", body);
 
-            //assert
+            // assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
         [Fact]
         public async Task UpdatedModule_Should_Have_Correct_Parameters()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -155,12 +155,12 @@ namespace Backend.IntegrationTests
 
             await _client.PutAsync("/Modules/2", body);
 
-            //act
+            // act
             var response = await _client.GetAsync("/Modules/2");
             var deserializedResponse = JsonConvert.DeserializeObject<Module>(
                 await response.Content.ReadAsStringAsync());
 
-            //assert
+            // assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             deserializedResponse!.Name.Should().Be("UpdatedModule");
             deserializedResponse!.NumberOfDays.Should().Be(2);
@@ -175,7 +175,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async void DeleteModule_Should_Return_204()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -183,17 +183,17 @@ namespace Backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            //act
+            // act
             var response = await _client.DeleteAsync("/Modules/1");
 
-            //assert
+            // assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
         [Fact]
         public async void GetDeletedModule_Should_Return_404()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -202,7 +202,7 @@ namespace Backend.IntegrationTests
             }
             await _client.DeleteAsync("/Modules/1");
 
-            //act
+            // act
             var response = await _client.GetAsync("/Modules/1");
 
             // assert

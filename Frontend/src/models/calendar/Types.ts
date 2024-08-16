@@ -7,7 +7,8 @@ export type CalendarDateType = {
 }
 
 export type DateContent = {
-    id?: number
+    appliedCourseId?: number;
+    id?: number;
     moduleName?: string;
     dayOfModule: number;
     totalDaysInModule: number;

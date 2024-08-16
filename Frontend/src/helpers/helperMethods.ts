@@ -18,7 +18,22 @@ export function getDateFromPath() {
 export function getWeekFromPath() {
   const { pathname } = useLocation();
   const pathArray = pathname.split("=");
-  return pathArray[pathArray.length - 1];
+  const pathArraySplit = pathArray[pathArray.length - 1].split("-");
+  return pathArraySplit[0];
+}
+
+export function getMonthFromPath() {
+  const { pathname } = useLocation();
+  const pathArray = pathname.split("=");
+  const pathArraySplit = pathArray[pathArray.length - 1].split("-");
+  return pathArraySplit[0];
+}
+
+export function getYearFromPath() {
+  const { pathname } = useLocation();
+  const pathArray = pathname.split("=");
+  const pathArraySplit = pathArray[pathArray.length - 1].split("-");
+  return pathArraySplit[1];
 }
 
 export function setNewTokenCookies() {
