@@ -18,10 +18,21 @@ const nextWeek = new Date(thisWeek);
 nextWeek.setDate(thisWeek.getDate() + 7)
 export const firstDayOfNextWeek = startOfWeek(nextWeek, { weekStartsOn: 1 });
 
+// export const firstDayOfWeekNumber = (weekNumber: number, year: number) => {
+//   const firstDayOfYear = startOfYear(new Date(year, 0, 1));
+//   const dateOfWeek = addWeeks(firstDayOfYear, weekNumber - 1);
+//   return startOfWeek(dateOfWeek, { weekStartsOn: 1 });
+// };
+
 export const firstDayOfWeekNumber = (weekNumber: number, year: number) => {
-  const firstDayOfYear = startOfYear(new Date(year, 0, 1));
-  const dateOfWeek = addWeeks(firstDayOfYear, weekNumber - 1);
-  return startOfWeek(dateOfWeek, { weekStartsOn: 1 });
+  // Start by finding the 4th of January of the given year
+  const january4th = new Date(year, 0, 4);
+
+  // Calculate the first day of the first week (ISO week starts on Monday)
+  const firstWeekStart = startOfWeek(january4th, { weekStartsOn: 1 });
+
+  // Calculate the desired week by adding (weekNumber - 1) weeks
+  return addWeeks(firstWeekStart, weekNumber - 1);
 };
 
 export const getDateAsString = (date: Date) => {

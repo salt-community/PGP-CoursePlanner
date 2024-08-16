@@ -14,16 +14,16 @@ namespace Backend.Tests.UnitTests
         [Fact]
         public async void CreateAppliedCourse_Returns_Ok_AppliedCourse()
         {
-            //Arrange
+            // arrange
             var AppliedCourse = new AppliedCourse() { StartDate = new DateTime(2024 - 07 - 12) };
             _mockService.Setup(service => service.CreateAsync(AppliedCourse)).ReturnsAsync(AppliedCourse);
             var controller = new AppliedCoursesController(_mockService.Object);
 
-            //Act
+            // act
             var result = await controller.CreateAppliedCourse(AppliedCourse);
             var resultValue = (result.Result as CreatedAtActionResult)!.Value as AppliedCourse;
 
-            //Assert
+            // assert
             resultValue.Should().NotBeNull();
             resultValue.Should().BeOfType<AppliedCourse>();
             resultValue!.StartDate.Should().Be(new DateTime(2024 - 07 - 12));
@@ -32,17 +32,17 @@ namespace Backend.Tests.UnitTests
         [Fact]
         public async void GetAppliedCourses_Returns_CollectionOfAppliedCourses()
         {
-            //Arrange
+            // arrange
             var AppliedCourse = new AppliedCourse() { StartDate = new DateTime(2024 - 07 - 12) };
             var list = new List<AppliedCourse>() { AppliedCourse };
             _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(list);
             var controller = new AppliedCoursesController(_mockService.Object);
 
-            //Act
+            // act
             var result = await controller.GetAppliedCourses();
             var resultValue = (result.Result as OkObjectResult)!.Value;
 
-            //Assert
+            // assert
             resultValue.Should().NotBeNull();
             resultValue.Should().BeOfType<List<AppliedCourse>>();
         }
@@ -50,15 +50,15 @@ namespace Backend.Tests.UnitTests
         // [Fact]
         // public async void CreateAppliedCourse_Returns_BadRequest()
         // {
-        //     //Arrange
+        //     // arrange
         //     var AppliedCourse = new AppliedCourse() { StartDate = new DateTime(2024 - 07 - 12) };
         //     _mockService.Setup(service => service.CreateAsync(AppliedCourse)).ReturnsAsync((AppliedCourse)null!);
         //     var controller = new AppliedCoursesController(_mockService.Object);
 
-        //     //Act
+        //     // act
         //     var result = await controller.CreateAppliedCourse(AppliedCourse);
 
-        //     //Assert
+        //     // assert
         //     result.Result.Should().NotBeNull();
         //     result.Result.Should().BeOfType<BadRequestObjectResult>();
         // }
@@ -66,16 +66,16 @@ namespace Backend.Tests.UnitTests
         [Fact]
         public async void GetAppliedCourse_Returns_CorrectAppliedCourse()
         {
-            //Arrange
+            // arrange
             var AppliedCourse = new AppliedCourse() { Id = 1, StartDate = new DateTime(2024 - 07 - 12) };
             _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(AppliedCourse);
             var controller = new AppliedCoursesController(_mockService.Object);
 
-            //Act
+            // act
             var result = await controller.GetAppliedCourse(1);
             var resultValue = (result.Result as OkObjectResult)!.Value as AppliedCourse;
 
-            //Assert
+            // assert
             resultValue.Should().NotBeNull();
             resultValue.Should().BeOfType<AppliedCourse>();
             resultValue!.StartDate.Should().Be(new DateTime(2024 - 07 - 12));
@@ -84,16 +84,16 @@ namespace Backend.Tests.UnitTests
         // [Fact]
         // public async void GetAppliedCourse_Returns_NotFound()
         // {
-        //     //Arrange
+        //     // arrange
         //     var AppliedCourse = new AppliedCourse() { Id = 1, StartDate = new DateTime(2024-07-12) };
         //     _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(AppliedCourse);
         //     var controller = new AppliedCoursesController(_mockService.Object);
 
-        //     //Act
+        //     // act
         //     var result = await controller.GetAppliedCourse(2);
         //     var resultValue = result.Result;
 
-        //     //Assert
+        //     // assert
         //     resultValue.Should().NotBeNull();
         //     resultValue.Should().BeOfType<NotFoundObjectResult>();
         // }
@@ -102,14 +102,14 @@ namespace Backend.Tests.UnitTests
         [Fact]
         public async void DeleteAppliedCourse_Returns_NoContent()
         {
-            //Arrange
+            // arrange
             _mockService.Setup(service => service.DeleteAsync(1)).ReturnsAsync(true);
             var controller = new AppliedCoursesController(_mockService.Object);
 
-            //Act
+            // act
             var result = await controller.DeleteAppliedCourse(1);
 
-            //Assert
+            // assert
             result.Should().NotBeNull();
             result.Should().BeOfType<NoContentResult>();
         }
@@ -117,14 +117,14 @@ namespace Backend.Tests.UnitTests
         // [Fact]
         // public async void DeleteAppliedCourse_Returns_BadRequest()
         // {
-        //     //Arrange
+        //     // arrange
         //     _mockService.Setup(service => service.DeleteAsync(1)).ReturnsAsync(false);
         //     var controller = new AppliedCoursesController(_mockService.Object);
 
-        //     //Act
+        //     // act
         //     var result = await controller.DeleteAppliedCourse(1);
 
-        //     //Assert
+        //     // assert
         //     result.Should().NotBeNull();
         //     result.Should().BeOfType<BadRequestObjectResult>();
         // }

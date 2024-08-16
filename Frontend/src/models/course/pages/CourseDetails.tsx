@@ -100,7 +100,6 @@ export default function CourseDetails() {
             if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
                 await Promise.all(appliedCoursesWithCourseId!.map(async appliedCourse => {
                     try {
-                        console.log(appliedCourse);
                         const newAppliedCourse: AppliedCourseType = {
                             id: appliedCourse.id,
                             name: appliedCourse.name,

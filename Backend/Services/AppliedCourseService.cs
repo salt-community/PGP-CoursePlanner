@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Backend.Data;
 using Backend.ExceptionHandler.Exceptions;
 using Backend.Models;
@@ -319,7 +318,7 @@ namespace Backend.Services
                 }
                 await _context.SaveChangesAsync();
                 //_context.DateContent.Remove(dc);
-                //await _context.SaveChangesAsync();
+                // await _context.SaveChangesAsync();
             }
 
             var currentDate = appliedCourse.StartDate.Date;

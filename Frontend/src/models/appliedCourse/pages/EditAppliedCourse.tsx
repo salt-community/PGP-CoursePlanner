@@ -208,7 +208,6 @@ export default function () {
     }
 
     const handleEdit = async () => {
-        console.log(startDate, "!!", startDate.getDay())
         setIsInvalidDate(false);
         setIsInvalidModule(false);
         if (startDate.getDay() == 6 || startDate.getDay() == 0 || appliedModules?.find(m => m.name == "")) {

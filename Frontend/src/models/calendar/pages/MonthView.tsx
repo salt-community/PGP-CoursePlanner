@@ -13,9 +13,6 @@ import { getCalendarDate } from "../../../api/CalendarDateApi"
 import { getMonthFromPath, getYearFromPath } from "../../../helpers/helperMethods"
 
 export default function MonthView() {
-    // const [month, setMonth] = useState<number>(currentMonth);
-    // const [year, setYear] = useState<number>(currentYear);
-
     const [month, setMonth] = useState<number>(parseInt(getMonthFromPath()));
     const [year, setYear] = useState<number>(parseInt(getYearFromPath()));
     const navigate = useNavigate();

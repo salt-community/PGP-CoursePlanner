@@ -129,7 +129,7 @@ namespace Backend.IntegrationTests
         [Fact]
         public async Task UpdateCourse_WithWrongId_Should_Return_404()
         {
-            //arrange
+            // arrange
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
@@ -143,10 +143,10 @@ namespace Backend.IntegrationTests
             var body = new StringContent(content, Encoding.UTF8, "application/json");
             body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            //act
+            // act
             var response = await _client.PutAsync("/Courses/7", body);
 
-            //assert
+            // assert
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 

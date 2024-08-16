@@ -83,7 +83,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                 name: moduleName.value.trim(),
                 numberOfDays: numberOfDays.value,
                 days: days,
-                track: track  // Track is an array of selected tracks
+                track: track
             };
 
             mutation.mutate(newModule);
@@ -97,8 +97,6 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         else
             return true;
     }
-
-    console.log(module)
 
     function handleClick() {
         let dropdownMenu = document.getElementById('dropdownMenu')!;

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { addDays, subDays, getWeek } from "date-fns";
+import { addDays, subDays } from "date-fns";
 import Page from "../../../components/Page";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { getAllAppliedCourses } from "../../../api/AppliedCourseApi";
 import { getAllCourses } from "../../../api/CourseApi";
 import { getAllModules } from "../../../api/ModuleApi";
-import { firstDayOfMonth, currentMonth, currentYear, currentWeek } from "../../../helpers/dateHelpers";
+import { currentMonth, currentYear, currentWeek } from "../../../helpers/dateHelpers";
 import TimeLineCourse from "../sections/TimeLineCourse";
 import TimeLineXaxis from "../sections/TimeLineXaxis";
 import { getCookie } from "../../../helpers/cookieHelpers";
