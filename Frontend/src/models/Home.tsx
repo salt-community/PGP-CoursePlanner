@@ -11,7 +11,6 @@ import { getTokens } from "../api/UserApi";
 import Login from "./login/Login";
 
 export default function Home() {
-
     const thisWeek = new Date();
     const nextWeek = new Date(thisWeek);
     nextWeek.setDate(thisWeek.getDate() + 7)

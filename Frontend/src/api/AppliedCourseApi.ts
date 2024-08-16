@@ -16,14 +16,14 @@ export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
     });
 
     if (!response.ok || response == null) {
-      alert("Failed to apply course");
+      // alert("Failed to apply course");
       return;
     }
 
     return response;
   } catch (error) {
     console.error(error);
-    alert("Failed to apply course");
+    // alert("Failed to apply course");
   }
 }
 

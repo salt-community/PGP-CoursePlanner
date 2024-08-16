@@ -22,7 +22,7 @@ namespace Backend.Controllers
 
         public async Task<ActionResult<CalendarDate>> GetCalendarDate(DateTime date)
         {
-            var convertedDate = date.ToUniversalTime();
+            var convertedDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);
             var response = await _context.CalendarDates
                             .Include(convertedDate => convertedDate.DateContent)
                             .ThenInclude(content => content.Events)

@@ -33,16 +33,17 @@ export default function MonthView() {
     const [weekDayDateContent, setWeekDayDateContent] = useState<DateContent[][]>([]);
     useEffect(() => {
         const fetchData = async () => {
-            const promises = daysInMonth.map(day => {
+            const results = await Promise.all(daysInMonth.map(async day => {
                 const dayString = getDateAsString(day).replaceAll("/", "-");
-                const data = getCalendarDate(dayString);
-                if (data != undefined)
-                    return data
+                console.log(dayString)
+                const data = await getCalendarDate(dayString);
+                if (data != undefined) {
+                    return data}
                 else
                     return []
-            });
+            }));
 
-            const results = await Promise.all(promises);
+            console.log("results", results) // this gives the first promise as undefined and does not get the last one
             const newWeekDayDateContent = results.map(result => result?.dateContent || []);
             setWeekDayDateContent(newWeekDayDateContent);
         };
