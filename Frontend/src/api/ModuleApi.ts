@@ -1,9 +1,8 @@
 import { getCookie } from "../helpers/cookieHelpers";
 import { CourseModule } from "../models/course/Types";
 import { ModuleType } from "../models/module/Types";
-import { BACKEND_URL } from "./BackendUrl";
 
-const BASE_URL = `${BACKEND_URL}/Modules`;
+const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Modules`;
 
 export async function getAllModules() {
   try {

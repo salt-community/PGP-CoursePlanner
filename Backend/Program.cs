@@ -1,3 +1,4 @@
+using System;
 using Backend.Config;
 using Backend.Data;
 using Backend.ExceptionHandler;
@@ -9,7 +10,6 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddProblemDetails();
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
 
@@ -17,8 +17,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+string deploymentDevelop = Environment.GetEnvironmentVariable("ConnectionStringDeployedDevelop")!;
+string? connectionString = builder.Environment.IsDevelopment() ?
+                        builder.Configuration.GetConnectionString("DevelopmentDb") :
+                        Environment.GetEnvironmentVariable("ConnectionStringDeployed");
+
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DataContext") ?? throw new InvalidOperationException("Connection string 'DataContext' not found.")));
+    options.UseNpgsql(connectionString ?? deploymentDevelop ?? throw new InvalidOperationException("Connection string 'DevelopmentDb' or 'ConnectionStringDeployed' not found.")));
 
 var JwtSecurityScheme = new OpenApiSecurityScheme()
 {
@@ -60,18 +66,19 @@ app.UseCors(x => x
     .AllowAnyHeader()
     .AllowAnyOrigin());
 
-using (var scope = app.Services.CreateScope())
+if (app.Environment.IsDevelopment() || deploymentDevelop != null)
 {
+    using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
     SeedData.Initialize(services);
 }
 
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 

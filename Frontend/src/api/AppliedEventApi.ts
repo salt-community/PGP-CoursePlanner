@@ -1,8 +1,8 @@
 import { getCookie } from "../helpers/cookieHelpers";
 import { AppliedEventType } from "../models/appliedCourse/Types";
-import { BACKEND_URL } from "./BackendUrl";
 
-const BASE_URL = `${BACKEND_URL}/AppliedEvents`;
+const BASE_URL = `${import.meta.env.VITE_BACKEND_URL} from "./BackendUrl";
+}/AppliedEvents`;
 
 export async function postAppliedEvent(event: AppliedEventType) {
   const response = await fetch(BASE_URL, {

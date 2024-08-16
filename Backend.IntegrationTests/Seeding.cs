@@ -59,7 +59,7 @@ namespace Backend.IntegrationTests
         {
             return new List<AppliedCourse>()
             {
-                new AppliedCourse(){StartDate = new DateTime(2024, 1, 13), CourseId = 1}
+                new AppliedCourse(){StartDate = new DateTime(2024, 1, 13).ToUniversalTime(), CourseId = 1}
             };
         }
 
@@ -67,7 +67,7 @@ namespace Backend.IntegrationTests
         {
             return new List<CalendarDate>()
             {
-                new CalendarDate(){Date = new DateTime(2024, 12, 24), 
+                new CalendarDate(){Date = new DateTime(2024, 12, 24).ToUniversalTime(), 
                 DateContent = new List<DateContent>()
                 {
                     new DateContent(){CourseName = "Java"}
