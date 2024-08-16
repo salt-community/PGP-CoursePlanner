@@ -9,38 +9,54 @@ import WeekDay from "./calendar/sections/WeekDay";
 import { DateContent } from "./calendar/Types";
 import { getTokens } from "../api/UserApi";
 import Login from "./login/Login";
+import { getHomeUrl } from "../helpers/helperMethods";
+import { useEffect } from "react";
+
+const homePage = getHomeUrl();
 
 export default function Home() {
+
+    // console.log("redirect link: ", getHomeUrl());
 
     const thisWeek = new Date();
     const nextWeek = new Date(thisWeek);
     nextWeek.setDate(thisWeek.getDate() + 7)
 
-    if (location.search) {
-        const params = new URLSearchParams(location.search);
-        const code = params.get('code')!;
+    let code = "";
+    useEffect(() => {
+        if (location.search) {
+            const params = new URLSearchParams(location.search);
+            code = params.get('code')!;
+        }
+    }, [location.href])
 
+    if (code != undefined) {
         const { data: response, isLoading, isError } = useQuery({
             queryKey: ['accessCode'],
             queryFn: () => getTokens(code)
         })
 
-        if (isLoading) {
-            setCookie('access_token', "soon to be set!");
-        }
+        useEffect(() => {
 
-        isError && deleteCookie('access_token');
-        console.log(response)
+            // if (isLoading) {
+            //     setCookie('access_token', "soon to be set!");
+            // }
 
-        if (response) {
-            const { access_token, id_token, expires_in } = response;
+            isError && deleteCookie('access_token');
+            console.log(response)
 
-            setCookie('access_token', access_token, expires_in);
-            setCookie('JWT', id_token, expires_in);
+            if (response) {
+                const { access_token, id_token, expires_in } = response;
 
-            location.href = import.meta.env.VITE_REDIRECT_LINK;
-        }
+                setCookie('access_token', access_token, expires_in);
+                setCookie('JWT', id_token, expires_in);
+
+                // location.href = homePage;
+            }
+        }, [response, isLoading, isError])
     }
+
+
 
     const weekDayDateContent: DateContent[][] = [];
     weekDays.forEach(day => {

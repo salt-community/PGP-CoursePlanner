@@ -9,6 +9,12 @@ export function getIdFromPath() {
   return pathArray[pathArray.length - 1];
 }
 
+export function getHomeUrl() {
+  const pathname = location.href;
+  const index = pathname.lastIndexOf("/");
+  return pathname.substring(0, index);
+}
+
 export function getDateFromPath() {
   const { pathname } = useLocation();
   const pathArray = pathname.split("=");
