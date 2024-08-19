@@ -22,7 +22,6 @@ export default function Home() {
 
     let loading = false;
 
-
     if (location.search) {
         const params = new URLSearchParams(location.search);
         const code = params.get('code')!;
