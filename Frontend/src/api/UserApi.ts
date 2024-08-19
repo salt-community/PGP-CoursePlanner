@@ -29,11 +29,15 @@ export async function refreshTokens() {
   try {
     const response = await fetch(BASE_URL);
 
-    if (response && response.ok) {
+    // const responseAsJson = await response.json();
+    // if (responseAsJson == undefined) {
+    // }
+    // return responseAsJson as tokenResponse;
+    if (response !== undefined && response.ok) {
       const data = await response.json();
       return data as tokenResponse;
     }
-    return null;
+    throw new Error("Response was undefined");
   } catch (error) {
     console.error(error);
   }

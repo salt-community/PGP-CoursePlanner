@@ -17,14 +17,14 @@ export default function Login() {
         location.href = LOGIN_URL;
     }
 
-    const { data: response, isLoading } = useQuery({
+    const { data: response, isLoading, isError } = useQuery({
         queryKey: ["accessCode"],
         queryFn: () => refreshTokens(),
     });
 
     useEffect(() => {
         console.log("response from refresh tokens: ", response)
-        if (response !== undefined && response !== null) {
+        if (response !== undefined && response !== null && !isError) {
             const { access_token, id_token, expires_in } = response;
 
             console.log("response was not undefined, setting access_token to: ");
@@ -38,11 +38,11 @@ export default function Login() {
         else {
             navigate("/login");
         }
-    }, [response, isLoading])
+    }, [])
 
 
     return (
-        isLoading || response ?
+        isLoading ?
             <LoadingMessage />
             :
             <section className="px-5 text-center w-full h-screen flex justify-center items-center flex-col gap-4">
