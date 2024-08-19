@@ -22,27 +22,29 @@ export default function Login() {
         queryFn: () => refreshTokens(),
     });
 
-    useEffect(() => {
-        console.log("response from refresh tokens: ", response)
-        if (response !== undefined && response !== null && !isError) {
-            const { access_token, id_token, expires_in } = response;
 
-            console.log("response was not undefined, setting access_token to: ");
-            console.log(access_token);
-            console.log("and JWT to: ");
-            console.log(id_token);
-            setCookie("access_token", access_token, expires_in);
-            setCookie("JWT", id_token, expires_in);
-            window.location.reload();
-        }
-        else {
+    console.log("response from refresh tokens: ", response)
+    if (response !== undefined && response !== null && !isError) {
+        const { access_token, id_token, expires_in } = response;
+
+        console.log("response from refresh tokens was not undefined, setting access_token to: ");
+        console.log(access_token);
+        console.log("and JWT to: ");
+        console.log(id_token);
+        setCookie("access_token", access_token, expires_in);
+        setCookie("JWT", id_token, expires_in);
+        window.location.reload();
+    }
+    useEffect(() => {
+        if (isError) {
             navigate("/login");
         }
     }, [])
 
 
+
     return (
-        isLoading ?
+        isLoading || response ?
             <LoadingMessage />
             :
             <section className="px-5 text-center w-full h-screen flex justify-center items-center flex-col gap-4">

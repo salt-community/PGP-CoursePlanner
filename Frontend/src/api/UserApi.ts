@@ -16,10 +16,10 @@ export async function getTokens(auth_code: string) {
     });
 
     const responseAsJson = await response.json();
-    if (responseAsJson == undefined || !response.ok) {
-      throw new Error("Response was undefined");
+    if (responseAsJson !== undefined && response.ok) {
+      return responseAsJson as tokenResponse;
     }
-    return responseAsJson as tokenResponse;
+    console.log(responseAsJson);
   } catch (error) {
     console.error(error);
   }
@@ -29,15 +29,11 @@ export async function refreshTokens() {
   try {
     const response = await fetch(BASE_URL);
 
-    // const responseAsJson = await response.json();
-    // if (responseAsJson == undefined) {
-    // }
-    // return responseAsJson as tokenResponse;
-    if (response !== undefined && response.ok) {
-      const data = await response.json();
-      return data as tokenResponse;
+    const responseAsJson = await response.json();
+    if (responseAsJson != undefined && response.ok) {
+      return responseAsJson as tokenResponse;
     }
-    throw new Error("Response was undefined");
+    throw new Error("refresh token not found");
   } catch (error) {
     console.error(error);
   }

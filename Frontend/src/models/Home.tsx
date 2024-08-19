@@ -21,22 +21,23 @@ export default function Home() {
     const nextWeek = new Date(thisWeek);
     nextWeek.setDate(thisWeek.getDate() + 7)
 
-    useEffect(() => {
-        if (location.search) {
-            const params = new URLSearchParams(location.search);
-            const code = params.get('code')!;
-            setCookie("auth_code", code);
-            console.log("setting auth_code to ", code);
+    let loading = false;
+
+
+    if (location.search) {
+        const params = new URLSearchParams(location.search);
+        const code = params.get('code')!;
+        setCookie("auth_code", code);
+        console.log("setting auth_code to ", code);
+
+        const { data: response, isLoading, isError } = useQuery({
+            queryKey: ['accessCode'],
+            queryFn: () => getTokens(getCookie("auth_code")!)
+        })
+
+        if (isLoading) {
+            loading = true;
         }
-    }, [location.href])
-
-    const { data: response, isLoading, isError } = useQuery({
-        queryKey: ['accessCode'],
-        queryFn: () => getTokens(getCookie("auth_code")!)
-    })
-
-
-    useEffect(() => {
 
         isError && deleteCookie('access_token');
         console.log("Response from get tokens: ", response)
@@ -44,18 +45,21 @@ export default function Home() {
         if (response !== undefined) {
             const { access_token, id_token, expires_in } = response;
 
-            console.log("response was not undefined, setting access_token to: ");
+            console.log("response from get tokens was not undefined, setting access_token to: ");
             console.log(access_token);
             console.log("and JWT to: ");
             console.log(id_token);
             setCookie('access_token', access_token, expires_in);
             setCookie('JWT', id_token, expires_in);
+            console.log("Deleting cookie auth_code")
             deleteCookie("auth_code");
 
-            console.log("home page", homePage);
+            console.log("going to home page:", homePage);
             location.href = homePage;
         }
-    }, [])
+    }
+
+
 
 
 
@@ -90,7 +94,7 @@ export default function Home() {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     return (
-        isLoading
+        loading
             ? <LoadingMessage />
             : !getCookie("access_token")
                 // || getCookie("access_token") == "undefined"
