@@ -1,4 +1,3 @@
-
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Tokens`;
 
 export type tokenResponse = {
@@ -7,17 +6,21 @@ export type tokenResponse = {
   id_token: string;
 };
 
-export async function getTokens(auth_code: string) {
+export async function getTokens(auth_code: string, redirect_uri: string) {
   try {
     const code = encodeURIComponent(auth_code);
-    const response = await fetch(`${BASE_URL}/${code}`, {
+    const uri = encodeURIComponent(redirect_uri);
+    const response = await fetch(`${BASE_URL}/${code}/${uri}`, {
       headers: {
         Accept: "application/json",
       },
     });
 
     const responseAsJson = await response.json();
-    return responseAsJson as tokenResponse;
+    if (responseAsJson !== undefined && response.ok) {
+      return responseAsJson as tokenResponse;
+    }
+    console.log(responseAsJson);
   } catch (error) {
     console.error(error);
   }
@@ -27,11 +30,11 @@ export async function refreshTokens() {
   try {
     const response = await fetch(BASE_URL);
 
-    if (response && response.ok) {
-      const data = await response.json();
-      return data as tokenResponse;
+    const responseAsJson = await response.json();
+    if (responseAsJson != undefined && response.ok) {
+      return responseAsJson as tokenResponse;
     }
-    return null;
+    throw new Error("refresh token not found");
   } catch (error) {
     console.error(error);
   }

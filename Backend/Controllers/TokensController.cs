@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using System.Web;
 using Backend.Data;
+using Backend.ExceptionHandler.Exceptions;
 using Backend.Models;
 using Backend.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -55,11 +56,10 @@ namespace Backend.Controllers
                 await response.Content.ReadAsStringAsync());
                 return Ok(deserializedResponse);
             }
-            else
-            {
-                var errorData = await response.Content.ReadAsStringAsync();
-                return StatusCode((int)response.StatusCode, errorData);
-            }
+
+            var errorData = JsonConvert.DeserializeObject<GoogleErrorResponse>
+                (await response.Content.ReadAsStringAsync());
+            throw new BadRequestInvalidGrantException($"Error: {errorData!.Error} Description: {errorData.Error_Description}");
 
         }
 
@@ -93,26 +93,26 @@ namespace Backend.Controllers
                 await response.Content.ReadAsStringAsync());
                 return Ok(deserializedResponse);
             }
-            else
-            {
-                var errorData = await response.Content.ReadAsStringAsync();
-                return StatusCode((int)response.StatusCode, errorData);
-            }
+
+            var errorData = JsonConvert.DeserializeObject<GoogleErrorResponse>
+                (await response.Content.ReadAsStringAsync());
+            throw new BadRequestInvalidGrantException($"Error: {errorData!.Error} Description: {errorData.Error_Description}");
 
         }
 
 
-        [HttpGet("{code}")]
-        public async Task<ActionResult<TokenResponse>> GetTokens(string code)
+        [HttpGet("{code}/{redirectUri}")]
+        public async Task<ActionResult<TokenResponse>> GetTokens(string code, string redirectUri)
         {
             var builder = WebApplication.CreateBuilder();
             code = HttpUtility.UrlDecode(code);
+            redirectUri = HttpUtility.UrlDecode(redirectUri);
             var response = await GetTokensFromGoogle(
                 "https://accounts.google.com/o/oauth2/token",
                 code,
                 builder.Configuration["AppInfo:ClientId"] ?? Environment.GetEnvironmentVariable("CLIENT_ID")!,
                 builder.Configuration["AppInfo:ClientSecret"] ?? Environment.GetEnvironmentVariable("CLIENT_SECRET")!,
-                "http://localhost:5173");
+                redirectUri);
 
             if (response.Result.GetType() == typeof(OkObjectResult))
             {
@@ -137,7 +137,8 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<TokenResponse>> RefreshTokens()
         {
-            var refreshToken = await _context.LoggedInUser.Select(user => user.Refresh_Token).FirstOrDefaultAsync();
+            var refreshToken = await _context.LoggedInUser.Select(user => user.Refresh_Token).FirstOrDefaultAsync()
+            ?? throw new NotFoundByIdException("No refresh tokens found");
             var builder = WebApplication.CreateBuilder();
             var response = await RefreshTokensFromGoogle(
                 "https://accounts.google.com/o/oauth2/token",
