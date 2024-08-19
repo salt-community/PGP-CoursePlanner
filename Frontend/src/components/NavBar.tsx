@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import PrimaryBtn from "./buttons/PrimaryBtn";
 import { deleteCookie} from "../helpers/cookieHelpers";
 import { deleteRefreshToken } from "../api/UserApi";
+import { currentMonth, currentYear } from "../helpers/dateHelpers";
 
 export default function NavBar() {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ export default function NavBar() {
                 }`}
             >
               <li>
-                <Link onClick={() => toggleDropdown()} to="/calendar/month">
+                <Link onClick={() => toggleDropdown()} to={`/calendar/month/monthyear=${currentMonth}-${currentYear}`}>
                   Course Templates
                 </Link>
               </li>
@@ -83,7 +84,7 @@ export default function NavBar() {
         <div className="navbar-center hidden md:flex">
           <ul className="menu menu-horizontal px-1 text-xl">
             <li>
-              <Link onClick={() => toggleDropdown()} to="/calendar/month">
+              <Link onClick={() => toggleDropdown()} to={`/calendar/month/monthyear=${currentMonth}-${currentYear}`}>
                 Calendar
               </Link>
             </li>

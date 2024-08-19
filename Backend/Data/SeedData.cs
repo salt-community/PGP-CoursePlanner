@@ -210,6 +210,7 @@ public static class SeedData
             string[] module_names = { "Hell Week", "API", "React", "Cloud" };
             int[] module_numOfDays = { 5, 3, 2, 3 };
             List<List<Day>> module_days = [hellWeekDays, APIDays, reactDays, cloudDays];
+            List<string[]> module_tracks = [["Java", "Javascript", ".NET"], ["Java"], ["Java", "Javascript"], [".NET"]];
 
             for (var i = 0; i < module_names.Length; i++)
             {
@@ -217,13 +218,14 @@ public static class SeedData
                 {
                     Name = module_names[i],
                     NumberOfDays = module_numOfDays[i],
-                    Days = module_days.ElementAt(i)
+                    Days = module_days.ElementAt(i),
+                    Track = module_tracks[i]
                 };
                 _context.Modules.Add(module);
                 _context.SaveChanges();
             }
 
-            string[] course_names = { "Java S24", "JavaScript S24", "Java W24" };
+            string[] course_names = { "Java", "JavaScript", "Dotnet" };
             int[] course_numOfWeeks = { 2, 3, 2 };
 
             var moduleDays = _context.Modules.Select(m => m.Days);

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { deleteCookie, getCookie, setCookie } from "../helpers/cookieHelpers";
-import { getDateAsString, today, weekDays, weekDaysNextWeek } from "../helpers/dateHelpers";
+import { currentMonth, currentYear, getDateAsString, today, weekDays, weekDaysNextWeek } from "../helpers/dateHelpers";
 import { getCalendarDate } from "../api/CalendarDateApi";
 import { getWeek, format } from "date-fns";
 import { Link } from "react-router-dom";
@@ -15,7 +15,6 @@ import LoadingMessage from "../components/LoadingMessage";
 const homePage = getHomeUrl();
 
 export default function Home() {
-
     const thisWeek = new Date();
     const nextWeek = new Date(thisWeek);
     nextWeek.setDate(thisWeek.getDate() + 7)
@@ -133,7 +132,7 @@ export default function Home() {
                             )}
                         </section>
                         <div className="flex flex-row gap-2">
-                            <Link to={`/calendar/month`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to calendar</Link>
+                            <Link to={`/calendar/month/monthyear=${currentMonth}-${currentYear}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to calendar</Link>
                             <Link to={`/calendar/timeline`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to timeline</Link>
                         </div>
                     </section>

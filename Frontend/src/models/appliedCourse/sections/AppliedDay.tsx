@@ -136,6 +136,7 @@ export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDa
                                 <tbody>
                                     {day.events.map((event, index) => (
                                         <CalendarEvent
+                                            editTrue={false}
                                             moduleId={0}
                                             appliedTrue={true}
                                             event={event}

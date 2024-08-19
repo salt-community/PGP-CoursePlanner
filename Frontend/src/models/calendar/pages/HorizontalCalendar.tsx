@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { addDays, subDays, getWeek } from "date-fns";
+import { addDays, subDays } from "date-fns";
 import Page from "../../../components/Page";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { getAllAppliedCourses } from "../../../api/AppliedCourseApi";
 import { getAllCourses } from "../../../api/CourseApi";
 import { getAllModules } from "../../../api/ModuleApi";
-import { firstDayOfMonth, currentMonth } from "../../../helpers/dateHelpers";
+import { currentMonth, currentYear, currentWeek } from "../../../helpers/dateHelpers";
 import TimeLineCourse from "../sections/TimeLineCourse";
 import TimeLineXaxis from "../sections/TimeLineXaxis";
 import { getCookie } from "../../../helpers/cookieHelpers";
@@ -104,8 +104,8 @@ const HorizontalCalendar: React.FC = () => {
         <div className="border-b-2 border-gray-100"></div>
         <div className="ml-10 mr-10 flex flex-row justify-between">
           <div className="flex flex-row gap-2">
-            <Link to={`/calendar/week/weeknumber=${getWeek(firstDayOfMonth(currentMonth))}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
-            <Link to={`/calendar/month`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to month view</Link>
+            <Link to={`/calendar/week/weeknumberyear=${currentWeek}-${currentYear}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
+            <Link to={`/calendar/month/monthyear=${currentMonth}-${currentYear}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to month view</Link>
           </div>
           <div className="flex flex-row gap-2">
             {widthIndex != 0

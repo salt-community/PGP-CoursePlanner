@@ -24,15 +24,15 @@ export default function Courses() {
                     {isLoading && <LoadingMessage />}
                     {isError && <ErrorMessage />}
                     {data &&
-                        <Link to={"/courses/create"} className="border border-black bg-primary text-white pb-[100%] relative">
+                        <Link to={"/courses/create"} className="border border-primary bg-primary text-white pb-[100%] relative">
                             <div className="absolute inset-0 flex items-center justify-center flex-col gap-4">
                                 Create new course
                             </div>
                         </Link>}
                     {data && data.map((course, index) =>
                         <Link to={`/courses/details/${course.id}`} key={course.name + index} className="border border-black pb-[100%] relative">
-                            <div className="absolute inset-0 flex items-center justify-center flex-col gap-4">
-                                {course.name}
+                            <div className="absolute inset-0 flex items-center justify-center flex-col gap-1">
+                                <h1 className="text-primary">{course.name}</h1>
                             </div>
                         </Link>
                     )}

@@ -8,7 +8,7 @@ import CloseBtn from "../../../components/buttons/CloseBtn";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { editModule, getAllModules } from "../../../api/ModuleApi";
 
-export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDays, days, index, event }: EventProps) {
+export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumber, setDays, days, index, event }: EventProps) {
     const [isMove, setIsMove] = useState<boolean>(false);
     const [isMoveAnotherModule, setIsMoveAnotherModule] = useState<boolean>(false);
     const popupRef = useRef<HTMLDivElement>(null);
@@ -243,7 +243,7 @@ export default function CalendarEvent({ appliedTrue, moduleId, dayNumber, setDay
             <td><InputSmallTime onChange={handleTimeChange} name="endTime" value={endTimeDefault} type="time" /></td>
             <td className="text-end flex gap-1">
                 <TrashBtn handleDelete={handleDeleteEvent} />
-                {!appliedTrue && event.name != "" && event.startTime != "" && event.endTime != "" &&
+                {!appliedTrue && event.name != "" && event.startTime != "" && event.endTime != "" && editTrue &&
                     <div className="relative inline-block">
                         <button
                             ref={buttonRef}
