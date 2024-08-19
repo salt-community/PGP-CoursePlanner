@@ -86,7 +86,7 @@ export default function Home() {
         loading
             ? <LoadingMessage />
             : !getCookie("access_token")
-                // || getCookie("access_token") == "undefined"
+                || getCookie("access_token") == "undefined"
                 ? <Login />
                 : <Page>
                     <section className="pl-20 pr-20 pb-20 flex flex-col items-center">
