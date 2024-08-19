@@ -3,7 +3,7 @@ import { deleteCookie, getCookie, setCookie } from "../helpers/cookieHelpers";
 import { getDateAsString, today, weekDays, weekDaysNextWeek } from "../helpers/dateHelpers";
 import { getCalendarDate } from "../api/CalendarDateApi";
 import { getWeek, format } from "date-fns";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Page from "../components/Page";
 import WeekDay from "./calendar/sections/WeekDay";
 import { DateContent } from "./calendar/Types";
