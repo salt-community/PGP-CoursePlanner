@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using System.Web;
 using Backend.Data;
+using Backend.ExceptionHandler.Exceptions;
 using Backend.Models;
 using Backend.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -58,7 +59,8 @@ namespace Backend.Controllers
             else
             {
                 var errorData = await response.Content.ReadAsStringAsync();
-                return StatusCode((int)response.StatusCode, errorData);
+                throw new BadRequestInvalidGrantException(errorData);
+                // return StatusCode((int)response.StatusCode, errorData);
             }
 
         }
@@ -96,7 +98,8 @@ namespace Backend.Controllers
             else
             {
                 var errorData = await response.Content.ReadAsStringAsync();
-                return StatusCode((int)response.StatusCode, errorData);
+                throw new BadRequestInvalidGrantException(errorData);
+                // return StatusCode((int)response.StatusCode, errorData);
             }
 
         }
