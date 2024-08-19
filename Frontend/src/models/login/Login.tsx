@@ -17,25 +17,28 @@ export default function Login() {
         location.href = LOGIN_URL;
     }
 
-
     const { data: response, isLoading } = useQuery({
         queryKey: ["accessCode"],
         queryFn: () => refreshTokens(),
     });
 
-    if (response) {
-        const { access_token, id_token, expires_in } = response;
-
-        setCookie("access_token", access_token, expires_in);
-        setCookie("JWT", id_token, expires_in);
-        window.location.reload();
-    }
     useEffect(() => {
-        console.log("Base url: ", import.meta.env.BASE_URL);
-        if (!response && !isLoading) {
+        console.log("response from refresh tokens: ", response)
+        if (response !== undefined && response !== null) {
+            const { access_token, id_token, expires_in } = response;
+
+            console.log("response was not undefined, setting access_token to: ");
+            console.log(access_token);
+            console.log("and JWT to: ");
+            console.log(id_token);
+            setCookie("access_token", access_token, expires_in);
+            setCookie("JWT", id_token, expires_in);
+            window.location.reload();
+        }
+        else {
             navigate("/login");
         }
-    }, [response])
+    }, [response, isLoading])
 
 
     return (

@@ -7,22 +7,22 @@ export type tokenResponse = {
 };
 
 export async function getTokens(auth_code: string) {
-  // try {
-  const code = encodeURIComponent(auth_code);
-  const response = await fetch(`${BASE_URL}/${code}`, {
-    headers: {
-      Accept: "application/json",
-    },
-  });
+  try {
+    const code = encodeURIComponent(auth_code);
+    const response = await fetch(`${BASE_URL}/${code}`, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
 
-  const responseAsJson = await response.json();
-  if (responseAsJson == undefined) {
-    throw new Error("Response was undefined");
+    const responseAsJson = await response.json();
+    if (responseAsJson == undefined) {
+      throw new Error("Response was undefined");
+    }
+    return responseAsJson as tokenResponse;
+  } catch (error) {
+    console.error(error);
   }
-  return responseAsJson as tokenResponse;
-  // } catch (error) {
-  //   console.error(error);
-  // }
 }
 
 export async function refreshTokens() {

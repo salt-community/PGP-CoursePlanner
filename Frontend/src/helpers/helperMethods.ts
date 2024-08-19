@@ -10,9 +10,15 @@ export function getIdFromPath() {
 }
 
 export function getHomeUrl() {
-  const pathname = location.href;
-  const index = pathname.lastIndexOf("/");
-  return pathname.substring(0, index);
+  const pathName = location.href;
+  let len = pathName.length,
+    i = -1,
+    index = 3;
+  while (index-- && i++ < len) {
+    i = pathName.indexOf("/", i);
+    if (i < 0) break;
+  }
+  return pathName.substring(0, i);
 }
 
 export function getDateFromPath() {
