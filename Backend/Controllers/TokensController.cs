@@ -56,12 +56,10 @@ namespace Backend.Controllers
                 await response.Content.ReadAsStringAsync());
                 return Ok(deserializedResponse);
             }
-            else
-            {
-                var errorData = await response.Content.ReadAsStringAsync();
-                throw new BadRequestInvalidGrantException(errorData);
-                // return StatusCode((int)response.StatusCode, errorData);
-            }
+
+            var errorData = JsonConvert.DeserializeObject<GoogleErrorResponse>
+                (await response.Content.ReadAsStringAsync());
+            throw new BadRequestInvalidGrantException($"Error: {errorData!.Error} Description: {errorData.Error_Description}");
 
         }
 
@@ -95,12 +93,10 @@ namespace Backend.Controllers
                 await response.Content.ReadAsStringAsync());
                 return Ok(deserializedResponse);
             }
-            else
-            {
-                var errorData = await response.Content.ReadAsStringAsync();
-                throw new BadRequestInvalidGrantException(errorData);
-                // return StatusCode((int)response.StatusCode, errorData);
-            }
+
+            var errorData = JsonConvert.DeserializeObject<GoogleErrorResponse>
+                (await response.Content.ReadAsStringAsync());
+            throw new BadRequestInvalidGrantException($"Error: {errorData!.Error} Description: {errorData.Error_Description}");
 
         }
 
