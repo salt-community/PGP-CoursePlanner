@@ -95,8 +95,6 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
             return true;
     }
 
-    console.log(module)
-
     function handleClick() {
         let dropdownMenu = document.getElementById('dropdownMenu')!;
         if (dropdownMenu.className.includes('block')) {

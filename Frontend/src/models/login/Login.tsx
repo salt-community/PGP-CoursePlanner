@@ -23,14 +23,9 @@ export default function Login() {
     });
 
 
-    console.log("response from refresh tokens: ", response)
     if (response !== undefined && response !== null && !isError) {
         const { access_token, id_token, expires_in } = response;
 
-        console.log("response from refresh tokens was not undefined, setting access_token to: ");
-        console.log(access_token);
-        console.log("and JWT to: ");
-        console.log(id_token);
         setCookie("access_token", access_token, expires_in);
         setCookie("JWT", id_token, expires_in);
         window.location.reload();

@@ -26,7 +26,6 @@ export default function Home() {
         const params = new URLSearchParams(location.search);
         const code = params.get('code')!;
         setCookie("auth_code", code);
-        console.log("setting auth_code to ", code);
 
         const { data: response, isLoading, isError } = useQuery({
             queryKey: ['accessCode'],
@@ -38,21 +37,14 @@ export default function Home() {
         }
 
         isError && deleteCookie('access_token');
-        console.log("Response from get tokens: ", response)
 
         if (response !== undefined) {
             const { access_token, id_token, expires_in } = response;
 
-            console.log("response from get tokens was not undefined, setting access_token to: ");
-            console.log(access_token);
-            console.log("and JWT to: ");
-            console.log(id_token);
             setCookie('access_token', access_token, expires_in);
             setCookie('JWT', id_token, expires_in);
-            console.log("Deleting cookie auth_code")
             deleteCookie("auth_code");
 
-            console.log("going to home page:", homePage);
             location.href = homePage;
         }
     }
