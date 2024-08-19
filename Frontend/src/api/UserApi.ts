@@ -16,7 +16,7 @@ export async function getTokens(auth_code: string) {
     });
 
     const responseAsJson = await response.json();
-    if (responseAsJson == undefined) {
+    if (responseAsJson == undefined || !response.ok) {
       throw new Error("Response was undefined");
     }
     return responseAsJson as tokenResponse;

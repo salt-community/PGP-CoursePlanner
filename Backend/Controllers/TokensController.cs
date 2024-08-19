@@ -136,7 +136,8 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<TokenResponse>> RefreshTokens()
         {
-            var refreshToken = await _context.LoggedInUser.Select(user => user.Refresh_Token).FirstOrDefaultAsync();
+            var refreshToken = await _context.LoggedInUser.Select(user => user.Refresh_Token).FirstOrDefaultAsync()
+            ?? throw new NotFoundByIdException("No refresh tokens found");
             var builder = WebApplication.CreateBuilder();
             var response = await RefreshTokensFromGoogle(
                 "https://accounts.google.com/o/oauth2/token",
