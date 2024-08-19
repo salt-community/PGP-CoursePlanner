@@ -101,17 +101,18 @@ namespace Backend.Controllers
         }
 
 
-        [HttpGet("{code}")]
-        public async Task<ActionResult<TokenResponse>> GetTokens(string code)
+        [HttpGet("{code}/{redirectUri}")]
+        public async Task<ActionResult<TokenResponse>> GetTokens(string code, string redirectUri)
         {
             var builder = WebApplication.CreateBuilder();
             code = HttpUtility.UrlDecode(code);
+            redirectUri = HttpUtility.UrlDecode(redirectUri);
             var response = await GetTokensFromGoogle(
                 "https://accounts.google.com/o/oauth2/token",
                 code,
                 builder.Configuration["AppInfo:ClientId"] ?? Environment.GetEnvironmentVariable("CLIENT_ID")!,
                 builder.Configuration["AppInfo:ClientSecret"] ?? Environment.GetEnvironmentVariable("CLIENT_SECRET")!,
-                "http://localhost:5173");
+                redirectUri);
 
             if (response.Result.GetType() == typeof(OkObjectResult))
             {
