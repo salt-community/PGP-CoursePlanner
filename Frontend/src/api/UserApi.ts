@@ -6,10 +6,10 @@ export type tokenResponse = {
   id_token: string;
 };
 
-export async function getTokens(auth_code: string) {
+export async function getTokens(auth_code: string, redirect_uri: string) {
   try {
     const code = encodeURIComponent(auth_code);
-    const response = await fetch(`${BASE_URL}/${code}`, {
+    const response = await fetch(`${BASE_URL}/${code}/${redirect_uri}`, {
       headers: {
         Accept: "application/json",
       },
