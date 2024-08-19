@@ -8,14 +8,13 @@ import {
   getWeek,
   getYear,
   startOfWeek,
-  startOfYear,
 } from "date-fns";
 
 export const firstDayOfWeek = startOfWeek(new Date(), { weekStartsOn: 1 });
 
 var thisWeek = new Date();
 const nextWeek = new Date(thisWeek);
-nextWeek.setDate(thisWeek.getDate() + 7)
+nextWeek.setDate(thisWeek.getDate() + 7);
 export const firstDayOfNextWeek = startOfWeek(nextWeek, { weekStartsOn: 1 });
 
 // export const firstDayOfWeekNumber = (weekNumber: number, year: number) => {
@@ -58,7 +57,7 @@ export const firstWeekDay = (date: Date) => {
 
 export const daysBeforeMonth = (startDate: Date, daysToAdd: number) => {
   if (daysToAdd == 1) {
-    return []
+    return [];
   }
 
   return eachDayOfInterval({
@@ -84,7 +83,10 @@ export const weekDaysNextWeek = eachDayOfInterval({
   end: addDays(firstDayOfNextWeek, 4),
 });
 
-export const fullWeekOfWeekNumber = (weekNumber: number, yearNumber: number) => {
+export const fullWeekOfWeekNumber = (
+  weekNumber: number,
+  yearNumber: number
+) => {
   return eachDayOfInterval({
     start: firstDayOfWeekNumber(weekNumber, yearNumber),
     end: addDays(firstDayOfWeekNumber(weekNumber, yearNumber), 6),
