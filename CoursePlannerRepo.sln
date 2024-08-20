@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{B2D17AC9-1CDC-4802-BF20-E569AAFA1F07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "back", "back\back.csproj", "{F23C3D6F-BCF1-4212-B1E4-483758758710}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.IntegrationTests", "Backend.IntegrationTests\Backend.IntegrationTests.csproj", "{A23111F7-7B90-4E4E-AFBE-EFD4FC2C7EF1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "back.IntegrationTests", "back.IntegrationTests\back.IntegrationTests.csproj", "{35BB23EF-2F22-4ABE-A252-30F826F574A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.UnitTests", "Backend.UnitTests\Backend.UnitTests.csproj", "{DF026344-6995-476C-8CAF-047BC4B76FEC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "back.UnitTests", "back.UnitTests\back.UnitTests.csproj", "{033A5A89-521C-4B1D-B118-657EF58D7E11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,5 +38,17 @@ Global
 		{DF026344-6995-476C-8CAF-047BC4B76FEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF026344-6995-476C-8CAF-047BC4B76FEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF026344-6995-476C-8CAF-047BC4B76FEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F23C3D6F-BCF1-4212-B1E4-483758758710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F23C3D6F-BCF1-4212-B1E4-483758758710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F23C3D6F-BCF1-4212-B1E4-483758758710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F23C3D6F-BCF1-4212-B1E4-483758758710}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35BB23EF-2F22-4ABE-A252-30F826F574A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35BB23EF-2F22-4ABE-A252-30F826F574A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35BB23EF-2F22-4ABE-A252-30F826F574A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35BB23EF-2F22-4ABE-A252-30F826F574A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{033A5A89-521C-4B1D-B118-657EF58D7E11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{033A5A89-521C-4B1D-B118-657EF58D7E11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{033A5A89-521C-4B1D-B118-657EF58D7E11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{033A5A89-521C-4B1D-B118-657EF58D7E11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
