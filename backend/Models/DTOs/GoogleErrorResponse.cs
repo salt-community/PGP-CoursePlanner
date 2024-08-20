@@ -1,4 +1,4 @@
-namespace Backend.Models.DTOs
+namespace backend.Models.DTOs
 {
     public class GoogleErrorResponse
     {

@@ -1,12 +1,12 @@
-using Backend.Controllers;
-using Backend.ExceptionHandler.Exceptions;
-using Backend.Models;
-using Backend.Services;
+using backend.Controllers;
+using backend.ExceptionHandler.Exceptions;
+using backend.Models;
+using backend.Services;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-namespace Backend.Tests.UnitTests
+namespace backend.Tests.UnitTests
 {
     public class ModulesControllerTests
     {

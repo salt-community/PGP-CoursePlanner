@@ -1,16 +1,16 @@
 using System.Net.Http.Headers;
 using System.Web;
-using Backend.Data;
-using Backend.ExceptionHandler.Exceptions;
-using Backend.Models;
-using Backend.Models.DTOs;
+using backend.Data;
+using backend.ExceptionHandler.Exceptions;
+using backend.Models;
+using backend.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 
 
-namespace Backend.Controllers
+namespace backend.Controllers
 {
     [ApiController]
     [Route("[controller]")]

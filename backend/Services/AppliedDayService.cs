@@ -1,8 +1,8 @@
-using Backend.Data;
-using Backend.Models;
+using backend.Data;
+using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Services
+namespace backend.Services
 {
     public class AppliedDayService : IService<AppliedDay>
     {

@@ -1,4 +1,4 @@
-namespace Backend.ExceptionHandler.Exceptions
+namespace backend.ExceptionHandler.Exceptions
 {
     public class NotFoundException<T> : Exception
     {

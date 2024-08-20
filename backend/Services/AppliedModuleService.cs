@@ -1,10 +1,10 @@
 using System.Diagnostics;
-using Backend.Data;
-using Backend.ExceptionHandler.Exceptions;
-using Backend.Models;
+using backend.Data;
+using backend.ExceptionHandler.Exceptions;
+using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Services
+namespace backend.Services
 {
     public class AppliedModuleService : IService<AppliedModule>
     {

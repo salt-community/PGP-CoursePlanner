@@ -1,9 +1,9 @@
-using Backend.Models;
+using backend.Models;
 using Microsoft.AspNetCore.Mvc;
-using Backend.Services;
+using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Backend.Controllers;
+namespace backend.Controllers;
 
 [Authorize]
 [ApiController]

@@ -1,4 +1,4 @@
-namespace Backend.Services;
+namespace backend.Services;
 
 public interface IService <T>
 {

@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copy the project file and restore dependencies
-COPY Backend.csproj .
+COPY backend.csproj .
 RUN dotnet restore
 
 # Copy the source code and build the application
@@ -22,4 +22,4 @@ WORKDIR /app
 COPY --from=build /app/out .
 
 # Start the application
-ENTRYPOINT ["dotnet", "Backend.dll"]
+ENTRYPOINT ["dotnet", "backend.dll"]

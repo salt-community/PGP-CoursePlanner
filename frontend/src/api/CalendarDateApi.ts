@@ -1,6 +1,6 @@
 import { getCookie } from "../helpers/cookieHelpers";
 
-const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/CalendarDates`;
+const BASE_URL = `${import.meta.env.VITE_backend_URL}/CalendarDates`;
 
 export async function getCalendarDate(date: string) {
   try {

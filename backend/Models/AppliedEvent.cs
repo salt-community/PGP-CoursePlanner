@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Backend.Models
+namespace backend.Models
 {
     public class AppliedEvent
     {

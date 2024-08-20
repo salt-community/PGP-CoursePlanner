@@ -1,4 +1,4 @@
-using Backend.Models;
+using backend.Models;
 
 public class CourseModule
 {

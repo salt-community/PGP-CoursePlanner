@@ -3,14 +3,14 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
-using Backend.Data;
-using Backend.Models;
+using backend.Data;
+using backend.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
-namespace Backend.IntegrationTests
+namespace backend.IntegrationTests
 {
     public class CoursesControllerIntegrationTests : IClassFixture<CustomWebApplicationFactory<Program>>
     {

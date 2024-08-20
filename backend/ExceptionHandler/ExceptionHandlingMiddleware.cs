@@ -1,9 +1,9 @@
 
 using System.Net;
-using Backend.ExceptionHandler.Exceptions;
+using backend.ExceptionHandler.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.ExceptionHandler
+namespace backend.ExceptionHandler
 {
     public class ExceptionHandlingMiddleware
     {

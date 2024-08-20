@@ -11,5 +11,5 @@ Salt Course Planner is designed to simplify the planning and execution of recurr
 5. Open up the local webpage and start using the web page.
 
 ## Technologies Used
-- **Frontend**: Vit/React, TypeScript, Tailwind, Daisy UI
-- **Backend**: .Net/C#, ASP.NET
+- **frontend**: Vit/React, TypeScript, Tailwind, Daisy UI
+- **backend**: .Net/C#, ASP.NET

@@ -1,7 +1,7 @@
 
 using Microsoft.OpenApi.Models;
 
-namespace Backend.Config
+namespace backend.Config
 {
     public static class SecurityConfig
     {

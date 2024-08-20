@@ -1,9 +1,8 @@
-using System;
-using Backend.Config;
-using Backend.Data;
-using Backend.ExceptionHandler;
-using Backend.Models;
-using Backend.Services;
+using backend.Config;
+using backend.Data;
+using backend.ExceptionHandler;
+using backend.Models;
+using backend.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 

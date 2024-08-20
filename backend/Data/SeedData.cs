@@ -1,5 +1,5 @@
-using Backend.Data;
-using Backend.Models;
+using backend.Data;
+using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 public static class SeedData
@@ -28,7 +28,7 @@ public static class SeedData
                 },
                 new Day{
                     DayNumber = 2,
-                    Description = "Introduction Backend",
+                    Description = "Introduction backend",
                     Events = [
                         new Event {
                             Name = "Lecture",

@@ -1,7 +1,7 @@
-using Backend.Data;
-using Backend.Models;
+using backend.Data;
+using backend.Models;
 
-namespace Backend.IntegrationTests
+namespace backend.IntegrationTests
 {
     public class Seeding
     {
