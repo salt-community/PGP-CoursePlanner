@@ -4,11 +4,11 @@ steps:
     # same thing here, we don't need to specify docker build
     args:
       ["build", "-t", "gcr.io/pgp-sandbox/courseplanner-frontend:${_TAG}", "."]
-    dir: Frontend
+    dir: frontend
 
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/pgp-sandbox/courseplanner-frontend:${_TAG}"]
-    dir: Frontend
+    dir: frontend
 
   # Deploy frontend to Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"

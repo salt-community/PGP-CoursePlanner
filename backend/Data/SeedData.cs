@@ -40,7 +40,7 @@ public static class SeedData
                 },
                 new Day{
                     DayNumber = 3,
-                    Description = "Introduction Frontend",
+                    Description = "Introduction frontend",
                     Events = [
                         new Event {
                             Name = "Lecture",
