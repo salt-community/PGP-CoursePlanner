@@ -59,12 +59,12 @@ export async function deleteAppliedCourse(id: number) {
       },
     });
     if (!response.ok || response == null) {
-      alert("Failed to delete applied courses");
+      // alert("Failed to delete applied courses");
       return;
     }
   } catch (error) {
     console.error(error);
-    alert("Failed to delete applied courses");
+    // alert("Failed to delete applied courses");
   }
 }
 
@@ -77,14 +77,14 @@ export async function getAppliedCourseById(id: number) {
       },
     });
     if (!response.ok || response == null) {
-      alert("Failed to get applied course");
+      // alert("Failed to get applied course");
       return;
     }
     const data = await response.json();
     return data as AppliedCourseType;
   } catch (error) {
     console.error(error);
-    alert("Failed to get applied course");
+    // alert("Failed to get applied course");
   }
 }
 
@@ -99,11 +99,11 @@ export async function editAppliedCourse(appliedCourse: AppliedCourseType) {
       body: JSON.stringify(appliedCourse),
     });
     if (!response.ok || response == null) {
-      alert("Failed to edit applied course");
+      // alert("Failed to edit applied course");
       return;
     }
   } catch (error) {
     console.error(error);
-    alert("Failed to edit applied courses");
+    // alert("Failed to edit applied courses");
   }
 }

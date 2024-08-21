@@ -66,7 +66,7 @@ namespace Backend.Services
             var course = await _context.Courses.FirstOrDefaultAsync(course => course.Id == appliedCourse.CourseId)
                 ?? throw new NotFoundByIdException("Course", appliedCourse.CourseId);
 
-            var currentDate = DateTime.SpecifyKind(appliedCourse.StartDate, DateTimeKind.Utc);
+            var currentDate = appliedCourse.StartDate.Date;
 
             var listOfAppliedModules = new List<AppliedModule>();
             int order = 0;
@@ -307,10 +307,10 @@ namespace Backend.Services
 
             // update appliedCourse, CalendarDays and DateContent
             var moduleIds = appliedCourse.Modules!.Select(m => m.Id);
-            var allDateContents = _context.DateContent.Where(dc => dc.appliedCourseId == id);
+            var allDateContents = await _context.DateContent.Where(dc => dc.appliedCourseId == id).ToListAsync();
             foreach (var dc in allDateContents)
             {
-                var cdList = _context.CalendarDates.Where(cd => cd.DateContent.Contains(dc)).ToList();
+                var cdList = await _context.CalendarDates.Where(cd => cd.DateContent.Contains(dc)).ToListAsync();
                 foreach (var cd in cdList)
                 {
                     cd.DateContent.Remove(dc);
@@ -318,7 +318,7 @@ namespace Backend.Services
                 }
                 await _context.SaveChangesAsync();
                 //_context.DateContent.Remove(dc);
-                // await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
             }
 
             var currentDate = appliedCourse.StartDate.Date;
