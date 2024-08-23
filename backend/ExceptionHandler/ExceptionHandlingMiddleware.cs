@@ -1,7 +1,6 @@
 
 using System.Net;
 using backend.ExceptionHandler.Exceptions;
-using Microsoft.AspNetCore.Mvc;
 
 namespace backend.ExceptionHandler
 {

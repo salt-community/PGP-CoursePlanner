@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen();
 
 string deploymentDevelop = Environment.GetEnvironmentVariable("ConnectionStringDeployedDevelop")!;
 string? connectionString = builder.Environment.IsDevelopment() ?
-                        builder.Configuration.GetConnectionString("DevelopmentDb") :
+                        builder.Configuration.GetConnectionString("DevelopmentDb") : //Change this variable to update all three databases
                         Environment.GetEnvironmentVariable("ConnectionStringDeployed");
 
 builder.Services.AddDbContext<DataContext>(options =>
