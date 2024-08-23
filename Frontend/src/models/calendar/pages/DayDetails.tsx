@@ -12,7 +12,6 @@ import WeekDay from "../sections/WeekDay";
 import { getDateAsString } from "../../../helpers/dateHelpers";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
-import { split } from "postcss/lib/list";
 
 export default function DayDetails() {
     const navigate = useNavigate();
@@ -30,7 +29,6 @@ export default function DayDetails() {
     
     const lastTrackedUrl = getLastTrackedUrl();
     const splitUrl = lastTrackedUrl?.split("5173")    //change this for deploy!
-    console.log(splitUrl![1])
 
     const dateAsDate = new Date(date);
 
