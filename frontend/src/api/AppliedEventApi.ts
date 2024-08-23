@@ -1,7 +1,7 @@
 import { getCookie } from "../helpers/cookieHelpers";
 import { AppliedEventType } from "../models/appliedCourse/Types";
 
-const BASE_URL = `${import.meta.env.VITE_backend_URL} from "./backendUrl";
+const BASE_URL = `${import.meta.env.VITE_BACKEND_URL} from "./backendUrl";
 }/AppliedEvents`;
 
 export async function postAppliedEvent(event: AppliedEventType) {
