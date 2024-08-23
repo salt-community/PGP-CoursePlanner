@@ -27,7 +27,7 @@ const HorizontalCalendar: React.FC = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   var width = [12, 16, 24, 32, 40, 48]; //56, 64, 80, 96
-  const [widthIndex, setWidthIndex] = useState<number>(1);
+  const [widthIndex, setWidthIndex] = useState<number>(3);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
