@@ -98,7 +98,7 @@ export default function AppliedCourses() {
                                                                 <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
                                                             </div>
                                                             <label htmlFor={`collapse-toggle-${appliedCourse.id}`} className="cursor-pointer flex flex-row items-end">
-                                                                <h1 className="text-lg item-end justify-item-end">
+                                                                <h1 className="text-lg item-end justify-item-end hover:italic">
                                                                     Details
                                                                 </h1>
                                                                 <svg className="fill-current w-7 h-7 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -126,7 +126,7 @@ export default function AppliedCourses() {
                                                                                 <div className="collapse-title text-base flex justify-between items-center">
                                                                                     <h2 className="flex items-center min-w-14 align-bottom">Day {day.dayNumber}: {day.description}</h2>
                                                                                     <label htmlFor={`collapse-toggle-events-${day.dayNumber}-${module.id}`} className="cursor-pointer flex flex-row">
-                                                                                        <h6 className='text-xs'>Events</h6>
+                                                                                        <h6 className='text-xs hover:italic'>Events</h6>
                                                                                         <svg className="fill-current w-4 h-4 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                                                             <path d="M15.3 9.3l-3.3 3.3-3.3-3.3-1.4 1.4 4.7 4.7 4.7-4.7z" />
                                                                                         </svg>
@@ -200,7 +200,7 @@ export default function AppliedCourses() {
                                                                 <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
                                                             </div>
                                                             <label htmlFor={`collapse-toggle-${appliedCourse.id}`} className="cursor-pointer flex flex-row items-end">
-                                                                <h1 className="text-lg item-end justify-item-end">
+                                                                <h1 className="text-lg item-end justify-item-end hover:italic">
                                                                     Details
                                                                 </h1>
                                                                 <svg className="fill-current w-7 h-7 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -228,7 +228,7 @@ export default function AppliedCourses() {
                                                                                 <div className="collapse-title text-base flex justify-between items-center">
                                                                                     <h2 className="flex items-center min-w-14 align-bottom">Day {day.dayNumber}: {day.description}</h2>
                                                                                     <label htmlFor={`collapse-toggle-events-${day.dayNumber}-${module.id}`} className="cursor-pointer flex flex-row">
-                                                                                        <h6 className='text-xs'>Events</h6>
+                                                                                        <h6 className='text-xs hover:italic'>Events</h6>
                                                                                         <svg className="fill-current w-4 h-4 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                                                             <path d="M15.3 9.3l-3.3 3.3-3.3-3.3-1.4 1.4 4.7 4.7 4.7-4.7z" />
                                                                                         </svg>
@@ -301,7 +301,7 @@ export default function AppliedCourses() {
                                                                 <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
                                                             </div>
                                                             <label htmlFor={`collapse-toggle-${appliedCourse.id}`} className="cursor-pointer flex flex-row items-end">
-                                                                <h1 className="text-lg item-end justify-item-end">
+                                                                <h1 className="text-lg item-end justify-item-end hover:italic">
                                                                     Details
                                                                 </h1>
                                                                 <svg className="fill-current w-7 h-7 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -329,7 +329,7 @@ export default function AppliedCourses() {
                                                                                 <div className="collapse-title text-base flex justify-between items-center">
                                                                                     <h2 className="flex items-center min-w-14 align-bottom">Day {day.dayNumber}: {day.description}</h2>
                                                                                     <label htmlFor={`collapse-toggle-events-${day.dayNumber}-${module.id}`} className="cursor-pointer flex flex-row">
-                                                                                        <h6 className='text-xs'>Events</h6>
+                                                                                        <h6 className='text-xs hover:italic'>Events</h6>
                                                                                         <svg className="fill-current w-4 h-4 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                                                             <path d="M15.3 9.3l-3.3 3.3-3.3-3.3-1.4 1.4 4.7 4.7 4.7-4.7z" />
                                                                                         </svg>

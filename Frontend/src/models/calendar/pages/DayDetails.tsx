@@ -12,10 +12,25 @@ import WeekDay from "../sections/WeekDay";
 import { getDateAsString } from "../../../helpers/dateHelpers";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
+import { split } from "postcss/lib/list";
 
 export default function DayDetails() {
     const navigate = useNavigate();
     const date = getDateFromPath();
+
+    function getLastTrackedUrl(): string | null {
+        const history = JSON.parse(localStorage.getItem('urlHistory') || '[]');
+        
+        if (history.length > 0) {
+            return history[history.length - 1];
+        } else {
+            return null;
+        }
+    }
+    
+    const lastTrackedUrl = getLastTrackedUrl();
+    const splitUrl = lastTrackedUrl?.split("5173")    //change this for deploy!
+    console.log(splitUrl![1])
 
     const dateAsDate = new Date(date);
 
@@ -47,7 +62,7 @@ export default function DayDetails() {
                     <section className="w-1/2 flex justify-center bg-background">
                         <div className="w-full bg-base-100 shadow-xl p-5">
                             <div className="flex justify-end">
-                                <CloseBtn onClick={() => navigate(-1)} />
+                                <CloseBtn onClick={() => navigate(splitUrl![1])} />
                             </div>
                             <h1 className="mb-4 item-center text-xl font-bold text-center">{format(getDateAsString(dateAsDate), 'EEEE')}
                                 <br /> {dateAsDate.getDate()} {monthNames[dateAsDate.getMonth()]}

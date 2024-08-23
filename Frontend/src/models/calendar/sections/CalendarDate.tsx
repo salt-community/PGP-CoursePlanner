@@ -2,13 +2,17 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { today } from "../../../helpers/dateHelpers";
 import { DateContent } from "../Types";
+import { trackUrl } from "../../../helpers/helperMethods";
 
 type Props = {
     dateContent: DateContent[][];
     date: string;
     dateIndex: number;
 }
+
 export default function CalenderDate({ dateContent, date, dateIndex }: Props) {
+    trackUrl();
+
     const border = today == date ? "border border-2 border-primary hover:border-primary" : "";
     const text = today == date ? "text-primary font-bold" : "";
 
@@ -27,7 +31,7 @@ export default function CalenderDate({ dateContent, date, dateIndex }: Props) {
     return (
         <>
             <Link to={`/calendar/day/date=${date}`}
-                className={`${border} rounded-md hover:shadow-md mx-px w-1/7 h-24`}>
+                className={`${border} rounded-md hover:shadow-md mx-px w-1/7 h-24 hover:italic`}>
                 <h1 className={`${text} text-center self-start mb-1 mt-2`}>
                     {format(date, 'd')}
                 </h1>

@@ -9,8 +9,11 @@ import WeekDay from "./calendar/sections/WeekDay";
 import { DateContent } from "./calendar/Types";
 import { getTokens } from "../api/UserApi";
 import Login from "./login/Login";
+import { trackUrl } from "../helpers/helperMethods";
 
 export default function Home() {
+    trackUrl();
+
     const thisWeek = new Date();
     const nextWeek = new Date(thisWeek);
     nextWeek.setDate(thisWeek.getDate() + 7)
@@ -81,15 +84,15 @@ export default function Home() {
                                 {getDateAsString(day) == today
                                     ?
                                     <section className="flex flex-col border-2 border-primary rounded-lg w-full gap-3">
-                                        <Link to={`/calendar/day/date=${getDateAsString(day)}`}>
-                                            <h1 className="item-center text-xl font-bold text-center text-primary">{format(getDateAsString(day), 'EEEE')}
+                                        <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:italic">
+                                            <h1 className="item-center font-bold text-xl text-center text-primary">{format(getDateAsString(day), 'EEEE')}
                                                 <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                             </h1>
                                         </Link>
                                         <WeekDay key={format(day, 'd')} dateContent={weekDayDateContent[index]} />
                                     </section>
                                     : <section className="flex flex-col border border-black rounded-lg w-full gap-3">
-                                        <Link to={`/calendar/day/date=${getDateAsString(day)}`}>
+                                        <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:italic">
                                             <h1 className="item-center text-lg text-center">{format(getDateAsString(day), 'EEEE')}
                                                 <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                             </h1>
@@ -105,7 +108,7 @@ export default function Home() {
                         {weekDaysNextWeek.map((day, index) =>
                             <>
                                 <section className="flex flex-col border border-black rounded-lg w-full gap-3">
-                                    <Link to={`/calendar/day/date=${getDateAsString(day)}`}>
+                                    <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:font-bold">
                                         <h1 className="item-center text-lg text-center">{format(getDateAsString(day), 'EEEE')}
                                             <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                         </h1>
