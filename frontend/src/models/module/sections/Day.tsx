@@ -342,7 +342,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                 }
                             </div>
                             <label htmlFor={`collapse-toggle-events-${moduleId}-${day.dayNumber}`} className="w-1/12 cursor-pointer flex flex-row items-center justify-end">
-                                <h6 className='text-xs ml-2'>Events</h6>
+                                <h6 className='text-xs ml-2 hover:italic'>Events</h6>
                                 <svg className="fill-current w-4 h-4 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path d="M15.3 9.3l-3.3 3.3-3.3-3.3-1.4 1.4 4.7 4.7 4.7-4.7z" />
                                 </svg>

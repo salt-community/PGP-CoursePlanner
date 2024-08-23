@@ -23,7 +23,7 @@ export default function TimeLineCourse({ dates, course, width }: Props) {
           <div className=" flex flex-col mb-4 mt-4">
             {index == startIndex
               ? <div style={{ backgroundColor: course.color, "width": widthString }} className="h-10 pl-3 flex items-center font-bold text-white">
-                <Link to={`/activecourses`}>
+                <Link to={`/activecourses`} className="hover:italic">
                   {course.title} ({format(course.startDate, "d MMM")} - {format(course.endDate, "d MMM")})
                 </Link>
               </div>

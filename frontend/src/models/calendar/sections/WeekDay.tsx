@@ -38,7 +38,7 @@ export default function WeekDay({ dateContent }: Props) {
             {dateContent && dateContent.map((content, index) =>
                 <div key={content.id} style={{ borderColor: content.color }} className="border rounded-md ml-2 mr-2 mb-2 p-2">
                     <h2 style={{ color: content.color }} className="font-bold">
-                        <Link to={`/courses/details/${courseIds[index]}`}>
+                        <Link to={`/courses/details/${courseIds[index]}`} className="hover:italic">
                             {content.courseName}
                         </Link>
                     </h2>
@@ -47,7 +47,7 @@ export default function WeekDay({ dateContent }: Props) {
                             ? <>
                                 Weekend
                             </>
-                            : <Link to={`/modules/details/${moduleIds[index]}`}>
+                            : <Link to={`/modules/details/${moduleIds[index]}`} className="hover:italic">
                                 Module: {content.moduleName} (day {content.dayOfModule}/{content.totalDaysInModule})
                             </Link>
                         }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { addDays, subDays } from "date-fns";
 import Page from "../../../components/Page";
 import { useQuery } from "@tanstack/react-query";
@@ -24,9 +24,13 @@ const HorizontalCalendar: React.FC = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 7));
   const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 7));
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  var width = [16, 24, 32, 40, 48, 56, 64, 80, 96];
+  var width = [12, 16, 24, 32, 40, 48]; //56, 64, 80, 96
   const [widthIndex, setWidthIndex] = useState<number>(3);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const { data: appliedCourses } = useQuery({
     queryKey: ["appliedCourses"],
@@ -57,18 +61,52 @@ const HorizontalCalendar: React.FC = () => {
           color: ac.color,
         };
         newActivities.push(newActivity);
-
-        if (subDays(ac.startDate, 7) < startDate)
-          setStartDate(subDays(ac.startDate, 7));
-        if (addDays(ac.endDate!, 7) > endDate)
-          setEndDate(addDays(ac.endDate!, 7))
       });
-      setActivities(newActivities);
+
+      const activeActivities: Activity[] = newActivities.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd <= today }).filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed >= today });
+      const futureActivities: Activity[] =newActivities.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today });
+      const pastActivities: Activity[] = newActivities.filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today });
+
+      const sortActivities = (activities: Activity[]): Activity[] => {
+        return activities.sort((a, b) => {
+          const startDateA = new Date(a.startDate!);
+          const startDateB = new Date(b.startDate!);
+          const endDateA = new Date(a.endDate!);
+          const endDateB = new Date(b.endDate!);
+  
+          if (startDateA < startDateB) return -1;
+          if (startDateA > startDateB) return 1;
+          if (endDateA < endDateB) return -1;
+          if (endDateA > endDateB) return 1;
+          return 0;
+        });
+      };
+  
+      const sortedActiveActivities = sortActivities(activeActivities);
+      const sortedFutureActivities = sortActivities(futureActivities);
+      const sortedPastActivities = sortActivities(pastActivities);
+
+      const sortedActivities: Activity[] = [...sortedActiveActivities, ...sortedFutureActivities, ...sortedPastActivities]
+
+      var tempStartDate = startDate;
+      var tempEndDate = endDate;
+      sortedActivities.forEach(ac => {
+        if (subDays(ac.startDate, 7) < tempStartDate)
+          tempStartDate = subDays(ac.startDate, 7)
+        if (addDays(ac.endDate!, 7) > tempEndDate)
+          tempEndDate = addDays(ac.endDate!, 7)
+      });
+      setStartDate(tempStartDate);
+      setEndDate(tempEndDate);
+
+      setActivities(sortedActivities);
     }
   }, [appliedCourses, courses, modules]
   );
 
   const numDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+  const numDaysToday = Math.ceil((today.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+
   var dates: Date[] = [startDate];
   for (var i = 1; i < numDays + 1; i++)
     dates.push(addDays(startDate, i));
@@ -77,15 +115,24 @@ const HorizontalCalendar: React.FC = () => {
   if (activities.length > 0)
     height = ((activities.length + 1) * 80) + "px";
 
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const scrollWidth = scrollContainerRef.current.scrollWidth;
+      const clientWidth = scrollContainerRef.current.clientWidth;
+      scrollContainerRef.current.scrollLeft = (scrollWidth - clientWidth) * (numDaysToday / numDays);
+    }
+  }, [activities, widthIndex]);
+
+  console.log("activities", activities)
+  console.log("enddate", endDate)
+
   return (
     getCookie("access_token") == undefined ?
       <Login />
       :
       <Page>
-        <div style={{ "height": height }} className="overflow-x-auto px-4 flex flex-col">
-          {/* <div className="flex flex-col"> */}
+        <div ref={scrollContainerRef}  style={{ "height": height }} className="overflow-x-auto px-4 flex flex-col">
           <div className="flex flex-row">
-
             {activities.length > 0 &&
               <TimeLineXaxis dates={dates} width={width[widthIndex]}></TimeLineXaxis>
             }
@@ -99,7 +146,6 @@ const HorizontalCalendar: React.FC = () => {
               })}
             </>
           }
-          {/* </div> */}
         </div >
         <div className="border-b-2 border-gray-100"></div>
         <div className="ml-10 mr-10 flex flex-row justify-between">

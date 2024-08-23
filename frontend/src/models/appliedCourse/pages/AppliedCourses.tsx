@@ -7,9 +7,14 @@ import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
+import { useEffect, useState } from "react";
+import { AppliedCourseType } from "../../course/Types";
 
 export default function AppliedCourses() {
     const navigate = useNavigate();
+    const [activeCourses, setActiveCourses] = useState<AppliedCourseType[]>([]);
+    const [pastCourses, setPastCourses] = useState<AppliedCourseType[]>([]);
+    const [futureCourses, setFutureCourses] = useState<AppliedCourseType[]>([]);
 
     const { data: allAppliedCourses, isLoading, isError } = useQuery({
         queryKey: ['allAppliedCourses'],
@@ -27,6 +32,37 @@ export default function AppliedCourses() {
         }
     })
 
+    useEffect (() => {
+        if (allAppliedCourses) {
+        const tempActiveCourses = allAppliedCourses!.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd <= today }).filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed >= today });
+        const tempFutureCourses = allAppliedCourses!.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today })
+        const tempPastCourses = allAppliedCourses!.filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today })
+
+        const sortCourses = (activities: AppliedCourseType[]): AppliedCourseType[] => {
+            return activities.sort((a, b) => {
+              const startDateA = new Date(a.startDate!);
+              const startDateB = new Date(b.startDate!);
+              const endDateA = new Date(a.endDate!);
+              const endDateB = new Date(b.endDate!);
+      
+              if (startDateA < startDateB) return -1;
+              if (startDateA > startDateB) return 1;
+              if (endDateA < endDateB) return -1;
+              if (endDateA > endDateB) return 1;
+              return 0;
+            });
+          };
+      
+          const sortedActiveCourses = sortCourses(tempActiveCourses);
+          const sortedFutureCourses = sortCourses(tempFutureCourses);
+          const sortedPastCourses = sortCourses(tempPastCourses);
+
+          setActiveCourses(sortedActiveCourses);
+          setFutureCourses(sortedFutureCourses);
+          setPastCourses(sortedPastCourses)
+        }
+    }, [allAppliedCourses])
+
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     var today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -41,10 +77,10 @@ export default function AppliedCourses() {
                     {isError && <ErrorMessage />}
                     {allAppliedCourses
                         && <>
-                            {allAppliedCourses && allAppliedCourses.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd <= today }).filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed >= today }).length > 0
+                            {allAppliedCourses && activeCourses.length > 0
                                 ? <>
                                     <h1 className="text-xl text-primary mb-2 font-bold">Active bootcamps</h1>
-                                    {allAppliedCourses.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd <= today }).filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed >= today }).map((appliedCourse) =>
+                                    {activeCourses.map((appliedCourse) =>
                                         <>
                                             <div className="collapse border-primary border mb-2">
                                                 <input type="checkbox" id={`collapse-toggle-${appliedCourse.id}`} className="hidden" />
@@ -62,7 +98,7 @@ export default function AppliedCourses() {
                                                                 <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
                                                             </div>
                                                             <label htmlFor={`collapse-toggle-${appliedCourse.id}`} className="cursor-pointer flex flex-row items-end">
-                                                                <h1 className="text-lg item-end justify-item-end">
+                                                                <h1 className="text-lg item-end justify-item-end hover:italic">
                                                                     Details
                                                                 </h1>
                                                                 <svg className="fill-current w-7 h-7 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -90,7 +126,7 @@ export default function AppliedCourses() {
                                                                                 <div className="collapse-title text-base flex justify-between items-center">
                                                                                     <h2 className="flex items-center min-w-14 align-bottom">Day {day.dayNumber}: {day.description}</h2>
                                                                                     <label htmlFor={`collapse-toggle-events-${day.dayNumber}-${module.id}`} className="cursor-pointer flex flex-row">
-                                                                                        <h6 className='text-xs'>Events</h6>
+                                                                                        <h6 className='text-xs hover:italic'>Events</h6>
                                                                                         <svg className="fill-current w-4 h-4 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                                                             <path d="M15.3 9.3l-3.3 3.3-3.3-3.3-1.4 1.4 4.7 4.7 4.7-4.7z" />
                                                                                         </svg>
@@ -143,10 +179,10 @@ export default function AppliedCourses() {
                                     <h1 className="text-lg">No active bootcamps</h1>
                                     <div className="border border-1 border-gray-200 mt-6"></div>
                                 </>}
-                            {allAppliedCourses && allAppliedCourses.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today }).length > 0
+                            {allAppliedCourses && futureCourses.length > 0
                                 ? <>
                                     <h1 className="text-xl text-primary mt-6 mb-2 font-bold">Future bootcamps</h1>
-                                    {allAppliedCourses.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today }).map((appliedCourse) =>
+                                    {futureCourses.map((appliedCourse) =>
                                         <>
                                             <div className="collapse border-primary border mb-2">
                                                 <input type="checkbox" id={`collapse-toggle-${appliedCourse.id}`} className="hidden" />
@@ -164,7 +200,7 @@ export default function AppliedCourses() {
                                                                 <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
                                                             </div>
                                                             <label htmlFor={`collapse-toggle-${appliedCourse.id}`} className="cursor-pointer flex flex-row items-end">
-                                                                <h1 className="text-lg item-end justify-item-end">
+                                                                <h1 className="text-lg item-end justify-item-end hover:italic">
                                                                     Details
                                                                 </h1>
                                                                 <svg className="fill-current w-7 h-7 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -192,7 +228,7 @@ export default function AppliedCourses() {
                                                                                 <div className="collapse-title text-base flex justify-between items-center">
                                                                                     <h2 className="flex items-center min-w-14 align-bottom">Day {day.dayNumber}: {day.description}</h2>
                                                                                     <label htmlFor={`collapse-toggle-events-${day.dayNumber}-${module.id}`} className="cursor-pointer flex flex-row">
-                                                                                        <h6 className='text-xs'>Events</h6>
+                                                                                        <h6 className='text-xs hover:italic'>Events</h6>
                                                                                         <svg className="fill-current w-4 h-4 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                                                             <path d="M15.3 9.3l-3.3 3.3-3.3-3.3-1.4 1.4 4.7 4.7 4.7-4.7z" />
                                                                                         </svg>
@@ -244,10 +280,10 @@ export default function AppliedCourses() {
                                     <h1 className="text-lg">No future bootcamps</h1>
                                     <div className="border border-1 border-gray-200 mt-6"></div>
                                 </>}
-                            {allAppliedCourses && allAppliedCourses.filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today }).length > 0
+                            {allAppliedCourses && pastCourses.length > 0
                                 ? <>
                                     <h1 className="text-xl text-primary font-bold mt-6 mb-2">Completed bootcamps</h1>
-                                    {allAppliedCourses.filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today }).map((appliedCourse) =>
+                                    {pastCourses.map((appliedCourse) =>
                                         <>
                                             <div className="collapse border-primary border mb-2">
                                                 <input type="checkbox" id={`collapse-toggle-${appliedCourse.id}`} className="hidden" />
@@ -265,7 +301,7 @@ export default function AppliedCourses() {
                                                                 <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
                                                             </div>
                                                             <label htmlFor={`collapse-toggle-${appliedCourse.id}`} className="cursor-pointer flex flex-row items-end">
-                                                                <h1 className="text-lg item-end justify-item-end">
+                                                                <h1 className="text-lg item-end justify-item-end hover:italic">
                                                                     Details
                                                                 </h1>
                                                                 <svg className="fill-current w-7 h-7 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -293,7 +329,7 @@ export default function AppliedCourses() {
                                                                                 <div className="collapse-title text-base flex justify-between items-center">
                                                                                     <h2 className="flex items-center min-w-14 align-bottom">Day {day.dayNumber}: {day.description}</h2>
                                                                                     <label htmlFor={`collapse-toggle-events-${day.dayNumber}-${module.id}`} className="cursor-pointer flex flex-row">
-                                                                                        <h6 className='text-xs'>Events</h6>
+                                                                                        <h6 className='text-xs hover:italic'>Events</h6>
                                                                                         <svg className="fill-current w-4 h-4 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                                                             <path d="M15.3 9.3l-3.3 3.3-3.3-3.3-1.4 1.4 4.7 4.7 4.7-4.7z" />
                                                                                         </svg>

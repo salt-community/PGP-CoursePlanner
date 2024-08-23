@@ -5,6 +5,7 @@ import { getAllCourses } from "../../../api/CourseApi";
 import { getAllModules } from "../../../api/ModuleApi";
 import { today } from "../../../helpers/dateHelpers";
 import { format } from "date-fns";
+import { trackUrl } from "../../../helpers/helperMethods";
 
 type Props = {
     date: string;
@@ -12,6 +13,8 @@ type Props = {
 }
 
 export default function WeekDayCalendar({ date, dateContent }: Props) {
+    trackUrl();
+
     const border = today == date ? "border border-2 border-primary hover:border-primary" : "";
     const text = today == date ? "text-primary font-bold" : "";
 
@@ -42,14 +45,14 @@ export default function WeekDayCalendar({ date, dateContent }: Props) {
         <>
             <Link to={`/calendar/day/date=${date}`}
                 className={`${border} rounded-md hover:shadow-md mx-px w-1/7`}>
-                <h1 className={`${text} text-center self-start mb-4 mt-2`}>
+                <h1 className={`${text} text-center self-start mb-4 mt-2 hover:italic`}>
                     {format(date, 'd')}
                 </h1>
                 <div className={`rounded-lg flex flex-col justify-start w-full mb-3`}>
                     {dateContent && dateContent.map((content, index) =>
                         <div key={content.id} style={{ borderColor: content.color }} className="border rounded-md ml-2 mr-2 mb-2 p-1">
                             <h2 style={{ color: content.color }} className="font-bold">
-                                <Link to={`/courses/details/${courseIds[index]}`}>
+                                <Link to={`/courses/details/${courseIds[index]}`} className="hover:italic">
                                     {content.courseName}
                                 </Link>
                             </h2>
@@ -58,7 +61,7 @@ export default function WeekDayCalendar({ date, dateContent }: Props) {
                                     ? <>
                                         Weekend
                                     </>
-                                    : <Link to={`/modules/details/${moduleIds[index]}`}>
+                                    : <Link to={`/modules/details/${moduleIds[index]}`} className="hover:italic">
                                         {content.moduleName}
                                     </Link>
                                 }

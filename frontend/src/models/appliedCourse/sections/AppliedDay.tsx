@@ -115,7 +115,7 @@ export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDa
                                 }
                             </div>
                             <label htmlFor={`collapse-toggle-events-${moduleIndex}-${day.dayNumber}`} className=" w-1/12 cursor-pointer flex flex-row items-center justify-end">
-                                <h6 className='text-xs'>Events</h6>
+                                <h6 className='text-xs hover:italic'>Events</h6>
                                 <svg className="fill-current w-4 h-4 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                     <path d="M15.3 9.3l-3.3 3.3-3.3-3.3-1.4 1.4 4.7 4.7 4.7-4.7z" />
                                 </svg>
