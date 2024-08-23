@@ -4,11 +4,11 @@ steps:
     # build       Build an image from a Dockerfile
     # we don't need to specify docker here
     args: ['build', '-t', 'gcr.io/pgp-sandbox/courseplanner-backend:${_TAG}', '.']
-    dir: Backend
+    dir: backend
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/pgp-sandbox/courseplanner-backend:${_TAG}']
-    dir: Backend
+    dir: backend
 
   # Deploy backend to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
