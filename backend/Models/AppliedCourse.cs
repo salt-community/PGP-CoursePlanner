@@ -10,5 +10,7 @@ namespace backend.Models
         public int CourseId { get; set; }
         public string? Color { get; set; }
         public List<AppliedModule>? Modules { get; set;}
+
+        public required string Email {get; set;}
     }
 }
