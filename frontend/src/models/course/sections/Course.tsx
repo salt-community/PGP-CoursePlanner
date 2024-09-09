@@ -4,10 +4,12 @@ import SuccessBtn from "../../../components/buttons/SuccessBtn";
 import InputSmall from "../../../components/inputFields/InputSmall";
 import DropDown from "../../../components/DropDown";
 import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TrashBtn from "../../../components/buttons/TrashBtn";
 import { CourseProps, CourseModule, CourseType } from "../Types";
+import FilterArea from "./FilterArea";
+import { ModuleType } from "../../module/Types";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);
@@ -16,11 +18,17 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const [isIncorrectName, setIsIncorrectName] = useState<boolean>(false);
     const [isNotSelected, setIsNotSelected] = useState<boolean>(false);
     const navigate = useNavigate();
+    const [filteredModules, setFilteredModules] = useState<ModuleType[]>([]);
 
     const { data: modules } = useQuery({
         queryKey: ['modules'],
         queryFn: getAllModules
     });
+    useEffect(() => {
+        if (modules) {
+            setFilteredModules(modules);
+        }
+    }, [modules]);
 
     var selectedModules: CourseModule[] = [{
         courseId: 0,
@@ -156,6 +164,25 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             return true;
     }
 
+    async function funcFilter(formData: FormData) {
+        const inputTrack = formData.get('track') as string;
+        if (inputTrack) {
+            const selectedModules = modules!.filter(m => m.track?.includes(inputTrack));
+            setFilteredModules(selectedModules);
+        } else {
+            console.log("No track selected.");
+        }
+    }
+
+    const tracks: string[] = [];
+    for (let trackArray of modules!.filter(m => m.track!).map(m => m.track!)) {
+        trackArray.forEach(track => {
+            if (!tracks.find(t => t == track)) {
+                tracks.push(track);
+            }
+        });
+    }
+
     return (
         <section className="px-4 md:px-24 lg:px-56">
             <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
@@ -173,6 +200,9 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                             : <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
                         }
                     </div>
+                    {modules &&
+                        <FilterArea modules={modules} options={tracks} funcFilter={funcFilter} funcResetFilter={() => { }}></FilterArea>
+                    }
                 </div>
                 {isIncorrectName &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
@@ -201,8 +231,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                         <h2 className="self-center font-bold w-[100px]">Module {index + 1}</h2>
                         <div key={thisCourseModule.moduleId + "," + index} className="flex space-x-2">
                             {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds.some(mid => mid == 0)
-                                ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setSelectedModules={setCourseModules} isSelected={false} />
-                                : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={modules} setSelectedModules={setCourseModules} isSelected={true} />}
+                                ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={false} />
+                                : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={true} />}
                             {courseModules &&
                                 <div className="flex items-end self-center">
                                     <PrimaryBtn onClick={() => handleAddModules(index)}>+</PrimaryBtn>
