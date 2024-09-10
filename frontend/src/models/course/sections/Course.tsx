@@ -167,8 +167,13 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     async function funcFilter(formData: FormData) {
         const inputTrack = formData.get('track') as string;
         if (inputTrack) {
-            const selectedModules = modules!.filter(m => m.track?.includes(inputTrack));
-            setFilteredModules(selectedModules);
+            if (inputTrack == "All") {
+                setFilteredModules(modules!)
+            }
+            else {
+                const selectedModules = modules!.filter(m => m.track?.includes(inputTrack));
+                setFilteredModules(selectedModules);
+            }
         } else {
             console.log("No track selected.");
         }
