@@ -181,10 +181,10 @@ export default function AppliedCourses() {
                                 </>}
                             {allAppliedCourses && futureCourses.length > 0
                                 ? <>
-                                    <h1 className="text-xl text-primary mt-6 mb-2 font-bold">Future bootcamps</h1>
+                                    <h1 className="text-xl text-black mt-6 mb-2">Future bootcamps</h1>
                                     {futureCourses.map((appliedCourse) =>
                                         <>
-                                            <div className="collapse border-primary border mb-2">
+                                            <div className="collapse border-black border mb-2">
                                                 <input type="checkbox" id={`collapse-toggle-${appliedCourse.id}`} className="hidden" />
                                                 <div className="collapse-title flex flex-col w-full gap-4">
                                                     <h1 className="text-lg font-bold mb-2">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</h1>
@@ -213,7 +213,6 @@ export default function AppliedCourses() {
                                                 <div className="collapse-content w-full">
                                                     <div className="w-full border border-gray-200 mb-4"></div>
                                                     <section className="flex items-start flex-col gap-4 px-1 sm:p-0 md:px-24">
-
                                                         {appliedCourse.modules!.map((module, index) =>
                                                             <div key={module.id}>
                                                                 <h1 className="text-lg text-black font-bold self-start">
@@ -276,16 +275,16 @@ export default function AppliedCourses() {
                                     <div className="border border-1 border-gray-200 mt-6"></div>
                                 </>
                                 : <>
-                                    <h1 className="text-xl text-primary font-bold mt-8 mb-2">Future bootcamps</h1>
+                                    <h1 className="text-xl text-black mt-8 mb-2">Future bootcamps</h1>
                                     <h1 className="text-lg">No future bootcamps</h1>
                                     <div className="border border-1 border-gray-200 mt-6"></div>
                                 </>}
                             {allAppliedCourses && pastCourses.length > 0
                                 ? <>
-                                    <h1 className="text-xl text-primary font-bold mt-6 mb-2">Completed bootcamps</h1>
+                                    <h1 className="text-xl text-black mt-6 mb-2">Completed bootcamps</h1>
                                     {pastCourses.map((appliedCourse) =>
                                         <>
-                                            <div className="collapse border-primary border mb-2">
+                                            <div className="collapse border-black border mb-2">
                                                 <input type="checkbox" id={`collapse-toggle-${appliedCourse.id}`} className="hidden" />
                                                 <div className="collapse-title flex flex-col w-full gap-4">
                                                     <h1 className="text-lg font-bold mb-2">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</h1>
@@ -377,7 +376,7 @@ export default function AppliedCourses() {
                                     )}
                                 </>
                                 : <>
-                                    <h1 className="text-xl text-primary font-bold mt-8 mb-2">Completed bootcamps</h1>
+                                    <h1 className="text-xl text-black mt-8 mb-2">Completed bootcamps</h1>
                                     <h1 className="text-lg">No completed bootcamps</h1>
                                 </>}
                         </>

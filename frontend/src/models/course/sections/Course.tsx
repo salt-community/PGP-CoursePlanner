@@ -206,7 +206,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                         }
                     </div>
                     {modules &&
-                        <FilterArea modules={modules} options={tracks} funcFilter={funcFilter} funcResetFilter={() => { }}></FilterArea>
+                        <FilterArea modules={modules} options={tracks} funcFilter={funcFilter} funcResetFilter={() => {}}></FilterArea>
                     }
                 </div>
                 {isIncorrectName &&
