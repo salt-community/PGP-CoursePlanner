@@ -50,12 +50,6 @@ export default function Home() {
         }
     }
 
-
-
-
-
-
-
     const weekDayDateContent: DateContent[][] = [];
     weekDays.forEach(day => {
         const dayString = getDateAsString(day).replaceAll("/", "-");

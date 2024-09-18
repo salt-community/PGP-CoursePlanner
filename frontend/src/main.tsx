@@ -24,6 +24,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+import AppliedCourseDetails from './models/appliedCourse/pages/AppliedCourseDetails.tsx'
 
 const router = createBrowserRouter([
   {
@@ -93,6 +94,10 @@ const router = createBrowserRouter([
   {
     path: "/activecourses/edit/*",
     element: <EditAppliedCourse />,
+  },
+  {
+    path: "/activecourses/details/*",
+    element: <AppliedCourseDetails />,
   },
   {
     path: "/login",
