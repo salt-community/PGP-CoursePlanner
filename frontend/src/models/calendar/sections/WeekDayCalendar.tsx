@@ -18,29 +18,6 @@ export default function WeekDayCalendar({ date, dateContent }: Props) {
     const border = today == date ? "border border-2 border-primary hover:border-primary" : "";
     const text = today == date ? "text-primary font-bold" : "";
 
-    const courseIds: number[] = [];
-    const moduleIds: number[] = [];
-
-    if (dateContent) {
-        const { data: allCourses } = useQuery({
-            queryKey: ['courses'],
-            queryFn: () => getAllCourses()
-        });
-        dateContent.forEach(dc => {
-            const courseId = allCourses?.find(c => c.name == dc.courseName)?.id;
-            courseIds.push(courseId!);
-        });
-
-        const { data: allModules } = useQuery({
-            queryKey: ['modules'],
-            queryFn: () => getAllModules()
-        });
-        dateContent.forEach(dc => {
-            const moduleId = allModules?.find(m => m.name == dc.moduleName)?.id;
-            moduleIds.push(moduleId!);
-        });
-    }
-
     return (
         <>
             <Link to={`/calendar/day/date=${date}`}
@@ -52,7 +29,7 @@ export default function WeekDayCalendar({ date, dateContent }: Props) {
                     {dateContent && dateContent.map((content, index) =>
                         <div key={content.id} style={{ borderColor: content.color }} className="border rounded-md ml-2 mr-2 mb-2 p-1">
                             <h2 style={{ color: content.color }} className="font-bold">
-                                <Link to={`/courses/details/${courseIds[index]}`} className="hover:italic">
+                                <Link to={`/activecourses/details/${content.appliedCourseId}`} className="hover:italic">
                                     {content.courseName}
                                 </Link>
                             </h2>
@@ -61,9 +38,9 @@ export default function WeekDayCalendar({ date, dateContent }: Props) {
                                     ? <>
                                         Weekend
                                     </>
-                                    : <Link to={`/modules/details/${moduleIds[index]}`} className="hover:italic">
+                                    : <>
                                         {content.moduleName}
-                                    </Link>
+                                    </>
                                 }
                             </h3>
                             {content.events.length > 0 && content.events.map(eventItem =>

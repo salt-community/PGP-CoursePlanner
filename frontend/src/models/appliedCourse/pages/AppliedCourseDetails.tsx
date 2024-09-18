@@ -109,7 +109,6 @@ export default function AppliedCourseDetails() {
                                 )}
                             </section>
                             <div className="flex flex-row gap-2 px-1 mb-6 sm:p-0 md:px-24">
-                                <Link to={`/activecourses/`} className="btn btn-sm py-1 max-w-xs btn-primary text-white">Back to bootcamps</Link>
                                 <Link to={`/activecourses/edit/${appliedCourse.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit</Link>
                                 <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
                             </div>
