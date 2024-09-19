@@ -14,7 +14,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 export default function AppliedCourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
-    const [color, setColor] = useState<string>("");
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
     const [appliedModules, setAppliedModules] = useState<AppliedModuleType[]>();
 
@@ -24,7 +23,7 @@ export default function AppliedCourseDetails() {
     const [appliedCourse, setAppliedCourse] = useState<AppliedCourseType>();
     useEffect(() => {
         getAppliedCourseById(parseInt(appliedCourseId))
-            .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setEndDate(new Date(result!.endDate!)); setColor(result!.color!); setAppliedCourseName(result!.name!); setAppliedModules(result!.modules); setColor(result!.color!) })
+            .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setEndDate(new Date(result!.endDate!)); setAppliedCourseName(result!.name!); setAppliedModules(result!.modules);})
     }, [appliedCourseId]);
 
     const queryClient = useQueryClient();

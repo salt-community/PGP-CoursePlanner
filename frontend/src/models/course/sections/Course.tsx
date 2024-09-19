@@ -19,6 +19,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const [isNotSelected, setIsNotSelected] = useState<boolean>(false);
     const navigate = useNavigate();
     const [filteredModules, setFilteredModules] = useState<ModuleType[]>([]);
+    const [tracks, setTracks] = useState<string[]>([]);
 
     const { data: modules } = useQuery({
         queryKey: ['modules'],
@@ -27,6 +28,16 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     useEffect(() => {
         if (modules) {
             setFilteredModules(modules);
+
+            const tempTracks: string[] = [];
+            for (let trackArray of modules!.filter(m => m.track!).map(m => m.track!)) {
+                trackArray.forEach(track => {
+                    if (!tempTracks.find(t => t == track)) {
+                        tempTracks.push(track);
+                    }
+                });
+            }
+            setTracks(tempTracks);
         }
     }, [modules]);
 
@@ -168,101 +179,109 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         const inputTrack = formData.get('track') as string;
         if (inputTrack) {
             if (inputTrack == "All") {
-                setFilteredModules(modules!)
+                setFilteredModules(modules!);
             }
-            else {
-                const selectedModules = modules!.filter(m => m.track?.includes(inputTrack));
-                setFilteredModules(selectedModules);
-            }
-        } else {
-            console.log("No track selected.");
+        else {
+            const selectedModules = modules!.filter(m => m.track?.includes(inputTrack));
+            setFilteredModules(selectedModules);
+
+            const editedModules = [...courseModules];
+            editedModules.forEach((cm, index) => {
+                const isModulePossible = selectedModules.find(fm => fm.id == cm.moduleId);
+
+                const emptyCourseModule: CourseModule = {
+                    course: {
+                        name: "",
+                        numberOfWeeks: 1,
+                        modules: [],
+                        moduleIds: [0]
+                    }
+                }
+                if (isModulePossible == undefined)
+                    editedModules[index] = emptyCourseModule;
+            });
+            setCourseModules(editedModules);
         }
+    } else {
+        console.log("No track selected.");
     }
+}
 
-    const tracks: string[] = [];
-    for (let trackArray of modules!.filter(m => m.track!).map(m => m.track!)) {
-        trackArray.forEach(track => {
-            if (!tracks.find(t => t == track)) {
-                tracks.push(track);
-            }
-        });
-    }
-
-    return (
-        <section className="px-4 md:px-24 lg:px-56">
-            <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
-                <div className="flex flex-col justify-between">
-                    <div className="flex flex-row items-center">
-                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Course Name: </h2>
-                        <div className="w-3/4">
-                            <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
-                        </div>
+return (
+    <section className="px-4 md:px-24 lg:px-56">
+        <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+            <div className="flex flex-col justify-between">
+                <div className="flex flex-row items-center">
+                    <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Course Name: </h2>
+                    <div className="w-3/4">
+                        <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
                     </div>
-                    <div className="flex flex-row items-center">
-                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Number of weeks:</h2>
-                        {numOfWeeks == 0
-                            ? <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" />
-                            : <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
-                        }
-                    </div>
-                    {modules &&
-                        <FilterArea modules={modules} options={tracks} funcFilter={funcFilter} funcResetFilter={() => {}}></FilterArea>
+                </div>
+                <div className="flex flex-row items-center">
+                    <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Number of weeks:</h2>
+                    {numOfWeeks == 0
+                        ? <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" />
+                        : <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
                     }
                 </div>
-                {isIncorrectName &&
-                    <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
-                {modules && courseModules.map((thisCourseModule, index) =>
-                    <div className="flex flex-row">
-                        {index == 0 && index != courseModules.length - 1 &&
-                            <div className="flex flex-col w-[26px] mr-2">
-                                <button type="button" className="w-full h-full self-center" onClick={() => moveDown(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
-                            </div>
-                        }
-                        {index != 0 && index == courseModules.length - 1 &&
-                            <div className="flex flex-col w-[26px] mr-2">
-                                <button type="button" className="w-full h-full self-center" onClick={() => moveUp(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
-                            </div>
-                        }
-                        {index != 0 && index != courseModules.length - 1 &&
-                            <div className="flex flex-col w-[26px] mr-2">
-                                <button type="button" className="w-full h-full self-center" onClick={() => moveUp(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
-                                <button type="button" className="w-full h-full self-center" onClick={() => moveDown(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
-                            </div>
-                        }
-                        {index == 0 && index == courseModules.length - 1 &&
-                            <div className="flex flex-col w-[26px] mr-2">
-                            </div>
-                        }
-                        <h2 className="self-center font-bold w-[100px]">Module {index + 1}</h2>
-                        <div key={thisCourseModule.moduleId + "," + index} className="flex space-x-2">
-                            {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds.some(mid => mid == 0)
-                                ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={false} />
-                                : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={true} />}
-                            {courseModules &&
-                                <div className="flex items-end self-center">
-                                    <PrimaryBtn onClick={() => handleAddModules(index)}>+</PrimaryBtn>
-                                </div>}
-                            {courseModules.length > 1 &&
-                                <div className="flex items-end self-center">
-                                    <TrashBtn handleDelete={() => handleDeleteModule(index)} />
-                                </div>}
+                {modules &&
+                    <FilterArea modules={modules} options={tracks} funcFilter={funcFilter} funcResetFilter={() => { }}></FilterArea>
+                }
+            </div>
+            {isIncorrectName &&
+                <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
+            {modules && courseModules.map((thisCourseModule, index) =>
+                <div className="flex flex-row">
+                    {index == 0 && index != courseModules.length - 1 &&
+                        <div className="flex flex-col w-[26px] mr-2">
+                            <button type="button" className="w-full h-full self-center" onClick={() => moveDown(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
                         </div>
-                    </div>)}
-                {isIncorrectModuleInput &&
-                    <p className="error-message text-red-600 text-sm" id="invalid-helper">Cannot select duplicate modules</p>}
-                {isNotSelected &&
-                    <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a module from the dropdown menu</p>}
-                {Math.floor(filledDays / 5) == 1 && numOfWeeks == 1 &&
-                    <p>You have selected {Math.floor(filledDays / 5)} week and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
-                {Math.floor(filledDays / 5) == 1 && numOfWeeks != 1 &&
-                    <p>You have selected {Math.floor(filledDays / 5)} week and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
-                {Math.floor(filledDays / 5) != 1 && numOfWeeks == 1 &&
-                    <p>You have selected {Math.floor(filledDays / 5)} weeks and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
-                {Math.floor(filledDays / 5) != 1 && numOfWeeks != 1 &&
-                    <p>You have selected {Math.floor(filledDays / 5)} weeks and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
-                <SuccessBtn value={buttonText}></SuccessBtn>
-            </form>
-        </section>
-    )
+                    }
+                    {index != 0 && index == courseModules.length - 1 &&
+                        <div className="flex flex-col w-[26px] mr-2">
+                            <button type="button" className="w-full h-full self-center" onClick={() => moveUp(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
+                        </div>
+                    }
+                    {index != 0 && index != courseModules.length - 1 &&
+                        <div className="flex flex-col w-[26px] mr-2">
+                            <button type="button" className="w-full h-full self-center" onClick={() => moveUp(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
+                            <button type="button" className="w-full h-full self-center" onClick={() => moveDown(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
+                        </div>
+                    }
+                    {index == 0 && index == courseModules.length - 1 &&
+                        <div className="flex flex-col w-[26px] mr-2">
+                        </div>
+                    }
+                    <h2 className="self-center font-bold w-[100px]">Module {index + 1}</h2>
+                    <div key={thisCourseModule.moduleId + "," + index} className="flex space-x-2">
+                        {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds.some(mid => mid == 0)
+                            ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={false} />
+                            : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={true} />}
+                        {courseModules &&
+                            <div className="flex items-end self-center">
+                                <PrimaryBtn onClick={() => handleAddModules(index)}>+</PrimaryBtn>
+                            </div>}
+                        {courseModules.length > 1 &&
+                            <div className="flex items-end self-center">
+                                <TrashBtn handleDelete={() => handleDeleteModule(index)} />
+                            </div>}
+                    </div>
+                </div>)}
+            {isIncorrectModuleInput &&
+                <p className="error-message text-red-600 text-sm" id="invalid-helper">Cannot select duplicate modules</p>}
+            {isNotSelected &&
+                <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a module from the dropdown menu</p>}
+            {Math.floor(filledDays / 5) == 1 && numOfWeeks == 1 &&
+                <p>You have selected {Math.floor(filledDays / 5)} week and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
+            {Math.floor(filledDays / 5) == 1 && numOfWeeks != 1 &&
+                <p>You have selected {Math.floor(filledDays / 5)} week and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
+            {Math.floor(filledDays / 5) != 1 && numOfWeeks == 1 &&
+                <p>You have selected {Math.floor(filledDays / 5)} weeks and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
+            {Math.floor(filledDays / 5) != 1 && numOfWeeks != 1 &&
+                <p>You have selected {Math.floor(filledDays / 5)} weeks and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
+            <SuccessBtn value={buttonText}></SuccessBtn>
+        </form>
+    </section>
+)
 }
 

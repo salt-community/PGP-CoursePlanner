@@ -12,14 +12,26 @@ import { ModuleType } from "../Types";
 
 export default function Modules() {
     const [filteredModules, setFilteredModules] = useState<ModuleType[]>([]);
+    const [tracks, setTracks] = useState<string[]>([]);
 
     const { data: modules, isLoading, isError } = useQuery({
         queryKey: ['modules'],
         queryFn: getAllModules
     });
+
     useEffect(() => {
         if (modules) {
             setFilteredModules(modules);
+
+            const tempTracks: string[] = [];
+            for (let trackArray of modules!.filter(m => m.track!).map(m => m.track!)) {
+                trackArray.forEach(track => {
+                    if (!tempTracks.find(t => t == track)) {
+                        tempTracks.push(track);
+                    }
+                });
+            }
+            setTracks(tempTracks);
         }
     }, [modules]);
 
@@ -36,15 +48,6 @@ export default function Modules() {
         } else {
             console.log("No track selected.");
         }
-    }
-
-    const tracks: string[] = [];
-    for (let trackArray of modules!.filter(m => m.track!).map(m => m.track!)) {
-        trackArray.forEach(track => {
-            if (!tracks.find(t => t == track)) {
-                tracks.push(track);
-            }
-        });
     }
 
     return (
