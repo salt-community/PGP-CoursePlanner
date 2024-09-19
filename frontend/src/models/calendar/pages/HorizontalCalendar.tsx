@@ -57,7 +57,7 @@ const HorizontalCalendar: React.FC = () => {
 
         var newActivity: Activity = {
           id: ac.id!,
-          title: c.name,
+          title: ac.name,
           startDate: new Date(ac.startDate),
           endDate: new Date(ac.endDate!),
           color: ac.color,
