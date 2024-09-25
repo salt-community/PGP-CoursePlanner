@@ -1,8 +1,5 @@
 import { DateContent } from "../Types";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getAllCourses } from "../../../api/CourseApi";
-import { getAllModules } from "../../../api/ModuleApi";
 
 type Props = {
     dateContent: DateContent[] | undefined

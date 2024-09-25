@@ -1,5 +1,5 @@
 import Page from "../../../components/Page";
-import { getIdFromPath } from "../../../helpers/helperMethods";
+import { getIdFromPath, trackUrl } from "../../../helpers/helperMethods";
 import { useEffect, useState } from "react";
 import { deleteAppliedCourse, getAppliedCourseById } from "../../../api/AppliedCourseApi";
 import 'reactjs-popup/dist/index.css';
@@ -12,6 +12,8 @@ import DeleteBtn from "../../../components/buttons/DeleteBtn";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function AppliedCourseDetails() {
+    trackUrl();
+    
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");

@@ -9,8 +9,11 @@ import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
 import { useEffect, useState } from "react";
 import { AppliedCourseType } from "../../course/Types";
+import { trackUrl } from "../../../helpers/helperMethods";
 
 export default function AppliedCourses() {
+    trackUrl();
+    
     const navigate = useNavigate();
     const [activeCourses, setActiveCourses] = useState<AppliedCourseType[]>([]);
     const [pastCourses, setPastCourses] = useState<AppliedCourseType[]>([]);
