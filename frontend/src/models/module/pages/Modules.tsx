@@ -9,8 +9,11 @@ import { useQuery } from "@tanstack/react-query";
 import FilterArea from "../../course/sections/FilterArea";
 import { useEffect, useState } from "react";
 import { ModuleType } from "../Types";
+import { trackUrl } from "../../../helpers/helperMethods";
 
 export default function Modules() {
+    trackUrl();
+    
     const [filteredModules, setFilteredModules] = useState<ModuleType[]>([]);
     const [tracks, setTracks] = useState<string[]>([]);
 
