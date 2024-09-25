@@ -6,15 +6,15 @@ import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
+import { trackUrl } from "../../../helpers/helperMethods";
 
 export default function Courses() {
+    trackUrl();
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['courses'],
         queryFn: getAllCourses
     });
-
-
 
     return (
         getCookie("access_token") == undefined

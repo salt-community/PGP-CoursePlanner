@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { deleteCourse, getCourseById } from "../../../api/CourseApi";
 import Page from "../../../components/Page";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getIdFromPath } from "../../../helpers/helperMethods";
+import { getIdFromPath, trackUrl } from "../../../helpers/helperMethods";
 import { getAllModules } from "../../../api/ModuleApi";
 import { useEffect, useRef, useState } from "react";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -23,6 +23,8 @@ import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
 
 export default function CourseDetails() {
+    trackUrl();
+
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
     const [isOpened, setIsOpened] = useState<boolean>(false);
@@ -182,8 +184,8 @@ export default function CourseDetails() {
                         </section>
 
                         <div className="pt-4 flex gap-4 flex-col sm:flex-row">
-                            <DeleteBtn onClick={() => mutation.mutate(parseInt(courseId))} >Delete Course</DeleteBtn>
                             <Link to={`/courses/edit/${courseId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Course</Link>
+                            <DeleteBtn onClick={() => mutation.mutate(parseInt(courseId))} >Delete Course</DeleteBtn>
                         </div>
                         <p className="error-message text-red-600 text-sm hidden" id="invalid-module-delete">Cannot delete this course, it is used in the calendar!</p>
                         <div className="flex gap-4 mt-10">
