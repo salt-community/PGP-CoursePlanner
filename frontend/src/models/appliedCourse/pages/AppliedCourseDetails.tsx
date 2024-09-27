@@ -11,7 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import DeleteBtn from "../../../components/buttons/DeleteBtn";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PDFCourseGenerator from "../sections/PDFCourseGenerator";
-import PDFWeekGenerator from "../sections/PDFWeekGenerator";
+import PDFGenerator from "../sections/PDFGenerator";
 
 export default function AppliedCourseDetails() {
     trackUrl();
@@ -41,8 +41,25 @@ export default function AppliedCourseDetails() {
         }
     })
 
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    function getWeekDayList() {
+        let days = []
+        let end = new Date(endDate)
+        for (let start = new Date(startDate); start <= end; start.setDate(start.getDate() + 1)) {
+            let day = start.getDay();
+            if (day != 6 && day != 0) {
+                days.push(new Date(start));
+            }
+        }
+        days.push(endDate)
+        return days;
+    }
 
+    const courseWeekDates = getWeekDayList();
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const courseWeekDays = courseWeekDates.map(e =>  monthNamesShort[e.getMonth()] + " " + e.getDate().toString());
+
+    let counter = -1;
     return (
         getCookie("access_token") == undefined
             ? <Login />
@@ -62,51 +79,55 @@ export default function AppliedCourseDetails() {
                                         <h1 className="text-lg text-black font-bold self-start">
                                             Module {index + 1}: {module.name}
                                         </h1>
-                                        {module.days.map((day) =>
-                                            <div className="w-full">
-                                                {day.events.length > 0
-                                                    ? <div className="collapse w-full">
-                                                        <input type="checkbox" id={`collapse-toggle-events-${day.dayNumber}-${module.id}`} className="hidden" />
-                                                        <div className="collapse-title text-base flex justify-between items-center">
-                                                            <h2 className="flex items-center min-w-14 align-bottom">Day {day.dayNumber}: {day.description}</h2>
-                                                            <label htmlFor={`collapse-toggle-events-${day.dayNumber}-${module.id}`} className="cursor-pointer flex flex-row">
-                                                                <h6 className='text-xs hover:italic'>Events</h6>
-                                                                <svg className="fill-current w-4 h-4 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                                    <path d="M15.3 9.3l-3.3 3.3-3.3-3.3-1.4 1.4 4.7 4.7 4.7-4.7z" />
-                                                                </svg>
-                                                            </label>
-                                                        </div>
-                                                        <div className="collapse-content w-full">
-                                                            <table className="table table-sm table-fixed">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th className="w-2/12">Event name</th>
-                                                                        <th className="w-6/12">Description</th>
-                                                                        <th className="w-2/12">Start</th>
-                                                                        <th className="w-2/12">End</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    {day.events.map((event) => (
-                                                                        <tr key={event.name} className="gap-2">
-                                                                            <td>{event.name}</td>
-                                                                            <td>{event.description}</td>
-                                                                            <td>{event.startTime}</td>
-                                                                            <td>{event.endTime}</td>
+                                        {module.days.map((day) => {
+                                            counter++;
+                                            return (
+                                                <div className="w-full">
+                                                    {day.events.length > 0
+                                                        ? <div className="collapse w-full">
+                                                            <input type="checkbox" id={`collapse-toggle-events-${day.dayNumber}-${module.id}`} className="hidden" />
+                                                            <div className="collapse-title text-base flex justify-between items-center">
+                                                                <h2 className="flex items-center min-w-14 align-bottom">Day {day.dayNumber} ({courseWeekDays[counter]}): {day.description}</h2>
+                                                                <label htmlFor={`collapse-toggle-events-${day.dayNumber}-${module.id}`} className="cursor-pointer flex flex-row">
+                                                                    <h6 className='text-xs hover:italic'>Events</h6>
+                                                                    <svg className="fill-current w-4 h-4 transform rotate-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                                        <path d="M15.3 9.3l-3.3 3.3-3.3-3.3-1.4 1.4 4.7 4.7 4.7-4.7z" />
+                                                                    </svg>
+                                                                </label>
+                                                            </div>
+                                                            <div className="collapse-content w-full">
+                                                                <table className="table table-sm table-fixed">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th className="w-2/12">Event name</th>
+                                                                            <th className="w-6/12">Description</th>
+                                                                            <th className="w-2/12">Start</th>
+                                                                            <th className="w-2/12">End</th>
                                                                         </tr>
-                                                                    ))}
-                                                                </tbody>
-                                                            </table>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {day.events.map((event) => (
+                                                                            <tr key={event.name} className="gap-2">
+                                                                                <td>{event.name}</td>
+                                                                                <td>{event.description}</td>
+                                                                                <td>{event.startTime}</td>
+                                                                                <td>{event.endTime}</td>
+                                                                            </tr>
+                                                                        ))}
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    : <div className="collapse w-full">
-                                                        <input type="checkbox" id={`collapse-toggle-events-${day.dayNumber}-${module.id}`} className="hidden" />
-                                                        <div className="collapse-title text-base flex justify-between items-center">
-                                                            <h2 className="flex items-center min-w-14 align-bottom">Day {day.dayNumber}: {day.description}</h2>
+                                                        : <div className="collapse w-full">
+                                                            <input type="checkbox" id={`collapse-toggle-events-${day.dayNumber}-${module.id}`} className="hidden" />
+                                                            <div className="collapse-title text-base flex justify-between items-center">
+                                                                <h2 className="flex items-center min-w-14 align-bottom">Day {day.dayNumber}: {day.description}</h2>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                }
-                                            </div>
+                                                    }
+                                                </div>
+                                            )
+                                        }
                                         )}
                                     </div>
                                 )}
@@ -115,7 +136,7 @@ export default function AppliedCourseDetails() {
                                 <Link to={`/activecourses/edit/${appliedCourse.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit</Link>
                                 <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
                                 <PDFCourseGenerator appliedCourse={appliedCourse!}></PDFCourseGenerator>
-                                <PDFWeekGenerator appliedCourse={appliedCourse}></PDFWeekGenerator>
+                                <PDFGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays}></PDFGenerator>
                             </div>
                         </section>
                     </>

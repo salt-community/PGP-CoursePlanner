@@ -83,7 +83,7 @@ export default function PDFCourseGenerator({ appliedCourse }: PDFCourseGenerator
     return (
         <button className="btn btn-sm py-1 max-w-xs btn-primary text-white">
             <a href={instance.url!} download="test.pdf">
-                Download course overview
+                Create PDF Week Overview
             </a>
         </button>
     );

@@ -1,12 +1,12 @@
-import React from 'react';
 import { Page, Text, View, Document, StyleSheet, usePDF } from '@react-pdf/renderer';
 import { AppliedCourseType } from '../../course/Types';
 
-type PDFWeekGeneratorProps = {
+type PDFGeneratorProps = {
     appliedCourse: AppliedCourseType;
+    courseWeekDays: string[];
 };
 
-export default function PDFWeekGenerator({ appliedCourse }: PDFWeekGeneratorProps) {
+export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGeneratorProps) {
 
     const styles = StyleSheet.create({
         page: {
@@ -43,15 +43,27 @@ export default function PDFWeekGenerator({ appliedCourse }: PDFWeekGeneratorProp
             fontWeight: 'bold',
         },
         col1: {
-            width: '25%',
+            width: '20%',
             fontSize: 12
         },
         col2: {
-            width: '75%',
+            width: '20%',
+            fontSize: 12
+        },
+        col3: {
+            width: '60%',
             fontSize: 12
         },
     })
 
+    const moduleDays: string[] = [];
+    let dayCounter = 0;
+    for (let i = 0; i<appliedCourse.modules!.length; i++) {
+        moduleDays.push(courseWeekDays[dayCounter]);
+        dayCounter = dayCounter + appliedCourse.modules![i].numberOfDays;
+    }
+    
+    let counter = -1;
     const MyDocument = () => (
         <Document>
             <Page size="A4" style={styles.page}>
@@ -61,12 +73,14 @@ export default function PDFWeekGenerator({ appliedCourse }: PDFWeekGeneratorProp
                 <View style={styles.table}>
                     <View style={[styles.row, styles.bold, styles.header]}>
                         <Text style={styles.col1}>Module</Text>
-                        <Text style={styles.col2}>Module description</Text>
+                        <Text style={styles.col2}>Date</Text>
+                        <Text style={styles.col3}>Module description</Text>
                     </View>
                     {appliedCourse.modules!.map((module, moduleIndex) => (
                         <View key={moduleIndex} style={styles.row} wrap={false}>
                             <Text style={styles.col1}>{moduleIndex + 1}</Text>
-                            <Text style={styles.col2}>{module.name}</Text>
+                            <Text style={styles.col2}>{moduleDays[moduleIndex]}</Text>
+                            <Text style={styles.col3}>{module.name}</Text>
                         </View>
                     ))}
                 </View>
@@ -74,19 +88,24 @@ export default function PDFWeekGenerator({ appliedCourse }: PDFWeekGeneratorProp
             {appliedCourse.modules!.map((module, moduleIndex) => (
                 <Page size="A4" style={styles.page}>
                     <View style={styles.section}>
-                        <Text style={styles.text}>WEEK {moduleIndex+1}: {module.name.toUpperCase()}</Text>
+                        <Text style={styles.text}>MODULE {moduleIndex + 1}: {module.name.toUpperCase()}</Text>
                     </View>
                     <View style={styles.table}>
                         <View style={[styles.row, styles.bold, styles.header]}>
                             <Text style={styles.col1}>Day</Text>
-                            <Text style={styles.col2}>Description</Text>
+                            <Text style={styles.col2}>Date</Text>
+                            <Text style={styles.col3}>Topic</Text>
                         </View>
-                        {module.days.map((day, dayIndex) => (
-                            <View key={dayIndex} style={styles.row} wrap={false}>
-                                <Text style={styles.col1}>{dayIndex + 1}</Text>
-                                <Text style={styles.col2}>{day.description}</Text>
-                            </View>
-                        ))}
+                        {module.days.map((day, dayIndex) => {
+                            counter++;
+                            return (
+                                <View key={dayIndex} style={styles.row} wrap={false}>
+                                    <Text style={styles.col1}>{dayIndex + 1}</Text>
+                                    <Text style={styles.col2}>{courseWeekDays[counter]}</Text>
+                                    <Text style={styles.col3}>{day.description}</Text>
+                                </View>
+                            )
+                        })}
                     </View>
                 </Page>
             ))}
@@ -101,7 +120,7 @@ export default function PDFWeekGenerator({ appliedCourse }: PDFWeekGeneratorProp
     return (
         <button className="btn btn-sm py-1 max-w-xs btn-primary text-white">
             <a href={instance.url!} download="test.pdf">
-                Download week overviews
+                Create PDF Complete Overview
             </a>
         </button>
     );
