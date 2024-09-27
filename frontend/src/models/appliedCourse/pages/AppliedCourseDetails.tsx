@@ -10,10 +10,12 @@ import { AppliedCourseType } from "../../course/Types";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteBtn from "../../../components/buttons/DeleteBtn";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import PDFCourseGenerator from "../sections/PDFCourseGenerator";
+import PDFWeekGenerator from "../sections/PDFWeekGenerator";
 
 export default function AppliedCourseDetails() {
     trackUrl();
-    
+
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
@@ -25,7 +27,7 @@ export default function AppliedCourseDetails() {
     const [appliedCourse, setAppliedCourse] = useState<AppliedCourseType>();
     useEffect(() => {
         getAppliedCourseById(parseInt(appliedCourseId))
-            .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setEndDate(new Date(result!.endDate!)); setAppliedCourseName(result!.name!); setAppliedModules(result!.modules);})
+            .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setEndDate(new Date(result!.endDate!)); setAppliedCourseName(result!.name!); setAppliedModules(result!.modules); })
     }, [appliedCourseId]);
 
     const queryClient = useQueryClient();
@@ -112,6 +114,8 @@ export default function AppliedCourseDetails() {
                             <div className="flex flex-row gap-2 px-1 mb-6 sm:p-0 md:px-24">
                                 <Link to={`/activecourses/edit/${appliedCourse.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit</Link>
                                 <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
+                                <PDFCourseGenerator appliedCourse={appliedCourse!}></PDFCourseGenerator>
+                                <PDFWeekGenerator appliedCourse={appliedCourse}></PDFWeekGenerator>
                             </div>
                         </section>
                     </>
