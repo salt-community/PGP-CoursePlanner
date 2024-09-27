@@ -2,11 +2,11 @@ import React from 'react';
 import { Page, Text, View, Document, StyleSheet, usePDF } from '@react-pdf/renderer';
 import { AppliedCourseType } from '../../course/Types';
 
-type PDFCourseGeneratorProps = {
+type PDFWeekGeneratorProps = {
     appliedCourse: AppliedCourseType;
 };
 
-export default function PDFCourseGenerator({ appliedCourse }: PDFCourseGeneratorProps) {
+export default function PDFWeekGenerator({ appliedCourse }: PDFWeekGeneratorProps) {
 
     const styles = StyleSheet.create({
         page: {
