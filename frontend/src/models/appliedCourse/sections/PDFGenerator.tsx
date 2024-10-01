@@ -1,5 +1,6 @@
 import { Page, Text, View, Document, StyleSheet, usePDF } from '@react-pdf/renderer';
 import { AppliedCourseType } from '../../course/Types';
+import { grey } from '@mui/material/colors';
 
 type PDFGeneratorProps = {
     appliedCourse: AppliedCourseType;
@@ -54,17 +55,35 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
             width: '60%',
             fontSize: 12
         },
+        eventCol1: {
+            width: '25%',
+            fontSize: 12
+        },
+        eventCol2: {
+            width: '55%',
+            fontSize: 12
+        },
+        eventCol3: {
+            width: '20%',
+            fontSize: 12
+        },
+        eventTable: {
+            width: '90%',
+            alignSelf: 'center',
+            color: 'grey',
+            fontSize: 8
+        },
     })
 
     const moduleDays: string[] = [];
     let dayCounter = 0;
-    for (let i = 0; i<appliedCourse.modules!.length; i++) {
+    for (let i = 0; i < appliedCourse.modules!.length; i++) {
         moduleDays.push(courseWeekDays[dayCounter]);
         dayCounter = dayCounter + appliedCourse.modules![i].numberOfDays;
     }
-    
+
     let counter = -1;
-    const MyDocument = () => (
+    const CourseOverviewDocument = () => (
         <Document>
             <Page size="A4" style={styles.page}>
                 <View style={styles.section}>
@@ -99,11 +118,23 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
                         {module.days.map((day, dayIndex) => {
                             counter++;
                             return (
-                                <View key={dayIndex} style={styles.row} wrap={false}>
-                                    <Text style={styles.col1}>{dayIndex + 1}</Text>
-                                    <Text style={styles.col2}>{courseWeekDays[counter]}</Text>
-                                    <Text style={styles.col3}>{day.description}</Text>
-                                </View>
+                                <>
+                                    <View key={dayIndex} style={styles.row} wrap={false}>
+                                        <Text style={styles.col1}>{dayIndex + 1}</Text>
+                                        <Text style={styles.col2}>{courseWeekDays[counter]}</Text>
+                                        <Text style={styles.col3}>{day.description}</Text>
+                                    </View>
+
+                                    {day.events.length > 0 && day.events.map((event, eventIndex) => (
+                                        <View key={eventIndex} style={[styles.eventTable, styles.row]} wrap={false}>
+                                            <Text style={styles.eventCol1}>{event.name}</Text>
+                                            <Text style={styles.eventCol2}>{event.description!}</Text>
+                                            <Text style={styles.eventCol3}>{event.startTime + "-" + event.endTime}</Text>
+                                        </View>
+                                    ))
+                                    }
+
+                                </>
                             )
                         })}
                     </View>
@@ -112,14 +143,29 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
         </Document >
     );
 
-    const [instance, updateInstance] = usePDF({ document: <MyDocument /> });
+    let startDay = new Date(appliedCourse.startDate).getDate().toString();
+    if (startDay.length == 1)
+        startDay = "0" + startDay;
+    let startMonth = new Date(appliedCourse.startDate).getMonth().toString();
+    if (startMonth.length == 1)
+        startMonth = "0" + startMonth;
+
+    let endDay = new Date(appliedCourse.endDate!).getDate().toString();
+    if (endDay.length == 1)
+        endDay = "0" + endDay;
+    let endMonth = new Date(appliedCourse.endDate!).getMonth().toString();
+    if (endMonth.length == 1)
+        endMonth = "0" + endMonth;
+
+    const [instance, _updateInstance] = usePDF({ document: <CourseOverviewDocument /> });
+    const documentName = "CourseLayout_" + appliedCourse.name + "_" + startDay + startMonth + new Date(appliedCourse.startDate).getFullYear() + "_" + endDay + endMonth + new Date(appliedCourse.endDate!).getFullYear();
 
     if (instance.loading) return <div>Loading ...</div>;
     if (instance.error) return <div>Something went wrong: {instance.error}</div>;
 
     return (
         <button className="btn btn-sm py-1 max-w-xs btn-primary text-white">
-            <a href={instance.url!} download="test.pdf">
+            <a href={instance.url!} download={documentName}>
                 Create PDF Complete Overview
             </a>
         </button>
