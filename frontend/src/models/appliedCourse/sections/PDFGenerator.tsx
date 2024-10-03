@@ -158,7 +158,7 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
         endMonth = "0" + endMonth;
 
     const [instance, _updateInstance] = usePDF({ document: <CourseOverviewDocument /> });
-    const documentName = "CourseLayout_" + appliedCourse.name + "_" + startDay + startMonth + new Date(appliedCourse.startDate).getFullYear() + "_" + endDay + endMonth + new Date(appliedCourse.endDate!).getFullYear();
+    const documentName = "CourseOverview_" + appliedCourse.name + "_" + startDay + startMonth + new Date(appliedCourse.startDate).getFullYear() + "_" + endDay + endMonth + new Date(appliedCourse.endDate!).getFullYear() + ".pdf";
 
     if (instance.loading) return <div>Loading ...</div>;
     if (instance.error) return <div>Something went wrong: {instance.error}</div>;
@@ -166,7 +166,7 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
     return (
         <button className="btn btn-sm py-1 max-w-xs btn-primary text-white">
             <a href={instance.url!} download={documentName}>
-                Create PDF Complete Overview
+                Create PDF - Complete Overview
             </a>
         </button>
     );
