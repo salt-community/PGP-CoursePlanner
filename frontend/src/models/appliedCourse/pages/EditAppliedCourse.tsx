@@ -37,12 +37,12 @@ export default function () {
         queryKey: ['modules'],
         queryFn: getAllModules
     });
-    
+
     const { data: allAppliedCourses } = useQuery({
         queryKey: ['appliedCourses'],
         queryFn: () => getAllAppliedCourses()
     });
-    
+
     const appliedCourseId = getIdFromPath();
     const [appliedCourse, setAppliedCourse] = useState<AppliedCourseType>();
     useEffect(() => {
@@ -259,6 +259,18 @@ export default function () {
         }
     })
 
+    function getLastTrackedUrl(): string | null {
+        const history = JSON.parse(localStorage.getItem('urlHistory') || '[]');
+        
+        if (history.length > 0) {
+            return history[history.length - 1];
+        } else {
+            return null;
+        }
+    }
+    const lastTrackedUrl = getLastTrackedUrl();
+    const splitUrl = lastTrackedUrl?.split("5173")    //change this for deploy!
+
     return (
         getCookie("access_token") == undefined
             ? <Login />
@@ -373,7 +385,7 @@ export default function () {
                                                 </label>
                                                 <div className="w-1/6 flex gap-1 justify-end items-center">
                                                     <PrimaryBtn onClick={() => handleAddModule(index)}>+</PrimaryBtn>
-                                                    {appliedModules.length > 1 
+                                                    {appliedModules.length > 1
                                                         ? <TrashBtn handleDelete={() => handleDeleteModule(index)} />
                                                         : <div className="w-12"></div>
                                                     }
@@ -385,12 +397,14 @@ export default function () {
                                         </div>}
                                 </>
                             )}
-
                             {isInvalidDate &&
                                 <p className="error-message text-red-600 text-sm mt-4" id="invalid-helper">Please select a weekday for the start date</p>}
                             {isInvalidModule &&
                                 <p className="error-message text-red-600 text-sm mt-4" id="invalid-helper">Please select a module</p>}
-                            <button onClick={handleEdit} className="btn btn-sm mt-6 max-w-48 btn-success text-white">Save all changes</button>
+                            <div className="flex flex-row gap-2">
+                                <button onClick={handleEdit} className="btn btn-sm mt-6 max-w-48 btn-success text-white">Save all changes</button>
+                                <button onClick={() => navigate(splitUrl![1])} className="btn btn-sm mt-6 max-w-66 btn-info text-white">Go back without saving changes</button>
+                            </div>
                         </div>
                     }
                 </section>

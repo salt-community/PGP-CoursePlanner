@@ -12,7 +12,6 @@ import { getCalendarDate } from "../../../api/CalendarDateApi";
 import { DateContent } from "../Types";
 import WeekDayCalendar from "../sections/WeekDayCalendar";
 
-
 export default function MonthView() {
     const [week, setWeek] = useState<number>(parseInt(getWeekFromPath()));
     const [year, setYear] = useState<number>(parseInt(getYearFromPath()));

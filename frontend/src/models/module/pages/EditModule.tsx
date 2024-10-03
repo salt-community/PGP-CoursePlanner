@@ -9,7 +9,6 @@ import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
 
 export default function () {
-
     const moduleId = getIdFromPath();
 
     const { data: module, isLoading, isError } = useQuery({

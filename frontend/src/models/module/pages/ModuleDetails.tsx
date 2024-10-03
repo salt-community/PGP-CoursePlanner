@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { deleteModule, getModuleById } from "../../../api/ModuleApi";
 import Page from "../../../components/Page";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getIdFromPath } from "../../../helpers/helperMethods";
+import { getIdFromPath, trackUrl } from "../../../helpers/helperMethods";
 import { getAllCourses } from "../../../api/CourseApi";
 import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
@@ -10,6 +10,8 @@ import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
 
 export default function ModuleDetails() {
+    trackUrl();
+
     const navigate = useNavigate();
     const moduleId = getIdFromPath();
     const { data: module, isLoading, isError } = useQuery({
@@ -104,8 +106,8 @@ export default function ModuleDetails() {
                         </div>
                         <p className="error-message text-red-600 text-sm hidden" id="invalid-module-delete">Cannot delete this module, it is used in a course!</p>
                         <div className="pt-4 mb-4 flex gap-4 flex-col sm:flex-row">
-                            <button onClick={() => handleDelete(parseInt(moduleId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module</button>
                             <Link to={`/modules/edit/${moduleId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Module</Link>
+                            <button onClick={() => handleDelete(parseInt(moduleId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module</button>
                         </div>
                     </section>
                 }

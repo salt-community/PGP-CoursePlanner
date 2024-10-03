@@ -18,10 +18,12 @@ export type Activity = {
   startDate: Date;
   endDate: Date;
   color: string;
+  courseId: number;
 };
 
 const HorizontalCalendar: React.FC = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [activitiesArray, setActivitiesArray] = useState<Activity[][]>([]);
   const [startDate, setStartDate] = useState<Date>(subDays(new Date(), 7));
   const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 7));
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -55,42 +57,50 @@ const HorizontalCalendar: React.FC = () => {
 
         var newActivity: Activity = {
           id: ac.id!,
-          title: c.name,
+          title: ac.name,
           startDate: new Date(ac.startDate),
           endDate: new Date(ac.endDate!),
           color: ac.color,
+          courseId: ac.courseId
         };
         newActivities.push(newActivity);
       });
 
-      const activeActivities: Activity[] = newActivities.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd <= today }).filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed >= today });
-      const futureActivities: Activity[] =newActivities.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today });
-      const pastActivities: Activity[] = newActivities.filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today });
+      // // sort calendar by active/future/past bootcamps
+      // const activeActivities: Activity[] = newActivities.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd <= today }).filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed >= today });
+      // const futureActivities: Activity[] =newActivities.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today });
+      // const pastActivities: Activity[] = newActivities.filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today });
 
-      const sortActivities = (activities: Activity[]): Activity[] => {
-        return activities.sort((a, b) => {
-          const startDateA = new Date(a.startDate!);
-          const startDateB = new Date(b.startDate!);
-          const endDateA = new Date(a.endDate!);
-          const endDateB = new Date(b.endDate!);
+      // const sortActivities = (activities: Activity[]): Activity[] => {
+      //   return activities.sort((a, b) => {
+      //     const startDateA = new Date(a.startDate!);
+      //     const startDateB = new Date(b.startDate!);
+      //     const endDateA = new Date(a.endDate!);
+      //     const endDateB = new Date(b.endDate!);
   
-          if (startDateA < startDateB) return -1;
-          if (startDateA > startDateB) return 1;
-          if (endDateA < endDateB) return -1;
-          if (endDateA > endDateB) return 1;
-          return 0;
-        });
-      };
+      //     if (startDateA < startDateB) return -1;
+      //     if (startDateA > startDateB) return 1;
+      //     if (endDateA < endDateB) return -1;
+      //     if (endDateA > endDateB) return 1;
+      //     return 0;
+      //   });
+      // };
   
-      const sortedActiveActivities = sortActivities(activeActivities);
-      const sortedFutureActivities = sortActivities(futureActivities);
-      const sortedPastActivities = sortActivities(pastActivities);
+      // const sortedActiveActivities = sortActivities(activeActivities);
+      // const sortedFutureActivities = sortActivities(futureActivities);
+      // const sortedPastActivities = sortActivities(pastActivities);
+      // const sortedActivities: Activity[] = [...sortedActiveActivities, ...sortedFutureActivities, ...sortedPastActivities]
 
-      const sortedActivities: Activity[] = [...sortedActiveActivities, ...sortedFutureActivities, ...sortedPastActivities]
+      // sort calendar by bootcamp
+      const oneActivities: Activity[] = newActivities.filter(ac => ac.courseId == 1);
+      const twoActivities: Activity[] = newActivities.filter(ac => ac.courseId == 2);
+      const threeActivities: Activity[] = newActivities.filter(ac => ac.courseId == 3);
+
+      const sortedActivities = [oneActivities, twoActivities, threeActivities]
 
       var tempStartDate = startDate;
       var tempEndDate = endDate;
-      sortedActivities.forEach(ac => {
+      newActivities.forEach(ac => {
         if (subDays(ac.startDate, 7) < tempStartDate)
           tempStartDate = subDays(ac.startDate, 7)
         if (addDays(ac.endDate!, 7) > tempEndDate)
@@ -99,7 +109,8 @@ const HorizontalCalendar: React.FC = () => {
       setStartDate(tempStartDate);
       setEndDate(tempEndDate);
 
-      setActivities(sortedActivities);
+      setActivities(newActivities);
+      setActivitiesArray(sortedActivities);
     }
   }, [appliedCourses, courses, modules]
   );
@@ -112,8 +123,8 @@ const HorizontalCalendar: React.FC = () => {
     dates.push(addDays(startDate, i));
 
   var height = "80px";
-  if (activities.length > 0)
-    height = ((activities.length + 1) * 80) + "px";
+  if (activitiesArray.length > 0)
+    height = ((activitiesArray.length + 1) * 80) + "px";
 
   useEffect(() => {
     if (scrollContainerRef.current) {
@@ -122,9 +133,6 @@ const HorizontalCalendar: React.FC = () => {
       scrollContainerRef.current.scrollLeft = (scrollWidth - clientWidth) * (numDaysToday / numDays);
     }
   }, [activities, widthIndex]);
-
-  console.log("activities", activities)
-  console.log("enddate", endDate)
 
   return (
     getCookie("access_token") == undefined ?
@@ -138,11 +146,11 @@ const HorizontalCalendar: React.FC = () => {
             }
 
           </div>
-          {activities.length > 0 &&
+          {activitiesArray.length > 0 &&
             <>
-              {activities.map(course => {
+              {activitiesArray.map(courses => {
                 return (
-                  <div className="flex flex-row"><TimeLineCourse dates={dates} course={course} width={width[widthIndex]}></TimeLineCourse></div>)
+                  <div className="flex flex-row"><TimeLineCourse dates={dates} courses={courses} width={width[widthIndex]}></TimeLineCourse></div>)
               })}
             </>
           }

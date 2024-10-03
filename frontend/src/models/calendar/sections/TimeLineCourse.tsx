@@ -3,28 +3,44 @@ import { daysBetweenDates } from "../../../helpers/dateHelpers"
 import { Activity } from "../pages/HorizontalCalendar"
 import { Link } from "react-router-dom"
 
-
 type Props = {
   dates: Date[],
-  course: Activity,
+  courses: Activity[],
   width: number
 }
 
-export default function TimeLineCourse({ dates, course, width }: Props) {
+export default function TimeLineCourse({ dates, courses, width }: Props) {
+  const startIndices: number[] = [];
+  const endIndices: number[] = [];
+  const widthStrings: string[] = [];
 
-  const startIndex = dates.findIndex(d => d.getDate() == course.startDate.getDate() && d.getMonth() == course.startDate.getMonth())
-  const endIndex = dates.findIndex(d => d.getDate() == course.endDate.getDate() && d.getMonth() == course.endDate.getMonth())
-  const widthString: string = ((daysBetweenDates(course.startDate, course.endDate) + 1) * width).toString() + "px";
+  courses.forEach(course => {
+    const startIndex = dates.findIndex(d => d.getDate() == course.startDate.getDate() && d.getMonth() == course.startDate.getMonth())
+    const endIndex = dates.findIndex(d => d.getDate() == course.endDate.getDate() && d.getMonth() == course.endDate.getMonth())
+    const widthString: string = ((daysBetweenDates(course.startDate, course.endDate) + 1) * width).toString() + "px";
+
+    startIndices.push(startIndex);
+    endIndices.push(endIndex);
+    widthStrings.push(widthString);
+  });
+
+  var startIndex = 1000;
+  var endIndex = 0;
 
   return (
     <>
       {dates.map((_currentDate, index) => {
+        const startIndexMatch = startIndices.findIndex(i => i == index);
+        if (startIndexMatch != -1) {
+          startIndex = startIndices[startIndexMatch];
+          endIndex = endIndices[startIndexMatch];
+        }
         return (
           <div className=" flex flex-col mb-4 mt-4">
-            {index == startIndex
-              ? <div style={{ backgroundColor: course.color, "width": widthString }} className="h-10 pl-3 flex items-center font-bold text-white">
-                <Link to={`/activecourses`} className="hover:italic">
-                  {course.title} ({format(course.startDate, "d MMM")} - {format(course.endDate, "d MMM")})
+            {startIndexMatch != -1
+              ? <div style={{ backgroundColor: courses[0].color, "width": widthStrings[startIndexMatch] }} className="h-10 pl-3 flex items-center font-bold text-white">
+                <Link to={`/activecourses/details/${courses[startIndexMatch].id}`} className="hover:italic">
+                  {courses[startIndexMatch].title} ({format(courses[startIndexMatch].startDate, "d MMM")} - {format(courses[startIndexMatch].endDate, "d MMM")})
                 </Link>
               </div>
               : <>
