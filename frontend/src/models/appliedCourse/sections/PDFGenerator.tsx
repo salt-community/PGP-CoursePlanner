@@ -1,6 +1,5 @@
 import { Page, Text, View, Document, StyleSheet, usePDF } from '@react-pdf/renderer';
 import { AppliedCourseType } from '../../course/Types';
-import { grey } from '@mui/material/colors';
 
 type PDFGeneratorProps = {
     appliedCourse: AppliedCourseType;
@@ -82,66 +81,68 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
         dayCounter = dayCounter + appliedCourse.modules![i].numberOfDays;
     }
 
-    let counter = -1;
-    const CourseOverviewDocument = () => (
-        <Document>
-            <Page size="A4" style={styles.page}>
-                <View style={styles.section}>
-                    <Text style={styles.text}>COURSE LAYOUT</Text>
-                </View>
-                <View style={styles.table}>
-                    <View style={[styles.row, styles.bold, styles.header]}>
-                        <Text style={styles.col1}>Module</Text>
-                        <Text style={styles.col2}>Date</Text>
-                        <Text style={styles.col3}>Module description</Text>
-                    </View>
-                    {appliedCourse.modules!.map((module, moduleIndex) => (
-                        <View key={moduleIndex} style={styles.row} wrap={false}>
-                            <Text style={styles.col1}>{moduleIndex + 1}</Text>
-                            <Text style={styles.col2}>{moduleDays[moduleIndex]}</Text>
-                            <Text style={styles.col3}>{module.name}</Text>
-                        </View>
-                    ))}
-                </View>
-            </Page>
-            {appliedCourse.modules!.map((module, moduleIndex) => (
+    const generateDocument = () => {
+        let counter = -1;
+        return (
+            <Document>
                 <Page size="A4" style={styles.page}>
                     <View style={styles.section}>
-                        <Text style={styles.text}>MODULE {moduleIndex + 1}: {module.name.toUpperCase()}</Text>
+                        <Text style={styles.text}>COURSE LAYOUT</Text>
                     </View>
                     <View style={styles.table}>
                         <View style={[styles.row, styles.bold, styles.header]}>
-                            <Text style={styles.col1}>Day</Text>
+                            <Text style={styles.col1}>Module</Text>
                             <Text style={styles.col2}>Date</Text>
-                            <Text style={styles.col3}>Topic</Text>
+                            <Text style={styles.col3}>Module description</Text>
                         </View>
-                        {module.days.map((day, dayIndex) => {
-                            counter++;
-                            return (
-                                <>
-                                    <View key={dayIndex} style={styles.row} wrap={false}>
-                                        <Text style={styles.col1}>{dayIndex + 1}</Text>
-                                        <Text style={styles.col2}>{courseWeekDays[counter]}</Text>
-                                        <Text style={styles.col3}>{day.description}</Text>
-                                    </View>
-
-                                    {day.events.length > 0 && day.events.map((event, eventIndex) => (
-                                        <View key={eventIndex} style={[styles.eventTable, styles.row]} wrap={false}>
-                                            <Text style={styles.eventCol1}>{event.name}</Text>
-                                            <Text style={styles.eventCol2}>{event.description!}</Text>
-                                            <Text style={styles.eventCol3}>{event.startTime + "-" + event.endTime}</Text>
-                                        </View>
-                                    ))
-                                    }
-
-                                </>
-                            )
-                        })}
+                        {appliedCourse.modules!.map((module, moduleIndex) => (
+                            <View key={moduleIndex} style={styles.row} wrap={false}>
+                                <Text style={styles.col1}>{moduleIndex + 1}</Text>
+                                <Text style={styles.col2}>{moduleDays[moduleIndex]}</Text>
+                                <Text style={styles.col3}>{module.name}</Text>
+                            </View>
+                        ))}
                     </View>
                 </Page>
-            ))}
-        </Document >
-    );
+                {appliedCourse.modules!.map((module, moduleIndex) => (
+                    <Page size="A4" style={styles.page}>
+                        <View style={styles.section}>
+                            <Text style={styles.text}>MODULE {moduleIndex + 1}: {module.name.toUpperCase()}</Text>
+                        </View>
+                        <View style={styles.table}>
+                            <View style={[styles.row, styles.bold, styles.header]}>
+                                <Text style={styles.col1}>Day</Text>
+                                <Text style={styles.col2}>Date</Text>
+                                <Text style={styles.col3}>Topic</Text>
+                            </View>
+                            {module.days.map((day, dayIndex) => {
+                                counter++;
+                                return (
+                                    <>
+                                        <View key={dayIndex} style={styles.row} wrap={false}>
+                                            <Text style={styles.col1}>{dayIndex + 1}</Text>
+                                            <Text style={styles.col2}>{courseWeekDays[counter]}</Text>
+                                            <Text style={styles.col3}>{day.description}</Text>
+                                        </View>
+
+                                        {day.events.length > 0 && day.events.map((event, eventIndex) => (
+                                            <View key={eventIndex} style={[styles.eventTable, styles.row]} wrap={false}>
+                                                <Text style={styles.eventCol1}>{event.name}</Text>
+                                                <Text style={styles.eventCol2}>{event.description!}</Text>
+                                                <Text style={styles.eventCol3}>{event.startTime + "-" + event.endTime}</Text>
+                                            </View>
+                                        ))
+                                        }
+
+                                    </>
+                                )
+                            })}
+                        </View>
+                    </Page>
+                ))}
+            </Document >
+        );
+    };
 
     let startDay = new Date(appliedCourse.startDate).getDate().toString();
     if (startDay.length == 1)
@@ -157,7 +158,7 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
     if (endMonth.length == 1)
         endMonth = "0" + endMonth;
 
-    const [instance, _updateInstance] = usePDF({ document: <CourseOverviewDocument /> });
+    const [instance, _updateInstance] = usePDF({ document: generateDocument() });
     const documentName = "CourseOverview_" + appliedCourse.name + "_" + startDay + startMonth + new Date(appliedCourse.startDate).getFullYear() + "_" + endDay + endMonth + new Date(appliedCourse.endDate!).getFullYear() + ".pdf";
 
     if (instance.loading) return <div>Loading ...</div>;
