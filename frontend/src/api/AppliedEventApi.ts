@@ -19,6 +19,6 @@ export async function postAppliedEvent(event: AppliedEventType) {
     alert("Failed to apply event");
     throw new Error("Failed to apply event");
   }
-  var data = await response.json();
+  const data = await response.json();
   return data as AppliedEventType;
 }

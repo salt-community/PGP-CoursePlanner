@@ -94,9 +94,8 @@ export async function deleteCourseFromGoogle(course: string) {
     if (result) {
       result.map((event) => deleteSingleGoogleEvent(event));
       alert("Event deleted, check your Google Calendar!");
-    } else {
     }
-  } catch (error){
+  } catch (error) {
     console.error(error);
   }
 }

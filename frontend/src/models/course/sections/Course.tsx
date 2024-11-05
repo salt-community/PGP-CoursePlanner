@@ -30,7 +30,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             setFilteredModules(modules);
 
             const tempTracks: string[] = [];
-            for (let trackArray of modules!.filter(m => m.track!).map(m => m.track!)) {
+            for (const trackArray of modules!.filter(m => m.track!).map(m => m.track!)) {
                 trackArray.forEach(track => {
                     if (!tempTracks.find(t => t == track)) {
                         tempTracks.push(track);
@@ -41,16 +41,16 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         }
     }, [modules]);
 
-    var selectedModules: CourseModule[] = [{
+    let selectedModules: CourseModule[] = [{
         courseId: 0,
         moduleId: 0,
     }];
     if (course.moduleIds[0] != 0) {
         selectedModules = [];
         course.moduleIds.forEach(moduleId => {
-            var module = modules?.find(m => m.id == moduleId);
+            const module = modules?.find(m => m.id == moduleId);
 
-            var cm: CourseModule = {
+            const cm: CourseModule = {
                 course: course,
                 courseId: course.id,
                 module: module,
@@ -61,9 +61,9 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     }
     const [courseModules, setCourseModules] = useState<CourseModule[]>(selectedModules);
 
-    var filledDays: number = 0;
+    let filledDays: number = 0;
     courseModules.forEach(cm => {
-        var mod = modules?.find(m => m.id == cm.moduleId);
+        const mod = modules?.find(m => m.id == cm.moduleId);
         if (mod)
             filledDays = filledDays + mod?.numberOfDays;
     });
@@ -126,7 +126,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         const { courseName } = e.target as typeof e.target & { courseName: { value: string } };
         const { numberOfWeeks } = e.target as typeof e.target & { numberOfWeeks: { value: number } };
 
-        var courseModuleIds: number[] = [];
+        const courseModuleIds: number[] = [];
         courseModules.forEach(element => {
             courseModuleIds.push(element.moduleId!);
         });
@@ -157,8 +157,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     }
 
     const findDuplicates = (arr: Array<CourseModule>) => {
-        var results = false;
-        for (var i = 0; i < arr.length; i++) {
+        let results = false;
+        for (let i = 0; i < arr.length; i++) {
             if (arr.filter(m => m.moduleId == arr[i].moduleId).length > 1) {
                 results = true;
                 break;
@@ -168,7 +168,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     }
 
     const isStringInputIncorrect = (str: string) => {
-        var strNoSpace = str.replaceAll(" ", "");
+        const strNoSpace = str.replaceAll(" ", "");
         if (strNoSpace.length > 0)
             return false;
         else

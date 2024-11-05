@@ -42,10 +42,10 @@ export default function AppliedCourseDetails() {
     })
 
     function getWeekDayList() {
-        let days = []
-        let end = new Date(endDate)
+        const days = []
+        const end = new Date(endDate)
         for (let start = new Date(startDate); start <= end; start.setDate(start.getDate() + 1)) {
-            let day = start.getDay();
+            const day = start.getDay();
             if (day != 6 && day != 0) {
                 days.push(new Date(start));
             }

@@ -43,7 +43,7 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
         const { name, value } = e.target;
         const editedDays = [...days];
 
-        let correctTime = value.replaceAll(".", ":");
+        const correctTime = value.replaceAll(".", ":");
         editedDays[dayNumber - 1].events[index] = {
             ...editedDays[dayNumber - 1].events[index],
             [name]: correctTime
@@ -57,11 +57,11 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
         setDays(editedDays);
     }
 
-    var startTimeDefault = event.startTime + ":00";
+    let startTimeDefault = event.startTime + ":00";
     if (startTimeDefault.length == 7)
         startTimeDefault = "0" + startTimeDefault;
 
-    var endTimeDefault = event.endTime + ":00";
+    let endTimeDefault = event.endTime + ":00";
     if (endTimeDefault.length == 7)
         endTimeDefault = "0" + endTimeDefault;
 
@@ -125,8 +125,8 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
     const handleMove = () => {
         setIsIncompleteInput(false);
         if (selectedDay != "DEFAULT") {
-            var originalDayIndex = days.findIndex(d => d.dayNumber == dayNumber);
-            var selectedDayIndex = days.findIndex(d => d.dayNumber == parseInt(selectedDay));
+            const originalDayIndex = days.findIndex(d => d.dayNumber == dayNumber);
+            const selectedDayIndex = days.findIndex(d => d.dayNumber == parseInt(selectedDay));
 
             days[originalDayIndex].events.splice(index, 1);
             days[originalDayIndex].events.sort((a, b) => {
@@ -197,13 +197,13 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
     const handleMoveAnotherModule = () => {
         setIsIncompleteInput(false);
         if (selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT") {
-            var originalDayIndex = days.findIndex(d => d.dayNumber == dayNumber);
+            const originalDayIndex = days.findIndex(d => d.dayNumber == dayNumber);
             days[originalDayIndex].events.splice(index, 1);
 
             const editedDays = [...days];
             setDays(editedDays);
 
-            var module = modules?.find(m => m.id == parseInt(selectedModule))!;
+            const module = modules?.find(m => m.id == parseInt(selectedModule))!;
             const newModule: ModuleType = {
                 id: module.id,
                 name: module.name,

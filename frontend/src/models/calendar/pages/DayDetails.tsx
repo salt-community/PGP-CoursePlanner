@@ -32,11 +32,11 @@ export default function DayDetails() {
 
     const dateAsDate = new Date(date);
 
-    var nextDate = new Date(dateAsDate)
+    let nextDate = new Date(dateAsDate)
     nextDate = new Date(nextDate.setDate(nextDate.getDate() + 1));
     const nextDay = getDateAsString(nextDate);
 
-    var previousDate = new Date(dateAsDate)
+    let previousDate = new Date(dateAsDate)
     previousDate = new Date(previousDate.setDate(previousDate.getDate() - 1));
     const previousDay = getDateAsString(previousDate)
 

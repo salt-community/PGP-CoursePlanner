@@ -18,6 +18,6 @@ export async function postAppliedDay(day: AppliedDayType) {
     alert("Failed to apply day");
     throw new Error("Failed to apply day");
   }
-  var data = await response.json();
+  const data = await response.json();
   return data as AppliedDayType;
 }

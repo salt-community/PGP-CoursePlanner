@@ -11,9 +11,9 @@ export function getIdFromPath() {
 
 export function getHomeUrl() {
   const pathName = location.href;
-  let len = pathName.length,
-    i = -1,
-    index = 3;
+  const len = pathName.length
+  let i = -1
+  let index = 3;
   while (index-- && i++ < len) {
     i = pathName.indexOf("/", i);
     if (i < 0) break;

@@ -158,7 +158,7 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
     if (endMonth.length == 1)
         endMonth = "0" + endMonth;
 
-    const [instance, _updateInstance] = usePDF({ document: generateDocument() });
+    const [instance] = usePDF({ document: generateDocument() });
     const documentName = "CourseOverview_" + appliedCourse.name + "_" + startDay + startMonth + new Date(appliedCourse.startDate).getFullYear() + "_" + endDay + endMonth + new Date(appliedCourse.endDate!).getFullYear() + ".pdf";
 
     if (instance.loading) return <div>Loading ...</div>;

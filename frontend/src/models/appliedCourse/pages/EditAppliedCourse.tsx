@@ -152,10 +152,10 @@ export default function () {
         const appliedModuleId = parseInt(appModuleId);
         const module = modules!.find(m => m.id === parseInt(moduleId))!;
 
-        var listDays: AppliedDayType[] = []
+        const listDays: AppliedDayType[] = []
 
         await Promise.all(module.days.map(async (day) => {
-            let listEvents: AppliedEventType[] = [];
+            const listEvents: AppliedEventType[] = [];
             await Promise.all(day.events.map(async (eventItem) => {
                 try {
                     const newEvent = {
@@ -217,7 +217,7 @@ export default function () {
                 setIsInvalidModule(true);
         }
         else {
-            var appliedCoursesWithCourseId = allAppliedCourses!.filter(m => m.courseId! == appliedCourse!.courseId);
+            const appliedCoursesWithCourseId = allAppliedCourses!.filter(m => m.courseId! == appliedCourse!.courseId);
             if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
                 await Promise.all(appliedCoursesWithCourseId!.map(async appliedCourse => {
                     try {

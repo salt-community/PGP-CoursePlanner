@@ -24,8 +24,8 @@ export default function TimeLineCourse({ dates, courses, width }: Props) {
     widthStrings.push(widthString);
   });
 
-  var startIndex = 1000;
-  var endIndex = 0;
+  let startIndex = 1000;
+  let endIndex = 0;
 
   return (
     <>

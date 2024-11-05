@@ -17,7 +17,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     const dropdownRef = useRef<HTMLUListElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
 
-    var editTrue = true;
+    let editTrue = true;
     if (submitFunction.name == "editModule")
         editTrue = true;
 
@@ -69,7 +69,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         const { numberOfDays } = e.target as typeof e.target & { numberOfDays: { value: number } };
         const events: EventType[] = [];
         days.forEach(day => {
-            var eventsOfDay = day.events;
+            const eventsOfDay = day.events;
             eventsOfDay.forEach(event => {
                 events.push(event);
             });
@@ -92,7 +92,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     }
 
     const isStringInputIncorrect = (str: string) => {
-        var strNoSpace = str.replaceAll(" ", "");
+        const strNoSpace = str.replaceAll(" ", "");
         if (strNoSpace.length > 0)
             return false;
         else
@@ -100,7 +100,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     }
 
     function handleClick() {
-        let dropdownMenu = document.getElementById('dropdownMenu')!;
+        const dropdownMenu = document.getElementById('dropdownMenu')!;
         if (dropdownMenu.className.includes('block')) {
             dropdownMenu.classList.add('hidden')
             dropdownMenu.classList.remove('block')

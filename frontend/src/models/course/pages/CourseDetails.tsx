@@ -68,9 +68,9 @@ export default function CourseDetails() {
         };
     }, []);
 
-    var modules: ModuleType[] = [];
+    const modules: ModuleType[] = [];
     course?.moduleIds.forEach(element => {
-        var module = allModules?.find(m => m.id == element);
+        const module = allModules?.find(m => m.id == element);
         modules.push(module!)
     });
 
@@ -79,7 +79,7 @@ export default function CourseDetails() {
     const [isColorNotSelected, setIsColorNotSelected] = useState<boolean>(false);
     useEffect(() => {
         if (course && allAppliedCourses) {
-            var appliedCoursesWithCourseId = allAppliedCourses.filter(m => m.courseId! === course.id);
+            const appliedCoursesWithCourseId = allAppliedCourses.filter(m => m.courseId! === course.id);
             
             if (appliedCoursesWithCourseId.length > 0) {
                 defaultColor = appliedCoursesWithCourseId[0].color;
@@ -98,7 +98,7 @@ export default function CourseDetails() {
                 setIsInvalidDate(true);
         }
         else {
-            var appliedCoursesWithCourseId = allAppliedCourses!.filter(m => m.courseId! == course!.id);
+            const appliedCoursesWithCourseId = allAppliedCourses!.filter(m => m.courseId! == course!.id);
             if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
                 await Promise.all(appliedCoursesWithCourseId!.map(async appliedCourse => {
                     try {

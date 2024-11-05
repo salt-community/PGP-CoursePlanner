@@ -28,7 +28,7 @@ const HorizontalCalendar: React.FC = () => {
   const [endDate, setEndDate] = useState<Date>(addDays(new Date(), 7));
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  var width = [12, 16, 24, 32, 40, 48]; //56, 64, 80, 96
+  const width = [12, 16, 24, 32, 40, 48]; //56, 64, 80, 96
   const [widthIndex, setWidthIndex] = useState<number>(3);
 
   const today = new Date();
@@ -54,7 +54,7 @@ const HorizontalCalendar: React.FC = () => {
       const newActivities: Activity[] = [];
       appliedCourses.forEach(ac => {
 
-        var newActivity: Activity = {
+        const newActivity: Activity = {
           id: ac.id!,
           title: ac.name,
           startDate: new Date(ac.startDate),
@@ -97,8 +97,8 @@ const HorizontalCalendar: React.FC = () => {
 
       const sortedActivities = [oneActivities, twoActivities, threeActivities]
 
-      var tempStartDate = startDate;
-      var tempEndDate = endDate;
+      let tempStartDate = startDate;
+      let tempEndDate = endDate;
       newActivities.forEach(ac => {
         if (subDays(ac.startDate, 7) < tempStartDate)
           tempStartDate = subDays(ac.startDate, 7)
@@ -117,11 +117,11 @@ const HorizontalCalendar: React.FC = () => {
   const numDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
   const numDaysToday = Math.ceil((today.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
 
-  var dates: Date[] = [startDate];
-  for (var i = 1; i < numDays + 1; i++)
+  const dates: Date[] = [startDate];
+  for (let i = 1; i < numDays + 1; i++)
     dates.push(addDays(startDate, i));
 
-  var height = "80px";
+  let height = "80px";
   if (activitiesArray.length > 0)
     height = ((activitiesArray.length + 1) * 80) + "px";
 
