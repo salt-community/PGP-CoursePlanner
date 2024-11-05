@@ -8,7 +8,7 @@ import Module from "../sections/Module";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
 
-export default function () {
+export default function EditModule() {
     const moduleId = getIdFromPath();
 
     const { data: module, isLoading, isError } = useQuery({

@@ -22,7 +22,7 @@ import { postAppliedModule, updateAppliedModule } from "../../../api/AppliedModu
 import { postAppliedEvent } from "../../../api/AppliedEventApi";
 import { postAppliedDay } from "../../../api/AppliedDayApi";
 
-export default function () {
+export default function EditAppliedCourse() {
     const [isOpened, setIsOpened] = useState<boolean>(false);
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
     const [isInvalidModule, setIsInvalidModule] = useState<boolean>(false);
