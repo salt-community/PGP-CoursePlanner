@@ -23,15 +23,15 @@ export default function Home() {
 
     let loading = false;
 
+    const { data: response, isLoading, isError } = useQuery({
+        queryKey: ['accessCode'],
+        queryFn: () => getTokens(getCookie("auth_code")!, homePage)
+    })
+
     if (location.search) {
         const params = new URLSearchParams(location.search);
         const code = params.get('code')!;
         setCookie("auth_code", code);
-
-        const { data: response, isLoading, isError } = useQuery({
-            queryKey: ['accessCode'],
-            queryFn: () => getTokens(getCookie("auth_code")!, homePage)
-        })
 
         if (isLoading) {
             loading = true;
@@ -57,8 +57,10 @@ export default function Home() {
             queryKey: ['calendarDates', dayString],
             queryFn: () => getCalendarDate(dayString)
         });
-        if (data != undefined)
+        if (data != undefined) {
+            console.log(data.dateContent);
             weekDayDateContent.push(data.dateContent);
+        }
         else
             weekDayDateContent.push([]);
     });
