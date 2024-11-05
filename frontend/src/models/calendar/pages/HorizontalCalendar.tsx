@@ -53,7 +53,6 @@ const HorizontalCalendar: React.FC = () => {
     if (appliedCourses && courses && modules) {
       const newActivities: Activity[] = [];
       appliedCourses.forEach(ac => {
-        var c = courses?.find(c => c.id == ac.courseId)!;
 
         var newActivity: Activity = {
           id: ac.id!,

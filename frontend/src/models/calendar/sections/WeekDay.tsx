@@ -9,7 +9,7 @@ export default function WeekDay({ dateContent }: Props) {
 
     return (
         <div className={`rounded-lg flex flex-col justify-start w-full h-full`}>
-            {dateContent && dateContent.map((content, index) =>
+            {dateContent && dateContent.map((content) =>
                 <div key={content.id} style={{ borderColor: content.color }} className="border rounded-md ml-2 mr-2 mb-2 p-2">
                     <h2 style={{ color: content.color }} className="font-bold">
                         <Link to={`/activecourses/details/${content.appliedCourseId}`} className="hover:italic">

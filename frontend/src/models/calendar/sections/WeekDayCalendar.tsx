@@ -1,8 +1,5 @@
 import { DateContent } from "../Types";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getAllCourses } from "../../../api/CourseApi";
-import { getAllModules } from "../../../api/ModuleApi";
 import { today } from "../../../helpers/dateHelpers";
 import { format } from "date-fns";
 import { trackUrl } from "../../../helpers/helperMethods";
@@ -26,7 +23,7 @@ export default function WeekDayCalendar({ date, dateContent }: Props) {
                     {format(date, 'd')}
                 </h1>
                 <div className={`rounded-lg flex flex-col justify-start w-full mb-3`}>
-                    {dateContent && dateContent.map((content, index) =>
+                    {dateContent && dateContent.map((content) =>
                         <div key={content.id} style={{ borderColor: content.color }} className="border rounded-md ml-2 mr-2 mb-2 p-1">
                             <h2 style={{ color: content.color }} className="font-bold">
                                 <Link to={`/activecourses/details/${content.appliedCourseId}`} className="hover:italic">

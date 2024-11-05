@@ -1,7 +1,6 @@
 import { postModule } from "../../../api/ModuleApi"
 import Page from "../../../components/Page"
 import { getCookie } from "../../../helpers/cookieHelpers"
-import { trackUrl } from "../../../helpers/helperMethods"
 import Login from "../../login/Login"
 import Module from "../sections/Module"
 import { ModuleType } from "../Types"

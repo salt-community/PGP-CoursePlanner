@@ -1,4 +1,4 @@
-import { FormEvent, SyntheticEvent, useState } from "react";
+import { SyntheticEvent } from "react";
 import { ModuleType } from "../../module/Types";
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
     funcResetFilter: () => void
 }
 
-export default function FilterArea({ modules, options, funcFilter, funcResetFilter }: Props) {
+export default function FilterArea({ options, funcFilter }: Props) {
 
     const handleChange = (event: SyntheticEvent) => {
         event.preventDefault();
