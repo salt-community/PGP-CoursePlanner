@@ -42,7 +42,7 @@ export default function AppliedModule({ submitFunction, module, index, buttonTex
         const { numberOfDays } = e.target as typeof e.target & { numberOfDays: { value: number } };
         const events: AppliedEventType[] = [];
         days.forEach(day => {
-            var eventsOfDay = day.events;
+            const eventsOfDay = day.events;
             eventsOfDay.forEach(event => {
                 events.push(event);
             })

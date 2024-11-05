@@ -12,7 +12,7 @@ import {
 
 export const firstDayOfWeek = startOfWeek(new Date(), { weekStartsOn: 1 });
 
-var thisWeek = new Date();
+const thisWeek = new Date();
 const nextWeek = new Date(thisWeek);
 nextWeek.setDate(thisWeek.getDate() + 7);
 export const firstDayOfNextWeek = startOfWeek(nextWeek, { weekStartsOn: 1 });
@@ -99,7 +99,7 @@ export const fullWeek = eachDayOfInterval({
 });
 
 export function daysBetweenDates(date1: Date, date2: Date): number {
-  var diff = Math.abs(date1.getTime() - date2.getTime());
-  var diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+  const diff = Math.abs(date1.getTime() - date2.getTime());
+  const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
   return diffDays;
 }

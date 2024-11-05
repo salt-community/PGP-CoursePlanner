@@ -7,7 +7,7 @@ type Props = {
 
 export default function TimeLineXaxis({ dates, width }: Props) {
 
-  var widthString = width + "px";
+  const widthString = width + "px";
 
   return (
     <>

@@ -37,9 +37,9 @@ export default function AppliedCourses() {
 
     useEffect(() => {
         if (allAppliedCourses) {
-            const tempActiveCourses = allAppliedCourses!.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd <= today }).filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed >= today });
-            const tempFutureCourses = allAppliedCourses!.filter(ac => { var sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today })
-            const tempPastCourses = allAppliedCourses!.filter(ac => { var ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today })
+            const tempActiveCourses = allAppliedCourses!.filter(ac => { const sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd <= today }).filter(ac => { const ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed >= today });
+            const tempFutureCourses = allAppliedCourses!.filter(ac => { const sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today })
+            const tempPastCourses = allAppliedCourses!.filter(ac => { const ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today })
 
             const sortCourses = (activities: AppliedCourseType[]): AppliedCourseType[] => {
                 return activities.sort((a, b) => {
@@ -67,7 +67,7 @@ export default function AppliedCourses() {
     }, [allAppliedCourses])
 
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    var today = new Date();
+    const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     return (

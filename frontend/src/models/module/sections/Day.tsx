@@ -51,7 +51,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
         };
         const editedDays = [...days];
         editedDays.splice(index + 1, 0, emptyDay);
-        for (var i = index; i < editedDays.length; i++) {
+        for (let i = index; i < editedDays.length; i++) {
             editedDays[i].dayNumber = i + 1;
         }
         setDays(editedDays);
@@ -61,7 +61,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
         setNumOfDays(days.length - 1);
         const editedDays = [...days];
         editedDays.splice(index, 1);
-        for (var i = index; i < editedDays.length; i++) {
+        for (let i = index; i < editedDays.length; i++) {
             editedDays[i].dayNumber = i + 1;
         }
         setDays(editedDays);
@@ -175,7 +175,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
         if (selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT") {
             const editedDaysCurrent = [...days];
             editedDaysCurrent.splice(day.dayNumber - 1, 1);
-            for (var i = day.dayNumber - 1; i < editedDaysCurrent.length; i++) {
+            for (let i = day.dayNumber - 1; i < editedDaysCurrent.length; i++) {
                 editedDaysCurrent[i].dayNumber = i + 1;
             }
             setNumOfDays(days.length - 1);
@@ -184,11 +184,11 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
             const originalDays = modules?.find(m => m.id == parseInt(selectedModule))!.days!;
             const editedDays = [...originalDays];
             editedDays.splice(parseInt(selectedModuleDay) - 1, 0, day);
-            for (var i = parseInt(selectedModuleDay) - 1; i < editedDays.length; i++) {
+            for (let i = parseInt(selectedModuleDay) - 1; i < editedDays.length; i++) {
                 editedDays[i].dayNumber = i + 1;
             }
 
-            var module = modules?.find(m => m.id == parseInt(selectedModule))!;
+            const module = modules?.find(m => m.id == parseInt(selectedModule))!;
             const newModule: ModuleType = {
                 id: module.id,
                 name: module.name,

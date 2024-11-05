@@ -27,7 +27,7 @@ export default function Modules() {
             setFilteredModules(modules);
 
             const tempTracks: string[] = [];
-            for (let trackArray of modules!.filter(m => m.track!).map(m => m.track!)) {
+            for (const trackArray of modules!.filter(m => m.track!).map(m => m.track!)) {
                 trackArray.forEach(track => {
                     if (!tempTracks.find(t => t == track)) {
                         tempTracks.push(track);

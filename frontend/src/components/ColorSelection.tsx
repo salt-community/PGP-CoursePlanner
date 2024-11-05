@@ -10,4 +10,4 @@ export default function ColorSelection({ color, setColor }: Props) {
   return (
         <HexColorPicker color={color} onChange={setColor} />
   )
-};
+}

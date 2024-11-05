@@ -16,8 +16,8 @@ export default function CalenderDate({ dateContent, date, dateIndex }: Props) {
     const border = today == date ? "border border-2 border-primary hover:border-primary" : "";
     const text = today == date ? "text-primary font-bold" : "";
 
-    var appliedCourseIds: number[] = [];
-    var appliedCourseColors: string[] = [];
+    let appliedCourseIds: number[] = [];
+    const appliedCourseColors: string[] = [];
     dateContent.forEach(dcArray => {
         dcArray.forEach(dc => {
             if (appliedCourseIds.filter(id => id == dc.appliedCourseId!).length == 0) {

@@ -32,7 +32,7 @@ export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDa
         };
         const editedDays = [...days];
         editedDays.splice(index + 1, 0, emptyDay);
-        for (var i = index; i < editedDays.length; i++) {
+        for (let i = index; i < editedDays.length; i++) {
             editedDays[i].dayNumber = i + 1;
         }
         setDays(editedDays);
@@ -42,7 +42,7 @@ export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDa
         setNumOfDays(days.length - 1)
         const editedDays = [...days];
         editedDays.splice(index, 1);
-        for (var i = index; i < editedDays.length; i++) {
+        for (let i = index; i < editedDays.length; i++) {
             editedDays[i].dayNumber = i + 1;
         }
         setDays(editedDays);

@@ -18,7 +18,7 @@ export async function postAppliedModule(module: AppliedModuleType) {
     alert("Failed to apply module");
     throw new Error("Failed to apply module");
   }
-  var data = await response.json();
+  const data = await response.json();
   return data as AppliedModuleType;
 }
 
