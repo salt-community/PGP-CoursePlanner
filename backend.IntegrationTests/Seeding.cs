@@ -67,7 +67,7 @@ namespace backend.IntegrationTests
         {
             return new List<CalendarDate>()
             {
-                new CalendarDate(){Date = new DateTime(2024, 12, 24).ToUniversalTime(), 
+                new CalendarDate(){Date = new DateTime(2024, 12, 24, 0, 0, 0, DateTimeKind.Utc), 
                 DateContent = new List<DateContent>()
                 {
                     new DateContent(){CourseName = "Java"}
