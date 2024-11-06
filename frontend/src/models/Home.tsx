@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { deleteCookie, getCookie, setCookie } from "../helpers/cookieHelpers";
-import { currentMonth, currentYear, getDateAsString, today, weekDays, weekDaysNextWeek } from "../helpers/dateHelpers";
-import { getCalendarDate } from "../api/CalendarDateApi";
+import { currentMonth, currentWeek, currentYear, getDateAsString, today, weekDays, weekDaysNextWeek } from "../helpers/dateHelpers";
+import { getCalendarDate, getCalendarDateWeeks } from "../api/CalendarDateApi";
 import { getWeek, format } from "date-fns";
 import { Link } from "react-router-dom";
 import Page from "../components/Page";
 import WeekDay from "./calendar/sections/WeekDay";
-import { DateContent } from "./calendar/Types";
+import { CalendarDateType, DateContent } from "./calendar/Types";
 import { getTokens } from "../api/UserApi";
 import Login from "./login/Login";
 import { getHomeUrl, trackUrl } from "../helpers/helperMethods";
@@ -50,35 +50,50 @@ export default function Home() {
         }
     }
 
-    const weekDayDateContent: DateContent[][] = [];
-    weekDays.forEach(day => {
-        const dayString = getDateAsString(day).replaceAll("/", "-");
-        const { data } = useQuery({
-            queryKey: ['calendarDates', dayString],
-            queryFn: () => getCalendarDate(dayString)
-        });
-        if (data != undefined) {
-            console.log(data.dateContent);
-            weekDayDateContent.push(data.dateContent);
-        }
-        else
-            weekDayDateContent.push([]);
-    });
+    const { isPending, data } = useQuery<CalendarDateType[]>({
+        queryKey: ['todos'],
+        queryFn: () => getCalendarDateWeeks(currentWeek),
+      })
+    
+    
 
-    const weekDayDateContentNextWeek: DateContent[][] = [];
-    weekDaysNextWeek.forEach(day => {
-        const dayString = getDateAsString(day).replaceAll("/", "-");
-        const { data } = useQuery({
-            queryKey: ['calendarDates', dayString],
-            queryFn: () => getCalendarDate(dayString)
-        });
-        if (data != undefined)
-            weekDayDateContentNextWeek.push(data.dateContent);
-        else
-            weekDayDateContentNextWeek.push([]);
-    });
+    // let weekDayDateContent: DateContent[][] = [];
+    // weekDays.forEach(day => {
+    //     const dayString = getDateAsString(day).replaceAll("/", "-");
+    //     const { data } = useQuery({
+    //         queryKey: ['calendarDates', dayString],
+    //         queryFn: () => getCalendarDate(dayString)
+    //     });
+    //     if (data != undefined) {
+    //        // console.log(data.dateContent);
+    //         weekDayDateContent.push(data.dateContent);
+    //     }
+    //     else
+    //         weekDayDateContent.push([]);
+    // });
+
+    // const weekDayDateContentNextWeek: DateContent[][] = [];
+    // weekDaysNextWeek.forEach(day => {
+    //     const dayString = getDateAsString(day).replaceAll("/", "-");
+    //     const { data } = useQuery({
+    //         queryKey: ['calendarDates', dayString],
+    //         queryFn: () => getCalendarDate(dayString)
+    //     });
+    //     if (data != undefined)
+    //         weekDayDateContentNextWeek.push(data.dateContent);
+    //     else
+    //         weekDayDateContentNextWeek.push([]);
+    // });
 
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    if(isPending) return "pending"
+    //if(isError) return "error"
+
+    console.log(data);
+  //  console.log(data[1].dateContent)
+   // const weekDayDateContent = data.map(dateContent => dateContent  : datecontent ? []); 
+    
 
     return (
         loading
@@ -99,7 +114,8 @@ export default function Home() {
                                                     <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                                 </h1>
                                             </Link>
-                                            <WeekDay dateContent={weekDayDateContent[index]} />
+                                            {/* <WeekDay dateContent={weekDayDateContent[index]} /> */}
+                                            { data[index] !== null ? <WeekDay dateContent = {data[index].dateContent}/> : "" }
                                         </section>
                                         ): ( <section key={format(day, 'd')} className="flex flex-col border border-black rounded-lg w-full gap-3">
                                             <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:italic">
@@ -107,7 +123,9 @@ export default function Home() {
                                                     <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                                 </h1>
                                             </Link>
-                                            <WeekDay key={format(day, 'd')} dateContent={weekDayDateContent[index]} />
+                                            { data[index] !== null ? <WeekDay dateContent = {data[index].dateContent}/> : "" }
+
+                                            {/* <WeekDay key={format(day, 'd')} dateContent={weekDayDateContent[index]} /> */}
                                         </section>
                                     ))}
                         </section>
@@ -121,7 +139,9 @@ export default function Home() {
                                                 <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                             </h1>
                                         </Link>
-                                        <WeekDay dateContent={weekDayDateContentNextWeek[index]} />
+                                        { data[index+7] !== null ? <WeekDay dateContent = {data[index+7].dateContent}/> : "" }
+
+                                        {/* <WeekDay dateContent={weekDayDateContentNextWeek[index]} /> */}
                                     </section>
                                 
                             )}

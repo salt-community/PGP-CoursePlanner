@@ -23,3 +23,25 @@ export async function getCalendarDate(date: string) {
     // alert("Failed to get applied courses");
   }
 }
+
+export async function getCalendarDateWeeks(week: number) {
+  try {
+    const response = await fetch(`${BASE_URL}/Weeks/${week}`, {
+      headers: {
+        Authorization: `Bearer ${getCookie("JWT")}`,
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok || response == null) {
+      // alert("Failed to get applied courses");
+      return;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    // console.error(error);
+    // alert("Failed to get applied courses");
+  }
+}
