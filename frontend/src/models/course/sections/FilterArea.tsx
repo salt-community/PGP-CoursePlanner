@@ -27,9 +27,9 @@ export default function FilterArea({ options, funcFilter }: Props) {
                     <div className="w-3/4">
                         <select className="border border-gray-300 rounded-lg p-1 w-full input-field" name="track" onChange={handleChange} defaultValue="Please select module track" >
                         <option value={"All"}>All</option>
-                        {options.map(option => {
+                        {options.map((option, index) => {
                                 return (
-                                    <option value={option}>{option}</option>
+                                    <option key={index}value={option}>{option}</option>
                                 )
                             })}
                         </select>
