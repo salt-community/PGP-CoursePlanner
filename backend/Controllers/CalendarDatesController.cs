@@ -35,23 +35,38 @@ public class CalendarDatesController : ControllerBase
     }
 
     [HttpGet("batch")]
-    public ActionResult<List<CalendarDate>> GetCalendarDateBatch(DateTime start, DateTime end)
+    public ActionResult<CalendarDate?[]> GetCalendarDateBatch(DateTime start, DateTime end)
     {
-        //todo: make async
-        //todo: add blank dates to list if nothing is found in database? 
+        //todo: make async?
         var convertedDateStart = DateTime.SpecifyKind(start, DateTimeKind.Utc);
         var convertedDateEnd = DateTime.SpecifyKind(end, DateTimeKind.Utc);
 
-        var response = _context.CalendarDates
+        if (convertedDateEnd < convertedDateStart)
+        {
+            return BadRequest("Start date has to be before end date");
+        }
+
+        CalendarDate?[] dates = new CalendarDate[Convert.ToInt32(Math.Ceiling((convertedDateEnd - convertedDateStart).TotalDays)) + 1];
+
+        var dbDates = _context.CalendarDates
                         .Include(convertedDate => convertedDate.DateContent)
                         .ThenInclude(content => content.Events)
-                        .Where(calendarDate =>  calendarDate.Date.Date >= convertedDateStart.Date && calendarDate.Date.Date <= convertedDateEnd.Date).ToList();
+                        .Where(calendarDate => calendarDate.Date.Date >= convertedDateStart.Date && calendarDate.Date.Date <= convertedDateEnd.Date).ToList();
 
-        if (response != null)
+
+        for (int i = 0; i < dates.Length; i++)
         {
-            return Ok(response);
+            var day = dbDates.FirstOrDefault(d => d.Date == convertedDateStart.AddDays(i));
+
+             if(day != null)
+            {
+                dates[i] = day;
+            }
+            else {
+                dates[i] = null;
+            }
         }
-        return NotFound("Date does not exist");
+        return dates;
     }
 
 }
