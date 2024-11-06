@@ -35,7 +35,6 @@ export default function MonthView() {
         const fetchData = async () => {
             const results = await Promise.all(daysInMonth.map(async day => {
                 const dayString = getDateAsString(day).replaceAll("/", "-");
-                console.log(dayString)
                 const data = await getCalendarDate(dayString);
                 if (data != undefined) {
                     return data}
@@ -67,13 +66,14 @@ export default function MonthView() {
                         </header>
                         <div className={`justify-center w-full shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
                             {fullWeek.map(day => (
-                                <div key={format(day, 'E')} className="h-24 w-1/7 flex items-center justify-center py-1 px-1 border-b-2 border-gray-100 border-3">{format(day, 'E')}</div>
+                                <div key={format(day, 'E')} className="h-24 w-1/7 flex items-center justify-center py-1 px-1 border-b-2 border-gray-100 border-3">{format(day, 'E')}
+                                </div>
                             ))}
                             {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
                                 <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-24"></div>
                             ))}
                             {daysInMonth.map((thisDate, dateIndex) => {
-                                return <div className="flex flex-col">
+                                return <div key={format(thisDate, 'yyyy-MM-dd')}  className="flex flex-col">
                                     <CalendarDate dateContent={weekDayDateContent} dateIndex={dateIndex} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                 </div>
                             })

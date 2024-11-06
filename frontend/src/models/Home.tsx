@@ -91,42 +91,42 @@ export default function Home() {
                         <h1 className="text-2xl font-semibold">We are in week {getWeek(new Date())}</h1>
                         <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-3">
                             {weekDays.map((day, index) =>
-                                <>
-                                    {getDateAsString(day) == today
-                                        ?
-                                        <section className="flex flex-col border-2 border-primary rounded-lg w-full gap-3">
+                                getDateAsString(day) == today
+                                        ?(
+                                        <section key={format(day, 'd')} className="flex flex-col border-2 border-primary rounded-lg w-full gap-3">
                                             <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:italic">
                                                 <h1 className="item-center text-xl font-bold text-center text-primary">{format(getDateAsString(day), 'EEEE')}
                                                     <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                                 </h1>
+                                                <p>Today?!</p>
                                             </Link>
-                                            <WeekDay key={format(day, 'd')} dateContent={weekDayDateContent[index]} />
+                                            <WeekDay dateContent={weekDayDateContent[index]} />
                                         </section>
-                                        : <section className="flex flex-col border border-black rounded-lg w-full gap-3">
+                                        ): ( <section key={format(day, 'd')} className="flex flex-col border border-black rounded-lg w-full gap-3">
                                             <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:italic">
                                                 <h1 className="item-center text-lg text-center">{format(getDateAsString(day), 'EEEE')}
                                                     <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                                 </h1>
+                                                <p>Im here!!</p>
                                             </Link>
                                             <WeekDay key={format(day, 'd')} dateContent={weekDayDateContent[index]} />
                                         </section>
-                                    }
-                                </>
-                            )}
+                                    ))}
                         </section>
                         <h1 className="text-2xl font-semibold">Week {getWeek(nextWeek)}</h1>
                         <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-3">
                             {weekDaysNextWeek.map((day, index) =>
-                                <>
-                                    <section className="flex flex-col border border-black rounded-lg w-full gap-3">
+                                
+                                    <section key={format(day, 'd')} className="flex flex-col border border-black rounded-lg w-full gap-3">
                                         <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:italic">
                                             <h1 className="item-center text-lg text-center">{format(getDateAsString(day), 'EEEE')}
                                                 <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                             </h1>
+                                            <p>Next week yes!?</p>
                                         </Link>
-                                        <WeekDay key={format(day, 'd')} dateContent={weekDayDateContentNextWeek[index]} />
+                                        <WeekDay dateContent={weekDayDateContentNextWeek[index]} />
                                     </section>
-                                </>
+                                
                             )}
                         </section>
                         <div className="flex flex-row gap-2">
