@@ -44,7 +44,7 @@ export async function postCourseToGoogle(eventTemplate: GoogleEvent[]) {
 export async function deleteSingleGoogleEvent(eventId: string) {
   try {
     await fetch(
-      BASE_URL + `/${eventId}?key=${import.meta.env.VITE_APP_API_KEY}`,
+      BASE_URL + `/${eventId}`,
       {
         method: "DELETE",
         headers: {
@@ -65,9 +65,7 @@ export const getGoogleCourseEvents = async (
   try {
     const response = await fetch(
       BASE_URL +
-        `?sharedExtendedProperty=course%3D${course}&key=${
-          import.meta.env.VITE_APP_API_KEY
-        }`,
+        `?sharedExtendedProperty=course%3D${course}`,
       {
         headers: {
           Authorization: `Bearer ${getCookie("access_token")}`,
