@@ -8,7 +8,7 @@ import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
 
-export default function () {
+export default function EditCourse() {
 
     const courseId = useIdFromPath();
 
