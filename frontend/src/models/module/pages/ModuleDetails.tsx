@@ -2,18 +2,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { deleteModule, getModuleById } from "../../../api/ModuleApi";
 import Page from "../../../components/Page";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getIdFromPath, trackUrl } from "../../../helpers/helperMethods";
+import { useIdFromPath } from "../../../helpers/helperHooks";
 import { getAllCourses } from "../../../api/CourseApi";
 import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
+import { trackUrl } from "../../../helpers/helperMethods";
 
 export default function ModuleDetails() {
     trackUrl();
 
     const navigate = useNavigate();
-    const moduleId = getIdFromPath();
+    const moduleId = useIdFromPath();
     const { data: module, isLoading, isError } = useQuery({
         queryKey: ['modules', moduleId],
         queryFn: () => getModuleById(parseInt(moduleId))

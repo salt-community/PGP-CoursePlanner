@@ -1,5 +1,5 @@
 import Page from "../../../components/Page";
-import { getIdFromPath, trackUrl } from "../../../helpers/helperMethods";
+import { useIdFromPath } from "../../../helpers/helperHooks";
 import { useEffect, useState } from "react";
 import { deleteAppliedCourse, getAppliedCourseById } from "../../../api/AppliedCourseApi";
 import 'reactjs-popup/dist/index.css';
@@ -12,6 +12,7 @@ import DeleteBtn from "../../../components/buttons/DeleteBtn";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PDFWeekGenerator from "../sections/PDFWeekGenerator";
 import PDFGenerator from "../sections/PDFGenerator";
+import { trackUrl } from "../../../helpers/helperMethods";
 
 export default function AppliedCourseDetails() {
     trackUrl();
@@ -23,7 +24,7 @@ export default function AppliedCourseDetails() {
 
     const navigate = useNavigate();
 
-    const appliedCourseId = getIdFromPath();
+    const appliedCourseId = useIdFromPath();
     const [appliedCourse, setAppliedCourse] = useState<AppliedCourseType>();
     useEffect(() => {
         getAppliedCourseById(parseInt(appliedCourseId))

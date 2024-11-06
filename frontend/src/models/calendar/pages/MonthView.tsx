@@ -10,11 +10,11 @@ import { getCookie } from "../../../helpers/cookieHelpers"
 import Login from "../../login/Login"
 import { DateContent } from "../Types"
 import { getCalendarDate } from "../../../api/CalendarDateApi"
-import { getMonthFromPath, getYearFromPath } from "../../../helpers/helperMethods"
+import { useMonthFromPath, useYearFromPath } from "../../../helpers/helperHooks"
 
 export default function MonthView() {
-    const [month, setMonth] = useState<number>(parseInt(getMonthFromPath()));
-    const [year, setYear] = useState<number>(parseInt(getYearFromPath()));
+    const [month, setMonth] = useState<number>(parseInt(useMonthFromPath()));
+    const [year, setYear] = useState<number>(parseInt(useYearFromPath()));
     const navigate = useNavigate();
 
     const startOfMonth = firstDayOfMonth(month, year);

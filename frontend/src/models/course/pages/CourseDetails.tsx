@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { deleteCourse, getCourseById } from "../../../api/CourseApi";
 import Page from "../../../components/Page";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getIdFromPath, trackUrl } from "../../../helpers/helperMethods";
+import { useIdFromPath } from "../../../helpers/helperHooks";
 import { getAllModules } from "../../../api/ModuleApi";
 import { useEffect, useRef, useState } from "react";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -21,6 +21,7 @@ import LoadingMessage from "../../../components/LoadingMessage";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
+import { trackUrl } from "../../../helpers/helperMethods";
 
 export default function CourseDetails() {
     trackUrl();
@@ -31,7 +32,7 @@ export default function CourseDetails() {
 
     const navigate = useNavigate();
 
-    const courseId = getIdFromPath();
+    const courseId = useIdFromPath();
     const { data: course, isLoading, isError } = useQuery({
         queryKey: ['courses', courseId],
         queryFn: () => getCourseById(parseInt(courseId))

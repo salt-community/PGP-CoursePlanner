@@ -7,7 +7,7 @@ import PreviousBtn from "../../../components/buttons/PreviousBtn";
 import { useEffect, useState } from "react";
 import { CalendarDateType, DateContent } from "../Types";
 import { getCalendarDate } from "../../../api/CalendarDateApi";
-import { getDateFromPath } from "../../../helpers/helperMethods";
+import { useDateFromPath } from "../../../helpers/helperHooks";
 import WeekDay from "../sections/WeekDay";
 import { getDateAsString } from "../../../helpers/dateHelpers";
 import { getCookie } from "../../../helpers/cookieHelpers";
@@ -15,7 +15,7 @@ import Login from "../../login/Login";
 
 export default function DayDetails() {
     const navigate = useNavigate();
-    const date = getDateFromPath();
+    const date = useDateFromPath();
 
     function getLastTrackedUrl(): string | null {
         const history = JSON.parse(localStorage.getItem('urlHistory') || '[]');
