@@ -37,6 +37,8 @@ export default function AppliedCourses() {
 
     useEffect(() => {
         if (allAppliedCourses) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
             const tempActiveCourses = allAppliedCourses!.filter(ac => { const sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd <= today }).filter(ac => { const ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed >= today });
             const tempFutureCourses = allAppliedCourses!.filter(ac => { const sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today })
             const tempPastCourses = allAppliedCourses!.filter(ac => { const ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today })
@@ -67,8 +69,6 @@ export default function AppliedCourses() {
     }, [allAppliedCourses])
 
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
 
     return (
         getCookie("access_token") == undefined ?
