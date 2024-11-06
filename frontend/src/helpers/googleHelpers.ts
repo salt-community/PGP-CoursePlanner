@@ -20,19 +20,19 @@ export type GoogleEvent = {
   };
 };
 
-export function converToGoogleDate(
+export function convertToGoogleDate(
   date: Date,
   eventTime: string,
-  daysToAdd: number
+  dayIndex: number
 ) {
   date = startOfDay(date);
-  date = addDays(date, daysToAdd);
+  date = addDays(date, dayIndex);
 
   const [hoursString, minutesString] = eventTime.split(":");
   const hours = parseInt(hoursString, 10);
   const minutes = parseInt(minutesString, 10);
 
-  date = addHours(date, hours + 2);
+  date = addHours(date, hours);
   date = addMinutes(date, minutes);
 
   return date;
@@ -44,20 +44,21 @@ export const convertToGoogle = (
   courseName: string
 ) => {
   const googleEvents: GoogleEvent[] = [];
-  let daysToAdd = 0;
 
+  let fridayIndex = 4;
+  let dayIndex = 0;
   modules.forEach((module) => {
     module.days.forEach((day) => {
       day.events.forEach((event) => {
-        const startDate = converToGoogleDate(
+        const startDate = convertToGoogleDate(
           templateStart,
           event.startTime,
-          daysToAdd
+          dayIndex
         );
-        const endDate = converToGoogleDate(
+        const endDate = convertToGoogleDate(
           templateStart,
           event.endTime,
-          daysToAdd
+          dayIndex
         );
 
         const googleEvent: GoogleEvent = {
@@ -80,7 +81,12 @@ export const convertToGoogle = (
 
         googleEvents.push(googleEvent);
       });
-      daysToAdd += 1;
+      if (dayIndex === 4 || dayIndex === fridayIndex) {
+        fridayIndex += 7;
+        dayIndex += 3;
+      } else {
+        dayIndex += 1;
+      }
     });
   });
   postCourseToGoogle(googleEvents);
