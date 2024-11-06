@@ -5,7 +5,7 @@ import NextBtn from "../../../components/buttons/NextBtn";
 import PreviousBtn from "../../../components/buttons/PreviousBtn";
 import Page from "../../../components/Page";
 import { fullWeekOfWeekNumber, getDateAsString } from "../../../helpers/dateHelpers";
-import { getWeekFromPath, getYearFromPath } from "../../../helpers/helperMethods";
+import { useWeekFromPath, useYearFromPath } from "../../../helpers/helperHooks";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
 import { getCalendarDate } from "../../../api/CalendarDateApi";
@@ -13,8 +13,8 @@ import { DateContent } from "../Types";
 import WeekDayCalendar from "../sections/WeekDayCalendar";
 
 export default function MonthView() {
-    const [week, setWeek] = useState<number>(parseInt(getWeekFromPath()));
-    const [year, setYear] = useState<number>(parseInt(getYearFromPath()));
+    const [week, setWeek] = useState<number>(parseInt(useWeekFromPath()));
+    const [year, setYear] = useState<number>(parseInt(useYearFromPath()));
     const navigate = useNavigate();
 
     const allWeekDays = fullWeekOfWeekNumber(week, year);

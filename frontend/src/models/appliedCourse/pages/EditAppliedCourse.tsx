@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Page from "../../../components/Page";
-import { getIdFromPath } from "../../../helpers/helperMethods";
+import { useIdFromPath } from "../../../helpers/helperHooks";
 import { editAppliedCourse, getAllAppliedCourses, getAppliedCourseById } from "../../../api/AppliedCourseApi";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { SyntheticEvent, useEffect, useRef, useState } from "react";
@@ -43,7 +43,7 @@ export default function EditAppliedCourse() {
         queryFn: () => getAllAppliedCourses()
     });
 
-    const appliedCourseId = getIdFromPath();
+    const appliedCourseId = useIdFromPath();
     const [appliedCourse, setAppliedCourse] = useState<AppliedCourseType>();
     useEffect(() => {
         getAppliedCourseById(parseInt(appliedCourseId))
