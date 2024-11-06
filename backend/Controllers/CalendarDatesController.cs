@@ -81,7 +81,6 @@ public class CalendarDatesController : ControllerBase
 
         DateTime jan4 = new DateTime(year, 1, 4);
 
-        // Get the first Monday of the first week
         int firstWeek = calendar.GetWeekOfYear(jan4, weekRule, firstDayOfWeek);
         DateTime firstMonday = jan4.AddDays(-(int)(jan4.DayOfWeek - DayOfWeek.Monday));
 
