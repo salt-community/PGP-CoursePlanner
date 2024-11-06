@@ -33,4 +33,25 @@ public class CalendarDatesController : ControllerBase
         }
         return NotFound("Date does not exist");
     }
+
+    [HttpGet("batch")]
+    public ActionResult<List<CalendarDate>> GetCalendarDateBatch(DateTime start, DateTime end)
+    {
+        //todo: make async
+        //todo: add blank dates to list if nothing is found in database? 
+        var convertedDateStart = DateTime.SpecifyKind(start, DateTimeKind.Utc);
+        var convertedDateEnd = DateTime.SpecifyKind(end, DateTimeKind.Utc);
+
+        var response = _context.CalendarDates
+                        .Include(convertedDate => convertedDate.DateContent)
+                        .ThenInclude(content => content.Events)
+                        .Where(calendarDate =>  calendarDate.Date.Date >= convertedDateStart.Date && calendarDate.Date.Date <= convertedDateEnd.Date).ToList();
+
+        if (response != null)
+        {
+            return Ok(response);
+        }
+        return NotFound("Date does not exist");
+    }
+
 }
