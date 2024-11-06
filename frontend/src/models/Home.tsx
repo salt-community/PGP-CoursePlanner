@@ -98,7 +98,6 @@ export default function Home() {
                                                 <h1 className="item-center text-xl font-bold text-center text-primary">{format(getDateAsString(day), 'EEEE')}
                                                     <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                                 </h1>
-                                                <p>Today?!</p>
                                             </Link>
                                             <WeekDay dateContent={weekDayDateContent[index]} />
                                         </section>
@@ -107,7 +106,6 @@ export default function Home() {
                                                 <h1 className="item-center text-lg text-center">{format(getDateAsString(day), 'EEEE')}
                                                     <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                                 </h1>
-                                                <p>Im here!!</p>
                                             </Link>
                                             <WeekDay key={format(day, 'd')} dateContent={weekDayDateContent[index]} />
                                         </section>
@@ -122,7 +120,6 @@ export default function Home() {
                                             <h1 className="item-center text-lg text-center">{format(getDateAsString(day), 'EEEE')}
                                                 <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                             </h1>
-                                            <p>Next week yes!?</p>
                                         </Link>
                                         <WeekDay dateContent={weekDayDateContentNextWeek[index]} />
                                     </section>
