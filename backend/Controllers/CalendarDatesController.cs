@@ -73,22 +73,18 @@ public class CalendarDatesController : ControllerBase
 
     private static DateTime GetMondayDate(int year, int weekNumber)
     {
-        // Get the ISO 8601 calendar, which treats the week containing Jan 4 as the first week
         var cultureInfo = CultureInfo.InvariantCulture;
         Calendar calendar = cultureInfo.Calendar;
 
-        // Set the first day of the week to Monday
         CalendarWeekRule weekRule = CalendarWeekRule.FirstFourDayWeek;
         DayOfWeek firstDayOfWeek = DayOfWeek.Monday;
 
-        // Find the first day of the year
         DateTime jan4 = new DateTime(year, 1, 4);
 
         // Get the first Monday of the first week
         int firstWeek = calendar.GetWeekOfYear(jan4, weekRule, firstDayOfWeek);
         DateTime firstMonday = jan4.AddDays(-(int)(jan4.DayOfWeek - DayOfWeek.Monday));
 
-        // Calculate the Monday of the given week
         DateTime mondayOfWeek = firstMonday.AddDays((weekNumber - firstWeek) * 7);
 
         return mondayOfWeek;
