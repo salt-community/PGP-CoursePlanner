@@ -83,9 +83,9 @@ export default function AppliedCourses() {
                             {allAppliedCourses && activeCourses.length > 0
                                 ? <>
                                     <h1 className="text-xl text-primary mb-2 font-bold">Active bootcamps</h1>
-                                    {activeCourses.map((appliedCourse) =>
-                                        <>
-                                            <div className="border-primary border rounded-xl mb-2">
+                                    {activeCourses.map((appliedCourse, index) =>
+                                        
+                                            <div key={index}className="border-primary border rounded-xl mb-2">
                                                 <div className="collapse-title flex flex-col w-full gap-4">
                                                     <Link to={`/activecourses/details/${appliedCourse.id}`} className="text-lg font-bold mb-2">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</Link>
                                                     <div className="flex flex-row">
@@ -103,7 +103,7 @@ export default function AppliedCourses() {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </>
+                                        
                                     )}
                                     <div className="border border-1 border-gray-200 mt-6"></div>
                                 </>
@@ -115,9 +115,9 @@ export default function AppliedCourses() {
                             {allAppliedCourses && futureCourses.length > 0
                                 ? <>
                                     <h1 className="text-xl text-black mt-6 mb-2">Future bootcamps</h1>
-                                    {futureCourses.map((appliedCourse) =>
-                                        <>
-                                            <div className="border-black border rounded-xl mb-2">
+                                    {futureCourses.map((appliedCourse, index) =>
+                                        
+                                            <div key={index}className="border-black border rounded-xl mb-2">
                                                 <div className="collapse-title flex flex-col w-full gap-4">
                                                     <Link to={`/activecourses/details/${appliedCourse.id}`} className="text-lg font-bold mb-2">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</Link>
                                                     <div className="flex flex-row">
@@ -135,7 +135,7 @@ export default function AppliedCourses() {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </>
+                                        
                                     )}
                                     <div className="border border-1 border-gray-200 mt-6"></div>
                                 </>
@@ -147,9 +147,9 @@ export default function AppliedCourses() {
                             {allAppliedCourses && pastCourses.length > 0
                                 ? <>
                                     <h1 className="text-xl text-black mt-6 mb-2">Completed bootcamps</h1>
-                                    {pastCourses.map((appliedCourse) =>
-                                        <>
-                                            <div className="border-black border rounded-xl mb-2">
+                                    {pastCourses.map((appliedCourse, index) =>
+                                        
+                                            <div key={index}className="border-black border rounded-xl mb-2">
                                                 <div className="collapse-title flex flex-col w-full gap-4">
                                                     <Link to={`/activecourses/details/${appliedCourse.id}`} className="text-lg font-bold mb-2">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</Link>
                                                     <div className="flex flex-row">
@@ -167,7 +167,7 @@ export default function AppliedCourses() {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </>
+                                        
                                     )}
                                 </>
                                 : <>
