@@ -72,7 +72,9 @@ export default function CourseDetails() {
     const modules: ModuleType[] = [];
     course?.moduleIds.forEach(element => {
         const module = allModules?.find(m => m.id == element);
-        modules.push(module!)
+        if (module) {
+            modules.push(module);
+        }
     });
 
     let defaultColor = "#FFFFFF";
