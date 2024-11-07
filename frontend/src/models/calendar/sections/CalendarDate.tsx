@@ -33,13 +33,13 @@ export default function CalenderDate({ dateContent, date }: Props) {
                 <h1 className={`${text} text-center self-start mb-1 mt-2`}>
                     {format(date, 'd')}
                 </h1>
-                {appliedCourseColors.length > 0 && appliedCourseColors.map((color, appliedCourseIndex) =>
-                    <>
-                        {dateContent && appliedCourseIds.length > 0 && dateContent.find(dc => dc.appliedCourseId == appliedCourseIds[appliedCourseIndex])
-                            ? <div style={{ backgroundColor: color }} className="w-full h-2 mb-1"></div>
-                            : <div className="w-full h-2 mb-1"></div>}
-                    </>
-                )}
+                {appliedCourseColors.length > 0 && appliedCourseColors.map((color, appliedCourseIndex) => (
+                <div
+                    key={appliedCourseIndex} 
+                    style={{ backgroundColor: color }}
+                    className="w-full h-2 mb-1"
+                ></div>
+                ))}
             </Link>
         </>
     )
