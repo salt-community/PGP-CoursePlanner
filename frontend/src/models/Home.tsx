@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { deleteCookie, getCookie, setCookie } from "../helpers/cookieHelpers";
-import { currentMonth, currentYear, getDateAsString, today, weekDays, weekDaysNextWeek } from "../helpers/dateHelpers";
-import { getCalendarDate } from "../api/CalendarDateApi";
+import { currentMonth, currentWeek, currentYear, getDateAsString, today, weekDays, weekDaysNextWeek } from "../helpers/dateHelpers";
+import { getCalendarDateWeeks } from "../api/CalendarDateApi";
 import { getWeek, format } from "date-fns";
 import { Link } from "react-router-dom";
 import Page from "../components/Page";
 import WeekDay from "./calendar/sections/WeekDay";
-import { DateContent } from "./calendar/Types";
+import { CalendarDateType } from "./calendar/Types";
 import { getTokens } from "../api/UserApi";
 import Login from "./login/Login";
 import { getHomeUrl, trackUrl } from "../helpers/helperMethods";
@@ -50,36 +50,14 @@ export default function Home() {
         }
     }
 
-    const weekDayDateContent: DateContent[][] = [];
-    weekDays.forEach(day => {
-        const dayString = getDateAsString(day).replaceAll("/", "-");
-        const { data } = useQuery({
-            queryKey: ['calendarDates', dayString],
-            queryFn: () => getCalendarDate(dayString)
-        });
-        if (data != undefined) {
-            console.log(data.dateContent);
-            weekDayDateContent.push(data.dateContent);
-        }
-        else
-            weekDayDateContent.push([]);
-    });
-
-    const weekDayDateContentNextWeek: DateContent[][] = [];
-    weekDaysNextWeek.forEach(day => {
-        const dayString = getDateAsString(day).replaceAll("/", "-");
-        const { data } = useQuery({
-            queryKey: ['calendarDates', dayString],
-            queryFn: () => getCalendarDate(dayString)
-        });
-        if (data != undefined)
-            weekDayDateContentNextWeek.push(data.dateContent);
-        else
-            weekDayDateContentNextWeek.push([]);
-    });
+    const { isPending, data } = useQuery<CalendarDateType[]>({
+        queryKey: ['todos'],
+        queryFn: () => getCalendarDateWeeks(currentWeek),
+      })
 
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+    if(isPending) return "pending"
     return (
         loading
             ? <LoadingMessage />
@@ -99,7 +77,7 @@ export default function Home() {
                                                     <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                                 </h1>
                                             </Link>
-                                            <WeekDay dateContent={weekDayDateContent[index]} />
+                                            { data && data[index] !== null ? <WeekDay dateContent = {data[index].dateContent}/> : "" }
                                         </section>
                                         ): ( <section key={format(day, 'd')} className="flex flex-col border border-black rounded-lg w-full gap-3">
                                             <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:italic">
@@ -107,7 +85,7 @@ export default function Home() {
                                                     <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                                 </h1>
                                             </Link>
-                                            <WeekDay key={format(day, 'd')} dateContent={weekDayDateContent[index]} />
+                                            { data && data[index] !== null ? <WeekDay dateContent = {data[index].dateContent}/> : "" }
                                         </section>
                                     ))}
                         </section>
@@ -121,9 +99,8 @@ export default function Home() {
                                                 <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                             </h1>
                                         </Link>
-                                        <WeekDay dateContent={weekDayDateContentNextWeek[index]} />
+                                        {data && data[index+7] !== null ? <WeekDay dateContent = {data[index+7].dateContent}/> : "" }
                                     </section>
-                                
                             )}
                         </section>
                         <div className="flex flex-row gap-2">
