@@ -35,6 +35,7 @@ export async function postCourseToGoogle(eventTemplate: GoogleEvent[]) {
       const data = await response.json();
       return data;
     });
+    alert("Events added, check your Google Calendar!");
   } catch (error) {
     console.error("Error creating events", error);
     alert("Failed to create events");
@@ -91,7 +92,7 @@ export async function deleteCourseFromGoogle(course: string) {
     const result = await getGoogleCourseEvents(course);
     if (result) {
       result.map((event) => deleteSingleGoogleEvent(event));
-      alert("Event deleted, check your Google Calendar!");
+      alert("Events deleted, check your Google Calendar!");
     }
   } catch (error) {
     console.error(error);
