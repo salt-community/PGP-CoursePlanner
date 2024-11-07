@@ -8,9 +8,10 @@ import { currentMonth, firstDayOfMonth, allDaysInInterval, currentYear, fullWeek
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { getCookie } from "../../../helpers/cookieHelpers"
 import Login from "../../login/Login"
-import { DateContent } from "../Types"
-import { getCalendarDate } from "../../../api/CalendarDateApi"
+import { CalendarDateType, DateContent } from "../Types"
+import { getCalendarDate, getCalendarDateBatch } from "../../../api/CalendarDateApi"
 import { useMonthFromPath, useYearFromPath } from "../../../helpers/helperHooks"
+import { useQuery } from "@tanstack/react-query"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(parseInt(useMonthFromPath()));
@@ -30,25 +31,34 @@ export default function MonthView() {
     const numberOfWeeks = getWeek(endOfMonth) - getWeek(startOfMonth) + 1;
     const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
-    const [weekDayDateContent, setWeekDayDateContent] = useState<DateContent[][]>([]);
-    useEffect(() => {
-        const fetchData = async () => {
-            const results = await Promise.all(daysInMonth.map(async day => {
-                const dayString = getDateAsString(day).replaceAll("/", "-");
-                const data = await getCalendarDate(dayString);
-                if (data != undefined) {
-                    return data}
-                else
-                    return []
-            }));
+    // const [weekDayDateContent, setWeekDayDateContent] = useState<DateContent[][]>([]);
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const results = await Promise.all(daysInMonth.map(async day => {
+    //             const dayString = getDateAsString(day).replaceAll("/", "-");
+    //             const data = await getCalendarDate(dayString);
+    //             if (data != undefined) {
+    //                 return data}
+    //             else
+    //                 return []
+    //         }));
 
-            console.log("results", results) // this gives the first promise as undefined and does not get the last one
-            const newWeekDayDateContent = results.map(result => result?.dateContent || []);
-            setWeekDayDateContent(newWeekDayDateContent);
-        };
+    //         console.log("results", results) // this gives the first promise as undefined and does not get the last one
+    //         const newWeekDayDateContent = results.map(result => result?.dateContent || []);
+    //         setWeekDayDateContent(newWeekDayDateContent);
+    //     };
 
-        fetchData();
-    }, [month]);
+    //     fetchData();
+    // }, [month]);
+
+    const { isPending, data } = useQuery<CalendarDateType[]>({
+        queryKey: ['CalendarMonthView'],
+        queryFn: () => getCalendarDateBatch(getDateAsString(startOfMonth), getDateAsString(endOfMonth)),
+      })
+
+      if(isPending) return "pending"
+      console.log(getDateAsString(startOfMonth), getDateAsString(endOfMonth))
+      console.log(data);
 
     return (
         getCookie("access_token") == undefined
@@ -74,7 +84,7 @@ export default function MonthView() {
                             ))}
                             {daysInMonth.map((thisDate, dateIndex) => {
                                 return <div key={format(thisDate, 'yyyy-MM-dd')}  className="flex flex-col">
-                                    <CalendarDate dateContent={weekDayDateContent} dateIndex={dateIndex} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                   {data && <CalendarDate dateContent={data.map(datum => datum.dateContent)} dateIndex={dateIndex} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
                                 </div>
                             })
                             }

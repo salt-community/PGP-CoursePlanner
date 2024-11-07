@@ -51,7 +51,7 @@ export default function Home() {
     }
 
     const { isPending, data } = useQuery<CalendarDateType[]>({
-        queryKey: ['todos'],
+        queryKey: ['CalendarWeeks'],
         queryFn: () => getCalendarDateWeeks(currentWeek),
       })
 
