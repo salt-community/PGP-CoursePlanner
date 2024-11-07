@@ -48,26 +48,26 @@ export async function getCalendarDateWeeks(week: number) {
 
 
 export async function getCalendarDateBatch(start: string, end: string) {
+  console.log("Fetching with GET and query parameters");
+
   try {
-    const response = await fetch(`${BASE_URL}/batch`, {
+    const response = await fetch(`${BASE_URL}/batch?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`, {
       headers: {
         Authorization: `Bearer ${getCookie("JWT")}`,
         Accept: "application/json",
-        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ start, end }),
     });
 
-    if (!response.ok || response == null) {
-      // alert("Failed to get applied courses");
+    if (!response.ok) {
+      console.log("Failed to fetch data");
       return;
     }
 
     const data = await response.json();
+    console.log("Data fetched:", data);
     return data;
   } catch (error) {
-    // console.error(error);
-    // alert("Failed to get applied courses");
+    console.error("Error fetching data:", error);
   }
 }
 

@@ -5,12 +5,11 @@ import { DateContent } from "../Types";
 import { trackUrl } from "../../../helpers/helperMethods";
 
 type Props = {
-    dateContent: DateContent[][];
+    dateContent: DateContent[];
     date: string;
-    dateIndex: number;
 }
 
-export default function CalenderDate({ dateContent, date, dateIndex }: Props) {
+export default function CalenderDate({ dateContent, date }: Props) {
     trackUrl();
 
     const border = today == date ? "border border-2 border-primary hover:border-primary" : "";
@@ -18,14 +17,13 @@ export default function CalenderDate({ dateContent, date, dateIndex }: Props) {
 
     let appliedCourseIds: number[] = [];
     const appliedCourseColors: string[] = [];
-    dateContent.forEach(dcArray => {
-        dcArray.forEach(dc => {
+    dateContent.forEach(dc => {
             if (appliedCourseIds.filter(id => id == dc.appliedCourseId!).length == 0) {
                 appliedCourseIds.push(dc.appliedCourseId!)
                 appliedCourseColors.push(dc.color!)
             }
         });
-    });
+    
     appliedCourseIds = [...new Set(appliedCourseIds.map(item => item))];
 
     return (
@@ -37,7 +35,7 @@ export default function CalenderDate({ dateContent, date, dateIndex }: Props) {
                 </h1>
                 {appliedCourseColors.length > 0 && appliedCourseColors.map((color, appliedCourseIndex) =>
                     <>
-                        {dateContent[dateIndex] && appliedCourseIds.length > 0 && dateContent[dateIndex].find(dc => dc.appliedCourseId == appliedCourseIds[appliedCourseIndex])
+                        {dateContent && appliedCourseIds.length > 0 && dateContent.find(dc => dc.appliedCourseId == appliedCourseIds[appliedCourseIndex])
                             ? <div style={{ backgroundColor: color }} className="w-full h-2 mb-1"></div>
                             : <div className="w-full h-2 mb-1"></div>}
                     </>

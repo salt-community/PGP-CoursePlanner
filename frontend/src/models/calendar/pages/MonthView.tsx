@@ -1,15 +1,15 @@
 import NextBtn from "../../../components/buttons/NextBtn"
 import PreviousBtn from "../../../components/buttons/PreviousBtn"
 import Page from "../../../components/Page"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import CalendarDate from "../sections/CalendarDate"
 import { Link, useNavigate } from "react-router-dom"
 import { currentMonth, firstDayOfMonth, allDaysInInterval, currentYear, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth, today } from "../../../helpers/dateHelpers"
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { getCookie } from "../../../helpers/cookieHelpers"
 import Login from "../../login/Login"
-import { CalendarDateType, DateContent } from "../Types"
-import { getCalendarDate, getCalendarDateBatch } from "../../../api/CalendarDateApi"
+import { CalendarDateType } from "../Types"
+import { getCalendarDateBatch } from "../../../api/CalendarDateApi"
 import { useMonthFromPath, useYearFromPath } from "../../../helpers/helperHooks"
 import { useQuery } from "@tanstack/react-query"
 
@@ -51,14 +51,25 @@ export default function MonthView() {
     //     fetchData();
     // }, [month]);
 
-    const { isPending, data } = useQuery<CalendarDateType[]>({
-        queryKey: ['CalendarMonthView'],
-        queryFn: () => getCalendarDateBatch(getDateAsString(startOfMonth), getDateAsString(endOfMonth)),
-      })
+    const startOfMonth2 = getDateAsString(startOfMonth);
+    const endOfMonth2 = getDateAsString(endOfMonth);
 
-      if(isPending) return "pending"
-      console.log(getDateAsString(startOfMonth), getDateAsString(endOfMonth))
-      console.log(data);
+
+    const { isPending, data, isError, error } = useQuery<CalendarDateType[]>({
+        queryKey: ['CalendarMonthView', startOfMonth2, endOfMonth2],
+        queryFn: () => {
+            console.log("Calling getCalendarDateBatch"); // Check if useQuery is calling the function
+            return getCalendarDateBatch(startOfMonth2, endOfMonth2);
+        },
+    })
+
+    if (isError) {
+        console.log("Query error:", error);
+    }
+    if (isPending) return "pending"
+    
+    console.log(getDateAsString(startOfMonth), getDateAsString(endOfMonth))
+    console.log(data);
 
     return (
         getCookie("access_token") == undefined
@@ -83,8 +94,9 @@ export default function MonthView() {
                                 <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-24"></div>
                             ))}
                             {daysInMonth.map((thisDate, dateIndex) => {
-                                return <div key={format(thisDate, 'yyyy-MM-dd')}  className="flex flex-col">
-                                   {data && <CalendarDate dateContent={data.map(datum => datum.dateContent)} dateIndex={dateIndex} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
+                                return <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
+                                    {data  &&  data[dateIndex] !== null ? <CalendarDate dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} /> 
+                                    : <CalendarDate  dateContent={[]}  key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
                                 </div>
                             })
                             }
@@ -96,7 +108,7 @@ export default function MonthView() {
                                     ? <Link to={`/calendar/week/weeknumberyear=${getWeek(startOfMonth) - 1}-${year}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
                                     : <Link to={`/calendar/week/weeknumberyear=${getWeek(startOfMonth)}-${year}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
                                 }
-                            </>}
+                                </>}
                             <Link to={`/calendar/timeline`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to timeline</Link>
                         </div>
                     </div>
