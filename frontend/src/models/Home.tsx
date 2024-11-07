@@ -54,47 +54,10 @@ export default function Home() {
         queryKey: ['todos'],
         queryFn: () => getCalendarDateWeeks(currentWeek),
       })
-    
-    
-
-    // let weekDayDateContent: DateContent[][] = [];
-    // weekDays.forEach(day => {
-    //     const dayString = getDateAsString(day).replaceAll("/", "-");
-    //     const { data } = useQuery({
-    //         queryKey: ['calendarDates', dayString],
-    //         queryFn: () => getCalendarDate(dayString)
-    //     });
-    //     if (data != undefined) {
-    //        // console.log(data.dateContent);
-    //         weekDayDateContent.push(data.dateContent);
-    //     }
-    //     else
-    //         weekDayDateContent.push([]);
-    // });
-
-    // const weekDayDateContentNextWeek: DateContent[][] = [];
-    // weekDaysNextWeek.forEach(day => {
-    //     const dayString = getDateAsString(day).replaceAll("/", "-");
-    //     const { data } = useQuery({
-    //         queryKey: ['calendarDates', dayString],
-    //         queryFn: () => getCalendarDate(dayString)
-    //     });
-    //     if (data != undefined)
-    //         weekDayDateContentNextWeek.push(data.dateContent);
-    //     else
-    //         weekDayDateContentNextWeek.push([]);
-    // });
 
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     if(isPending) return "pending"
-    //if(isError) return "error"
-
-    console.log(data);
-  //  console.log(data[1].dateContent)
-   // const weekDayDateContent = data.map(dateContent => dateContent  : datecontent ? []); 
-    
-
     return (
         loading
             ? <LoadingMessage />
@@ -114,8 +77,7 @@ export default function Home() {
                                                     <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                                 </h1>
                                             </Link>
-                                            {/* <WeekDay dateContent={weekDayDateContent[index]} /> */}
-                                            { data[index] !== null ? <WeekDay dateContent = {data[index].dateContent}/> : "" }
+                                            { data && data[index] !== null ? <WeekDay dateContent = {data[index].dateContent}/> : "" }
                                         </section>
                                         ): ( <section key={format(day, 'd')} className="flex flex-col border border-black rounded-lg w-full gap-3">
                                             <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:italic">
@@ -123,9 +85,7 @@ export default function Home() {
                                                     <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                                 </h1>
                                             </Link>
-                                            { data[index] !== null ? <WeekDay dateContent = {data[index].dateContent}/> : "" }
-
-                                            {/* <WeekDay key={format(day, 'd')} dateContent={weekDayDateContent[index]} /> */}
+                                            { data && data[index] !== null ? <WeekDay dateContent = {data[index].dateContent}/> : "" }
                                         </section>
                                     ))}
                         </section>
@@ -139,11 +99,8 @@ export default function Home() {
                                                 <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                             </h1>
                                         </Link>
-                                        { data[index+7] !== null ? <WeekDay dateContent = {data[index+7].dateContent}/> : "" }
-
-                                        {/* <WeekDay dateContent={weekDayDateContentNextWeek[index]} /> */}
+                                        {data && data[index+7] !== null ? <WeekDay dateContent = {data[index+7].dateContent}/> : "" }
                                     </section>
-                                
                             )}
                         </section>
                         <div className="flex flex-row gap-2">
