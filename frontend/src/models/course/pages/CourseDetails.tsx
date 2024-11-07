@@ -4,7 +4,7 @@ import Page from "../../../components/Page";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIdFromPath } from "../../../helpers/helperHooks";
 import { getAllModules } from "../../../api/ModuleApi";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { editAppliedCourse, getAllAppliedCourses, postAppliedCourse } from "../../../api/AppliedCourseApi";
 import { convertToGoogle } from "../../../helpers/googleHelpers";
@@ -12,9 +12,7 @@ import DeleteBtn from "../../../components/buttons/DeleteBtn";
 import { deleteCourseFromGoogle } from "../../../api/GoogleCalendarApi";
 import ColorSelection from "../../../components/ColorSelection";
 import ColorBtn from "../../../components/buttons/ColorButton";
-import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import CloseBtn from "../../../components/buttons/CloseBtn";
 import { ModuleType } from "../../module/Types";
 import { AppliedCourseType } from "../Types";
 import LoadingMessage from "../../../components/LoadingMessage";
@@ -28,7 +26,6 @@ export default function CourseDetails() {
 
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
-    const [isOpened, setIsOpened] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
@@ -54,21 +51,6 @@ export default function CourseDetails() {
         });
     }
 
-    const popupRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-                setIsOpened(false);
-            }
-        }
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
     const modules: ModuleType[] = [];
     course?.moduleIds.forEach(element => {
         const module = allModules?.find(m => m.id == element);
@@ -83,7 +65,7 @@ export default function CourseDetails() {
     useEffect(() => {
         if (course && allAppliedCourses) {
             const appliedCoursesWithCourseId = allAppliedCourses.filter(m => m.courseId! === course.id);
-            
+
             if (appliedCoursesWithCourseId.length > 0) {
                 defaultColor = appliedCoursesWithCourseId[0].color;
                 setColor(defaultColor)
@@ -144,6 +126,13 @@ export default function CourseDetails() {
             navigate(`/courses`);
         }
     })
+
+    function handleColorModal(state: string) {
+        const modal = document.getElementById('color-modal') as HTMLDialogElement;
+        return state === "open"
+            ? modal.showModal()
+            : modal.close();
+    }
 
     return (
         getCookie("access_token") == undefined
@@ -207,29 +196,17 @@ export default function CourseDetails() {
                                 }
                             } />
 
-                            <Popup
-                                open={isOpened}
-                                onOpen={() => setIsOpened(true)}
-                                trigger={<ColorBtn color={color}>Select color</ColorBtn>}
-                                modal
-                            >
-                                {
-                                    <div ref={popupRef}>
-
-                                        <div className="flex flex-col">
-                                            <div className="flex justify-end">
-                                                <CloseBtn onClick={() => setIsOpened(false)} />
-                                            </div>
-                                            <div className="self-center mt-2 mb-4">
-                                                <ColorSelection color={color} setColor={setColor}></ColorSelection>
-                                            </div>
-                                            <div className="self-center mb-4">
-                                                <ColorBtn onClick={() => setIsOpened(false)} color={color}>Select color</ColorBtn>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            </Popup>
+                            <ColorBtn color={color} onClick={() => handleColorModal("open")}>Select color</ColorBtn>
+                            <dialog id="color-modal" className="modal">
+                                <div className="modal-box flex flex-col items-center gap-4">
+                                    <ColorSelection color={color} setColor={setColor}></ColorSelection>
+                                    <ColorBtn onClick={() => handleColorModal("close")} color={color}>Select color</ColorBtn>
+                                    <button className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => handleColorModal("close")}>✕</button>
+                                </div>
+                                <form method="dialog" className="modal-backdrop">
+                                    <button>close</button>
+                                </form>
+                            </dialog>
 
                         </div>
                         {isColorNotSelected &&
