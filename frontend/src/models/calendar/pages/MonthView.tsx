@@ -47,9 +47,6 @@ export default function MonthView() {
     }
     if (isPending) return "pending"
     
-    console.log(getDateAsString(startOfMonth), getDateAsString(endOfMonth))
-    console.log(data);
-
     return (
         getCookie("access_token") == undefined
             ? <Login />

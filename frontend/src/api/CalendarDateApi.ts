@@ -62,7 +62,6 @@ export async function getCalendarDateBatch(start: string, end: string) {
     }
 
     const data = await response.json();
-    console.log("Data fetched:", data);
     return data;
   } catch (error) {
     console.error("Error fetching data:", error);
