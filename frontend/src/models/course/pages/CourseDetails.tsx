@@ -10,8 +10,6 @@ import { editAppliedCourse, getAllAppliedCourses, postAppliedCourse } from "../.
 import { convertToGoogle } from "../../../helpers/googleHelpers";
 import DeleteBtn from "../../../components/buttons/DeleteBtn";
 import { deleteCourseFromGoogle } from "../../../api/GoogleCalendarApi";
-import ColorSelection from "../../../components/ColorSelection";
-import ColorBtn from "../../../components/buttons/ColorButton";
 import 'reactjs-popup/dist/index.css';
 import { ModuleType } from "../../module/Types";
 import { AppliedCourseType } from "../Types";
@@ -20,6 +18,7 @@ import ErrorMessage from "../../../components/ErrorMessage";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
 import { trackUrl } from "../../../helpers/helperMethods";
+import ColorPickerModal from "../../../components/ColorPickerModal";
 
 export default function CourseDetails() {
     trackUrl();
@@ -127,13 +126,6 @@ export default function CourseDetails() {
         }
     })
 
-    function handleColorModal(state: string) {
-        const modal = document.getElementById('color-modal') as HTMLDialogElement;
-        return state === "open"
-            ? modal.showModal()
-            : modal.close();
-    }
-
     return (
         getCookie("access_token") == undefined
             ? <Login />
@@ -195,19 +187,7 @@ export default function CourseDetails() {
                                     }
                                 }
                             } />
-
-                            <ColorBtn color={color} onClick={() => handleColorModal("open")}>Select color</ColorBtn>
-                            <dialog id="color-modal" className="modal">
-                                <div className="modal-box flex flex-col items-center gap-4">
-                                    <ColorSelection color={color} setColor={setColor}></ColorSelection>
-                                    <ColorBtn onClick={() => handleColorModal("close")} color={color}>Select color</ColorBtn>
-                                    <button className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => handleColorModal("close")}>✕</button>
-                                </div>
-                                <form method="dialog" className="modal-backdrop">
-                                    <button>close</button>
-                                </form>
-                            </dialog>
-
+                            <ColorPickerModal color={color} setColor={setColor} />
                         </div>
                         {isColorNotSelected &&
                             <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a color for the calendar items</p>}
