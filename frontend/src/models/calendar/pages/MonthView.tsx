@@ -31,26 +31,6 @@ export default function MonthView() {
     const numberOfWeeks = getWeek(endOfMonth) - getWeek(startOfMonth) + 1;
     const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
-    // const [weekDayDateContent, setWeekDayDateContent] = useState<DateContent[][]>([]);
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const results = await Promise.all(daysInMonth.map(async day => {
-    //             const dayString = getDateAsString(day).replaceAll("/", "-");
-    //             const data = await getCalendarDate(dayString);
-    //             if (data != undefined) {
-    //                 return data}
-    //             else
-    //                 return []
-    //         }));
-
-    //         console.log("results", results) // this gives the first promise as undefined and does not get the last one
-    //         const newWeekDayDateContent = results.map(result => result?.dateContent || []);
-    //         setWeekDayDateContent(newWeekDayDateContent);
-    //     };
-
-    //     fetchData();
-    // }, [month]);
-
     const startOfMonth2 = getDateAsString(startOfMonth);
     const endOfMonth2 = getDateAsString(endOfMonth);
 
@@ -58,7 +38,6 @@ export default function MonthView() {
     const { isPending, data, isError, error } = useQuery<CalendarDateType[]>({
         queryKey: ['CalendarMonthView', startOfMonth2, endOfMonth2],
         queryFn: () => {
-            console.log("Calling getCalendarDateBatch"); // Check if useQuery is calling the function
             return getCalendarDateBatch(startOfMonth2, endOfMonth2);
         },
     })
