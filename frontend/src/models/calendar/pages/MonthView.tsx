@@ -1,16 +1,17 @@
 import NextBtn from "../../../components/buttons/NextBtn"
 import PreviousBtn from "../../../components/buttons/PreviousBtn"
 import Page from "../../../components/Page"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import CalendarDate from "../sections/CalendarDate"
 import { Link, useNavigate } from "react-router-dom"
 import { currentMonth, firstDayOfMonth, allDaysInInterval, currentYear, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth, today } from "../../../helpers/dateHelpers"
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { getCookie } from "../../../helpers/cookieHelpers"
 import Login from "../../login/Login"
-import { DateContent } from "../Types"
-import { getCalendarDate } from "../../../api/CalendarDateApi"
+import { CalendarDateType } from "../Types"
+import { getCalendarDateBatch } from "../../../api/CalendarDateApi"
 import { useMonthFromPath, useYearFromPath } from "../../../helpers/helperHooks"
+import { useQuery } from "@tanstack/react-query"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(parseInt(useMonthFromPath()));
@@ -30,26 +31,22 @@ export default function MonthView() {
     const numberOfWeeks = getWeek(endOfMonth) - getWeek(startOfMonth) + 1;
     const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
-    const [weekDayDateContent, setWeekDayDateContent] = useState<DateContent[][]>([]);
-    useEffect(() => {
-        const fetchData = async () => {
-            const results = await Promise.all(daysInMonth.map(async day => {
-                const dayString = getDateAsString(day).replaceAll("/", "-");
-                const data = await getCalendarDate(dayString);
-                if (data != undefined) {
-                    return data}
-                else
-                    return []
-            }));
+    const startOfMonth2 = getDateAsString(startOfMonth);
+    const endOfMonth2 = getDateAsString(endOfMonth);
 
-            console.log("results", results) // this gives the first promise as undefined and does not get the last one
-            const newWeekDayDateContent = results.map(result => result?.dateContent || []);
-            setWeekDayDateContent(newWeekDayDateContent);
-        };
 
-        fetchData();
-    }, [month]);
+    const { isPending, data, isError, error } = useQuery<CalendarDateType[]>({
+        queryKey: ['CalendarMonthView', startOfMonth2, endOfMonth2],
+        queryFn: () => {
+            return getCalendarDateBatch(startOfMonth2, endOfMonth2);
+        },
+    })
 
+    if (isError) {
+        console.log("Query error:", error);
+    }
+    if (isPending) return "pending"
+    
     return (
         getCookie("access_token") == undefined
             ? <Login />
@@ -73,8 +70,9 @@ export default function MonthView() {
                                 <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-24"></div>
                             ))}
                             {daysInMonth.map((thisDate, dateIndex) => {
-                                return <div key={format(thisDate, 'yyyy-MM-dd')}  className="flex flex-col">
-                                    <CalendarDate dateContent={weekDayDateContent} dateIndex={dateIndex} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                return <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
+                                    {data  &&  data[dateIndex] !== null ? <CalendarDate dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} /> 
+                                    : <CalendarDate  dateContent={[]}  key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
                                 </div>
                             })
                             }
@@ -86,7 +84,7 @@ export default function MonthView() {
                                     ? <Link to={`/calendar/week/weeknumberyear=${getWeek(startOfMonth) - 1}-${year}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
                                     : <Link to={`/calendar/week/weeknumberyear=${getWeek(startOfMonth)}-${year}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
                                 }
-                            </>}
+                                </>}
                             <Link to={`/calendar/timeline`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to timeline</Link>
                         </div>
                     </div>

@@ -45,3 +45,25 @@ export async function getCalendarDateWeeks(week: number) {
     // alert("Failed to get applied courses");
   }
 }
+
+
+export async function getCalendarDateBatch(start: string, end: string) {
+  try {
+    const response = await fetch(`${BASE_URL}/batch?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`, {
+      headers: {
+        Authorization: `Bearer ${getCookie("JWT")}`,
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      console.log("Failed to fetch data");
+      return;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
