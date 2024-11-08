@@ -182,6 +182,7 @@ export default function Module({
               name="numberOfDays"
               onChange={(e) => setNumOfDays(parseInt(e.target.value))}
               value={numOfDays.toString()}
+              min="0"
               className="input input-bordered input-sm w-3/5 mr-4"
               placeholder="Number of days"
             />

@@ -272,6 +272,7 @@ export default function Course({
                 type="number"
                 name="numberOfWeeks"
                 onChange={(e) => setNumOfWeeks(parseInt(e.target.value))}
+                min="0"
                 placeholder="Number of weeks"
               />
             ) : (
@@ -281,6 +282,7 @@ export default function Course({
                 name="numberOfWeeks"
                 onChange={(e) => setNumOfWeeks(parseInt(e.target.value))}
                 value={numOfWeeks.toString()}
+                min="0"
                 placeholder="Number of weeks"
               />
             )}
