@@ -138,7 +138,7 @@ export default function CourseDetails() {
                             <h1 className="pb-4 text-xl text-primary font-bold">{course.name}</h1>
                             {modules && modules.map((module, index) =>
                                 <div key={module.id}>
-                                    <h1 className="text-lg text-black font-bold self-start">
+                                    <h1 className="text-lg font-bold self-start">
                                         <Link to={`/modules/details/${module.id}`} className="hover:italic">
                                             Module {index + 1}: {module.name}
                                         </Link>
