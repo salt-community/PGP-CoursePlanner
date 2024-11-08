@@ -487,6 +487,6 @@ $RECYCLE.BIN/
 *.swp
 
 # Environment configuration files for frontend
-Frontend/.env.development.local
-Frontend/.env.production.local
+frontend/.env.development.local
+frontend/.env.production.local
 
