@@ -165,15 +165,15 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                         <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Track(s):</h2>
                         <div className="relative w-3/5 mr-4">
                             {track.length > 0
-                                ? <button ref={buttonRef} type="button" id="dropdownToggle" onClick={handleClick} className="h-8 text-start pl-3 text-sm text-black w-full border rounded-lg border-gray-300">
+                                ? <button ref={buttonRef} type="button" id="dropdownToggle" onClick={handleClick} className="h-8 text-start pl-3 text-sm w-full border rounded-lg border-gray-300">
                                     {track.join(", ")}
                                 </button>
-                                : <button ref={buttonRef} type="button" id="dropdownToggle" onClick={handleClick} className="h-8 text-start pl-3 text-sm text-gray-400 w-full border rounded-lg border-gray-300">
+                                : <button ref={buttonRef} type="button" id="dropdownToggle" onClick={handleClick} className="h-8 text-start pl-3 text-sm w-full border rounded-lg border-gray-300">
                                     Select
                                 </button>
                             }
 
-                            <ul ref={dropdownRef} id="dropdownMenu" className='absolute hidden bg-white py-2 px-2 z-[1000] w-full shadow'>
+                            <ul ref={dropdownRef} id="dropdownMenu" className='absolute hidden bg-neutral rounded-lg py-2 px-2 z-[1000] w-full shadow'>
                                 <li>
                                     <label className="flex flex-row gap-2">
                                         <input

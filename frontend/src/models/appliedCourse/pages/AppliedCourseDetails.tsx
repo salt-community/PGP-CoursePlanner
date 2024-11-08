@@ -77,7 +77,7 @@ export default function AppliedCourseDetails() {
                             <section className="flex items-start flex-col gap-4 px-1 sm:p-0 md:px-24">
                                 {appliedModules!.map((module, index) =>
                                     <div key={module.id}>
-                                        <h1 className="text-lg text-black font-bold self-start">
+                                        <h1 className="text-lg font-bold self-start">
                                             Module {index + 1}: {module.name}
                                         </h1>
                                         {module.days.map((day) => {
