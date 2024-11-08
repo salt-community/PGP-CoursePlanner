@@ -69,9 +69,9 @@ export default function ModuleDetails() {
                                 </div>
                                 {module.days.map((day) =>
                                     <div className="w-full" key={"day_" + day.dayNumber}>
-                                        <h1 className="text-lg text-black font-bold self-start">
+                                        <h2 className="text-lg  font-bold self-start">
                                             Day {day.dayNumber}: {day.description}
-                                        </h1>
+                                        </h2>
                                         <table className="table table-sm lg:table-lg">
                                             <thead>
                                                 {day.events.length > 0 &&
