@@ -1,8 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Page, Text, View, Document, StyleSheet, usePDF } from '@react-pdf/renderer';
 import { AppliedCourseType } from '../../course/Types';
-import Popup from 'reactjs-popup';
-import CloseBtn from '../../../components/buttons/CloseBtn';
 import { AppliedModuleType } from '../Types';
 
 type PDFWeekGeneratorProps = {
@@ -11,27 +9,10 @@ type PDFWeekGeneratorProps = {
 };
 
 export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFWeekGeneratorProps) {
-    const [isOpened, setIsOpened] = useState<boolean>(false);
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
     const [selectedModuleObject, setSelectedModuleObject] = useState<AppliedModuleType | null>(null);
     const [documentName, setDocumentName] = useState<string>("");
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
-
-    const popupRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-                setIsOpened(false);
-            }
-        }
-
-        document.addEventListener('mousedown', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
 
     const moduleDays: string[] = [];
     const moduleDaysPerModule: string[][] = [];
@@ -179,7 +160,7 @@ export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFW
 
     useEffect(() => {
         updateInstance(generateDocument(selectedModuleObject));
-    }, [selectedModuleObject, updateInstance]); 
+    }, [selectedModuleObject, updateInstance]);
 
     const handleSelectModule = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value;
@@ -192,27 +173,25 @@ export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFW
     };
 
     const setAllToFalse = () => {
-        setIsOpened(false);
         setIsIncompleteInput(false);
         setSelectedModule("DEFAULT");
     }
 
+    function handlePDFModalOverview(state: string) {
+        const modal = document.getElementById('pdf-modal-overview') as HTMLDialogElement;
+        return state === "open"
+            ? modal.showModal()
+            : modal.close();
+    }
+
     return (
-        <Popup
-            open={isOpened}
-            onOpen={() => setIsOpened(true)}
-            onClose={() => setAllToFalse()}
-            trigger={<button className="btn btn-sm py-1 max-w-xs btn-primary text-white">
+        <>
+            <button className="btn btn-sm py-1 max-w-xs btn-primary text-white" onClick={() => handlePDFModalOverview("open")}>
                 Create PDF - Module Overview
-            </button>}
-            modal
-        >
-            <div ref={popupRef}>
-                <div className="flex flex-col">
-                    <div className="flex justify-end">
-                        <CloseBtn onClick={() => setIsOpened(false)} />
-                    </div>
-                    <h1 className="m-2 self-center">For which module do you want to create a PDF?</h1>
+            </button>
+            <dialog id="pdf-modal-overview" className="modal">
+                <div className="modal-box flex flex-col items-center gap-4">
+                    <h2 className="m-2 self-center">For which module do you want to create a PDF?</h2>
                     <div className="flex flex-col self-center">
                         <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'}>
                             <option key={"default"} value="DEFAULT" disabled>Select Module</option>
@@ -232,13 +211,17 @@ export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFW
                                 Create PDF
                             </button>
                         }
-                        <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"Cancel"} onClick={() => setAllToFalse()} />
+                        <button className="btn btn-sm mt-4 w-24 btn-error text-white" onClick={() => {setAllToFalse(); handlePDFModalOverview("close")}}>Cancel</button>
                     </div>
                     {isIncompleteInput && (
                         <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module</p>
                     )}
+                    <button className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => handlePDFModalOverview("close")}>✕</button>
                 </div>
-            </div>
-        </Popup>
+                <form method="dialog" className="modal-backdrop">
+                    <button>close</button>
+                </form>
+            </dialog>
+        </>
     );
 }
