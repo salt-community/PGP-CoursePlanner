@@ -76,14 +76,14 @@ export default function AppliedCourseDetails() {
                             </section>
                             <section className="flex items-start flex-col gap-4 px-1 sm:p-0 md:px-24">
                                 {appliedModules!.map((module, index) =>
-                                    <div key={module.id}>
+                                    <div key={index}>
                                         <h1 className="text-lg font-bold self-start">
                                             Module {index + 1}: {module.name}
                                         </h1>
-                                        {module.days.map((day) => {
+                                        {module.days.map((day, index) => {
                                             counter++;
                                             return (
-                                                <div className="w-full">
+                                                <div key={index} className="w-full">
                                                     {day.events.length > 0
                                                         ? <div className="collapse w-full">
                                                             <input type="checkbox" id={`collapse-toggle-events-${day.dayNumber}-${module.id}`} className="hidden" />

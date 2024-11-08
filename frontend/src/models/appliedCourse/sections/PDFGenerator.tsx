@@ -105,7 +105,7 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
                     </View>
                 </Page>
                 {appliedCourse.modules!.map((module, moduleIndex) => (
-                    <Page size="A4" style={styles.page}>
+                    <Page key={moduleIndex}size="A4" style={styles.page}>
                         <View style={styles.section}>
                             <Text style={styles.text}>MODULE {moduleIndex + 1}: {module.name.toUpperCase()}</Text>
                         </View>
@@ -118,12 +118,12 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
                             {module.days.map((day, dayIndex) => {
                                 counter++;
                                 return (
-                                    <>
+                                    
                                         <View key={dayIndex} style={styles.row} wrap={false}>
                                             <Text style={styles.col1}>{dayIndex + 1}</Text>
                                             <Text style={styles.col2}>{courseWeekDays[counter]}</Text>
                                             <Text style={styles.col3}>{day.description}</Text>
-                                        </View>
+                                        
 
                                         {day.events.length > 0 && day.events.map((event, eventIndex) => (
                                             <View key={eventIndex} style={[styles.eventTable, styles.row]} wrap={false}>
@@ -131,10 +131,10 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
                                                 <Text style={styles.eventCol2}>{event.description!}</Text>
                                                 <Text style={styles.eventCol3}>{event.startTime + "-" + event.endTime}</Text>
                                             </View>
-                                        ))
-                                        }
+                                        ))}
+                                        </View>
 
-                                    </>
+                                    
                                 )
                             })}
                         </View>
