@@ -4,8 +4,8 @@ type Props = {
 
 export default function PreviousBtn({ onClick }: Props) {
     return (
-            <button onClick={onClick} className="btn btn-square btn-outline hover:bg-gray-200 flex mt-72">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M15.293 3.293 6.586 12l8.707 8.707 1.414-1.414L9.414 12l7.293-7.293-1.414-1.414z" /></svg>
+            <button onClick={onClick} className="btn btn-square flex mt-72">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" stroke-width="2" stroke="currentColor"><path d="M15.293 3.293 6.586 12l8.707 8.707 1.414-1.414L9.414 12l7.293-7.293-1.414-1.414z" /></svg>
             </button>
     )
 
