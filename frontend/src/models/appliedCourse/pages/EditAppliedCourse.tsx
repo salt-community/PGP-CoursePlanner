@@ -399,7 +399,7 @@ export default function EditAppliedCourse() {
                                                                 fill="none"
                                                                 stroke="#3F00E7"
                                                                 strokeWidth="2"
-                                                                stroke-linecap="round"
+                                                                strokeLinecap="round"
                                                                 stroke-linejoin="round"
                                                             >
                                                                 <path d="M6 9l6 6 6-6" />
@@ -423,7 +423,7 @@ export default function EditAppliedCourse() {
                                                                 fill="none"
                                                                 stroke="#3F00E7"
                                                                 strokeWidth="2"
-                                                                stroke-linecap="round"
+                                                                strokeLinecap="round"
                                                                 stroke-linejoin="round"
                                                             >
                                                                 <path d="M18 15l-6-6-6 6" />
@@ -447,7 +447,7 @@ export default function EditAppliedCourse() {
                                                                 fill="none"
                                                                 stroke="#3F00E7"
                                                                 strokeWidth="2"
-                                                                stroke-linecap="round"
+                                                                strokeLinecap="round"
                                                                 stroke-linejoin="round"
                                                             >
                                                                 <path d="M18 15l-6-6-6 6" />
@@ -467,7 +467,7 @@ export default function EditAppliedCourse() {
                                                                 fill="none"
                                                                 stroke="#3F00E7"
                                                                 strokeWidth="2"
-                                                                stroke-linecap="round"
+                                                                strokeLinecap="round"
                                                                 stroke-linejoin="round"
                                                             >
                                                                 <path d="M6 9l6 6 6-6" />
