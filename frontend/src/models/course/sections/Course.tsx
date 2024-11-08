@@ -243,7 +243,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 {isIncorrectName &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
                 {modules && courseModules.map((thisCourseModule, index) =>
-                    <div className="flex flex-row">
+                    <div key={index}className="flex flex-row">
                         {index == 0 && index != courseModules.length - 1 &&
                             <div className="flex flex-col w-[26px] mr-2">
                                 <button type="button" className="w-full h-full self-center" onClick={() => moveDown(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
