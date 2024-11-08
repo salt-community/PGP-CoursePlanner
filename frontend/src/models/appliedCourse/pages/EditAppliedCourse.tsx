@@ -291,7 +291,7 @@ export default function EditAppliedCourse() {
         }
     }
     const lastTrackedUrl = getLastTrackedUrl();
-    const splitUrl = lastTrackedUrl?.split("5173"); //change this for deploy!
+    const splitUrl = lastTrackedUrl?.split("5173"); //change this for deploy! TODO
 
     return getCookie("access_token") == undefined ? (
         <Login />
@@ -337,7 +337,7 @@ export default function EditAppliedCourse() {
                         {modules &&
                             appliedModules &&
                             appliedModules.map((appliedModule, index) => (
-                                <>
+                                <div key={index}>
                                     {appliedModule.name == "" ? (
                                         <div className="collapse border-primary border mb-2">
                                             <input
@@ -365,6 +365,7 @@ export default function EditAppliedCourse() {
                                                         </option>
                                                         {modules.map((module) => (
                                                             <option
+                                                                key={module.id}
                                                                 value={`${module.id}_${index}_${appliedModule.id}`}
                                                             >
                                                                 {module.name} ({module.numberOfDays} days)
@@ -509,7 +510,7 @@ export default function EditAppliedCourse() {
                                             </div>
                                         </div>
                                     )}
-                                </>
+                                </div>
                             ))}
                         {isInvalidDate && (
                             <p
