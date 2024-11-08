@@ -32,7 +32,6 @@ export default function CourseDetails() {
     const { data: course, isLoading, isError } = useQuery({
         queryKey: ['courses', courseId],
         queryFn: () => {
-            console.log("heyyy")
             return getCourseById(parseInt(courseId))
         }
     });
@@ -124,7 +123,7 @@ export default function CourseDetails() {
             return deleteCourse(id);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['courses'] })
+            queryClient.invalidateQueries({ queryKey: ['courses', parseInt(courseId)] })
             navigate(`/courses`);
         }
     })
