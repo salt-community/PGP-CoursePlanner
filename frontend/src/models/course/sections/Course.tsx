@@ -233,7 +233,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                         <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Number of weeks:</h2>
                         {numOfWeeks == 0
                             ? <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" />
-                            : <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks} placeholder="Number of weeks" />
+                            : <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks.toString()} min="0" placeholder="Number of weeks" />
                         }
                     </div>
                     {modules &&
