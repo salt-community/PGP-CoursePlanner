@@ -398,9 +398,9 @@ export default function EditAppliedCourse() {
                                                                 viewBox="0 0 24 24"
                                                                 fill="none"
                                                                 stroke="#3F00E7"
-                                                                stroke-width="2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
+                                                                strokeWidth="2"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
                                                             >
                                                                 <path d="M6 9l6 6 6-6" />
                                                             </svg>
@@ -422,9 +422,9 @@ export default function EditAppliedCourse() {
                                                                 viewBox="0 0 24 24"
                                                                 fill="none"
                                                                 stroke="#3F00E7"
-                                                                stroke-width="2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
+                                                                strokeWidth="2"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
                                                             >
                                                                 <path d="M18 15l-6-6-6 6" />
                                                             </svg>
@@ -446,9 +446,9 @@ export default function EditAppliedCourse() {
                                                                 viewBox="0 0 24 24"
                                                                 fill="none"
                                                                 stroke="#3F00E7"
-                                                                stroke-width="2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
+                                                                strokeWidth="2"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
                                                             >
                                                                 <path d="M18 15l-6-6-6 6" />
                                                             </svg>
@@ -466,9 +466,9 @@ export default function EditAppliedCourse() {
                                                                 viewBox="0 0 24 24"
                                                                 fill="none"
                                                                 stroke="#3F00E7"
-                                                                stroke-width="2"
-                                                                stroke-linecap="round"
-                                                                stroke-linejoin="round"
+                                                                strokeWidth="2"
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
                                                             >
                                                                 <path d="M6 9l6 6 6-6" />
                                                             </svg>
