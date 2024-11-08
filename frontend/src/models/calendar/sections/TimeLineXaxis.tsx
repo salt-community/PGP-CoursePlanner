@@ -11,9 +11,9 @@ export default function TimeLineXaxis({ dates, width }: Props) {
 
   return (
     <>
-      {dates.map((currentDate) => {
+      {dates.map((currentDate, index) => {
         return (
-        <div className="mb-2 flex">
+        <div key={index} className="mb-2 flex">
           {currentDate.getDay() == 1
             ? <div style={{ "width": widthString}} className="font-bold">{format(currentDate, "MMM d")}</div>
             : <div style={{ "width": widthString}} className="font-bold"></div>
