@@ -36,7 +36,6 @@ export async function getCourseById(courseId: number) {
 
     if (!response.ok || response == null) {
       // alert("Failed to get course");
-      console.log("getCourseById är den som buggar")
       return;
     }
 
