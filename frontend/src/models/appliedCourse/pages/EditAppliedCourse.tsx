@@ -400,7 +400,7 @@ export default function EditAppliedCourse() {
                                                                 stroke="#3F00E7"
                                                                 strokeWidth="2"
                                                                 strokeLinecap="round"
-                                                                stroke-linejoin="round"
+                                                                strokeLinejoin="round"
                                                             >
                                                                 <path d="M6 9l6 6 6-6" />
                                                             </svg>
@@ -424,7 +424,7 @@ export default function EditAppliedCourse() {
                                                                 stroke="#3F00E7"
                                                                 strokeWidth="2"
                                                                 strokeLinecap="round"
-                                                                stroke-linejoin="round"
+                                                                strokeLinejoin="round"
                                                             >
                                                                 <path d="M18 15l-6-6-6 6" />
                                                             </svg>
@@ -448,7 +448,7 @@ export default function EditAppliedCourse() {
                                                                 stroke="#3F00E7"
                                                                 strokeWidth="2"
                                                                 strokeLinecap="round"
-                                                                stroke-linejoin="round"
+                                                                strokeLinejoin="round"
                                                             >
                                                                 <path d="M18 15l-6-6-6 6" />
                                                             </svg>
@@ -468,7 +468,7 @@ export default function EditAppliedCourse() {
                                                                 stroke="#3F00E7"
                                                                 strokeWidth="2"
                                                                 strokeLinecap="round"
-                                                                stroke-linejoin="round"
+                                                                strokeLinejoin="round"
                                                             >
                                                                 <path d="M6 9l6 6 6-6" />
                                                             </svg>
