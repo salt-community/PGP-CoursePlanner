@@ -1,5 +1,5 @@
 import { format, getMonth, getWeek, getYear } from "date-fns";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import NextBtn from "../../../components/buttons/NextBtn";
 import PreviousBtn from "../../../components/buttons/PreviousBtn";
@@ -8,9 +8,10 @@ import { fullWeekOfWeekNumber, getDateAsString } from "../../../helpers/dateHelp
 import { useWeekFromPath, useYearFromPath } from "../../../helpers/helperHooks";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
-import { getCalendarDate } from "../../../api/CalendarDateApi";
-import { DateContent } from "../Types";
+import { getCalendarDateBatch } from "../../../api/CalendarDateApi";
+import { CalendarDateType } from "../Types";
 import WeekDayCalendar from "../sections/WeekDayCalendar";
+import { useQuery } from "@tanstack/react-query";
 
 export default function MonthView() {
     const [week, setWeek] = useState<number>(parseInt(useWeekFromPath()));
@@ -30,25 +31,20 @@ export default function MonthView() {
     const yearFirstDay = getYear(allWeekDays[0])
     const yearLastDay = getYear(allWeekDays[6])
 
-    const [weekDayDateContent, setWeekDayDateContent] = useState<DateContent[][]>([]);
-    useEffect(() => {
-        const fetchData = async () => {
-            const promises = allWeekDays.map(day => {
-                const dayString = getDateAsString(day).replaceAll("/", "-");
-                const data = getCalendarDate(dayString);
-                if (data != undefined)
-                    return data
-                else
-                    return []
-            });
+    const monday = getDateAsString(allWeekDays[0])
+    const sunday = getDateAsString(allWeekDays[6])
 
-            const results = await Promise.all(promises);
-            const newWeekDayDateContent = results.map(result => result?.dateContent || []);
-            setWeekDayDateContent(newWeekDayDateContent);
-        };
+    const { isPending, data, isError, error } = useQuery<CalendarDateType[]>({
+        queryKey: ['CalendarWeekView', monday, sunday],
+        queryFn: () => {
+            return getCalendarDateBatch(monday, sunday);
+        },
+    })
 
-        fetchData();
-    }, [week]);
+    if (isError) {
+        console.log("Query error:", error);
+    }
+    if (isPending) return "pending"
 
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -82,9 +78,12 @@ export default function MonthView() {
                             {allWeekDays.map(day => (
                                 <div key={format(day, 'E')} className="h-28 w-1/7 flex items-center justify-center py-1 px-1 border-b-2 border-gray-100 border-3">{format(day, 'E')}</div>
                             ))}
-                            {allWeekDays.map((date, dateIndex) =>
-                                <WeekDayCalendar key={format(date, 'd')} dateContent={weekDayDateContent[dateIndex]} date={getDateAsString(date)} />
-                            )
+                            {allWeekDays.map((thisDate, dateIndex) => {
+                                return <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
+                                    {data  &&  data[dateIndex] !== null ? <WeekDayCalendar dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} /> 
+                                    : <WeekDayCalendar  dateContent={[]}  key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
+                                </div>
+                            })
                             }
                             <div className="h-2"></div>
                         </div>
