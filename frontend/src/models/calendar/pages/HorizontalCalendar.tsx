@@ -147,9 +147,9 @@ const HorizontalCalendar: React.FC = () => {
           </div>
           {activitiesArray.length > 0 &&
             <>
-              {activitiesArray.map(courses => {
+              {activitiesArray.map((courses, index) => {
                 return (
-                  <div className="flex flex-row"><TimeLineCourse dates={dates} courses={courses} width={width[widthIndex]}></TimeLineCourse></div>)
+                  <div key={index} className="flex flex-row"><TimeLineCourse dates={dates} courses={courses} width={width[widthIndex]}></TimeLineCourse></div>)
               })}
             </>
           }
