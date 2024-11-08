@@ -9,6 +9,9 @@ dist
 # dotenv files
 *.env
 
+# .vite build file
+*.vite
+
 # User-specific files
 *.rsuser
 *.suo
