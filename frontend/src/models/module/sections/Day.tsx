@@ -294,15 +294,26 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                                                 </div>
                                                                                 <h1 className="m-2 self-center">To which module do you want to move this event?</h1>
                                                                                 <div className="flex flex-col self-center">
-                                                                                    <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
-                                                                                        <option key={moduleId + ",default"} value="DEFAULT" disabled>Select Module</option>
-                                                                                        {modules && modules.map((module, moduleIndex) =>
-                                                                                            <> {module.id != moduleId &&
-                                                                                                <option key={module.id + ":" + moduleIndex} value={module.id}>{module.name}</option>
-                                                                                            }
-                                                                                            </>)}
-                                                                                    </select>
+                                                                                <select
+                                                                                    onMouseDown={(e) => e.stopPropagation()}
+                                                                                    onClick={(e) => e.stopPropagation()}
+                                                                                    onChange={handleSelectModule}
+                                                                                    className="border border-gray-300 rounded-lg p-1 w-fit"
+                                                                                    defaultValue="DEFAULT"
+                                                                                >
+                                                                                    <option key={moduleId + ",default"} value="DEFAULT" disabled>
+                                                                                    Select Module
+                                                                                    </option>
+                                                                                    {modules && modules.map((module, moduleIndex) => (
+                                                                                    module.id !== moduleId && (
+                                                                                        <option key={`${module.id}:${moduleIndex}`} value={module.id}>
+                                                                                        {module.name}
+                                                                                        </option>
+                                                                                    )
+                                                                                    ))}
+                                                                                </select>
                                                                                 </div>
+
                                                                                 {selectedModule != "DEFAULT" &&
                                                                                     <div className="flex flex-col items-center">
                                                                                         <h1 className="m-2 self-center">To which day of this module do you want to move this event?</h1>
