@@ -31,7 +31,10 @@ export default function CourseDetails() {
     const courseId = useIdFromPath();
     const { data: course, isLoading, isError } = useQuery({
         queryKey: ['courses', courseId],
-        queryFn: () => getCourseById(parseInt(courseId))
+        queryFn: () => {
+            console.log("heyyy")
+            return getCourseById(parseInt(courseId))
+        }
     });
 
     const { data: allModules, isLoading: isLoadingModules, isError: isErrorModules } = useQuery({
