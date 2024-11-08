@@ -31,7 +31,9 @@ export default function CourseDetails() {
     const courseId = useIdFromPath();
     const { data: course, isLoading, isError } = useQuery({
         queryKey: ['courses', courseId],
-        queryFn: () => getCourseById(parseInt(courseId))
+        queryFn: () => {
+            return getCourseById(parseInt(courseId))
+        }
     });
 
     const { data: allModules, isLoading: isLoadingModules, isError: isErrorModules } = useQuery({
@@ -121,7 +123,7 @@ export default function CourseDetails() {
             return deleteCourse(id);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['courses'] })
+            queryClient.invalidateQueries({ queryKey: ['courses', parseInt(courseId)] })
             navigate(`/courses`);
         }
     })
