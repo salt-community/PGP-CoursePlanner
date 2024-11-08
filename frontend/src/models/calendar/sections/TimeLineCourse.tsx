@@ -36,7 +36,7 @@ export default function TimeLineCourse({ dates, courses, width }: Props) {
           endIndex = endIndices[startIndexMatch];
         }
         return (
-          <div className=" flex flex-col mb-4 mt-4">
+          <div key={index}className=" flex flex-col mb-4 mt-4">
             {startIndexMatch != -1
               ? <div style={{ backgroundColor: courses[0].color, "width": widthStrings[startIndexMatch] }} className="h-10 pl-3 flex items-center font-bold text-white">
                 <Link to={`/activecourses/details/${courses[startIndexMatch].id}`} className="hover:italic">
