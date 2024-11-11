@@ -3,9 +3,10 @@ import { ReactNode } from "react";
 type Props = {
     children: ReactNode
     setAllToFalse: () => void
+    openModalText: string
 }
 
-export default function MoveModal({ children, setAllToFalse }: Props) {
+export default function MoveModal({ children, setAllToFalse, openModalText }: Props) {
 
     function handleModal(state: string) {
         const modal = document.getElementById('modal-popup') as HTMLDialogElement;
@@ -24,7 +25,7 @@ export default function MoveModal({ children, setAllToFalse }: Props) {
                 className="block w-full text-left px-4 py-2 text-sm"
                 onClick={() => handleModal("open")}
             >
-                Move Day to another Module
+                {openModalText}
             </button>
             <dialog id="modal-popup" className="modal">
                 <div className="modal-box flex flex-col items-center gap-4">
