@@ -25,6 +25,7 @@ import {
 import { postAppliedEvent } from "../../../api/AppliedEventApi";
 import { postAppliedDay } from "../../../api/AppliedDayApi";
 import ColorPickerModal from "../../../components/ColorPickerModal";
+import { reorderModule } from "../helpers/reorderModule";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -50,6 +51,7 @@ export default function EditAppliedCourse() {
     const [appliedCourse, setAppliedCourse] = useState<AppliedCourseType | null>(
         null
     );
+
     useEffect(() => {
         getAppliedCourseById(parseInt(appliedCourseId)).then((result) => {
             if (result) {
@@ -101,51 +103,12 @@ export default function EditAppliedCourse() {
         editedModules.splice(index, 1);
         setAppliedModules(editedModules);
     };
-
-    const moveDown = (index: number) => {
-        const editedModules = [...appliedModules!];
-
-        const tempIndex: AppliedModuleType = {
-            id: editedModules[index].id,
-            name: editedModules[index].name,
-            numberOfDays: editedModules[index].numberOfDays,
-            days: editedModules[index].days,
-        };
-
-        const tempIndexPlusOne: AppliedModuleType = {
-            id: editedModules[index + 1].id,
-            name: editedModules[index + 1].name,
-            numberOfDays: editedModules[index + 1].numberOfDays,
-            days: editedModules[index + 1].days,
-        };
-
-        editedModules[index] = tempIndexPlusOne;
-        editedModules[index + 1] = tempIndex;
-
-        setAppliedModules(editedModules);
+ 
+    const moveModuleUp = (index: number) => {
+        setAppliedModules((prevModules) => reorderModule(prevModules ?? [], index, "up"));
     };
-
-    const moveUp = (index: number) => {
-        const editedModules = [...appliedModules!];
-
-        const tempIndex: AppliedModuleType = {
-            id: editedModules[index].id,
-            name: editedModules[index].name,
-            numberOfDays: editedModules[index].numberOfDays,
-            days: editedModules[index].days,
-        };
-
-        const tempIndexMinusOne: AppliedModuleType = {
-            id: editedModules[index - 1].id,
-            name: editedModules[index - 1].name,
-            numberOfDays: editedModules[index - 1].numberOfDays,
-            days: editedModules[index - 1].days,
-        };
-
-        editedModules[index] = tempIndexMinusOne;
-        editedModules[index - 1] = tempIndex;
-
-        setAppliedModules(editedModules);
+    const moveModuleDown = (index: number) => {
+        setAppliedModules((prevModules) => reorderModule(prevModules ?? [], index, "down"));
     };
 
     const handleChange = async (event: SyntheticEvent) => {
@@ -388,7 +351,7 @@ export default function EditAppliedCourse() {
                                                         <button
                                                             type="button"
                                                             className="w-full h-full self-center"
-                                                            onClick={() => moveDown(index)}
+                                                            onClick={() => moveModuleDown(index)}
                                                         >
                                                             <svg
                                                                 className="self-center"
@@ -412,7 +375,7 @@ export default function EditAppliedCourse() {
                                                         <button
                                                             type="button"
                                                             className="w-full h-full self-center"
-                                                            onClick={() => moveUp(index)}
+                                                            onClick={() => moveModuleUp(index)}
                                                         >
                                                             <svg
                                                                 className="self-center"
@@ -436,7 +399,7 @@ export default function EditAppliedCourse() {
                                                         <button
                                                             type="button"
                                                             className="w-full h-full self-center"
-                                                            onClick={() => moveUp(index)}
+                                                            onClick={() => moveModuleUp(index)}
                                                         >
                                                             <svg
                                                                 className="self-center"
@@ -456,7 +419,7 @@ export default function EditAppliedCourse() {
                                                         <button
                                                             type="button"
                                                             className="w-full h-full self-center"
-                                                            onClick={() => moveDown(index)}
+                                                            onClick={() => moveModuleDown(index)}
                                                         >
                                                             <svg
                                                                 className="self-center"
