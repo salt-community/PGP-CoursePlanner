@@ -191,10 +191,10 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
         setSelectedModuleDay("DEFAULT");
     }
 
-    function handleCancelButton() {
+    function handleCloseModal() {
         const modal = document.getElementById('modal-popup') as HTMLDialogElement;
         modal.close();
-        setAllToFalse(); 
+        setAllToFalse();
     }
 
     return (
@@ -306,8 +306,8 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                                         </>
                                                                     }
                                                                     <div className="flex items-center justify-center mb-4 gap-2">
-                                                                        <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-40 btn-success text-white" value={"Move Day and Save"} />
-                                                                        <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCancelButton}>Cancel</button>
+                                                                        <button className="btn btn-sm mt-4 w-40 btn-success text-white" type="button" onClick={() => { handleMove(); handleCloseModal() }}>Move Day and Save</button>
+                                                                        <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCloseModal}>Cancel</button>
                                                                     </div>
                                                                     {isIncompleteInput && <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
                                                                 </MoveModalContainer>
@@ -448,8 +448,8 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                                         <h2 className="m-2 self-center font-bold">Moving this day will save all changes!</h2>
                                                                     }
                                                                     <div className="flex items-center justify-center mb-4 gap-2">
-                                                                        <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-40 btn-success text-white" value={"Move Day and Save"} />
-                                                                        <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCancelButton}>Cancel</button>
+                                                                        <button className="btn btn-sm mt-4 w-40 btn-success text-white" type="button" onClick={() => { handleMove(); handleCloseModal() }}>Move Day and Save</button>
+                                                                        <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCloseModal}>Cancel</button>
                                                                     </div>
                                                                     {isIncompleteInput &&
                                                                         <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}

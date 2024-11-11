@@ -215,7 +215,7 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
         setSelectedModuleDay("DEFAULT");
     }
 
-    function handleCancelButton() {
+    function handleCloseModal() {
         const modal = document.getElementById('modal-popup') as HTMLDialogElement;
         modal.close();
         setAllToFalse();
@@ -267,8 +267,8 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                                     </select>
                                                 </div>
                                                 <div className="flex items-center justify-center mb-4 gap-2">
-                                                    <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-28 btn-success text-white" value={"Move Event"} />
-                                                    <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCancelButton}>Cancel</button>
+                                                    <button className="btn btn-sm mt-4 w-28 btn-success text-white" type="button" onClick={() => { handleMove(); handleCloseModal() }}>Move Event and Save</button>
+                                                    <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCloseModal}>Cancel</button>
                                                 </div>
                                                 {isIncompleteInput &&
                                                     <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a day</p>}
@@ -306,8 +306,11 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                                 </>
                                             }
                                             <div className="flex items-center justify-center mb-4 gap-2">
-                                                <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMoveAnotherModule} className="btn btn-sm mt-4 w-44 btn-success text-white" value={"Move Event and Save"} />
-                                                <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCancelButton}>Cancel</button>
+                                                <button className="btn btn-sm mt-4 w-44 btn-success text-white" type="button" onClick={() => {
+                                                    handleMoveAnotherModule(); handleCloseModal()
+
+                                                }}>Move Event and Save</button>
+                                                <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCloseModal}>Cancel</button>
                                             </div>
                                             {isIncompleteInput &&
                                                 <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
