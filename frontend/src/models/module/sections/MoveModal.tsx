@@ -5,13 +5,16 @@ type Props = {
     setAllToFalse: () => void
 }
 
-export default function ModalPopup({ children, setAllToFalse }: Props) {
+export default function MoveModal({ children, setAllToFalse }: Props) {
 
     function handleModal(state: string) {
         const modal = document.getElementById('modal-popup') as HTMLDialogElement;
-        return state === "open"
-            ? modal.showModal()
-            : modal.close();
+        if (state === "open") {
+            modal.showModal();
+        } else {
+            modal.close();
+            setAllToFalse();
+        }
     }
 
     return (
@@ -26,10 +29,10 @@ export default function ModalPopup({ children, setAllToFalse }: Props) {
             <dialog id="modal-popup" className="modal">
                 <div className="modal-box flex flex-col items-center gap-4">
                     {children}
-                    <button type="button" className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => { handleModal("close"); setAllToFalse() }}>✕</button>
+                    <button type="button" className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => handleModal("close")}>✕</button>
                 </div>
                 <div className="modal-backdrop">
-                    <button type="button" onClick={() => { handleModal("close"); setAllToFalse() }}>close</button>
+                    <button type="button" onClick={() => handleModal("close")}>close</button>
                 </div>
             </dialog>
         </>
