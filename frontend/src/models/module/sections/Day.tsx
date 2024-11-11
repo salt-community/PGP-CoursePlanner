@@ -6,7 +6,7 @@ import CalendarEvent from './CalendarEvent';
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { editModule, getAllModules } from '../../../api/ModuleApi';
-import MoveModal from './MoveModal';
+import MoveModalContainer from './MoveModalContainer';
 
 export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const [showOptions, setShowOptions] = useState(false);
@@ -263,7 +263,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                     >
                                                         <ul className="py-1">
                                                             <li>
-                                                                <MoveModal openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse}>
+                                                                <MoveModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse}>
                                                                     <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                                                     <div className="flex flex-col self-center">
                                                                         <select
@@ -310,7 +310,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                                         <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCancelButton}>Cancel</button>
                                                                     </div>
                                                                     {isIncompleteInput && <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
-                                                                </MoveModal>
+                                                                </MoveModalContainer>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -419,7 +419,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                     >
                                                         <ul className="py-1">
                                                             <li>
-                                                                <MoveModal openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse}>
+                                                                <MoveModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse}>
                                                                     <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                                                     <div className="flex flex-col self-center">
                                                                         <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
@@ -453,7 +453,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                                     </div>
                                                                     {isIncompleteInput &&
                                                                         <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
-                                                                </MoveModal>
+                                                                </MoveModalContainer>
                                                             </li>
                                                         </ul>
                                                     </div>

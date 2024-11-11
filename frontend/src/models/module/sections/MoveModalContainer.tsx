@@ -6,7 +6,7 @@ type Props = {
     openModalText: string
 }
 
-export default function MoveModal({ children, setAllToFalse, openModalText }: Props) {
+export default function MoveModalContainer({ children, setAllToFalse, openModalText }: Props) {
 
     function handleModal(state: string) {
         const modal = document.getElementById('modal-popup') as HTMLDialogElement;

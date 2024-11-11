@@ -5,7 +5,7 @@ import InputSmallTime from "../../../components/inputFields/InputSmallTime";
 import { EventProps, ModuleType } from "../Types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { editModule, getAllModules } from "../../../api/ModuleApi";
-import MoveModal from "./MoveModal";
+import MoveModalContainer from "./MoveModalContainer";
 
 export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumber, setDays, days, index, event }: EventProps) {
     const popupRefAnotherModule = useRef<HTMLDivElement>(null);
@@ -255,7 +255,7 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                 <ul className="py-1">
                                     {days.length > 1 &&
                                         <li>
-                                            <MoveModal openModalText={"Move Event to another Day"} setAllToFalse={setAllToFalse}>
+                                            <MoveModalContainer openModalText={"Move Event to another Day"} setAllToFalse={setAllToFalse}>
                                                 <h2 className="m-2 self-center">To which day do you want to move this event?</h2>
                                                 <div className="flex flex-col self-center">
                                                     <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
@@ -272,10 +272,10 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                                 </div>
                                                 {isIncompleteInput &&
                                                     <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a day</p>}
-                                            </MoveModal>
+                                            </MoveModalContainer>
                                         </li>}
                                     <li>
-                                        <MoveModal openModalText="Move Event to another Module" setAllToFalse={setAllToFalse}>
+                                        <MoveModalContainer openModalText="Move Event to another Module" setAllToFalse={setAllToFalse}>
                                             <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                             <div className="flex flex-col self-center">
                                                 <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
@@ -311,7 +311,7 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                             </div>
                                             {isIncompleteInput &&
                                                 <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
-                                        </MoveModal>
+                                        </MoveModalContainer>
                                     </li>
                                 </ul>
                             </div>
