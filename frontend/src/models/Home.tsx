@@ -66,13 +66,13 @@ export default function Home() {
                 ? <Login />
                 : <Page>
                     <section className="pl-20 pr-20 pb-20 flex flex-col items-center">
-                        <h1 className="text-2xl font-semibold">We are in week {getWeek(new Date())}</h1>
-                        <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-3">
+                        <h1 className="text-2xl font-semibold">Current Week {getWeek(new Date())}</h1>
+                        <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-5">
                             {weekDays.map((day, index) =>
                                 getDateAsString(day) == today
                                         ?(
                                         <section key={format(day, 'd')} className="flex flex-col border-2 border-primary rounded-lg w-full gap-3">
-                                            <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:translate-y-1">
+                                            <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:-translate-y-0.5">
                                                 <h1 className="item-center text-xl font-bold text-center text-primary">{format(getDateAsString(day), 'EEEE')}
                                                     <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                                 </h1>
@@ -80,7 +80,7 @@ export default function Home() {
                                             { data && data[index] !== null ? <WeekDay dateContent = {data[index].dateContent}/> : "" }
                                         </section>
                                         ): ( <section key={format(day, 'd')} className="flex flex-col border border-black rounded-lg w-full gap-3">
-                                            <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:translate-y-1">
+                                            <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:-translate-y-0.5">
                                                 <h1 className="item-center text-lg text-center">{format(getDateAsString(day), 'EEEE')}
                                                     <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                                 </h1>
@@ -89,12 +89,12 @@ export default function Home() {
                                         </section>
                                     ))}
                         </section>
-                        <h1 className="text-2xl font-semibold">Week {getWeek(nextWeek)}</h1>
+                        <h1 className="text-2xl font-semibold">Next Week {getWeek(nextWeek)}</h1>
                         <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-3">
                             {weekDaysNextWeek.map((day, index) =>
                                 
                                     <section key={format(day, 'd')} className="flex flex-col border border-black rounded-lg w-full gap-3">
-                                        <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:translate-y-1">
+                                        <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:-translate-y-0.5">
                                             <h1 className="item-center text-lg text-center">{format(getDateAsString(day), 'EEEE')}
                                                 <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                             </h1>
