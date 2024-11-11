@@ -2,7 +2,16 @@ import { addDays, addHours, addMinutes, startOfDay } from "date-fns";
 import { postCourseToGoogle } from "../api/GoogleCalendarApi";
 import { ModuleType } from "../models/module/Types";
 
+interface Attendee {
+  email: string; // Email of the guest
+  displayName?: string; // Optional name for the guest
+  optional?: boolean; // Indicates if the guest’s attendance is optional
+  responseStatus?: "accepted" | "declined" | "tentative" | "needsAction";
+}
+
+
 export type GoogleEvent = {
+  attendees: Attendee[];
   summary: string;
   description?: string;
   start: {
@@ -41,7 +50,8 @@ export function convertToGoogleDate(
 export const convertToGoogle = (
   modules: ModuleType[],
   templateStart: Date,
-  courseName: string
+  courseName: string,
+  groupEmail: string,
 ) => {
   const googleEvents: GoogleEvent[] = [];
 
@@ -62,6 +72,7 @@ export const convertToGoogle = (
         );
 
         const googleEvent: GoogleEvent = {
+          attendees: [{email: groupEmail}],
           summary: event.name,
           description: event.description,
           start: {
@@ -75,6 +86,7 @@ export const convertToGoogle = (
           extendedProperties: {
             shared: {
               course: courseName,
+              
             },
           },
         };

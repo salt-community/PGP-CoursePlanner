@@ -25,6 +25,7 @@ export default function CourseDetails() {
 
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
+    const groupEmail = "course-planner---test@appliedtechnology.se";
 
     const navigate = useNavigate();
 
@@ -197,7 +198,7 @@ export default function CourseDetails() {
                             <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a weekday for the start date</p>}
                         <div className="pt-4 mb-4 flex gap-4 flex-col sm:flex-row">
                             <button onClick={handleApplyTemplate} className="btn btn-sm py-1 max-w-fit btn-primary text-white">Add to app calendar</button>
-                            <button onClick={() => convertToGoogle(modules, startDate, course.name)} className="btn btn-sm py-1 max-w-xs btn-success text-white">Add to Google calendar </button>
+                            <button onClick={() => convertToGoogle(modules, startDate, course.name, groupEmail)} className="btn btn-sm py-1 max-w-xs btn-success text-white">Add to Google calendar </button>
                             <DeleteBtn onClick={() => deleteCourseFromGoogle(course.name)}>Remove from Google calendar</DeleteBtn>
                         </div>
                     </section >
