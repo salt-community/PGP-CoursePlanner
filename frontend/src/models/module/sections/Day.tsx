@@ -4,10 +4,9 @@ import TrashBtn from '../../../components/buttons/TrashBtn';
 import { DayProps, ModuleType } from '../Types';
 import CalendarEvent from './CalendarEvent';
 import { useEffect, useRef, useState } from 'react';
-import CloseBtn from '../../../components/buttons/CloseBtn';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { editModule, getAllModules } from '../../../api/ModuleApi';
-import { Button } from '@mui/material';
+import ModalPopup from './ModalPopup';
 
 export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const [showOptions, setShowOptions] = useState(false);
@@ -186,13 +185,6 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
         }
     };
 
-    function handleMoveModuleModal(state: string) {
-        const modal = document.getElementById('move-module-modal') as HTMLDialogElement;
-        return state === "open"
-            ? modal.showModal()
-            : modal.close();
-    }
-
     const setAllToFalse = () => {
         setIsIncompleteInput(false);
         setSelectedModule("DEFAULT");
@@ -265,72 +257,54 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                     >
                                                         <ul className="py-1">
                                                             <li>
-
-                                                                <button
-                                                                    type="button"
-                                                                    className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-gray-100"
-                                                                    onClick={() => handleMoveModuleModal("open")}
-                                                                >
-                                                                    Move Day to another Module
-                                                                </button>
-                                                                <dialog id="move-module-modal" className="modal">
-                                                                    <div className="modal-box flex flex-col items-center gap-4">
-
-                                                                        <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
-                                                                        <div className="flex flex-col self-center">
-                                                                            <select
-                                                                                onMouseDown={(e) => e.stopPropagation()}
-                                                                                onClick={(e) => e.stopPropagation()}
-                                                                                onChange={handleSelectModule}
-                                                                                className="border border-gray-300 rounded-lg p-1 w-fit"
-                                                                                defaultValue="DEFAULT"
-                                                                            >
-                                                                                <option key={moduleId + ",default"} value="DEFAULT" disabled>
-                                                                                    Select Module
-                                                                                </option>
-                                                                                {modules && modules.map((module, moduleIndex) => (
-                                                                                    module.id !== moduleId && (
-                                                                                        <option key={`${module.id}:${moduleIndex}`} value={module.id}>
-                                                                                            {module.name}
-                                                                                        </option>
-                                                                                    )
-                                                                                ))}
-                                                                            </select>
-                                                                        </div>
-
-                                                                        {selectedModule != "DEFAULT" &&
-                                                                            <div className="flex flex-col items-center">
-                                                                                <h2 className="m-2 self-center">To which day of this module do you want to move this event?</h2>
-                                                                                <div className="flex flex-col self-center">
-                                                                                    <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModuleDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
-                                                                                        <option key={moduleId + ",defaultDay"} value="DEFAULT" disabled>Select Day</option>
-                                                                                        {modules && modules.find(m => m.id == parseInt(selectedModule))!.days.map((day, dayIndex) =>
-                                                                                            <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber}</option>
-                                                                                        )}
-                                                                                        <option key={day.id + "," + modules!.find(m => m.id == parseInt(selectedModule))!.days.length} value={modules!.find(m => m.id == parseInt(selectedModule))!.days.length + 1}>Day {modules!.find(m => m.id == parseInt(selectedModule))!.days.length + 1}</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>}
-                                                                        {selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT" &&
-                                                                            <>
-                                                                                <h2 className="mt-4 self-center font-bold">Moving this day will save all changes!</h2>
-                                                                                <h2 className="mt-4 self-center font-bold">If this module is part of a course, the course will also be modified!</h2>
-                                                                            </>
-                                                                        }
-                                                                        <div className="flex items-center justify-center mb-4 gap-2">
-                                                                            <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-40 btn-success text-white" value={"Move Day and Save"} />
-                                                                            <button className="btn btn-sm mt-4 w-24 btn-error text-white" onClick={() => { setAllToFalse(); handleMoveModuleModal("close") }}>Cancel</button>
-                                                                        </div>
-                                                                        {isIncompleteInput &&
-                                                                            <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
-
-                                                                        <button className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => { setAllToFalse(); handleMoveModuleModal("close") }}>✕</button>
+                                                                <ModalPopup setAllToFalse={setAllToFalse}>
+                                                                    <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
+                                                                    <div className="flex flex-col self-center">
+                                                                        <select
+                                                                            onMouseDown={(e) => e.stopPropagation()}
+                                                                            onClick={(e) => e.stopPropagation()}
+                                                                            onChange={handleSelectModule}
+                                                                            className="border border-gray-300 rounded-lg p-1 w-fit"
+                                                                            defaultValue="DEFAULT"
+                                                                        >
+                                                                            <option key={moduleId + ",default"} value="DEFAULT" disabled>
+                                                                                Select Module
+                                                                            </option>
+                                                                            {modules && modules.map((module, moduleIndex) => (
+                                                                                module.id !== moduleId && (
+                                                                                    <option key={`${module.id}:${moduleIndex}`} value={module.id}>
+                                                                                        {module.name}
+                                                                                    </option>
+                                                                                )
+                                                                            ))}
+                                                                        </select>
                                                                     </div>
-                                                                    <form method="dialog" className="modal-backdrop">
-                                                                        <button onClick={setAllToFalse}>close</button>
-                                                                    </form>
-                                                                </dialog>
 
+                                                                    {selectedModule != "DEFAULT" &&
+                                                                        <div className="flex flex-col items-center">
+                                                                            <h2 className="m-2 self-center">To which day of this module do you want to move this event?</h2>
+                                                                            <div className="flex flex-col self-center">
+                                                                                <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModuleDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
+                                                                                    <option key={moduleId + ",defaultDay"} value="DEFAULT" disabled>Select Day</option>
+                                                                                    {modules && modules.find(m => m.id == parseInt(selectedModule))!.days.map((day, dayIndex) =>
+                                                                                        <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber}</option>
+                                                                                    )}
+                                                                                    <option key={day.id + "," + modules!.find(m => m.id == parseInt(selectedModule))!.days.length} value={modules!.find(m => m.id == parseInt(selectedModule))!.days.length + 1}>Day {modules!.find(m => m.id == parseInt(selectedModule))!.days.length + 1}</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>}
+                                                                    {selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT" &&
+                                                                        <>
+                                                                            <h2 className="mt-4 self-center font-bold">Moving this day will save all changes!</h2>
+                                                                            <h2 className="mt-4 self-center font-bold">If this module is part of a course, the course will also be modified!</h2>
+                                                                        </>
+                                                                    }
+                                                                    <div className="flex items-center justify-center mb-4 gap-2">
+                                                                        <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-40 btn-success text-white" value={"Move Day and Save"} />
+                                                                        <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => { setAllToFalse() }}>Cancel</button>
+                                                                    </div>
+                                                                    {isIncompleteInput && <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
+                                                                </ModalPopup>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -439,18 +413,8 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                     >
                                                         <ul className="py-1">
                                                             <li>
-
-                                                                <button
-                                                                    type="button"
-                                                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                                >
-                                                                    Move Day to another Module
-                                                                </button>
-                                                                <div className="flex flex-col">
-                                                                    <div className="flex justify-end">
-                                                                        <CloseBtn onClick={setAllToFalse} />
-                                                                    </div>
-                                                                    <h1 className="m-2 self-center">To which module do you want to move this event?</h1>
+                                                                <ModalPopup setAllToFalse={setAllToFalse}>
+                                                                    <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                                                     <div className="flex flex-col self-center">
                                                                         <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
                                                                             <option key={moduleId + ",default"} value="DEFAULT" disabled>Select Module</option>
@@ -463,7 +427,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                                     </div>
                                                                     {selectedModule != "DEFAULT" &&
                                                                         <div className="flex flex-col items-center">
-                                                                            <h1 className="m-2 self-center">To which day of this module do you want to move this event?</h1>
+                                                                            <h2 className="m-2 self-center">To which day of this module do you want to move this event?</h2>
                                                                             <div className="flex flex-col self-center">
                                                                                 <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModuleDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
                                                                                     <option key={moduleId + ",defaultDay"} value="DEFAULT" disabled>Select Day</option>
@@ -475,16 +439,15 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                                             </div>
                                                                         </div>}
                                                                     {selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT" &&
-                                                                        <h1 className="m-2 self-center font-bold">Moving this day will save all changes!</h1>
+                                                                        <h2 className="m-2 self-center font-bold">Moving this day will save all changes!</h2>
                                                                     }
                                                                     <div className="flex items-center justify-center mb-4 gap-2">
                                                                         <input onMouseDown={(e) => e.stopPropagation()} onClick={handleMove} className="btn btn-sm mt-4 w-40 btn-success text-white" value={"Move Day and Save"} />
-                                                                        <input className="btn btn-sm mt-4 w-24 btn-error text-white" value={"Cancel"} onClick={setAllToFalse} />
+                                                                        <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => { setAllToFalse() }}>Cancel</button>
                                                                     </div>
                                                                     {isIncompleteInput &&
                                                                         <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
-                                                                </div>
-
+                                                                </ModalPopup>
                                                             </li>
                                                         </ul>
                                                     </div>
