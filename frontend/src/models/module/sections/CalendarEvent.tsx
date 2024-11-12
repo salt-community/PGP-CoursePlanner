@@ -198,7 +198,7 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                             </select>
                                         </div>
                                         <div className="flex items-center justify-center mb-4 gap-2">
-                                            <button className="btn btn-sm mt-4 w-28 btn-success text-white" type="button" onClick={() => { handleMove(); handleCloseModal() }}>Move Event and Save</button>
+                                            <button className="btn btn-sm mt-4 w-44 btn-success text-white" type="button" onClick={() => { handleMove(); handleCloseModal() }}>Move Event and Save</button>
                                             <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCloseModal}>Cancel</button>
                                         </div>
                                         {isIncompleteInput &&
