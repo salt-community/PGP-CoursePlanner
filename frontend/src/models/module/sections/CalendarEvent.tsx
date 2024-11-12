@@ -184,7 +184,7 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                 <circle cx="5" cy="12" r="1"></circle>
                             </svg>
                         </div>
-                        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                        <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-64 p-2 shadow">
                             {days.length > 1 &&
                                     <MoveModalContainer openModalText={"Move Event to another Day"} setAllToFalse={setAllToFalse} dayIndex={parseInt(`${dayNumber - 1}${index + 1000}`)}>
                                         <h2 className="m-2 self-center">To which day do you want to move this event?</h2>
