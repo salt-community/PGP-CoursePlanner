@@ -20,13 +20,11 @@ export default function MoveModalContainer({ children, setAllToFalse, openModalT
 
     return (
         <>
-            <button
-                type="button"
-                className="block w-full text-left px-4 py-2 text-sm"
+            <li
                 onClick={() => handleModal("open")}
             >
-                {openModalText}
-            </button>
+                    {openModalText}
+            </li>
             <dialog id="modal-popup" className="modal">
                 <div className="modal-box flex flex-col items-center gap-4">
                     {children}
