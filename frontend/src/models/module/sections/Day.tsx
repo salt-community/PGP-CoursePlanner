@@ -198,7 +198,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                         {editTrue &&
                                             <div className="dropdown">
                                                 <div
-                                                    tabIndex={day.dayNumber - 1}
+                                                    tabIndex={0}
                                                     role="button"
                                                     className="btn btn-accent btn-sm"
                                                 >
@@ -208,7 +208,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                         <circle cx="5" cy="12" r="1"></circle>
                                                     </svg>
                                                 </div>
-                                                <ul tabIndex={day.dayNumber - 1} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                                                <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                                                     <MoveModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse} dayIndex={day.dayNumber - 1}>
                                                         <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                                         <div className="flex flex-col self-center">
@@ -340,7 +340,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                         {editTrue &&
                                             <div className="dropdown">
                                                 <div
-                                                    tabIndex={day.dayNumber - 1}
+                                                    tabIndex={0}
                                                     role="button"
                                                     className="btn btn-accent btn-sm"
                                                 >
@@ -350,7 +350,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                         <circle cx="5" cy="12" r="1"></circle>
                                                     </svg>
                                                 </div>
-                                                <ul tabIndex={day.dayNumber - 1} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                                                <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                                                     <MoveModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse} dayIndex={day.dayNumber - 1}>
                                                         <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                                         <div className="flex flex-col self-center">

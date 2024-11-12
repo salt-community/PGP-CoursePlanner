@@ -24,7 +24,7 @@ export default function MoveModalContainer({ children, setAllToFalse, openModalT
             <li
                 onClick={() => handleModal("open")}
             >
-                    {openModalText}
+                <a>{openModalText}</a>
             </li>
             <dialog id={`modal-popup-${dayIndex}`} className="modal">
                 <div className="modal-box flex flex-col items-center gap-4">
