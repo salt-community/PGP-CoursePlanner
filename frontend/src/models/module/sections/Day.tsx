@@ -160,7 +160,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                 {day.events.length > 0
                     ? <div className="collapse">
                         <input type="checkbox" id={`collapse-toggle-events-${moduleId}-${day.dayNumber}`} className="hidden" />
-                        <div className="collapse-title text-base w-100 h-28 flex flex-row">
+                        <div className="collapse-title text-base w-100 flex flex-row">
                             <div className='flex flex-row w-2/12'>
                                 {day.dayNumber == 1 && day.dayNumber != days.length &&
                                     <div className="flex flex-col w-[26px] mr-2">
@@ -302,7 +302,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                     </div>
                     : <div className="collapse">
                         <input type="checkbox" id={`collapse-toggle-events-${day.dayNumber}`} className="hidden" />
-                        <div className="collapse-title text-base w-100 h-28 flex flex-row">
+                        <div className="collapse-title text-base w-100 flex flex-row">
                             <div className='flex flex-row w-2/12'>
                                 {day.dayNumber == 1 && day.dayNumber != days.length &&
                                     <div className="flex flex-col w-[26px] mr-2">
