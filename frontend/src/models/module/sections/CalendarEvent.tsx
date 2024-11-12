@@ -151,8 +151,8 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
         setSelectedModuleDay("DEFAULT");
     }
 
-    function handleCloseModal() {
-        const modal = document.getElementById(`modal-popup-${parseInt(`${dayNumber - 1}${index}`)}`) as HTMLDialogElement;
+    function handleCloseModal(id: number) {
+        const modal = document.getElementById(`modal-popup-${id}`) as HTMLDialogElement;
         modal.close();
         setAllToFalse();
     }
@@ -192,8 +192,8 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                             </select>
                                         </div>
                                         <div className="flex items-center justify-center mb-4 gap-2">
-                                            <button className="btn btn-sm mt-4 w-44 btn-success text-white" type="button" onClick={() => { handleMove(); handleCloseModal() }}>Move Event and Save</button>
-                                            <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCloseModal}>Cancel</button>
+                                            <button className="btn btn-sm mt-4 w-44 btn-success text-white" type="button" onClick={() => { handleMove(); handleCloseModal(parseInt(`${dayNumber - 1}${index + 1000}`))}}>Move Event and Save</button>
+                                            <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => handleCloseModal(parseInt(`${dayNumber - 1}${index + 1000}`))}>Cancel</button>
                                         </div>
                                         {isIncompleteInput &&
                                             <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a day</p>}
@@ -231,10 +231,10 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                     }
                                     <div className="flex items-center justify-center mb-4 gap-2">
                                         <button className="btn btn-sm mt-4 w-44 btn-success text-white" type="button" onClick={() => {
-                                            handleMoveAnotherModule(); handleCloseModal()
+                                            handleMoveAnotherModule(); handleCloseModal(parseInt(`${dayNumber - 1}${index + 2000}`))
 
                                         }}>Move Event and Save</button>
-                                        <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCloseModal}>Cancel</button>
+                                        <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => handleCloseModal(parseInt(`${dayNumber - 1}${index + 2000}`))}>Cancel</button>
                                     </div>
                                     {isIncompleteInput &&
                                         <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
