@@ -101,12 +101,6 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
             setAllToFalse()
-            // const form = document.getElementById('editCourse-form') as HTMLFormElement;
-
-            // if (form) {
-            //     const syntheticEvent = new Event('submit', { bubbles: true, cancelable: true });
-            //     form.dispatchEvent(syntheticEvent);
-            // }
         }
     })
 

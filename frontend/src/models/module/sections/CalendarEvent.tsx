@@ -109,12 +109,6 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules'] })
             setAllToFalse();
-            // const form = document.getElementById('editCourse-form') as HTMLFormElement;
-
-            // if (form) {
-            //     const syntheticEvent = new Event('submit', { bubbles: true, cancelable: true });
-            //     form.dispatchEvent(syntheticEvent);
-            // }
         }
     })
 
