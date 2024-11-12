@@ -4,12 +4,13 @@ type Props = {
     children: ReactNode
     setAllToFalse: () => void
     openModalText: string
+    dayIndex: number
 }
 
-export default function MoveModalContainer({ children, setAllToFalse, openModalText }: Props) {
+export default function MoveModalContainer({ children, setAllToFalse, openModalText, dayIndex }: Props) {
 
     function handleModal(state: string) {
-        const modal = document.getElementById('modal-popup') as HTMLDialogElement;
+        const modal = document.getElementById(`modal-popup-${dayIndex}`) as HTMLDialogElement;
         if (state === "open") {
             modal.showModal();
         } else {
@@ -25,7 +26,7 @@ export default function MoveModalContainer({ children, setAllToFalse, openModalT
             >
                     {openModalText}
             </li>
-            <dialog id="modal-popup" className="modal">
+            <dialog id={`modal-popup-${dayIndex}`} className="modal">
                 <div className="modal-box flex flex-col items-center gap-4">
                     {children}
                     <button type="button" className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => handleModal("close")}>✕</button>

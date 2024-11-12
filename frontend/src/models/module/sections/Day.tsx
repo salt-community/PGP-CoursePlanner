@@ -149,7 +149,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
     }
 
     function handleCloseModal() {
-        const modal = document.getElementById('modal-popup') as HTMLDialogElement;
+        const modal = document.getElementById(`modal-popup-${day.dayNumber - 1}`) as HTMLDialogElement;
         modal.close();
         setAllToFalse();
     }
@@ -209,7 +209,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                     </svg>
                                                 </div>
                                                 <ul tabIndex={day.dayNumber - 1} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                                                    <MoveModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse}>
+                                                    <MoveModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse} dayIndex={day.dayNumber - 1}>
                                                         <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                                         <div className="flex flex-col self-center">
                                                             <select
@@ -351,7 +351,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                     </svg>
                                                 </div>
                                                 <ul tabIndex={day.dayNumber - 1} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                                                    <MoveModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse}>
+                                                    <MoveModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse} dayIndex={day.dayNumber - 1}>
                                                         <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                                         <div className="flex flex-col self-center">
                                                             <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
