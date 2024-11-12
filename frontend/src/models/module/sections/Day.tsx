@@ -158,7 +158,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
         <>
             <div className="relative">
                 {day.events.length > 0
-                    ? <div className="collapse">
+                    ? <div className="collapse overflow-visible">
                         <input type="checkbox" id={`collapse-toggle-events-${moduleId}-${day.dayNumber}`} className="hidden" />
                         <div className="collapse-title text-base w-100 flex flex-row">
                             <div className='flex flex-row w-2/12'>
@@ -208,7 +208,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                         <circle cx="5" cy="12" r="1"></circle>
                                                     </svg>
                                                 </div>
-                                                <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                                                <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-60 p-2 shadow">
                                                     <MoveModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse} dayIndex={day.dayNumber - 1}>
                                                         <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                                         <div className="flex flex-col self-center">
@@ -300,7 +300,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                             </table>
                         </div>
                     </div>
-                    : <div className="collapse">
+                    : <div className="collapse overflow-visible">
                         <input type="checkbox" id={`collapse-toggle-events-${day.dayNumber}`} className="hidden" />
                         <div className="collapse-title text-base w-100 flex flex-row">
                             <div className='flex flex-row w-2/12'>
@@ -350,7 +350,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                         <circle cx="5" cy="12" r="1"></circle>
                                                     </svg>
                                                 </div>
-                                                <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                                                <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-60 p-2 shadow">
                                                     <MoveModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse} dayIndex={day.dayNumber - 1}>
                                                         <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                                         <div className="flex flex-col self-center">
