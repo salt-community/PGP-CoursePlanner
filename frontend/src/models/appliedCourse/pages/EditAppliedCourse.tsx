@@ -26,6 +26,8 @@ import { postAppliedEvent } from "../../../api/AppliedEventApi";
 import { postAppliedDay } from "../../../api/AppliedDayApi";
 import ColorPickerModal from "../../../components/ColorPickerModal";
 import { reorderModule } from "../helpers/reorderModule";
+import DownArrow from "../components/downArrowButton";
+import UpArrow from "../components/upArrowButton";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -109,7 +111,7 @@ export default function EditAppliedCourse() {
     };
     const moveModuleDown = (index: number) => {
         setAppliedModules((prevModules) => reorderModule(prevModules ?? [], index, "down"));
-    };
+        };
 
     const handleChange = async (event: SyntheticEvent) => {
         const value = (event.target as HTMLSelectElement).value;
@@ -261,6 +263,7 @@ export default function EditAppliedCourse() {
     ) : (
         <Page>
             <section className="px-4 md:px-24 lg:px-56">
+                
                 {appliedCourse !== undefined && (
                     <div>
                         <div className="flex flex-row gap-4 items-center">
@@ -296,6 +299,7 @@ export default function EditAppliedCourse() {
                                 }}
                             />
                         </div>
+
                         <ColorPickerModal color={color} setColor={setColor} />
                         {modules &&
                             appliedModules &&
@@ -348,94 +352,18 @@ export default function EditAppliedCourse() {
                                             <div className="collapse-title flex flex-row">
                                                 {index == 0 && index != appliedModules.length - 1 && (
                                                     <div className="flex flex-col w-[26px] mr-2">
-                                                        <button
-                                                            type="button"
-                                                            className="w-full h-full self-center"
-                                                            onClick={() => moveModuleDown(index)}
-                                                        >
-                                                            <svg
-                                                                className="self-center"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="24"
-                                                                height="24"
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                stroke="#3F00E7"
-                                                                strokeWidth="2"
-                                                                strokeLinecap="round"
-                                                                strokeLinejoin="round"
-                                                            >
-                                                                <path d="M6 9l6 6 6-6" />
-                                                            </svg>
-                                                        </button>
+                                                        <DownArrow onClick={() => moveModuleDown(index)}/>
                                                     </div>
                                                 )}
                                                 {index != 0 && index == appliedModules.length - 1 && (
                                                     <div className="flex flex-col w-[26px] mr-2">
-                                                        <button
-                                                            type="button"
-                                                            className="w-full h-full self-center"
-                                                            onClick={() => moveModuleUp(index)}
-                                                        >
-                                                            <svg
-                                                                className="self-center"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="24"
-                                                                height="24"
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                stroke="#3F00E7"
-                                                                strokeWidth="2"
-                                                                strokeLinecap="round"
-                                                                strokeLinejoin="round"
-                                                            >
-                                                                <path d="M18 15l-6-6-6 6" />
-                                                            </svg>
-                                                        </button>
+                                                        <UpArrow onClick = {() => moveModuleUp(index)}/>
                                                     </div>
                                                 )}
                                                 {index != 0 && index != appliedModules.length - 1 && (
                                                     <div className="flex flex-col w-[26px] mr-2">
-                                                        <button
-                                                            type="button"
-                                                            className="w-full h-full self-center"
-                                                            onClick={() => moveModuleUp(index)}
-                                                        >
-                                                            <svg
-                                                                className="self-center"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="24"
-                                                                height="24"
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                stroke="#3F00E7"
-                                                                strokeWidth="2"
-                                                                strokeLinecap="round"
-                                                                strokeLinejoin="round"
-                                                            >
-                                                                <path d="M18 15l-6-6-6 6" />
-                                                            </svg>
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className="w-full h-full self-center"
-                                                            onClick={() => moveModuleDown(index)}
-                                                        >
-                                                            <svg
-                                                                className="self-center"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="24"
-                                                                height="24"
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                stroke="#3F00E7"
-                                                                strokeWidth="2"
-                                                                strokeLinecap="round"
-                                                                strokeLinejoin="round"
-                                                            >
-                                                                <path d="M6 9l6 6 6-6" />
-                                                            </svg>
-                                                        </button>
+                                                        <UpArrow onClick = {() => moveModuleUp(index)}/>
+                                                        <DownArrow onClick={() => moveModuleDown(index)}/>
                                                     </div>
                                                 )}
                                                 {index == 0 && index == appliedModules.length - 1 && (
@@ -445,7 +373,7 @@ export default function EditAppliedCourse() {
                                                     htmlFor={`collapse-toggle-${index}`}
                                                     className="cursor-pointer flex flex-row w-5/6"
                                                 >
-                                                    <h1 className="text-lg text-primary self-center">
+                                                    <h1 className="text-lg text-primary self-center p-3">
                                                         Module {index + 1}: {appliedModule.name}
                                                     </h1>
                                                 </label>
@@ -496,13 +424,13 @@ export default function EditAppliedCourse() {
                                 onClick={handleEdit}
                                 className="btn btn-sm mt-6 max-w-48 btn-success text-white"
                             >
-                                Save all changes
+                                Save
                             </button>
                             <button
                                 onClick={() => navigate(splitUrl![1])}
                                 className="btn btn-sm mt-6 max-w-66 btn-info text-white"
                             >
-                                Go back without saving changes
+                                Abort
                             </button>
                         </div>
                     </div>
