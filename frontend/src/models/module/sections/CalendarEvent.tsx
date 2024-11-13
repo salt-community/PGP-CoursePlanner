@@ -6,7 +6,7 @@ import { EventProps, ModuleType } from "../Types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { editModule, getAllModules } from "../../../api/ModuleApi";
 import ModalContainer from "../components/ModalContainer";
-import EllipsisButton from "../components/EllipsisButton";
+import EllipsisBtn from "../components/EllipsisBtn";
 
 export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumber, setDays, days, index, event }: EventProps) {
     const [selectedDay, setSelectedDay] = useState<string>("DEFAULT");
@@ -168,7 +168,7 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                 <TrashBtn handleDelete={handleDeleteEvent} />
                 {!appliedTrue && event.name != "" && event.startTime != "" && event.endTime != "" && editTrue &&
                     <div className="dropdown">
-                        <EllipsisButton />
+                        <EllipsisBtn />
                         <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-64 p-2 shadow">
                             {days.length > 1 &&
                                 <ModalContainer openModalText={"Move Event to another Day"} setAllToFalse={setAllToFalse} dayIndex={parseInt(`${dayNumber - 1}${index + 1000}`)}>
