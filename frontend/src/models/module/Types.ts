@@ -33,11 +33,12 @@ export type DayProps = {
 };
 
 export type EventType = {
+  id: number;
   name: string;
   startTime: string;
   endTime: string;
   description?: string;
-  links?: string[];
+  // links?: string[];
 };
 
 export type EventProps = {

@@ -24,6 +24,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
     const handleAddEvent = () => {
         const editedDays = [...days];
         editedDays[day.dayNumber - 1].events.push({
+            id: editedDays[day.dayNumber - 1].events.length,
             name: "",
             startTime: "",
             endTime: ""

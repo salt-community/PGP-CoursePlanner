@@ -175,11 +175,11 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                     <h2 className="m-2 self-center">To which day do you want to move this event?</h2>
                                     <div className="flex flex-col self-center">
                                         <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
-                                            {days.map((day, dayIndex) =>
-                                                <> {day.dayNumber == dayNumber
-                                                    ? <option key={day.id + "," + dayIndex} value="DEFAULT" disabled>Day {day.dayNumber} ({day.description})</option>
-                                                    : <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber} ({day.description})</option>}
-                                                </>)}
+                                            {days.map((day) =>
+                                                day.dayNumber == dayNumber
+                                                    ? <option key={`${day.id}:${event.id}`} value="DEFAULT" disabled>Day {day.dayNumber} ({day.description})</option>
+                                                    : <option key={`${day.id}:${event.id}`} value={day.dayNumber}>Day {day.dayNumber} ({day.description})</option>
+                                            )}
                                         </select>
                                     </div>
                                     <div className="flex items-center justify-center mb-4 gap-2">
@@ -195,11 +195,9 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                 <div className="flex flex-col self-center">
                                     <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
                                         <option key={dayNumber + ",default"} value="DEFAULT" disabled>Select Module</option>
-                                        {modules && modules.map((module, moduleIndex) =>
-                                            <> {module.id != moduleId &&
-                                                <option key={module.id + ":" + moduleIndex} value={module.id}>{module.name}</option>
-                                            }
-                                            </>)}
+                                        {modules && modules.map((module) =>
+                                            module.id != moduleId && <option key={`${module.id}:${event.id}`} value={module.id}>{module.name}</option>
+                                        )}
                                     </select>
                                 </div>
                                 {selectedModule != "DEFAULT" &&
@@ -208,8 +206,8 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                         <div className="flex flex-col self-center">
                                             <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModuleDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
                                                 <option key={dayNumber + ",defaultDay"} value="DEFAULT" disabled>Select Day</option>
-                                                {modules && modules.find(m => m.id == parseInt(selectedModule))!.days.map((day, dayIndex) =>
-                                                    <option key={day.id + "," + dayIndex} value={day.dayNumber}>Day {day.dayNumber} ({day.description})</option>
+                                                {modules && modules.find(m => m.id == parseInt(selectedModule))!.days.map((day) =>
+                                                    <option key={`${day.id}:${event.id}`} value={day.dayNumber}>Day {day.dayNumber} ({day.description})</option>
                                                 )}
                                             </select>
                                         </div>
