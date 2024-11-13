@@ -3,7 +3,7 @@ type Props = {
     color: string
 }
 
-export default function UpArrowButton({ onClick, color }: Props) {
+export default function UpArrowBtn({ onClick, color }: Props) {
     return (
         <button
             type="button"
