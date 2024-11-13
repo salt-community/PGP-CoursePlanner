@@ -7,7 +7,7 @@ type Props = {
     dayIndex: number
 }
 
-export default function MoveModalContainer({ children, setAllToFalse, openModalText, dayIndex }: Props) {
+export default function ModalContainer({ children, setAllToFalse, openModalText, dayIndex }: Props) {
 
     function handleModal(state: string) {
         const modal = document.getElementById(`modal-popup-${dayIndex}`) as HTMLDialogElement;

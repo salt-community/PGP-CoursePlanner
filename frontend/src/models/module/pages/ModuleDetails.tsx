@@ -45,8 +45,8 @@ export default function ModuleDetails() {
         mutationFn: (id: number) => {
             return deleteModule(id);
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        onSuccess: (_data, id) => {
+            queryClient.invalidateQueries({ queryKey: ['modules', id] })
             navigate(`/modules`);
         }
     })

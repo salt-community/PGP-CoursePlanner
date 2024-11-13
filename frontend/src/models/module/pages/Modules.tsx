@@ -74,7 +74,7 @@ export default function Modules() {
                         <Link to={`/modules/details/${module.id}`} key={module.name + index} className="border border-black pb-[100%] relative">
                             <div className="absolute inset-0 flex items-center justify-center flex-col gap-1">
                                 <h1 className="text-primary">{module.name}</h1>
-                                {module.track && <h1>{module.track.join(', ')}</h1>}
+                                {module.track && <h2>{module.track.join(', ')}</h2>}
                             </div>
                         </Link>
                     )}
