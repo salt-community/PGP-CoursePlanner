@@ -1,8 +1,6 @@
 import { SyntheticEvent } from "react";
 import { reorderModule } from "../helpers/reorderModule";
 import { AppliedDayType, AppliedEventType, AppliedModuleType } from "../Types";
-import DownArrow from "../components/downArrowButton";
-import UpArrow from "../components/upArrowButton";
 import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
 import TrashBtn from "../../../components/buttons/TrashBtn";
 import AppliedModule from "./AppliedModule";
@@ -11,23 +9,25 @@ import { postAppliedDay } from "../../../api/AppliedDayApi";
 import { postAppliedEvent } from "../../../api/AppliedEventApi";
 import { useQuery } from "@tanstack/react-query";
 import { getAllModules } from "../../../api/ModuleApi";
+import UpArrowBtn from "../../../components/buttons/UpArrowBtn";
+import DownArrowBtn from "../../../components/buttons/DownArrowBtn";
 
 interface ModuleEditProps {
     appliedModules: AppliedModuleType[];
     onUpdateModules: (updatedModules: AppliedModuleType[]) => void;
-  }
+}
 
-export default function ModuleEdit ({appliedModules, onUpdateModules}: ModuleEditProps) {
+export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEditProps) {
 
     const { data: modules, isLoading, error } = useQuery({
         queryKey: ["modules"],
         queryFn: getAllModules,
-      });
-      
-      if (isLoading) return <p>Loading modules...</p>;
-      if (error) return <p>Error loading modules</p>;
-      
-    
+    });
+
+    if (isLoading) return <p>Loading modules...</p>;
+    if (error) return <p>Error loading modules</p>;
+
+
     const handleChange = async (event: SyntheticEvent) => {
         const value = (event.target as HTMLSelectElement).value;
         const [moduleId, indexStr, appModuleId] = value.split("_");
@@ -137,17 +137,17 @@ export default function ModuleEdit ({appliedModules, onUpdateModules}: ModuleEdi
         editedModules.splice(index, 1);
         onUpdateModules(editedModules);
     };
- 
+
     const moveModuleUp = (index: number) => {
         onUpdateModules(reorderModule(appliedModules, index, "up"));
     };
     const moveModuleDown = (index: number) => {
         onUpdateModules(reorderModule(appliedModules, index, "down"));
-        };
+    };
 
-    return (    
+    return (
         <>
-        {modules &&
+            {modules &&
                 appliedModules.map((appliedModule, index) => (
                     <div key={appliedModule.id}>
                         {appliedModule.name == "" ? (
@@ -197,19 +197,19 @@ export default function ModuleEdit ({appliedModules, onUpdateModules}: ModuleEdi
                                 />
                                 <div className="collapse-title flex flex-row">
                                     {index == 0 && index != appliedModules.length - 1 && (
-                                        <div className="flex flex-col w-[26px] mr-2">
-                                            <DownArrow onClick={() => moveModuleDown(index)}/>
+                                        <div className="flex flex-col w-[26px] mr-2" >
+                                            <DownArrowBtn onClick={() => moveModuleDown(index)} color={"#3F00E7"} />
                                         </div>
                                     )}
                                     {index != 0 && index == appliedModules.length - 1 && (
                                         <div className="flex flex-col w-[26px] mr-2">
-                                            <UpArrow onClick = {() => moveModuleUp(index)}/>
+                                            <UpArrowBtn onClick={() => moveModuleUp(index)} color={"#3F00E7"} />
                                         </div>
                                     )}
                                     {index != 0 && index != appliedModules.length - 1 && (
                                         <div className="flex flex-col w-[26px] mr-2">
-                                            <UpArrow onClick = {() => moveModuleUp(index)}/>
-                                            <DownArrow onClick={() => moveModuleDown(index)}/>
+                                            <UpArrowBtn onClick={() => moveModuleUp(index)} color={"#3F00E7"} />
+                                            <DownArrowBtn onClick={() => moveModuleDown(index)} color={"#3F00E7"} />
                                         </div>
                                     )}
                                     {index == 0 && index == appliedModules.length - 1 && (
