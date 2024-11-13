@@ -9,6 +9,7 @@ import { editModule, getAllModules } from '../../../api/ModuleApi';
 import MoveModalContainer from '../components/MoveModalContainer';
 import DownArrowButton from '../components/DownArrowButton';
 import UpArrowButton from '../components/UpArrowButton';
+import EllipsisButton from '../components/EllipsisButton';
 
 export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
@@ -193,17 +194,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                         <TrashBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
                                         {editTrue &&
                                             <div className="dropdown">
-                                                <div
-                                                    tabIndex={0}
-                                                    role="button"
-                                                    className="btn btn-accent btn-sm"
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <circle cx="12" cy="12" r="1"></circle>
-                                                        <circle cx="19" cy="12" r="1"></circle>
-                                                        <circle cx="5" cy="12" r="1"></circle>
-                                                    </svg>
-                                                </div>
+                                                <EllipsisButton />
                                                 <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-60 p-2 shadow">
                                                     <MoveModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse} dayIndex={day.dayNumber - 1}>
                                                         <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
