@@ -98,8 +98,8 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
         mutationFn: (module: ModuleType) => {
             return editModule(module);
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        onSuccess: (_data, module) => {
+            queryClient.invalidateQueries({ queryKey: ['modules', module.id] })
             setAllToFalse()
         }
     })

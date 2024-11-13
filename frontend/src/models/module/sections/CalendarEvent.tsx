@@ -106,8 +106,8 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
         mutationFn: (module: ModuleType) => {
             return editModule(module);
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['modules'] })
+        onSuccess: (_data, module) => {
+            queryClient.invalidateQueries({ queryKey: ['modules', module.id] })
             setAllToFalse();
         }
     })
