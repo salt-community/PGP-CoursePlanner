@@ -114,14 +114,14 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
 
     const handleMoveAnotherModule = () => {
         setIsIncompleteInput(false);
-        if (selectedModule != "DEFAULT" && selectedModuleDay != "DEFAULT") {
+        const module = modules?.find(m => m.id == parseInt(selectedModule));
+        if (module && selectedModuleDay != "DEFAULT") {
             const originalDayIndex = days.findIndex(d => d.dayNumber == dayNumber);
             days[originalDayIndex].events.splice(index, 1);
 
             const editedDays = [...days];
             setDays(editedDays);
 
-            const module = modules?.find(m => m.id == parseInt(selectedModule))!;
             const newModule: ModuleType = {
                 id: module.id,
                 name: module.name,
