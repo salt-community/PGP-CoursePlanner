@@ -7,27 +7,15 @@ import {
     getAppliedCourseById,
 } from "../../../api/AppliedCourseApi";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppliedCourseType } from "../../course/Types";
 import { getCookie } from "../../../helpers/cookieHelpers";
 import Login from "../../login/Login";
-import AppliedModule from "../sections/AppliedModule";
 import InputSmall from "../../../components/inputFields/InputSmall";
-import { AppliedDayType, AppliedEventType, AppliedModuleType } from "../Types";
-import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
-import TrashBtn from "../../../components/buttons/TrashBtn";
-import { getAllModules } from "../../../api/ModuleApi";
-import {
-    postAppliedModule,
-    updateAppliedModule,
-} from "../../../api/AppliedModuleApi";
-import { postAppliedEvent } from "../../../api/AppliedEventApi";
-import { postAppliedDay } from "../../../api/AppliedDayApi";
+import { AppliedModuleType } from "../Types";
 import ColorPickerModal from "../../../components/ColorPickerModal";
-import { reorderModule } from "../helpers/reorderModule";
-import DownArrow from "../components/downArrowButton";
-import UpArrow from "../components/upArrowButton";
+import ModuleEdit from "../sections/moduleEdit";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -35,14 +23,13 @@ export default function EditAppliedCourse() {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [color, setColor] = useState<string>("");
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
-    const [appliedModules, setAppliedModules] = useState<AppliedModuleType[]>();
+    const [appliedModules, setAppliedModules] = useState<AppliedModuleType[]>([]);
 
     const navigate = useNavigate();
 
-    const { data: modules } = useQuery({
-        queryKey: ["modules"],
-        queryFn: getAllModules,
-    });
+    const handleUpdateModules = (updatedModules: AppliedModuleType[]) => {
+        setAppliedModules(updatedModules);
+    };
 
     const { data: allAppliedCourses } = useQuery({
         queryKey: ["appliedCourses"],
@@ -69,124 +56,6 @@ export default function EditAppliedCourse() {
     }, [appliedCourseId]);
 
     const defaultColor = appliedCourse?.color || "";
-
-    async function editAppliedModule(
-        index: number,
-        appliedModule: AppliedModuleType
-    ) {
-        const newAppliedModules = [...appliedModules!];
-        newAppliedModules[index] = appliedModule;
-        setAppliedModules(newAppliedModules);
-    }
-
-    const handleAddModule = (index: number) => {
-        const emptyModule: AppliedModuleType = {
-            id: 0,
-            name: "",
-            numberOfDays: 1,
-            days: [],
-        };
-
-        postAppliedModule(emptyModule)
-            .then((response) => {
-                if (response) {
-                    const editedModules = [...appliedModules!];
-                    editedModules.splice(index + 1, 0, response);
-                    setAppliedModules(editedModules);
-                }
-            })
-            .catch((error) => {
-                console.error("Error posting applied module:", error);
-            });
-    };
-
-    const handleDeleteModule = (index: number) => {
-        const editedModules = [...appliedModules!];
-        editedModules.splice(index, 1);
-        setAppliedModules(editedModules);
-    };
- 
-    const moveModuleUp = (index: number) => {
-        setAppliedModules((prevModules) => reorderModule(prevModules ?? [], index, "up"));
-    };
-    const moveModuleDown = (index: number) => {
-        setAppliedModules((prevModules) => reorderModule(prevModules ?? [], index, "down"));
-        };
-
-    const handleChange = async (event: SyntheticEvent) => {
-        const value = (event.target as HTMLSelectElement).value;
-        const [moduleId, indexStr, appModuleId] = value.split("_");
-        const moduleIndex = parseInt(indexStr);
-        const appliedModuleId = parseInt(appModuleId);
-
-        if (!modules) {
-            console.error("Modules data is loading");
-            return;
-        }
-        const module = modules.find((m) => m.id === parseInt(moduleId));
-        if (!module) {
-            console.error("Sorry Module Not Found");
-            return;
-        }
-
-        const listDays: AppliedDayType[] = [];
-
-        await Promise.all(
-            module.days.map(async (day) => {
-                const listEvents: AppliedEventType[] = [];
-                await Promise.all(
-                    day.events.map(async (eventItem) => {
-                        try {
-                            const newEvent = {
-                                id: 0,
-                                name: eventItem.name,
-                                description: eventItem.description,
-                                startTime: eventItem.startTime,
-                                endTime: eventItem.endTime,
-                            };
-                            const response = await postAppliedEvent(newEvent);
-                            if (response) listEvents.push(response);
-                        } catch (error) {
-                            console.error("Error posting applied event:", error);
-                        }
-                    })
-                );
-
-                const newDay = {
-                    id: 0,
-                    dayNumber: day.dayNumber,
-                    description: day.description,
-                    events: listEvents,
-                };
-
-                try {
-                    const response = await postAppliedDay(newDay);
-                    if (response) listDays.push(response);
-                } catch (error) {
-                    console.error("Error posting applied day:", error);
-                }
-            })
-        );
-
-        const newAppliedModule: AppliedModuleType = {
-            id: appliedModuleId,
-            name: module.name,
-            numberOfDays: listDays.length,
-            days: listDays.sort((a, b) => a.dayNumber - b.dayNumber),
-        };
-
-        updateAppliedModule(newAppliedModule)
-            .then((response) => {
-                if (response) {
-                    const updatedModules = [...appliedModules!];
-                    updatedModules[moduleIndex] = newAppliedModule;
-                    setAppliedModules(updatedModules);
-                }
-            })
-            .catch((error) => {
-                console.error("Error posting applied module:", error);
-            });
-    };
 
     const handleEdit = async () => {
         setIsInvalidDate(false);
@@ -241,7 +110,7 @@ export default function EditAppliedCourse() {
             return editAppliedCourse(newAppliedCourse);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["allAppliedCourses"] });
+            queryClient.invalidateQueries({ queryKey: ["appliedCourses"] });
             navigate(`/activecourses`);
         },
     });
@@ -266,7 +135,7 @@ export default function EditAppliedCourse() {
                 
                 {appliedCourse !== undefined && (
                     <div>
-                        <div className="flex flex-row gap-4 items-center">
+                        <div className="flex flex-row gap-4 items-center p-1">
                             <div className="self-start mt-2">
                                 <h2 className="text-lg mb-2 w-[150px]">Bootcamp Name: </h2>
                             </div>
@@ -279,7 +148,7 @@ export default function EditAppliedCourse() {
                             />
                         </div>
 
-                        <div className="flex flex-row gap-4 items-center">
+                        <div className="flex flex-row gap-4 items-center p-1">
                             <div className="self-start mt-2 w-[150px]">
                                 <h2 className="text-lg mb-2">Start Date: </h2>
                             </div>
@@ -299,110 +168,12 @@ export default function EditAppliedCourse() {
                                 }}
                             />
                         </div>
-
-                        <ColorPickerModal color={color} setColor={setColor} />
-                        {modules &&
-                            appliedModules &&
-                            appliedModules.map((appliedModule, index) => (
-                                <div key={index}>
-                                    {appliedModule.name == "" ? (
-                                        <div className="collapse border-primary border mb-2">
-                                            <input
-                                                type="checkbox"
-                                                id={`collapse-toggle-${index}`}
-                                                className="hidden"
-                                            />
-                                            <div className="collapse-title flex flex-row">
-                                                <label
-                                                    htmlFor={`collapse-toggle-${index}`}
-                                                    className="cursor-pointer flex flex-row"
-                                                >
-                                                    <h1 className="text-lg text-primary">
-                                                        Module {index + 1}:
-                                                    </h1>
-                                                </label>
-                                                <div className="flex flex-col ml-1">
-                                                    <select
-                                                        className="border border-gray-300 rounded-lg p-1 w-48"
-                                                        onChange={handleChange}
-                                                        defaultValue={"DEFAULT"}
-                                                    >
-                                                        <option value="DEFAULT" disabled>
-                                                            Select
-                                                        </option>
-                                                        {modules.map((module) => (
-                                                            <option
-                                                                key={module.id}
-                                                                value={`${module.id}_${index}_${appliedModule.id}`}
-                                                            >
-                                                                {module.name} ({module.numberOfDays} days)
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="collapse border-primary border mb-2 ">
-                                            <input
-                                                type="checkbox"
-                                                id={`collapse-toggle-${index}`}
-                                                className="hidden"
-                                            />
-                                            <div className="collapse-title flex flex-row">
-                                                {index == 0 && index != appliedModules.length - 1 && (
-                                                    <div className="flex flex-col w-[26px] mr-2">
-                                                        <DownArrow onClick={() => moveModuleDown(index)}/>
-                                                    </div>
-                                                )}
-                                                {index != 0 && index == appliedModules.length - 1 && (
-                                                    <div className="flex flex-col w-[26px] mr-2">
-                                                        <UpArrow onClick = {() => moveModuleUp(index)}/>
-                                                    </div>
-                                                )}
-                                                {index != 0 && index != appliedModules.length - 1 && (
-                                                    <div className="flex flex-col w-[26px] mr-2">
-                                                        <UpArrow onClick = {() => moveModuleUp(index)}/>
-                                                        <DownArrow onClick={() => moveModuleDown(index)}/>
-                                                    </div>
-                                                )}
-                                                {index == 0 && index == appliedModules.length - 1 && (
-                                                    <div className="flex flex-col w-[26px] mr-2"></div>
-                                                )}
-                                                <label
-                                                    htmlFor={`collapse-toggle-${index}`}
-                                                    className="cursor-pointer flex flex-row w-5/6"
-                                                >
-                                                    <h1 className="text-lg text-primary self-center p-3">
-                                                        Module {index + 1}: {appliedModule.name}
-                                                    </h1>
-                                                </label>
-                                                <div className="w-1/6 flex gap-1 justify-end items-center">
-                                                    <PrimaryBtn onClick={() => handleAddModule(index)}>
-                                                        +
-                                                    </PrimaryBtn>
-                                                    {appliedModules.length > 1 ? (
-                                                        <TrashBtn
-                                                            handleDelete={() => handleDeleteModule(index)}
-                                                        />
-                                                    ) : (
-                                                        <div className="w-12"></div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div className="collapse-content">
-                                                <AppliedModule
-                                                    key={appliedModule.id}
-                                                    module={appliedModule}
-                                                    index={index}
-                                                    submitFunction={editAppliedModule}
-                                                    buttonText="Save module changes"
-                                                />
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
+                        <div className="p-1">
+                        <ColorPickerModal color={color} setColor={setColor} />  
+                        </div>                        
+                       <div className="mt-10 mb-10">
+                       <ModuleEdit appliedModules={appliedModules || []} onUpdateModules={handleUpdateModules}/>                      
+                       </div>                       
                         {isInvalidDate && (
                             <p
                                 className="error-message text-red-600 text-sm mt-4"
