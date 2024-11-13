@@ -345,10 +345,9 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                             <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
                                                                 <option key={moduleId + ",default"} value="DEFAULT" disabled>Select Module</option>
                                                                 {modules && modules.map((module, moduleIndex) =>
-                                                                    <> {module.id != moduleId &&
-                                                                        <option key={module.id + ":" + moduleIndex} value={module.id}>{module.name}</option>
-                                                                    }
-                                                                    </>)}
+                                                                    module.id != moduleId &&
+                                                                    <option key={module.id + ":" + moduleIndex} value={module.id}>{module.name}</option>
+                                                                )}
                                                             </select>
                                                         </div>
                                                         {selectedModule != "DEFAULT" &&
