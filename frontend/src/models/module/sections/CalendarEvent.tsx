@@ -5,7 +5,7 @@ import InputSmallTime from "../../../components/inputFields/InputSmallTime";
 import { EventProps, ModuleType } from "../Types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { editModule, getAllModules } from "../../../api/ModuleApi";
-import MoveModalContainer from "./MoveModalContainer";
+import MoveModalContainer from "../components/MoveModalContainer";
 
 export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumber, setDays, days, index, event }: EventProps) {
     const [selectedDay, setSelectedDay] = useState<string>("DEFAULT");

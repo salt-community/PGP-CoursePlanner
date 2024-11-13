@@ -6,7 +6,9 @@ import CalendarEvent from './CalendarEvent';
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { editModule, getAllModules } from '../../../api/ModuleApi';
-import MoveModalContainer from './MoveModalContainer';
+import MoveModalContainer from '../components/MoveModalContainer';
+import DownArrowButton from '../components/DownArrowButton';
+import UpArrowButton from '../components/UpArrowButton';
 
 export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
@@ -116,7 +118,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
             }
             setNumOfDays(days.length - 1);
             setDays(editedDaysCurrent);
-            
+
             const editedDays = [...originalDays];
             editedDays.splice(parseInt(selectedModuleDay) - 1, 0, day);
             for (let i = parseInt(selectedModuleDay) - 1; i < editedDays.length; i++) {
@@ -158,18 +160,18 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                             <div className='flex flex-row w-2/12'>
                                 {day.dayNumber == 1 && day.dayNumber != days.length &&
                                     <div className="flex flex-col w-[26px] mr-2">
-                                        <button type="button" className="w-full h-full self-center stroke-base-content" onClick={() => moveDown(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
+                                        <DownArrowButton onClick={() => moveDown(day.dayNumber - 1)} />
                                     </div>
                                 }
                                 {day.dayNumber != 1 && day.dayNumber == days.length &&
                                     <div className="flex flex-col w-[26px] mr-2">
-                                        <button type="button" className="w-full h-full self-center stroke-base-content" onClick={() => moveUp(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
+                                        <UpArrowButton onClick={() => moveUp(day.dayNumber - 1)} />
                                     </div>
                                 }
                                 {day.dayNumber != 1 && day.dayNumber != days.length &&
                                     <div className="flex flex-col w-[26px] mr-2">
-                                        <button type="button" className="w-full h-full self-center stroke-base-content" onClick={() => moveUp(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
-                                        <button type="button" className="w-full h-full self-center stroke-base-content" onClick={() => moveDown(day.dayNumber - 1)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
+                                        <UpArrowButton onClick={() => moveUp(day.dayNumber - 1)} />
+                                        <DownArrowButton onClick={() => moveDown(day.dayNumber - 1)} />
                                     </div>
                                 }
                                 {day.dayNumber == 1 && day.dayNumber == days.length &&
