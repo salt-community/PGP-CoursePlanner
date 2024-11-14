@@ -11,16 +11,17 @@ namespace backend.Controllers
     [Route("[controller]")]
     public class AppliedDaysController : ControllerBase
     {
-        private readonly IService<AppliedDay> _service;
+        private readonly IService<Day> _service;
 
-        public AppliedDaysController(IService<AppliedDay> service)
+        public AppliedDaysController(IService<Day> service)
         {
             _service = service;
         }
 
         [HttpPost]
-        public async Task<ActionResult<AppliedDay>> CreateAppliedDay(AppliedDay appliedDay)
+        public async Task<ActionResult<Day>> CreateAppliedDay(Day appliedDay)
         {
+            appliedDay.IsApplied = true;
             var response = await _service.CreateAsync(appliedDay);
             if (response == null)
             {
@@ -30,7 +31,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<AppliedDay>> GetAppliedDay(int id)
+        public async Task<ActionResult<Day>> GetAppliedDay(int id)
         {
             var response = await _service.GetOneAsync(id);
             if (response != null)

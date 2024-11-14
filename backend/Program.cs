@@ -51,10 +51,7 @@ builder.Services.AddCors();
 
 builder.Services.AddScoped<IService<Module>, ModuleService>();
 builder.Services.AddScoped<IService<Course>, CourseService>();
-builder.Services.AddScoped<IService<AppliedCourse>, AppliedCourseService>();
-builder.Services.AddScoped<IService<AppliedModule>, AppliedModuleService>();
-builder.Services.AddScoped<IService<AppliedDay>, AppliedDayService>();
-builder.Services.AddScoped<IService<AppliedEvent>, AppliedEventService>();
+builder.Services.AddScoped<IService<Day>, DayService>();
 
 var app = builder.Build();
 
