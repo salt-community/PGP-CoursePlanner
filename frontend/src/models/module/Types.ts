@@ -38,7 +38,6 @@ export type EventType = {
   startTime: string;
   endTime: string;
   description?: string;
-  // links?: string[];
 };
 
 export type EventProps = {
