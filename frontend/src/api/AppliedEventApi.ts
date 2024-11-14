@@ -1,10 +1,10 @@
 import { getCookie } from "@helpers/cookieHelpers";
-import { AppliedEventType } from "@models/appliedCourse/Types";
+import { EventType } from "@models/module/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL} from "./backendUrl";
 }/AppliedEvents`;
 
-export async function postAppliedEvent(event: AppliedEventType) {
+export async function postAppliedEvent(event: EventType) {
   const response = await fetch(BASE_URL, {
     method: "POST",
     headers: {
@@ -20,5 +20,5 @@ export async function postAppliedEvent(event: AppliedEventType) {
     throw new Error("Failed to apply event");
   }
   const data = await response.json();
-  return data as AppliedEventType;
+  return data as EventType;
 }

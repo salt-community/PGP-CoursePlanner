@@ -1,9 +1,9 @@
 import { getCookie } from "@helpers/cookieHelpers";
-import { AppliedDayType } from "@models/appliedCourse/Types";
+import { DayType } from "@models/module/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedDays`;
 
-export async function postAppliedDay(day: AppliedDayType) {
+export async function postAppliedDay(day: DayType) {
   const response = await fetch(BASE_URL, {
     method: "POST",
     headers: {
@@ -19,5 +19,5 @@ export async function postAppliedDay(day: AppliedDayType) {
     throw new Error("Failed to apply day");
   }
   const data = await response.json();
-  return data as AppliedDayType;
+  return data as DayType;
 }
