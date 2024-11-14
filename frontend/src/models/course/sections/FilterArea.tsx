@@ -1,5 +1,5 @@
 import { SyntheticEvent } from "react";
-import { ModuleType } from "../../module/Types";
+import { ModuleType } from "@models/module/Types";
 
 type Props = {
     modules: ModuleType[],

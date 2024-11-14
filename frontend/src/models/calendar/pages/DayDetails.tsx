@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import CloseBtn from "../../../components/buttons/CloseBtn";
-import Page from "../../../components/Page";
+import CloseBtn from "@components/buttons/CloseBtn";
+import Page from "@components/Page";
 import { format } from "date-fns";
-import NextBtn from "../../../components/buttons/NextBtn";
-import PreviousBtn from "../../../components/buttons/PreviousBtn";
+import NextBtn from "@components/buttons/NextBtn";
+import PreviousBtn from "@components/buttons/PreviousBtn";
 import { useEffect, useState } from "react";
 import { CalendarDateType, DateContent } from "../Types";
-import { getCalendarDate } from "../../../api/CalendarDateApi";
-import { useDateFromPath } from "../../../helpers/helperHooks";
+import { getCalendarDate } from "@api/CalendarDateApi";
+import { useDateFromPath } from "@helpers/helperHooks";
 import WeekDay from "../sections/WeekDay";
-import { getDateAsString } from "../../../helpers/dateHelpers";
-import { getCookie } from "../../../helpers/cookieHelpers";
-import Login from "../../login/Login";
+import { getDateAsString } from "@helpers/dateHelpers";
+import { getCookie } from "@helpers/cookieHelpers";
+import Login from "@models/login/Login";
 
 export default function DayDetails() {
     const navigate = useNavigate();

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import TrashBtn from "../../../components/buttons/TrashBtn";
-import InputSmall from "../../../components/inputFields/InputSmall";
-import InputSmallTime from "../../../components/inputFields/InputSmallTime";
+import TrashBtn from "@components/buttons/TrashBtn";
+import InputSmall from "@components/inputFields/InputSmall";
+import InputSmallTime from "@components/inputFields/InputSmallTime";
 import { EventProps, ModuleType } from "../Types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { editModule, getAllModules } from "../../../api/ModuleApi";
+import { editModule, getAllModules } from "@api/ModuleApi";
 import ModalContainer from "../components/ModalContainer";
 import EllipsisButton from "../components/EllipsisButton";
 

@@ -3,14 +3,14 @@ import { reorderModule } from "../helpers/reorderModule";
 import { AppliedDayType, AppliedEventType, AppliedModuleType } from "../Types";
 import DownArrow from "../components/downArrowButton";
 import UpArrow from "../components/upArrowButton";
-import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
-import TrashBtn from "../../../components/buttons/TrashBtn";
+import PrimaryBtn from "@components/buttons/PrimaryBtn";
+import TrashBtn from "@components/buttons/TrashBtn";
 import AppliedModule from "./AppliedModule";
-import { postAppliedModule, updateAppliedModule } from "../../../api/AppliedModuleApi";
-import { postAppliedDay } from "../../../api/AppliedDayApi";
-import { postAppliedEvent } from "../../../api/AppliedEventApi";
+import { postAppliedModule, updateAppliedModule } from "@api/AppliedModuleApi";
+import { postAppliedDay } from "@api/AppliedDayApi";
+import { postAppliedEvent } from "@api/AppliedEventApi";
 import { useQuery } from "@tanstack/react-query";
-import { getAllModules } from "../../../api/ModuleApi";
+import { getAllModules } from "@api/ModuleApi";
 
 interface ModuleEditProps {
     appliedModules: AppliedModuleType[];

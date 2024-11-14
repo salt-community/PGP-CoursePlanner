@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { addDays, subDays } from "date-fns";
-import Page from "../../../components/Page";
+import Page from "@components/Page";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { getAllAppliedCourses } from "../../../api/AppliedCourseApi";
-import { getAllCourses } from "../../../api/CourseApi";
-import { getAllModules } from "../../../api/ModuleApi";
-import { currentMonth, currentYear, currentWeek } from "../../../helpers/dateHelpers";
+import { getAllAppliedCourses } from "@api/AppliedCourseApi";
+import { getAllCourses } from "@api/CourseApi";
+import { getAllModules } from "@api/ModuleApi";
+import { currentMonth, currentYear, currentWeek } from "@helpers/dateHelpers";
 import TimeLineCourse from "../sections/TimeLineCourse";
 import TimeLineXaxis from "../sections/TimeLineXaxis";
-import { getCookie } from "../../../helpers/cookieHelpers";
-import Login from "../../login/Login";
+import { getCookie } from "@helpers/cookieHelpers";
+import Login from "@models/login/Login";
 
 export type Activity = {
   id: number;

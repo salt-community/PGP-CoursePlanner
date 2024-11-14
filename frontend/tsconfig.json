@@ -18,7 +18,16 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Paths Configuration */
+    "baseUrl": "src", // The root directory of your source files
+    "paths": {
+      "@api/*": ["api/*"],
+      "@helpers/*": ["helpers/*"],
+      "@components/*": ["components/*"],
+      "@models/*": ["models/*"],
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

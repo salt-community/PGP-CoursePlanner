@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PrimaryBtn from "./buttons/PrimaryBtn";
-import { deleteCookie} from "../helpers/cookieHelpers";
-import { deleteRefreshToken } from "../api/UserApi";
-import { currentMonth, currentYear } from "../helpers/dateHelpers";
+import { deleteCookie} from "@helpers/cookieHelpers";
+import { deleteRefreshToken } from "@api/UserApi";
+import { currentMonth, currentYear } from "@helpers/dateHelpers";
 
 export default function NavBar() {
   const navigate = useNavigate();

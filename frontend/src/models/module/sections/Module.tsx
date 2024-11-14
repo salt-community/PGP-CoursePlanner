@@ -1,6 +1,6 @@
-import InputSmall from "../../../components/inputFields/InputSmall";
-import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
-import SuccessBtn from "../../../components/buttons/SuccessBtn";
+import InputSmall from "@components/inputFields/InputSmall";
+import PrimaryBtn from "@components/buttons/PrimaryBtn";
+import SuccessBtn from "@components/buttons/SuccessBtn";
 import { useNavigate } from "react-router-dom";
 import { useState, FormEvent, useEffect, useRef } from "react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";

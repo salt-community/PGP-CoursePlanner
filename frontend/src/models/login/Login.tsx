@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import LoadingMessage from "../../components/LoadingMessage";
-import { setCookie } from "../../helpers/cookieHelpers";
-import { refreshTokens } from "../../api/UserApi";
+import LoadingMessage from "@components/LoadingMessage";
+import { setCookie } from "@helpers/cookieHelpers";
+import { refreshTokens } from "@api/UserApi";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { getHomeUrl } from "../../helpers/helperMethods";
+import { getHomeUrl } from "@helpers/helperMethods";
 
 const redirectLink = getHomeUrl();
 const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=openid https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com&access_type=offline&prompt=consent`;

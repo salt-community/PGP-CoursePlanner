@@ -1,6 +1,6 @@
-import InputSmall from '../../../components/inputFields/InputSmall';
-import PrimaryBtn from '../../../components/buttons/PrimaryBtn';
-import TrashBtn from '../../../components/buttons/TrashBtn';
+import InputSmall from '@components/inputFields/InputSmall';
+import PrimaryBtn from '@components/buttons/PrimaryBtn';
+import TrashBtn from '@components/buttons/TrashBtn';
 import { DayProps, ModuleType } from '../Types';
 import CalendarEvent from './CalendarEvent';
 import { useState } from 'react';

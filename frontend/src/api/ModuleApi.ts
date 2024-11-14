@@ -1,6 +1,6 @@
-import { getCookie } from "../helpers/cookieHelpers";
-import { CourseModule } from "../models/course/Types";
-import { ModuleType } from "../models/module/Types";
+import { getCookie } from "@helpers/cookieHelpers";
+import { CourseModule } from "@models/course/Types";
+import { ModuleType } from "@models/module/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Modules`;
 

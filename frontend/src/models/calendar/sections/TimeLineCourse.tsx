@@ -1,5 +1,5 @@
 import { format } from "date-fns"
-import { daysBetweenDates } from "../../../helpers/dateHelpers"
+import { daysBetweenDates } from "@helpers/dateHelpers"
 import { Activity } from "../pages/HorizontalCalendar"
 import { Link } from "react-router-dom"
 
