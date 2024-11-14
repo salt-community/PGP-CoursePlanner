@@ -1,6 +1,6 @@
 import { SyntheticEvent } from "react";
 import { reorderModule } from "../helpers/reorderModule";
-import { AppliedDayType, AppliedEventType, AppliedModuleType } from "../Types";
+import { AppliedModuleType } from "../Types";
 import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
 import TrashBtn from "../../../components/buttons/TrashBtn";
 import AppliedModule from "./AppliedModule";
@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllModules } from "../../../api/ModuleApi";
 import UpArrowBtn from "../../../components/buttons/UpArrowBtn";
 import DownArrowBtn from "../../../components/buttons/DownArrowBtn";
+import { DayType, EventType } from "../../module/Types";
 
 interface ModuleEditProps {
     appliedModules: AppliedModuleType[];
@@ -44,11 +45,11 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
             return;
         }
 
-        const listDays: AppliedDayType[] = [];
+        const listDays: DayType[] = [];
 
         await Promise.all(
             module.days.map(async (day) => {
-                const listEvents: AppliedEventType[] = [];
+                const listEvents: EventType[] = [];
                 await Promise.all(
                     day.events.map(async (eventItem) => {
                         try {

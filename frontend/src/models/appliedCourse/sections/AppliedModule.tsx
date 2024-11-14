@@ -2,13 +2,14 @@ import InputSmall from "../../../components/inputFields/InputSmall";
 import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
 import SuccessBtn from "../../../components/buttons/SuccessBtn";
 import { useState, FormEvent } from "react";
-import { AppliedModuleProps, AppliedDayType, AppliedModuleType, AppliedEventType } from '../Types';
+import { AppliedModuleProps, AppliedModuleType } from '../Types';
 import AppliedDay from "./AppliedDay";
+import { DayType, EventType } from "../../module/Types";
 
 export default function AppliedModule({ submitFunction, module, index, buttonText }: AppliedModuleProps) {
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
-    const [days, setDays] = useState<AppliedDayType[]>(module.days);
+    const [days, setDays] = useState<DayType[]>(module.days);
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
 
     const handleDays = () => {
@@ -40,7 +41,7 @@ export default function AppliedModule({ submitFunction, module, index, buttonTex
 
         const { moduleName } = e.target as typeof e.target & { moduleName: { value: string } };
         const { numberOfDays } = e.target as typeof e.target & { numberOfDays: { value: number } };
-        const events: AppliedEventType[] = [];
+        const events: EventType[] = [];
         days.forEach(day => {
             const eventsOfDay = day.events;
             eventsOfDay.forEach(event => {
