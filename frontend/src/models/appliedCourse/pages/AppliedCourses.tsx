@@ -1,15 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Page from "../../../components/Page";
-import { deleteAppliedCourse, getAllAppliedCourses } from "../../../api/AppliedCourseApi";
-import DeleteBtn from "../../../components/buttons/DeleteBtn";
+import Page from "@components/Page";
+import { deleteAppliedCourse, getAllAppliedCourses } from "@api/AppliedCourseApi";
+import DeleteBtn from "@components/buttons/DeleteBtn";
 import { Link, useNavigate } from "react-router-dom";
-import LoadingMessage from "../../../components/LoadingMessage";
-import ErrorMessage from "../../../components/ErrorMessage";
-import { getCookie } from "../../../helpers/cookieHelpers";
-import Login from "../../login/Login";
+import LoadingMessage from "@components/LoadingMessage";
+import ErrorMessage from "@components/ErrorMessage";
+import { getCookie } from "@helpers/cookieHelpers";
+import Login from "@models/login/Login";
 import { useEffect, useState } from "react";
-import { AppliedCourseType } from "../../course/Types";
-import { trackUrl } from "../../../helpers/helperMethods";
+import { AppliedCourseType } from "@models/course/Types";
+import { trackUrl } from "@helpers/helperMethods";
 
 export default function AppliedCourses() {
     trackUrl();

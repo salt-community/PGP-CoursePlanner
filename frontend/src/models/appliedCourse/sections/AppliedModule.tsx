@@ -1,6 +1,6 @@
-import InputSmall from "../../../components/inputFields/InputSmall";
-import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
-import SuccessBtn from "../../../components/buttons/SuccessBtn";
+import InputSmall from "@components/inputFields/InputSmall";
+import PrimaryBtn from "@components/buttons/PrimaryBtn";
+import SuccessBtn from "@components/buttons/SuccessBtn";
 import { useState, FormEvent } from "react";
 import { AppliedModuleProps, AppliedModuleType } from '../Types';
 import AppliedDay from "./AppliedDay";

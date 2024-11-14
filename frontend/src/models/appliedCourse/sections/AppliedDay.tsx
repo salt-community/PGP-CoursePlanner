@@ -1,6 +1,13 @@
+<<<<<<< HEAD
+import InputSmall from '@components/inputFields/InputSmall';
+import PrimaryBtn from '@components/buttons/PrimaryBtn';
+import TrashBtn from '@components/buttons/TrashBtn';
+import CalendarEvent from '@models/module/sections/CalendarEvent';
+=======
 import InputSmall from '../../../components/inputFields/InputSmall';
 import PrimaryBtn from '../../../components/buttons/PrimaryBtn';
 import TrashBtn from '../../../components/buttons/TrashBtn';
+>>>>>>> main
 import { AppliedDayProps } from '../Types';
 import EditEventTable from '../../../components/EditEventTable';
 

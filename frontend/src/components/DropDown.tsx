@@ -1,6 +1,6 @@
 import { SyntheticEvent } from "react";
-import { CourseModule } from "../models/course/Types";
-import { ModuleType } from "../models/module/Types";
+import { CourseModule } from "@models/course/Types";
+import { ModuleType } from "@models/module/Types";
 
 type Props = {
     thisCourseModule: CourseModule

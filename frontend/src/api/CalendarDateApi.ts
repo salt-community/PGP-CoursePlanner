@@ -1,4 +1,4 @@
-import { getCookie } from "../helpers/cookieHelpers";
+import { getCookie } from "@helpers/cookieHelpers";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/CalendarDates`;
 

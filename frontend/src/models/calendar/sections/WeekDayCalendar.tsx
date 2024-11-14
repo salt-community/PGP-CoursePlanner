@@ -1,8 +1,8 @@
 import { DateContent } from "../Types";
 import { Link } from "react-router-dom";
-import { today } from "../../../helpers/dateHelpers";
+import { today } from "@helpers/dateHelpers";
 import { format } from "date-fns";
-import { trackUrl } from "../../../helpers/helperMethods";
+import { trackUrl } from "@helpers/helperMethods";
 
 type Props = {
     date: string;

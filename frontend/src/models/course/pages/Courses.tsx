@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllCourses } from "../../../api/CourseApi";
-import Page from "../../../components/Page";
+import { getAllCourses } from "@api/CourseApi";
+import Page from "@components/Page";
 import { Link } from "react-router-dom";
-import LoadingMessage from "../../../components/LoadingMessage";
-import ErrorMessage from "../../../components/ErrorMessage";
-import { getCookie } from "../../../helpers/cookieHelpers";
-import Login from "../../login/Login";
-import { trackUrl } from "../../../helpers/helperMethods";
+import LoadingMessage from "@components/LoadingMessage";
+import ErrorMessage from "@components/ErrorMessage";
+import { getCookie } from "@helpers/cookieHelpers";
+import Login from "@models/login/Login";
+import { trackUrl } from "@helpers/helperMethods";
 
 export default function Courses() {
     trackUrl();

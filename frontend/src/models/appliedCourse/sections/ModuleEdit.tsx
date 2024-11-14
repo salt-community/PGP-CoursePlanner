@@ -1,17 +1,17 @@
 import { SyntheticEvent } from "react";
 import { reorderModule } from "../helpers/reorderModule";
 import { AppliedModuleType } from "../Types";
-import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
-import TrashBtn from "../../../components/buttons/TrashBtn";
+import PrimaryBtn from "@components/buttons/PrimaryBtn";
+import TrashBtn from "@components/buttons/TrashBtn";
 import AppliedModule from "./AppliedModule";
-import { postAppliedModule, updateAppliedModule } from "../../../api/AppliedModuleApi";
-import { postAppliedDay } from "../../../api/AppliedDayApi";
-import { postAppliedEvent } from "../../../api/AppliedEventApi";
+import { postAppliedModule, updateAppliedModule } from "@api/AppliedModuleApi";
+import { postAppliedDay } from "@api/AppliedDayApi";
+import { postAppliedEvent } from "@api/AppliedEventApi";
 import { useQuery } from "@tanstack/react-query";
-import { getAllModules } from "../../../api/ModuleApi";
-import UpArrowBtn from "../../../components/buttons/UpArrowBtn";
-import DownArrowBtn from "../../../components/buttons/DownArrowBtn";
-import { DayType, EventType } from "../../module/Types";
+import { getAllModules } from "@api/ModuleApi";
+import UpArrowBtn from "@components/buttons/UpArrowBtn";
+import DownArrowBtn from "@components/buttons/DownArrowBtn";
+import { DayType, EventType } from "@models/module/Types";
 
 interface ModuleEditProps {
     appliedModules: AppliedModuleType[];

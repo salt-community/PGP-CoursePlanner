@@ -1,18 +1,18 @@
-import Page from "../../../components/Page";
-import { useIdFromPath } from "../../../helpers/helperHooks";
+import Page from "@components/Page";
+import { useIdFromPath } from "@helpers/helperHooks";
 import { useEffect, useState } from "react";
-import { deleteAppliedCourse, getAppliedCourseById } from "../../../api/AppliedCourseApi";
+import { deleteAppliedCourse, getAppliedCourseById } from "@api/AppliedCourseApi";
 import 'reactjs-popup/dist/index.css';
 import { AppliedModuleType } from "../Types";
-import { getCookie } from "../../../helpers/cookieHelpers";
-import Login from "../../login/Login";
-import { AppliedCourseType } from "../../course/Types";
+import { getCookie } from "@helpers/cookieHelpers";
+import Login from "@models/login/Login";
+import { AppliedCourseType } from "@models/course/Types";
 import { Link, useNavigate } from "react-router-dom";
-import DeleteBtn from "../../../components/buttons/DeleteBtn";
+import DeleteBtn from "@components/buttons/DeleteBtn";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PDFWeekGenerator from "../sections/PDFWeekGenerator";
 import PDFGenerator from "../sections/PDFGenerator";
-import { trackUrl } from "../../../helpers/helperMethods";
+import { trackUrl } from "@helpers/helperMethods";
 
 export default function AppliedCourseDetails() {
     trackUrl();

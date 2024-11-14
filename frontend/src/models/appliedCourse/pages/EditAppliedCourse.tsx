@@ -1,20 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Page from "../../../components/Page";
-import { useIdFromPath } from "../../../helpers/helperHooks";
+import Page from "@components/Page";
+import { useIdFromPath } from "@helpers/helperHooks";
 import {
     editAppliedCourse,
     getAllAppliedCourses,
     getAppliedCourseById,
-} from "../../../api/AppliedCourseApi";
+} from "@api/AppliedCourseApi";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AppliedCourseType } from "../../course/Types";
-import { getCookie } from "../../../helpers/cookieHelpers";
-import Login from "../../login/Login";
-import InputSmall from "../../../components/inputFields/InputSmall";
+import { AppliedCourseType } from "@models/course/Types";
+import { getCookie } from "@helpers/cookieHelpers";
+import Login from "@models/login/Login";
+import InputSmall from "@components/inputFields/InputSmall";
 import { AppliedModuleType } from "../Types";
-import ColorPickerModal from "../../../components/ColorPickerModal";
+import ColorPickerModal from "@components/ColorPickerModal";
 import ModuleEdit from "../sections/ModuleEdit";
 
 export default function EditAppliedCourse() {

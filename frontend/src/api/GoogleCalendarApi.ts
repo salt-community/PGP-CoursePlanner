@@ -1,5 +1,5 @@
-import { getCookie } from "../helpers/cookieHelpers";
-import { GoogleEvent } from "../helpers/googleHelpers";
+import { getCookie } from "@helpers/cookieHelpers";
+import { GoogleEvent } from "@helpers/googleHelpers";
 
 interface EventData {
   summary: string;

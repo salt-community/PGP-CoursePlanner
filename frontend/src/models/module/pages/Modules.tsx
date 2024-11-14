@@ -1,15 +1,15 @@
-import { getAllModules } from "../../../api/ModuleApi";
-import Page from "../../../components/Page";
+import { getAllModules } from "@api/ModuleApi";
+import Page from "@components/Page";
 import { Link } from "react-router-dom";
-import LoadingMessage from "../../../components/LoadingMessage";
-import ErrorMessage from "../../../components/ErrorMessage";
-import { getCookie } from "../../../helpers/cookieHelpers";
-import Login from "../../login/Login";
+import LoadingMessage from "@components/LoadingMessage";
+import ErrorMessage from "@components/ErrorMessage";
+import { getCookie } from "@helpers/cookieHelpers";
+import Login from "@models/login/Login";
 import { useQuery } from "@tanstack/react-query";
-import FilterArea from "../../course/sections/FilterArea";
+import FilterArea from "@models/course/sections/FilterArea";
 import { useEffect, useState } from "react";
 import { ModuleType } from "../Types";
-import { trackUrl } from "../../../helpers/helperMethods";
+import { trackUrl } from "@helpers/helperMethods";
 
 export default function Modules() {
     trackUrl();

@@ -1,5 +1,5 @@
-import { getCookie } from "../helpers/cookieHelpers";
-import { AppliedEventType } from "../models/appliedCourse/Types";
+import { getCookie } from "@helpers/cookieHelpers";
+import { AppliedEventType } from "@models/appliedCourse/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL} from "./backendUrl";
 }/AppliedEvents`;

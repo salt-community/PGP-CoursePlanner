@@ -1,15 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllModules } from "../../../api/ModuleApi";
-import SuccessBtn from "../../../components/buttons/SuccessBtn";
-import InputSmall from "../../../components/inputFields/InputSmall";
-import DropDown from "../../../components/DropDown";
-import PrimaryBtn from "../../../components/buttons/PrimaryBtn";
+import { getAllModules } from "@api/ModuleApi";
+import SuccessBtn from "@components/buttons/SuccessBtn";
+import InputSmall from "@components/inputFields/InputSmall";
+import DropDown from "@components/DropDown";
+import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import TrashBtn from "../../../components/buttons/TrashBtn";
+import TrashBtn from "@components/buttons/TrashBtn";
 import { CourseProps, CourseModule, CourseType } from "../Types";
 import FilterArea from "./FilterArea";
-import { ModuleType } from "../../module/Types";
+import { ModuleType } from "@models/module/Types";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);

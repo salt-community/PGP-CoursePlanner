@@ -1,28 +1,24 @@
 import { Link, useNavigate } from "react-router-dom";
-import { deleteCourse, getCourseById } from "../../../api/CourseApi";
-import Page from "../../../components/Page";
+import { deleteCourse, getCourseById } from "@api/CourseApi";
+import Page from "@components/Page";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useIdFromPath } from "../../../helpers/helperHooks";
-import { getAllModules } from "../../../api/ModuleApi";
+import { useIdFromPath } from "@helpers/helperHooks";
+import { getAllModules } from "@api/ModuleApi";
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import {
-  editAppliedCourse,
-  getAllAppliedCourses,
-  postAppliedCourse,
-} from "../../../api/AppliedCourseApi";
-import { convertToGoogle } from "../../../helpers/googleHelpers";
-import DeleteBtn from "../../../components/buttons/DeleteBtn";
-import { deleteCourseFromGoogle } from "../../../api/GoogleCalendarApi";
+import { editAppliedCourse, getAllAppliedCourses, postAppliedCourse, } from "@api/AppliedCourseApi";
+import { convertToGoogle } from "@helpers/googleHelpers";
+import DeleteBtn from "@components/buttons/DeleteBtn";
+import { deleteCourseFromGoogle } from "@api/GoogleCalendarApi";
 import "reactjs-popup/dist/index.css";
-import { ModuleType } from "../../module/Types";
+import { ModuleType } from "@models/module/Types";
 import { AppliedCourseType } from "../Types";
-import LoadingMessage from "../../../components/LoadingMessage";
-import ErrorMessage from "../../../components/ErrorMessage";
-import { getCookie } from "../../../helpers/cookieHelpers";
-import Login from "../../login/Login";
-import { trackUrl } from "../../../helpers/helperMethods";
-import ColorPickerModal from "../../../components/ColorPickerModal";
+import LoadingMessage from "@components/LoadingMessage";
+import ErrorMessage from "@components/ErrorMessage";
+import { getCookie } from "@helpers/cookieHelpers";
+import Login from "@models/login/Login";
+import { trackUrl } from "@helpers/helperMethods";
+import ColorPickerModal from "@components/ColorPickerModal";
 
 export default function CourseDetails() {
   trackUrl();
@@ -136,7 +132,7 @@ export default function CourseDetails() {
       }
 
       const appliedCourse: AppliedCourseType = {
-        name: course?.name!,
+        name: course?.name?? "",
         startDate: startDate,
         courseId: parseInt(courseId),
         color: color,

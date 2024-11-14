@@ -1,6 +1,6 @@
-import InputSmall from '../../../components/inputFields/InputSmall';
-import PrimaryBtn from '../../../components/buttons/PrimaryBtn';
-import TrashBtn from '../../../components/buttons/TrashBtn';
+import InputSmall from '@components/inputFields/InputSmall';
+import PrimaryBtn from '@components/buttons/PrimaryBtn';
+import TrashBtn from '@components/buttons/TrashBtn';
 import { DayProps, ModuleType } from '../Types';
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

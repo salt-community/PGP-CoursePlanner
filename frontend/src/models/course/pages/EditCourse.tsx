@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { editCourse, getCourseById } from "../../../api/CourseApi";
-import Page from "../../../components/Page";
+import { editCourse, getCourseById } from "@api/CourseApi";
+import Page from "@components/Page";
 import Course from "../sections/Course";
-import { useIdFromPath } from "../../../helpers/helperHooks";
-import LoadingMessage from "../../../components/LoadingMessage";
-import ErrorMessage from "../../../components/ErrorMessage";
-import { getCookie } from "../../../helpers/cookieHelpers";
-import Login from "../../login/Login";
+import { useIdFromPath } from "@helpers/helperHooks";
+import LoadingMessage from "@components/LoadingMessage";
+import ErrorMessage from "@components/ErrorMessage";
+import { getCookie } from "@helpers/cookieHelpers";
+import Login from "@models/login/Login";
 
 export default function EditCourse() {
 
