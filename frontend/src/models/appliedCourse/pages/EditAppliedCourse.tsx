@@ -15,7 +15,7 @@ import Login from "@models/login/Login";
 import InputSmall from "@components/inputFields/InputSmall";
 import { AppliedModuleType } from "../Types";
 import ColorPickerModal from "@components/ColorPickerModal";
-import ModuleEdit from "../sections/moduleEdit";
+import ModuleEdit from "../sections/ModuleEdit";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
