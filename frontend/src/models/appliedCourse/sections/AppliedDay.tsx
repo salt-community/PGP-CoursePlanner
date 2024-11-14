@@ -1,14 +1,22 @@
+<<<<<<< HEAD
 import InputSmall from '@components/inputFields/InputSmall';
 import PrimaryBtn from '@components/buttons/PrimaryBtn';
 import TrashBtn from '@components/buttons/TrashBtn';
 import CalendarEvent from '@models/module/sections/CalendarEvent';
+=======
+import InputSmall from '../../../components/inputFields/InputSmall';
+import PrimaryBtn from '../../../components/buttons/PrimaryBtn';
+import TrashBtn from '../../../components/buttons/TrashBtn';
+>>>>>>> main
 import { AppliedDayProps } from '../Types';
+import EditEventTable from '../../../components/EditEventTable';
 
 export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDays }: AppliedDayProps) {
     const handleAddEvent = () => {
         const editedDays = [...days];
 
         editedDays[day.dayNumber - 1].events.push({
+            id: editedDays[day.dayNumber - 1].events.length,
             name: "",
             startTime: "",
             endTime: ""
@@ -122,33 +130,7 @@ export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDa
                             </label>
                         </div>
                         <div className="collapse-content">
-                            <table className="table table-sm table-fixed">
-                                <thead>
-                                    <tr>
-                                        <th className="w-2/12">Event name</th>
-                                        <th className="w-4/12">Description</th>
-                                        <th className="w-1/6">Start</th>
-                                        <th className="w-1/6">End</th>
-                                        <th className="w-1/12"></th>
-                                        <th className="w-1/12"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {day.events.map((event, index) => (
-                                        <CalendarEvent
-                                            editTrue={false}
-                                            moduleId={0}
-                                            appliedTrue={true}
-                                            event={event}
-                                            key={index}
-                                            days={days}
-                                            setDays={setDays}
-                                            index={index}
-                                            dayNumber={day.dayNumber}
-                                        />
-                                    ))}
-                                </tbody>
-                            </table>
+                            <EditEventTable editTrue={false} moduleId={0} day={day} setDays={setDays} days={days} appliedTrue={true} />
                         </div>
                     </div>
                     : <div className="collapse">
