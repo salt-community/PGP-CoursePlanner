@@ -59,29 +59,21 @@ public class CourseService : IService<Course>
     public async Task<Course> CreateAsync(Course course)
     {
         var moduleIds = course.moduleIds;
+        var modulesInDb = await _context.Modules
+                .Where(m => moduleIds.Contains(m.Id))
+                .ToListAsync();
 
-        List<CourseModule> courseModulesToAdd = [];
-        course.Modules = courseModulesToAdd;
-        _context.Courses.Add(course);
-        await _context.SaveChangesAsync();
-
-        foreach (var moduleId in moduleIds)
+        course.Modules = new List<CourseModule>();
+        foreach (var module in modulesInDb)
         {
-            _context.CourseModules.Add(new CourseModule
+            course.Modules.Add(new CourseModule
             {
-                Course = course,
                 CourseId = course.Id,
-                Module = _context.Modules.First(m => m.Id == moduleId),
-                ModuleId = moduleId
+                ModuleId = module.Id
             });
         }
+        await _context.Courses.AddAsync(course);
         await _context.SaveChangesAsync();
-
-        courseModulesToAdd = _context.CourseModules.Where(m => m.CourseId == course.Id).ToList();
-        course.Modules = courseModulesToAdd;
-        _context.Set<Course>().Update(course);
-        await _context.SaveChangesAsync();
-
         return course;
 
     }

@@ -22,7 +22,8 @@ public static class SeedData
                             Name = "Lecture",
                             StartTime = "9:00",
                             EndTime = "10:00",
-                            Description = "Lecture about the topic of today"
+                            Description = "Lecture about the topic of today",
+                            IsApplied = true
                             }
                     ]
                 },
@@ -34,7 +35,8 @@ public static class SeedData
                             Name = "Lecture",
                             StartTime = "9:00",
                             EndTime = "10:00",
-                            Description = "Lecture about the topic of today"
+                            Description = "Lecture about the topic of today",
+                            IsApplied = true
                             }
                     ]
                 },
@@ -46,7 +48,8 @@ public static class SeedData
                             Name = "Lecture",
                             StartTime = "9:00",
                             EndTime = "10:00",
-                            Description = "Lecture about the topic of today"
+                            Description = "Lecture about the topic of today",
+                            IsApplied = true
                             }
                     ]
                 },
@@ -58,7 +61,8 @@ public static class SeedData
                             Name = "Lecture",
                             StartTime = "9:00",
                             EndTime = "10:00",
-                            Description = "Lecture about the topic of today"
+                            Description = "Lecture about the topic of today",
+                            IsApplied = true
                             }
                     ]
                 },
@@ -70,19 +74,22 @@ public static class SeedData
                             Name = "Lecture",
                             StartTime = "9:00",
                             EndTime = "10:00",
-                            Description = "Lecture about the topic of today"
+                            Description = "Lecture about the topic of today",
+                            IsApplied = true
                             },
                         new Event{
                             Name = "Demo",
                             StartTime = "15:00",
                             EndTime = "16:00",
-                            Description = "Presentation of today's topic"
+                            Description = "Presentation of today's topic",
+                            IsApplied = true
                             },
                         new Event{
                             Name = "After Work",
                             StartTime = "17:00",
                             EndTime = "22:00",
-                            Description = "Drink and make friends"
+                            Description = "Drink and make friends",
+                            IsApplied = true
                         }
                     ]
                 }
@@ -97,13 +104,15 @@ public static class SeedData
                             Name = "Lecture",
                             StartTime = "9:00",
                             EndTime = "10:00",
-                            Description = "Lecture about the topic of today"
+                            Description = "Lecture about the topic of today",
+                            IsApplied = true
                             },
                         new Event{
                             Name = "Demo",
                             StartTime = "15:00",
                             EndTime = "16:00",
-                            Description = "Presentation of today's topic"
+                            Description = "Presentation of today's topic",
+                            IsApplied = true
                             }],
                 },
                 new Day{
@@ -114,7 +123,8 @@ public static class SeedData
                             Name = "Lecture",
                             StartTime = "9:00",
                             EndTime = "10:00",
-                            Description = "Lecture about the topic of today"
+                            Description = "Lecture about the topic of today",
+                            IsApplied = true
                             }
                     ]
                 },
@@ -126,7 +136,8 @@ public static class SeedData
                             Name = "Lecture",
                             StartTime = "9:00",
                             EndTime = "10:00",
-                            Description = "Lecture about the topic of today"
+                            Description = "Lecture about the topic of today",
+                            IsApplied = true
                             }
                     ]
                 }
@@ -141,7 +152,8 @@ public static class SeedData
                             Name = "Lecture",
                             StartTime = "9:00",
                             EndTime = "10:00",
-                            Description = "Lecture about the topic of today"
+                            Description = "Lecture about the topic of today",
+                            IsApplied = true
                             }
                     ]
                 },
@@ -153,13 +165,15 @@ public static class SeedData
                             Name = "Lecture",
                             StartTime = "9:00",
                             EndTime = "10:00",
-                            Description = "Lecture about the topic of today"
+                            Description = "Lecture about the topic of today",
+                            IsApplied = true
                             },
                         new Event{
                             Name = "Demo",
                             StartTime = "15:00",
                             EndTime = "16:00",
-                            Description = "Presentation of today's topic"
+                            Description = "Presentation of today's topic",
+                            IsApplied = true
                             }],
                 }
             ];
@@ -173,7 +187,8 @@ public static class SeedData
                             Name = "Lecture",
                             StartTime = "9:00",
                             EndTime = "10:00",
-                            Description = "Lecture about the topic of today"
+                            Description = "Lecture about the topic of today",
+                            IsApplied = true
                             }
                     ]
                 },
@@ -185,7 +200,8 @@ public static class SeedData
                             Name = "Lecture",
                             StartTime = "9:00",
                             EndTime = "10:00",
-                            Description = "Lecture about the topic of today"
+                            Description = "Lecture about the topic of today",
+                            IsApplied = true
                             }
                     ]
                 },
@@ -197,13 +213,15 @@ public static class SeedData
                             Name = "Lecture",
                             StartTime = "9:00",
                             EndTime = "10:00",
-                            Description = "Lecture about the topic of today"
+                            Description = "Lecture about the topic of today",
+                            IsApplied = true
                             },
                         new Event{
                             Name = "Demo",
                             StartTime = "15:00",
                             EndTime = "16:00",
-                            Description = "Presentation of today's topic"
+                            Description = "Presentation of today's topic",
+                            IsApplied = true
                             }],
                 }];
 
@@ -238,7 +256,8 @@ public static class SeedData
                 {
                     Name = course_names[i],
                     NumberOfWeeks = course_numOfWeeks[i],
-                    moduleIds = course_moduleIds[i]
+                    moduleIds = course_moduleIds[i],
+                    IsApplied = false
                 };
                 _context.Courses.Add(course);
                 _context.SaveChanges();

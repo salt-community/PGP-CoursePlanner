@@ -63,11 +63,12 @@ public class ModuleService : IService<Module>
     }
     public async Task<Module> CreateAsync(Module module)
     {
-
-        _context.Modules.Add(module);
+        _context.ChangeTracker.Clear();
+        _context.Entry(module).State = EntityState.Added;
+        await _context.Modules.AddAsync(module);
         await _context.SaveChangesAsync();
-        return module;
 
+        return module;
     }
     public async Task<Module> UpdateAsync(int id, Module module)
     {

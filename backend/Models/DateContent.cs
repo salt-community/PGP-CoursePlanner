@@ -9,7 +9,7 @@ namespace backend.Models
         public int DayOfModule { get; set; }
         public int TotalDaysInModule { get; set; }
         public required string CourseName { get; set; }
-        public List<AppliedEvent> Events { get; set; } = [];
+        public List<Event> Events { get; set; } = [];
         public string? Color { get; set; }
         public int appliedCourseId { get; set;}
         
