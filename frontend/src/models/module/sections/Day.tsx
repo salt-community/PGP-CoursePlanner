@@ -2,7 +2,6 @@ import InputSmall from '../../../components/inputFields/InputSmall';
 import PrimaryBtn from '../../../components/buttons/PrimaryBtn';
 import TrashBtn from '../../../components/buttons/TrashBtn';
 import { DayProps, ModuleType } from '../Types';
-import CalendarEvent from './CalendarEvent';
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { editModule, getAllModules } from '../../../api/ModuleApi';
@@ -10,6 +9,7 @@ import ModalContainer from '../components/ModalContainer';
 import DownArrowBtn from '../../../components/buttons/DownArrowBtn';
 import UpArrowBtn from '../../../components/buttons/UpArrowBtn';
 import EllipsisBtn from '../components/EllipsisBtn';
+import EditEventTable from '../../../components/EditEventTable';
 
 export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
@@ -259,33 +259,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                             </label>
                         </div>
                         <div className="collapse-content">
-                            <table className="table table-sm table-fixed">
-                                <thead>
-                                    <tr>
-                                        <th className="w-2/12">Event name</th>
-                                        <th className="w-4/12">Description</th>
-                                        <th className="w-1/6">Start</th>
-                                        <th className="w-1/6">End</th>
-                                        <th className="w-1/12"></th>
-                                        <th className="w-1/12"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {day.events.map((event, index) => (
-                                        <CalendarEvent
-                                            moduleId={moduleId}
-                                            editTrue={editTrue}
-                                            appliedTrue={false}
-                                            event={event}
-                                            key={index}
-                                            days={days}
-                                            setDays={setDays}
-                                            index={index}
-                                            dayNumber={day.dayNumber}
-                                        />
-                                    ))}
-                                </tbody>
-                            </table>
+                            <EditEventTable moduleId={moduleId} editTrue={editTrue} day={day} setDays={setDays} days={days} appliedTrue={false} />
                         </div>
                     </div>
                     : <div className="collapse overflow-visible">
