@@ -122,7 +122,7 @@ export default function CourseDetails() {
                 courseId: appliedCourse.courseId,
                 modules: appliedCourse.modules,
                 color: color,
-                isApplied: true
+                isApplied: appliedCourse.isApplied
               };
               await editAppliedCourse(newAppliedCourse);
             } catch (error) {
