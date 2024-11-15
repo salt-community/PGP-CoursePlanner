@@ -122,6 +122,7 @@ export default function CourseDetails() {
                 courseId: appliedCourse.courseId,
                 modules: appliedCourse.modules,
                 color: color,
+                isApplied: appliedCourse.isApplied
               };
               await editAppliedCourse(newAppliedCourse);
             } catch (error) {
@@ -132,10 +133,11 @@ export default function CourseDetails() {
       }
 
       const appliedCourse: AppliedCourseType = {
-        name: course?.name?? "",
+        name: course?.name ?? "",
         startDate: startDate,
         courseId: parseInt(courseId),
         color: color,
+        isApplied: true
       };
       const response = postAppliedCourse(appliedCourse);
       if ((await response) != undefined && (await response)!.ok) {

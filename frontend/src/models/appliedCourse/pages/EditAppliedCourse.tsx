@@ -84,6 +84,7 @@ export default function EditAppliedCourse() {
                                 courseId: appliedCourse.courseId,
                                 modules: appliedCourse.modules,
                                 color: color,
+                                isApplied: appliedCourse.isApplied
                             };
                             await editAppliedCourse(newAppliedCourse);
                         } catch (error) {
@@ -100,6 +101,7 @@ export default function EditAppliedCourse() {
                 startDate: startDate,
                 color: color,
                 modules: appliedModules!,
+                isApplied: appliedCourse!.isApplied
             };
             mutation.mutate(newAppliedCourse);
         }

@@ -30,5 +30,5 @@ export type AppliedCourseType = {
     courseId: number;
     color: string;
     modules?: AppliedModuleType[];
-    isApplied: true;
+    isApplied: boolean;
 }
