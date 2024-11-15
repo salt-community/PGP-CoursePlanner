@@ -7,9 +7,7 @@ import EditEventTable from '@components/EditEventTable';
 export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDays }: AppliedDayProps) {
     const handleAddEvent = () => {
         const editedDays = [...days];
-
         editedDays[day.dayNumber - 1].events.push({
-            id: editedDays[day.dayNumber - 1].events.length,
             name: "",
             startTime: "",
             endTime: ""
