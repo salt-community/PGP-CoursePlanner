@@ -10,6 +10,7 @@ import DownArrowBtn from '../../../components/buttons/DownArrowBtn';
 import UpArrowBtn from '../../../components/buttons/UpArrowBtn';
 import EllipsisBtn from '../components/EllipsisBtn';
 import EditEventTable from '../../../components/EditEventTable';
+import { openCloseModal } from '../helpers/openCloseModal';
 
 export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
@@ -146,12 +147,6 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
         setSelectedModuleDay("DEFAULT");
     }
 
-    function handleCloseModal() {
-        const modal = document.getElementById(`modal-popup-${day.dayNumber - 1}`) as HTMLDialogElement;
-        modal.close();
-        setAllToFalse();
-    }
-
     return (
         <>
             <div className="relative">
@@ -197,7 +192,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                             <div className="dropdown">
                                                 <EllipsisBtn />
                                                 <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-60 p-2 shadow">
-                                                    <ModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse} dayIndex={day.dayNumber - 1}>
+                                                    <ModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse} id={day.dayNumber - 1}>
                                                         <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                                         <div className="flex flex-col self-center">
                                                             <select
@@ -240,8 +235,8 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                             </>
                                                         }
                                                         <div className="flex items-center justify-center mb-4 gap-2">
-                                                            <button className="btn btn-sm mt-4 w-40 btn-success text-white" type="button" onClick={() => { handleMove(); handleCloseModal() }}>Move Day and Save</button>
-                                                            <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCloseModal}>Cancel</button>
+                                                            <button className="btn btn-sm mt-4 w-40 btn-success text-white" type="button" onClick={() => { handleMove(); openCloseModal("close", setAllToFalse, day.dayNumber - 1); setSelectedModule("DEFAULT"); setSelectedModuleDay("DEFAULT") }}>Move Day and Save</button>
+                                                            <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => openCloseModal("close", setAllToFalse, day.dayNumber - 1)}>Cancel</button>
                                                         </div>
                                                         {isIncompleteInput && <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
                                                     </ModalContainer>
@@ -313,7 +308,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                     </svg>
                                                 </div>
                                                 <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-60 p-2 shadow">
-                                                    <ModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse} dayIndex={day.dayNumber - 1}>
+                                                    <ModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse} id={day.dayNumber - 1}>
                                                         <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                                         <div className="flex flex-col self-center">
                                                             <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
@@ -341,8 +336,8 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                                             <h2 className="m-2 self-center font-bold">Moving this day will save all changes!</h2>
                                                         }
                                                         <div className="flex items-center justify-center mb-4 gap-2">
-                                                            <button className="btn btn-sm mt-4 w-40 btn-success text-white" type="button" onClick={() => { handleMove(); handleCloseModal() }}>Move Day and Save</button>
-                                                            <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={handleCloseModal}>Cancel</button>
+                                                            <button className="btn btn-sm mt-4 w-40 btn-success text-white" type="button" onClick={() => { handleMove(); openCloseModal("close", setAllToFalse, day.dayNumber - 1) }}>Move Day and Save</button>
+                                                            <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => openCloseModal("close", setAllToFalse, day.dayNumber - 1)}>Cancel</button>
                                                         </div>
                                                         {isIncompleteInput &&
                                                             <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}

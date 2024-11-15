@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { editModule, getAllModules } from "@api/ModuleApi";
 import ModalContainer from "../components/ModalContainer";
 import EllipsisBtn from "../components/EllipsisBtn";
+import { openCloseModal } from "../helpers/openCloseModal";
 
 export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumber, setDays, days, index, event }: EventProps) {
     const [selectedDay, setSelectedDay] = useState<string>("DEFAULT");
@@ -152,12 +153,6 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
         setSelectedModuleDay("DEFAULT");
     }
 
-    function handleCloseModal(id: number) {
-        const modal = document.getElementById(`modal-popup-${id}`) as HTMLDialogElement;
-        modal.close();
-        setAllToFalse();
-    }
-
     return (
         <tr className="gap-2">
             <td><input onChange={handleInputChange} name="name" value={event.name} type="text" placeholder="Event name" className="input input-bordered w-full min-w-[120px] input-sm" /></td>
@@ -171,7 +166,7 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                         <EllipsisBtn />
                         <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-64 p-2 shadow">
                             {days.length > 1 &&
-                                <ModalContainer openModalText={"Move Event to another Day"} setAllToFalse={setAllToFalse} dayIndex={parseInt(`${dayNumber - 1}${index + 1000}`)}>
+                                <ModalContainer openModalText={"Move Event to another Day"} setAllToFalse={setAllToFalse} id={parseInt(`${dayNumber - 1}${event.id}`)}>
                                     <h2 className="m-2 self-center">To which day do you want to move this event?</h2>
                                     <div className="flex flex-col self-center">
                                         <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
@@ -183,14 +178,14 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                         </select>
                                     </div>
                                     <div className="flex items-center justify-center mb-4 gap-2">
-                                        <button className="btn btn-sm mt-4 w-44 btn-success text-white" type="button" onClick={() => { handleMove(); handleCloseModal(parseInt(`${dayNumber - 1}${index + 1000}`)) }}>Move Event and Save</button>
-                                        <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => handleCloseModal(parseInt(`${dayNumber - 1}${index + 1000}`))}>Cancel</button>
+                                        <button className="btn btn-sm mt-4 w-44 btn-success text-white" type="button" onClick={() => { handleMove(); openCloseModal("close", setAllToFalse, parseInt(`${dayNumber - 1}${event.id}`)) }}>Move Event and Save</button>
+                                        <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => openCloseModal("close", setAllToFalse, parseInt(`${dayNumber - 1}${event.id}`))}>Cancel</button>
                                     </div>
                                     {isIncompleteInput &&
                                         <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a day</p>}
                                 </ModalContainer>
                             }
-                            <ModalContainer openModalText="Move Event to another Module" setAllToFalse={setAllToFalse} dayIndex={parseInt(`${dayNumber - 1}${index + 2000}`)}>
+                            <ModalContainer openModalText="Move Event to another Module" setAllToFalse={setAllToFalse} id={parseInt(`${dayNumber - 1}${event.id}`)}>
                                 <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                 <div className="flex flex-col self-center">
                                     <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
@@ -220,10 +215,10 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                 }
                                 <div className="flex items-center justify-center mb-4 gap-2">
                                     <button className="btn btn-sm mt-4 w-44 btn-success text-white" type="button" onClick={() => {
-                                        handleMoveAnotherModule(); handleCloseModal(parseInt(`${dayNumber - 1}${index + 2000}`))
+                                        handleMoveAnotherModule(); openCloseModal("close", setAllToFalse, parseInt(`${dayNumber - 1}${event.id}`))
 
                                     }}>Move Event and Save</button>
-                                    <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => handleCloseModal(parseInt(`${dayNumber - 1}${index + 2000}`))}>Cancel</button>
+                                    <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => openCloseModal("close", setAllToFalse, (parseInt(`${dayNumber - 1}${event.id}`)))}>Cancel</button>
                                 </div>
                                 {isIncompleteInput &&
                                     <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
