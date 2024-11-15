@@ -233,7 +233,6 @@ export default function CourseDetails() {
               name="startDate"
               value={startDate}
               onChange={(date) => setStartDate(date!)}
-              className="max-w-xs"
               sx={{
                 height: "35px",
                 padding: "0px",
@@ -242,7 +241,14 @@ export default function CourseDetails() {
                   color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
                   padding: "6px",
                 },
+                "& .css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root": {
+                  color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
+                },
+                "& .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
+                  borderRadius: "var(--rounded-btn, 0.5rem)"
+                }
               }}
+              className="input input-bordered"
             />
             <ColorPickerModal
               color={color}
