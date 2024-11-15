@@ -5,7 +5,7 @@ type Props = {
     children: ReactNode
     setAllToFalse: () => void
     openModalText: string
-    id: number
+    id: string
 }
 
 export default function ModalContainer({ children, setAllToFalse, openModalText, id }: Props) {
