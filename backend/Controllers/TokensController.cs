@@ -109,11 +109,32 @@ namespace backend.Controllers
             var builder = WebApplication.CreateBuilder();
             code = HttpUtility.UrlDecode(code);
             redirectUri = HttpUtility.UrlDecode(redirectUri);
+
+            string client_id;
+            if (builder.Configuration["AppInfo:ClientId"] == "Secret")
+            {
+                client_id = Environment.GetEnvironmentVariable("CLIENT_ID")!;
+            }
+            else
+            {
+                client_id = builder.Configuration["AppInfo:ClientId"]!;
+            }
+
+            string client_secret;
+            if (builder.Configuration["AppInfo:ClientSecret"] == "Secret")
+            {
+                client_secret = Environment.GetEnvironmentVariable("CLIENT_SECRET")!;
+            }
+            else
+            {
+                client_secret = builder.Configuration["AppInfo:ClientSecret"]!;
+            }
+
             var response = await GetTokensFromGoogle(
                 "https://accounts.google.com/o/oauth2/token",
                 code,
-                builder.Configuration["AppInfo:ClientId"] ?? Environment.GetEnvironmentVariable("CLIENT_ID")!,
-                builder.Configuration["AppInfo:ClientSecret"] ?? Environment.GetEnvironmentVariable("CLIENT_SECRET")!,
+                client_id,
+                client_secret,
                 redirectUri);
 
             if (response.Result.GetType() == typeof(OkObjectResult))
@@ -142,12 +163,32 @@ namespace backend.Controllers
             var refreshToken = await _context.LoggedInUser.Select(user => user.Refresh_Token).FirstOrDefaultAsync()
             ?? throw new NotFoundByIdException("No refresh tokens found");
             var builder = WebApplication.CreateBuilder();
+
+                        string client_id;
+            if (builder.Configuration["AppInfo:ClientId"] == "Secret")
+            {
+                client_id = Environment.GetEnvironmentVariable("CLIENT_ID")!;
+            }
+            else
+            {
+                client_id = builder.Configuration["AppInfo:ClientId"]!;
+            }
+
+            string client_secret;
+            if (builder.Configuration["AppInfo:ClientSecret"] == "Secret")
+            {
+                client_secret = Environment.GetEnvironmentVariable("CLIENT_SECRET")!;
+            }
+            else
+            {
+                client_secret = builder.Configuration["AppInfo:ClientSecret"]!;
+            }
+
             var response = await RefreshTokensFromGoogle(
                 "https://accounts.google.com/o/oauth2/token",
                 refreshToken,
-                builder.Configuration["AppInfo:ClientId"] ?? Environment.GetEnvironmentVariable("CLIENT_ID")!,
-                builder.Configuration["AppInfo:ClientSecret"] ?? Environment.GetEnvironmentVariable("CLIENT_SECRET")!);
-
+                client_id,
+                client_secret);
             if (response.Result.GetType() == typeof(OkObjectResult))
             {
                 var responseData = (OkObjectResult)response.Result!;
