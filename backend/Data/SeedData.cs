@@ -230,6 +230,7 @@ public static class SeedData
             List<List<Day>> module_days = [hellWeekDays, APIDays, reactDays, cloudDays];
             List<string[]> module_tracks = [["Java", "Javascript", ".NET"], ["Java"], ["Java", "Javascript"], [".NET"]];
 
+            List<Module> moduleList = new();
             for (var i = 0; i < module_names.Length; i++)
             {
                 var module = new Module
@@ -241,6 +242,7 @@ public static class SeedData
                 };
                 _context.Modules.Add(module);
                 _context.SaveChanges();
+                moduleList.Add(module);
             }
 
             string[] course_names = { "Java", "JavaScript", "Dotnet" };
@@ -252,11 +254,22 @@ public static class SeedData
 
             for (var i = 0; i < course_names.Length; i++)
             {
+                var courseModules = new List<CourseModule>();
+                for (int j = 0; j < course_moduleIds[i].Count; j++)
+                {
+                    var courseModuleElement = new CourseModule
+                    {
+                        ModuleId = course_moduleIds[i][j],
+                        Module = moduleList.First(m => m.Id == course_moduleIds[i][j])
+                    };
+                    courseModules.Add(courseModuleElement);
+                }
                 var course = new Course
                 {
                     Name = course_names[i],
                     NumberOfWeeks = course_numOfWeeks[i],
                     moduleIds = course_moduleIds[i],
+                    Modules = courseModules,
                     IsApplied = false
                 };
                 _context.Courses.Add(course);
