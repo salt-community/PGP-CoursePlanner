@@ -58,12 +58,6 @@ export default function CourseDetails() {
     queryKey: ["appliedCourses"],
     queryFn: () => getAllAppliedCourses(),
   });
-  const usedCourses: number[] = [];
-  if (allAppliedCourses) {
-    allAppliedCourses.forEach((element) => {
-      usedCourses.push(element.courseId);
-    });
-  }
 
   const modules: ModuleType[] = [];
   course?.moduleIds.forEach((element) => {
