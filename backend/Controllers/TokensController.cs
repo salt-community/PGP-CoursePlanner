@@ -30,9 +30,6 @@ namespace backend.Controllers
 
             var request = new HttpRequestMessage(HttpMethod.Post, Url);
 
-            Console.WriteLine("CLIENT ID:{0}", ClientId);
-            Console.WriteLine("CLIENT SECRET:{0}", ClientSecret);
-
             var parameters = new Dictionary<string, string>
         {
 
