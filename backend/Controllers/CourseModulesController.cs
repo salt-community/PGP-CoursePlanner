@@ -11,7 +11,6 @@ namespace backend.Controllers;
 public class CourseModulesController : ControllerBase
 {
     private readonly IService<Course> _service;
-
     public CourseModulesController(IService<Course> service)
     {
         _service = service;
@@ -22,5 +21,12 @@ public class CourseModulesController : ControllerBase
     {
         var response = await _service.GetAllAsync();
         return Ok(response);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<IEnumerable<Module>>> GetCourseModulesByCourse(int id)
+    {
+        var course = await _service.GetOneAsync(id);
+        return Ok(course.Modules.Select(m => m.Module));
     }
 }
