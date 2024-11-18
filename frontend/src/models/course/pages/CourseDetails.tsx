@@ -3,7 +3,7 @@ import { deleteCourse, getCourseById } from "@api/CourseApi";
 import Page from "@components/Page";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIdFromPath } from "@helpers/helperHooks";
-import { getAllModules } from "@api/ModuleApi";
+import { getModulesByCourseId } from "@api/ModuleApi";
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { editAppliedCourse, getAllAppliedCourses, postAppliedCourse, } from "@api/AppliedCourseApi";
@@ -11,7 +11,6 @@ import { convertToGoogle } from "@helpers/googleHelpers";
 import DeleteBtn from "@components/buttons/DeleteBtn";
 import { deleteCourseFromGoogle } from "@api/GoogleCalendarApi";
 import "reactjs-popup/dist/index.css";
-import { ModuleType } from "@models/module/Types";
 import { AppliedCourseType } from "../Types";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
@@ -42,12 +41,12 @@ export default function CourseDetails() {
   });
 
   const {
-    data: allModules,
+    data: modules,
     isLoading: isLoadingModules,
     isError: isErrorModules,
   } = useQuery({
-    queryKey: ["modules"],
-    queryFn: () => getAllModules(),
+    queryKey: ["modulesByCourseId", courseId],
+    queryFn: () => getModulesByCourseId(parseInt(courseId)),
   });
 
   const {
@@ -57,14 +56,6 @@ export default function CourseDetails() {
   } = useQuery({
     queryKey: ["appliedCourses"],
     queryFn: () => getAllAppliedCourses(),
-  });
-
-  const modules: ModuleType[] = [];
-  course?.moduleIds.forEach((element) => {
-    const module = allModules?.find((m) => m.id == element);
-    if (module) {
-      modules.push(module);
-    }
   });
 
   let defaultColor = "#FFFFFF";
@@ -84,7 +75,7 @@ export default function CourseDetails() {
   }, [course, allAppliedCourses]);
 
   const handleGoogleGroupAdd = async () => {
-    if (course) {
+    if (course && modules) {
       convertToGoogle(modules, startDate, course.name, groupEmail);
     }
   };
