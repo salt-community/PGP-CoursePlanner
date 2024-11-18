@@ -11,7 +11,7 @@ namespace backend.Models
         public int NumberOfWeeks {get; set;}
 
         public List<int> moduleIds {get; set;} = [];
-        // [JsonIgnore]
+        [JsonIgnore]
         public List<CourseModule> Modules {get; set;} = [];
         public string? Color {get; set;}
 
