@@ -1,8 +1,6 @@
 import { SyntheticEvent } from "react";
-import { ModuleType } from "@models/module/Types";
 
 type Props = {
-    modules: ModuleType[],
     options: string[],
     funcFilter: (event: FormData) => void,
     funcResetFilter: () => void
