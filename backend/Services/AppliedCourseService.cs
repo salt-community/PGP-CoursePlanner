@@ -13,50 +13,50 @@
 //         {
 //             _context = context;
 //         }
-//         // public async Task<List<AppliedCourse>> GetAllAsync()
-//         // {
-//         //     var appliedCourses = await _context.AppliedCourses
-//         //         .Include(course => course.Modules!)
-//         //         .ThenInclude(module => module!.Days)
-//         //         .ThenInclude(day => day.Events)
-//         //     .ToListAsync();
+//         public async Task<List<AppliedCourse>> GetAllAsync()
+//         {
+//             var appliedCourses = await _context.AppliedCourses
+//                 .Include(course => course.Modules!)
+//                 .ThenInclude(module => module!.Days)
+//                 .ThenInclude(day => day.Events)
+//             .ToListAsync();
 
-//         //     foreach (var course in appliedCourses)
-//         //     {
-//         //         course.Modules = course.Modules.OrderBy(m => m.Order).ToList();
-//         //         foreach (var module in course.Modules)
-//         //         {
-//         //             module.Days = module.Days.OrderBy(d => d.DayNumber).ToList();
-//         //             foreach (var day in module.Days)
-//         //             {
-//         //                 day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
-//         //             }
-//         //         }
-//         //     }
-//         //     return appliedCourses;
+//             foreach (var course in appliedCourses)
+//             {
+//                 course.Modules = course.Modules.OrderBy(m => m.Order).ToList();
+//                 foreach (var module in course.Modules)
+//                 {
+//                     module.Days = module.Days.OrderBy(d => d.DayNumber).ToList();
+//                     foreach (var day in module.Days)
+//                     {
+//                         day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
+//                     }
+//                 }
+//             }
+//             return appliedCourses;
 
-//         // }
+//         }
 
-//         // public async Task<Course> GetOneAsync(int id)
-//         // {
-//         //     var course = await _context.Courses
-//         //             .Include(course => course.Modules!)
-//         //             .ThenInclude(module => module!.Days)
-//         //             .ThenInclude(day => day.Events)
-//         //             .FirstOrDefaultAsync(course => course.Id == id)
-//         //                 ?? throw new NotFoundByIdException("Applied Course", id);
+//         public async Task<Course> GetOneAsync(int id)
+//         {
+//             var course = await _context.Courses
+//                     .Include(course => course.Modules!)
+//                     .ThenInclude(module => module!.Days)
+//                     .ThenInclude(day => day.Events)
+//                     .FirstOrDefaultAsync(course => course.Id == id)
+//                         ?? throw new NotFoundByIdException("Applied Course", id);
 
-//         //     course.Modules = course.Modules.OrderBy(m => m.Order).ToList();
-//         //     foreach (var module in course.Modules)
-//         //     {
-//         //         module.Days = module.Days.OrderBy(d => d.DayNumber).ToList();
-//         //         foreach (var day in module.Days)
-//         //         {
-//         //             day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
-//         //         }
-//         //     }
-//         //     return course;
-//         // }
+//             course.Modules = course.Modules.OrderBy(m => m.Order).ToList();
+//             foreach (var module in course.Modules)
+//             {
+//                 module.Days = module.Days.OrderBy(d => d.DayNumber).ToList();
+//                 foreach (var day in module.Days)
+//                 {
+//                     day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
+//                 }
+//             }
+//             return course;
+//         }
 
 //         public async Task<AppliedCourse> CreateAsync(AppliedCourse appliedCourse)
 //         {

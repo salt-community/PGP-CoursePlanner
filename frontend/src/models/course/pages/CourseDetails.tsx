@@ -120,7 +120,7 @@ export default function CourseDetails() {
                 startDate: appliedCourse.startDate,
                 endDate: appliedCourse.endDate,
                 courseId: appliedCourse.courseId,
-                modules: appliedCourse.modules,
+                moduleIds: appliedCourse.moduleIds,
                 color: color,
                 isApplied: appliedCourse.isApplied
               };
@@ -137,6 +137,7 @@ export default function CourseDetails() {
         startDate: startDate,
         courseId: parseInt(courseId),
         color: color,
+        moduleIds: modules.map(m => m.id!),
         isApplied: true
       };
       const response = postAppliedCourse(appliedCourse);
