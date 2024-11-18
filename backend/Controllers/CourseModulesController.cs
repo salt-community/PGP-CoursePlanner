@@ -2,6 +2,7 @@ using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
+using backend.Data;
 
 namespace backend.Controllers;
 
@@ -11,7 +12,6 @@ namespace backend.Controllers;
 public class CourseModulesController : ControllerBase
 {
     private readonly IService<Course> _service;
-
     public CourseModulesController(IService<Course> service)
     {
         _service = service;
@@ -25,9 +25,9 @@ public class CourseModulesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<IEnumerable<Course>>> GetCourseModules(int id)
+    public async Task<ActionResult<IEnumerable<Module>>> GetCourseModulesByCourse(int id)
     {
-        var response = await _service.GetOneAsync(id);
-        return Ok(response);
+        var course = await _service.GetOneAsync(id);
+        return Ok(course.Modules.Select(m => m.Module));
     }
 }
