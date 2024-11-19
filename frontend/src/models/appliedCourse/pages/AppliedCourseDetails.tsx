@@ -56,7 +56,7 @@ export default function AppliedCourseDetails() {
         return days;
     }
 
-    const { isPending, data : appliedModules } = useQuery<ModuleType[]>({
+    const { isPending, data : appliedModules, isError : isAppliedModulesError, error : AppliedModulesError } = useQuery<ModuleType[]>({
         queryKey: ['AppliedModules', appliedCourseId],
         queryFn: () => getModulesByCourseId(Number(appliedCourseId)),
       })
@@ -70,6 +70,7 @@ export default function AppliedCourseDetails() {
 
     console.log(appliedModules);
     if(isPending) return "pending";
+    if(isAppliedModulesError) return AppliedModulesError;
     return (
         getCookie("access_token") == undefined
             ? <Login />
