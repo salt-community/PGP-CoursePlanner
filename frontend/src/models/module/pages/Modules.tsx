@@ -59,7 +59,7 @@ export default function Modules() {
             : <Page>
                 <div className="mx-28 mb-10 md:px-24 lg:px-56">
                     {modules &&
-                        <FilterArea modules={modules} options={tracks} funcFilter={funcFilter} funcResetFilter={() => { }}></FilterArea>}
+                        <FilterArea options={tracks} funcFilter={funcFilter} funcResetFilter={() => { }}></FilterArea>}
                 </div>
                 <section className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4 md:px-24 lg:px-56">
                     {isLoading && <LoadingMessage />}

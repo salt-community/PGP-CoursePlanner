@@ -122,7 +122,7 @@ export default function CourseDetails() {
         startDate: startDate,
         courseId: parseInt(courseId),
         color: color,
-        moduleIds: modules.map(m => m.id!),
+        moduleIds: modules?.map(m => m.id!),
         isApplied: true
       };
       const response = postAppliedCourse(appliedCourse);
