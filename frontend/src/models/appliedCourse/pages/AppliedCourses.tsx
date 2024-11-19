@@ -39,10 +39,9 @@ export default function AppliedCourses() {
         if (allAppliedCourses) {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            const isAppliedCourses = allAppliedCourses.filter(courses => courses.isApplied);
-            const tempActiveCourses = isAppliedCourses.filter(ac => { const sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd <= today }).filter(ac => { const ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed >= today });
-            const tempFutureCourses = isAppliedCourses.filter(ac => { const sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today })
-            const tempPastCourses = isAppliedCourses.filter(ac => { const ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today })
+            const tempActiveCourses = allAppliedCourses.filter(ac => { const sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd <= today }).filter(ac => { const ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed >= today });
+            const tempFutureCourses = allAppliedCourses.filter(ac => { const sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today })
+            const tempPastCourses = allAppliedCourses.filter(ac => { const ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today })
 
             const sortCourses = (activities: AppliedCourseType[]): AppliedCourseType[] => {
                 return activities.sort((a, b) => {
