@@ -3,7 +3,6 @@ import { deleteCourse, getCourseById } from "@api/CourseApi";
 import Page from "@components/Page";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIdFromPath } from "@helpers/helperHooks";
-import { getModulesByCourseId } from "@api/ModuleApi";
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { editAppliedCourse, getAllAppliedCourses, postAppliedCourse, } from "@api/AppliedCourseApi";
@@ -18,6 +17,7 @@ import { getCookie } from "@helpers/cookieHelpers";
 import Login from "@models/login/Login";
 import { trackUrl } from "@helpers/helperMethods";
 import ColorPickerModal from "@components/ColorPickerModal";
+import { getModulesByCourseId } from "@api/CourseModuleApi";
 
 export default function CourseDetails() {
   trackUrl();
@@ -45,7 +45,7 @@ export default function CourseDetails() {
     isLoading: isLoadingModules,
     isError: isErrorModules,
   } = useQuery({
-    queryKey: ["modulesByCourseId", courseId],
+    queryKey: ["courseModules", courseId],
     queryFn: () => getModulesByCourseId(parseInt(courseId)),
   });
 
