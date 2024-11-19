@@ -3,7 +3,6 @@ import { useIdFromPath } from "@helpers/helperHooks";
 import { useEffect, useState } from "react";
 import { deleteAppliedCourse, getAppliedCourseById } from "@api/AppliedCourseApi";
 import 'reactjs-popup/dist/index.css';
-import { AppliedModuleType } from "../Types";
 import { getCookie } from "@helpers/cookieHelpers";
 import Login from "@models/login/Login";
 import { AppliedCourseType } from "@models/course/Types";
@@ -146,7 +145,7 @@ export default function AppliedCourseDetails() {
                             <div className="flex flex-row gap-2 px-1 mb-6 sm:p-0 md:px-24">
                                 <Link to={`/activecourses/edit/${appliedCourse.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit</Link>
                                 <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
-                                <PDFGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays}></PDFGenerator>
+                                <PDFGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays} appliedModules={appliedModules}></PDFGenerator>
                                 <PDFWeekGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays}></PDFWeekGenerator>
                             </div>
                         </section>
