@@ -16,6 +16,8 @@ import InputSmall from "@components/inputFields/InputSmall";
 import { AppliedModuleType } from "../Types";
 import ColorPickerModal from "@components/ColorPickerModal";
 import ModuleEdit from "../sections/ModuleEdit";
+import { getModulesByCourseId } from "@api/CourseModulesApi";
+import { ModuleType } from "@models/module/Types";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -41,6 +43,11 @@ export default function EditAppliedCourse() {
         null
     );
 
+    const { isPending, data, isError, error} = useQuery<ModuleType[]>({
+        queryKey: ['AppliedModules', appliedCourseId],
+        queryFn: () => getModulesByCourseId(Number(appliedCourseId)),
+      })
+
     useEffect(() => {
         getAppliedCourseById(parseInt(appliedCourseId)).then((result) => {
             if (result) {
@@ -50,10 +57,16 @@ export default function EditAppliedCourse() {
                 );
                 setColor(result.color || "");
                 setAppliedCourseName(result.name || "");
-                setAppliedModules(result.modules || []);
+                setAppliedModules(data || []);
             }
         });
-    }, [appliedCourseId]);
+    }, [appliedCourseId, data]);
+
+    console.log(appliedModules);
+    
+    // if (!isPending && !isError ) {
+    //     setAppliedModules(data);
+    // }
 
     const defaultColor = appliedCourse?.color || "";
 
@@ -82,7 +95,6 @@ export default function EditAppliedCourse() {
                                 startDate: appliedCourse.startDate,
                                 endDate: appliedCourse.endDate,
                                 courseId: appliedCourse.courseId,
-                                modules: appliedCourse.modules,
                                 color: color,
                                 isApplied: appliedCourse.isApplied
                             };
