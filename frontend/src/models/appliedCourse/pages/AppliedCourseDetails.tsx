@@ -146,7 +146,7 @@ export default function AppliedCourseDetails() {
                                 <Link to={`/activecourses/edit/${appliedCourse.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit</Link>
                                 <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
                                 <PDFGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays} appliedModules={appliedModules}></PDFGenerator>
-                                <PDFWeekGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays}></PDFWeekGenerator>
+                                <PDFWeekGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays } appliedModules={appliedModules}></PDFWeekGenerator>
                             </div>
                         </section>
                     </>
