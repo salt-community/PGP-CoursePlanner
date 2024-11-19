@@ -17,7 +17,7 @@ import { getCookie } from "@helpers/cookieHelpers";
 import Login from "@models/login/Login";
 import { trackUrl } from "@helpers/helperMethods";
 import ColorPickerModal from "@components/ColorPickerModal";
-import { getModulesByCourseId } from "@api/CourseModuleApi";
+import { getModulesByCourseId } from "@api/CourseModulesApi";
 
 export default function CourseDetails() {
   trackUrl();
