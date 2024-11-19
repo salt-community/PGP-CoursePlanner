@@ -58,9 +58,8 @@ public class CourseService : IService<Course>
     }
     public async Task<Course> CreateAsync(Course course)
     {
-        var moduleIds = course.moduleIds;
         var modulesInDb = await _context.Modules
-                .Where(m => moduleIds.Contains(m.Id))
+                .Where(m => course.moduleIds.Contains(m.Id))
                 .ToListAsync();
 
         course.Modules = new List<CourseModule>();
@@ -69,13 +68,17 @@ public class CourseService : IService<Course>
             course.Modules.Add(new CourseModule
             {
                 CourseId = course.Id,
-                ModuleId = module.Id
+                ModuleId = module.Id,
+                Module = module
             });
         }
+        int totalCourseDays = course.Modules.Sum(m => m.Module.NumberOfDays);
+
+        course.EndDate = course.StartDate.AddDays(totalCourseDays);
+
         await _context.Courses.AddAsync(course);
         await _context.SaveChangesAsync();
         return course;
-
     }
     public async Task<Course> UpdateAsync(int id, Course course)
     {
