@@ -9,10 +9,12 @@ import Login from "@models/login/Login";
 import { AppliedCourseType } from "@models/course/Types";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteBtn from "@components/buttons/DeleteBtn";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import PDFWeekGenerator from "../sections/PDFWeekGenerator";
 import PDFGenerator from "../sections/PDFGenerator";
 import { trackUrl } from "@helpers/helperMethods";
+import { getModulesByCourseId } from "@api/CourseModulesApi";
+import { ModuleType } from "@models/module/Types";
 
 export default function AppliedCourseDetails() {
     trackUrl();
@@ -20,7 +22,7 @@ export default function AppliedCourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
-    const [appliedModules, setAppliedModules] = useState<AppliedModuleType[]>();
+    //const [appliedModules, setAppliedModules] = useState<AppliedModuleType[]>();
 
     const navigate = useNavigate();
 
@@ -28,7 +30,7 @@ export default function AppliedCourseDetails() {
     const [appliedCourse, setAppliedCourse] = useState<AppliedCourseType>();
     useEffect(() => {
         getAppliedCourseById(parseInt(appliedCourseId))
-            .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setEndDate(new Date(result!.endDate!)); setAppliedCourseName(result!.name!); setAppliedModules(result!.modules); })
+            .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setEndDate(new Date(result!.endDate!)); setAppliedCourseName(result!.name!);  })
     }, [appliedCourseId]);
 
     const queryClient = useQueryClient();
@@ -55,12 +57,20 @@ export default function AppliedCourseDetails() {
         return days;
     }
 
+    const { isPending, data : appliedModules } = useQuery<ModuleType[]>({
+        queryKey: ['AppliedModules', appliedCourseId],
+        queryFn: () => getModulesByCourseId(Number(appliedCourseId)),
+      })
+
     const courseWeekDates = getWeekDayList();
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const courseWeekDays = courseWeekDates.map(e =>  monthNamesShort[e.getMonth()] + " " + e.getDate().toString());
 
     let counter = -1;
+
+    console.log(appliedModules);
+    if(isPending) return "pending";
     return (
         getCookie("access_token") == undefined
             ? <Login />
