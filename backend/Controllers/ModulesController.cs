@@ -21,7 +21,7 @@ public class ModulesController : ControllerBase
     public async Task<ActionResult<IEnumerable<Module>>> GetModules()
     {
         var response = await _service.GetAllAsync();
-        return Ok(response);
+        return Ok(response.Where(x => x.IsApplied == false));
     }
 
     [HttpGet("{id}")]
