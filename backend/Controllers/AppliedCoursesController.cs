@@ -38,7 +38,7 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<Course>>> GetAppliedCourses()
         {
             var response = await _service.GetAllAsync();
-            return Ok(response);
+            return Ok(response.Where(x => x.IsApplied == true));
         }
 
         [HttpDelete("{id}")]
