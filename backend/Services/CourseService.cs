@@ -3,6 +3,7 @@ using backend.Data;
 using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace backend.Services;
 
@@ -307,9 +308,12 @@ public class CourseService : IService<Course>
                 .FirstOrDefaultAsync(ac => ac.Id == id)
                 ?? throw new NotFoundByIdException("Course", appliedCourse.Id);
 
-        var courseClearedOfModules = clearCourseModules(appliedCourseToUpdate);
+        var courseClearedOfModules = clearCourseModules(appliedCourseToUpdate); // i do not remove moduleIds
+                                                                                //  var courseWithAddedModules =
         return courseClearedOfModules;
     }
+
+
 
     private Course clearCourseModules(Course course) // this method removes everything inside Course.Modules (which have the type of CourseModule)
     {
@@ -322,11 +326,11 @@ public class CourseService : IService<Course>
                 .FirstOrDefault(ac => ac.Id == course.Id)
                 ?? throw new NotFoundByIdException("Course", course.Id);
 
-        foreach (var courseModule in courseToClear.Modules.Select(m => m.Module!)) 
+        foreach (var courseModule in courseToClear.Modules.Select(m => m.Module!))
         {
             clearModuleOfDays(courseModule, courseToClear.Id);
         }
-        _context.CourseModules.RemoveRange(courseToClear.Modules); 
+        _context.CourseModules.RemoveRange(courseToClear.Modules);
         _context.SaveChanges();
         return course;
     }
@@ -348,8 +352,8 @@ public class CourseService : IService<Course>
         _context.Days.RemoveRange(moduleToClear.Days);
 
         //this part removes dateContent
-        var calendarDates =  _context.CalendarDates
-            .Include(cd => cd.DateContent) 
+        var calendarDates = _context.CalendarDates
+            .Include(cd => cd.DateContent)
             .Where(cd => cd.DateContent.Any(dc => dc.appliedCourseId == courseId));
 
         foreach (var calendarDate in calendarDates)
