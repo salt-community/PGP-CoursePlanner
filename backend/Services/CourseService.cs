@@ -308,12 +308,172 @@ public class CourseService : IService<Course>
                 .FirstOrDefaultAsync(ac => ac.Id == id)
                 ?? throw new NotFoundByIdException("Course", appliedCourse.Id);
 
-        var courseClearedOfModules = clearCourseModules(appliedCourseToUpdate); // i do not remove moduleIds
-                                                                                //  var courseWithAddedModules =
-        return courseClearedOfModules;
+        appliedCourseToUpdate = clearCourseModules(appliedCourseToUpdate); // i do not remove moduleIds
+
+        var startDate = appliedCourseToUpdate.StartDate;
+        int order = 1;
+        foreach (var moduleId in appliedCourseToUpdate.moduleIds)
+        {
+            startDate = await addModuleToCourse(appliedCourseToUpdate, moduleId, startDate, order);
+            order++;
+        }
+        return appliedCourseToUpdate;
     }
 
+    private async Task<DateTime> addModuleToCourse(Course course, int moduleId, DateTime moduleDate, int order)
+    {
+        var courseToAddTo = await _context.Courses
+                        .Include(course => course.Modules!)
+                        .ThenInclude(module => module!.Module)
+                        .FirstOrDefaultAsync(ac => ac.Id == course.Id)
+                        ?? throw new NotFoundByIdException("Course", course.Id);
 
+        var moduleToAddData = await _context.Modules
+                        .Include(m => m.Days)
+                        .ThenInclude(d => d.Events)
+                        .FirstOrDefaultAsync(m => m.Id == moduleId)
+                        ?? throw new NotFoundByIdException("Module", moduleId);
+
+        Module moduleToAdd = moduleToAddData.ShallowClone();
+        moduleToAdd.SetIsApplied();
+        moduleToAdd.Order = order;
+
+        foreach (var day in moduleToAddData.Days)
+        {
+            var dayToAdd = day.ShallowClone();
+            foreach (var @event in day.Events)
+            {
+                var eventToAdd = @event.ShallowClone();
+                if (eventToAdd.StartTime.Length == 4)
+                    eventToAdd.StartTime = "0" + eventToAdd.StartTime;
+                if (eventToAdd.EndTime.Length == 4)
+                    eventToAdd.EndTime = "0" + eventToAdd.EndTime;
+                _context.Events.Add(eventToAdd);
+                dayToAdd.Events.Add(eventToAdd);
+            }
+            _context.Days.Add(dayToAdd);
+            moduleToAdd.Days.Add(dayToAdd); 
+
+            var dateContent = new DateContent()
+            {
+                CourseName = course.Name!,
+                ModuleName = moduleToAdd.Name,
+                DayOfModule = dayToAdd.DayNumber,
+                TotalDaysInModule = moduleToAdd.NumberOfDays,
+                Events = dayToAdd.Events,
+                Color = course.Color,
+                appliedCourseId = course.Id,
+            };
+            await _context.DateContent.AddAsync(dateContent);
+
+            var date = await _context.CalendarDates.
+                        Include(cm => cm.DateContent)
+                        .ThenInclude(dc => dc.Events)
+                        .FirstOrDefaultAsync(date => date.Date.Date == moduleDate);
+
+            if (date == null)
+            {
+                date = new CalendarDate()
+                {
+                    Date = moduleDate,
+                    DateContent = new List<DateContent> { dateContent }
+                };
+                await _context.CalendarDates.AddAsync(date);
+            }
+            else
+            {
+                date.DateContent.Add(dateContent);
+                _context.CalendarDates.Update(date);
+            }
+            moduleDate = moduleDate.AddDays(1);
+
+            if (moduleDate.DayOfWeek == DayOfWeek.Saturday && !(day.DayNumber == moduleToAdd.NumberOfDays && moduleId == course.moduleIds.Last()))
+            {
+                AddWeekendDates(course, moduleToAdd, moduleDate);
+                moduleDate.AddDays(2);
+            }
+            _context.SaveChanges();
+        }
+
+        var courseModule = new CourseModule
+        {
+            CourseId = course.Id,
+            Course = course,
+            Module = moduleToAdd,
+            ModuleId = moduleToAdd.Id,
+        };
+
+        _context.CourseModules.Add(courseModule);
+        
+        course.Modules.Add(courseModule);
+        _context.SaveChanges();
+
+        return moduleDate.AddDays(1);
+    }
+
+    private bool AddWeekendDates(Course course, Module module, DateTime moduleDate)
+    {
+        var dateContentSaturday = new DateContent()
+        {
+            CourseName = course.Name!,
+            ModuleName = module.Name + " (weekend)",
+            DayOfModule = 0,
+            TotalDaysInModule = module.NumberOfDays,
+            Events = [],
+            Color = course.Color,
+            appliedCourseId = course.Id
+        };
+        _context.DateContent.Add(dateContentSaturday);
+        var dateContentSunday = new DateContent()
+        {
+            CourseName = course.Name!,
+            ModuleName = module.Name + " (weekend)",
+            DayOfModule = 0,
+            TotalDaysInModule = module.NumberOfDays,
+            Events = [],
+            Color = course.Color,
+            appliedCourseId = course.Id
+        };
+        _context.DateContent.Add(dateContentSunday);
+        _context.SaveChanges();
+
+        var dateSaturday = _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefault(date => date.Date.Date == moduleDate);
+        if (dateSaturday == null)
+        {
+            dateSaturday = new CalendarDate()
+            {
+                Date = moduleDate,
+                DateContent = new List<DateContent> { dateContentSaturday }
+            };
+            _context.CalendarDates.Add(dateSaturday);
+            _context.SaveChanges();
+        }
+        else
+        {
+            dateSaturday.DateContent.Add(dateContentSaturday);
+            _context.CalendarDates.Update(dateSaturday);
+            _context.SaveChanges();
+        }
+
+        var dateSunday = _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefault(date => date.Date.Date == moduleDate.AddDays(1));
+        if (dateSunday == null)
+        {
+            dateSunday = new CalendarDate()
+            {
+                Date = moduleDate.AddDays(1),
+                DateContent = new List<DateContent> { dateContentSunday }
+            };
+            _context.CalendarDates.Add(dateSunday);
+            _context.SaveChanges();
+        }
+        else
+        {
+            dateSunday.DateContent.Add(dateContentSunday);
+            _context.CalendarDates.Update(dateSunday);
+            _context.SaveChanges();
+        }
+        return true;
+    }
 
     private Course clearCourseModules(Course course) // this method removes everything inside Course.Modules (which have the type of CourseModule)
     {
