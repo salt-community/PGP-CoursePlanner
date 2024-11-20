@@ -1,12 +1,14 @@
 import { Page, Text, View, Document, StyleSheet, usePDF } from '@react-pdf/renderer';
 import { AppliedCourseType } from '@models/course/Types';
+import { ModuleType } from '@models/module/Types';
 
 type PDFGeneratorProps = {
     appliedCourse: AppliedCourseType;
     courseWeekDays: string[];
+    appliedModules: ModuleType[];
 };
 
-export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGeneratorProps) {
+export default function PDFGenerator({ appliedCourse, courseWeekDays, appliedModules }: PDFGeneratorProps) {
 
     const styles = StyleSheet.create({
         page: {
@@ -76,9 +78,9 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
 
     const moduleDays: string[] = [];
     let dayCounter = 0;
-    for (let i = 0; i < appliedCourse.modules!.length; i++) {
+    for (let i = 0; i < appliedModules!.length; i++) {
         moduleDays.push(courseWeekDays[dayCounter]);
-        dayCounter = dayCounter + appliedCourse.modules![i].numberOfDays;
+        dayCounter = dayCounter + appliedModules![i].numberOfDays;
     }
 
     const generateDocument = () => {
@@ -95,7 +97,7 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
                             <Text style={styles.col2}>Date</Text>
                             <Text style={styles.col3}>Module description</Text>
                         </View>
-                        {appliedCourse.modules!.map((module, moduleIndex) => (
+                        {appliedModules!.map((module, moduleIndex) => (
                             <View key={moduleIndex} style={styles.row} wrap={false}>
                                 <Text style={styles.col1}>{moduleIndex + 1}</Text>
                                 <Text style={styles.col2}>{moduleDays[moduleIndex]}</Text>
@@ -104,7 +106,7 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGener
                         ))}
                     </View>
                 </Page>
-                {appliedCourse.modules!.map((module, moduleIndex) => (
+                {appliedModules!.map((module, moduleIndex) => (
                     <Page key={moduleIndex}size="A4" style={styles.page}>
                         <View style={styles.section}>
                             <Text style={styles.text}>MODULE {moduleIndex + 1}: {module.name.toUpperCase()}</Text>

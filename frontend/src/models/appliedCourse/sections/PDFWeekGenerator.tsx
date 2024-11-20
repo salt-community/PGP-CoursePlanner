@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Page, Text, View, Document, StyleSheet, usePDF } from '@react-pdf/renderer';
 import { AppliedCourseType } from '@models/course/Types';
 import { AppliedModuleType } from '../Types';
+import { ModuleType } from '@models/module/Types';
 
 type PDFWeekGeneratorProps = {
     appliedCourse: AppliedCourseType;
     courseWeekDays: string[];
+    appliedModules: ModuleType[];
 };
 
-export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFWeekGeneratorProps) {
+export default function PDFWeekGenerator({ appliedCourse, courseWeekDays, appliedModules }: PDFWeekGeneratorProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
     const [selectedModuleObject, setSelectedModuleObject] = useState<AppliedModuleType | null>(null);
     const [documentName, setDocumentName] = useState<string>("");
@@ -17,15 +19,15 @@ export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFW
     const moduleDays: string[] = [];
     const moduleDaysPerModule: string[][] = [];
     let dayCounter = 0;
-    for (let i = 0; i < appliedCourse.modules!.length; i++) {
+    for (let i = 0; i < appliedModules!.length; i++) {
         moduleDays.push(courseWeekDays[dayCounter]);
 
         const tempArray: string[] = [];
-        for (let j = dayCounter; j < dayCounter + appliedCourse.modules![i].numberOfDays; j++) {
+        for (let j = dayCounter; j < dayCounter + appliedModules![i].numberOfDays; j++) {
             tempArray.push(courseWeekDays[j]);
         }
         moduleDaysPerModule.push(tempArray);
-        dayCounter = dayCounter + appliedCourse.modules![i].numberOfDays;
+        dayCounter = dayCounter + appliedModules![i].numberOfDays;
     }
 
     const styles = StyleSheet.create({
@@ -108,7 +110,7 @@ export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFW
                             <Text style={styles.col2}>Date</Text>
                             <Text style={styles.col3}>Module description</Text>
                         </View>
-                        {appliedCourse.modules!.map((module, moduleIndex) => (
+                        {appliedModules!.map((module, moduleIndex) => (
                             <View key={moduleIndex} style={styles.row} wrap={false}>
                                 <Text style={styles.col1}>{moduleIndex + 1}</Text>
                                 <Text style={styles.col2}>{moduleDays[moduleIndex]}</Text>
@@ -121,7 +123,7 @@ export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFW
                     <Page size="A4" style={styles.page}>
                         <View style={styles.section}>
                             <Text style={styles.text}>
-                                MODULE {appliedCourse.modules!.findIndex(m => m === moduleObject) + 1}: {moduleObject!.name.toUpperCase()}
+                                MODULE {appliedModules!.findIndex(m => m === moduleObject) + 1}: {moduleObject!.name.toUpperCase()}
                             </Text>
                         </View>
                         <View style={styles.table}>
@@ -136,7 +138,7 @@ export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFW
                                     <React.Fragment key={dayIndex}>
                                         <View style={styles.row} wrap={false}>
                                             <Text style={styles.col1}>{dayIndex + 1}</Text>
-                                            <Text style={styles.col2}>{moduleDaysPerModule[appliedCourse.modules!.findIndex(m => m === moduleObject)][counter]}</Text>
+                                            <Text style={styles.col2}>{moduleDaysPerModule[appliedModules!.findIndex(m => m === moduleObject)][counter]}</Text>
                                             <Text style={styles.col3}>{day.description}</Text>
                                         </View>
                                         {day.events.length > 0 && day.events.map((event, eventIndex) => (
@@ -164,7 +166,7 @@ export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFW
 
     const handleSelectModule = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value;
-        const selectedModuleObj = appliedCourse.modules!.find(m => m.id == parseInt(value));
+        const selectedModuleObj = appliedModules!.find(m => m.id == parseInt(value));
 
         setSelectedModule(value);
         setSelectedModuleObject(selectedModuleObj!);
@@ -195,7 +197,7 @@ export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFW
                     <div className="flex flex-col self-center">
                         <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'}>
                             <option key={"default"} value="DEFAULT" disabled>Select Module</option>
-                            {appliedCourse && appliedCourse.modules!.map((module, moduleIndex) =>
+                            {appliedCourse && appliedModules!.map((module, moduleIndex) =>
                                 <option key={module.id + ":" + moduleIndex} value={module.id}>{module.name}</option>
                             )}
                         </select>
