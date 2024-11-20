@@ -21,7 +21,7 @@ public class CoursesController : ControllerBase
     public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
     {
         var response = await _service.GetAllAsync();
-        return Ok(response);
+        return Ok(response.Where(x => x.IsApplied == false));
     }
 
     [HttpGet("{id}")]
