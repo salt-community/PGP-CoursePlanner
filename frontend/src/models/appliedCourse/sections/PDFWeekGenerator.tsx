@@ -226,6 +226,4 @@ export default function PDFWeekGenerator({ appliedCourse, courseWeekDays, applie
             </dialog>
         </>
     );
-
-    return "remove this return"
 }

@@ -173,5 +173,4 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays, appliedMod
             </a>
         </button>
     );
-    return "remove this return as well"
 }
