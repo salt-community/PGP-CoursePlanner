@@ -58,6 +58,9 @@ public class CourseService : IService<Course>
         return course;
     }
 
+
+
+
     private async Task<Course> CreateAppliedCourseAsync(Course appliedCourse)
     {
         await _context.Courses.AddAsync(appliedCourse);
@@ -263,6 +266,10 @@ public class CourseService : IService<Course>
         await _context.SaveChangesAsync();
         return appliedCourse;
     }
+
+
+
+
     public async Task<Course> CreateAsync(Course course)
     {
         if (course.IsApplied == true)
@@ -315,19 +322,16 @@ public class CourseService : IService<Course>
                 .FirstOrDefault(ac => ac.Id == course.Id)
                 ?? throw new NotFoundByIdException("Course", course.Id);
 
-        //courseToClear.moduleIds = new List<int>();
-
-        foreach (var courseModule in courseToClear.Modules.Select(m => m.Module!)) // varför mååste det vara en bang här ;_;
+        foreach (var courseModule in courseToClear.Modules.Select(m => m.Module!)) 
         {
-            clearModuleOfDays(courseModule);
-
+            clearModuleOfDays(courseModule, courseToClear.Id);
         }
-        _context.CourseModules.RemoveRange(courseToClear.Modules); // this should be basically at the bottom
+        _context.CourseModules.RemoveRange(courseToClear.Modules); 
         _context.SaveChanges();
         return course;
     }
 
-    private bool clearModuleOfDays(Module module)
+    private bool clearModuleOfDays(Module module, int courseId)
     {
         Module moduleToClear = _context.Modules
                             .Include(module => module.Days)
@@ -338,21 +342,30 @@ public class CourseService : IService<Course>
 
         foreach (var day in moduleToClear.Days)
         {
-            foreach (var eventElement in day.Events)
-            {
-                if (eventElement.DateContents != null)
-                {
-                    foreach (var dateContent in eventElement.DateContents)
-                    {
-                        var calendarDatesWhereDateContentMustBeRemoved = _context.CalendarDates.Where(cd => cd.DateContent.Contains(dateContent)).First();
-                        calendarDatesWhereDateContentMustBeRemoved.DateContent.Remove(dateContent);
-                        _context.DateContent.Remove(dateContent);
-                    }
-                }
-                _context.Events.Remove(eventElement);
-            }
-            _context.Days.Remove(day);
+            _context.Events.RemoveRange(day.Events);
         }
+
+        _context.Days.RemoveRange(moduleToClear.Days);
+
+        //this part removes dateContent
+        var calendarDates =  _context.CalendarDates
+            .Include(cd => cd.DateContent) 
+            .Where(cd => cd.DateContent.Any(dc => dc.appliedCourseId == courseId));
+
+        foreach (var calendarDate in calendarDates)
+        {
+            calendarDate.DateContent.RemoveAll(dc => dc.appliedCourseId == courseId);
+
+            if (!calendarDate.DateContent.Any())
+            {
+                _context.CalendarDates.Remove(calendarDate);
+            }
+            else
+            {
+                _context.CalendarDates.Update(calendarDate);
+            }
+        }
+
         _context.SaveChanges();
         return true;
     }
