@@ -96,7 +96,8 @@ export default function EditAppliedCourse() {
                                 endDate: appliedCourse.endDate,
                                 courseId: appliedCourse.courseId,
                                 color: color,
-                                isApplied: appliedCourse.isApplied
+                                isApplied: appliedCourse.isApplied,
+                                moduleIds: appliedModules.map(m => m.id!), // the bang here is based on nothing. i really really dislike how the code base is filled with optional things that shouldn't be optional.
                             };
                             await editAppliedCourse(newAppliedCourse);
                         } catch (error) {
@@ -113,6 +114,7 @@ export default function EditAppliedCourse() {
                 startDate: startDate,
                 color: color,
                 modules: appliedModules!,
+                moduleIds: appliedModules.map(m => m.id!), // the bang here is based on nothing. i really really dislike how the code base is filled with optional things that shouldn't be optional.
                 isApplied: appliedCourse!.isApplied
             };
             mutation.mutate(newAppliedCourse);
