@@ -310,6 +310,8 @@ public class CourseService : IService<Course>
 
         appliedCourseToUpdate = clearCourseModules(appliedCourseToUpdate); // i do not remove moduleIds
 
+        // precis här måste jag sätta appliedCourseToUpdate.ModuleIds till appliedCourse.ModuleIds 
+
         var startDate = appliedCourseToUpdate.StartDate;
         int order = 1;
         foreach (var moduleId in appliedCourseToUpdate.moduleIds)
@@ -356,13 +358,13 @@ public class CourseService : IService<Course>
 
             var dateContent = new DateContent()
             {
-                CourseName = course.Name!,
+                CourseName = courseToAddTo.Name!,
                 ModuleName = moduleToAdd.Name,
                 DayOfModule = dayToAdd.DayNumber,
                 TotalDaysInModule = moduleToAdd.NumberOfDays,
                 Events = dayToAdd.Events,
-                Color = course.Color,
-                appliedCourseId = course.Id,
+                Color = courseToAddTo.Color,
+                appliedCourseId = courseToAddTo.Id,
             };
             await _context.DateContent.AddAsync(dateContent);
 
@@ -387,9 +389,9 @@ public class CourseService : IService<Course>
             }
             moduleDate = moduleDate.AddDays(1);
 
-            if (moduleDate.DayOfWeek == DayOfWeek.Saturday && !(day.DayNumber == moduleToAdd.NumberOfDays && moduleId == course.moduleIds.Last()))
+            if (moduleDate.DayOfWeek == DayOfWeek.Saturday && !(day.DayNumber == moduleToAdd.NumberOfDays && moduleId == courseToAddTo.moduleIds.Last()))
             {
-                AddWeekendDates(course, moduleToAdd, moduleDate);
+                AddWeekendDates(courseToAddTo, moduleToAdd, moduleDate);
                 moduleDate.AddDays(2);
             }
             _context.SaveChanges();
@@ -397,8 +399,8 @@ public class CourseService : IService<Course>
 
         var courseModule = new CourseModule
         {
-            CourseId = course.Id,
-            Course = course,
+            CourseId = courseToAddTo.Id,
+            Course = courseToAddTo,
             Module = moduleToAdd,
             ModuleId = moduleToAdd.Id,
         };
@@ -475,7 +477,7 @@ public class CourseService : IService<Course>
         return true;
     }
 
-    private Course clearCourseModules(Course course) // this method removes everything inside Course.Modules (which have the type of CourseModule)
+    private Course clearCourseModules(Course course) 
     {
         var courseToClear = _context.Courses
                 .Include(course => course.Modules!)
@@ -486,9 +488,9 @@ public class CourseService : IService<Course>
                 .FirstOrDefault(ac => ac.Id == course.Id)
                 ?? throw new NotFoundByIdException("Course", course.Id);
 
-        foreach (var courseModule in courseToClear.Modules.Select(m => m.Module!))
+        foreach (var module in courseToClear.Modules.Select(m => m.Module!))
         {
-            clearModuleOfDays(courseModule, courseToClear.Id);
+            clearModuleOfDays(module, courseToClear.Id);
         }
         _context.CourseModules.RemoveRange(courseToClear.Modules);
         _context.SaveChanges();
@@ -497,19 +499,12 @@ public class CourseService : IService<Course>
 
     private bool clearModuleOfDays(Module module, int courseId)
     {
-        Module moduleToClear = _context.Modules
-                            .Include(module => module.Days)
-                            .ThenInclude(day => day.Events)
-                            .ThenInclude(ev => ev.DateContents)
-                            .FirstOrDefault(m => m.Id == module.Id)
-                            ?? throw new NotFoundByIdException("Module", module.Id);
-
-        foreach (var day in moduleToClear.Days)
+        foreach (var day in module.Days)
         {
-            _context.Events.RemoveRange(day.Events);
+           _context.Events.RemoveRange(day.Events);
         }
 
-        _context.Days.RemoveRange(moduleToClear.Days);
+        _context.Days.RemoveRange(module.Days);
 
         //this part removes dateContent
         var calendarDates = _context.CalendarDates
@@ -520,13 +515,13 @@ public class CourseService : IService<Course>
         {
             calendarDate.DateContent.RemoveAll(dc => dc.appliedCourseId == courseId);
 
-            if (!calendarDate.DateContent.Any())
+            if (calendarDate.DateContent.Count == 0)
             {
                 _context.CalendarDates.Remove(calendarDate);
             }
             else
             {
-                _context.CalendarDates.Update(calendarDate);
+               _context.CalendarDates.Update(calendarDate);
             }
         }
 
