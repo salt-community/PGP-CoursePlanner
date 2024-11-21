@@ -371,15 +371,16 @@ public class CourseService : IService<Course>
             var date = await _context.CalendarDates.
                         Include(cm => cm.DateContent)
                         .ThenInclude(dc => dc.Events)
-                        .FirstOrDefaultAsync(date => date.Date.Date == moduleDate);
+                        .FirstOrDefaultAsync(date => date.Date.Date == moduleDate.Date);
 
             if (date == null)
             {
                 date = new CalendarDate()
                 {
-                    Date = moduleDate,
-                    DateContent = new List<DateContent> { dateContent }
+                    Date = moduleDate.Date,
                 };
+                date.DateContent.Add( dateContent );
+
                 await _context.CalendarDates.AddAsync(date);
             }
             else
@@ -393,7 +394,7 @@ public class CourseService : IService<Course>
             if (moduleDate.DayOfWeek == DayOfWeek.Saturday && !(day.DayNumber == moduleToAdd.NumberOfDays && moduleId == courseToAddTo.moduleIds.Last()))
             {
                 AddWeekendDates(courseToAddTo, moduleToAdd, moduleDate);
-                moduleDate.AddDays(2);
+                moduleDate = moduleDate.AddDays(2);
             }
             _context.SaveChanges();
         }
@@ -411,7 +412,7 @@ public class CourseService : IService<Course>
         course.Modules.Add(courseModule);
         _context.SaveChanges();
 
-        return moduleDate.AddDays(1);
+        return moduleDate;
     }
 
     private bool AddWeekendDates(Course course, Module module, DateTime moduleDate)
@@ -440,12 +441,12 @@ public class CourseService : IService<Course>
         _context.DateContent.Add(dateContentSunday);
         _context.SaveChanges();
 
-        var dateSaturday = _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefault(date => date.Date.Date == moduleDate);
+        var dateSaturday = _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefault(date => date.Date.Date == moduleDate.Date);
         if (dateSaturday == null)
         {
             dateSaturday = new CalendarDate()
             {
-                Date = moduleDate,
+                Date = moduleDate.Date,
                 DateContent = new List<DateContent> { dateContentSaturday }
             };
             _context.CalendarDates.Add(dateSaturday);
@@ -458,12 +459,12 @@ public class CourseService : IService<Course>
             _context.SaveChanges();
         }
 
-        var dateSunday = _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefault(date => date.Date.Date == moduleDate.AddDays(1));
+        var dateSunday = _context.CalendarDates.Include(cm => cm.DateContent).ThenInclude(dc => dc.Events).FirstOrDefault(date => date.Date.Date == moduleDate.AddDays(1).Date);
         if (dateSunday == null)
         {
             dateSunday = new CalendarDate()
             {
-                Date = moduleDate.AddDays(1),
+                Date = moduleDate.AddDays(1).Date,
                 DateContent = new List<DateContent> { dateContentSunday }
             };
             _context.CalendarDates.Add(dateSunday);
