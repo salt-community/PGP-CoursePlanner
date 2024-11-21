@@ -354,7 +354,7 @@ public class CourseService : IService<Course>
                 dayToAdd.Events.Add(eventToAdd);
             }
             _context.Days.Add(dayToAdd);
-            moduleToAdd.Days.Add(dayToAdd); 
+            moduleToAdd.Days.Add(dayToAdd);
 
             var dateContent = new DateContent()
             {
@@ -386,6 +386,7 @@ public class CourseService : IService<Course>
             {
                 date.DateContent.Add(dateContent);
                 _context.CalendarDates.Update(date);
+
             }
             moduleDate = moduleDate.AddDays(1);
 
@@ -406,7 +407,7 @@ public class CourseService : IService<Course>
         };
 
         _context.CourseModules.Add(courseModule);
-        
+
         course.Modules.Add(courseModule);
         _context.SaveChanges();
 
@@ -477,7 +478,7 @@ public class CourseService : IService<Course>
         return true;
     }
 
-    private Course clearCourseModules(Course course) 
+    private Course clearCourseModules(Course course)
     {
         var courseToClear = _context.Courses
                 .Include(course => course.Modules!)
@@ -501,7 +502,7 @@ public class CourseService : IService<Course>
     {
         foreach (var day in module.Days)
         {
-           _context.Events.RemoveRange(day.Events);
+            _context.Events.RemoveRange(day.Events);
         }
 
         _context.Days.RemoveRange(module.Days);
@@ -521,7 +522,7 @@ public class CourseService : IService<Course>
             }
             else
             {
-               _context.CalendarDates.Update(calendarDate);
+                _context.CalendarDates.Update(calendarDate);
             }
         }
 

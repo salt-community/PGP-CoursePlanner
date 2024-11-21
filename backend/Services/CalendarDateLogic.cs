@@ -22,7 +22,7 @@ public static class CalendarDateLogic
 
         for (int i = 0; i < dates.Length; i++)
         {
-            var day = dbDates.FirstOrDefault(d => d.Date == convertedDateStart.AddDays(i));
+            var day = dbDates.FirstOrDefault(d => d.Date.Date == convertedDateStart.AddDays(i));
 
             if (day != null)
             {
