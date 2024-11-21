@@ -311,6 +311,7 @@ public class CourseService : IService<Course>
         appliedCourseToUpdate = clearCourseModules(appliedCourseToUpdate); // i do not remove moduleIds
 
         // precis här måste jag sätta appliedCourseToUpdate.ModuleIds till appliedCourse.ModuleIds 
+        appliedCourseToUpdate.moduleIds = appliedCourse.moduleIds;
 
         var startDate = appliedCourseToUpdate.StartDate;
         int order = 1;
@@ -319,6 +320,8 @@ public class CourseService : IService<Course>
             startDate = await addModuleToCourse(appliedCourseToUpdate, moduleId, startDate, order);
             order++;
         }
+
+        _context.SaveChanges();
         return appliedCourseToUpdate;
     }
 
@@ -340,7 +343,7 @@ public class CourseService : IService<Course>
         moduleToAdd.SetIsApplied();
         moduleToAdd.Order = order;
 
-        foreach (var day in moduleToAddData.Days)
+        foreach (var day in moduleToAddData.Days.OrderBy(d => d.DayNumber))
         {
             var dayToAdd = day.ShallowClone();
             foreach (var @event in day.Events)
