@@ -308,9 +308,8 @@ public class CourseService : IService<Course>
                 .FirstOrDefaultAsync(ac => ac.Id == id)
                 ?? throw new NotFoundByIdException("Course", appliedCourse.Id);
 
-        appliedCourseToUpdate = clearCourseModules(appliedCourseToUpdate); // i do not remove moduleIds
+        appliedCourseToUpdate = clearCourseModules(appliedCourseToUpdate); 
 
-        // precis här måste jag sätta appliedCourseToUpdate.ModuleIds till appliedCourse.ModuleIds 
         appliedCourseToUpdate.moduleIds = appliedCourse.moduleIds;
 
         var startDate = appliedCourseToUpdate.StartDate;
@@ -382,7 +381,7 @@ public class CourseService : IService<Course>
                 {
                     Date = moduleDate.Date,
                 };
-                date.DateContent.Add( dateContent );
+                date.DateContent.Add(dateContent);
 
                 await _context.CalendarDates.AddAsync(date);
             }
@@ -484,20 +483,11 @@ public class CourseService : IService<Course>
 
     private Course clearCourseModules(Course course)
     {
-        var courseToClear = _context.Courses
-                .Include(course => course.Modules!)
-                .ThenInclude(module => module!.Module)
-                .ThenInclude(module => module!.Days)
-                .ThenInclude(day => day.Events)
-                .AsNoTracking()
-                .FirstOrDefault(ac => ac.Id == course.Id)
-                ?? throw new NotFoundByIdException("Course", course.Id);
-
-        foreach (var module in courseToClear.Modules.Select(m => m.Module!))
+        foreach (var module in course.Modules.Select(m => m.Module!))
         {
-            clearModuleOfDays(module, courseToClear.Id);
+            clearModuleOfDays(module, course.Id);
         }
-        _context.CourseModules.RemoveRange(courseToClear.Modules);
+        _context.CourseModules.RemoveRange(course.Modules);
         _context.SaveChanges();
         return course;
     }
@@ -575,14 +565,35 @@ public class CourseService : IService<Course>
     }
     public async Task<bool> DeleteAsync(int id)
     {
+        var course = _context.Courses
+               .Include(course => course.Modules!)
+               .ThenInclude(module => module!.Module)
+               .ThenInclude(module => module!.Days)
+               .ThenInclude(day => day.Events)
+               .AsNoTracking()
+               .FirstOrDefault(ac => ac.Id == id)
+               ?? throw new NotFoundByIdException("Course", id);
 
-        var course = await _context.Courses
-        .Include(c => c.Modules)
-        .FirstOrDefaultAsync(c => c.Id == id) ?? throw new NotFoundByIdException("Course", id);
+        if (course.IsApplied)
+        {
+            return await DeleteAppliedAsync(course);
+        }
+        _context.Courses.Remove(course);
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> DeleteAppliedAsync(Course course)
+    {
+
+        clearCourseModules(course);
 
         _context.Courses.Remove(course);
         await _context.SaveChangesAsync();
 
         return true;
     }
+
+
 }
