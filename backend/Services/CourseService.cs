@@ -311,6 +311,7 @@ public class CourseService : IService<Course>
         appliedCourseToUpdate = clearCourseModules(appliedCourseToUpdate); 
 
         appliedCourseToUpdate.moduleIds = appliedCourse.moduleIds;
+        appliedCourseToUpdate.StartDate = appliedCourse.StartDate;
 
         var startDate = appliedCourseToUpdate.StartDate;
         int order = 1;
@@ -319,9 +320,18 @@ public class CourseService : IService<Course>
             startDate = await addModuleToCourse(appliedCourseToUpdate, moduleId, startDate, order);
             order++;
         }
-
+        appliedCourseToUpdate.EndDate = calculateEndDate(appliedCourseToUpdate);
         _context.SaveChanges();
         return appliedCourseToUpdate;
+    }
+
+    private DateTime calculateEndDate(Course course)
+    {
+        var numberOfDays =  _context.CalendarDates
+            .Include(cd => cd.DateContent)
+            .Where(cd => cd.DateContent.Any(dc => dc.appliedCourseId == course.Id)).Count();
+        
+        return course.StartDate.AddDays(numberOfDays-1).Date;
     }
 
     private async Task<DateTime> addModuleToCourse(Course course, int moduleId, DateTime moduleDate, int order)
