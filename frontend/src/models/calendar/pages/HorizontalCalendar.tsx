@@ -11,6 +11,8 @@ import TimeLineCourse from "../sections/TimeLineCourse";
 import TimeLineXaxis from "../sections/TimeLineXaxis";
 import { getCookie } from "@helpers/cookieHelpers";
 import Login from "@models/login/Login";
+import { ZoomOutButton } from "../components/ZoomOutBtn";
+import { ZoomInButton } from "../components/zoomInBtn";
 
 export type Activity = {
   id: number;
@@ -111,7 +113,7 @@ const HorizontalCalendar: React.FC = () => {
       setActivities(newActivities);
       setActivitiesArray(sortedActivities);
     }
-  }, [appliedCourses, courses, modules]
+  }, [appliedCourses, courses, modules, endDate, startDate]
   );
 
   const numDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
@@ -131,7 +133,7 @@ const HorizontalCalendar: React.FC = () => {
       const clientWidth = scrollContainerRef.current.clientWidth;
       scrollContainerRef.current.scrollLeft = (scrollWidth - clientWidth) * (numDaysToday / numDays);
     }
-  }, [activities, widthIndex]);
+  }, [activities, widthIndex, numDays, numDaysToday]);
 
   return (
     getCookie("access_token") == undefined ?
@@ -161,20 +163,8 @@ const HorizontalCalendar: React.FC = () => {
             <Link to={`/calendar/month/monthyear=${currentMonth}-${currentYear}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to month view</Link>
           </div>
           <div className="flex flex-row gap-2">
-            {widthIndex != 0
-              ? <svg onClick={() => setWidthIndex(widthIndex - 1)} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM13.5 10.5h-6" />
-              </svg>
-              : <svg className="btn btn-sm py-1 mt-4 max-w-xs btn-disabled" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM13.5 10.5h-6" />
-              </svg>}
-            {widthIndex != width.length - 1
-              ? <svg onClick={() => setWidthIndex(widthIndex + 1)} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6" />
-              </svg>
-              : <svg className="btn btn-sm py-1 mt-4 max-w-xs btn-disabled" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607ZM10.5 7.5v6m3-3h-6" />
-              </svg>}
+          <ZoomOutButton onClick={() => setWidthIndex(widthIndex - 1)} disabled={widthIndex === 0}/>
+          <ZoomInButton onClick={() => setWidthIndex(widthIndex + 1)} disabled={widthIndex === width.length - 1}/>
           </div>
         </div>
       </Page >
