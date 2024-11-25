@@ -18,6 +18,7 @@ import ColorPickerModal from "@components/ColorPickerModal";
 import ModuleEdit from "../sections/ModuleEdit";
 import { getModulesByCourseId } from "@api/CourseModulesApi";
 import { ModuleType } from "@models/module/Types";
+import { updateAppliedModule } from "@api/AppliedModuleApi";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -31,6 +32,9 @@ export default function EditAppliedCourse() {
 
     const handleUpdateModules = (updatedModules: AppliedModuleType[]) => {
         setAppliedModules(updatedModules);
+        for(let i = 0; i < updatedModules.length; i++ ){
+            updateAppliedModule(updatedModules[i]);
+        }
     };
 
     const { data: allAppliedCourses } = useQuery({
@@ -43,7 +47,7 @@ export default function EditAppliedCourse() {
         null
     );
 
-    const { isPending, data, isError, error} = useQuery<ModuleType[]>({
+    const { data} = useQuery<ModuleType[]>({
         queryKey: ['AppliedModules', appliedCourseId],
         queryFn: () => getModulesByCourseId(Number(appliedCourseId)),
       })
@@ -62,11 +66,6 @@ export default function EditAppliedCourse() {
         });
     }, [appliedCourseId, data]);
 
-    console.log(appliedModules);
-    
-    // if (!isPending && !isError ) {
-    //     setAppliedModules(data);
-    // }
 
     const defaultColor = appliedCourse?.color || "";
 
@@ -97,7 +96,7 @@ export default function EditAppliedCourse() {
                                 courseId: appliedCourse.courseId,
                                 color: color,
                                 isApplied: appliedCourse.isApplied,
-                                moduleIds: appliedModules.map(m => m.id!), // the bang here is based on nothing. i really really dislike how the code base is filled with optional things that shouldn't be optional.
+                                moduleIds: appliedModules.map(m => m.id!), // todo: think about why ids are optional
                             };
                             await editAppliedCourse(newAppliedCourse);
                         } catch (error) {
@@ -114,7 +113,7 @@ export default function EditAppliedCourse() {
                 startDate: startDate,
                 color: color,
                 modules: appliedModules!,
-                moduleIds: appliedModules.map(m => m.id!), // the bang here is based on nothing. i really really dislike how the code base is filled with optional things that shouldn't be optional.
+                moduleIds: appliedModules.map(m => m.id!),
                 isApplied: appliedCourse!.isApplied
             };
             mutation.mutate(newAppliedCourse);
