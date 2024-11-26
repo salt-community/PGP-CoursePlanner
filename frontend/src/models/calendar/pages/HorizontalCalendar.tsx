@@ -4,8 +4,6 @@ import Page from "@components/Page";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { getAllAppliedCourses } from "@api/AppliedCourseApi";
-import { getAllCourses } from "@api/CourseApi";
-import { getAllModules } from "@api/ModuleApi";
 import { currentMonth, currentYear, currentWeek } from "@helpers/dateHelpers";
 import TimeLineCourse from "../sections/TimeLineCourse";
 import TimeLineXaxis from "../sections/TimeLineXaxis";
@@ -41,18 +39,8 @@ const HorizontalCalendar: React.FC = () => {
     queryFn: getAllAppliedCourses,
   });
 
-  const { data: courses } = useQuery({
-    queryKey: ["courses"],
-    queryFn: getAllCourses,
-  });
-
-  const { data: modules } = useQuery({
-    queryKey: ["modules"],
-    queryFn: getAllModules,
-  });
-
   useEffect(() => {
-    if (appliedCourses && courses && modules) {
+    if (appliedCourses) {
       const newActivities: Activity[] = [];
       const newActivitiesArray: Activity[][] = [];
       appliedCourses.forEach(ac => {
@@ -108,7 +96,7 @@ const HorizontalCalendar: React.FC = () => {
       setActivities(newActivities);
       setActivitiesArray(newActivitiesArray);
     }
-  }, [appliedCourses, courses, modules, endDate, startDate]
+  }, [appliedCourses, endDate, startDate]
   );
 
   const numDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
