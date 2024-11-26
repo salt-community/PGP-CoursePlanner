@@ -54,6 +54,7 @@ const HorizontalCalendar: React.FC = () => {
   useEffect(() => {
     if (appliedCourses && courses && modules) {
       const newActivities: Activity[] = [];
+      const newActivitiesArray: Activity[][] = [];
       appliedCourses.forEach(ac => {
 
         const newActivity: Activity = {
@@ -65,6 +66,7 @@ const HorizontalCalendar: React.FC = () => {
           courseId: ac.courseId
         };
         newActivities.push(newActivity);
+        newActivitiesArray.push([newActivity]);
       });
 
       // // sort calendar by active/future/past bootcamps
@@ -92,13 +94,6 @@ const HorizontalCalendar: React.FC = () => {
       // const sortedPastActivities = sortActivities(pastActivities);
       // const sortedActivities: Activity[] = [...sortedActiveActivities, ...sortedFutureActivities, ...sortedPastActivities]
 
-      // sort calendar by bootcamp
-      const oneActivities: Activity[] = newActivities.filter(ac => ac.courseId == 1);
-      const twoActivities: Activity[] = newActivities.filter(ac => ac.courseId == 2);
-      const threeActivities: Activity[] = newActivities.filter(ac => ac.courseId == 3);
-
-      const sortedActivities = [oneActivities, twoActivities, threeActivities]
-
       let tempStartDate = startDate;
       let tempEndDate = endDate;
       newActivities.forEach(ac => {
@@ -111,7 +106,7 @@ const HorizontalCalendar: React.FC = () => {
       setEndDate(tempEndDate);
 
       setActivities(newActivities);
-      setActivitiesArray(sortedActivities);
+      setActivitiesArray(newActivitiesArray);
     }
   }, [appliedCourses, courses, modules, endDate, startDate]
   );
