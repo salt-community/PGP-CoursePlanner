@@ -53,8 +53,14 @@ const HorizontalCalendar: React.FC = () => {
           color: ac.color,
           courseId: ac.courseId
         };
+
+        if (newActivitiesArray.find(activities => activities.find(activity => activity.title == newActivity.title))) {
+          const index = newActivitiesArray.findIndex(activities => activities.find(activity => activity.title == newActivity.title));
+          newActivitiesArray[index].push(newActivity);
+        } else {
+          newActivitiesArray.push([newActivity]);
+        }
         newActivities.push(newActivity);
-        newActivitiesArray.push([newActivity]);
       });
 
       // // sort calendar by active/future/past bootcamps
@@ -68,7 +74,7 @@ const HorizontalCalendar: React.FC = () => {
       //     const startDateB = new Date(b.startDate!);
       //     const endDateA = new Date(a.endDate!);
       //     const endDateB = new Date(b.endDate!);
-  
+
       //     if (startDateA < startDateB) return -1;
       //     if (startDateA > startDateB) return 1;
       //     if (endDateA < endDateB) return -1;
@@ -76,7 +82,7 @@ const HorizontalCalendar: React.FC = () => {
       //     return 0;
       //   });
       // };
-  
+
       // const sortedActiveActivities = sortActivities(activeActivities);
       // const sortedFutureActivities = sortActivities(futureActivities);
       // const sortedPastActivities = sortActivities(pastActivities);
@@ -123,7 +129,7 @@ const HorizontalCalendar: React.FC = () => {
       <Login />
       :
       <Page>
-        <div ref={scrollContainerRef}  style={{ "height": height }} className="overflow-x-auto px-4 flex flex-col">
+        <div ref={scrollContainerRef} style={{ "height": height }} className="overflow-x-auto px-4 flex flex-col">
           <div className="flex flex-row">
             {activities.length > 0 &&
               <TimeLineXaxis dates={dates} width={width[widthIndex]}></TimeLineXaxis>
@@ -146,8 +152,8 @@ const HorizontalCalendar: React.FC = () => {
             <Link to={`/calendar/month/monthyear=${currentMonth}-${currentYear}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to month view</Link>
           </div>
           <div className="flex flex-row gap-2">
-          <ZoomOutButton onClick={() => setWidthIndex(widthIndex - 1)} disabled={widthIndex === 0}/>
-          <ZoomInButton onClick={() => setWidthIndex(widthIndex + 1)} disabled={widthIndex === width.length - 1}/>
+            <ZoomOutButton onClick={() => setWidthIndex(widthIndex - 1)} disabled={widthIndex === 0} />
+            <ZoomInButton onClick={() => setWidthIndex(widthIndex + 1)} disabled={widthIndex === width.length - 1} />
           </div>
         </div>
       </Page >
