@@ -53,10 +53,9 @@ const HorizontalCalendar: React.FC = () => {
           color: ac.color,
           courseId: ac.courseId
         };
-
-        if (newActivitiesArray.find(activities => activities.find(activity => activity.title == newActivity.title))) {
-          const index = newActivitiesArray.findIndex(activities => activities.find(activity => activity.title == newActivity.title));
-          newActivitiesArray[index].push(newActivity);
+        const sameTitleIndex = newActivitiesArray.findIndex(activities => activities.find(activity => activity.title == newActivity.title));
+        if (sameTitleIndex != -1) {
+          newActivitiesArray[sameTitleIndex].push(newActivity);
         } else {
           newActivitiesArray.push([newActivity]);
         }
