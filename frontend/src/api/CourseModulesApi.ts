@@ -1,4 +1,5 @@
 import { getCookie } from "@helpers/cookieHelpers";
+import { ModuleType } from "@models/module/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/CourseModules`;
 
@@ -16,7 +17,7 @@ export async function getModulesByCourseId(courseId: number) {
             return;
         }
 
-        const data = await response.json();
+        const data: ModuleType[] = await response.json();
         return data;
     } catch (error) {
         console.error(error);
