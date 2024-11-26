@@ -12,15 +12,11 @@ export async function getModulesByCourseId(courseId: number) {
             },
         });
 
-        if (!response.ok || response == null) {
-            // alert("Failed to get modules by course");
-            return;
-        }
-
         const data: ModuleType[] = await response.json();
         return data;
     } catch (error) {
         console.error(error);
+        throw new Error("Could not get moduels");
         // alert("Failed to get modules");
     }
 }

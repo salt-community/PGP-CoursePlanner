@@ -69,8 +69,11 @@ export default function AppliedCourseDetails() {
     let counter = -1;
 
     console.log(appliedModules);
-    if(isPending) return "pending";
-    if(isAppliedModulesError) return AppliedModulesError;
+    if(isPending) return <p>pending</p>;
+    if(isAppliedModulesError){
+        console.log(AppliedModulesError)
+        return <p>Error</p>
+    };
     return (
         getCookie("access_token") == undefined
             ? <Login />
