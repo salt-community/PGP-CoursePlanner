@@ -178,8 +178,8 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                         </select>
                                     </div>
                                     <div className="flex items-center justify-center mb-4 gap-2">
-                                        <button className="btn btn-sm mt-4 w-44 btn-success text-white" type="button" onClick={() => { handleMove(); openCloseModal("close", setAllToFalse, `${dayNumber - 1}:${event.id}`) }}>Move Event and Save</button>
-                                        <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => openCloseModal("close", setAllToFalse, `${dayNumber - 1}:${event.id}`)}>Cancel</button>
+                                        <button className="btn btn-sm mt-4 w-44 btn-success text-white" type="button" onClick={() => { handleMove(); openCloseModal("close", setAllToFalse, `${dayNumber - 1}:${event.id}:moveToAnotherDay`) }}>Move Event and Save</button>
+                                        <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => openCloseModal("close", setAllToFalse, `${dayNumber - 1}:${event.id}:moveToAnotherDay`)}>Cancel</button>
                                     </div>
                                     {isIncompleteInput &&
                                         <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a day</p>}
@@ -215,10 +215,10 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                 }
                                 <div className="flex items-center justify-center mb-4 gap-2">
                                     <button className="btn btn-sm mt-4 w-44 btn-success text-white" type="button" onClick={() => {
-                                        handleMoveAnotherModule(); openCloseModal("close", setAllToFalse, `${dayNumber - 1}:${event.id}`)
+                                        handleMoveAnotherModule(); openCloseModal("close", setAllToFalse, `${dayNumber - 1}:${event.id}:moveToAnotherModule`)
 
                                     }}>Move Event and Save</button>
-                                    <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => openCloseModal("close", setAllToFalse, `${dayNumber - 1}:${event.id}`)}>Cancel</button>
+                                    <button className="btn btn-sm mt-4 w-24 btn-error text-white" type="button" onClick={() => openCloseModal("close", setAllToFalse, `${dayNumber - 1}:${event.id}:moveToAnotherModule`)}>Cancel</button>
                                 </div>
                                 {isIncompleteInput &&
                                     <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>}
