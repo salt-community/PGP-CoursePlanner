@@ -1,6 +1,6 @@
 # Use the official Node.js image to build the application
 FROM node:14 AS build
-WORKDIR /frontend
+WORKDIR /dist
 
 # Copy package.json and package-lock.json to the container
 COPY frontend/package*.json ./
@@ -18,7 +18,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy the build artifacts from the 'frontend/dist' folder to Nginx's HTML directory
-COPY --from=build /frontend/dist /usr/share/nginx/html
+COPY --from=build dist /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
