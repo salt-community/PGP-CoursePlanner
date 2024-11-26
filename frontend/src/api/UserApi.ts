@@ -7,6 +7,10 @@ export type tokenResponse = {
 };
 
 export async function getTokens(auth_code: string, redirect_uri: string) {
+  if (!auth_code || !redirect_uri) {
+    throw new Error("Missing auth code or redirect uri");
+  }
+
   try {
     const code = encodeURIComponent(auth_code);
     const uri = encodeURIComponent(redirect_uri);
