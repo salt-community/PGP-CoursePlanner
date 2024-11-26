@@ -12,7 +12,7 @@ import TimeLineXaxis from "../sections/TimeLineXaxis";
 import { getCookie } from "@helpers/cookieHelpers";
 import Login from "@models/login/Login";
 import { ZoomOutButton } from "../components/ZoomOutBtn";
-import { ZoomInButton } from "../components/zoomInBtn";
+import { ZoomInButton } from "../components/ZoomInBtn";
 
 export type Activity = {
   id: number;
