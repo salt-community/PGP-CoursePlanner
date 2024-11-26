@@ -166,7 +166,7 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                         <EllipsisBtn />
                         <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-64 p-2 shadow">
                             {days.length > 1 &&
-                                <ModalContainer openModalText={"Move Event to another Day"} setAllToFalse={setAllToFalse} id={`${dayNumber - 1}:${event.id}`}>
+                                <ModalContainer openModalText={"Move Event to another Day"} setAllToFalse={setAllToFalse} id={`${dayNumber - 1}:${event.id}:moveToAnotherDay`}>
                                     <h2 className="m-2 self-center">To which day do you want to move this event?</h2>
                                     <div className="flex flex-col self-center">
                                         <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectDay} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
@@ -185,7 +185,7 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                                         <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a day</p>}
                                 </ModalContainer>
                             }
-                            <ModalContainer openModalText="Move Event to another Module" setAllToFalse={setAllToFalse} id={`${dayNumber - 1}:${event.id}`}>
+                            <ModalContainer openModalText="Move Event to another Module" setAllToFalse={setAllToFalse} id={`${dayNumber - 1}:${event.id}:moveToAnotherModule`}>
                                 <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
                                 <div className="flex flex-col self-center">
                                     <select onMouseDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} onChange={handleSelectModule} className="border border-gray-300 rounded-lg p-1 w-fit" defaultValue={'DEFAULT'} >
