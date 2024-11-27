@@ -73,7 +73,7 @@ export default function AppliedCourseDetails() {
     if(isAppliedModulesError){
         console.log(AppliedModulesError)
         return <p>Error</p>
-    };
+    }
     return (
         getCookie("access_token") == undefined
             ? <Login />
