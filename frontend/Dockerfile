@@ -11,11 +11,12 @@ RUN npm install
 # Copy the rest of the application files
 COPY . .
 
-# Debug step: list files in /app
-RUN ls -la /app
 
 # Build the application
 RUN npm run build
+
+# Debug step: list files in /app
+RUN ls -la /app
 
 # Use an official Nginx image to serve the application
 FROM nginx:alpine
