@@ -32,13 +32,13 @@ export default function Home() {
         const params = new URLSearchParams(location.search);
         const code = params.get('code')!;
         setCookie("auth_code", code);
+    }
 
-        if (tokenData !== undefined) {
-            const { access_token, id_token, expires_in } = tokenData;
-            setCookie('access_token', access_token, expires_in);
-            setCookie('JWT', id_token, expires_in);
-            deleteCookie("auth_code");
-        }
+    if (tokenData !== undefined) {
+        const { access_token, id_token, expires_in } = tokenData;
+        setCookie('access_token', access_token, expires_in);
+        setCookie('JWT', id_token, expires_in);
+        deleteCookie("auth_code");
     }
 
     const { data, isLoading: isCalendarLoading, isError: isCalendarError } = useQuery<CalendarDateType[]>({
