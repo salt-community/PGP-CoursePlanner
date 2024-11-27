@@ -17,15 +17,11 @@ const homePage = getHomeUrl();
 
 export default function Home() {
     trackUrl();
-    const { data: tokenData, isError: isTokenError } = useQuery<tokenResponse>({
+    const { data: tokenData } = useQuery<tokenResponse>({
         queryKey: ['accessCode'],
         queryFn: () => getTokens(getCookie("auth_code")!, homePage),
         enabled: !!getCookie("auth_code"),
     })
-
-    if (isTokenError) {
-        deleteCookie('access_token')
-    }
 
     if (location.search) {
         const params = new URLSearchParams(location.search);
