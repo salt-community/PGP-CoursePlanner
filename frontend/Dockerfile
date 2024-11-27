@@ -1,24 +1,25 @@
 # Use the official Node.js image to build the application
 FROM node:14 AS build
-WORKDIR /frontend
+WORKDIR /app
 
 # Copy package.json and package-lock.json to the container
-COPY frontend/package*.json ./
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application files
-COPY frontend/ .
+COPY . .
+
+# Debug step: list files in /app
+RUN ls -la /app
 
 # Build the application
 RUN npm run build
 
 # Use an official Nginx image to serve the application
 FROM nginx:alpine
-
-# Copy the build artifacts from the 'frontend/dist' folder to Nginx's HTML directory
-COPY --from=build /frontend/dist /usr/share/nginx/html
+COPY --from=build dist /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
