@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import Page from "@components/Page";
 import WeekDay from "./calendar/sections/WeekDay";
 import { CalendarDateType } from "./calendar/Types";
-import { getTokens } from "@api/UserApi";
+import { getTokens, tokenResponse } from "@api/UserApi";
 import Login from "./login/Login";
 import { getHomeUrl, trackUrl } from "@helpers/helperMethods";
 import LoadingMessage from "@components/LoadingMessage";
@@ -23,7 +23,7 @@ export default function Home() {
 
     let loading = false;
 
-    const { data: response, isLoading, isError } = useQuery({
+    const { data: response, isLoading, isError } = useQuery<tokenResponse>({
         queryKey: ['accessCode'],
         queryFn: () => getTokens(getCookie("auth_code")!, homePage)
     })

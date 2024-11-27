@@ -17,7 +17,7 @@ export default function Modules() {
     const [filteredModules, setFilteredModules] = useState<ModuleType[]>([]);
     const [tracks, setTracks] = useState<string[]>([]);
 
-    const { data: modules, isLoading, isError } = useQuery({
+    const { data: modules, isLoading, isError } = useQuery<ModuleType[]>({
         queryKey: ['modules'],
         queryFn: getAllModules
     });

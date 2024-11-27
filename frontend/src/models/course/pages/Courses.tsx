@@ -7,11 +7,12 @@ import ErrorMessage from "@components/ErrorMessage";
 import { getCookie } from "@helpers/cookieHelpers";
 import Login from "@models/login/Login";
 import { trackUrl } from "@helpers/helperMethods";
+import { CourseType } from "../Types";
 
 export default function Courses() {
     trackUrl();
 
-    const { data, isLoading, isError } = useQuery({
+    const { data, isLoading, isError } = useQuery<CourseType[]>({
         queryKey: ['courses'],
         queryFn: getAllCourses
     });

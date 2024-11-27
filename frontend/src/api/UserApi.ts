@@ -6,54 +6,58 @@ export type tokenResponse = {
   id_token: string;
 };
 
-export async function getTokens(auth_code: string, redirect_uri: string) {
-  if (!auth_code || !redirect_uri) {
-    throw new Error("Missing auth code or redirect uri");
+export async function getTokens(auth_code: string, redirect_uri: string): Promise<tokenResponse> {
+  if (!auth_code && !redirect_uri) {
+    throw new Error("Missing auth code and redirect uri");
+  }
+  if (!auth_code) {
+    throw new Error("Missing auth code");
+  }
+  if (!redirect_uri) {
+    throw new Error("Redirect uri");
   }
 
-  try {
-    const code = encodeURIComponent(auth_code);
-    const uri = encodeURIComponent(redirect_uri);
-    const response = await fetch(`${BASE_URL}/${code}/${uri}`, {
-      headers: {
-        Accept: "application/json",
-      },
-    });
+  const code = encodeURIComponent(auth_code);
+  const uri = encodeURIComponent(redirect_uri);
+  const response = await fetch(`${BASE_URL}/${code}/${uri}`, {
+    headers: {
+      Accept: "application/json",
+    },
+  });
 
-    const responseAsJson = await response.json();
-    if (responseAsJson !== undefined && response.ok) {
-      return responseAsJson as tokenResponse;
-    }
-    console.log(responseAsJson);
-  } catch (error) {
-    console.error(error);
+  if (!response.ok) {
+    throw new Error(response.statusText);
   }
+
+  return await response.json();
 }
 
 export async function refreshTokens() {
-  try {
-    const response = await fetch(BASE_URL);
+  const response = await fetch(BASE_URL, {
+    headers: {
+      Accept: "application/json",
+    },
+  });
 
-    const responseAsJson = await response.json();
-    if (responseAsJson != undefined && response.ok) {
-      return responseAsJson as tokenResponse;
-    }
-    throw new Error("refresh token not found");
-  } catch (error) {
-    console.error(error);
+  if (!response.ok) {
+    throw new Error(response.statusText);
   }
+
+  return await response.json();
 }
 
 export async function deleteRefreshToken() {
-  try {
-    await fetch(BASE_URL, {
-      method: "DELETE",
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-        Accept: "application/json",
-      },
-    });
-  } catch (error) {
-    console.error(error);
+  const response = await fetch(BASE_URL, {
+    method: "DELETE",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
   }
+
+  return await response.json();
 }

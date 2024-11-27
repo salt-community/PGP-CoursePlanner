@@ -37,7 +37,7 @@ export default function EditAppliedCourse() {
         }
     };
 
-    const { data: allAppliedCourses } = useQuery({
+    const { data: allAppliedCourses } = useQuery<AppliedCourseType[]>({
         queryKey: ["appliedCourses"],
         queryFn: () => getAllAppliedCourses(),
     });

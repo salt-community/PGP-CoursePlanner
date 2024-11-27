@@ -15,7 +15,7 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
     const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
 
-    const { data: modules } = useQuery({
+    const { data: modules } = useQuery<ModuleType[]>({
         queryKey: ['modules'],
         queryFn: getAllModules
     });

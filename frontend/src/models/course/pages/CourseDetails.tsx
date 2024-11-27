@@ -18,6 +18,7 @@ import Login from "@models/login/Login";
 import { trackUrl } from "@helpers/helperMethods";
 import ColorPickerModal from "@components/ColorPickerModal";
 import { getModulesByCourseId } from "@api/CourseModulesApi";
+import { ModuleType } from "@models/module/Types";
 
 export default function CourseDetails() {
   trackUrl();
@@ -44,7 +45,7 @@ export default function CourseDetails() {
     data: modules,
     isLoading: isLoadingModules,
     isError: isErrorModules,
-  } = useQuery({
+  } = useQuery<ModuleType[]>({
     queryKey: ["courseModules", courseId],
     queryFn: () => getModulesByCourseId(parseInt(courseId)),
   });
@@ -53,7 +54,7 @@ export default function CourseDetails() {
     data: allAppliedCourses,
     isLoading: isLoadingAppliedCourses,
     isError: isErrorAppliedCourses,
-  } = useQuery({
+  } = useQuery<AppliedCourseType[]>({
     queryKey: ["appliedCourses"],
     queryFn: () => getAllAppliedCourses(),
   });
