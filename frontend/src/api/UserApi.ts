@@ -58,6 +58,4 @@ export async function deleteRefreshToken() {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-
-  return await response.json();
 }

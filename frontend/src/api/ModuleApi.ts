@@ -47,8 +47,6 @@ export async function postModule(module: ModuleType) {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-
-  return await response.json();
 }
 
 export async function editModule(module: ModuleType) {
@@ -65,8 +63,6 @@ export async function editModule(module: ModuleType) {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-
-  return await response.json();
 }
 
 export async function deleteModule(id: number) {
@@ -82,6 +78,4 @@ export async function deleteModule(id: number) {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-
-  return await response.json();
 }

@@ -17,8 +17,6 @@ export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-
-  return await response.json();
 }
 
 export async function getAllAppliedCourses() {
@@ -48,8 +46,6 @@ export async function deleteAppliedCourse(id: number) {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-
-  return await response.json();
 }
 
 export async function getAppliedCourseById(id: number) {
@@ -80,6 +76,4 @@ export async function editAppliedCourse(appliedCourse: AppliedCourseType) {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-
-  return await response.json();
 }

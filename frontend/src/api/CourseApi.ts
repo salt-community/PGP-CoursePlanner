@@ -47,8 +47,6 @@ export async function postCourse(course: CourseType) {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-
-  return await response.json();
 }
 
 export async function editCourse(course: CourseType) {
@@ -65,8 +63,6 @@ export async function editCourse(course: CourseType) {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-
-  return await response.json();
 }
 
 export async function deleteCourse(id: number) {
@@ -82,6 +78,4 @@ export async function deleteCourse(id: number) {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-
-  return await response.json();
 }

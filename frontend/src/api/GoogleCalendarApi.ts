@@ -32,7 +32,6 @@ export async function postCourseToGoogle(eventTemplate: GoogleEvent[]) {
       throw new Error(response.statusText);
     }
     alert("Events added, check your Google Calendar!");
-    return await response.json();
   });
 }
 
@@ -47,8 +46,6 @@ export async function deleteSingleGoogleEvent(eventId: string) {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-
-  return await response.json();
 }
 
 export const getGoogleCourseEvents = async (course: string): Promise<EventDataArr> => {

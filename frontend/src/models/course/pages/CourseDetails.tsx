@@ -126,9 +126,13 @@ export default function CourseDetails() {
         moduleIds: modules?.map(m => m.id!),
         isApplied: true
       };
-      const response = postAppliedCourse(appliedCourse);
-      if ((await response) != undefined && (await response)!.ok) {
+      try {
+        await postAppliedCourse(appliedCourse);
         navigate("/activecourses");
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error.message);
+        }
       }
     }
   };
