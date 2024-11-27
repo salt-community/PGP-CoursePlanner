@@ -21,7 +21,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const [filteredModules, setFilteredModules] = useState<ModuleType[]>([]);
     const [tracks, setTracks] = useState<string[]>([]);
 
-    const { data: modules } = useQuery({
+    const { data: modules } = useQuery<ModuleType[]>({
         queryKey: ['modules'],
         queryFn: getAllModules
     });

@@ -17,7 +17,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
     const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
 
-    const { data: modules } = useQuery({
+    const { data: modules } = useQuery<ModuleType[]>({
         queryKey: ['modules'],
         queryFn: getAllModules
     });

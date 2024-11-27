@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllModules } from "@api/ModuleApi";
 import UpArrowBtn from "@components/buttons/UpArrowBtn";
 import DownArrowBtn from "@components/buttons/DownArrowBtn";
-import { DayType, EventType } from "@models/module/Types";
+import { DayType, EventType, ModuleType } from "@models/module/Types";
 
 interface ModuleEditProps {
     appliedModules: AppliedModuleType[];
@@ -20,7 +20,7 @@ interface ModuleEditProps {
 
 export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEditProps) {
 
-    const { data: modules, isLoading, error } = useQuery({
+    const { data: modules, isLoading, error } = useQuery<ModuleType[]>({
         queryKey: ["modules"],
         queryFn: getAllModules,
     });

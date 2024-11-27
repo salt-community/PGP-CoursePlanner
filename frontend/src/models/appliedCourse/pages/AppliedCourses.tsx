@@ -19,7 +19,7 @@ export default function AppliedCourses() {
     const [pastCourses, setPastCourses] = useState<AppliedCourseType[]>([]);
     const [futureCourses, setFutureCourses] = useState<AppliedCourseType[]>([]);
 
-    const { data: allAppliedCourses, isLoading, isError } = useQuery({
+    const { data: allAppliedCourses, isLoading, isError } = useQuery<AppliedCourseType[]>({
         queryKey: ['allAppliedCourses'],
         queryFn: getAllAppliedCourses
     });

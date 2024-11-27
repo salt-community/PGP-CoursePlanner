@@ -37,8 +37,8 @@ export default function AppliedCourseDetails() {
         mutationFn: (id: number) => {
             return deleteAppliedCourse(id);
         },
-        onSuccess: (_data, id) => {
-            queryClient.invalidateQueries({ queryKey: ['allAppliedCourses', id] })
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['allAppliedCourses'] })
             navigate(`/activecourses`);
         }
     })

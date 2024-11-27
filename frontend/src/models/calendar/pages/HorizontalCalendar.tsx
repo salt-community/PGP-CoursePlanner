@@ -11,6 +11,7 @@ import { getCookie } from "@helpers/cookieHelpers";
 import Login from "@models/login/Login";
 import { ZoomOutButton } from "../components/ZoomOutBtn";
 import { ZoomInButton } from "../components/ZoomInBtn";
+import { AppliedCourseType } from "@models/course/Types";
 
 export type Activity = {
   id: number;
@@ -34,7 +35,7 @@ const HorizontalCalendar: React.FC = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const { data: appliedCourses } = useQuery({
+  const { data: appliedCourses } = useQuery<AppliedCourseType[]>({
     queryKey: ["appliedCourses"],
     queryFn: getAllAppliedCourses,
   });
