@@ -30,7 +30,8 @@ jobs:
 
     - name: Build and push Docker image for Frontend
       run: |
-        docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/courseplanner-frontend:latest ./frontend
+        cd frontend
+        docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/courseplanner-frontend:latest
         docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/courseplanner-frontend:latest
 
     - name: Deploy to Cloud Run
