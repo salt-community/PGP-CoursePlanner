@@ -1,48 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
-import LoadingMessage from "@components/LoadingMessage";
-import { setCookie } from "@helpers/cookieHelpers";
-import { refreshTokens, tokenResponse } from "@api/UserApi";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { getHomeUrl } from "@helpers/helperMethods";
 
 const redirectLink = getHomeUrl();
 const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=openid https://www.googleapis.com/auth/calendar.events.owned&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=${redirectLink}&client_id=735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com&access_type=offline&prompt=consent`;
 
 export default function Login() {
-  const navigate = useNavigate();
-
-  const login = () => {
+  function handleLogin() {
     location.href = LOGIN_URL;
-  };
-
-  const {
-    data: response,
-    isLoading,
-    isError,
-  } = useQuery<tokenResponse>({
-    queryKey: ["accessCode"],
-    queryFn: () => refreshTokens(),
-  });
-
-  if (response !== undefined && response !== null && !isError) {
-    const { access_token, id_token, expires_in } = response;
-
-
-
-    setCookie("access_token", access_token, expires_in);
-    setCookie("JWT", id_token, expires_in);
-    window.location.reload();
   }
-  useEffect(() => {
-    if (isError) {
-      navigate("/login");
-    }
-  }, []);
 
-  return isLoading || response ? (
-    <LoadingMessage />
-  ) : (
+  return (
     <section className="px-5 text-center w-full h-screen flex justify-center items-center flex-col gap-4">
       <img
         src={"https://salt.dev/wp-content/uploads/2024/02/salt-logo-dark.svg"}
@@ -51,7 +17,7 @@ export default function Login() {
       />
       <button
         type="button"
-        onClick={() => login()}
+        onClick={() => handleLogin()}
         className="text-white w-full  bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between mr-2 mb-2 max-w-sm">
         <svg
           className="mr-2 -ml-1 w-4 h-4"
