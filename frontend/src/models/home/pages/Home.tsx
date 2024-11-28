@@ -2,7 +2,7 @@ import { getCookie, setCookie } from "@helpers/cookieHelpers";
 import Page from "@components/Page";
 import Login from "./Login";
 import WeeksContainer from "../sections/WeeksContainer";
-import { setTokenCookies } from "../helpers/useGetTokens";
+import { setTokenCookies } from "../helpers/setTokenCookies";
 import { getTokens, tokenResponse } from "@api/UserApi";
 import { useQuery } from "@tanstack/react-query";
 
