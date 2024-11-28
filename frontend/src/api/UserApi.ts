@@ -7,6 +7,16 @@ export type tokenResponse = {
 };
 
 export async function getTokens(auth_code: string, redirect_uri: string) {
+  if (!auth_code && !redirect_uri) {
+    throw new Error("Missing auth code and redirect uri");
+  }
+  if (!auth_code) {
+    throw new Error("Missing auth code");
+  }
+  if (!redirect_uri) {
+    throw new Error("Redirect uri");
+  }
+
   const code = encodeURIComponent(auth_code);
   const uri = encodeURIComponent(redirect_uri);
   const response = await fetch(`${BASE_URL}/${code}/${uri}`, {

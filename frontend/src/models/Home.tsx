@@ -27,7 +27,6 @@ export default function Home() {
     const { data: tokenData } = useQuery<tokenResponse>({
         queryKey: ['accessCode'],
         queryFn: () => getTokens(getCookie("auth_code")!, homePage),
-        enabled: !!getCookie("auth_code") && !getCookie("JWT") && !getCookie("access_token"),
     })
 
     if (tokenData !== undefined) {
