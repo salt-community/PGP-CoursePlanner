@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCookie, setCookie } from "@helpers/cookieHelpers";
+import { deleteCookie, getCookie, setCookie } from "@helpers/cookieHelpers";
 import { currentMonth, currentWeek, currentYear, getDateAsString, today, weekDays, weekDaysNextWeek } from "../helpers/dateHelpers";
 import { getCalendarDateWeeks } from "@api/CalendarDateApi";
 import { getWeek, format } from "date-fns";
@@ -12,28 +12,37 @@ import Login from "./login/Login";
 import { getHomeUrl, trackUrl } from "@helpers/helperMethods";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
+import { useEffect, useState } from "react";
 
 const homePage = getHomeUrl();
 
 export default function Home() {
     trackUrl();
+    const [searchParams, setSearchParams] = useState<URLSearchParams | null>(null);
+
+    useEffect(() => {
+        if (location.search) {
+            const params = new URLSearchParams(location.search);
+            setSearchParams(params);
+        }
+    }, [location.search]);
+
+    if (searchParams) {
+        const code = searchParams.get('code')!;
+        setCookie("auth_code", code);
+    }
+
     const { data: tokenData } = useQuery<tokenResponse>({
         queryKey: ['accessCode'],
         queryFn: () => getTokens(getCookie("auth_code")!, homePage),
         enabled: !!getCookie("auth_code"),
-        retry: 4
     })
-
-    if (location.search) {
-        const params = new URLSearchParams(location.search);
-        const code = params.get('code')!;
-        setCookie("auth_code", code);
-    }
 
     if (tokenData !== undefined) {
         const { access_token, id_token, expires_in } = tokenData;
         setCookie('access_token', access_token, expires_in);
         setCookie('JWT', id_token, expires_in);
+        deleteCookie('auth_code');
     }
 
     const { data, isLoading: isCalendarLoading, isError: isCalendarError } = useQuery<CalendarDateType[]>({
