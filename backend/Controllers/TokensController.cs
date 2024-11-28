@@ -140,8 +140,8 @@ namespace backend.Controllers
                 var data = responseData.Value as TokenResponse;
 
                 var loggedInUser = new LoggedInUser() { Refresh_Token = data!.Refresh_token };
-                await _context.LoggedInUser.AddAsync(loggedInUser);
-                await _context.SaveChangesAsync();
+                _context.LoggedInUser.Add(loggedInUser);
+                _context.SaveChanges();
                 return new TokenResponse()
                 {
                     Access_token = data!.Access_token,
