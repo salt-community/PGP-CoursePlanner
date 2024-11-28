@@ -55,7 +55,7 @@ builder.Services.AddScoped<IService<Day>, DayService>();
 
 var app = builder.Build();
 
-app.UseMiddleware<ExceptionHandlingMiddleware>();
+//app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseCors(x => x
     .AllowAnyMethod()
