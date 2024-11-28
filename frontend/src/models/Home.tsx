@@ -11,9 +11,6 @@ import { getTokens, tokenResponse } from "@api/UserApi";
 import Login from "./login/Login";
 import { trackUrl } from "@helpers/helperMethods";
 import LoadingMessage from "@components/LoadingMessage";
-import ErrorMessage from "@components/ErrorMessage";
-
-
 
 export default function Home() {
     trackUrl();
@@ -38,7 +35,7 @@ export default function Home() {
         location.href = "/";
     }
 
-    const { data, isLoading: isCalendarLoading, isError: isCalendarError } = useQuery<CalendarDateType[]>({
+    const { data, isLoading: isCalendarLoading } = useQuery<CalendarDateType[]>({
         queryKey: ['CalendarWeeks'],
         queryFn: () => getCalendarDateWeeks(currentWeek),
         enabled: !!getCookie("JWT"),
@@ -53,54 +50,56 @@ export default function Home() {
         return <Login />
     }
 
-    if (isCalendarLoading || (!getCookie("JWT") && !getCookie("access_token"))) {
-        return <LoadingMessage />
-    }
-
-    if (isCalendarError) {
-        return <ErrorMessage />
-    }
-
     return (
         <Page>
             <section className="pl-20 pr-20 pb-20 flex flex-col items-center">
                 <h1 className="text-2xl font-semibold">Current Week {getWeek(new Date())}</h1>
-                <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-5">
-                    {weekDays.map((day, index) =>
-                        getDateAsString(day) == today
-                            ? (
-                                <section key={format(day, 'd')} className="flex flex-col border-2 border-primary rounded-lg w-full gap-3">
+                {isCalendarLoading
+                    ?
+                    <LoadingMessage />
+                    :
+                    <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-5">
+                        {weekDays.map((day, index) =>
+                            getDateAsString(day) == today
+                                ? (
+                                    <section key={format(day, 'd')} className="flex flex-col border-2 border-primary rounded-lg w-full gap-3">
+                                        <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:-translate-y-0.5">
+                                            <h1 className="item-center text-xl font-bold text-center text-primary">{format(getDateAsString(day), 'EEEE')}
+                                                <br /> {day.getDate()} {monthNames[day.getMonth()]}
+                                            </h1>
+                                        </Link>
+                                        {data && data[index] !== null ? <WeekDay dateContent={data[index].dateContent} /> : ""}
+                                    </section>
+                                ) : (<section key={format(day, 'd')} className="flex flex-col border border-black rounded-lg w-full gap-3">
                                     <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:-translate-y-0.5">
-                                        <h1 className="item-center text-xl font-bold text-center text-primary">{format(getDateAsString(day), 'EEEE')}
+                                        <h1 className="item-center text-lg text-center">{format(getDateAsString(day), 'EEEE')}
                                             <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                         </h1>
                                     </Link>
                                     {data && data[index] !== null ? <WeekDay dateContent={data[index].dateContent} /> : ""}
                                 </section>
-                            ) : (<section key={format(day, 'd')} className="flex flex-col border border-black rounded-lg w-full gap-3">
+                                ))}
+                    </section>
+                }
+                <h1 className="text-2xl font-semibold">Next Week {getWeek(nextWeek)}</h1>
+                {isCalendarLoading
+                    ?
+                    <LoadingMessage />
+                    :
+                    <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-3">
+                        {weekDaysNextWeek.map((day, index) =>
+
+                            <section key={format(day, 'd')} className="flex flex-col border border-black rounded-lg w-full gap-3">
                                 <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:-translate-y-0.5">
                                     <h1 className="item-center text-lg text-center">{format(getDateAsString(day), 'EEEE')}
                                         <br /> {day.getDate()} {monthNames[day.getMonth()]}
                                     </h1>
                                 </Link>
-                                {data && data[index] !== null ? <WeekDay dateContent={data[index].dateContent} /> : ""}
+                                {data && data[index + 7] !== null ? <WeekDay dateContent={data[index + 7].dateContent} /> : ""}
                             </section>
-                            ))}
-                </section>
-                <h1 className="text-2xl font-semibold">Next Week {getWeek(nextWeek)}</h1>
-                <section className="flex rounded-lg w-full justify-between m-5 gap-3 p-3">
-                    {weekDaysNextWeek.map((day, index) =>
-
-                        <section key={format(day, 'd')} className="flex flex-col border border-black rounded-lg w-full gap-3">
-                            <Link to={`/calendar/day/date=${getDateAsString(day)}`} className="hover:-translate-y-0.5">
-                                <h1 className="item-center text-lg text-center">{format(getDateAsString(day), 'EEEE')}
-                                    <br /> {day.getDate()} {monthNames[day.getMonth()]}
-                                </h1>
-                            </Link>
-                            {data && data[index + 7] !== null ? <WeekDay dateContent={data[index + 7].dateContent} /> : ""}
-                        </section>
-                    )}
-                </section>
+                        )}
+                    </section>
+                }
                 <div className="flex flex-row gap-2">
                     <Link to={`/calendar/month/monthyear=${currentMonth}-${currentYear}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to calendar</Link>
                     <Link to={`/calendar/timeline`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to timeline</Link>
