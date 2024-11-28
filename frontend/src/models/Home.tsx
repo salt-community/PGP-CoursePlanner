@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { deleteCookie, getCookie, setCookie } from "@helpers/cookieHelpers";
+import { getCookie, setCookie } from "@helpers/cookieHelpers";
 import { currentMonth, currentWeek, currentYear, getDateAsString, today, weekDays, weekDaysNextWeek } from "../helpers/dateHelpers";
 import { getCalendarDateWeeks } from "@api/CalendarDateApi";
 import { getWeek, format } from "date-fns";
@@ -34,7 +34,6 @@ export default function Home() {
         const { access_token, id_token, expires_in } = tokenData;
         setCookie('access_token', access_token, expires_in);
         setCookie('JWT', id_token, expires_in);
-        deleteCookie("auth_code");
     }
 
     const { data, isLoading: isCalendarLoading, isError: isCalendarError } = useQuery<CalendarDateType[]>({
