@@ -22,8 +22,15 @@ string? connectionString = builder.Environment.IsDevelopment() ?
                         builder.Configuration.GetConnectionString("DevelopmentDb") : //Change this variable to update all three databases
                         Environment.GetEnvironmentVariable("ConnectionStringDeployed");
 
+//builder.Services.AddDbContext<DataContext>(options =>
+//    options.UseNpgsql(connectionString ?? deploymentDevelop ?? throw new InvalidOperationException("Connection string 'DevelopmentDb' or 'ConnectionStringDeployed' not found.")));
+
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseNpgsql(connectionString ?? deploymentDevelop ?? throw new InvalidOperationException("Connection string 'DevelopmentDb' or 'ConnectionStringDeployed' not found.")));
+    options.UseNpgsql(connectionString ?? deploymentDevelop ?? throw new InvalidOperationException("Connection string 'DevelopmentDb' or 'ConnectionStringDeployed' not found."))
+           .EnableSensitiveDataLogging()  // Optional: logs query parameter values (for debugging only).
+           .LogTo(Console.WriteLine, LogLevel.Information)  // Logs EF Core activity to the console.
+            .AddInterceptors(new DbIntercept())); // Custom logging for connections.
+
 
 var JwtSecurityScheme = new OpenApiSecurityScheme()
 {
@@ -54,6 +61,18 @@ builder.Services.AddScoped<IService<Course>, CourseService>();
 builder.Services.AddScoped<IService<Day>, DayService>();
 
 var app = builder.Build();
+
+app.Use(async (context, next) => // this middleware is only used for debugging. remove later.
+{
+    var requestId = context.TraceIdentifier; // Unique request identifier
+    Console.WriteLine($"[Request] {requestId} {context.Request.Method} {context.Request.Path}");
+
+    // Call the next middleware in the pipeline
+    await next();
+
+    Console.WriteLine($"[Response] {requestId} {context.Response.StatusCode}");
+});
+
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
