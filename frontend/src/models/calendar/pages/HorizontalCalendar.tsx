@@ -8,7 +8,7 @@ import { currentMonth, currentYear, currentWeek } from "@helpers/dateHelpers";
 import TimeLineCourse from "../sections/TimeLineCourse";
 import TimeLineXaxis from "../sections/TimeLineXaxis";
 import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/login/Login";
+import Login from "@models/home/pages/Login";
 import { ZoomOutButton } from "../components/ZoomOutBtn";
 import { ZoomInButton } from "../components/ZoomInBtn";
 import { AppliedCourseType } from "@models/course/Types";

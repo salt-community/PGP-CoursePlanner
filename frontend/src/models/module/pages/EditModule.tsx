@@ -6,7 +6,7 @@ import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import Module from "../sections/Module";
 import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/login/Login";
+import Login from "@models/home/pages/Login";
 
 export default function EditModule() {
     const moduleId = useIdFromPath();

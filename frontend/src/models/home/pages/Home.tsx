@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { deleteCookie, getCookie, setCookie } from "@helpers/cookieHelpers";
-import { currentMonth, currentWeek, currentYear, getDateAsString, today, weekDays, weekDaysNextWeek } from "../helpers/dateHelpers";
+import { currentMonth, currentWeek, currentYear, getDateAsString, today, weekDays, weekDaysNextWeek } from "../../../helpers/dateHelpers";
 import { getCalendarDateWeeks } from "@api/CalendarDateApi";
 import { getWeek, format } from "date-fns";
 import { Link } from "react-router-dom";
 import Page from "@components/Page";
-import WeekDay from "./calendar/sections/WeekDay";
-import { CalendarDateType } from "./calendar/Types";
+import WeekDay from "../../calendar/sections/WeekDay";
+import { CalendarDateType } from "../../calendar/Types";
 import { getTokens, tokenResponse } from "@api/UserApi";
-import Login from "./login/Login";
+import Login from "./Login";
 import LoadingMessage from "@components/LoadingMessage";
 
 export default function Home() {

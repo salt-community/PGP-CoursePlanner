@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { deleteAppliedCourse, getAppliedCourseById } from "@api/AppliedCourseApi";
 import 'reactjs-popup/dist/index.css';
 import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/login/Login";
+import Login from "@models/home/pages/Login";
 import { AppliedCourseType } from "@models/course/Types";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteBtn from "@components/buttons/DeleteBtn";

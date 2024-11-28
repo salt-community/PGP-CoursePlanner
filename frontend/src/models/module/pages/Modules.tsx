@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/login/Login";
+import Login from "@models/home/pages/Login";
 import { useQuery } from "@tanstack/react-query";
 import FilterArea from "@models/course/sections/FilterArea";
 import { useEffect, useState } from "react";
