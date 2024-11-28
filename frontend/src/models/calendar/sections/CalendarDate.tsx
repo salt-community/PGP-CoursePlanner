@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { today } from "@helpers/dateHelpers";
 import { DateContent } from "../Types";
-import { trackUrl } from "@helpers/helperMethods";
 
 type Props = {
     dateContent: DateContent[];
@@ -10,8 +9,6 @@ type Props = {
 }
 
 export default function CalenderDate({ dateContent, date }: Props) {
-    trackUrl();
-
     const border = today == date ? "border border-2 border-primary hover:border-primary" : "";
     const text = today == date ? "text-primary font-bold" : "";
 

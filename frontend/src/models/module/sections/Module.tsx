@@ -122,18 +122,6 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         return () => document.removeEventListener('mousedown', handleOutsideClick);
     }, []);
 
-    function getLastTrackedUrl(): string | null {
-        const history = JSON.parse(localStorage.getItem('urlHistory') || '[]');
-
-        if (history.length > 0) {
-            return history[history.length - 1];
-        } else {
-            return null;
-        }
-    }
-    const lastTrackedUrl = getLastTrackedUrl();
-    const splitUrl = lastTrackedUrl?.split("5173")    //change this for deploy!
-
     return (
         <section className="px-4 pb-10 md:px-24 lg:px-56">
             <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
@@ -222,7 +210,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Please fill in all the fields</p>}
                 <div className="flex flex-row gap-2">
                     <SuccessBtn value={buttonText}></SuccessBtn>
-                    <button onClick={() => navigate(splitUrl![1])} className="btn btn-sm mt-4 max-w-66 btn-info text-white">Go back without saving changes</button>
+                    <button onClick={() => navigate(`/modules/details/${module.id}`)} className="btn btn-sm mt-4 max-w-66 btn-info text-white">Go back without saving changes</button>
                 </div>
             </form>
         </section>

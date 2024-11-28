@@ -202,22 +202,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 });
                 setCourseModules(editedModules);
             }
-        } else {
-            console.log("No track selected.");
         }
     }
-
-    function getLastTrackedUrl(): string | null {
-        const history = JSON.parse(localStorage.getItem('urlHistory') || '[]');
-
-        if (history.length > 0) {
-            return history[history.length - 1];
-        } else {
-            return null;
-        }
-    }
-    const lastTrackedUrl = getLastTrackedUrl();
-    const splitUrl = lastTrackedUrl?.split("5173")    //change this for deploy!
 
     return (
         <section className="px-4 md:px-24 lg:px-56">
@@ -243,7 +229,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 {isIncorrectName &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
                 {modules && courseModules.map((thisCourseModule, index) =>
-                    <div key={index}className="flex flex-row">
+                    <div key={index} className="flex flex-row">
                         {index == 0 && index != courseModules.length - 1 &&
                             <div className="flex flex-col w-[26px] mr-2">
                                 <button type="button" className="w-full h-full self-center stroke-base-content" onClick={() => moveDown(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
@@ -293,7 +279,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                     <p>You have selected {Math.floor(filledDays / 5)} weeks and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
                 <div className="flex flex-row gap-2">
                     <SuccessBtn value={buttonText}></SuccessBtn>
-                    <button onClick={() => navigate(splitUrl![1])} className="btn btn-sm mt-4 max-w-66 btn-info text-white">Go back without saving changes</button>
+                    <button onClick={() => navigate(`/courses/details/${course.id}`)} className="btn btn-sm mt-4 max-w-66 btn-info text-white">Go back without saving changes</button>
                 </div>
             </form>
         </section>

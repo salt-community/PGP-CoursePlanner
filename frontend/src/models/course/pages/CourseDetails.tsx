@@ -15,14 +15,11 @@ import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import { getCookie } from "@helpers/cookieHelpers";
 import Login from "@models/login/Login";
-import { trackUrl } from "@helpers/helperMethods";
 import ColorPickerModal from "@components/ColorPickerModal";
 import { getModulesByCourseId } from "@api/CourseModulesApi";
 import { ModuleType } from "@models/module/Types";
 
 export default function CourseDetails() {
-  trackUrl();
-
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
   const [groupEmail, setGroupEmail] = useState<string>("");

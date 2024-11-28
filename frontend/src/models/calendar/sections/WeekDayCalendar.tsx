@@ -2,7 +2,6 @@ import { DateContent } from "../Types";
 import { Link } from "react-router-dom";
 import { today } from "@helpers/dateHelpers";
 import { format } from "date-fns";
-import { trackUrl } from "@helpers/helperMethods";
 
 type Props = {
     date: string;
@@ -10,8 +9,6 @@ type Props = {
 }
 
 export default function WeekDayCalendar({ date, dateContent }: Props) {
-    trackUrl();
-
     const border = today == date ? "border border-2 border-primary hover:border-primary" : "";
     const text = today == date ? "text-primary font-bold" : "";
 
