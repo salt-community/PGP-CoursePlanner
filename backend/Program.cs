@@ -16,8 +16,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-string deploymentDevelop = Environment.GetEnvironmentVariable("ConnectionStringDeployedDevelop")!;
 string? connectionString = builder.Environment.IsDevelopment() ?
                         builder.Configuration.GetConnectionString("DevelopmentDb") : //Change this variable to update all three databases
                         Environment.GetEnvironmentVariable("ConnectionStringDeployed");
@@ -26,7 +24,7 @@ string? connectionString = builder.Environment.IsDevelopment() ?
 //    options.UseNpgsql(connectionString ?? deploymentDevelop ?? throw new InvalidOperationException("Connection string 'DevelopmentDb' or 'ConnectionStringDeployed' not found.")));
 
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseNpgsql(connectionString ?? deploymentDevelop ?? throw new InvalidOperationException("Connection string 'DevelopmentDb' or 'ConnectionStringDeployed' not found."))
+    options.UseNpgsql(connectionString ?? throw new InvalidOperationException("Connection string 'DevelopmentDb' or 'ConnectionStringDeployed' not found."))
            .EnableSensitiveDataLogging()  // Optional: logs query parameter values (for debugging only).
            .LogTo(Console.WriteLine, LogLevel.Information)  // Logs EF Core activity to the console.
             .AddInterceptors(new DbIntercept())); // Custom logging for connections.
@@ -81,7 +79,7 @@ app.UseCors(x => x
     .AllowAnyHeader()
     .AllowAnyOrigin());
 
-if (app.Environment.IsDevelopment() || deploymentDevelop != null)
+if (app.Environment.IsDevelopment())
 {
     using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
