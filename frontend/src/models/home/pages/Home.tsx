@@ -7,6 +7,7 @@ import { getTokens, tokenResponse } from "@api/UserApi";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
+    // This if statement is a production fix for getting the auth code from the URL. 
     if (location.search) {
         const authCode = new URLSearchParams(location.search).get('code');
         if (authCode !== null) {
@@ -19,6 +20,7 @@ export default function Home() {
         queryFn: getTokens,
     })
     setTokenCookies(data);
+    
     return (
         <>
             {!getCookie("auth_code") && (!getCookie("JWT") || !getCookie("access_token"))
