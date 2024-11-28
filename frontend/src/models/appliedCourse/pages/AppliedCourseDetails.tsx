@@ -11,13 +11,10 @@ import DeleteBtn from "@components/buttons/DeleteBtn";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import PDFWeekGenerator from "../sections/PDFWeekGenerator";
 import PDFGenerator from "../sections/PDFGenerator";
-import { trackUrl } from "@helpers/helperMethods";
 import { getModulesByCourseId } from "@api/CourseModulesApi";
 import { ModuleType } from "@models/module/Types";
 
 export default function AppliedCourseDetails() {
-    trackUrl();
-
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
@@ -56,7 +53,7 @@ export default function AppliedCourseDetails() {
         return days;
     }
 
-    const { isPending, data : appliedModules, isError : isAppliedModulesError, error : AppliedModulesError } = useQuery<ModuleType[]>({
+    const { isPending, data : appliedModules, isError : isAppliedModulesError } = useQuery<ModuleType[]>({
         queryKey: ['AppliedModules', appliedCourseId],
         queryFn: () => getModulesByCourseId(Number(appliedCourseId)),
       })
@@ -68,10 +65,8 @@ export default function AppliedCourseDetails() {
 
     let counter = -1;
 
-    console.log(appliedModules);
     if(isPending) return <p>pending</p>;
     if(isAppliedModulesError){
-        console.log(AppliedModulesError)
         return <p>Error</p>
     }
     return (

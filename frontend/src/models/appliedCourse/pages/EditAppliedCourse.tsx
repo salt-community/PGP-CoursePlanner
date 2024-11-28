@@ -130,18 +130,6 @@ export default function EditAppliedCourse() {
         },
     });
 
-    function getLastTrackedUrl(): string | null {
-        const history = JSON.parse(localStorage.getItem("urlHistory") || "[]");
-
-        if (history.length > 0) {
-            return history[history.length - 1];
-        } else {
-            return null;
-        }
-    }
-    const lastTrackedUrl = getLastTrackedUrl();
-    const splitUrl = lastTrackedUrl?.split("5173"); //change this for deploy! TODO
-
     return getCookie("access_token") == undefined ? (
         <Login />
     ) : (
@@ -213,7 +201,7 @@ export default function EditAppliedCourse() {
                                 Save
                             </button>
                             <button
-                                onClick={() => navigate(splitUrl![1])}
+                                onClick={() => navigate(-1)}
                                 className="btn btn-sm mt-6 max-w-66 btn-info text-white"
                             >
                                 Abort

@@ -9,12 +9,9 @@ import WeekDay from "./calendar/sections/WeekDay";
 import { CalendarDateType } from "./calendar/Types";
 import { getTokens, tokenResponse } from "@api/UserApi";
 import Login from "./login/Login";
-import { trackUrl } from "@helpers/helperMethods";
 import LoadingMessage from "@components/LoadingMessage";
 
 export default function Home() {
-    trackUrl();
-
     if (location.search) {
         const authCode = new URLSearchParams(location.search).get('code');
         if (authCode !== null) {

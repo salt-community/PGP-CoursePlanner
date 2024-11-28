@@ -8,13 +8,10 @@ import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import { getCookie } from "@helpers/cookieHelpers";
 import Login from "@models/login/Login";
-import { trackUrl } from "@helpers/helperMethods";
 import { CourseType } from "@models/course/Types";
 import { ModuleType } from "../Types";
 
 export default function ModuleDetails() {
-    trackUrl();
-
     const navigate = useNavigate();
     const moduleId = useIdFromPath();
     const { data: module, isLoading, isError } = useQuery<ModuleType>({
