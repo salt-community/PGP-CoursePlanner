@@ -6,7 +6,7 @@ export type tokenResponse = {
   id_token: string;
 };
 
-export async function getTokens(auth_code: string, redirect_uri: string): Promise<tokenResponse> {
+export async function getTokens(auth_code: string, redirect_uri: string) {
   const code = encodeURIComponent(auth_code);
   const uri = encodeURIComponent(redirect_uri);
   const response = await fetch(`${BASE_URL}/${code}/${uri}`, {
