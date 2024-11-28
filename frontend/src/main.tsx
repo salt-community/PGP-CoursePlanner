@@ -14,12 +14,12 @@ import DayDetails from '@models/calendar/pages/DayDetails'
 import HorizontalCalendar from '@models/calendar/pages/HorizontalCalendar'
 import MonthView from '@models/calendar/pages/MonthView'
 import WeekView from '@models/calendar/pages/WeekView'
-import Home from '@models/Home'
+import Home from '@models/home/pages/Home.tsx'
 import CreateModule from '@models/module/pages/CreateModule'
 import EditModule from '@models/module/pages/EditModule'
 import ModuleDetails from '@models/module/pages/ModuleDetails'
 import Modules from '@models/module/pages/Modules'
-import Login from '@models/login/Login.tsx'
+import Login from '@models/home/pages/Login.tsx'
 import {
   QueryClient,
   QueryClientProvider,

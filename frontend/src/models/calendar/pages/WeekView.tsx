@@ -7,7 +7,7 @@ import Page from "@components/Page";
 import { fullWeekOfWeekNumber, getDateAsString } from "@helpers/dateHelpers";
 import { useWeekFromPath, useYearFromPath } from "@helpers/helperHooks";
 import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/login/Login";
+import Login from "@models/home/pages/Login";
 import { getCalendarDateBatch } from "@api/CalendarDateApi";
 import { CalendarDateType } from "../Types";
 import WeekDayCalendar from "../sections/WeekDayCalendar";

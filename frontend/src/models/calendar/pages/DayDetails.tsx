@@ -11,7 +11,7 @@ import { useDateFromPath } from "@helpers/helperHooks";
 import WeekDay from "../sections/WeekDay";
 import { getDateAsString } from "@helpers/dateHelpers";
 import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/login/Login";
+import Login from "@models/home/pages/Login";
 
 export default function DayDetails() {
     const navigate = useNavigate();

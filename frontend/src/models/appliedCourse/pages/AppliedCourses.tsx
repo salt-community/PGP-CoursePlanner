@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/login/Login";
+import Login from "@models/home/pages/Login";
 import { useEffect, useState } from "react";
 import { AppliedCourseType } from "@models/course/Types";
 

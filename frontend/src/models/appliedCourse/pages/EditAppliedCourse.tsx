@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppliedCourseType } from "@models/course/Types";
 import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/login/Login";
+import Login from "@models/home/pages/Login";
 import InputSmall from "@components/inputFields/InputSmall";
 import { AppliedModuleType } from "../Types";
 import ColorPickerModal from "@components/ColorPickerModal";
