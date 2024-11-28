@@ -15,6 +15,7 @@ export default function NavBar() {
   const handleLogOut = () => {
     deleteCookie('JWT');
     deleteCookie("access_token");
+    deleteCookie("auth_code");
     navigate("/");
     window.location.reload();
   };
