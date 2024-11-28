@@ -1,3 +1,6 @@
+import { setCookie } from "@helpers/cookieHelpers";
+import { getHomeUrl } from "@helpers/helperMethods";
+
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Tokens`;
 
 export type tokenResponse = {
@@ -6,19 +9,15 @@ export type tokenResponse = {
   id_token: string;
 };
 
-export async function getTokens(auth_code: string, redirect_uri: string) {
-  if (!auth_code && !redirect_uri) {
-    throw new Error("Missing auth code and redirect uri");
+export async function getTokens() {
+  const redirectURI = getHomeUrl();
+  const authCode = new URLSearchParams(location.search).get('code');
+  if (authCode === null) {
+    throw new Error("No code found in URL");
   }
-  if (!auth_code) {
-    throw new Error("Missing auth code");
-  }
-  if (!redirect_uri) {
-    throw new Error("Redirect uri");
-  }
-
-  const code = encodeURIComponent(auth_code);
-  const uri = encodeURIComponent(redirect_uri);
+  setCookie("auth_code", authCode);
+  const code = encodeURIComponent(authCode);
+  const uri = encodeURIComponent(redirectURI);
   const response = await fetch(`${BASE_URL}/${code}/${uri}`, {
     headers: {
       Accept: "application/json",

@@ -9,24 +9,25 @@ import WeekDay from "./calendar/sections/WeekDay";
 import { CalendarDateType } from "./calendar/Types";
 import { getTokens, tokenResponse } from "@api/UserApi";
 import Login from "./login/Login";
-import { getHomeUrl, trackUrl } from "@helpers/helperMethods";
+import { trackUrl } from "@helpers/helperMethods";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 
-const homePage = getHomeUrl();
+
 
 export default function Home() {
     trackUrl();
 
     if (location.search) {
-        const params = new URLSearchParams(location.search);
-        const code = params.get('code')!;
-        setCookie("auth_code", code);
+        const authCode = new URLSearchParams(location.search).get('code');
+        if (authCode !== null) {
+            setCookie("auth_code", authCode);
+        }
     }
 
     const { data: tokenData } = useQuery<tokenResponse>({
         queryKey: ['accessCode'],
-        queryFn: () => getTokens(getCookie("auth_code")!, homePage),
+        queryFn: getTokens,
     })
 
     if (tokenData !== undefined) {
@@ -34,6 +35,7 @@ export default function Home() {
         setCookie('access_token', access_token, expires_in);
         setCookie('JWT', id_token, expires_in);
         deleteCookie('auth_code');
+        location.href = "/";
     }
 
     const { data, isLoading: isCalendarLoading, isError: isCalendarError } = useQuery<CalendarDateType[]>({
