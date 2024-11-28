@@ -27,7 +27,7 @@ export default function Home() {
         queryFn: getTokens,
     })
 
-    if (tokenData !== undefined) {
+    if (tokenData) {
         const { access_token, id_token, expires_in } = tokenData;
         setCookie('access_token', access_token, expires_in);
         setCookie('JWT', id_token, expires_in);
@@ -54,7 +54,7 @@ export default function Home() {
         <Page>
             <section className="pl-20 pr-20 pb-20 flex flex-col items-center">
                 <h1 className="text-2xl font-semibold">Current Week {getWeek(new Date())}</h1>
-                {isCalendarLoading
+                {isCalendarLoading || (!getCookie("JWT") || !getCookie("access_token"))
                     ?
                     <LoadingMessage />
                     :
@@ -82,7 +82,7 @@ export default function Home() {
                     </section>
                 }
                 <h1 className="text-2xl font-semibold">Next Week {getWeek(nextWeek)}</h1>
-                {isCalendarLoading
+                {isCalendarLoading || (!getCookie("JWT") || !getCookie("access_token"))
                     ?
                     <LoadingMessage />
                     :
