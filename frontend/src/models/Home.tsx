@@ -49,11 +49,11 @@ export default function Home() {
     nextWeek.setDate(thisWeek.getDate() + 7)
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-    if (!getCookie("auth_code") && !getCookie("JWT") && !getCookie("access_token")) {
+    if (!getCookie("auth_code") && !getCookie("JWT")) {
         return <Login />
     }
 
-    if (isCalendarLoading) {
+    if (isCalendarLoading || !getCookie("JWT")) {
         return <LoadingMessage />
     }
 
