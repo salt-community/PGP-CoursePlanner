@@ -37,6 +37,6 @@ jobs:
       run: |
         gcloud run deploy courseplanner-frontend \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/courseplanner-frontend:latest \
-          --region us-central1 \
+          --region europe-north1 \
           --platform managed \
           --allow-unauthenticated
