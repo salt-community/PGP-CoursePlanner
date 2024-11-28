@@ -12,30 +12,22 @@ import Login from "./login/Login";
 import { getHomeUrl, trackUrl } from "@helpers/helperMethods";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import { useEffect, useState } from "react";
 
 const homePage = getHomeUrl();
 
 export default function Home() {
     trackUrl();
-    const [searchParams, setSearchParams] = useState<URLSearchParams | null>(null);
 
-    useEffect(() => {
-        if (location.search) {
-            const params = new URLSearchParams(location.search);
-            setSearchParams(params);
-        }
-    }, [location.search]);
-
-    if (searchParams) {
-        const code = searchParams.get('code')!;
+    if (location.search) {
+        const params = new URLSearchParams(location.search);
+        const code = params.get('code')!;
         setCookie("auth_code", code);
     }
 
     const { data: tokenData } = useQuery<tokenResponse>({
         queryKey: ['accessCode'],
         queryFn: () => getTokens(getCookie("auth_code")!, homePage),
-        enabled: !!getCookie("auth_code"),
+        enabled: !!getCookie("auth_code") && !getCookie("JWT") && !getCookie("access_token"),
     })
 
     if (tokenData !== undefined) {
