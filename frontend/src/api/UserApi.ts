@@ -6,8 +6,12 @@ export type tokenResponse = {
   id_token: string;
 };
 
-export async function getTokens(auth_code: string, redirect_uri: string): Promise<tokenResponse> {
-  const code = encodeURIComponent(auth_code);
+export async function getTokens(redirect_uri: string): Promise<tokenResponse> {
+  const params = new URLSearchParams(location.search);
+  if (params.get('code') === null) {
+    throw new Error("No code found in URL");
+  }
+  const code = encodeURIComponent(params.get('code')!);
   const uri = encodeURIComponent(redirect_uri);
   const response = await fetch(`${BASE_URL}/${code}/${uri}`, {
     headers: {

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { deleteCookie, getCookie, setCookie } from "@helpers/cookieHelpers";
+import { getCookie, setCookie } from "@helpers/cookieHelpers";
 import { currentMonth, currentWeek, currentYear, getDateAsString, today, weekDays, weekDaysNextWeek } from "../helpers/dateHelpers";
 import { getCalendarDateWeeks } from "@api/CalendarDateApi";
 import { getWeek, format } from "date-fns";
@@ -19,21 +19,13 @@ export default function Home() {
     trackUrl();
     const { data: tokenData } = useQuery<tokenResponse>({
         queryKey: ['accessCode'],
-        queryFn: () => getTokens(getCookie("auth_code")!, homePage),
-        enabled: !!getCookie("auth_code"),
+        queryFn: () => getTokens(homePage),
     })
-
-    if (location.search) {
-        const params = new URLSearchParams(location.search);
-        const code = params.get('code')!;
-        setCookie("auth_code", code);
-    }
 
     if (tokenData !== undefined) {
         const { access_token, id_token, expires_in } = tokenData;
         setCookie('access_token', access_token, expires_in);
         setCookie('JWT', id_token, expires_in);
-        deleteCookie("auth_code");
     }
 
     const { data, isLoading: isCalendarLoading, isError: isCalendarError } = useQuery<CalendarDateType[]>({
@@ -47,7 +39,7 @@ export default function Home() {
     nextWeek.setDate(thisWeek.getDate() + 7)
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-    if (!getCookie("auth_code") && !getCookie("JWT")) {
+    if (!tokenData && !getCookie("JWT")) {
         return <Login />
     }
 
