@@ -35,15 +35,8 @@ public class ModulesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Module>> CreateModule(Module module)
     {
-        try
-        {
             var response = await _service.CreateAsync(module);
             return CreatedAtAction("GetModule", new { id = response.Id }, response);
-        }
-        catch (BadRequestException<Module>)
-        {
-            return BadRequest("Cannot create module with zero days");
-        }
     }
 
     [HttpPut("{id}")]

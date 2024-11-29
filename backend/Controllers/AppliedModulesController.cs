@@ -23,12 +23,9 @@ namespace backend.Controllers
         public async Task<ActionResult<Module>> CreateAppliedModule(Module appliedModule)
         {
             appliedModule.IsApplied = true;
-            try{
+            
             await _service.CreateAsync(appliedModule);
-            }
-            catch(BadRequestException<Module>){
-                return BadRequest("Module cannot be created with zero days");
-            }
+
             return CreatedAtAction("GetAppliedModule", new { id = appliedModule.Id }, appliedModule);
         }
 
