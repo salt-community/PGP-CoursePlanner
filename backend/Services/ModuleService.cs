@@ -63,6 +63,9 @@ public class ModuleService : IService<Module>
     }
     public async Task<Module> CreateAsync(Module module)
     {
+        if(module.Days.Count == 0) {
+            throw new BadRequestException<Module>();
+        }
         _context.ChangeTracker.Clear();
         _context.Entry(module).State = EntityState.Added;
 
