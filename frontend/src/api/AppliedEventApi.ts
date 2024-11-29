@@ -4,7 +4,7 @@ import { EventType } from "@models/module/Types";
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL} from "./backendUrl";
 }/AppliedEvents`;
 
-export async function postAppliedEvent(event: EventType) {
+export async function postAppliedEvent(event: EventType): Promise<EventType> {
   const response = await fetch(BASE_URL, {
     method: "POST",
     headers: {
@@ -16,9 +16,8 @@ export async function postAppliedEvent(event: EventType) {
   });
 
   if (!response.ok) {
-    alert("Failed to apply event");
-    throw new Error("Failed to apply event");
+    throw new Error(response.statusText);
   }
-  const data = await response.json();
-  return data as EventType;
+
+  return await response.json();
 }

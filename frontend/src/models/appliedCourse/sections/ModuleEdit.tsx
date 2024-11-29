@@ -7,7 +7,7 @@ import AppliedModule from "./AppliedModule";
 import { postAppliedModule, updateAppliedModule } from "@api/AppliedModuleApi";
 import { postAppliedDay } from "@api/AppliedDayApi";
 import { postAppliedEvent } from "@api/AppliedEventApi";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllModules } from "@api/ModuleApi";
 import UpArrowBtn from "@components/buttons/UpArrowBtn";
 import DownArrowBtn from "@components/buttons/DownArrowBtn";
@@ -25,9 +25,45 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
         queryFn: getAllModules,
     });
 
+    const queryClient = useQueryClient();
+    const eventMutation = useMutation({
+        mutationFn: (newEvent: EventType) => {
+            return postAppliedEvent(newEvent);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['allAppliedModules'] })
+        }
+    })
+
+    const dayMutation = useMutation({
+        mutationFn: (dayType: DayType) => {
+            return postAppliedDay(dayType);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['allAppliedModules'] })
+        }
+    })
+
+    const appliedModuleMutation = useMutation({
+        mutationFn: (newAppliedModule: AppliedModuleType) => {
+            return updateAppliedModule(newAppliedModule);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['allAppliedModules'] })
+        }
+    })
+
+    const postAppliedModuleMutation = useMutation({
+        mutationFn: (emptyModule: AppliedModuleType) => {
+            return postAppliedModule(emptyModule);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['allAppliedModules'] })
+        }
+    })
+
     if (isLoading) return <p>Loading modules...</p>;
     if (error) return <p>Error loading modules</p>;
-
 
     const handleChange = async (event: SyntheticEvent) => {
         const value = (event.target as HTMLSelectElement).value;
@@ -60,8 +96,8 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
                                 startTime: eventItem.startTime,
                                 endTime: eventItem.endTime,
                             };
-                            const response = await postAppliedEvent(newEvent);
-                            if (response) listEvents.push(response);
+                            eventMutation.mutate(newEvent);
+                            if (eventMutation.data) listEvents.push(eventMutation.data);
                         } catch (error) {
                             console.error("Error posting applied event:", error);
                         }
@@ -76,8 +112,8 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
                 };
 
                 try {
-                    const response = await postAppliedDay(newDay);
-                    if (response) listDays.push(response);
+                    dayMutation.mutate(newDay);
+                    if (dayMutation.data) listDays.push(dayMutation.data);
                 } catch (error) {
                     console.error("Error posting applied day:", error);
                 }
@@ -90,17 +126,12 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
             days: listDays.sort((a, b) => a.dayNumber - b.dayNumber),
         };
 
-        updateAppliedModule(newAppliedModule)
-            .then((response) => {
-                if (response) {
-                    const updatedModules = [...appliedModules!];
-                    updatedModules[moduleIndex] = newAppliedModule;
-                    onUpdateModules(updatedModules);
-                }
-            })
-            .catch((error) => {
-                console.error("Error posting applied module:", error);
-            });
+        appliedModuleMutation.mutate(newAppliedModule)
+        if (appliedModuleMutation.data) {
+            const updatedModules = [...appliedModules!];
+            updatedModules[moduleIndex] = newAppliedModule;
+            onUpdateModules(updatedModules);
+        }
     };
 
     async function editAppliedModule(
@@ -120,17 +151,12 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
             days: [],
         };
 
-        postAppliedModule(emptyModule)
-            .then((response) => {
-                if (response) {
-                    const editedModules = [...appliedModules!];
-                    editedModules.splice(index + 1, 0, response);
-                    onUpdateModules(editedModules);
-                }
-            })
-            .catch((error) => {
-                console.error("Error posting applied module:", error);
-            });
+        postAppliedModuleMutation.mutate(emptyModule)
+        if (postAppliedModuleMutation.data) {
+            const editedModules = [...appliedModules!];
+            editedModules.splice(index + 1, 0, postAppliedModuleMutation.data);
+            onUpdateModules(editedModules);
+        }
     };
 
     const handleDeleteModule = (index: number) => {
