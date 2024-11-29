@@ -10,15 +10,13 @@ export type tokenResponse = {
 };
 
 export async function getTokens() {
-  const redirectURI = getHomeUrl();
   const authCode = new URLSearchParams(location.search).get('code');
   if (authCode === null) {
     throw new Error("No code found in URL");
   }
   setCookie("auth_code", authCode);
-  const code = encodeURIComponent(authCode);
-  const uri = encodeURIComponent(redirectURI);
-  const response = await fetch(`${BASE_URL}/${code}/${uri}`, {
+  const redirectURI = getHomeUrl();
+  const response = await fetch(`${BASE_URL}/${encodeURIComponent(authCode)}/${encodeURIComponent(redirectURI)}`, {
     headers: {
       Accept: "application/json",
     },
