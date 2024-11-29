@@ -3,7 +3,7 @@ import { AppliedModuleType } from "@models/appliedCourse/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedModules`;
 
-export async function postAppliedModule(module: AppliedModuleType) {
+export async function postAppliedModule(module: AppliedModuleType): Promise<AppliedModuleType> {
   const response = await fetch(BASE_URL, {
     method: "POST",
     headers: {
@@ -15,11 +15,10 @@ export async function postAppliedModule(module: AppliedModuleType) {
   });
 
   if (!response.ok) {
-    alert("Failed to apply module");
-    throw new Error("Failed to apply module");
+    throw new Error(response.statusText);
   }
-  const data = await response.json();
-  return data as AppliedModuleType;
+
+  return await response.json();
 }
 
 export async function updateAppliedModule(appliedModule: AppliedModuleType) {
@@ -31,8 +30,8 @@ export async function updateAppliedModule(appliedModule: AppliedModuleType) {
     },
     body: JSON.stringify(appliedModule),
   });
+
   if (!response.ok) {
-    throw new Error("Failed to edit applied module");
+    throw new Error(response.statusText);
   }
-  return true;
 }

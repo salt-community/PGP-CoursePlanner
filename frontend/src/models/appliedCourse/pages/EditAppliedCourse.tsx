@@ -30,10 +30,19 @@ export default function EditAppliedCourse() {
 
     const navigate = useNavigate();
 
+    const appliedModuleMutation = useMutation({
+        mutationFn: (newAppliedModule: AppliedModuleType) => {
+            return updateAppliedModule(newAppliedModule);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['allAppliedModules'] })
+        }
+    })
+
     const handleUpdateModules = (updatedModules: AppliedModuleType[]) => {
         setAppliedModules(updatedModules);
         for(let i = 0; i < updatedModules.length; i++ ){
-            updateAppliedModule(updatedModules[i]);
+            appliedModuleMutation.mutate(updatedModules[i]);
         }
     };
 

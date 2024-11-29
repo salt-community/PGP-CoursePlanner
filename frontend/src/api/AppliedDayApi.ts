@@ -3,7 +3,7 @@ import { DayType } from "@models/module/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedDays`;
 
-export async function postAppliedDay(day: DayType) {
+export async function postAppliedDay(day: DayType): Promise<DayType> {
   const response = await fetch(BASE_URL, {
     method: "POST",
     headers: {
@@ -15,9 +15,8 @@ export async function postAppliedDay(day: DayType) {
   });
 
   if (!response.ok) {
-    alert("Failed to apply day");
-    throw new Error("Failed to apply day");
+    throw new Error(response.statusText);
   }
-  const data = await response.json();
-  return data as DayType;
+
+  return await response.json();
 }
