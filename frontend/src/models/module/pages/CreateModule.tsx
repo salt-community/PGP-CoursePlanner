@@ -1,7 +1,5 @@
 import { postModule } from "@api/ModuleApi"
 import Page from "@components/Page"
-import { getCookie } from "@helpers/cookieHelpers"
-import Login from "@models/home/pages/Login"
 import Module from "../sections/Module"
 import { ModuleType } from "../Types"
 
@@ -19,10 +17,8 @@ export default function CreateModule() {
     }
 
     return (
-        getCookie("access_token") == undefined
-            ? <Login />
-            : <Page>
-                <Module module={emptyModule} submitFunction={postModule} buttonText="Create" />
-            </Page>
+        <Page>
+            <Module module={emptyModule} submitFunction={postModule} buttonText="Create" />
+        </Page>
     )
 }

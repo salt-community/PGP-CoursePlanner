@@ -19,7 +19,7 @@ import CreateModule from '@models/module/pages/CreateModule'
 import EditModule from '@models/module/pages/EditModule'
 import ModuleDetails from '@models/module/pages/ModuleDetails'
 import Modules from '@models/module/pages/Modules'
-import Login from '@models/home/pages/Login.tsx'
+import Login from '@models/login/Login.tsx'
 import {
   QueryClient,
   QueryClientProvider,
@@ -106,7 +106,6 @@ const router = createBrowserRouter([
 ]);
 
 const queryClient = new QueryClient();
-
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

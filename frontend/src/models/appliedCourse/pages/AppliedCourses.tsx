@@ -5,8 +5,6 @@ import DeleteBtn from "@components/buttons/DeleteBtn";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/home/pages/Login";
 import { useEffect, useState } from "react";
 import { AppliedCourseType } from "@models/course/Types";
 
@@ -68,9 +66,6 @@ export default function AppliedCourses() {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     return (
-        getCookie("access_token") == undefined ?
-            <Login />
-            :
             <Page>
                 <section className="px-4 pb-10 md:px-24 lg:px-56">
                     {isLoading && <LoadingMessage />}

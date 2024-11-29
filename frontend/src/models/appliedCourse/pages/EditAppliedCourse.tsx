@@ -10,8 +10,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppliedCourseType } from "@models/course/Types";
-import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/home/pages/Login";
 import InputSmall from "@components/inputFields/InputSmall";
 import { AppliedModuleType } from "../Types";
 import ColorPickerModal from "@components/ColorPickerModal";
@@ -41,7 +39,7 @@ export default function EditAppliedCourse() {
 
     const handleUpdateModules = (updatedModules: AppliedModuleType[]) => {
         setAppliedModules(updatedModules);
-        for(let i = 0; i < updatedModules.length; i++ ){
+        for (let i = 0; i < updatedModules.length; i++) {
             appliedModuleMutation.mutate(updatedModules[i]);
         }
     };
@@ -56,10 +54,10 @@ export default function EditAppliedCourse() {
         null
     );
 
-    const { data} = useQuery<ModuleType[]>({
+    const { data } = useQuery<ModuleType[]>({
         queryKey: ['AppliedModules', appliedCourseId],
         queryFn: () => getModulesByCourseId(Number(appliedCourseId)),
-      })
+    })
 
     useEffect(() => {
         getAppliedCourseById(parseInt(appliedCourseId)).then((result) => {
@@ -139,12 +137,10 @@ export default function EditAppliedCourse() {
         },
     });
 
-    return getCookie("access_token") == undefined ? (
-        <Login />
-    ) : (
+    return (
         <Page>
             <section className="px-4 md:px-24 lg:px-56">
-                
+
                 {appliedCourse !== undefined && (
                     <div>
                         <div className="flex flex-row gap-4 items-center p-1">
@@ -181,11 +177,11 @@ export default function EditAppliedCourse() {
                             />
                         </div>
                         <div className="p-1">
-                        <ColorPickerModal color={color} setColor={setColor} />  
-                        </div>                        
-                       <div className="mt-10 mb-10">
-                       <ModuleEdit appliedModules={appliedModules || []} onUpdateModules={handleUpdateModules}/>                      
-                       </div>                       
+                            <ColorPickerModal color={color} setColor={setColor} />
+                        </div>
+                        <div className="mt-10 mb-10">
+                            <ModuleEdit appliedModules={appliedModules || []} onUpdateModules={handleUpdateModules} />
+                        </div>
                         {isInvalidDate && (
                             <p
                                 className="error-message text-red-600 text-sm mt-4"
