@@ -65,7 +65,17 @@ public class ModuleService : IService<Module>
     {
         _context.ChangeTracker.Clear();
         _context.Entry(module).State = EntityState.Added;
+
+        foreach (var day in module.Days)
+        {
+            foreach (var eventItem in day.Events)
+            {
+                _context.Events.Add(eventItem);
+            }
+            _context.Days.Add(day);
+        }
         await _context.Modules.AddAsync(module);
+
         await _context.SaveChangesAsync();
 
         return module;
