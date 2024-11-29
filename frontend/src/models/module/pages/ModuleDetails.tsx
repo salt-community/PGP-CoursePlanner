@@ -23,7 +23,7 @@ export default function ModuleDetails() {
     const usedModules: number[] = [];
     if (allCourses) {
         allCourses.forEach(c => {
-            c.moduleIds.forEach(element => {
+            c.moduleIds!.forEach(element => {
                 usedModules.push(element);
             });
         });

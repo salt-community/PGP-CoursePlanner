@@ -9,14 +9,13 @@ import {
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AppliedCourseType } from "@models/course/Types";
 import InputSmall from "@components/inputFields/InputSmall";
-import { AppliedModuleType } from "../Types";
 import ColorPickerModal from "@components/ColorPickerModal";
 import ModuleEdit from "../sections/ModuleEdit";
 import { getModulesByCourseId } from "@api/CourseModulesApi";
 import { ModuleType } from "@models/module/Types";
 import { updateAppliedModule } from "@api/AppliedModuleApi";
+import { CourseType } from "@models/course/Types";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -24,12 +23,12 @@ export default function EditAppliedCourse() {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [color, setColor] = useState<string>("");
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
-    const [appliedModules, setAppliedModules] = useState<AppliedModuleType[]>([]);
+    const [appliedModules, setAppliedModules] = useState<ModuleType[]>([]);
 
     const navigate = useNavigate();
 
     const appliedModuleMutation = useMutation({
-        mutationFn: (newAppliedModule: AppliedModuleType) => {
+        mutationFn: (newAppliedModule: ModuleType) => {
             return updateAppliedModule(newAppliedModule);
         },
         onSuccess: () => {
@@ -37,20 +36,20 @@ export default function EditAppliedCourse() {
         }
     })
 
-    const handleUpdateModules = (updatedModules: AppliedModuleType[]) => {
+    const handleUpdateModules = (updatedModules: ModuleType[]) => {
         setAppliedModules(updatedModules);
         for (let i = 0; i < updatedModules.length; i++) {
             appliedModuleMutation.mutate(updatedModules[i]);
         }
     };
 
-    const { data: allAppliedCourses } = useQuery<AppliedCourseType[]>({
+    const { data: allAppliedCourses } = useQuery<CourseType[]>({
         queryKey: ["appliedCourses"],
         queryFn: () => getAllAppliedCourses(),
     });
 
     const appliedCourseId = useIdFromPath();
-    const [appliedCourse, setAppliedCourse] = useState<AppliedCourseType | null>(
+    const [appliedCourse, setAppliedCourse] = useState<CourseType | null>(
         null
     );
 
@@ -89,18 +88,17 @@ export default function EditAppliedCourse() {
             if (appliedModules?.find((m) => m.name == "")) setIsInvalidModule(true);
         } else {
             const appliedCoursesWithCourseId = allAppliedCourses!.filter(
-                (m) => m.courseId == appliedCourse!.courseId
+                (m) => m.id == appliedCourse!.id
             );
             if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
                 await Promise.all(
                     appliedCoursesWithCourseId.map(async (appliedCourse) => {
                         try {
-                            const newAppliedCourse: AppliedCourseType = {
+                            const newAppliedCourse: CourseType = {
                                 id: appliedCourse.id,
                                 name: appliedCourse.name,
                                 startDate: appliedCourse.startDate,
                                 endDate: appliedCourse.endDate,
-                                courseId: appliedCourse.courseId,
                                 color: color,
                                 isApplied: appliedCourse.isApplied,
                                 moduleIds: appliedModules.map(m => m.id!), // todo: think about why ids are optional
@@ -113,13 +111,11 @@ export default function EditAppliedCourse() {
                 );
             }
 
-            const newAppliedCourse: AppliedCourseType = {
+            const newAppliedCourse: CourseType = {
                 name: appliedCourseName,
                 id: appliedCourse!.id,
-                courseId: appliedCourse!.courseId,
                 startDate: startDate,
                 color: color,
-                modules: appliedModules!,
                 moduleIds: appliedModules.map(m => m.id!),
                 isApplied: appliedCourse!.isApplied
             };
@@ -128,7 +124,7 @@ export default function EditAppliedCourse() {
     };
     const queryClient = useQueryClient();
     const mutation = useMutation({
-        mutationFn: (newAppliedCourse: AppliedCourseType) => {
+        mutationFn: (newAppliedCourse: CourseType) => {
             return editAppliedCourse(newAppliedCourse);
         },
         onSuccess: () => {

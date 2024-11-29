@@ -2,9 +2,9 @@ import InputSmall from "@components/inputFields/InputSmall";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import SuccessBtn from "@components/buttons/SuccessBtn";
 import { useState, FormEvent } from "react";
-import { AppliedModuleProps, AppliedModuleType } from '../Types';
+import { AppliedModuleProps } from '../Types';
 import AppliedDay from "./AppliedDay";
-import { DayType, EventType } from "../../module/Types";
+import { DayType, EventType, ModuleType } from "../../module/Types";
 
 export default function AppliedModule({ submitFunction, module, index, buttonText }: AppliedModuleProps) {
     const [moduleName, setModuleName] = useState<string>(module.name);
@@ -54,7 +54,7 @@ export default function AppliedModule({ submitFunction, module, index, buttonTex
             setIsIncompleteInput(true);
         }
         else {
-            const newModule: AppliedModuleType = {
+            const newModule: ModuleType = {
                 id: module.id ?? 0,
                 name: moduleName.value,
                 numberOfDays: numberOfDays.value,

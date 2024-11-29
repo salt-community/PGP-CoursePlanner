@@ -3,7 +3,6 @@ import { useIdFromPath } from "@helpers/helperHooks";
 import { useEffect, useState } from "react";
 import { deleteAppliedCourse, getAppliedCourseById } from "@api/AppliedCourseApi";
 import 'reactjs-popup/dist/index.css';
-import { AppliedCourseType } from "@models/course/Types";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteBtn from "@components/buttons/DeleteBtn";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -11,6 +10,7 @@ import PDFWeekGenerator from "../sections/PDFWeekGenerator";
 import PDFGenerator from "../sections/PDFGenerator";
 import { getModulesByCourseId } from "@api/CourseModulesApi";
 import { ModuleType } from "@models/module/Types";
+import { CourseType } from "@models/course/Types";
 
 export default function AppliedCourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
@@ -21,7 +21,7 @@ export default function AppliedCourseDetails() {
     const navigate = useNavigate();
 
     const appliedCourseId = useIdFromPath();
-    const [appliedCourse, setAppliedCourse] = useState<AppliedCourseType>();
+    const [appliedCourse, setAppliedCourse] = useState<CourseType>();
     useEffect(() => {
         getAppliedCourseById(parseInt(appliedCourseId))
             .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setEndDate(new Date(result!.endDate!)); setAppliedCourseName(result!.name!); })

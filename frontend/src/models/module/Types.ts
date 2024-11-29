@@ -1,11 +1,11 @@
 export type ModuleType = {
-  id: number;
+  id?: number;
   name: string;
   numberOfDays: number;
   days: DayType[];
-  track: string[];
-  order: number;
-  isApplied: boolean;
+  track?: string[];
+  order?: number;
+  isApplied?: boolean;
 };
 
 export type ModuleProps = {
@@ -19,6 +19,7 @@ export type DayType = {
   dayNumber: number;
   description: string;
   events: EventType[];
+  isApplied?: boolean;
 };
 
 export type DayProps = {
@@ -36,6 +37,7 @@ export type EventType = {
   startTime: string;
   endTime: string;
   description?: string;
+  isApplied?: boolean;
 };
 
 export type EventProps = {

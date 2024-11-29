@@ -16,7 +16,3 @@ export type DateContent = {
     events: EventType[];
     color: string
 }
-
-
-
-  

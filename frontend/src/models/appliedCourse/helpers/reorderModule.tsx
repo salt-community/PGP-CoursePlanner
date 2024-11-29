@@ -1,10 +1,10 @@
-import { AppliedModuleType } from "../Types";
+import { ModuleType } from "@models/module/Types";
 
 export const reorderModule = (
-    modules: AppliedModuleType[],
+    modules: ModuleType[],
     index: number,
     direction: "up" | "down"
-): AppliedModuleType[] => {
+): ModuleType[] => {
     const newModules = [...modules];
     const swapIndex = direction === "up" ? index - 1 : index + 1;
 

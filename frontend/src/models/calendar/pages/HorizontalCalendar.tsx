@@ -9,7 +9,7 @@ import TimeLineCourse from "../sections/TimeLineCourse";
 import TimeLineXaxis from "../sections/TimeLineXaxis";
 import { ZoomOutButton } from "../components/ZoomOutBtn";
 import { ZoomInButton } from "../components/ZoomInBtn";
-import { AppliedCourseType } from "@models/course/Types";
+import { CourseType } from "@models/course/Types";
 
 export type Activity = {
   id: number;
@@ -17,7 +17,6 @@ export type Activity = {
   startDate: Date;
   endDate: Date;
   color: string;
-  courseId: number;
 };
 
 const HorizontalCalendar: React.FC = () => {
@@ -33,7 +32,7 @@ const HorizontalCalendar: React.FC = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const { data: appliedCourses } = useQuery<AppliedCourseType[]>({
+  const { data: appliedCourses } = useQuery<CourseType[]>({
     queryKey: ["appliedCourses"],
     queryFn: getAllAppliedCourses,
   });
@@ -49,8 +48,7 @@ const HorizontalCalendar: React.FC = () => {
           title: ac.name,
           startDate: new Date(ac.startDate),
           endDate: new Date(ac.endDate!),
-          color: ac.color,
-          courseId: ac.courseId
+          color: ac.color!,
         };
         const sameTitleIndex = newActivitiesArray.findIndex(activities => activities.find(activity => activity.title == newActivity.title));
         if (sameTitleIndex != -1) {

@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Page, Text, View, Document, StyleSheet, usePDF } from '@react-pdf/renderer';
-import { AppliedCourseType } from '@models/course/Types';
-import { AppliedModuleType } from '../Types';
+import { CourseType } from '@models/course/Types';
 import { ModuleType } from '@models/module/Types';
 
 type PDFWeekGeneratorProps = {
-    appliedCourse: AppliedCourseType;
+    appliedCourse: CourseType;
     courseWeekDays: string[];
     appliedModules: ModuleType[];
 };
 
 export default function PDFWeekGenerator({ appliedCourse, courseWeekDays, appliedModules }: PDFWeekGeneratorProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
-    const [selectedModuleObject, setSelectedModuleObject] = useState<AppliedModuleType | null>(null);
+    const [selectedModuleObject, setSelectedModuleObject] = useState<ModuleType | null>(null);
     const [documentName, setDocumentName] = useState<string>("");
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
 
@@ -96,7 +95,7 @@ export default function PDFWeekGenerator({ appliedCourse, courseWeekDays, applie
         },
     });
 
-    const generateDocument = (moduleObject: AppliedModuleType | null) => {
+    const generateDocument = (moduleObject: ModuleType | null) => {
         let counter = -1;
         return (
             <Document>
