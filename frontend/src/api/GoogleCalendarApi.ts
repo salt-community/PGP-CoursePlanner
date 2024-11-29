@@ -13,8 +13,7 @@ interface EventDataArr {
   items: EventData[];
 }
 
-const BASE_URL =
-  "https://www.googleapis.com/calendar/v3/calendars/primary/events";
+const BASE_URL = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
 
 export async function postCourseToGoogle(eventTemplate: GoogleEvent[]) {
   try {
