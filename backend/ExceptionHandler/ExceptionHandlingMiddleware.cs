@@ -22,9 +22,7 @@ namespace backend.ExceptionHandler
             }
             catch (Exception exception)
             {
-                // Log full details
-                _logger.LogError(exception, "Request {TraceId} failed: {Message}\n{StackTrace}",
-                    context.TraceIdentifier, exception.Message, exception.StackTrace);
+                _logger.LogError(exception, "An unhandled exception has occured: {Message}", exception.Message);
 
                 await HandleExceptionAsync(context, exception);
             }
@@ -33,16 +31,6 @@ namespace backend.ExceptionHandler
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-
-            if (exception is TimeoutException || exception.InnerException is TimeoutException)
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.GatewayTimeout;
-                return context.Response.WriteAsJsonAsync(new
-                {
-                    status = context.Response.StatusCode,
-                    message = "The operation timed out. Please try again.",
-                });
-            }
 
             if (exception is NotFoundException<int> notFoundEx)
             {
@@ -72,7 +60,7 @@ namespace backend.ExceptionHandler
             var response = new
             {
                 status = context.Response.StatusCode,
-                message = "An error occurred while processing your request.",
+                message = "An error occurres while processing your request.",
                 detailed = exception.Message
             };
 
