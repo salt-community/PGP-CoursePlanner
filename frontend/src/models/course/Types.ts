@@ -1,4 +1,3 @@
-import { AppliedModuleType } from "../appliedCourse/Types";
 import { ModuleType } from "../module/Types";
 
 export type CourseType = {
@@ -29,7 +28,7 @@ export type AppliedCourseType = {
     endDate?: Date;
     courseId: number;
     color: string;
-    modules?: AppliedModuleType[];
+    modules?: ModuleType[];
     moduleIds?: number[];
     isApplied: boolean;
 }

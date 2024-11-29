@@ -1,13 +1,11 @@
-import { CourseModule } from "../course/Types";
-
-
 export type ModuleType = {
-  id?: number;
+  id: number;
   name: string;
   numberOfDays: number;
   days: DayType[];
-  courseModules?: CourseModule[];
-  track?: string[];
+  track: string[];
+  order: number;
+  isApplied: boolean;
 };
 
 export type ModuleProps = {
