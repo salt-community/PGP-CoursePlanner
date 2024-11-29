@@ -63,6 +63,9 @@ public class ModuleService : IService<Module>
     }
     public async Task<Module> CreateAsync(Module module)
     {
+        if(module.Days.Count == 0) {
+            throw new BadRequestException<int>("Cannot create module with zero days");
+        }
         _context.ChangeTracker.Clear();
         _context.Entry(module).State = EntityState.Added;
 
@@ -82,7 +85,9 @@ public class ModuleService : IService<Module>
     }
     public async Task<Module> UpdateAsync(int id, Module module)
     {
-
+        if(module.Days.Count == 0) {
+            throw new BadRequestException<int>("Cannot update module to have zero days");
+        }
         var moduleToUpdate = await _context.Modules
                     .Include(module => module.Days)
                     .ThenInclude(day => day.Events)

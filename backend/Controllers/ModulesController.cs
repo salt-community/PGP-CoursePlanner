@@ -1,3 +1,4 @@
+using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -34,8 +35,8 @@ public class ModulesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Module>> CreateModule(Module module)
     {
-        var response = await _service.CreateAsync(module);
-        return CreatedAtAction("GetModule", new { id = response.Id }, response);
+            var response = await _service.CreateAsync(module);
+            return CreatedAtAction("GetModule", new { id = response.Id }, response);
     }
 
     [HttpPut("{id}")]
