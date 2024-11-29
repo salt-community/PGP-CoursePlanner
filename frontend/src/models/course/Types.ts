@@ -1,12 +1,15 @@
-import { AppliedModuleType } from "../appliedCourse/Types";
 import { ModuleType } from "../module/Types";
 
 export type CourseType = {
     id?: number;
     name: string;
-    numberOfWeeks: number;
-    moduleIds: number[];
-    modules: CourseModule[];
+    startDate: Date;
+    endDate?: Date;
+    numberOfWeeks?: number;
+    moduleIds?: number[];
+    modules?: CourseModule[];
+    color?: string;
+    isApplied?: boolean;
 }
 
 export type CourseProps = {
@@ -20,16 +23,4 @@ export type CourseModule = {
     course?: CourseType;
     moduleId?: number;
     module?: ModuleType;
-}
-
-export type AppliedCourseType = {
-    id?: number;
-    name: string;
-    startDate: Date;
-    endDate?: Date;
-    courseId: number;
-    color: string;
-    modules?: AppliedModuleType[];
-    moduleIds?: number[];
-    isApplied: boolean;
 }

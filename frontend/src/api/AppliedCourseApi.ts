@@ -1,9 +1,9 @@
 import { getCookie } from "@helpers/cookieHelpers";
-import { AppliedCourseType } from "@models/course/Types";
+import { CourseType } from "@models/course/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedCourses`;
 
-export async function postAppliedCourse(appliedCourse: AppliedCourseType) {
+export async function postAppliedCourse(appliedCourse: CourseType) {
   const response = await fetch(BASE_URL, {
     method: "POST",
     headers: {
@@ -63,7 +63,7 @@ export async function getAppliedCourseById(id: number) {
   return await response.json();
 }
 
-export async function editAppliedCourse(appliedCourse: AppliedCourseType) {
+export async function editAppliedCourse(appliedCourse: CourseType) {
   const response = await fetch(`${BASE_URL}/${appliedCourse.id}`, {
     method: "PUT",
     headers: {

@@ -13,7 +13,7 @@ import { ModuleType } from "@models/module/Types";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);
-    const [numOfWeeks, setNumOfWeeks] = useState<number>(course.numberOfWeeks);
+    const [numOfWeeks, setNumOfWeeks] = useState<number>(course.numberOfWeeks!);
     const [isIncorrectModuleInput, setIsIncorrectModuleInput] = useState<boolean>(false);
     const [isIncorrectName, setIsIncorrectName] = useState<boolean>(false);
     const [isNotSelected, setIsNotSelected] = useState<boolean>(false);
@@ -45,9 +45,9 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         courseId: 0,
         moduleId: 0,
     }];
-    if (course.moduleIds[0] != 0) {
+    if (course.moduleIds![0] != 0) {
         selectedModules = [];
-        course.moduleIds.forEach(moduleId => {
+        course.moduleIds!.forEach(moduleId => {
             const module = modules?.find(m => m.id == moduleId);
 
             const cm: CourseModule = {
@@ -73,6 +73,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             course: {
                 name: "",
                 numberOfWeeks: 1,
+                startDate: new Date(),
                 modules: [],
                 moduleIds: [0]
             }
@@ -135,18 +136,19 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         setIsIncorrectName(false);
         setIsNotSelected(false);
         const isDuplicate = findDuplicates(courseModules);
-        if (isDuplicate || isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0 || courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0))) {
+        if (isDuplicate || isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0 || courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds!.some(mid => mid == 0))) {
             if (isDuplicate)
                 setIsIncorrectModuleInput(true);
             if (isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0)
                 setIsIncorrectName(true);
-            if (courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds.some(mid => mid == 0)))
+            if (courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds!.some(mid => mid == 0)))
                 setIsNotSelected(true);
         }
         else {
             const newCourse: CourseType = {
                 id: course.id ?? 0,
                 name: courseName.value.trim(),
+                startDate: course.startDate,
                 numberOfWeeks: numberOfWeeks.value,
                 moduleIds: courseModuleIds,
                 modules: courseModules,
@@ -193,6 +195,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                         course: {
                             name: "",
                             numberOfWeeks: 1,
+                            startDate: new Date(),
                             modules: [],
                             moduleIds: [0]
                         }
@@ -252,7 +255,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                         }
                         <h2 className="self-center font-bold w-[100px]">Module {index + 1}</h2>
                         <div key={thisCourseModule.moduleId + "," + index} className="flex space-x-2">
-                            {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds.some(mid => mid == 0)
+                            {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds!.some(mid => mid == 0)
                                 ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={false} />
                                 : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={true} />}
                             {courseModules &&

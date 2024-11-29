@@ -1,9 +1,9 @@
 import { Page, Text, View, Document, StyleSheet, usePDF } from '@react-pdf/renderer';
-import { AppliedCourseType } from '@models/course/Types';
 import { ModuleType } from '@models/module/Types';
+import { CourseType } from '@models/course/Types';
 
 type PDFGeneratorProps = {
-    appliedCourse: AppliedCourseType;
+    appliedCourse: CourseType;
     courseWeekDays: string[];
     appliedModules: ModuleType[];
 };

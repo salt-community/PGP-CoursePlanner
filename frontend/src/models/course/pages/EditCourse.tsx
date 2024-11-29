@@ -5,8 +5,6 @@ import Course from "../sections/Course";
 import { useIdFromPath } from "@helpers/helperHooks";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/home/pages/Login";
 
 export default function EditCourse() {
 
@@ -18,12 +16,10 @@ export default function EditCourse() {
     });
 
     return (
-        getCookie("access_token") == undefined
-            ? <Login />
-            : <Page>
-                {isLoading && <LoadingMessage />}
-                {isError && <ErrorMessage />}
-                {course && <Course course={course} submitFunction={editCourse} buttonText="Save changes" />}
-            </Page>
+        <Page>
+            {isLoading && <LoadingMessage />}
+            {isError && <ErrorMessage />}
+            {course && <Course course={course} submitFunction={editCourse} buttonText="Save changes" />}
+        </Page>
     )
 }

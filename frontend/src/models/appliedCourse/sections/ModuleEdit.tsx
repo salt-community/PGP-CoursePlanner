@@ -1,6 +1,5 @@
 import { SyntheticEvent } from "react";
 import { reorderModule } from "../helpers/reorderModule";
-import { AppliedModuleType } from "../Types";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import TrashBtn from "@components/buttons/TrashBtn";
 import AppliedModule from "./AppliedModule";
@@ -14,8 +13,8 @@ import DownArrowBtn from "@components/buttons/DownArrowBtn";
 import { DayType, EventType, ModuleType } from "@models/module/Types";
 
 interface ModuleEditProps {
-    appliedModules: AppliedModuleType[];
-    onUpdateModules: (updatedModules: AppliedModuleType[]) => void;
+    appliedModules: ModuleType[];
+    onUpdateModules: (updatedModules: ModuleType[]) => void;
 }
 
 export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEditProps) {
@@ -45,7 +44,7 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
     })
 
     const appliedModuleMutation = useMutation({
-        mutationFn: (newAppliedModule: AppliedModuleType) => {
+        mutationFn: (newAppliedModule: ModuleType) => {
             return updateAppliedModule(newAppliedModule);
         },
         onSuccess: () => {
@@ -54,7 +53,7 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
     })
 
     const postAppliedModuleMutation = useMutation({
-        mutationFn: (emptyModule: AppliedModuleType) => {
+        mutationFn: (emptyModule: ModuleType) => {
             return postAppliedModule(emptyModule);
         },
         onSuccess: () => {
@@ -119,7 +118,7 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
                 }
             })
         );
-        const newAppliedModule: AppliedModuleType = {
+        const newAppliedModule: ModuleType = {
             id: appliedModuleId,
             name: module.name,
             numberOfDays: listDays.length,
@@ -136,7 +135,7 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
 
     async function editAppliedModule(
         index: number,
-        appliedModule: AppliedModuleType
+        appliedModule: ModuleType
     ) {
         const newAppliedModules = [...appliedModules!];
         newAppliedModules[index] = appliedModule;
@@ -144,7 +143,7 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
     }
 
     const handleAddModule = (index: number) => {
-        const emptyModule: AppliedModuleType = {
+        const emptyModule: ModuleType = {
             id: 0,
             name: "",
             numberOfDays: 1,

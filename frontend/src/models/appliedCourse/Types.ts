@@ -1,18 +1,8 @@
-import { CourseModule } from "../course/Types";
-import { DayType, EventType } from "../module/Types";
-
-
-export type AppliedModuleType = {
-  id?: number;
-  name: string;
-  numberOfDays: number;
-  days: DayType[];
-  courseModules?: CourseModule[];
-};
+import { DayType, EventType, ModuleType } from "../module/Types";
 
 export type AppliedModuleProps = {
-  submitFunction: (index: number, module: AppliedModuleType) => Promise<void>;
-  module: AppliedModuleType;
+  submitFunction: (index: number, module: ModuleType) => Promise<void>;
+  module: ModuleType;
   index: number;
   buttonText: string;
 };

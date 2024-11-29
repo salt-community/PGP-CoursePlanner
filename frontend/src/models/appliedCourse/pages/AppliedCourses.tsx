@@ -5,18 +5,16 @@ import DeleteBtn from "@components/buttons/DeleteBtn";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/home/pages/Login";
 import { useEffect, useState } from "react";
-import { AppliedCourseType } from "@models/course/Types";
+import { CourseType } from "@models/course/Types";
 
 export default function AppliedCourses() {
     const navigate = useNavigate();
-    const [activeCourses, setActiveCourses] = useState<AppliedCourseType[]>([]);
-    const [pastCourses, setPastCourses] = useState<AppliedCourseType[]>([]);
-    const [futureCourses, setFutureCourses] = useState<AppliedCourseType[]>([]);
+    const [activeCourses, setActiveCourses] = useState<CourseType[]>([]);
+    const [pastCourses, setPastCourses] = useState<CourseType[]>([]);
+    const [futureCourses, setFutureCourses] = useState<CourseType[]>([]);
 
-    const { data: allAppliedCourses, isLoading, isError } = useQuery<AppliedCourseType[]>({
+    const { data: allAppliedCourses, isLoading, isError } = useQuery<CourseType[]>({
         queryKey: ['allAppliedCourses'],
         queryFn: getAllAppliedCourses
     });
@@ -40,7 +38,7 @@ export default function AppliedCourses() {
             const tempFutureCourses = allAppliedCourses.filter(ac => { const sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd > today })
             const tempPastCourses = allAppliedCourses.filter(ac => { const ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed < today })
 
-            const sortCourses = (activities: AppliedCourseType[]): AppliedCourseType[] => {
+            const sortCourses = (activities: CourseType[]): CourseType[] => {
                 return activities.sort((a, b) => {
                     const startDateA = new Date(a.startDate!);
                     const startDateB = new Date(b.startDate!);
@@ -68,9 +66,6 @@ export default function AppliedCourses() {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     return (
-        getCookie("access_token") == undefined ?
-            <Login />
-            :
             <Page>
                 <section className="px-4 pb-10 md:px-24 lg:px-56">
                     {isLoading && <LoadingMessage />}

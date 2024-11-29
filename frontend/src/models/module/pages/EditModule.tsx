@@ -5,8 +5,6 @@ import { useIdFromPath } from "@helpers/helperHooks";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import Module from "../sections/Module";
-import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/home/pages/Login";
 
 export default function EditModule() {
     const moduleId = useIdFromPath();
@@ -17,12 +15,10 @@ export default function EditModule() {
     });
 
     return (
-        getCookie("access_token") == undefined
-            ? <Login />
-            : <Page>
-                {isLoading && <LoadingMessage />}
-                {isError && <ErrorMessage />}
-                {module && <Module module={module} submitFunction={editModule} buttonText="Save changes" />}
-            </Page>
+        <Page>
+            {isLoading && <LoadingMessage />}
+            {isError && <ErrorMessage />}
+            {module && <Module module={module} submitFunction={editModule} buttonText="Save changes" />}
+        </Page>
     )
 }

@@ -7,11 +7,9 @@ import { getAllAppliedCourses } from "@api/AppliedCourseApi";
 import { currentMonth, currentYear, currentWeek } from "@helpers/dateHelpers";
 import TimeLineCourse from "../sections/TimeLineCourse";
 import TimeLineXaxis from "../sections/TimeLineXaxis";
-import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/home/pages/Login";
 import { ZoomOutButton } from "../components/ZoomOutBtn";
 import { ZoomInButton } from "../components/ZoomInBtn";
-import { AppliedCourseType } from "@models/course/Types";
+import { CourseType } from "@models/course/Types";
 
 export type Activity = {
   id: number;
@@ -19,7 +17,6 @@ export type Activity = {
   startDate: Date;
   endDate: Date;
   color: string;
-  courseId: number;
 };
 
 const HorizontalCalendar: React.FC = () => {
@@ -35,7 +32,7 @@ const HorizontalCalendar: React.FC = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const { data: appliedCourses } = useQuery<AppliedCourseType[]>({
+  const { data: appliedCourses } = useQuery<CourseType[]>({
     queryKey: ["appliedCourses"],
     queryFn: getAllAppliedCourses,
   });
@@ -51,8 +48,7 @@ const HorizontalCalendar: React.FC = () => {
           title: ac.name,
           startDate: new Date(ac.startDate),
           endDate: new Date(ac.endDate!),
-          color: ac.color,
-          courseId: ac.courseId
+          color: ac.color!,
         };
         const sameTitleIndex = newActivitiesArray.findIndex(activities => activities.find(activity => activity.title == newActivity.title));
         if (sameTitleIndex != -1) {
@@ -125,38 +121,35 @@ const HorizontalCalendar: React.FC = () => {
   }, [activities, widthIndex, numDays, numDaysToday]);
 
   return (
-    getCookie("access_token") == undefined ?
-      <Login />
-      :
-      <Page>
-        <div ref={scrollContainerRef} style={{ "height": height }} className="overflow-x-auto px-4 flex flex-col">
-          <div className="flex flex-row">
-            {activities.length > 0 &&
-              <TimeLineXaxis dates={dates} width={width[widthIndex]}></TimeLineXaxis>
-            }
-
-          </div>
-          {activitiesArray.length > 0 &&
-            <>
-              {activitiesArray.map((courses, index) => {
-                return (
-                  <div key={index} className="flex flex-row"><TimeLineCourse dates={dates} courses={courses} width={width[widthIndex]}></TimeLineCourse></div>)
-              })}
-            </>
+    <Page>
+      <div ref={scrollContainerRef} style={{ "height": height }} className="overflow-x-auto px-4 flex flex-col">
+        <div className="flex flex-row">
+          {activities.length > 0 &&
+            <TimeLineXaxis dates={dates} width={width[widthIndex]}></TimeLineXaxis>
           }
-        </div >
-        <div className="border-b-2 border-gray-100"></div>
-        <div className="ml-10 mr-10 flex flex-row justify-between">
-          <div className="flex flex-row gap-2">
-            <Link to={`/calendar/week/weeknumberyear=${currentWeek}-${currentYear}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
-            <Link to={`/calendar/month/monthyear=${currentMonth}-${currentYear}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to month view</Link>
-          </div>
-          <div className="flex flex-row gap-2">
-            <ZoomOutButton onClick={() => setWidthIndex(widthIndex - 1)} disabled={widthIndex === 0} />
-            <ZoomInButton onClick={() => setWidthIndex(widthIndex + 1)} disabled={widthIndex === width.length - 1} />
-          </div>
+
         </div>
-      </Page >
+        {activitiesArray.length > 0 &&
+          <>
+            {activitiesArray.map((courses, index) => {
+              return (
+                <div key={index} className="flex flex-row"><TimeLineCourse dates={dates} courses={courses} width={width[widthIndex]}></TimeLineCourse></div>)
+            })}
+          </>
+        }
+      </div >
+      <div className="border-b-2 border-gray-100"></div>
+      <div className="ml-10 mr-10 flex flex-row justify-between">
+        <div className="flex flex-row gap-2">
+          <Link to={`/calendar/week/weeknumberyear=${currentWeek}-${currentYear}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to week view</Link>
+          <Link to={`/calendar/month/monthyear=${currentMonth}-${currentYear}`} className="btn btn-sm py-1 mt-4 max-w-xs btn-info text-white">Go to month view</Link>
+        </div>
+        <div className="flex flex-row gap-2">
+          <ZoomOutButton onClick={() => setWidthIndex(widthIndex - 1)} disabled={widthIndex === 0} />
+          <ZoomInButton onClick={() => setWidthIndex(widthIndex + 1)} disabled={widthIndex === width.length - 1} />
+        </div>
+      </div>
+    </Page >
   );
 };
 

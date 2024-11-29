@@ -10,11 +10,9 @@ import { convertToGoogle } from "@helpers/googleHelpers";
 import DeleteBtn from "@components/buttons/DeleteBtn";
 import { deleteCourseFromGoogle } from "@api/GoogleCalendarApi";
 import "reactjs-popup/dist/index.css";
-import { AppliedCourseType } from "../Types";
+import { CourseType } from "../Types";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import { getCookie } from "@helpers/cookieHelpers";
-import Login from "@models/home/pages/Login";
 import ColorPickerModal from "@components/ColorPickerModal";
 import { getModulesByCourseId } from "@api/CourseModulesApi";
 import { ModuleType } from "@models/module/Types";
@@ -51,7 +49,7 @@ export default function CourseDetails() {
     data: allAppliedCourses,
     isLoading: isLoadingAppliedCourses,
     isError: isErrorAppliedCourses,
-  } = useQuery<AppliedCourseType[]>({
+  } = useQuery<CourseType[]>({
     queryKey: ["appliedCourses"],
     queryFn: () => getAllAppliedCourses(),
   });
@@ -62,11 +60,11 @@ export default function CourseDetails() {
   useEffect(() => {
     if (course && allAppliedCourses) {
       const appliedCoursesWithCourseId = allAppliedCourses.filter(
-        (m) => m.courseId! === course.id
+        (m) => m.id! === course.id
       );
 
       if (appliedCoursesWithCourseId.length > 0) {
-        defaultColor = appliedCoursesWithCourseId[0].color;
+        defaultColor = appliedCoursesWithCourseId[0].color!;
         setColor(defaultColor);
       }
     }
@@ -91,18 +89,17 @@ export default function CourseDetails() {
         setIsInvalidDate(true);
     } else {
       const appliedCoursesWithCourseId = allAppliedCourses!.filter(
-        (m) => m.courseId! == course!.id
+        (m) => m.id! == course!.id
       );
       if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
         await Promise.all(
           appliedCoursesWithCourseId!.map(async (appliedCourse) => {
             try {
-              const newAppliedCourse: AppliedCourseType = {
+              const newAppliedCourse: CourseType = {
                 id: appliedCourse.id,
                 name: appliedCourse.name,
                 startDate: appliedCourse.startDate,
                 endDate: appliedCourse.endDate,
-                courseId: appliedCourse.courseId,
                 moduleIds: appliedCourse.moduleIds,
                 color: color,
                 isApplied: appliedCourse.isApplied
@@ -115,10 +112,9 @@ export default function CourseDetails() {
         );
       }
 
-      const appliedCourse: AppliedCourseType = {
+      const appliedCourse: CourseType = {
         name: course?.name ?? "",
         startDate: startDate,
-        courseId: parseInt(courseId),
         color: color,
         moduleIds: modules?.map(m => m.id!),
         isApplied: true
@@ -147,9 +143,7 @@ export default function CourseDetails() {
     },
   });
 
-  return getCookie("access_token") == undefined ? (
-    <Login />
-  ) : (
+  return (
     <Page>
       {(isLoading || isLoadingModules || isLoadingAppliedCourses) && (
         <LoadingMessage />
