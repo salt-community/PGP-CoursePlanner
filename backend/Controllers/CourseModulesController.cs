@@ -2,6 +2,9 @@ using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
+using backend.Data;
+using Microsoft.EntityFrameworkCore;
+using backend.ExceptionHandler.Exceptions;
 
 namespace backend.Controllers;
 
@@ -10,23 +13,27 @@ namespace backend.Controllers;
 [Route("[controller]")]
 public class CourseModulesController : ControllerBase
 {
-    private readonly IService<Course> _service;
-    public CourseModulesController(IService<Course> service)
+    private readonly DataContext _context;
+    public CourseModulesController( DataContext context)
     {
-        _service = service;
+
+        _context = context;
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Course>>> GetAllCourseModules()
+    public  IEnumerable<CourseModule> GetAllCourseModules()
     {
-        var response = await _service.GetAllAsync();
-        return Ok(response);
+        var response = _context.CourseModules;
+        return response;
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<IEnumerable<Module>>> GetCourseModulesByCourse(int id)
+    public async Task<ActionResult<IEnumerable<CourseModule>>> GetCourseModulesByCourse(int id)
     {
-        var course = await _service.GetOneAsync(id);
-        return Ok(course.Modules.Select(m => m.Module));
+        var course =await _context.Courses 
+                .Include(c => c.Modules)
+                .ThenInclude(cm => cm.Module)
+                .FirstOrDefaultAsync(c => c.Id == id) ?? throw new NotFoundByIdException("Course", id);
+        return course.Modules;
     }
 }

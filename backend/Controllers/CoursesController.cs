@@ -52,7 +52,7 @@ public class CoursesController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet("GetModulesByCourseId/{id}")]
+    [HttpGet("ModulesByCourse/{id}")]
     public async Task<IEnumerable<Module>> GetModulesByCourseId(int id)
     {
         var course = await _service.GetOneAsync(id);
