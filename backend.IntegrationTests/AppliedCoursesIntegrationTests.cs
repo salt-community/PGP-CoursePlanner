@@ -62,14 +62,14 @@ namespace backend.IntegrationTests
             }
 
             // act
-            var response = await _client.GetAsync("/AppliedCourses/1");
+            var response = await _client.GetAsync("/AppliedCourses/3");
             var deserializedResponse = JsonConvert.DeserializeObject<Course>(
                 await response.Content.ReadAsStringAsync());
 
             // assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             deserializedResponse!.StartDate.Year.Should().Be(2024);
-            deserializedResponse!.Id.Should().Be(1);
+            deserializedResponse!.Id.Should().Be(3);
         }
 
         [Fact]

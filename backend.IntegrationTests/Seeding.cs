@@ -59,7 +59,7 @@ namespace backend.IntegrationTests
         {
             return new List<Course>()
             {
-                new Course(){StartDate = new DateTime(2024, 1, 13).ToUniversalTime(), Id = 1}
+                new Course(){StartDate = new DateTime(2024, 1, 13).ToUniversalTime(), IsApplied = true}
             };
         }
 
