@@ -12,14 +12,9 @@ type Props = {
 
 export default function DropDown({ thisCourseModule, index, selectedModules, modules, setSelectedModules, isSelected }: Props) {
     const handleChange = (event: SyntheticEvent) => {
+        const selectedModuleId = parseInt((event.target as HTMLSelectElement).value);
         const addedModules: ModuleType[] = [...selectedModules];
-        const courseModuleToAdd: ModuleType = {
-            id: parseInt((event.target as HTMLSelectElement).value),
-            name: thisCourseModule.name,
-            numberOfDays: thisCourseModule.numberOfDays,
-            days: thisCourseModule.days
-        }
-        addedModules[index] = courseModuleToAdd!;
+        addedModules[index] = modules.find(module => module.id === selectedModuleId)!;
         setSelectedModules(addedModules);
     }
 

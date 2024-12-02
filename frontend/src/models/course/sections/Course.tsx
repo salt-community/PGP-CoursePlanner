@@ -21,6 +21,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const navigate = useNavigate();
     const [filteredModules, setFilteredModules] = useState<ModuleType[]>([]);
     const [tracks, setTracks] = useState<string[]>([]);
+    const [courseModules, setCourseModules] = useState<ModuleType[]>([]);
+    const [filledDaysCount, setFilledDaysCount] = useState<number>(0);
 
     const { data: modules } = useQuery<ModuleType[]>({
         queryKey: ['modules'],
@@ -48,16 +50,17 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         }
     }, [modules]);
 
-    const [courseModules, setCourseModules] = useState<ModuleType[]>([]);
-
     useEffect(() => {
         setCourseModules(courseModulesData ?? []);
     }, [courseModulesData]);
 
-    let filledDays: number = 0;
-    if (courseModules) {
-        courseModules.forEach(module => filledDays += module.numberOfDays);
-    }
+    useEffect(() => {
+        let filledDays: number = 0;
+        if (courseModules) {
+            courseModules.forEach(module => filledDays += module.numberOfDays);
+            setFilledDaysCount(filledDays);
+        }
+    }, [courseModules]);
 
     const handleAddModules = (index: number) => {
         const emptyCourseModule: ModuleType = {
@@ -68,6 +71,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         }
         const editedModules = [...courseModules];
         editedModules.splice(index + 1, 0, emptyCourseModule);
+        console.log(editedModules);
         setCourseModules(editedModules);
     }
 
@@ -120,6 +124,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             courseModuleIds.push(element.id!);
         });
 
+        console.log(courseModuleIds);
+
         setIsIncorrectModuleInput(false);
         setIsIncorrectName(false);
         setIsNotSelected(false);
@@ -134,13 +140,13 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         }
         else {
             const newCourse: CourseType = {
-                id: course.id ?? 0,
+                id: course.id,
                 name: courseName.value.trim(),
                 startDate: course.startDate,
                 numberOfWeeks: numberOfWeeks.value,
                 moduleIds: courseModuleIds,
             };
-
+            console.log(newCourse.moduleIds);
             mutation.mutate(newCourse);
         }
     }
@@ -256,14 +262,14 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Cannot select duplicate modules</p>}
                 {isNotSelected &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a module from the dropdown menu</p>}
-                {Math.floor(filledDays / 5) == 1 && numOfWeeks == 1 &&
-                    <p>You have selected {Math.floor(filledDays / 5)} week and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
-                {Math.floor(filledDays / 5) == 1 && numOfWeeks != 1 &&
-                    <p>You have selected {Math.floor(filledDays / 5)} week and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
-                {Math.floor(filledDays / 5) != 1 && numOfWeeks == 1 &&
-                    <p>You have selected {Math.floor(filledDays / 5)} weeks and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
-                {Math.floor(filledDays / 5) != 1 && numOfWeeks != 1 &&
-                    <p>You have selected {Math.floor(filledDays / 5)} weeks and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
+                {Math.floor(filledDaysCount / 5) == 1 && numOfWeeks == 1 &&
+                    <p>You have selected {Math.floor(filledDaysCount / 5)} week and {filledDaysCount % 5} days (target: {numOfWeeks} week)</p>}
+                {Math.floor(filledDaysCount / 5) == 1 && numOfWeeks != 1 &&
+                    <p>You have selected {Math.floor(filledDaysCount / 5)} week and {filledDaysCount % 5} days (target: {numOfWeeks} weeks)</p>}
+                {Math.floor(filledDaysCount / 5) != 1 && numOfWeeks == 1 &&
+                    <p>You have selected {Math.floor(filledDaysCount / 5)} weeks and {filledDaysCount % 5} days (target: {numOfWeeks} week)</p>}
+                {Math.floor(filledDaysCount / 5) != 1 && numOfWeeks != 1 &&
+                    <p>You have selected {Math.floor(filledDaysCount / 5)} weeks and {filledDaysCount % 5} days (target: {numOfWeeks} weeks)</p>}
                 <div className="flex flex-row gap-2">
                     <SuccessBtn value={buttonText}></SuccessBtn>
                     <button onClick={() => navigate(`/courses/details/${course.id}`)} className="btn btn-sm mt-4 max-w-66 btn-info text-white">Go back without saving changes</button>
