@@ -33,7 +33,7 @@ namespace backend.Tests.UnitTests
         public async void GetAppliedCourses_Returns_CollectionOfAppliedCourses()
         {
             // arrange
-            var AppliedCourse = new Course() { StartDate = new DateTime(2024 - 07 - 12) };
+            var AppliedCourse = new Course() { StartDate = new DateTime(2024 - 07 - 12), IsApplied = true };
             var list = new List<Course>() { AppliedCourse };
             _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(list);
             var controller = new AppliedCoursesController(_mockService.Object);
@@ -44,7 +44,7 @@ namespace backend.Tests.UnitTests
 
             // assert
             resultValue.Should().NotBeNull();
-            resultValue.Should().BeOfType<List<Course>>();
+            resultValue.Should().BeAssignableTo<IEnumerable<Course>>();
         }
 
         // [Fact]
