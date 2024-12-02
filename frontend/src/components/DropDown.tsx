@@ -1,22 +1,23 @@
 import { SyntheticEvent } from "react";
-import { CourseModule } from "@models/course/Types";
 import { ModuleType } from "@models/module/Types";
 
 type Props = {
-    thisCourseModule: CourseModule
+    thisCourseModule: ModuleType;
     index: number;
-    selectedModules: CourseModule[];
+    selectedModules: ModuleType[];
     modules: ModuleType[];
-    setSelectedModules: React.Dispatch<React.SetStateAction<CourseModule[]>>
+    setSelectedModules: React.Dispatch<React.SetStateAction<ModuleType[]>>
     isSelected: boolean;
 }
 
-export default function DropDown({ thisCourseModule, index, selectedModules, modules, setSelectedModules, isSelected}: Props) {
+export default function DropDown({ thisCourseModule, index, selectedModules, modules, setSelectedModules, isSelected }: Props) {
     const handleChange = (event: SyntheticEvent) => {
-        const addedModules: CourseModule[] = [...selectedModules];
-        const courseModuleToAdd: CourseModule = {
-            moduleId: parseInt((event.target as HTMLSelectElement).value),
-            module: modules.find(m => m.id == parseInt((event.target as HTMLSelectElement).value))!
+        const addedModules: ModuleType[] = [...selectedModules];
+        const courseModuleToAdd: ModuleType = {
+            id: parseInt((event.target as HTMLSelectElement).value),
+            name: thisCourseModule.name,
+            numberOfDays: thisCourseModule.numberOfDays,
+            days: thisCourseModule.days
         }
         addedModules[index] = courseModuleToAdd!;
         setSelectedModules(addedModules);
@@ -27,17 +28,17 @@ export default function DropDown({ thisCourseModule, index, selectedModules, mod
             <select
                 className="border border-gray-300 rounded-lg p-1 w-48"
                 onChange={handleChange}
-                value={isSelected ? thisCourseModule.moduleId : 'DEFAULT'}
+                value={isSelected ? thisCourseModule.id : 'DEFAULT'}
             >
                 <option value="DEFAULT" disabled>Select</option>
                 {modules.map((module, modIndex) => {
-                    const isModuleSelectedInAnotherCourse = selectedModules.some(m => m.moduleId === module.id);
-                    
+                    const isModuleSelectedInAnotherCourse = selectedModules.some(m => m.id === module.id);
+
                     return (
                         <option
                             key={`${module.id},${modIndex}`}
                             value={module.id}
-                            disabled={isModuleSelectedInAnotherCourse && module.id !== thisCourseModule.moduleId}
+                            disabled={isModuleSelectedInAnotherCourse && module.id !== thisCourseModule.id}
                         >
                             {module.name} ({module.numberOfDays} days)
                         </option>
