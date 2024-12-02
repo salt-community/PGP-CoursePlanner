@@ -41,7 +41,7 @@ namespace backend.IntegrationTests
 
             // act 
             var response = await _client.GetAsync("/AppliedCourses");
-            var deserializedResponse = JsonConvert.DeserializeObject<List<AppliedCourse>>(
+            var deserializedResponse = JsonConvert.DeserializeObject<List<Course>>(
                 await response.Content.ReadAsStringAsync());
 
             // assert
@@ -63,13 +63,13 @@ namespace backend.IntegrationTests
 
             // act
             var response = await _client.GetAsync("/AppliedCourses/1");
-            var deserializedResponse = JsonConvert.DeserializeObject<AppliedCourse>(
+            var deserializedResponse = JsonConvert.DeserializeObject<Course>(
                 await response.Content.ReadAsStringAsync());
 
             // assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             deserializedResponse!.StartDate.Year.Should().Be(2024);
-            deserializedResponse!.CourseId.Should().Be(1);
+            deserializedResponse!.Id.Should().Be(1);
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            var newAppliedCourse = new AppliedCourse() {Name = "JavaScript S24", StartDate = new DateTime(2024-08-06), CourseId = 2, Color = "#3a0909"};
+            var newAppliedCourse = new Course() {Name = "JavaScript S24", StartDate = new DateTime(2024-08-06), Id = 2, Color = "#3a0909"};
             var content = JsonConvert.SerializeObject(newAppliedCourse);
 
             var body = new StringContent(content, Encoding.UTF8, "application/json");
@@ -91,13 +91,13 @@ namespace backend.IntegrationTests
 
             // act 
             var response = await _client.PostAsync("/AppliedCourses", body);
-            var deserializedResponse = JsonConvert.DeserializeObject<AppliedCourse>(
+            var deserializedResponse = JsonConvert.DeserializeObject<Course>(
                 await response.Content.ReadAsStringAsync());
 
             // assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             response.Content.Headers.ContentType.Should().BeOfType<MediaTypeHeaderValue>();
-            deserializedResponse!.CourseId.Should().Be(2);
+            deserializedResponse!.Id.Should().Be(2);
         }
 
         [Fact]
@@ -111,7 +111,7 @@ namespace backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            var newAppliedCourse = new AppliedCourse() { StartDate = DateTime.Now, CourseId = 7 };
+            var newAppliedCourse = new Course() { StartDate = DateTime.Now, Id = 7 };
             var content = JsonConvert.SerializeObject(newAppliedCourse);
 
             var body = new StringContent(content, Encoding.UTF8, "application/json");
@@ -119,7 +119,7 @@ namespace backend.IntegrationTests
 
             // act 
             var response = await _client.PostAsync("/AppliedCourses", body);
-            var deserializedResponse = JsonConvert.DeserializeObject<AppliedCourse>(
+            var deserializedResponse = JsonConvert.DeserializeObject<Course>(
                 await response.Content.ReadAsStringAsync());
 
             // assert
