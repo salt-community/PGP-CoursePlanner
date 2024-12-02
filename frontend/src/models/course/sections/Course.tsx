@@ -10,6 +10,7 @@ import TrashBtn from "@components/buttons/TrashBtn";
 import { CourseProps, CourseModule, CourseType } from "../Types";
 import FilterArea from "./FilterArea";
 import { ModuleType } from "@models/module/Types";
+import { getModulesByCourseId } from "@api/CourseModulesApi";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);
@@ -22,8 +23,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const [tracks, setTracks] = useState<string[]>([]);
 
     const { data: modules } = useQuery<ModuleType[]>({
-        queryKey: ['modules'],
-        queryFn: getAllModules
+        queryKey: ['courseModules', course.id],
+        queryFn: () => getModulesByCourseId(course.id!)
     });
     useEffect(() => {
         if (modules) {
@@ -229,31 +230,31 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 </div>
                 {isIncorrectName &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
-                {modules && courseModules.map((thisCourseModule, index) =>
+                {modules && modules.map((module, index) =>
                     <div key={index} className="flex flex-row">
-                        {index == 0 && index != courseModules.length - 1 &&
+                        {index == 0 && index != modules.length - 1 &&
                             <div className="flex flex-col w-[26px] mr-2">
                                 <button type="button" className="w-full h-full self-center stroke-base-content" onClick={() => moveDown(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
                             </div>
                         }
-                        {index != 0 && index == courseModules.length - 1 &&
+                        {index != 0 && index == modules.length - 1 &&
                             <div className="flex flex-col w-[26px] mr-2">
                                 <button type="button" className="w-full h-full self-center stroke-base-content" onClick={() => moveUp(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
                             </div>
                         }
-                        {index != 0 && index != courseModules.length - 1 &&
+                        {index != 0 && index != modules.length - 1 &&
                             <div className="flex flex-col w-[26px] mr-2">
                                 <button type="button" className="w-full h-full self-center stroke-base-content" onClick={() => moveUp(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6" /></svg></button>
                                 <button type="button" className="w-full h-full self-center stroke-base-content" onClick={() => moveDown(index)}><svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg></button>
                             </div>
                         }
-                        {index == 0 && index == courseModules.length - 1 &&
+                        {index == 0 && index == modules.length - 1 &&
                             <div className="flex flex-col w-[26px] mr-2">
                             </div>
                         }
                         <h2 className="self-center font-bold w-[100px]">Module {index + 1}</h2>
                         <div key={course.id + "," + index} className="flex space-x-2">
-                            {course.id == 0 || thisCourseModule.course?.moduleIds!.some(mid => mid == 0)
+                            {course.id == 0 || course.moduleIds?.some(mid => mid == 0)
                                 ? <DropDown courseId={course.id} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={false} />
                                 : <DropDown courseId={course.id} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={true} />}
                             {courseModules &&
