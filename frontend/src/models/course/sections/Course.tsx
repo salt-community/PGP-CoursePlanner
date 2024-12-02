@@ -61,6 +61,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
 
     const handleAddModules = (index: number) => {
         const emptyCourseModule: ModuleType = {
+            id: 0,
             name: "",
             numberOfDays: 0,
             days: []
@@ -176,6 +177,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                     setFilteredModules(selectedModules);
                     const isModulePossible = selectedModules.find(fm => fm.id == cm.id);
                     const emptyCourseModule: ModuleType = {
+                        id: 0,
                         name: "",
                         numberOfDays: 0,
                         days: []
