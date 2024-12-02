@@ -3,7 +3,7 @@ import { CourseModule } from "@models/course/Types";
 import { ModuleType } from "@models/module/Types";
 
 type Props = {
-    courseId: number | undefined;
+    thisCourseModule: CourseModule
     index: number;
     selectedModules: CourseModule[];
     modules: ModuleType[];
@@ -11,7 +11,7 @@ type Props = {
     isSelected: boolean;
 }
 
-export default function DropDown({ courseId, index, selectedModules, modules, setSelectedModules, isSelected}: Props) {
+export default function DropDown({ thisCourseModule, index, selectedModules, modules, setSelectedModules, isSelected}: Props) {
     const handleChange = (event: SyntheticEvent) => {
         const addedModules: CourseModule[] = [...selectedModules];
         const courseModuleToAdd: CourseModule = {
@@ -27,7 +27,7 @@ export default function DropDown({ courseId, index, selectedModules, modules, se
             <select
                 className="border border-gray-300 rounded-lg p-1 w-48"
                 onChange={handleChange}
-                value={isSelected ? courseId : 'DEFAULT'}
+                value={isSelected ? thisCourseModule.moduleId : 'DEFAULT'}
             >
                 <option value="DEFAULT" disabled>Select</option>
                 {modules.map((module, modIndex) => {
@@ -37,7 +37,7 @@ export default function DropDown({ courseId, index, selectedModules, modules, se
                         <option
                             key={`${module.id},${modIndex}`}
                             value={module.id}
-                            disabled={isModuleSelectedInAnotherCourse && module.id !== courseId}
+                            disabled={isModuleSelectedInAnotherCourse && module.id !== thisCourseModule.moduleId}
                         >
                             {module.name} ({module.numberOfDays} days)
                         </option>
