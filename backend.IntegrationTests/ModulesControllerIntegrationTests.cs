@@ -69,7 +69,7 @@ namespace backend.IntegrationTests
         }
 
         [Fact]
-        public async Task CreateModule_Returns_Success()
+        public async Task CreateModule_With_Zero_Days_Should_Return_Bad_Request()
         {
             // arrange
             using (var scope = _factory.Services.CreateScope())
@@ -79,7 +79,36 @@ namespace backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            var newModule = new Module() { Name = "CreatedModule" };
+            var newModule = new Module() { Name = "CreatedModule"  };
+            var content = JsonConvert.SerializeObject(newModule);
+
+            var body = new StringContent(content, Encoding.UTF8, "application/json");
+            body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            // act 
+            var response = await _client.PostAsync("/Modules", body);
+            var deserializedResponse = JsonConvert.DeserializeObject<Module>(
+                await response.Content.ReadAsStringAsync());
+
+            // assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.Content.Headers.ContentType.Should().BeOfType<MediaTypeHeaderValue>();
+        }
+
+
+                [Fact]
+        public async Task CreateModule_Should_Return_Success()
+        {
+            // arrange
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<DataContext>();
+                Seeding.InitializeTestDB(db);
+            }
+            var day = new Day() {};
+            
+            var newModule = new Module() { Name = "CreatedModule", Days = [day]  };
             var content = JsonConvert.SerializeObject(newModule);
 
             var body = new StringContent(content, Encoding.UTF8, "application/json");
@@ -107,7 +136,7 @@ namespace backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            var updatedModule = new Module() { Name = "UpdatedModule", Id = 2 };
+            var updatedModule = new Module() { Name = "UpdatedModule", Id = 2 , Days = [new Day()]};
             var content = JsonConvert.SerializeObject(updatedModule);
 
             var body = new StringContent(content, Encoding.UTF8, "application/json");
