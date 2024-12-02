@@ -71,7 +71,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         }
         const editedModules = [...courseModules];
         editedModules.splice(index + 1, 0, emptyCourseModule);
-        console.log(editedModules);
         setCourseModules(editedModules);
     }
 
@@ -124,8 +123,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             courseModuleIds.push(element.id!);
         });
 
-        console.log(courseModuleIds);
-
         setIsIncorrectModuleInput(false);
         setIsIncorrectName(false);
         setIsNotSelected(false);
@@ -146,7 +143,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 numberOfWeeks: numberOfWeeks.value,
                 moduleIds: courseModuleIds,
             };
-            console.log(newCourse.moduleIds);
             mutation.mutate(newCourse);
         }
     }
