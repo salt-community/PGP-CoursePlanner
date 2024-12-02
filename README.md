@@ -4,10 +4,11 @@
 Salt Course Planner is designed to simplify the planning and execution of recurring courses. By being able to save templates and modules for courses and then applying them directly to the calendar date when it starts.
 
 ## Technologies Used
-- **frontend**: Vit/React, TypeScript, Tailwind, Daisy UI
+- **frontend**: Vit/React, TypeScript, Tailwind, Daisy UI, MUI
 - **backend**: .Net/C#, ASP.NET
 - **Containerization**: Docker
 - **Cloud Platform**: Google Cloud Platform (GCP)
+- **Cloud database**: Supabase
 
 ## Prepare to use the project
 1. Ask to get access to project in GCP and get the right permissions. 
@@ -17,7 +18,7 @@ Salt Course Planner is designed to simplify the planning and execution of recurr
 4. Start docker application
 5. Compose docker-compose-localDB to create local db for develop.
 
-## Getting Started localy
+## Getting Started locally
 1. Clone this repository to your local machine.
 2. CD in to the backend folder and run dotnet install.
 3. Add connectionstring: DevelopmentDb to dotnet user secrets
