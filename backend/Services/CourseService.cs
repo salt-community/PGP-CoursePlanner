@@ -1,7 +1,9 @@
 using System.Runtime.InteropServices;
+using backend.Controllers;
 using backend.Data;
 using backend.ExceptionHandler.Exceptions;
 using backend.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
@@ -64,6 +66,7 @@ public class CourseService : IService<Course>
 
     private async Task<Course> CreateAppliedCourseAsync(Course appliedCourse)
     {
+        appliedCourse.StartDate = DateTime.SpecifyKind(appliedCourse.StartDate.Date, DateTimeKind.Utc);
         await _context.Courses.AddAsync(appliedCourse);
         await _context.SaveChangesAsync();
 

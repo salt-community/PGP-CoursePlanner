@@ -9,23 +9,23 @@ namespace backend.Tests.UnitTests
 {
     public class AppliedCoursesControllerUnitTests
     {
-        readonly Mock<IService<AppliedCourse>> _mockService = new Mock<IService<AppliedCourse>>();
+        readonly Mock<IService<Course>> _mockService = new Mock<IService<Course>>();
 
         [Fact]
         public async void CreateAppliedCourse_Returns_Ok_AppliedCourse()
         {
             // arrange
-            var AppliedCourse = new AppliedCourse() { StartDate = new DateTime(2024 - 07 - 12) };
+            var AppliedCourse = new Course() { StartDate = new DateTime(2024 - 07 - 12) };
             _mockService.Setup(service => service.CreateAsync(AppliedCourse)).ReturnsAsync(AppliedCourse);
             var controller = new AppliedCoursesController(_mockService.Object);
 
             // act
             var result = await controller.CreateAppliedCourse(AppliedCourse);
-            var resultValue = (result.Result as CreatedAtActionResult)!.Value as AppliedCourse;
+            var resultValue = (result.Result as CreatedAtActionResult)!.Value as Course;
 
             // assert
             resultValue.Should().NotBeNull();
-            resultValue.Should().BeOfType<AppliedCourse>();
+            resultValue.Should().BeOfType<Course>();
             resultValue!.StartDate.Should().Be(new DateTime(2024 - 07 - 12));
         }
 
@@ -33,8 +33,8 @@ namespace backend.Tests.UnitTests
         public async void GetAppliedCourses_Returns_CollectionOfAppliedCourses()
         {
             // arrange
-            var AppliedCourse = new AppliedCourse() { StartDate = new DateTime(2024 - 07 - 12) };
-            var list = new List<AppliedCourse>() { AppliedCourse };
+            var AppliedCourse = new Course() { StartDate = new DateTime(2024 - 07 - 12), IsApplied = true };
+            var list = new List<Course>() { AppliedCourse };
             _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(list);
             var controller = new AppliedCoursesController(_mockService.Object);
 
@@ -44,7 +44,7 @@ namespace backend.Tests.UnitTests
 
             // assert
             resultValue.Should().NotBeNull();
-            resultValue.Should().BeOfType<List<AppliedCourse>>();
+            resultValue.Should().BeAssignableTo<IEnumerable<Course>>();
         }
 
         // [Fact]
@@ -67,17 +67,17 @@ namespace backend.Tests.UnitTests
         public async void GetAppliedCourse_Returns_CorrectAppliedCourse()
         {
             // arrange
-            var AppliedCourse = new AppliedCourse() { Id = 1, StartDate = new DateTime(2024 - 07 - 12) };
+            var AppliedCourse = new Course() { Id = 1, StartDate = new DateTime(2024 - 07 - 12) };
             _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(AppliedCourse);
             var controller = new AppliedCoursesController(_mockService.Object);
 
             // act
             var result = await controller.GetAppliedCourse(1);
-            var resultValue = (result.Result as OkObjectResult)!.Value as AppliedCourse;
+            var resultValue = (result.Result as OkObjectResult)!.Value as Course;
 
             // assert
             resultValue.Should().NotBeNull();
-            resultValue.Should().BeOfType<AppliedCourse>();
+            resultValue.Should().BeOfType<Course>();
             resultValue!.StartDate.Should().Be(new DateTime(2024 - 07 - 12));
         }
 

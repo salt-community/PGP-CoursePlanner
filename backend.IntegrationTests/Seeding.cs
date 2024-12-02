@@ -11,7 +11,7 @@ namespace backend.IntegrationTests
             db.Database.EnsureCreated();
             db.Modules.AddRange(GetModule());
             db.Courses.AddRange(GetCourses());
-            db.AppliedCourses.AddRange(GetAppliedCourses());
+            db.Courses.AddRange(GetAppliedCourses());
             db.CalendarDates.AddRange(GetCalendarDates());
             db.SaveChanges();
         }
@@ -55,11 +55,11 @@ namespace backend.IntegrationTests
             };
         }
 
-        private static List<AppliedCourse> GetAppliedCourses()
+        private static List<Course> GetAppliedCourses()
         {
-            return new List<AppliedCourse>()
+            return new List<Course>()
             {
-                new AppliedCourse(){StartDate = new DateTime(2024, 1, 13).ToUniversalTime(), CourseId = 1}
+                new Course(){StartDate = new DateTime(2024, 1, 13).ToUniversalTime(), IsApplied = true}
             };
         }
 
