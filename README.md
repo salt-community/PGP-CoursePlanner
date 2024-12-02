@@ -42,6 +42,3 @@ To deploy a new revision manually first you need to build the frontend or backen
 Then you push the img to artifact registry. 
 Then you click Edit & deploy new revision and select the correct new docker img.
 The above is done by github actions when you push to main.
-
-
-

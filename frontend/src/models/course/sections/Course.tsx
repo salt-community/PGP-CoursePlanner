@@ -7,9 +7,10 @@ import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TrashBtn from "@components/buttons/TrashBtn";
-import { CourseProps, CourseModule, CourseType } from "../Types";
+import { CourseProps, CourseType } from "../Types";
 import FilterArea from "./FilterArea";
 import { ModuleType } from "@models/module/Types";
+import { getModulesByCourseId } from "@api/CourseModulesApi";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);
@@ -20,11 +21,19 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const navigate = useNavigate();
     const [filteredModules, setFilteredModules] = useState<ModuleType[]>([]);
     const [tracks, setTracks] = useState<string[]>([]);
+    const [courseModules, setCourseModules] = useState<ModuleType[]>([]);
+    const [filledDaysCount, setFilledDaysCount] = useState<number>(0);
 
     const { data: modules } = useQuery<ModuleType[]>({
         queryKey: ['modules'],
         queryFn: getAllModules
     });
+
+    const { data: courseModulesData } = useQuery<ModuleType[]>({
+        queryKey: ["courseModules", course.id],
+        queryFn: () => getModulesByCourseId(course.id!)
+    });
+
     useEffect(() => {
         if (modules) {
             setFilteredModules(modules);
@@ -41,42 +50,24 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         }
     }, [modules]);
 
-    let selectedModules: CourseModule[] = [{
-        courseId: 0,
-        moduleId: 0,
-    }];
-    if (course.moduleIds![0] != 0) {
-        selectedModules = [];
-        course.moduleIds!.forEach(moduleId => {
-            const module = modules?.find(m => m.id == moduleId);
+    useEffect(() => {
+        setCourseModules(courseModulesData ?? []);
+    }, [courseModulesData]);
 
-            const cm: CourseModule = {
-                course: course,
-                courseId: course.id,
-                module: module,
-                moduleId: moduleId
-            }
-            selectedModules.push(cm);
-        });
-    }
-    const [courseModules, setCourseModules] = useState<CourseModule[]>(selectedModules);
-
-    let filledDays: number = 0;
-    courseModules.forEach(cm => {
-        const mod = modules?.find(m => m.id == cm.moduleId);
-        if (mod)
-            filledDays = filledDays + mod?.numberOfDays;
-    });
+    useEffect(() => {
+        let filledDays: number = 0;
+        if (courseModules) {
+            courseModules.forEach(module => filledDays += module.numberOfDays);
+            setFilledDaysCount(filledDays);
+        }
+    }, [courseModules]);
 
     const handleAddModules = (index: number) => {
-        const emptyCourseModule: CourseModule = {
-            course: {
-                name: "",
-                numberOfWeeks: 1,
-                startDate: new Date(),
-                modules: [],
-                moduleIds: [0]
-            }
+        const emptyCourseModule: ModuleType = {
+            id: 0,
+            name: "",
+            numberOfDays: 0,
+            days: []
         }
         const editedModules = [...courseModules];
         editedModules.splice(index + 1, 0, emptyCourseModule);
@@ -129,39 +120,37 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
 
         const courseModuleIds: number[] = [];
         courseModules.forEach(element => {
-            courseModuleIds.push(element.moduleId!);
+            courseModuleIds.push(element.id!);
         });
 
         setIsIncorrectModuleInput(false);
         setIsIncorrectName(false);
         setIsNotSelected(false);
         const isDuplicate = findDuplicates(courseModules);
-        if (isDuplicate || isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0 || courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds!.some(mid => mid == 0))) {
+        if (isDuplicate || isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0 || courseModules.some(cm => cm.id == 0) || course.moduleIds!.some(mid => mid == 0)) {
             if (isDuplicate)
                 setIsIncorrectModuleInput(true);
             if (isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0)
                 setIsIncorrectName(true);
-            if (courseModules.some(cm => cm.moduleId == 0) || courseModules.some(c => c.course?.moduleIds!.some(mid => mid == 0)))
+            if (courseModules.some(cm => cm.id == 0) || course.moduleIds!.some(mid => mid == 0))
                 setIsNotSelected(true);
         }
         else {
             const newCourse: CourseType = {
-                id: course.id ?? 0,
+                id: course.id,
                 name: courseName.value.trim(),
                 startDate: course.startDate,
                 numberOfWeeks: numberOfWeeks.value,
                 moduleIds: courseModuleIds,
-                modules: courseModules,
             };
-
             mutation.mutate(newCourse);
         }
     }
 
-    const findDuplicates = (arr: Array<CourseModule>) => {
+    const findDuplicates = (arr: Array<ModuleType>) => {
         let results = false;
         for (let i = 0; i < arr.length; i++) {
-            if (arr.filter(m => m.moduleId == arr[i].moduleId).length > 1) {
+            if (arr.filter(m => m.id == arr[i].id).length > 1) {
                 results = true;
                 break;
             }
@@ -185,22 +174,18 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
             }
             else {
                 const selectedModules = modules!.filter(m => m.track?.includes(inputTrack));
-                setFilteredModules(selectedModules);
-
                 const editedModules = [...courseModules];
                 editedModules.forEach((cm, index) => {
-                    const isModulePossible = selectedModules.find(fm => fm.id == cm.moduleId);
-
-                    const emptyCourseModule: CourseModule = {
-                        course: {
-                            name: "",
-                            numberOfWeeks: 1,
-                            startDate: new Date(),
-                            modules: [],
-                            moduleIds: [0]
-                        }
+                    setFilteredModules(selectedModules);
+                    const isModulePossible = selectedModules.find(fm => fm.id == cm.id);
+                    const emptyCourseModule: ModuleType = {
+                        id: 0,
+                        name: "",
+                        numberOfDays: 0,
+                        days: []
                     }
                     if (isModulePossible == undefined)
+
                         editedModules[index] = emptyCourseModule;
                 });
                 setCourseModules(editedModules);
@@ -225,13 +210,13 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                             : <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} value={numOfWeeks.toString()} min="0" placeholder="Number of weeks" />
                         }
                     </div>
-                    {modules &&
+                    {modules && courseModulesData &&
                         <FilterArea options={tracks} funcFilter={funcFilter} funcResetFilter={() => { }}></FilterArea>
                     }
                 </div>
                 {isIncorrectName &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
-                {modules && courseModules.map((thisCourseModule, index) =>
+                {modules && courseModules && courseModules.map((thisCourseModule, index) =>
                     <div key={index} className="flex flex-row">
                         {index == 0 && index != courseModules.length - 1 &&
                             <div className="flex flex-col w-[26px] mr-2">
@@ -254,8 +239,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                             </div>
                         }
                         <h2 className="self-center font-bold w-[100px]">Module {index + 1}</h2>
-                        <div key={thisCourseModule.moduleId + "," + index} className="flex space-x-2">
-                            {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds!.some(mid => mid == 0)
+                        <div key={thisCourseModule.id + "," + index} className="flex space-x-2">
+                            {thisCourseModule.id == 0 || course.moduleIds?.some(mid => mid == 0)
                                 ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={false} />
                                 : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={true} />}
                             {courseModules &&
@@ -267,19 +252,20 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                                     <TrashBtn handleDelete={() => handleDeleteModule(index)} />
                                 </div>}
                         </div>
-                    </div>)}
+                    </div>
+                )}
                 {isIncorrectModuleInput &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Cannot select duplicate modules</p>}
                 {isNotSelected &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a module from the dropdown menu</p>}
-                {Math.floor(filledDays / 5) == 1 && numOfWeeks == 1 &&
-                    <p>You have selected {Math.floor(filledDays / 5)} week and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
-                {Math.floor(filledDays / 5) == 1 && numOfWeeks != 1 &&
-                    <p>You have selected {Math.floor(filledDays / 5)} week and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
-                {Math.floor(filledDays / 5) != 1 && numOfWeeks == 1 &&
-                    <p>You have selected {Math.floor(filledDays / 5)} weeks and {filledDays % 5} days (target: {numOfWeeks} week)</p>}
-                {Math.floor(filledDays / 5) != 1 && numOfWeeks != 1 &&
-                    <p>You have selected {Math.floor(filledDays / 5)} weeks and {filledDays % 5} days (target: {numOfWeeks} weeks)</p>}
+                {Math.floor(filledDaysCount / 5) == 1 && numOfWeeks == 1 &&
+                    <p>You have selected {Math.floor(filledDaysCount / 5)} week and {filledDaysCount % 5} days (target: {numOfWeeks} week)</p>}
+                {Math.floor(filledDaysCount / 5) == 1 && numOfWeeks != 1 &&
+                    <p>You have selected {Math.floor(filledDaysCount / 5)} week and {filledDaysCount % 5} days (target: {numOfWeeks} weeks)</p>}
+                {Math.floor(filledDaysCount / 5) != 1 && numOfWeeks == 1 &&
+                    <p>You have selected {Math.floor(filledDaysCount / 5)} weeks and {filledDaysCount % 5} days (target: {numOfWeeks} week)</p>}
+                {Math.floor(filledDaysCount / 5) != 1 && numOfWeeks != 1 &&
+                    <p>You have selected {Math.floor(filledDaysCount / 5)} weeks and {filledDaysCount % 5} days (target: {numOfWeeks} weeks)</p>}
                 <div className="flex flex-row gap-2">
                     <SuccessBtn value={buttonText}></SuccessBtn>
                     <button onClick={() => navigate(`/courses/details/${course.id}`)} className="btn btn-sm mt-4 max-w-66 btn-info text-white">Go back without saving changes</button>
@@ -288,4 +274,3 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         </section>
     )
 }
-
