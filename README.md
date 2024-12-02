@@ -36,10 +36,10 @@ Salt Course Planner is designed to simplify the planning and execution of recurr
 7. To change connection string or other secrets click Edit & deploy new revision and variabels and secrets
 8. DB is in supabase. Get access to db or create a new one and update connection string.
 
-## Understand cloud and CI/CD
-To deploy a new revision first you need to build the frontend or backend docker img.
+## Understand pushing to cloud and CI/CD
+To deploy a new revision manually first you need to build the frontend or backend docker img.
 Then you push the img to artifact registry. 
-Then you click Edit & deploy new revision and select the right new docker img.
+Then you click Edit & deploy new revision and select the correct new docker img.
 The above is done by github actions when you push to main.
 
 
