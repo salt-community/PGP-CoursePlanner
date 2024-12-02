@@ -51,4 +51,13 @@ public class CoursesController : ControllerBase
         await _service.DeleteAsync(id);
         return NoContent();
     }
+
+    [HttpGet("GetModulesByCourseId/{id}")]
+    public async Task<IEnumerable<Module>> GetModulesByCourseId(int id)
+    {
+        var course = await _service.GetOneAsync(id);
+        return course.Modules.Select(m => m.Module!).OrderBy(m => course.moduleIds.IndexOf(m.Id));
+
+    }
+
 }
