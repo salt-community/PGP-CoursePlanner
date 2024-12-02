@@ -26,6 +26,7 @@ export default function DayDetails() {
 
     const dateForApi = date.replaceAll("/", "-");
     const [data, setData] = useState<CalendarDateType>();
+    // Use Tanstack Query
     useEffect(() => {
         getCalendarDate(dateForApi)
             .then(setData);

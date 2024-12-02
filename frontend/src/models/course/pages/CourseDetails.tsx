@@ -120,6 +120,7 @@ export default function CourseDetails() {
         isApplied: true
       };
       try {
+        // Use Tanstack Query
         await postAppliedCourse(appliedCourse);
         navigate("/activecourses");
       } catch (error) {

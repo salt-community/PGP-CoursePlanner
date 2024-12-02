@@ -15,7 +15,7 @@ export default function CreateModule() {
         }],
         track: []
     }
-
+    // Use Tanstack Query
     return (
         <Page>
             <Module module={emptyModule} submitFunction={postModule} buttonText="Create" />

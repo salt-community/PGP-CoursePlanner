@@ -90,6 +90,7 @@ export default function EditAppliedCourse() {
             const appliedCoursesWithCourseId = allAppliedCourses!.filter(
                 (m) => m.id == appliedCourse!.id
             );
+            // Use Tanstack Query
             if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
                 await Promise.all(
                     appliedCoursesWithCourseId.map(async (appliedCourse) => {

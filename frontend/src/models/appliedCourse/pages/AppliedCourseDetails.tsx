@@ -22,6 +22,8 @@ export default function AppliedCourseDetails() {
 
     const appliedCourseId = useIdFromPath();
     const [appliedCourse, setAppliedCourse] = useState<CourseType>();
+
+    // Use Tanstack Query
     useEffect(() => {
         getAppliedCourseById(parseInt(appliedCourseId))
             .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setEndDate(new Date(result!.endDate!)); setAppliedCourseName(result!.name!); })

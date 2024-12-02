@@ -13,7 +13,7 @@ export default function EditModule() {
         queryKey: ['modules', moduleId],
         queryFn: () => getModuleById(parseInt(moduleId))
     });
-
+    // Use Tanstack Query
     return (
         <Page>
             {isLoading && <LoadingMessage />}

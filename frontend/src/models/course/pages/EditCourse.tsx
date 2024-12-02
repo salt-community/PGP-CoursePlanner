@@ -14,7 +14,7 @@ export default function EditCourse() {
         queryKey: ['courses', courseId],
         queryFn: () => getCourseById(parseInt(courseId))
     });
-
+    // Use Tanstack Query
     return (
         <Page>
             {isLoading && <LoadingMessage />}
