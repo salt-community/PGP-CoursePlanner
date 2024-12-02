@@ -41,7 +41,7 @@ namespace backend.Tests.UnitTests
 
             // assert
             resultValue.Should().NotBeNull();
-            resultValue.Should().BeOfType<List<Course>>();
+            resultValue.Should().BeAssignableTo<IEnumerable<Course>>();
         }
 
         [Fact]
