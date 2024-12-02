@@ -3,7 +3,7 @@ import { CourseModule } from "@models/course/Types";
 import { ModuleType } from "@models/module/Types";
 
 type Props = {
-    thisCourseModule: CourseModule
+    courseId: number | undefined;
     index: number;
     selectedModules: CourseModule[];
     modules: ModuleType[];
@@ -11,7 +11,7 @@ type Props = {
     isSelected: boolean;
 }
 
-export default function DropDown({ thisCourseModule, index, selectedModules, modules, setSelectedModules, isSelected}: Props) {
+export default function DropDown({ courseId, index, selectedModules, modules, setSelectedModules, isSelected}: Props) {
     const handleChange = (event: SyntheticEvent) => {
         const addedModules: CourseModule[] = [...selectedModules];
         const courseModuleToAdd: CourseModule = {
@@ -27,7 +27,7 @@ export default function DropDown({ thisCourseModule, index, selectedModules, mod
             <select
                 className="border border-gray-300 rounded-lg p-1 w-48"
                 onChange={handleChange}
-                value={isSelected ? thisCourseModule.moduleId : 'DEFAULT'}
+                value={isSelected ? courseId : 'DEFAULT'}
             >
                 <option value="DEFAULT" disabled>Select</option>
                 {modules.map((module, modIndex) => {
@@ -37,7 +37,7 @@ export default function DropDown({ thisCourseModule, index, selectedModules, mod
                         <option
                             key={`${module.id},${modIndex}`}
                             value={module.id}
-                            disabled={isModuleSelectedInAnotherCourse && module.id !== thisCourseModule.moduleId}
+                            disabled={isModuleSelectedInAnotherCourse && module.id !== courseId}
                         >
                             {module.name} ({module.numberOfDays} days)
                         </option>
@@ -47,30 +47,3 @@ export default function DropDown({ thisCourseModule, index, selectedModules, mod
         </div>
     );
 }
-    
-// old return
-// return (
-//     <div className="flex flex-col self-center">
-//         <select className="border border-gray-300 rounded-lg p-1 w-48" onChange={handleChange} defaultValue={'DEFAULT'} >
-//             {!isSelected
-//                 ? <>
-//                     <option value="DEFAULT" disabled>Select</option>
-//                     {modules.map((module, modIndex) =>
-//                         <> {selectedModules.find(m => m.moduleId == module.id) != null
-//                             ? <option key={module.id + "," + modIndex} value={module.id} disabled>{module.name} ({module.numberOfDays} days)</option>
-//                             : <option key={module.id + "," + modIndex} value={module.id}>{module.name} ({module.numberOfDays} days)</option>}
-//                         </>)}
-//                 </>
-//                 : <>
-//                     {modules.map((module, modIndex) =>
-//                         <> {module.id == thisCourseModule.moduleId
-//                             ? <option key={module.id + "," + modIndex} value="DEFAULT">{module.name} ({module.numberOfDays} days)</option>
-//                             : <> {selectedModules.find(m => m.moduleId == module.id) != null
-//                                 ? <option key={module.id + "," + modIndex} value={module.id} disabled>{module.name} ({module.numberOfDays} days)</option>
-//                                 : <option key={module.id + "," + modIndex} value={module.id}>{module.name} ({module.numberOfDays} days)</option>}
-//                             </>}
-//                         </>)}
-//                 </>}
-//         </select>
-//     </div>
-// )

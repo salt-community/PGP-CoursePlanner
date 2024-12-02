@@ -42,7 +42,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     }, [modules]);
 
     let selectedModules: CourseModule[] = [{
-        courseId: 0,
         moduleId: 0,
     }];
     if (course.moduleIds![0] != 0) {
@@ -52,7 +51,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
 
             const cm: CourseModule = {
                 course: course,
-                courseId: course.id,
                 module: module,
                 moduleId: moduleId
             }
@@ -254,10 +252,10 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                             </div>
                         }
                         <h2 className="self-center font-bold w-[100px]">Module {index + 1}</h2>
-                        <div key={thisCourseModule.moduleId + "," + index} className="flex space-x-2">
-                            {thisCourseModule.moduleId == 0 || thisCourseModule.course?.moduleIds!.some(mid => mid == 0)
-                                ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={false} />
-                                : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={true} />}
+                        <div key={course.id + "," + index} className="flex space-x-2">
+                            {course.id == 0 || thisCourseModule.course?.moduleIds!.some(mid => mid == 0)
+                                ? <DropDown courseId={course.id} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={false} />
+                                : <DropDown courseId={course.id} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={true} />}
                             {courseModules &&
                                 <div className="flex items-end self-center">
                                     <PrimaryBtn onClick={() => handleAddModules(index)}>+</PrimaryBtn>
