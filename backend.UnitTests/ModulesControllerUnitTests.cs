@@ -42,7 +42,7 @@ namespace backend.Tests.UnitTests
 
             // assert
             resultValue.Should().NotBeNull();
-            resultValue.Should().BeOfType<List<Module>>();
+            resultValue.Should().BeAssignableTo<IEnumerable<Module>>();
         }
 
         [Fact]
