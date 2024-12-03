@@ -1,6 +1,6 @@
 import { CalendarDateType } from "@models/calendar/Types";
 import { useQuery } from "@tanstack/react-query";
-import { getCalendarDate, getCalendarDateBatch, getCalendarDateWeeks } from "./calendarDateApi";
+import { getCalendarDate, getCalendarDateBatch, getCalendarDateWeeks } from "./calendarDateFetches";
 import { getCookie } from "@helpers/cookieHelpers";
 
 export function useQueryCalendarDate(date: string) {
