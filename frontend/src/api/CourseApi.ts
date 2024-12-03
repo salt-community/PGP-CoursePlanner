@@ -33,6 +33,21 @@ export async function getCourseById(courseId: number) {
   return await response.json();
 }
 
+export async function getModulesByCourseId(courseId: number) {
+  const response = await fetch(`${BASE_URL}/ModulesByCourse/${courseId}`, {
+      headers: {
+          Authorization: `Bearer ${getCookie("JWT")}`,
+          Accept: "application/json",
+      },
+  });
+
+  if (!response.ok) {
+      throw new Error(response.statusText);
+  }
+
+  return await response.json();
+}
+
 export async function postCourse(course: CourseType) {
   const response = await fetch(BASE_URL, {
     method: "POST",

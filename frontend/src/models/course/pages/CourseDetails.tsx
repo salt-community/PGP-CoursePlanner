@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { deleteCourse, getCourseById } from "@api/CourseApi";
+import { deleteCourse, getCourseById, getModulesByCourseId } from "@api/CourseApi";
 import Page from "@components/Page";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIdFromPath } from "@helpers/helperHooks";
@@ -14,7 +14,6 @@ import { CourseType } from "../Types";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import ColorPickerModal from "@components/ColorPickerModal";
-import { getModulesByCourseId } from "@api/CourseModulesApi";
 import { ModuleType } from "@models/module/Types";
 
 export default function CourseDetails() {
