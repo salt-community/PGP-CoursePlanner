@@ -2,7 +2,7 @@ import Login from "@models/login/Login";
 import NavBar from "./NavBar";
 import { getCookie, setCookie, setTokenCookies } from "@helpers/cookieHelpers";
 import { useQuery } from "@tanstack/react-query";
-import { getTokens, tokenResponse } from "@api/UserApi";
+import { getTokens, tokenResponse } from "@api/userFetches";
 
 type Props = {
     children: React.ReactNode;

@@ -6,11 +6,11 @@ import AppliedModule from "./AppliedModule";
 import { postAppliedModule, updateAppliedModule } from "@api/appliedModuleFetches";
 import { postAppliedDay } from "@api/appliedDayFetches";
 import { postAppliedEvent } from "@api/appliedEventFetches";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllModules } from "@api/ModuleApi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import UpArrowBtn from "@components/buttons/UpArrowBtn";
 import DownArrowBtn from "@components/buttons/DownArrowBtn";
 import { DayType, EventType, ModuleType } from "@models/module/Types";
+import { useQueryModules } from "@api/moduleQueries";
 
 interface ModuleEditProps {
     appliedModules: ModuleType[];
@@ -18,11 +18,7 @@ interface ModuleEditProps {
 }
 
 export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEditProps) {
-
-    const { data: modules, isLoading, error } = useQuery<ModuleType[]>({
-        queryKey: ["modules"],
-        queryFn: getAllModules,
-    });
+    const { data: modules, isLoading, error } = useQueryModules();
 
     const queryClient = useQueryClient();
     const eventMutation = useMutation({

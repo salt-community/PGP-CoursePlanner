@@ -3,22 +3,19 @@ import TrashBtn from "@components/buttons/TrashBtn";
 import InputSmall from "@components/inputFields/InputSmall";
 import InputSmallTime from "@components/inputFields/InputSmallTime";
 import { EventProps, ModuleType } from "../Types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { editModule, getAllModules } from "@api/ModuleApi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { editModule } from "@api/moduleFetches";
 import ModalContainer from "../components/ModalContainer";
 import EllipsisBtn from "../components/EllipsisBtn";
 import { openCloseModal } from "../helpers/openCloseModal";
+import { useQueryModules } from "@api/moduleQueries";
 
 export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumber, setDays, days, index, event }: EventProps) {
     const [selectedDay, setSelectedDay] = useState<string>("DEFAULT");
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
     const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
-
-    const { data: modules } = useQuery<ModuleType[]>({
-        queryKey: ['modules'],
-        queryFn: getAllModules
-    });
+    const { data: modules } = useQueryModules();
 
     // change event name or description
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,22 +1,18 @@
 import { Link, useNavigate } from "react-router-dom";
-import { deleteModule, getModuleById } from "@api/ModuleApi";
+import { deleteModule } from "@api/moduleFetches";
 import Page from "@components/Page";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useIdFromPath } from "@helpers/helperHooks";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import { ModuleType } from "../Types";
 import { useQueryCourses } from "@api/courseQueries";
+import { useQueryModuleById } from "@api/moduleQueries";
 
 export default function ModuleDetails() {
     const navigate = useNavigate();
     const moduleId = useIdFromPath();
-    const {data: courses } = useQueryCourses();
-
-    const { data: module, isLoading, isError } = useQuery<ModuleType>({
-        queryKey: ['modules', moduleId],
-        queryFn: () => getModuleById(moduleId)
-    });
+    const { data: module, isLoading, isError } = useQueryModuleById(moduleId);
+    const { data: courses } = useQueryCourses();
 
     const usedModules: number[] = [];
     if (courses) {

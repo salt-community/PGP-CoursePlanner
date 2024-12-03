@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { refreshTokens } from "../api/UserApi";
+import { refreshTokens } from "../api/userFetches";
 import { setCookie } from "./cookieHelpers";
 import { useQuery } from "@tanstack/react-query";
 

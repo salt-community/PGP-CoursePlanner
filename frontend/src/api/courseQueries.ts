@@ -6,7 +6,7 @@ import { ModuleType } from "@models/module/Types";
 export function useQueryCourses() {
     const { data, isLoading, isError } = useQuery<CourseType[]>({
         queryKey: ['courses'],
-        queryFn: () => getCourses()
+        queryFn: getCourses
     });
 
     return { data, isLoading, isError };
@@ -23,7 +23,7 @@ export function useQueryCourseById(id: number) {
 
 export function useQueryModulesByCourseId(id: number) {
     const { data, isLoading, isError } = useQuery<ModuleType[]>({
-        queryKey: ["appliedModules", id],
+        queryKey: ["courseModules", id],
         queryFn: () => getModulesByCourseId(id)
     });
 

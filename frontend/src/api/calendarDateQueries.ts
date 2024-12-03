@@ -14,7 +14,7 @@ export function useQueryCalendarDate(date: string) {
 
 export function useQueryCalendarDateWeeks(currentWeek: number) {
     const { data, isLoading } = useQuery<CalendarDateType[]>({
-        queryKey: ['CalendarWeeks'],
+        queryKey: ['calendarWeeks'],
         queryFn: () => getCalendarDateWeeks(currentWeek),
         enabled: !!getCookie("JWT"),
     })
@@ -23,7 +23,7 @@ export function useQueryCalendarDateWeeks(currentWeek: number) {
 
 export function useQueryCalendarDateBatch(startDate: string, endDate: string) {
     const { data, isPending, isError, error } = useQuery<CalendarDateType[]>({
-        queryKey: ['CalendarWeekView', startDate, endDate],
+        queryKey: ['calendarBatch'],
         queryFn: () => {
             return getCalendarDateBatch(startDate, endDate);
         },

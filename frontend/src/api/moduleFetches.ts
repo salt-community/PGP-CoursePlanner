@@ -3,7 +3,7 @@ import { ModuleType } from "@models/module/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Modules`;
 
-export async function getAllModules() {
+export async function getModules() {
   const response = await fetch(BASE_URL, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,

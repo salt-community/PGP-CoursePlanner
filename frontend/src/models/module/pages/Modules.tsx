@@ -1,21 +1,16 @@
-import { getAllModules } from "@api/ModuleApi";
 import Page from "@components/Page";
 import { Link } from "react-router-dom";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import { useQuery } from "@tanstack/react-query";
 import FilterArea from "@models/course/sections/FilterArea";
 import { useEffect, useState } from "react";
 import { ModuleType } from "../Types";
+import { useQueryModules } from "@api/moduleQueries";
 
 export default function Modules() {
     const [filteredModules, setFilteredModules] = useState<ModuleType[]>([]);
     const [tracks, setTracks] = useState<string[]>([]);
-
-    const { data: modules, isLoading, isError } = useQuery<ModuleType[]>({
-        queryKey: ['modules'],
-        queryFn: getAllModules
-    });
+    const { data: modules, isLoading, isError } = useQueryModules();
 
     useEffect(() => {
         if (modules) {

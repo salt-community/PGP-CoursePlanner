@@ -1,5 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllModules } from "@api/ModuleApi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import SuccessBtn from "@components/buttons/SuccessBtn";
 import InputSmall from "@components/inputFields/InputSmall";
 import DropDown from "@components/DropDown";
@@ -11,6 +10,7 @@ import { CourseProps, CourseType } from "../Types";
 import FilterArea from "./FilterArea";
 import { ModuleType } from "@models/module/Types";
 import { useQueryModulesByCourseId } from "@api/courseQueries";
+import { useQueryModules } from "@api/moduleQueries";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);
@@ -23,12 +23,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const [courseModules, setCourseModules] = useState<ModuleType[]>([]);
     const [filledDaysCount, setFilledDaysCount] = useState<number>(0);
     const navigate = useNavigate();
-    const {data: courseModulesData} = useQueryModulesByCourseId(course.id!);
-
-    const { data: modules } = useQuery<ModuleType[]>({
-        queryKey: ['modules'],
-        queryFn: getAllModules
-    });
+    const { data: courseModulesData } = useQueryModulesByCourseId(course.id!);
+    const { data: modules } = useQueryModules();
 
     useEffect(() => {
         if (modules) {
