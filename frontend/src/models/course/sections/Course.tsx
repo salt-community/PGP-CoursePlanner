@@ -10,7 +10,7 @@ import TrashBtn from "@components/buttons/TrashBtn";
 import { CourseProps, CourseType } from "../Types";
 import FilterArea from "./FilterArea";
 import { ModuleType } from "@models/module/Types";
-import { getModulesByCourseId } from "@api/courseFetches";
+import { useQueryModulesByCourseId } from "@api/courseQueries";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);
@@ -18,20 +18,16 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const [isIncorrectModuleInput, setIsIncorrectModuleInput] = useState<boolean>(false);
     const [isIncorrectName, setIsIncorrectName] = useState<boolean>(false);
     const [isNotSelected, setIsNotSelected] = useState<boolean>(false);
-    const navigate = useNavigate();
     const [filteredModules, setFilteredModules] = useState<ModuleType[]>([]);
     const [tracks, setTracks] = useState<string[]>([]);
     const [courseModules, setCourseModules] = useState<ModuleType[]>([]);
     const [filledDaysCount, setFilledDaysCount] = useState<number>(0);
+    const navigate = useNavigate();
+    const {data: courseModulesData} = useQueryModulesByCourseId(course.id!);
 
     const { data: modules } = useQuery<ModuleType[]>({
         queryKey: ['modules'],
         queryFn: getAllModules
-    });
-
-    const { data: courseModulesData } = useQuery<ModuleType[]>({
-        queryKey: ["appliedModules", course.id],
-        queryFn: () => getModulesByCourseId(course.id!)
     });
 
     useEffect(() => {

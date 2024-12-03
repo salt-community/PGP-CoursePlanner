@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
-import { deleteCourse, getCourseById, getModulesByCourseId } from "@api/courseFetches";
+import { deleteCourse } from "@api/courseFetches";
 import Page from "@components/Page";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useIdFromPath } from "@helpers/helperHooks";
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -14,37 +14,18 @@ import { CourseType } from "../Types";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import ColorPickerModal from "@components/ColorPickerModal";
-import { ModuleType } from "@models/module/Types";
 import { useQueryAppliedCourses } from "@api/appliedCourseQueries";
+import { useQueryCourseById, useQueryModulesByCourseId } from "@api/courseQueries";
 
 export default function CourseDetails() {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
   const [groupEmail, setGroupEmail] = useState<string>("");
   const navigate = useNavigate();
-  const {data: appliedCourses, isLoading: isLoadingAppliedCourses, isError:isErrorAppliedCourses} = useQueryAppliedCourses();
-
   const courseId = useIdFromPath();
-  const {
-    data: course,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["courses", courseId],
-    queryFn: () => {
-      return getCourseById(courseId);
-    },
-  });
-
-  const {
-    data: modules,
-    isLoading: isLoadingModules,
-    isError: isErrorModules,
-  } = useQuery<ModuleType[]>({
-    queryKey: ["appliedModules", courseId],
-    queryFn: () => getModulesByCourseId(courseId),
-  });
-
+  const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
+  const { data: course, isLoading: isLoadingCourse, isError: isErrorCourse } = useQueryCourseById(courseId);
+  const {data: courseModules, isLoading: isLoadingCourseModules, isError: isErrorCourseModules} = useQueryModulesByCourseId(courseId);
 
   let defaultColor = "#FFFFFF";
   const [color, setColor] = useState(defaultColor);
@@ -63,8 +44,8 @@ export default function CourseDetails() {
   }, [course, appliedCourses]);
 
   const handleGoogleGroupAdd = async () => {
-    if (course && modules) {
-      convertToGoogle(modules, startDate, course.name, groupEmail);
+    if (course && courseModules) {
+      convertToGoogle(courseModules, startDate, course.name, groupEmail);
     }
   };
 
@@ -116,7 +97,7 @@ export default function CourseDetails() {
         name: course?.name ?? "",
         startDate: startDate,
         color: color,
-        moduleIds: modules?.map(m => m.id!),
+        moduleIds: courseModules?.map(m => m.id!),
         isApplied: true
       };
       mutationPostAppliedCourse.mutate(appliedCourse);
@@ -129,9 +110,9 @@ export default function CourseDetails() {
     mutationFn: (id: number) => {
       return deleteCourse(id);
     },
-    onSuccess: () => {
+    onSuccess: (_data, id) => {
       queryClient.invalidateQueries({
-        queryKey: ["courses", courseId],
+        queryKey: ["courses", id],
       });
       navigate(`/courses`);
     },
@@ -139,18 +120,18 @@ export default function CourseDetails() {
 
   return (
     <Page>
-      {(isLoading || isLoadingModules || isLoadingAppliedCourses) && (
+      {(isLoadingCourse || isLoadingCourseModules || isLoadingAppliedCourses) && (
         <LoadingMessage />
       )}
-      {(isError || isErrorModules || isErrorAppliedCourses) && <ErrorMessage />}
+      {(isErrorCourse || isErrorCourseModules || isErrorAppliedCourses) && <ErrorMessage />}
       {course && appliedCourses && (
         <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
           <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
             <h1 className="pb-4 text-xl text-primary font-bold">
               {course.name}
             </h1>
-            {modules &&
-              modules.map((module, index) => (
+            {courseModules &&
+              courseModules.map((module, index) => (
                 <div key={module.id}>
                   <h1 className="text-lg font-bold self-start">
                     <Link

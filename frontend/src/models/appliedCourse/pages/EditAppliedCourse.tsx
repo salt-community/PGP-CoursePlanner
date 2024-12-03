@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
 import {
@@ -13,8 +13,8 @@ import ModuleEdit from "../sections/ModuleEdit";
 import { ModuleType } from "@models/module/Types";
 import { updateAppliedModule } from "@api/appliedModuleFetches";
 import { CourseType } from "@models/course/Types";
-import { getModulesByCourseId } from "@api/courseFetches";
 import { useQueryAppliedCourseById, useQueryAppliedCourses } from "@api/appliedCourseQueries";
+import { useQueryModulesByCourseId } from "@api/courseQueries";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -24,10 +24,10 @@ export default function EditAppliedCourse() {
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
     const [appliedModules, setAppliedModules] = useState<ModuleType[]>([]);
     const appliedCourseId = useIdFromPath();
+    const navigate = useNavigate();
     const { data: appliedCourses } = useQueryAppliedCourses();
     const { data: appliedCourse } = useQueryAppliedCourseById(appliedCourseId);
-
-    const navigate = useNavigate();
+    const {data: courseModules } = useQueryModulesByCourseId(appliedCourseId);
 
     const appliedModuleMutation = useMutation({
         mutationFn: (newAppliedModule: ModuleType) => {
@@ -44,11 +44,6 @@ export default function EditAppliedCourse() {
             appliedModuleMutation.mutate(updatedModules[i]);
         }
     };
-
-    const { data: courseModules } = useQuery<ModuleType[]>({
-        queryKey: ['appliedModules', appliedCourseId],
-        queryFn: () => getModulesByCourseId(appliedCourseId)
-    })
 
     useEffect(() => {
         if (appliedCourse) {

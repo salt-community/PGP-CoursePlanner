@@ -3,28 +3,24 @@ import { deleteModule, getModuleById } from "@api/ModuleApi";
 import Page from "@components/Page";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIdFromPath } from "@helpers/helperHooks";
-import { getAllCourses } from "@api/courseFetches";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import { CourseType } from "@models/course/Types";
 import { ModuleType } from "../Types";
+import { useQueryCourses } from "@api/courseQueries";
 
 export default function ModuleDetails() {
     const navigate = useNavigate();
     const moduleId = useIdFromPath();
+    const {data: courses } = useQueryCourses();
+
     const { data: module, isLoading, isError } = useQuery<ModuleType>({
         queryKey: ['modules', moduleId],
         queryFn: () => getModuleById(moduleId)
     });
 
-    const { data: allCourses } = useQuery<CourseType[]>({
-        queryKey: ['courses'],
-        queryFn: () => getAllCourses()
-    });
-
     const usedModules: number[] = [];
-    if (allCourses) {
-        allCourses.forEach(c => {
+    if (courses) {
+        courses.forEach(c => {
             c.moduleIds!.forEach(element => {
                 usedModules.push(element);
             });

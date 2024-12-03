@@ -1,16 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAllCourses } from "@api/courseFetches";
 import Page from "@components/Page";
 import { Link } from "react-router-dom";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import { CourseType } from "../Types";
+import { useQueryCourses } from "@api/courseQueries";
 
 export default function Courses() {
-    const { data, isLoading, isError } = useQuery<CourseType[]>({
-        queryKey: ['courses'],
-        queryFn: getAllCourses
-    });
+    const { data, isLoading, isError } = useQueryCourses();
 
     return (
         <Page>
