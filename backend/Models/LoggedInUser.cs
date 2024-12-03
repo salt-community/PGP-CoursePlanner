@@ -4,5 +4,6 @@ namespace backend.Models
     {
         public int Id { get; set; }
         public required string Refresh_Token {get; set;}
+        public required string Sub {get; init;}
     }
 }

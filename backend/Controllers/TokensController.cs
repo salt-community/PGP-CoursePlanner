@@ -1,4 +1,6 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Web;
 using backend.Data;
 using backend.ExceptionHandler.Exceptions;
@@ -139,7 +141,12 @@ namespace backend.Controllers
                 var responseData = (OkObjectResult)response.Result!;
                 var data = responseData.Value as TokenResponse;
 
-                var loggedInUser = new LoggedInUser() { Refresh_Token = data!.Refresh_token };
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(data!.Id_token);
+
+                var sub = jwtToken.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+                var loggedInUser = new LoggedInUser() { Refresh_Token = data!.Refresh_token, Sub = sub };
                 _context.LoggedInUser.Add(loggedInUser);
                 _context.SaveChanges();
                 return new TokenResponse()
@@ -149,7 +156,6 @@ namespace backend.Controllers
                     Expires_in = data.Expires_in
                 };
             }
-
             return response;
 
         }
@@ -161,7 +167,7 @@ namespace backend.Controllers
             ?? throw new NotFoundByIdException("No refresh tokens found");
             var builder = WebApplication.CreateBuilder();
 
-                        string client_id;
+            string client_id;
             if (builder.Configuration["AppInfo:ClientId"] == "Secret")
             {
                 client_id = Environment.GetEnvironmentVariable("CLIENT_ID")!;
