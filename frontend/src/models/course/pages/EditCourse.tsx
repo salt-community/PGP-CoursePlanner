@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { editCourse, getCourseById } from "@api/CourseApi";
+import { editCourse, getCourseById } from "@api/courseFetches";
 import Page from "@components/Page";
 import Course from "../sections/Course";
 import { useIdFromPath } from "@helpers/helperHooks";

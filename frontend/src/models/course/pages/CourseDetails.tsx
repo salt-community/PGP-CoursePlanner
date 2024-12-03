@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { deleteCourse, getCourseById, getModulesByCourseId } from "@api/CourseApi";
+import { deleteCourse, getCourseById, getModulesByCourseId } from "@api/courseFetches";
 import Page from "@components/Page";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIdFromPath } from "@helpers/helperHooks";

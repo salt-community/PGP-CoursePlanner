@@ -1,4 +1,4 @@
-import { postCourse } from "@api/CourseApi";
+import { postCourse } from "@api/courseFetches";
 import Page from "@components/Page";
 import Course from "../sections/Course";
 import { CourseType } from "../Types";

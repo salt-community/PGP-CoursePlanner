@@ -3,7 +3,7 @@ import { deleteModule, getModuleById } from "@api/ModuleApi";
 import Page from "@components/Page";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIdFromPath } from "@helpers/helperHooks";
-import { getAllCourses } from "@api/CourseApi";
+import { getAllCourses } from "@api/courseFetches";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import { CourseType } from "@models/course/Types";
@@ -16,10 +16,12 @@ export default function ModuleDetails() {
         queryKey: ['modules', moduleId],
         queryFn: () => getModuleById(moduleId)
     });
+
     const { data: allCourses } = useQuery<CourseType[]>({
         queryKey: ['courses'],
         queryFn: () => getAllCourses()
     });
+
     const usedModules: number[] = [];
     if (allCourses) {
         allCourses.forEach(c => {

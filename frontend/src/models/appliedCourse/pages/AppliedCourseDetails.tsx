@@ -9,7 +9,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import PDFWeekGenerator from "../sections/PDFWeekGenerator";
 import PDFGenerator from "../sections/PDFGenerator";
 import { ModuleType } from "@models/module/Types";
-import { getModulesByCourseId } from "@api/CourseApi";
+import { getModulesByCourseId } from "@api/courseFetches";
 import { useQueryAppliedCourseById } from "@api/appliedCourseQueries";
 
 export default function AppliedCourseDetails() {

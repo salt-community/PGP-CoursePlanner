@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllCourses } from "@api/CourseApi";
+import { getAllCourses } from "@api/courseFetches";
 import Page from "@components/Page";
 import { Link } from "react-router-dom";
 import LoadingMessage from "@components/LoadingMessage";

@@ -11,9 +11,9 @@ import InputSmall from "@components/inputFields/InputSmall";
 import ColorPickerModal from "@components/ColorPickerModal";
 import ModuleEdit from "../sections/ModuleEdit";
 import { ModuleType } from "@models/module/Types";
-import { updateAppliedModule } from "@api/appliedModuleApi";
+import { updateAppliedModule } from "@api/appliedModuleFetches";
 import { CourseType } from "@models/course/Types";
-import { getModulesByCourseId } from "@api/CourseApi";
+import { getModulesByCourseId } from "@api/courseFetches";
 import { useQueryAppliedCourseById, useQueryAppliedCourses } from "@api/appliedCourseQueries";
 
 export default function EditAppliedCourse() {
