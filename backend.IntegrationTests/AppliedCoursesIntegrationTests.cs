@@ -73,8 +73,6 @@ namespace backend.IntegrationTests
         }
 
 
-        //this test was commented out 2024-12-01 due to strange behaviour. it really shouldn't fail. and it doesn't when one does performs it manually on swagger.
-
         [Fact] 
         public async Task CreateAppliedCourse_Returns_Success()
         {
@@ -86,7 +84,7 @@ namespace backend.IntegrationTests
                 Seeding.InitializeTestDB(db);
             }
 
-            var newAppliedCourse = new Course() {Name = "JavaScript S24", StartDate = new DateTime(2024-08-06), Color = "#3a0909"};
+            var newAppliedCourse = new Course() {Name = "JavaScript S24", StartDate = new DateTime(2024-08-06), Color = "#3a0909", moduleIds = [1]};
             var content = JsonConvert.SerializeObject(newAppliedCourse);
 
             var body = new StringContent(content, Encoding.UTF8, "application/json");
