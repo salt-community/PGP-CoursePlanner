@@ -10,10 +10,9 @@ export default function CreateCourse() {
         name: "",
         numberOfWeeks: 0,
         startDate: new Date(),
-        modules: [],
         moduleIds: [0]
     }
-
+    
     return (
         <Page>
             <Course course={emptyCourse} submitFunction={postCourse} buttonText="Create" />

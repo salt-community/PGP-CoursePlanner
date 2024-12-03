@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 export function useIdFromPath() {
   const { pathname } = useLocation();
   const pathArray = pathname.split("/");
-  return pathArray[pathArray.length - 1];
+  return parseInt(pathArray[pathArray.length - 1]);
 }
 
 export function useDateFromPath() {

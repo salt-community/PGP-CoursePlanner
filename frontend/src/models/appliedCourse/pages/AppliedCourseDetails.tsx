@@ -16,24 +16,36 @@ export default function AppliedCourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
-    //const [appliedModules, setAppliedModules] = useState<AppliedModuleType[]>();
 
     const navigate = useNavigate();
 
     const appliedCourseId = useIdFromPath();
-    const [appliedCourse, setAppliedCourse] = useState<CourseType>();
+
+    const { data: appliedModules } = useQuery<ModuleType[]>({
+        queryKey: ['appliedModules', appliedCourseId],
+        queryFn: () => getModulesByCourseId(appliedCourseId),
+    })
+
+    const { data: appliedCourse } = useQuery<CourseType>({
+        queryKey: ["appliedCourses", appliedCourseId],
+        queryFn: () => getAppliedCourseById(appliedCourseId),
+    });
+
     useEffect(() => {
-        getAppliedCourseById(parseInt(appliedCourseId))
-            .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setEndDate(new Date(result!.endDate!)); setAppliedCourseName(result!.name!); })
-    }, [appliedCourseId]);
+        if (appliedCourse) {
+            setStartDate(new Date(appliedCourse.startDate));
+            setEndDate(new Date(appliedCourse.endDate!))
+            setAppliedCourseName(appliedCourse.name)
+        }
+    }, [appliedCourse]);
 
     const queryClient = useQueryClient();
     const mutation = useMutation({
         mutationFn: (id: number) => {
             return deleteAppliedCourse(id);
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['allAppliedCourses'] })
+        onSuccess: (_data, id) => {
+            queryClient.invalidateQueries({ queryKey: ['appliedCourses', id] })
             navigate(`/activecourses`);
         }
     })
@@ -51,11 +63,6 @@ export default function AppliedCourseDetails() {
         return days;
     }
 
-    const { isPending, data: appliedModules, isError: isAppliedModulesError } = useQuery<ModuleType[]>({
-        queryKey: ['AppliedModules', appliedCourseId],
-        queryFn: () => getModulesByCourseId(Number(appliedCourseId)),
-    })
-
     const courseWeekDates = getWeekDayList();
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -63,13 +70,9 @@ export default function AppliedCourseDetails() {
 
     let counter = -1;
 
-    if (isPending) return <p>pending</p>;
-    if (isAppliedModulesError) {
-        return <p>Error</p>
-    }
     return (
         <Page>
-            {appliedCourse &&
+            {appliedCourse && appliedModules &&
                 <>
                     <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
                         <section className="flex items-center flex-col gap-4">
@@ -79,7 +82,7 @@ export default function AppliedCourseDetails() {
                             </h2>
                         </section>
                         <section className="flex items-start flex-col gap-4 px-1 sm:p-0 md:px-24">
-                            {appliedModules!.map((module, index) =>
+                            {appliedModules.map((module, index) =>
                                 <div key={index}>
                                     <h1 className="text-lg font-bold self-start">
                                         Module {index + 1}: {module.name}

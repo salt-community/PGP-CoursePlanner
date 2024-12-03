@@ -12,7 +12,7 @@ export default function EditCourse() {
 
     const { data: course, isLoading, isError } = useQuery({
         queryKey: ['courses', courseId],
-        queryFn: () => getCourseById(parseInt(courseId))
+        queryFn: () => getCourseById(courseId)
     });
 
     return (

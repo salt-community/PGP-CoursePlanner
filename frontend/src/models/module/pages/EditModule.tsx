@@ -11,7 +11,7 @@ export default function EditModule() {
 
     const { data: module, isLoading, isError } = useQuery({
         queryKey: ['modules', moduleId],
-        queryFn: () => getModuleById(parseInt(moduleId))
+        queryFn: () => getModuleById(moduleId)
     });
 
     return (

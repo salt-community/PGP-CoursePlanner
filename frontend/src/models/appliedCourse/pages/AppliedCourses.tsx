@@ -15,7 +15,7 @@ export default function AppliedCourses() {
     const [futureCourses, setFutureCourses] = useState<CourseType[]>([]);
 
     const { data: allAppliedCourses, isLoading, isError } = useQuery<CourseType[]>({
-        queryKey: ['allAppliedCourses'],
+        queryKey: ['appliedCourses'],
         queryFn: getAllAppliedCourses
     });
 
@@ -25,7 +25,7 @@ export default function AppliedCourses() {
             return deleteAppliedCourse(id);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['allAppliedCourses'] })
+            queryClient.invalidateQueries({ queryKey: ['appliedCourses'] })
             navigate(`/activecourses`);
         }
     })
