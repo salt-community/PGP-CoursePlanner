@@ -4,17 +4,20 @@ import Page from "@components/Page";
 import { format } from "date-fns";
 import NextBtn from "@components/buttons/NextBtn";
 import PreviousBtn from "@components/buttons/PreviousBtn";
-import { CalendarDateType, DateContent } from "../Types";
-import { getCalendarDate } from "@api/CalendarDateApi";
+import { DateContent } from "../Types";
 import { useDateFromPath } from "@helpers/helperHooks";
 import WeekDay from "../sections/WeekDay";
 import { getDateAsString } from "@helpers/dateHelpers";
-import { useQuery } from "@tanstack/react-query";
+import { useQueryCalendarDate } from "@api/calendarDateQueries";
+
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 export default function DayDetails() {
     const navigate = useNavigate();
     const date = useDateFromPath();
     const dateAsDate = new Date(date);
+    const dateForApi = date.replaceAll("/", "-");
+    const { data } = useQueryCalendarDate(dateForApi);
 
     let nextDate = new Date(dateAsDate)
     nextDate = new Date(nextDate.setDate(nextDate.getDate() + 1));
@@ -24,17 +27,7 @@ export default function DayDetails() {
     previousDate = new Date(previousDate.setDate(previousDate.getDate() - 1));
     const previousDay = getDateAsString(previousDate)
 
-    const dateForApi = date.replaceAll("/", "-");
-
-    const {data} = useQuery<CalendarDateType>({
-        queryKey: ['calendarDate', dateForApi],
-        queryFn: () => getCalendarDate(dateForApi),
-        enabled: !!dateForApi
-    })
-
     const dateContent: DateContent[] = data != undefined ? data.dateContent : [];
-
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     return (
         <Page>
@@ -55,7 +48,6 @@ export default function DayDetails() {
                 </section>
                 <NextBtn onClick={() => navigate("/calendar/day/date=" + nextDay)} />
             </section>
-        </Page>
+        </Page >
     )
-
 }

@@ -1,23 +1,16 @@
-import { getCalendarDateWeeks } from "@api/CalendarDateApi"
 import LoadingMessage from "@components/LoadingMessage"
 import { getCookie } from "@helpers/cookieHelpers"
 import { currentMonth, currentWeek, currentYear } from "@helpers/dateHelpers"
-import { CalendarDateType } from "@models/calendar/Types"
-import { useQuery } from "@tanstack/react-query"
 import { getWeek } from "date-fns"
 import { Link } from "react-router-dom"
 import CurrentWeek from "./CurrentWeek"
 import NextWeek from "./NextWeek"
+import { useQueryCalendarDateWeeks } from "@api/calendarDateQueries"
 
 export default function WeeksContainer() {
     const thisWeek = new Date();
     const nextWeek = new Date(thisWeek).setDate(thisWeek.getDate() + 7);
-
-    const { data, isLoading: isCalendarLoading } = useQuery<CalendarDateType[]>({
-        queryKey: ['CalendarWeeks'],
-        queryFn: () => getCalendarDateWeeks(currentWeek),
-        enabled: !!getCookie("JWT"),
-    })
+    const { data, isLoading: isCalendarLoading } = useQueryCalendarDateWeeks(currentWeek);
 
     return (
         <section className="pl-20 pr-20 pb-20 flex flex-col items-center">
