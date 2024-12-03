@@ -14,7 +14,7 @@ export default function ModuleDetails() {
     const moduleId = useIdFromPath();
     const { data: module, isLoading, isError } = useQuery<ModuleType>({
         queryKey: ['modules', moduleId],
-        queryFn: () => getModuleById(parseInt(moduleId))
+        queryFn: () => getModuleById(moduleId)
     });
     const { data: allCourses } = useQuery<CourseType[]>({
         queryKey: ['courses'],
@@ -104,7 +104,7 @@ export default function ModuleDetails() {
                     <p className="error-message text-red-600 text-sm hidden" id="invalid-module-delete">Cannot delete this module, it is used in a course!</p>
                     <div className="pt-4 mb-4 flex gap-4 flex-col sm:flex-row">
                         <Link to={`/modules/edit/${moduleId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Module</Link>
-                        <button onClick={() => handleDelete(parseInt(moduleId))} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module</button>
+                        <button onClick={() => handleDelete(moduleId)} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module</button>
                     </div>
                 </section>
             }
