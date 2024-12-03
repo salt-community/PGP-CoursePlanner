@@ -147,6 +147,7 @@ namespace backend.Controllers
                 var sub = jwtToken.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
 
                 var loggedInUser = new LoggedInUser() { Refresh_Token = data!.Refresh_token, Sub = sub };
+                Console.WriteLine("USER REFRESH TOKEN: {0}", loggedInUser.Refresh_Token);
                 _context.LoggedInUser.Add(loggedInUser);
                 _context.SaveChanges();
                 return new TokenResponse()
@@ -163,7 +164,16 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult<TokenResponse>> RefreshTokens()
         {
-            var refreshToken = await _context.LoggedInUser.Select(user => user.Refresh_Token).FirstOrDefaultAsync()
+            string? sub;
+            try {
+                sub = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            }
+            catch(Exception ex)
+            {
+                throw new BadRequestException<int>("Cannot refresh token for non-logged in user");
+            }
+
+            var loggedInUser =  _context.LoggedInUser.FirstOrDefault(user => user.Sub == sub)
             ?? throw new NotFoundByIdException("No refresh tokens found");
             var builder = WebApplication.CreateBuilder();
 
@@ -189,19 +199,19 @@ namespace backend.Controllers
 
             var response = await RefreshTokensFromGoogle(
                 "https://accounts.google.com/o/oauth2/token",
-                refreshToken,
+                loggedInUser.Refresh_Token,
                 client_id,
                 client_secret);
             if (response.Result.GetType() == typeof(OkObjectResult))
             {
                 var responseData = (OkObjectResult)response.Result!;
                 var data = responseData.Value as TokenResponse;
-
+                
                 return new TokenResponse()
                 {
                     Access_token = data!.Access_token,
                     Id_token = data.Id_token,
-                    Expires_in = data.Expires_in
+                    Expires_in = data.Expires_in,
                 };
             }
 
