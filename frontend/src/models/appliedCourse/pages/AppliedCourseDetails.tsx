@@ -1,7 +1,7 @@
 import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
 import { useEffect, useState } from "react";
-import { deleteAppliedCourse, getAppliedCourseById } from "@api/AppliedCourseApi";
+import { deleteAppliedCourse, getAppliedCourseById } from "@api/appliedCourseFetches";
 import 'reactjs-popup/dist/index.css';
 import { Link, useNavigate } from "react-router-dom";
 import DeleteBtn from "@components/buttons/DeleteBtn";

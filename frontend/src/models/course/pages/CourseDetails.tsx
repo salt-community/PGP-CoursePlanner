@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useIdFromPath } from "@helpers/helperHooks";
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { editAppliedCourse, getAllAppliedCourses, postAppliedCourse, } from "@api/AppliedCourseApi";
+import { editAppliedCourse, postAppliedCourse, } from "@api/appliedCourseFetches";
 import { convertToGoogle } from "@helpers/googleHelpers";
 import DeleteBtn from "@components/buttons/DeleteBtn";
 import { deleteCourseFromGoogle } from "@api/GoogleCalendarApi";
@@ -15,13 +15,14 @@ import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import ColorPickerModal from "@components/ColorPickerModal";
 import { ModuleType } from "@models/module/Types";
+import { useQueryAppliedCourses } from "@api/appliedCourseQueries";
 
 export default function CourseDetails() {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
   const [groupEmail, setGroupEmail] = useState<string>("");
-
   const navigate = useNavigate();
+  const {data: appliedCourses, isLoading: isLoadingAppliedCourses, isError:isErrorAppliedCourses} = useQueryAppliedCourses();
 
   const courseId = useIdFromPath();
   const {
@@ -44,21 +45,13 @@ export default function CourseDetails() {
     queryFn: () => getModulesByCourseId(courseId),
   });
 
-  const {
-    data: allAppliedCourses,
-    isLoading: isLoadingAppliedCourses,
-    isError: isErrorAppliedCourses,
-  } = useQuery<CourseType[]>({
-    queryKey: ["appliedCourses"],
-    queryFn: () => getAllAppliedCourses(),
-  });
 
   let defaultColor = "#FFFFFF";
   const [color, setColor] = useState(defaultColor);
   const [isColorNotSelected, setIsColorNotSelected] = useState<boolean>(false);
   useEffect(() => {
-    if (course && allAppliedCourses) {
-      const appliedCoursesWithCourseId = allAppliedCourses.filter(
+    if (course && appliedCourses) {
+      const appliedCoursesWithCourseId = appliedCourses.filter(
         (m) => m.id! === course.id
       );
 
@@ -67,7 +60,7 @@ export default function CourseDetails() {
         setColor(defaultColor);
       }
     }
-  }, [course, allAppliedCourses]);
+  }, [course, appliedCourses]);
 
   const handleGoogleGroupAdd = async () => {
     if (course && modules) {
@@ -99,7 +92,7 @@ export default function CourseDetails() {
       if (startDate.getDay() == 6 || startDate.getDay() == 0)
         setIsInvalidDate(true);
     } else {
-      const appliedCoursesWithCourseId = allAppliedCourses!.filter(
+      const appliedCoursesWithCourseId = appliedCourses!.filter(
         (m) => m.id! == course!.id
       );
       if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
@@ -150,7 +143,7 @@ export default function CourseDetails() {
         <LoadingMessage />
       )}
       {(isError || isErrorModules || isErrorAppliedCourses) && <ErrorMessage />}
-      {course && allAppliedCourses && (
+      {course && appliedCourses && (
         <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
           <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
             <h1 className="pb-4 text-xl text-primary font-bold">

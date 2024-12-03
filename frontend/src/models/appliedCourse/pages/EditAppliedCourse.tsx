@@ -3,9 +3,8 @@ import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
 import {
     editAppliedCourse,
-    getAllAppliedCourses,
     getAppliedCourseById,
-} from "@api/AppliedCourseApi";
+} from "@api/appliedCourseFetches";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +15,7 @@ import { ModuleType } from "@models/module/Types";
 import { updateAppliedModule } from "@api/AppliedModuleApi";
 import { CourseType } from "@models/course/Types";
 import { getModulesByCourseId } from "@api/CourseApi";
+import { useQueryAppliedCourses } from "@api/appliedCourseQueries";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -24,6 +24,7 @@ export default function EditAppliedCourse() {
     const [color, setColor] = useState<string>("");
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
     const [appliedModules, setAppliedModules] = useState<ModuleType[]>([]);
+    const {data: appliedCourses } = useQueryAppliedCourses();
 
     const navigate = useNavigate();
 
@@ -42,11 +43,6 @@ export default function EditAppliedCourse() {
             appliedModuleMutation.mutate(updatedModules[i]);
         }
     };
-
-    const { data: allAppliedCourses } = useQuery<CourseType[]>({
-        queryKey: ["appliedCourses"],
-        queryFn: () => getAllAppliedCourses(),
-    });
 
     const appliedCourseId = useIdFromPath();
 
@@ -94,7 +90,7 @@ export default function EditAppliedCourse() {
                 setIsInvalidDate(true);
             if (appliedModules?.find((m) => m.name == "")) setIsInvalidModule(true);
         } else {
-            const appliedCoursesWithCourseId = allAppliedCourses!.filter(
+            const appliedCoursesWithCourseId = appliedCourses!.filter(
                 (m) => m.id == appliedCourse!.id
             );
             if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
