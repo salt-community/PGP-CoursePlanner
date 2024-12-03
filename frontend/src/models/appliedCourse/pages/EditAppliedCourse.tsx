@@ -32,7 +32,7 @@ export default function EditAppliedCourse() {
             return updateAppliedModule(newAppliedModule);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['allAppliedModules'] })
+            queryClient.invalidateQueries({ queryKey: ['appliedCourses', appliedCourseId] })
         }
     })
 
@@ -54,7 +54,7 @@ export default function EditAppliedCourse() {
     );
 
     const { data } = useQuery<ModuleType[]>({
-        queryKey: ['AppliedModules', appliedCourseId],
+        queryKey: ['appliedCourses', appliedCourseId],
         queryFn: () => getModulesByCourseId(Number(appliedCourseId)),
     })
 
@@ -75,6 +75,15 @@ export default function EditAppliedCourse() {
 
     const defaultColor = appliedCourse?.color || "";
 
+    const mutationEditAppliedCourse = useMutation({
+        mutationFn: (newAppliedCourse: CourseType) => {
+            return editAppliedCourse(newAppliedCourse);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['appliedCourses', appliedCourseId] })
+        }
+    })
+
     const handleEdit = async () => {
         setIsInvalidDate(false);
         setIsInvalidModule(false);
@@ -90,24 +99,19 @@ export default function EditAppliedCourse() {
             const appliedCoursesWithCourseId = allAppliedCourses!.filter(
                 (m) => m.id == appliedCourse!.id
             );
-            // Use Tanstack Query
             if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
                 await Promise.all(
                     appliedCoursesWithCourseId.map(async (appliedCourse) => {
-                        try {
-                            const newAppliedCourse: CourseType = {
-                                id: appliedCourse.id,
-                                name: appliedCourse.name,
-                                startDate: appliedCourse.startDate,
-                                endDate: appliedCourse.endDate,
-                                color: color,
-                                isApplied: appliedCourse.isApplied,
-                                moduleIds: appliedModules.map(m => m.id!), // todo: think about why ids are optional
-                            };
-                            await editAppliedCourse(newAppliedCourse);
-                        } catch (error) {
-                            console.error("Error posting applied event:", error);
-                        }
+                        const newAppliedCourse: CourseType = {
+                            id: appliedCourse.id,
+                            name: appliedCourse.name,
+                            startDate: appliedCourse.startDate,
+                            endDate: appliedCourse.endDate,
+                            color: color,
+                            isApplied: appliedCourse.isApplied,
+                            moduleIds: appliedModules.map(m => m.id!), // todo: think about why ids are optional
+                        };
+                        mutationEditAppliedCourse.mutate(newAppliedCourse);
                     })
                 );
             }

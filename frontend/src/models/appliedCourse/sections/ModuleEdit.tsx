@@ -30,7 +30,7 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
             return postAppliedEvent(newEvent);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['allAppliedModules'] })
+            queryClient.invalidateQueries({ queryKey: ['appliedModules'] })
         }
     })
 
@@ -39,7 +39,7 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
             return postAppliedDay(dayType);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['allAppliedModules'] })
+            queryClient.invalidateQueries({ queryKey: ['appliedModules'] })
         }
     })
 
@@ -48,7 +48,7 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
             return updateAppliedModule(newAppliedModule);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['allAppliedModules'] })
+            queryClient.invalidateQueries({ queryKey: ['appliedModules'] })
         }
     })
 
@@ -57,7 +57,7 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
             return postAppliedModule(emptyModule);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['allAppliedModules'] })
+            queryClient.invalidateQueries({ queryKey: ['appliedModules'] })
         }
     })
 

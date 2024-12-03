@@ -12,7 +12,7 @@ export default function CreateCourse() {
         startDate: new Date(),
         moduleIds: [0]
     }
-    // Use Tanstack Query
+    
     return (
         <Page>
             <Course course={emptyCourse} submitFunction={postCourse} buttonText="Create" />

@@ -1,6 +1,6 @@
 import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { deleteAppliedCourse, getAppliedCourseById } from "@api/AppliedCourseApi";
 import 'reactjs-popup/dist/index.css';
 import { Link, useNavigate } from "react-router-dom";
@@ -16,26 +16,30 @@ export default function AppliedCourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
-    //const [appliedModules, setAppliedModules] = useState<AppliedModuleType[]>();
 
     const navigate = useNavigate();
 
     const appliedCourseId = useIdFromPath();
-    const [appliedCourse, setAppliedCourse] = useState<CourseType>();
 
-    // Use Tanstack Query
-    useEffect(() => {
-        getAppliedCourseById(parseInt(appliedCourseId))
-            .then(result => { setAppliedCourse(result); setStartDate(new Date(result!.startDate!)); setEndDate(new Date(result!.endDate!)); setAppliedCourseName(result!.name!); })
-    }, [appliedCourseId]);
+    const { data: appliedCourse } = useQuery<CourseType>({
+        queryKey: ["appliedCourses", appliedCourseId],
+        queryFn: () => getAppliedCourseById(parseInt(appliedCourseId)),
+        enabled: !!appliedCourseId
+    });
+
+    if (appliedCourse) {
+        setStartDate(new Date(appliedCourse.startDate));
+        setEndDate(new Date(appliedCourse.endDate!))
+        setAppliedCourseName(appliedCourse.name)
+    }
 
     const queryClient = useQueryClient();
     const mutation = useMutation({
         mutationFn: (id: number) => {
             return deleteAppliedCourse(id);
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['allAppliedCourses'] })
+        onSuccess: (_data, id) => {
+            queryClient.invalidateQueries({ queryKey: ['appliedCourses', id] })
             navigate(`/activecourses`);
         }
     })
@@ -54,7 +58,7 @@ export default function AppliedCourseDetails() {
     }
 
     const { isPending, data: appliedModules, isError: isAppliedModulesError } = useQuery<ModuleType[]>({
-        queryKey: ['AppliedModules', appliedCourseId],
+        queryKey: ['appliedModules', appliedCourseId],
         queryFn: () => getModulesByCourseId(Number(appliedCourseId)),
     })
 
