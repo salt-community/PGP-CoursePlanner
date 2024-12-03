@@ -68,6 +68,7 @@ public class CourseService : IService<Course>
     {
         _context.Courses.Add(appliedCourse);
         var startDate = appliedCourse.StartDate;
+        _context.SaveChanges();
 
         int order = 1;
         foreach (var moduleId in appliedCourse.moduleIds)
