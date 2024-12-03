@@ -4,12 +4,12 @@ import Page from "@components/Page";
 import { format } from "date-fns";
 import NextBtn from "@components/buttons/NextBtn";
 import PreviousBtn from "@components/buttons/PreviousBtn";
-import { useEffect, useState } from "react";
 import { CalendarDateType, DateContent } from "../Types";
 import { getCalendarDate } from "@api/CalendarDateApi";
 import { useDateFromPath } from "@helpers/helperHooks";
 import WeekDay from "../sections/WeekDay";
 import { getDateAsString } from "@helpers/dateHelpers";
+import { useQuery } from "@tanstack/react-query";
 
 export default function DayDetails() {
     const navigate = useNavigate();
@@ -25,12 +25,12 @@ export default function DayDetails() {
     const previousDay = getDateAsString(previousDate)
 
     const dateForApi = date.replaceAll("/", "-");
-    const [data, setData] = useState<CalendarDateType>();
-    // Use Tanstack Query
-    useEffect(() => {
-        getCalendarDate(dateForApi)
-            .then(setData);
-    }, [dateForApi]);
+
+    const {data} = useQuery<CalendarDateType>({
+        queryKey: ['calendarDate', dateForApi],
+        queryFn: () => getCalendarDate(dateForApi),
+        enabled: !!dateForApi
+    })
 
     const dateContent: DateContent[] = data != undefined ? data.dateContent : [];
 

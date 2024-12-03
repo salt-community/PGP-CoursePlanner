@@ -76,6 +76,13 @@ export default function CourseDetails() {
     }
   };
 
+  const mutationPostAppliedCourse = useMutation({
+    mutationFn: (appliedCourse: CourseType) => { return postAppliedCourse(appliedCourse) },
+    onSuccess: () => {
+      navigate("/activecourses");
+    },
+  });
+
   const handleApplyTemplate = async () => {
     setIsColorNotSelected(false);
     setIsInvalidDate(false);
@@ -119,15 +126,8 @@ export default function CourseDetails() {
         moduleIds: modules?.map(m => m.id!),
         isApplied: true
       };
-      try {
-        // Use Tanstack Query
-        await postAppliedCourse(appliedCourse);
-        navigate("/activecourses");
-      } catch (error) {
-        if (error instanceof Error) {
-          console.error(error.message);
-        }
-      }
+      mutationPostAppliedCourse.mutate(appliedCourse);
+      navigate("/activecourses");
     }
   };
 
