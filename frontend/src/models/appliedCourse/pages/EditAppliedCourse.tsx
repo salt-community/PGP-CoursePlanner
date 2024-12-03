@@ -3,7 +3,6 @@ import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
 import {
     editAppliedCourse,
-    getAppliedCourseById,
 } from "@api/appliedCourseFetches";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
@@ -15,7 +14,7 @@ import { ModuleType } from "@models/module/Types";
 import { updateAppliedModule } from "@api/AppliedModuleApi";
 import { CourseType } from "@models/course/Types";
 import { getModulesByCourseId } from "@api/CourseApi";
-import { useQueryAppliedCourses } from "@api/appliedCourseQueries";
+import { useQueryAppliedCourseById, useQueryAppliedCourses } from "@api/appliedCourseQueries";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -24,7 +23,9 @@ export default function EditAppliedCourse() {
     const [color, setColor] = useState<string>("");
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
     const [appliedModules, setAppliedModules] = useState<ModuleType[]>([]);
-    const {data: appliedCourses } = useQueryAppliedCourses();
+    const appliedCourseId = useIdFromPath();
+    const { data: appliedCourses } = useQueryAppliedCourses();
+    const { data: appliedCourse } = useQueryAppliedCourseById(appliedCourseId);
 
     const navigate = useNavigate();
 
@@ -44,16 +45,9 @@ export default function EditAppliedCourse() {
         }
     };
 
-    const appliedCourseId = useIdFromPath();
-
     const { data: courseModules } = useQuery<ModuleType[]>({
         queryKey: ['appliedModules', appliedCourseId],
         queryFn: () => getModulesByCourseId(appliedCourseId)
-    })
-
-    const { data: appliedCourse } = useQuery<CourseType>({
-        queryKey: ['appliedCourses', appliedCourseId],
-        queryFn: () => getAppliedCourseById(appliedCourseId)
     })
 
     useEffect(() => {

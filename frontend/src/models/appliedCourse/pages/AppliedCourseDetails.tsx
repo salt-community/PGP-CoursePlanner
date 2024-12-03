@@ -1,7 +1,7 @@
 import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
 import { useEffect, useState } from "react";
-import { deleteAppliedCourse, getAppliedCourseById } from "@api/appliedCourseFetches";
+import { deleteAppliedCourse } from "@api/appliedCourseFetches";
 import 'reactjs-popup/dist/index.css';
 import { Link, useNavigate } from "react-router-dom";
 import DeleteBtn from "@components/buttons/DeleteBtn";
@@ -9,27 +9,21 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import PDFWeekGenerator from "../sections/PDFWeekGenerator";
 import PDFGenerator from "../sections/PDFGenerator";
 import { ModuleType } from "@models/module/Types";
-import { CourseType } from "@models/course/Types";
 import { getModulesByCourseId } from "@api/CourseApi";
+import { useQueryAppliedCourseById } from "@api/appliedCourseQueries";
 
 export default function AppliedCourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
-
     const navigate = useNavigate();
-
     const appliedCourseId = useIdFromPath();
+    const {data: appliedCourse} = useQueryAppliedCourseById(appliedCourseId);
 
     const { data: appliedModules } = useQuery<ModuleType[]>({
         queryKey: ['appliedModules', appliedCourseId],
         queryFn: () => getModulesByCourseId(appliedCourseId),
     })
-
-    const { data: appliedCourse } = useQuery<CourseType>({
-        queryKey: ["appliedCourses", appliedCourseId],
-        queryFn: () => getAppliedCourseById(appliedCourseId),
-    });
 
     useEffect(() => {
         if (appliedCourse) {
