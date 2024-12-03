@@ -12,10 +12,10 @@ import { useNavigate } from "react-router-dom";
 import InputSmall from "@components/inputFields/InputSmall";
 import ColorPickerModal from "@components/ColorPickerModal";
 import ModuleEdit from "../sections/ModuleEdit";
-import { getModulesByCourseId } from "@api/CourseModulesApi";
 import { ModuleType } from "@models/module/Types";
 import { updateAppliedModule } from "@api/AppliedModuleApi";
 import { CourseType } from "@models/course/Types";
+import { getModulesByCourseId } from "@api/CourseApi";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);

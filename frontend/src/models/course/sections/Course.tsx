@@ -10,7 +10,7 @@ import TrashBtn from "@components/buttons/TrashBtn";
 import { CourseProps, CourseType } from "../Types";
 import FilterArea from "./FilterArea";
 import { ModuleType } from "@models/module/Types";
-import { getModulesByCourseId } from "@api/CourseModulesApi";
+import { getModulesByCourseId } from "@api/CourseApi";
 
 export default function Course({ submitFunction, course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);

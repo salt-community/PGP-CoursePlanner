@@ -8,9 +8,9 @@ import DeleteBtn from "@components/buttons/DeleteBtn";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import PDFWeekGenerator from "../sections/PDFWeekGenerator";
 import PDFGenerator from "../sections/PDFGenerator";
-import { getModulesByCourseId } from "@api/CourseModulesApi";
 import { ModuleType } from "@models/module/Types";
 import { CourseType } from "@models/course/Types";
+import { getModulesByCourseId } from "@api/CourseApi";
 
 export default function AppliedCourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
