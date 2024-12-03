@@ -8,7 +8,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { editAppliedCourse, postAppliedCourse, } from "@api/appliedCourseFetches";
 import { convertToGoogle } from "@helpers/googleHelpers";
 import DeleteBtn from "@components/buttons/DeleteBtn";
-import { deleteCourseFromGoogle } from "@api/googleCalendarApi";
+import { deleteCourseFromGoogle } from "@api/googleCalendarFetches";
 import "reactjs-popup/dist/index.css";
 import { CourseType } from "../Types";
 import LoadingMessage from "@components/LoadingMessage";
