@@ -18,8 +18,8 @@ export async function getCourses() {
   return await response.json();
 }
 
-export async function getCourseById(courseId: number) {
-  const response = await fetch(`${BASE_URL}/${courseId}`, {
+export async function getCourseById(id: number) {
+  const response = await fetch(`${BASE_URL}/${id}`, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",

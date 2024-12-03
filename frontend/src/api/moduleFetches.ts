@@ -18,8 +18,8 @@ export async function getModules() {
   return await response.json();
 }
 
-export async function getModuleById(moduleId: number) {
-  const response = await fetch(`${BASE_URL}/${moduleId}`, {
+export async function getModuleById(id: number) {
+  const response = await fetch(`${BASE_URL}/${id}`, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",

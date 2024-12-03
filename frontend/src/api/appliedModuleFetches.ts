@@ -3,7 +3,7 @@ import { ModuleType } from "@models/module/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedModules`;
 
-export async function postAppliedModule(module: ModuleType): Promise<ModuleType> {
+export async function postAppliedModule(appliedModule: ModuleType): Promise<ModuleType> {
   const response = await fetch(BASE_URL, {
     method: "POST",
     headers: {
@@ -11,7 +11,7 @@ export async function postAppliedModule(module: ModuleType): Promise<ModuleType>
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",
     },
-    body: JSON.stringify(module),
+    body: JSON.stringify(appliedModule),
   });
 
   if (!response.ok) {
