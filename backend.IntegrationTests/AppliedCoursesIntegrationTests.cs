@@ -75,33 +75,33 @@ namespace backend.IntegrationTests
 
         //this test was commented out 2024-12-01 due to strange behaviour. it really shouldn't fail. and it doesn't when one does performs it manually on swagger.
 
-        // [Fact] 
-        // public async Task CreateAppliedCourse_Returns_Success()
-        // {
-        //     // arrange
-        //     using (var scope = _factory.Services.CreateScope())
-        //     {
-        //         var scopedServices = scope.ServiceProvider;
-        //         var db = scopedServices.GetRequiredService<DataContext>();
-        //         Seeding.InitializeTestDB(db);
-        //     }
+        [Fact] 
+        public async Task CreateAppliedCourse_Returns_Success()
+        {
+            // arrange
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<DataContext>();
+                Seeding.InitializeTestDB(db);
+            }
 
-        //     var newAppliedCourse = new Course() {Name = "JavaScript S24", StartDate = new DateTime(2024-08-06), Color = "#3a0909"};
-        //     var content = JsonConvert.SerializeObject(newAppliedCourse);
+            var newAppliedCourse = new Course() {Name = "JavaScript S24", StartDate = new DateTime(2024-08-06), Color = "#3a0909"};
+            var content = JsonConvert.SerializeObject(newAppliedCourse);
 
-        //     var body = new StringContent(content, Encoding.UTF8, "application/json");
-        //     body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var body = new StringContent(content, Encoding.UTF8, "application/json");
+            body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-        //     // act 
-        //     var response = await _client.PostAsync("/AppliedCourses", body);
-        //     var deserializedResponse = JsonConvert.DeserializeObject<Course>(
-        //         await response.Content.ReadAsStringAsync());
+            // act 
+            var response = await _client.PostAsync("/AppliedCourses", body);
+            var deserializedResponse = JsonConvert.DeserializeObject<Course>(
+                await response.Content.ReadAsStringAsync());
 
-        //     // assert
-        //     response.StatusCode.Should().Be(HttpStatusCode.Created);
-        //     response.Content.Headers.ContentType.Should().BeOfType<MediaTypeHeaderValue>();
-        //     deserializedResponse!.Id.Should().Be(2);
-        // }
+            // assert
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+            response.Content.Headers.ContentType.Should().BeOfType<MediaTypeHeaderValue>();
+            deserializedResponse!.Id.Should().Be(4);
+        }
 
     }
 }
