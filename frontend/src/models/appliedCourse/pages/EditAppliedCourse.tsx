@@ -49,29 +49,27 @@ export default function EditAppliedCourse() {
     });
 
     const appliedCourseId = useIdFromPath();
-    const [appliedCourse, setAppliedCourse] = useState<CourseType | null>(
-        null
-    );
 
-    const { data } = useQuery<ModuleType[]>({
+    const { data: courseModules } = useQuery<ModuleType[]>({
+        queryKey: ['appliedModules', appliedCourseId],
+        queryFn: () => getModulesByCourseId(appliedCourseId)
+    })
+
+    const { data: appliedCourse } = useQuery<CourseType>({
         queryKey: ['appliedCourses', appliedCourseId],
-        queryFn: () => getModulesByCourseId(Number(appliedCourseId)),
+        queryFn: () => getAppliedCourseById(appliedCourseId)
     })
 
     useEffect(() => {
-        getAppliedCourseById(parseInt(appliedCourseId)).then((result) => {
-            if (result) {
-                setAppliedCourse(result);
-                setStartDate(
-                    result.startDate ? new Date(result.startDate) : new Date()
-                );
-                setColor(result.color || "");
-                setAppliedCourseName(result.name || "");
-                setAppliedModules(data || []);
-            }
-        });
-    }, [appliedCourseId, data]);
-
+        if (appliedCourse) {
+            setStartDate(
+                appliedCourse.startDate ? new Date(appliedCourse.startDate) : new Date()
+            );
+            setColor(appliedCourse.color || "");
+            setAppliedCourseName(appliedCourse.name || "");
+            setAppliedModules(courseModules || []);
+        }
+    }, [appliedCourse, courseModules])
 
     const defaultColor = appliedCourse?.color || "";
 
@@ -133,7 +131,7 @@ export default function EditAppliedCourse() {
             return editAppliedCourse(newAppliedCourse);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["appliedCourses"] });
+            queryClient.invalidateQueries({ queryKey: ["appliedCourses", appliedCourseId] });
             navigate(`/activecourses`);
         },
     });

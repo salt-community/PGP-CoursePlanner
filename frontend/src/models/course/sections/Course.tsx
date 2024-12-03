@@ -30,7 +30,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     });
 
     const { data: courseModulesData } = useQuery<ModuleType[]>({
-        queryKey: ["courseModules", course.id],
+        queryKey: ["appliedModules", course.id],
         queryFn: () => getModulesByCourseId(course.id!)
     });
 

@@ -32,7 +32,7 @@ export default function CourseDetails() {
   } = useQuery({
     queryKey: ["courses", courseId],
     queryFn: () => {
-      return getCourseById(parseInt(courseId));
+      return getCourseById(courseId);
     },
   });
 
@@ -41,8 +41,8 @@ export default function CourseDetails() {
     isLoading: isLoadingModules,
     isError: isErrorModules,
   } = useQuery<ModuleType[]>({
-    queryKey: ["courseModules", courseId],
-    queryFn: () => getModulesByCourseId(parseInt(courseId)),
+    queryKey: ["appliedModules", courseId],
+    queryFn: () => getModulesByCourseId(courseId),
   });
 
   const {
@@ -79,8 +79,13 @@ export default function CourseDetails() {
   const mutationPostAppliedCourse = useMutation({
     mutationFn: (appliedCourse: CourseType) => { return postAppliedCourse(appliedCourse) },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['appliedCourses'] });
       navigate("/activecourses");
     },
+  });
+
+  const mutationEditAppliedCourse = useMutation({
+    mutationFn: (appliedCourse: CourseType) => { return editAppliedCourse(appliedCourse) },
   });
 
   const handleApplyTemplate = async () => {
@@ -101,20 +106,16 @@ export default function CourseDetails() {
       if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
         await Promise.all(
           appliedCoursesWithCourseId!.map(async (appliedCourse) => {
-            try {
-              const newAppliedCourse: CourseType = {
-                id: appliedCourse.id,
-                name: appliedCourse.name,
-                startDate: appliedCourse.startDate,
-                endDate: appliedCourse.endDate,
-                moduleIds: appliedCourse.moduleIds,
-                color: color,
-                isApplied: appliedCourse.isApplied
-              };
-              await editAppliedCourse(newAppliedCourse);
-            } catch (error) {
-              console.error("Error posting applied event:", error);
-            }
+            const newAppliedCourse: CourseType = {
+              id: appliedCourse.id,
+              name: appliedCourse.name,
+              startDate: appliedCourse.startDate,
+              endDate: appliedCourse.endDate,
+              moduleIds: appliedCourse.moduleIds,
+              color: color,
+              isApplied: appliedCourse.isApplied
+            };
+            mutationEditAppliedCourse.mutate(newAppliedCourse);
           })
         );
       }
@@ -138,7 +139,7 @@ export default function CourseDetails() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["courses", parseInt(courseId)],
+        queryKey: ["courses", courseId],
       });
       navigate(`/courses`);
     },
@@ -197,7 +198,7 @@ export default function CourseDetails() {
               className="btn btn-sm py-1 max-w-xs btn-info text-white">
               Edit Course
             </Link>
-            <DeleteBtn onClick={() => mutation.mutate(parseInt(courseId))}>
+            <DeleteBtn onClick={() => mutation.mutate(courseId)}>
               Delete Course
             </DeleteBtn>
           </div>
