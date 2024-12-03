@@ -3,7 +3,7 @@ import { CourseType } from "@models/course/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedCourses`;
 
-export async function getAllAppliedCourses() {
+export async function getAppliedCourses() {
   const response = await fetch(BASE_URL, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
