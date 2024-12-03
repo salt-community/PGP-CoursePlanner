@@ -9,7 +9,7 @@ export type tokenResponse = {
   id_token: string;
 };
 
-export async function getTokens() {
+export async function getToken() {
   const authCode = new URLSearchParams(location.search).get('code');
   if (authCode === null) {
     throw new Error("No code found in URL");
@@ -29,7 +29,7 @@ export async function getTokens() {
   return await response.json();
 }
 
-export async function refreshTokens() {
+export async function refreshToken() {
   const response = await fetch(BASE_URL, {
     headers: {
       Accept: "application/json",
