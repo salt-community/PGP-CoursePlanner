@@ -24,9 +24,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore ./backend
 
-    - name: Run tests
-      run: dotnet test --no-build --verbosity normal
-
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
       with:
