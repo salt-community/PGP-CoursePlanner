@@ -1,16 +1,10 @@
 services:
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+  postgres-db:
+    container_name: course-planner-postgres
+    image: postgres:latest
     ports:
-      - "5268:5268"
-  
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
+      - '5268:5432'
+    environment:
+      POSTGRES_PASSWORD: 'postgresPassword'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_DB: 'course_planner_db'
