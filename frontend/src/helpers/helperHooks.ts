@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { refreshTokens } from "../api/UserApi";
+import { refreshToken } from "../api/userFetches";
 import { setCookie } from "./cookieHelpers";
 import { useQuery } from "@tanstack/react-query";
 
@@ -39,7 +39,7 @@ export function useYearFromPath() {
 export function useNewTokenCookies() {
   const { data: response, isError } = useQuery({
     queryKey: ["accessCode"],
-    queryFn: () => refreshTokens(),
+    queryFn: () => refreshToken(),
   });
 
   if (isError) {

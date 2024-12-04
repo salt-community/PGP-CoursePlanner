@@ -6,10 +6,8 @@ import PreviousBtn from "@components/buttons/PreviousBtn";
 import Page from "@components/Page";
 import { fullWeekOfWeekNumber, getDateAsString } from "@helpers/dateHelpers";
 import { useWeekFromPath, useYearFromPath } from "@helpers/helperHooks";
-import { getCalendarDateBatch } from "@api/CalendarDateApi";
-import { CalendarDateType } from "../Types";
 import WeekDayCalendar from "../sections/WeekDayCalendar";
-import { useQuery } from "@tanstack/react-query";
+import { useQueryCalendarDateBatch } from "@api/calendarDateQueries";
 import { trackUrl } from "@helpers/helperMethods";
 
 export default function MonthView() {
@@ -34,12 +32,7 @@ export default function MonthView() {
     const monday = getDateAsString(allWeekDays[0])
     const sunday = getDateAsString(allWeekDays[6])
 
-    const { isPending, data, isError, error } = useQuery<CalendarDateType[]>({
-        queryKey: ['CalendarWeekView', monday, sunday],
-        queryFn: () => {
-            return getCalendarDateBatch(monday, sunday);
-        },
-    })
+    const {data, isPending, isError, error} = useQueryCalendarDateBatch(monday, sunday);
 
     if (isError) {
         console.log("Query error:", error);

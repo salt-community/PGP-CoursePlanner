@@ -15,6 +15,21 @@ interface EventDataArr {
 
 const BASE_URL = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
 
+export const getGoogleCourseEvents = async (course: string): Promise<EventDataArr> => {
+  const response = await fetch(BASE_URL + `?sharedExtendedProperty=course%3D${course}`, {
+    headers: {
+      Authorization: `Bearer ${getCookie("access_token")}`,
+      Accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  return await response.json();
+}
+
 export async function postCourseToGoogle(eventTemplate: GoogleEvent[]) {
   try {
     for (const event of eventTemplate) {
@@ -75,17 +90,3 @@ export async function deleteSingleGoogleEvent(eventId: string) {
   }
 }
 
-export const getGoogleCourseEvents = async (course: string): Promise<EventDataArr> => {
-  const response = await fetch(BASE_URL + `?sharedExtendedProperty=course%3D${course}`, {
-    headers: {
-      Authorization: `Bearer ${getCookie("access_token")}`,
-      Accept: "application/json",
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
-
-  return await response.json();
-}

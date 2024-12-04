@@ -1,19 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
-import { editCourse, getCourseById } from "@api/CourseApi";
+import { editCourse } from "@api/courseFetches";
 import Page from "@components/Page";
 import Course from "../sections/Course";
 import { useIdFromPath } from "@helpers/helperHooks";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
+import { useQueryCourseById } from "@api/courseQueries";
 
 export default function EditCourse() {
-
-    const courseId = useIdFromPath();
-
-    const { data: course, isLoading, isError } = useQuery({
-        queryKey: ['courses', courseId],
-        queryFn: () => getCourseById(courseId)
-    });
+    const { data: course, isLoading, isError } = useQueryCourseById(useIdFromPath());
 
     return (
         <Page>

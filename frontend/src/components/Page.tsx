@@ -1,14 +1,14 @@
 import Login from "@models/login/Login";
 import NavBar from "./NavBar";
-import { getCookie, setCookie, setTokenCookies } from "@helpers/cookieHelpers";
-import { useQuery } from "@tanstack/react-query";
-import { getTokens, tokenResponse } from "@api/UserApi";
+import { getCookie, setCookie } from "@helpers/cookieHelpers";
+import { useQueryToken } from "@api/userQueries";
 
 type Props = {
     children: React.ReactNode;
 }
 
 export default function Page({ children }: Props) {
+    useQueryToken();
     // This if statement is a production fix for getting the auth code from the URL. 
     if (location.search) {
         const authCode = new URLSearchParams(location.search).get('code');
@@ -16,12 +16,6 @@ export default function Page({ children }: Props) {
             setCookie("auth_code", authCode);
         }
     }
-
-    const { data } = useQuery<tokenResponse>({
-        queryKey: ['accessCode'],
-        queryFn: getTokens,
-    })
-    setTokenCookies(data);
 
     return (
         <>

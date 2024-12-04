@@ -3,24 +3,21 @@ import PrimaryBtn from '@components/buttons/PrimaryBtn';
 import TrashBtn from '@components/buttons/TrashBtn';
 import { DayProps, ModuleType } from '../Types';
 import { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { editModule, getAllModules } from '../../../api/ModuleApi';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { editModule } from '../../../api/moduleFetches';
 import ModalContainer from '../components/ModalContainer';
 import DownArrowBtn from '../../../components/buttons/DownArrowBtn';
 import UpArrowBtn from '../../../components/buttons/UpArrowBtn';
 import EllipsisBtn from '../components/EllipsisBtn';
 import EditEventTable from '../../../components/EditEventTable';
 import { openCloseModal } from '../helpers/openCloseModal';
+import { useQueryModules } from '@api/moduleQueries';
 
 export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
     const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
-
-    const { data: modules } = useQuery<ModuleType[]>({
-        queryKey: ['modules'],
-        queryFn: getAllModules
-    });
+    const {data: modules } = useQueryModules();
 
     const handleAddEvent = () => {
         const editedDays = [...days];

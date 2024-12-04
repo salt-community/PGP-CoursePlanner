@@ -1,35 +1,27 @@
 import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
 import { useEffect, useState } from "react";
-import { deleteAppliedCourse, getAppliedCourseById } from "@api/AppliedCourseApi";
+import { deleteAppliedCourse } from "@api/appliedCourseFetches";
 import 'reactjs-popup/dist/index.css';
 import { Link, useNavigate } from "react-router-dom";
 import DeleteBtn from "@components/buttons/DeleteBtn";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PDFWeekGenerator from "../sections/PDFWeekGenerator";
 import PDFGenerator from "../sections/PDFGenerator";
-import { ModuleType } from "@models/module/Types";
-import { CourseType } from "@models/course/Types";
-import { getModulesByCourseId } from "@api/CourseApi";
+import { useQueryAppliedCourseById } from "@api/appliedCourseQueries";
+import { useQueryModulesByCourseId } from "@api/courseQueries";
+
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export default function AppliedCourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
-
     const navigate = useNavigate();
-
     const appliedCourseId = useIdFromPath();
-
-    const { data: appliedModules } = useQuery<ModuleType[]>({
-        queryKey: ['appliedModules', appliedCourseId],
-        queryFn: () => getModulesByCourseId(appliedCourseId),
-    })
-
-    const { data: appliedCourse } = useQuery<CourseType>({
-        queryKey: ["appliedCourses", appliedCourseId],
-        queryFn: () => getAppliedCourseById(appliedCourseId),
-    });
+    const { data: appliedCourse } = useQueryAppliedCourseById(appliedCourseId);
+    const { data: courseModules } = useQueryModulesByCourseId(appliedCourseId);
 
     useEffect(() => {
         if (appliedCourse) {
@@ -64,15 +56,13 @@ export default function AppliedCourseDetails() {
     }
 
     const courseWeekDates = getWeekDayList();
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const courseWeekDays = courseWeekDates.map(e => monthNamesShort[e.getMonth()] + " " + e.getDate().toString());
 
     let counter = -1;
 
     return (
         <Page>
-            {appliedCourse && appliedModules &&
+            {appliedCourse && courseModules &&
                 <>
                     <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
                         <section className="flex items-center flex-col gap-4">
@@ -82,7 +72,7 @@ export default function AppliedCourseDetails() {
                             </h2>
                         </section>
                         <section className="flex items-start flex-col gap-4 px-1 sm:p-0 md:px-24">
-                            {appliedModules.map((module, index) =>
+                            {courseModules.map((module, index) =>
                                 <div key={index}>
                                     <h1 className="text-lg font-bold self-start">
                                         Module {index + 1}: {module.name}
@@ -143,8 +133,8 @@ export default function AppliedCourseDetails() {
                         <div className="flex flex-row gap-2 px-1 mb-6 sm:p-0 md:px-24">
                             <Link to={`/activecourses/edit/${appliedCourse.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit</Link>
                             <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
-                            <PDFGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays} appliedModules={appliedModules}></PDFGenerator>
-                            <PDFWeekGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays} appliedModules={appliedModules}></PDFWeekGenerator>
+                            <PDFGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays} appliedModules={courseModules}></PDFGenerator>
+                            <PDFWeekGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays} appliedModules={courseModules}></PDFWeekGenerator>
                         </div>
                     </section>
                 </>

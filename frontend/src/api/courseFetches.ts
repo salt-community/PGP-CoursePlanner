@@ -1,9 +1,9 @@
 import { getCookie } from "@helpers/cookieHelpers";
-import { ModuleType } from "@models/module/Types";
+import { CourseType } from "@models/course/Types";
 
-const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Modules`;
+const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Courses`;
 
-export async function getAllModules() {
+export async function getCourses() {
   const response = await fetch(BASE_URL, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
@@ -18,8 +18,8 @@ export async function getAllModules() {
   return await response.json();
 }
 
-export async function getModuleById(moduleId: number) {
-  const response = await fetch(`${BASE_URL}/${moduleId}`, {
+export async function getCourseById(id: number) {
+  const response = await fetch(`${BASE_URL}/${id}`, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",
@@ -33,7 +33,22 @@ export async function getModuleById(moduleId: number) {
   return await response.json();
 }
 
-export async function postModule(module: ModuleType) {
+export async function getModulesByCourseId(courseId: number) {
+  const response = await fetch(`${BASE_URL}/ModulesByCourse/${courseId}`, {
+      headers: {
+          Authorization: `Bearer ${getCookie("JWT")}`,
+          Accept: "application/json",
+      },
+  });
+
+  if (!response.ok) {
+      throw new Error(response.statusText);
+  }
+
+  return await response.json();
+}
+
+export async function postCourse(course: CourseType) {
   const response = await fetch(BASE_URL, {
     method: "POST",
     headers: {
@@ -41,7 +56,7 @@ export async function postModule(module: ModuleType) {
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",
     },
-    body: JSON.stringify(module),
+    body: JSON.stringify(course),
   });
 
   if (!response.ok) {
@@ -49,15 +64,15 @@ export async function postModule(module: ModuleType) {
   }
 }
 
-export async function editModule(module: ModuleType) {
-  const response = await fetch(`${BASE_URL}/${module.id}`, {
+export async function editCourse(course: CourseType) {
+  const response = await fetch(`${BASE_URL}/${course.id}`, {
     method: "PUT",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",
     },
-    body: JSON.stringify(module),
+    body: JSON.stringify(course),
   });
 
   if (!response.ok) {
@@ -65,7 +80,7 @@ export async function editModule(module: ModuleType) {
   }
 }
 
-export async function deleteModule(id: number) {
+export async function deleteCourse(id: number) {
   const response = await fetch(`${BASE_URL}/${id}`, {
     method: "DELETE",
     headers: {

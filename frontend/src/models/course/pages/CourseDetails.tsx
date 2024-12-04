@@ -1,64 +1,38 @@
 import { Link, useNavigate } from "react-router-dom";
-import { deleteCourse, getCourseById, getModulesByCourseId } from "@api/CourseApi";
+import { deleteCourse } from "@api/courseFetches";
 import Page from "@components/Page";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useIdFromPath } from "@helpers/helperHooks";
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { editAppliedCourse, getAllAppliedCourses, postAppliedCourse, } from "@api/AppliedCourseApi";
+import { editAppliedCourse, postAppliedCourse, } from "@api/appliedCourseFetches";
 import { convertToGoogle } from "@helpers/googleHelpers";
 import DeleteBtn from "@components/buttons/DeleteBtn";
-import { deleteCourseFromGoogle } from "@api/GoogleCalendarApi";
+import { deleteCourseFromGoogle } from "@api/googleCalendarFetches";
 import "reactjs-popup/dist/index.css";
 import { CourseType } from "../Types";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import ColorPickerModal from "@components/ColorPickerModal";
-import { ModuleType } from "@models/module/Types";
+import { useQueryAppliedCourses } from "@api/appliedCourseQueries";
+import { useQueryCourseById, useQueryModulesByCourseId } from "@api/courseQueries";
 
 export default function CourseDetails() {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
   const [groupEmail, setGroupEmail] = useState<string>("");
-
   const navigate = useNavigate();
-
   const courseId = useIdFromPath();
-  const {
-    data: course,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["courses", courseId],
-    queryFn: () => {
-      return getCourseById(courseId);
-    },
-  });
-
-  const {
-    data: modules,
-    isLoading: isLoadingModules,
-    isError: isErrorModules,
-  } = useQuery<ModuleType[]>({
-    queryKey: ["appliedModules", courseId],
-    queryFn: () => getModulesByCourseId(courseId),
-  });
-
-  const {
-    data: allAppliedCourses,
-    isLoading: isLoadingAppliedCourses,
-    isError: isErrorAppliedCourses,
-  } = useQuery<CourseType[]>({
-    queryKey: ["appliedCourses"],
-    queryFn: () => getAllAppliedCourses(),
-  });
+  const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
+  const { data: course, isLoading: isLoadingCourse, isError: isErrorCourse } = useQueryCourseById(courseId);
+  const {data: courseModules, isLoading: isLoadingCourseModules, isError: isErrorCourseModules} = useQueryModulesByCourseId(courseId);
 
   let defaultColor = "#FFFFFF";
   const [color, setColor] = useState(defaultColor);
   const [isColorNotSelected, setIsColorNotSelected] = useState<boolean>(false);
   useEffect(() => {
-    if (course && allAppliedCourses) {
-      const appliedCoursesWithCourseId = allAppliedCourses.filter(
+    if (course && appliedCourses) {
+      const appliedCoursesWithCourseId = appliedCourses.filter(
         (m) => m.id! === course.id
       );
 
@@ -67,11 +41,11 @@ export default function CourseDetails() {
         setColor(defaultColor);
       }
     }
-  }, [course, allAppliedCourses]);
+  }, [course, appliedCourses]);
 
   const handleGoogleGroupAdd = async () => {
-    if (course && modules) {
-      convertToGoogle(modules, startDate, course.name, groupEmail);
+    if (course && courseModules) {
+      convertToGoogle(courseModules, startDate, course.name, groupEmail);
     }
   };
 
@@ -99,7 +73,7 @@ export default function CourseDetails() {
       if (startDate.getDay() == 6 || startDate.getDay() == 0)
         setIsInvalidDate(true);
     } else {
-      const appliedCoursesWithCourseId = allAppliedCourses!.filter(
+      const appliedCoursesWithCourseId = appliedCourses!.filter(
         (m) => m.id! == course!.id
       );
       if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
@@ -123,7 +97,7 @@ export default function CourseDetails() {
         name: course?.name ?? "",
         startDate: startDate,
         color: color,
-        moduleIds: modules?.map(m => m.id!),
+        moduleIds: courseModules?.map(m => m.id!),
         isApplied: true
       };
       mutationPostAppliedCourse.mutate(appliedCourse);
@@ -136,9 +110,9 @@ export default function CourseDetails() {
     mutationFn: (id: number) => {
       return deleteCourse(id);
     },
-    onSuccess: () => {
+    onSuccess: (_data, id) => {
       queryClient.invalidateQueries({
-        queryKey: ["courses", courseId],
+        queryKey: ["courses", id],
       });
       navigate(`/courses`);
     },
@@ -146,18 +120,18 @@ export default function CourseDetails() {
 
   return (
     <Page>
-      {(isLoading || isLoadingModules || isLoadingAppliedCourses) && (
+      {(isLoadingCourse || isLoadingCourseModules || isLoadingAppliedCourses) && (
         <LoadingMessage />
       )}
-      {(isError || isErrorModules || isErrorAppliedCourses) && <ErrorMessage />}
-      {course && allAppliedCourses && (
+      {(isErrorCourse || isErrorCourseModules || isErrorAppliedCourses) && <ErrorMessage />}
+      {course && appliedCourses && (
         <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
           <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
             <h1 className="pb-4 text-xl text-primary font-bold">
               {course.name}
             </h1>
-            {modules &&
-              modules.map((module, index) => (
+            {courseModules &&
+              courseModules.map((module, index) => (
                 <div key={module.id}>
                   <h1 className="text-lg font-bold self-start">
                     <Link

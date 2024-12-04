@@ -1,4 +1,4 @@
-import { postModule } from "@api/ModuleApi"
+import { postModule } from "@api/moduleFetches"
 import Page from "@components/Page"
 import Module from "../sections/Module"
 import { ModuleType } from "../Types"

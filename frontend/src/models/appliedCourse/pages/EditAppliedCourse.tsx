@@ -1,11 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
 import {
     editAppliedCourse,
-    getAllAppliedCourses,
-    getAppliedCourseById,
-} from "@api/AppliedCourseApi";
+} from "@api/appliedCourseFetches";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,9 +11,10 @@ import InputSmall from "@components/inputFields/InputSmall";
 import ColorPickerModal from "@components/ColorPickerModal";
 import ModuleEdit from "../sections/ModuleEdit";
 import { ModuleType } from "@models/module/Types";
-import { updateAppliedModule } from "@api/AppliedModuleApi";
+import { updateAppliedModule } from "@api/appliedModuleFetches";
 import { CourseType } from "@models/course/Types";
-import { getModulesByCourseId } from "@api/CourseApi";
+import { useQueryAppliedCourseById, useQueryAppliedCourses } from "@api/appliedCourseQueries";
+import { useQueryModulesByCourseId } from "@api/courseQueries";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -24,8 +23,11 @@ export default function EditAppliedCourse() {
     const [color, setColor] = useState<string>("");
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
     const [appliedModules, setAppliedModules] = useState<ModuleType[]>([]);
-
+    const appliedCourseId = useIdFromPath();
     const navigate = useNavigate();
+    const { data: appliedCourses } = useQueryAppliedCourses();
+    const { data: appliedCourse } = useQueryAppliedCourseById(appliedCourseId);
+    const {data: courseModules } = useQueryModulesByCourseId(appliedCourseId);
 
     const appliedModuleMutation = useMutation({
         mutationFn: (newAppliedModule: ModuleType) => {
@@ -42,23 +44,6 @@ export default function EditAppliedCourse() {
             appliedModuleMutation.mutate(updatedModules[i]);
         }
     };
-
-    const { data: allAppliedCourses } = useQuery<CourseType[]>({
-        queryKey: ["appliedCourses"],
-        queryFn: () => getAllAppliedCourses(),
-    });
-
-    const appliedCourseId = useIdFromPath();
-
-    const { data: courseModules } = useQuery<ModuleType[]>({
-        queryKey: ['appliedModules', appliedCourseId],
-        queryFn: () => getModulesByCourseId(appliedCourseId)
-    })
-
-    const { data: appliedCourse } = useQuery<CourseType>({
-        queryKey: ['appliedCourses', appliedCourseId],
-        queryFn: () => getAppliedCourseById(appliedCourseId)
-    })
 
     useEffect(() => {
         if (appliedCourse) {
@@ -94,7 +79,7 @@ export default function EditAppliedCourse() {
                 setIsInvalidDate(true);
             if (appliedModules?.find((m) => m.name == "")) setIsInvalidModule(true);
         } else {
-            const appliedCoursesWithCourseId = allAppliedCourses!.filter(
+            const appliedCoursesWithCourseId = appliedCourses!.filter(
                 (m) => m.id == appliedCourse!.id
             );
             if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
