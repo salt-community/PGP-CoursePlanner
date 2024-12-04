@@ -3,14 +3,13 @@ import { reorderModule } from "../helpers/reorderModule";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import TrashBtn from "@components/buttons/TrashBtn";
 import AppliedModule from "./AppliedModule";
-import { postAppliedModule, updateAppliedModule } from "@api/appliedModuleFetches";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import UpArrowBtn from "@components/buttons/UpArrowBtn";
 import DownArrowBtn from "@components/buttons/DownArrowBtn";
 import { DayType, EventType, ModuleType } from "@models/module/Types";
 import { useQueryModules } from "@api/moduleQueries";
 import { useMutationPostAppliedEvent } from "@api/appliedEventMutations";
 import { useMutationPostAppliedDay } from "@api/appliedDayMutations";
+import { useMutationPostAppliedModule, useMutationUpdateAppliedModule } from "@api/appliedModuleMutations";
 
 interface ModuleEditProps {
     appliedModules: ModuleType[];
@@ -21,26 +20,8 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
     const { data: modules, isLoading, error } = useQueryModules();
     const postAppliedEventMutation = useMutationPostAppliedEvent();
     const postAppliedDayMutation = useMutationPostAppliedDay();
-
-    const queryClient = useQueryClient();
-
-    const appliedModuleMutation = useMutation({
-        mutationFn: (newAppliedModule: ModuleType) => {
-            return updateAppliedModule(newAppliedModule);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['appliedModules'] })
-        }
-    })
-
-    const postAppliedModuleMutation = useMutation({
-        mutationFn: (emptyModule: ModuleType) => {
-            return postAppliedModule(emptyModule);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['appliedModules'] })
-        }
-    })
+    const postAppliedModuleMutation = useMutationPostAppliedModule();
+    const updateAppliedModuleMutation = useMutationUpdateAppliedModule();
 
     if (isLoading) return <p>Loading modules...</p>;
     if (error) return <p>Error loading modules</p>;
@@ -96,8 +77,8 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
             days: listDays.sort((a, b) => a.dayNumber - b.dayNumber),
         };
 
-        appliedModuleMutation.mutate(newAppliedModule)
-        if (appliedModuleMutation.data) {
+        updateAppliedModuleMutation.mutate(newAppliedModule)
+        if (updateAppliedModuleMutation.data) {
             const updatedModules = [...appliedModules!];
             updatedModules[moduleIndex] = newAppliedModule;
             onUpdateModules(updatedModules);

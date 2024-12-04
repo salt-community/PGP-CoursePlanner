@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -8,11 +7,11 @@ import InputSmall from "@components/inputFields/InputSmall";
 import ColorPickerModal from "@components/ColorPickerModal";
 import ModuleEdit from "../sections/ModuleEdit";
 import { ModuleType } from "@models/module/Types";
-import { updateAppliedModule } from "@api/appliedModuleFetches";
 import { CourseType } from "@models/course/Types";
 import { useQueryAppliedCourseById, useQueryAppliedCourses } from "@api/appliedCourseQueries";
 import { useQueryModulesByCourseId } from "@api/courseQueries";
 import { useMutationUpdateAppliedCourse } from "@api/appliedCourseMutations";
+import { useMutationUpdateAppliedModule } from "@api/appliedModuleMutations";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -27,20 +26,12 @@ export default function EditAppliedCourse() {
     const { data: appliedCourse } = useQueryAppliedCourseById(appliedCourseId);
     const { data: courseModules } = useQueryModulesByCourseId(appliedCourseId);
     const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
-
-    const appliedModuleMutation = useMutation({
-        mutationFn: (newAppliedModule: ModuleType) => {
-            return updateAppliedModule(newAppliedModule);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['appliedCourses', appliedCourseId] })
-        }
-    })
+    const mutationUpdateAppliedModule = useMutationUpdateAppliedModule();
 
     const handleUpdateModules = (updatedModules: ModuleType[]) => {
         setAppliedModules(updatedModules);
         for (let i = 0; i < updatedModules.length; i++) {
-            appliedModuleMutation.mutate(updatedModules[i]);
+            mutationUpdateAppliedModule.mutate(updatedModules[i]);
         }
     };
 
@@ -100,7 +91,6 @@ export default function EditAppliedCourse() {
             mutationUpdateAppliedCourse.mutate(newAppliedCourse);
         }
     };
-    const queryClient = useQueryClient();
 
     return (
         <Page>
