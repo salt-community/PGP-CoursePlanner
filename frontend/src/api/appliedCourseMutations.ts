@@ -1,5 +1,5 @@
 import { CourseType } from "@models/course/Types";
-import { deleteAppliedCourse, editAppliedCourse, postAppliedCourse } from "./appliedCourseFetches";
+import { deleteAppliedCourse, postAppliedCourse, updateAppliedCourse } from "./appliedCourseFetches";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -19,12 +19,12 @@ export function useMutationPostAppliedCourse() {
     return mutation
 }
 
-export function useMutationEditAppliedCourse() {
+export function useMutationUpdateAppliedCourse() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const mutation = useMutation({
         mutationFn: (appliedCourse: CourseType) => {
-            return editAppliedCourse(appliedCourse);
+            return updateAppliedCourse(appliedCourse);
         },
         onSuccess: (_data, appliedCourse) => {
             queryClient.invalidateQueries({ queryKey: ["appliedCourses", appliedCourse.id] });

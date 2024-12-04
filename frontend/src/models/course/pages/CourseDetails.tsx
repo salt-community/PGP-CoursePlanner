@@ -15,7 +15,7 @@ import ErrorMessage from "@components/ErrorMessage";
 import ColorPickerModal from "@components/ColorPickerModal";
 import { useQueryAppliedCourses } from "@api/appliedCourseQueries";
 import { useQueryCourseById, useQueryModulesByCourseId } from "@api/courseQueries";
-import { useMutationEditAppliedCourse, useMutationPostAppliedCourse } from "@api/appliedCourseMutations";
+import { useMutationUpdateAppliedCourse, useMutationPostAppliedCourse } from "@api/appliedCourseMutations";
 
 export default function CourseDetails() {
   const [startDate, setStartDate] = useState<Date>(new Date());
@@ -27,7 +27,7 @@ export default function CourseDetails() {
   const { data: course, isLoading: isLoadingCourse, isError: isErrorCourse } = useQueryCourseById(courseId);
   const {data: courseModules, isLoading: isLoadingCourseModules, isError: isErrorCourseModules} = useQueryModulesByCourseId(courseId);
   const mutationPostAppliedCourse = useMutationPostAppliedCourse();
-  const mutationEditAppliedCourse = useMutationEditAppliedCourse();
+  const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
 
   let defaultColor = "#FFFFFF";
   const [color, setColor] = useState(defaultColor);
@@ -78,7 +78,7 @@ export default function CourseDetails() {
               color: color,
               isApplied: appliedCourse.isApplied
             };
-            mutationEditAppliedCourse.mutate(newAppliedCourse);
+            mutationUpdateAppliedCourse.mutate(newAppliedCourse);
           })
         );
       }

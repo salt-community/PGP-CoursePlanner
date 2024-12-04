@@ -12,7 +12,7 @@ import { updateAppliedModule } from "@api/appliedModuleFetches";
 import { CourseType } from "@models/course/Types";
 import { useQueryAppliedCourseById, useQueryAppliedCourses } from "@api/appliedCourseQueries";
 import { useQueryModulesByCourseId } from "@api/courseQueries";
-import { useMutationEditAppliedCourse } from "@api/appliedCourseMutations";
+import { useMutationUpdateAppliedCourse } from "@api/appliedCourseMutations";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -26,7 +26,7 @@ export default function EditAppliedCourse() {
     const { data: appliedCourses } = useQueryAppliedCourses();
     const { data: appliedCourse } = useQueryAppliedCourseById(appliedCourseId);
     const { data: courseModules } = useQueryModulesByCourseId(appliedCourseId);
-    const mutationEditAppliedCourse = useMutationEditAppliedCourse();
+    const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
 
     const appliedModuleMutation = useMutation({
         mutationFn: (newAppliedModule: ModuleType) => {
@@ -84,7 +84,7 @@ export default function EditAppliedCourse() {
                             isApplied: appliedCourse.isApplied,
                             moduleIds: appliedModules.map(m => m.id!),
                         };
-                        mutationEditAppliedCourse.mutate(newAppliedCourse);
+                        mutationUpdateAppliedCourse.mutate(newAppliedCourse);
                     })
                 );
             }
@@ -97,7 +97,7 @@ export default function EditAppliedCourse() {
                 moduleIds: appliedModules.map(m => m.id!),
                 isApplied: appliedCourse!.isApplied
             };
-            mutationEditAppliedCourse.mutate(newAppliedCourse);
+            mutationUpdateAppliedCourse.mutate(newAppliedCourse);
         }
     };
     const queryClient = useQueryClient();
