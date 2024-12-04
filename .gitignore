@@ -488,8 +488,3 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
-
-# Environment configuration files for frontend
-frontend/.env.development.local
-frontend/.env.production.local
-
