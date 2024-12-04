@@ -1,9 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
-import {
-    editAppliedCourse,
-} from "@api/appliedCourseFetches";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +12,7 @@ import { updateAppliedModule } from "@api/appliedModuleFetches";
 import { CourseType } from "@models/course/Types";
 import { useQueryAppliedCourseById, useQueryAppliedCourses } from "@api/appliedCourseQueries";
 import { useQueryModulesByCourseId } from "@api/courseQueries";
+import { useMutationEditAppliedCourse } from "@api/appliedCourseMutations";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -27,7 +25,8 @@ export default function EditAppliedCourse() {
     const navigate = useNavigate();
     const { data: appliedCourses } = useQueryAppliedCourses();
     const { data: appliedCourse } = useQueryAppliedCourseById(appliedCourseId);
-    const {data: courseModules } = useQueryModulesByCourseId(appliedCourseId);
+    const { data: courseModules } = useQueryModulesByCourseId(appliedCourseId);
+    const mutationEditAppliedCourse = useMutationEditAppliedCourse();
 
     const appliedModuleMutation = useMutation({
         mutationFn: (newAppliedModule: ModuleType) => {
@@ -58,15 +57,6 @@ export default function EditAppliedCourse() {
 
     const defaultColor = appliedCourse?.color || "";
 
-    const mutationEditAppliedCourse = useMutation({
-        mutationFn: (newAppliedCourse: CourseType) => {
-            return editAppliedCourse(newAppliedCourse);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['appliedCourses', appliedCourseId] })
-        }
-    })
-
     const handleEdit = async () => {
         setIsInvalidDate(false);
         setIsInvalidModule(false);
@@ -92,7 +82,7 @@ export default function EditAppliedCourse() {
                             endDate: appliedCourse.endDate,
                             color: color,
                             isApplied: appliedCourse.isApplied,
-                            moduleIds: appliedModules.map(m => m.id!), // todo: think about why ids are optional
+                            moduleIds: appliedModules.map(m => m.id!),
                         };
                         mutationEditAppliedCourse.mutate(newAppliedCourse);
                     })
@@ -107,19 +97,10 @@ export default function EditAppliedCourse() {
                 moduleIds: appliedModules.map(m => m.id!),
                 isApplied: appliedCourse!.isApplied
             };
-            mutation.mutate(newAppliedCourse);
+            mutationEditAppliedCourse.mutate(newAppliedCourse);
         }
     };
     const queryClient = useQueryClient();
-    const mutation = useMutation({
-        mutationFn: (newAppliedCourse: CourseType) => {
-            return editAppliedCourse(newAppliedCourse);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["appliedCourses", appliedCourseId] });
-            navigate(`/activecourses`);
-        },
-    });
 
     return (
         <Page>
