@@ -34,7 +34,7 @@ Salt Course Planner is designed to simplify the planning and execution of recurr
 4. Click link and add /swagger to test api
 5. Find courseplanner-frontend
 6. Click link and enjoy website
-7. To change connection string or other secrets click Edit & deploy new revision and variabels and secrets
+7. To change connection string or other secrets click Edit & deploy new revision and variables and secrets
 8. DB is in supabase. Get access to db or create a new one and update connection string.
 
 ## Understand pushing to cloud and CI/CD
