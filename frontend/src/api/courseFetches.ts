@@ -1,7 +1,7 @@
 import { getCookie } from "@helpers/cookieHelpers";
 import { CourseType } from "@models/course/Types";
 
-const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Courses`;
+const BASE_URL = `${process.env.VITE_BACKEND_URL}/Courses`;
 
 export async function getCourses() {
   const response = await fetch(BASE_URL, {
