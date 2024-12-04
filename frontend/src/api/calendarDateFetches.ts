@@ -1,6 +1,6 @@
 import { getCookie } from "@helpers/cookieHelpers";
 
-const BASE_URL = `${process.env.VITE_BACKEND_URL}/CalendarDates`;
+const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/CalendarDates`;
 
 export async function getCalendarDateBatch(startDate: string, endDate: string) {
   const response = await fetch(`${BASE_URL}/batch?start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}`, {
