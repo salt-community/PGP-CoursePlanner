@@ -8,11 +8,13 @@ import { currentMonth, firstDayOfMonth, allDaysInInterval, currentYear, fullWeek
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useMonthFromPath, useYearFromPath } from "@helpers/helperHooks"
 import { useQueryCalendarDateBatch } from "@api/calendarDateQueries"
+import { trackUrl } from "@helpers/helperMethods"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(parseInt(useMonthFromPath()));
     const [year, setYear] = useState<number>(parseInt(useYearFromPath()));
     const navigate = useNavigate();
+    trackUrl();
 
     const startOfMonth = firstDayOfMonth(month, year);
     const endOfMonth = lastDayOfMonth(month, year);

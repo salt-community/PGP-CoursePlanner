@@ -9,3 +9,10 @@ export function getHomeUrl() {
   }
   return pathName.substring(0, i);
 }
+
+export function trackUrl() {
+  const url = new URL(window.location.href);
+  const pathname = url.pathname;
+
+  localStorage.setItem('urlHistory', pathname);
+}

@@ -8,11 +8,13 @@ import { fullWeekOfWeekNumber, getDateAsString } from "@helpers/dateHelpers";
 import { useWeekFromPath, useYearFromPath } from "@helpers/helperHooks";
 import WeekDayCalendar from "../sections/WeekDayCalendar";
 import { useQueryCalendarDateBatch } from "@api/calendarDateQueries";
+import { trackUrl } from "@helpers/helperMethods";
 
 export default function MonthView() {
     const [week, setWeek] = useState<number>(parseInt(useWeekFromPath()));
     const [year, setYear] = useState<number>(parseInt(useYearFromPath()));
     const navigate = useNavigate();
+    trackUrl();
 
     const allWeekDays = fullWeekOfWeekNumber(week, year);
     if (getWeek(allWeekDays[0], { weekStartsOn: 1, firstWeekContainsDate: 4 }) != week) {

@@ -36,7 +36,7 @@ export default function DayDetails() {
                 <section className="w-1/2 flex justify-center bg-background">
                     <div className="w-full bg-base-100 shadow-xl p-5">
                         <div className="flex justify-end">
-                            <CloseBtn onClick={() => navigate(-1)} />
+                            <CloseBtn onClick={() => navigate(localStorage.getItem("urlHistory") ?? "/")} />
                         </div>
                         <h1 className="mb-4 item-center text-xl font-bold text-center">{format(getDateAsString(dateAsDate), 'EEEE')}
                             <br /> {dateAsDate.getDate()} {monthNames[dateAsDate.getMonth()]}

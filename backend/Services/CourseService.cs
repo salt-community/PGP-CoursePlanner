@@ -144,7 +144,9 @@ public class CourseService : IService<Course>
         var numberOfDays = _context.CalendarDates
             .Include(cd => cd.DateContent)
             .Where(cd => cd.DateContent.Any(dc => dc.appliedCourseId == course.Id)).Count();
-
+        
+        if(numberOfDays == 0) return course.StartDate;
+        
         return course.StartDate.AddDays(numberOfDays - 1).Date;
     }
 
