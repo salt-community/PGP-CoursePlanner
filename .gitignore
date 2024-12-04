@@ -7,7 +7,7 @@
 dist
 
 # dotenv files
-*.env*
+*.env
 
 # .vite build file
 *.vite
