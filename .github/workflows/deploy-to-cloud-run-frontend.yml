@@ -42,4 +42,3 @@ jobs:
           --region europe-north1 \
           --platform managed \
           --allow-unauthenticated
-          --set-env-vars VITE_BACKEND_URL=${{ env.VITE_BACKEND_URL }}
