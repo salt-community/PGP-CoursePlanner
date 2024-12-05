@@ -6,7 +6,7 @@ import { AppliedModuleProps } from '../Types';
 import AppliedDay from "./AppliedDay";
 import { DayType, EventType, ModuleType } from "../../module/Types";
 
-export default function AppliedModule({ submitFunction, module, index, buttonText }: AppliedModuleProps) {
+export default function AppliedModule({ saveAppliedModule, module, index, buttonText }: AppliedModuleProps) {
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
     const [days, setDays] = useState<DayType[]>(module.days);
@@ -61,7 +61,7 @@ export default function AppliedModule({ submitFunction, module, index, buttonTex
                 days: days
             };
 
-            submitFunction(index, newModule);
+            saveAppliedModule(index, newModule);
             collapseToggle.checked = false;
         }
     }
