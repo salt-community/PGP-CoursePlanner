@@ -23,7 +23,7 @@ export function useQueryCalendarDateWeeks(currentWeek: number) {
 
 export function useQueryCalendarDateBatch(startDate: string, endDate: string) {
     const { data, isPending, isError, error } = useQuery<CalendarDateType[]>({
-        queryKey: ['calendarBatch'],
+        queryKey: ['calendarBatch', startDate, endDate],
         queryFn: () => {
             return getCalendarDateBatch(startDate, endDate);
         },
