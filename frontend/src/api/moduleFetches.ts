@@ -49,7 +49,7 @@ export async function postModule(module: ModuleType) {
   }
 }
 
-export async function editModule(module: ModuleType) {
+export async function updateModule(module: ModuleType) {
   const response = await fetch(`${BASE_URL}/${module.id}`, {
     method: "PUT",
     headers: {

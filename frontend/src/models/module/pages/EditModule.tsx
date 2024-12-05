@@ -1,4 +1,3 @@
-import { editModule } from "@api/moduleFetches";
 import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
 import LoadingMessage from "@components/LoadingMessage";
@@ -14,7 +13,7 @@ export default function EditModule() {
         <Page>
             {isLoading && <LoadingMessage />}
             {isError && <ErrorMessage />}
-            {data && <Module module={data} submitFunction={editModule} buttonText="Save changes" />}
+            {data && <Module module={data} buttonText="Save changes" />}
         </Page>
     )
 }

@@ -1,15 +1,14 @@
 import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
 import { useEffect, useState } from "react";
-import { deleteAppliedCourse } from "@api/appliedCourseFetches";
 import 'reactjs-popup/dist/index.css';
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import DeleteBtn from "@components/buttons/DeleteBtn";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import PDFWeekGenerator from "../sections/PDFWeekGenerator";
 import PDFGenerator from "../sections/PDFGenerator";
 import { useQueryAppliedCourseById } from "@api/appliedCourseQueries";
 import { useQueryModulesByCourseId } from "@api/courseQueries";
+import { useMutationDeleteAppliedCourse } from "@api/appliedCourseMutations";
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -18,10 +17,10 @@ export default function AppliedCourseDetails() {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
     const [appliedCourseName, setAppliedCourseName] = useState<string>("");
-    const navigate = useNavigate();
     const appliedCourseId = useIdFromPath();
     const { data: appliedCourse } = useQueryAppliedCourseById(appliedCourseId);
     const { data: courseModules } = useQueryModulesByCourseId(appliedCourseId);
+    const mutation = useMutationDeleteAppliedCourse();
 
     useEffect(() => {
         if (appliedCourse) {
@@ -30,17 +29,6 @@ export default function AppliedCourseDetails() {
             setAppliedCourseName(appliedCourse.name)
         }
     }, [appliedCourse]);
-
-    const queryClient = useQueryClient();
-    const mutation = useMutation({
-        mutationFn: (id: number) => {
-            return deleteAppliedCourse(id);
-        },
-        onSuccess: (_data, id) => {
-            queryClient.invalidateQueries({ queryKey: ['appliedCourses', id] })
-            navigate(`/activecourses`);
-        }
-    })
 
     function getWeekDayList() {
         const days = []

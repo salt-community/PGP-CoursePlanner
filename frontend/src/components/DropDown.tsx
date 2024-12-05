@@ -28,7 +28,6 @@ export default function DropDown({ thisCourseModule, index, selectedModules, mod
                 <option value="DEFAULT" disabled>Select</option>
                 {modules.map((module, modIndex) => {
                     const isModuleSelectedInAnotherCourse = selectedModules.some(m => m.id === module.id);
-
                     return (
                         <option
                             key={`${module.id},${modIndex}`}

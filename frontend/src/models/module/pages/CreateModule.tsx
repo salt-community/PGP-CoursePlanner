@@ -1,4 +1,3 @@
-import { postModule } from "@api/moduleFetches"
 import Page from "@components/Page"
 import Module from "../sections/Module"
 import { ModuleType } from "../Types"
@@ -18,7 +17,7 @@ export default function CreateModule() {
 
     return (
         <Page>
-            <Module module={emptyModule} submitFunction={postModule} buttonText="Create" />
+            <Module module={emptyModule} buttonText="Create" />
         </Page>
     )
 }

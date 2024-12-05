@@ -1,11 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import { deleteCourse } from "@api/courseFetches";
 import Page from "@components/Page";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useIdFromPath } from "@helpers/helperHooks";
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { editAppliedCourse, postAppliedCourse, } from "@api/appliedCourseFetches";
 import { convertToGoogle } from "@helpers/googleHelpers";
 import DeleteBtn from "@components/buttons/DeleteBtn";
 import { deleteCourseFromGoogle } from "@api/googleCalendarFetches";
@@ -16,6 +13,8 @@ import ErrorMessage from "@components/ErrorMessage";
 import ColorPickerModal from "@components/ColorPickerModal";
 import { useQueryAppliedCourses } from "@api/appliedCourseQueries";
 import { useQueryCourseById, useQueryModulesByCourseId } from "@api/courseQueries";
+import { useMutationUpdateAppliedCourse, useMutationPostAppliedCourse } from "@api/appliedCourseMutations";
+import { useMutationDeleteCourse } from "@api/courseMutations";
 
 export default function CourseDetails() {
   const [startDate, setStartDate] = useState<Date>(new Date());
@@ -25,7 +24,10 @@ export default function CourseDetails() {
   const courseId = useIdFromPath();
   const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
   const { data: course, isLoading: isLoadingCourse, isError: isErrorCourse } = useQueryCourseById(courseId);
-  const {data: courseModules, isLoading: isLoadingCourseModules, isError: isErrorCourseModules} = useQueryModulesByCourseId(courseId);
+  const { data: courseModules, isLoading: isLoadingCourseModules, isError: isErrorCourseModules } = useQueryModulesByCourseId(courseId);
+  const mutationPostAppliedCourse = useMutationPostAppliedCourse();
+  const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
+  const mutationDeleteCourse = useMutationDeleteCourse();
 
   let defaultColor = "#FFFFFF";
   const [color, setColor] = useState(defaultColor);
@@ -48,18 +50,6 @@ export default function CourseDetails() {
       convertToGoogle(courseModules, startDate, course.name, groupEmail);
     }
   };
-
-  const mutationPostAppliedCourse = useMutation({
-    mutationFn: (appliedCourse: CourseType) => { return postAppliedCourse(appliedCourse) },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['appliedCourses'] });
-      navigate("/activecourses");
-    },
-  });
-
-  const mutationEditAppliedCourse = useMutation({
-    mutationFn: (appliedCourse: CourseType) => { return editAppliedCourse(appliedCourse) },
-  });
 
   const handleApplyTemplate = async () => {
     setIsColorNotSelected(false);
@@ -88,7 +78,7 @@ export default function CourseDetails() {
               color: color,
               isApplied: appliedCourse.isApplied
             };
-            mutationEditAppliedCourse.mutate(newAppliedCourse);
+            mutationUpdateAppliedCourse.mutate(newAppliedCourse);
           })
         );
       }
@@ -105,18 +95,7 @@ export default function CourseDetails() {
     }
   };
 
-  const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: (id: number) => {
-      return deleteCourse(id);
-    },
-    onSuccess: (_data, id) => {
-      queryClient.invalidateQueries({
-        queryKey: ["courses", id],
-      });
-      navigate(`/courses`);
-    },
-  });
+
 
   return (
     <Page>
@@ -171,7 +150,7 @@ export default function CourseDetails() {
               className="btn btn-sm py-1 max-w-xs btn-info text-white">
               Edit Course
             </Link>
-            <DeleteBtn onClick={() => mutation.mutate(courseId)}>
+            <DeleteBtn onClick={() => mutationDeleteCourse.mutate(courseId)}>
               Delete Course
             </DeleteBtn>
           </div>

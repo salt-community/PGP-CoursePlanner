@@ -1,31 +1,21 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Page from "@components/Page";
-import { deleteAppliedCourse } from "@api/appliedCourseFetches";
 import DeleteBtn from "@components/buttons/DeleteBtn";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import { useEffect, useState } from "react";
 import { CourseType } from "@models/course/Types";
 import { useQueryAppliedCourses } from "@api/appliedCourseQueries";
+import { useMutationDeleteAppliedCourse } from "@api/appliedCourseMutations";
+
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 export default function AppliedCourses() {
-    const navigate = useNavigate();
     const [activeCourses, setActiveCourses] = useState<CourseType[]>([]);
     const [pastCourses, setPastCourses] = useState<CourseType[]>([]);
     const [futureCourses, setFutureCourses] = useState<CourseType[]>([]);
     const { data: appliedCourses, isLoading, isError } = useQueryAppliedCourses();
-
-    const queryClient = useQueryClient();
-    const mutation = useMutation({
-        mutationFn: (id: number) => {
-            return deleteAppliedCourse(id);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['appliedCourses'] })
-            navigate(`/activecourses`);
-        }
-    })
+    const mutation = useMutationDeleteAppliedCourse();
 
     useEffect(() => {
         if (appliedCourses) {
@@ -59,8 +49,6 @@ export default function AppliedCourses() {
             setPastCourses(sortedPastCourses)
         }
     }, [appliedCourses])
-
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
     return (
         <Page>

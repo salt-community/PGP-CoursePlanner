@@ -3,12 +3,11 @@ import TrashBtn from "@components/buttons/TrashBtn";
 import InputSmall from "@components/inputFields/InputSmall";
 import InputSmallTime from "@components/inputFields/InputSmallTime";
 import { EventProps, ModuleType } from "../Types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { editModule } from "@api/moduleFetches";
 import ModalContainer from "../components/ModalContainer";
 import EllipsisBtn from "../components/EllipsisBtn";
 import { openCloseModal } from "../helpers/openCloseModal";
 import { useQueryModules } from "@api/moduleQueries";
+import { useMutationUpdateModule } from "@api/moduleMutations";
 
 export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumber, setDays, days, index, event }: EventProps) {
     const [selectedDay, setSelectedDay] = useState<string>("DEFAULT");
@@ -16,6 +15,7 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
     const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
     const { data: modules } = useQueryModules();
+    const mutationUpdateModule = useMutationUpdateModule();
 
     // change event name or description
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,17 +100,6 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
         setSelectedModuleDay(event.target.value);
     };
 
-    const queryClient = useQueryClient();
-    const mutation = useMutation({
-        mutationFn: (module: ModuleType) => {
-            return editModule(module);
-        },
-        onSuccess: (_data, module) => {
-            queryClient.invalidateQueries({ queryKey: ['modules', module.id] })
-            setAllToFalse();
-        }
-    })
-
     const handleMoveAnotherModule = () => {
         setIsIncompleteInput(false);
         const module = modules?.find(m => m.id == parseInt(selectedModule));
@@ -135,8 +124,10 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                 if (a.endTime > b.endTime) return 1;
                 return 0;
             });
-
-            mutation.mutate(newModule);
+            mutationUpdateModule.mutate(newModule);
+            if (mutationUpdateModule.isSuccess) {
+                setAllToFalse();
+            }
         }
         else {
             setIsIncompleteInput(true);

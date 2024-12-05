@@ -3,8 +3,6 @@ import PrimaryBtn from '@components/buttons/PrimaryBtn';
 import TrashBtn from '@components/buttons/TrashBtn';
 import { DayProps, ModuleType } from '../Types';
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { editModule } from '../../../api/moduleFetches';
 import ModalContainer from '../components/ModalContainer';
 import DownArrowBtn from '../../../components/buttons/DownArrowBtn';
 import UpArrowBtn from '../../../components/buttons/UpArrowBtn';
@@ -12,19 +10,21 @@ import EllipsisBtn from '../components/EllipsisBtn';
 import EditEventTable from '../../../components/EditEventTable';
 import { openCloseModal } from '../helpers/openCloseModal';
 import { useQueryModules } from '@api/moduleQueries';
+import { useMutationUpdateModule } from '@api/moduleMutations';
 
 export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
     const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
-    const {data: modules } = useQueryModules();
+    const { data: modules } = useQueryModules();
+    const mutationUpdateModule = useMutationUpdateModule();
 
     const handleAddEvent = () => {
         const editedDays = [...days];
-            editedDays[day.dayNumber - 1].events.push({
-                name: "",
-                startTime: "",
-                endTime: ""
+        editedDays[day.dayNumber - 1].events.push({
+            name: "",
+            startTime: "",
+            endTime: ""
 
         })
         setDays(editedDays);
@@ -95,17 +95,6 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
         setSelectedModuleDay(event.target.value);
     };
 
-    const queryClient = useQueryClient();
-    const mutation = useMutation({
-        mutationFn: (module: ModuleType) => {
-            return editModule(module);
-        },
-        onSuccess: (_data, module) => {
-            queryClient.invalidateQueries({ queryKey: ['modules', module.id] })
-            setAllToFalse()
-        }
-    })
-
     const handleMove = () => {
         setIsIncompleteInput(false);
         const originalDays = modules?.find(m => m.id == parseInt(selectedModule))?.days;
@@ -131,7 +120,10 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                 numberOfDays: module.numberOfDays + 1,
                 days: editedDays
             };
-            mutation.mutate(newModule);
+            mutationUpdateModule.mutate(newModule);
+            if (mutationUpdateModule.isSuccess) {
+                setAllToFalse();
+            }
         }
         else {
             setIsIncompleteInput(true);

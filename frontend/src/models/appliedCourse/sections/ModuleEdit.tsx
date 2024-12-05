@@ -3,14 +3,13 @@ import { reorderModule } from "../helpers/reorderModule";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import TrashBtn from "@components/buttons/TrashBtn";
 import AppliedModule from "./AppliedModule";
-import { postAppliedModule, updateAppliedModule } from "@api/appliedModuleFetches";
-import { postAppliedDay } from "@api/appliedDayFetches";
-import { postAppliedEvent } from "@api/appliedEventFetches";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import UpArrowBtn from "@components/buttons/UpArrowBtn";
 import DownArrowBtn from "@components/buttons/DownArrowBtn";
 import { DayType, EventType, ModuleType } from "@models/module/Types";
 import { useQueryModules } from "@api/moduleQueries";
+import { useMutationPostAppliedEvent } from "@api/appliedEventMutations";
+import { useMutationPostAppliedDay } from "@api/appliedDayMutations";
+import { useMutationPostAppliedModule, useMutationUpdateAppliedModule } from "@api/appliedModuleMutations";
 
 interface ModuleEditProps {
     appliedModules: ModuleType[];
@@ -19,43 +18,10 @@ interface ModuleEditProps {
 
 export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEditProps) {
     const { data: modules, isLoading, error } = useQueryModules();
-
-    const queryClient = useQueryClient();
-    const eventMutation = useMutation({
-        mutationFn: (newEvent: EventType) => {
-            return postAppliedEvent(newEvent);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['appliedModules'] })
-        }
-    })
-
-    const dayMutation = useMutation({
-        mutationFn: (dayType: DayType) => {
-            return postAppliedDay(dayType);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['appliedModules'] })
-        }
-    })
-
-    const appliedModuleMutation = useMutation({
-        mutationFn: (newAppliedModule: ModuleType) => {
-            return updateAppliedModule(newAppliedModule);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['appliedModules'] })
-        }
-    })
-
-    const postAppliedModuleMutation = useMutation({
-        mutationFn: (emptyModule: ModuleType) => {
-            return postAppliedModule(emptyModule);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['appliedModules'] })
-        }
-    })
+    const postAppliedEventMutation = useMutationPostAppliedEvent();
+    const postAppliedDayMutation = useMutationPostAppliedDay();
+    const postAppliedModuleMutation = useMutationPostAppliedModule();
+    const updateAppliedModuleMutation = useMutationUpdateAppliedModule();
 
     if (isLoading) return <p>Loading modules...</p>;
     if (error) return <p>Error loading modules</p>;
@@ -83,35 +49,25 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
                 const listEvents: EventType[] = [];
                 await Promise.all(
                     day.events.map(async (eventItem) => {
-                        try {
-                            const newEvent = {
-                                id: 0,
-                                name: eventItem.name,
-                                description: eventItem.description,
-                                startTime: eventItem.startTime,
-                                endTime: eventItem.endTime,
-                            };
-                            eventMutation.mutate(newEvent);
-                            if (eventMutation.data) listEvents.push(eventMutation.data);
-                        } catch (error) {
-                            console.error("Error posting applied event:", error);
-                        }
+                        const newEvent = {
+                            id: 0,
+                            name: eventItem.name,
+                            description: eventItem.description,
+                            startTime: eventItem.startTime,
+                            endTime: eventItem.endTime,
+                        };
+                        postAppliedEventMutation.mutate(newEvent);
+                        if (postAppliedEventMutation.data) listEvents.push(postAppliedEventMutation.data);
                     })
                 );
-
                 const newDay = {
                     id: 0,
                     dayNumber: day.dayNumber,
                     description: day.description,
                     events: listEvents,
                 };
-
-                try {
-                    dayMutation.mutate(newDay);
-                    if (dayMutation.data) listDays.push(dayMutation.data);
-                } catch (error) {
-                    console.error("Error posting applied day:", error);
-                }
+                postAppliedDayMutation.mutate(newDay);
+                if (postAppliedDayMutation.data) listDays.push(postAppliedDayMutation.data);
             })
         );
         const newAppliedModule: ModuleType = {
@@ -121,8 +77,8 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
             days: listDays.sort((a, b) => a.dayNumber - b.dayNumber),
         };
 
-        appliedModuleMutation.mutate(newAppliedModule)
-        if (appliedModuleMutation.data) {
+        updateAppliedModuleMutation.mutate(newAppliedModule)
+        if (updateAppliedModuleMutation.data) {
             const updatedModules = [...appliedModules!];
             updatedModules[moduleIndex] = newAppliedModule;
             onUpdateModules(updatedModules);

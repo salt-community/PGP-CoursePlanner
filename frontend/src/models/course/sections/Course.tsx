@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import SuccessBtn from "@components/buttons/SuccessBtn";
 import InputSmall from "@components/inputFields/InputSmall";
 import DropDown from "@components/DropDown";
@@ -11,8 +10,9 @@ import FilterArea from "./FilterArea";
 import { ModuleType } from "@models/module/Types";
 import { useQueryModulesByCourseId } from "@api/courseQueries";
 import { useQueryModules } from "@api/moduleQueries";
+import { useMutationPostCourse, useMutationUpdateCourse } from "@api/courseMutations";
 
-export default function Course({ submitFunction, course, buttonText }: CourseProps) {
+export default function Course({ course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);
     const [numOfWeeks, setNumOfWeeks] = useState<number>(course.numberOfWeeks!);
     const [isIncorrectModuleInput, setIsIncorrectModuleInput] = useState<boolean>(false);
@@ -25,6 +25,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const navigate = useNavigate();
     const { data: courseModulesData } = useQueryModulesByCourseId(course.id!);
     const { data: modules } = useQueryModules();
+    const mutationPostCourse = useMutationPostCourse();
+    const mutationUpdateCourse = useMutationUpdateCourse();
 
     useEffect(() => {
         if (modules) {
@@ -43,7 +45,17 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     }, [modules]);
 
     useEffect(() => {
-        setCourseModules(courseModulesData ?? []);
+        if (!courseModulesData) {
+            const emptyCourseModule: ModuleType = {
+                id: 0,
+                name: "",
+                numberOfDays: 0,
+                days: []
+            }
+            setCourseModules([emptyCourseModule]);
+        } else {
+            setCourseModules(courseModulesData ?? []);
+        }
     }, [courseModulesData]);
 
     useEffect(() => {
@@ -92,18 +104,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         setCourseModules(editedModules);
     }
 
-    const queryClient = useQueryClient();
-
-    const mutation = useMutation({
-        mutationFn: (course: CourseType) => {
-            return submitFunction(course);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['courses'] })
-            navigate(`/courses`)
-        }
-    })
-
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -119,7 +119,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         setIsIncorrectName(false);
         setIsNotSelected(false);
         const isDuplicate = findDuplicates(courseModules);
-        if (isDuplicate || isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0 || courseModules.some(cm => cm.id == 0) || course.moduleIds!.some(mid => mid == 0)) {
+        if (isDuplicate || isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0 || courseModules.some(cm => cm.id == 0)) {
             if (isDuplicate)
                 setIsIncorrectModuleInput(true);
             if (isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0)
@@ -135,7 +135,11 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 numberOfWeeks: numberOfWeeks.value,
                 moduleIds: courseModuleIds,
             };
-            mutation.mutate(newCourse);
+            if (newCourse.id == 0) {
+                mutationPostCourse.mutate(newCourse);
+            } else {
+                mutationUpdateCourse.mutate(newCourse);
+            }
         }
     }
 
@@ -232,7 +236,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                         }
                         <h2 className="self-center font-bold w-[100px]">Module {index + 1}</h2>
                         <div key={thisCourseModule.id + "," + index} className="flex space-x-2">
-                            {thisCourseModule.id == 0 || course.moduleIds?.some(mid => mid == 0)
+                            {thisCourseModule.id == 0
                                 ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={false} />
                                 : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={true} />}
                             {courseModules &&

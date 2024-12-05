@@ -1,9 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
-import {
-    editAppliedCourse,
-} from "@api/appliedCourseFetches";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -11,10 +7,11 @@ import InputSmall from "@components/inputFields/InputSmall";
 import ColorPickerModal from "@components/ColorPickerModal";
 import ModuleEdit from "../sections/ModuleEdit";
 import { ModuleType } from "@models/module/Types";
-import { updateAppliedModule } from "@api/appliedModuleFetches";
 import { CourseType } from "@models/course/Types";
 import { useQueryAppliedCourseById, useQueryAppliedCourses } from "@api/appliedCourseQueries";
 import { useQueryModulesByCourseId } from "@api/courseQueries";
+import { useMutationUpdateAppliedCourse } from "@api/appliedCourseMutations";
+import { useMutationUpdateAppliedModule } from "@api/appliedModuleMutations";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -27,21 +24,14 @@ export default function EditAppliedCourse() {
     const navigate = useNavigate();
     const { data: appliedCourses } = useQueryAppliedCourses();
     const { data: appliedCourse } = useQueryAppliedCourseById(appliedCourseId);
-    const {data: courseModules } = useQueryModulesByCourseId(appliedCourseId);
-
-    const appliedModuleMutation = useMutation({
-        mutationFn: (newAppliedModule: ModuleType) => {
-            return updateAppliedModule(newAppliedModule);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['appliedCourses', appliedCourseId] })
-        }
-    })
+    const { data: courseModules } = useQueryModulesByCourseId(appliedCourseId);
+    const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
+    const mutationUpdateAppliedModule = useMutationUpdateAppliedModule();
 
     const handleUpdateModules = (updatedModules: ModuleType[]) => {
         setAppliedModules(updatedModules);
         for (let i = 0; i < updatedModules.length; i++) {
-            appliedModuleMutation.mutate(updatedModules[i]);
+            mutationUpdateAppliedModule.mutate(updatedModules[i]);
         }
     };
 
@@ -57,15 +47,6 @@ export default function EditAppliedCourse() {
     }, [appliedCourse, courseModules])
 
     const defaultColor = appliedCourse?.color || "";
-
-    const mutationEditAppliedCourse = useMutation({
-        mutationFn: (newAppliedCourse: CourseType) => {
-            return editAppliedCourse(newAppliedCourse);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['appliedCourses', appliedCourseId] })
-        }
-    })
 
     const handleEdit = async () => {
         setIsInvalidDate(false);
@@ -92,9 +73,9 @@ export default function EditAppliedCourse() {
                             endDate: appliedCourse.endDate,
                             color: color,
                             isApplied: appliedCourse.isApplied,
-                            moduleIds: appliedModules.map(m => m.id!), // todo: think about why ids are optional
+                            moduleIds: appliedModules.map(m => m.id!),
                         };
-                        mutationEditAppliedCourse.mutate(newAppliedCourse);
+                        mutationUpdateAppliedCourse.mutate(newAppliedCourse);
                     })
                 );
             }
@@ -107,19 +88,9 @@ export default function EditAppliedCourse() {
                 moduleIds: appliedModules.map(m => m.id!),
                 isApplied: appliedCourse!.isApplied
             };
-            mutation.mutate(newAppliedCourse);
+            mutationUpdateAppliedCourse.mutate(newAppliedCourse);
         }
     };
-    const queryClient = useQueryClient();
-    const mutation = useMutation({
-        mutationFn: (newAppliedCourse: CourseType) => {
-            return editAppliedCourse(newAppliedCourse);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["appliedCourses", appliedCourseId] });
-            navigate(`/activecourses`);
-        },
-    });
 
     return (
         <Page>
