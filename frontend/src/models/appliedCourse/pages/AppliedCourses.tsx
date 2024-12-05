@@ -5,8 +5,8 @@ import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import { useEffect, useState } from "react";
 import { CourseType } from "@models/course/Types";
-import { useQueryAppliedCourses } from "@api/appliedCourseQueries";
-import { useMutationDeleteAppliedCourse } from "@api/appliedCourseMutations";
+import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
+import { useMutationDeleteAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 

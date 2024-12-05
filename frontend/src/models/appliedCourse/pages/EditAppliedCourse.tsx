@@ -8,10 +8,10 @@ import ColorPickerModal from "@components/ColorPickerModal";
 import ModuleEdit from "../sections/ModuleEdit";
 import { ModuleType } from "@models/module/Types";
 import { CourseType } from "@models/course/Types";
-import { useQueryAppliedCourseById, useQueryAppliedCourses } from "@api/appliedCourseQueries";
-import { useQueryModulesByCourseId } from "@api/courseQueries";
-import { useMutationUpdateAppliedCourse } from "@api/appliedCourseMutations";
-import { useMutationUpdateAppliedModule } from "@api/appliedModuleMutations";
+import { useQueryAppliedCourseById, useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
+import { useQueryModulesByCourseId } from "@api/course/courseQueries";
+import { useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
+import { useMutationUpdateAppliedModule } from "@api/appliedModule/appliedModuleMutations";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);

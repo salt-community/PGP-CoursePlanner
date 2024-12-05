@@ -3,7 +3,7 @@ import { useIdFromPath } from "@helpers/helperHooks";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import Module from "../sections/Module";
-import { useQueryModuleById } from "@api/moduleQueries";
+import { useQueryModuleById } from "@api/modules/moduleQueries";
 
 export default function EditModule() {
     const moduleId = useIdFromPath();

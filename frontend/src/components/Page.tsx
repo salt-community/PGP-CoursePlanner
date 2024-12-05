@@ -1,7 +1,7 @@
 import Login from "@models/login/Login";
 import NavBar from "./NavBar";
 import { getCookie, setCookie } from "@helpers/cookieHelpers";
-import { useQueryToken } from "@api/userQueries";
+import { useQueryToken } from "@api/user/userQueries";
 
 type Props = {
     children: React.ReactNode;

@@ -5,7 +5,7 @@ import ErrorMessage from "@components/ErrorMessage";
 import FilterArea from "@models/course/sections/FilterArea";
 import { useEffect, useState } from "react";
 import { ModuleType } from "../Types";
-import { useQueryModules } from "@api/moduleQueries";
+import { useQueryModules } from "@api/modules/moduleQueries";
 
 export default function Modules() {
     const [filteredModules, setFilteredModules] = useState<ModuleType[]>([]);

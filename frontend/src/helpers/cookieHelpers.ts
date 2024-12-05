@@ -1,4 +1,4 @@
-import { tokenResponse } from "@api/userFetches";
+import { tokenResponse } from "@api/user/userFetches";
 
 export function getCookie(name: string) {
   const value = `; ${document.cookie}`;

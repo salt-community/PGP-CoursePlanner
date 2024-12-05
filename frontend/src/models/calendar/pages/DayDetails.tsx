@@ -8,7 +8,7 @@ import { DateContent } from "../Types";
 import { useDateFromPath } from "@helpers/helperHooks";
 import WeekDay from "../sections/WeekDay";
 import { getDateAsString } from "@helpers/dateHelpers";
-import { useQueryCalendarDate } from "@api/calendarDateQueries";
+import { useQueryCalendarDate } from "@api/calendarDate/calendarDateQueries";
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 

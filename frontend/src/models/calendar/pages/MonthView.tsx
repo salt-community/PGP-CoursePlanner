@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { currentMonth, firstDayOfMonth, allDaysInInterval, currentYear, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth, today } from "../../../helpers/dateHelpers"
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useMonthFromPath, useYearFromPath } from "@helpers/helperHooks"
-import { useQueryCalendarDateBatch } from "@api/calendarDateQueries"
+import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
 import { trackUrl } from "@helpers/helperMethods"
 
 export default function MonthView() {

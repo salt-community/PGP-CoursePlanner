@@ -6,8 +6,8 @@ import { EventProps, ModuleType } from "../Types";
 import ModalContainer from "../components/ModalContainer";
 import EllipsisBtn from "../components/EllipsisBtn";
 import { openCloseModal } from "../helpers/openCloseModal";
-import { useQueryModules } from "@api/moduleQueries";
-import { useMutationUpdateModule } from "@api/moduleMutations";
+import { useQueryModules } from "@api/modules/moduleQueries";
+import { useMutationUpdateModule } from "@api/modules/moduleMutations";
 
 export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumber, setDays, days, index, event }: EventProps) {
     const [selectedDay, setSelectedDay] = useState<string>("DEFAULT");
