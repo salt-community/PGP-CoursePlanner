@@ -43,7 +43,17 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     }, [modules]);
 
     useEffect(() => {
-        setCourseModules(courseModulesData ?? []);
+        if (!courseModulesData) {
+            const emptyCourseModule: ModuleType = {
+                id: 0,
+                name: "",
+                numberOfDays: 0,
+                days: []
+            }
+            setCourseModules([emptyCourseModule]);
+        } else {
+            setCourseModules(courseModulesData ?? []);
+        }
     }, [courseModulesData]);
 
     useEffect(() => {
@@ -119,7 +129,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         setIsIncorrectName(false);
         setIsNotSelected(false);
         const isDuplicate = findDuplicates(courseModules);
-        if (isDuplicate || isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0 || courseModules.some(cm => cm.id == 0) || course.moduleIds!.some(mid => mid == 0)) {
+        if (isDuplicate || isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0 || courseModules.some(cm => cm.id == 0)) {
             if (isDuplicate)
                 setIsIncorrectModuleInput(true);
             if (isStringInputIncorrect(courseName.value) || numberOfWeeks.value == 0)
@@ -232,7 +242,7 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                         }
                         <h2 className="self-center font-bold w-[100px]">Module {index + 1}</h2>
                         <div key={thisCourseModule.id + "," + index} className="flex space-x-2">
-                            {thisCourseModule.id == 0 || course.moduleIds?.some(mid => mid == 0)
+                            {thisCourseModule.id == 0
                                 ? <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={false} />
                                 : <DropDown thisCourseModule={thisCourseModule} index={index} selectedModules={courseModules} modules={filteredModules} setSelectedModules={setCourseModules} isSelected={true} />}
                             {courseModules &&

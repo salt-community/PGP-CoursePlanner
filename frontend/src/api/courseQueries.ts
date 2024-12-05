@@ -24,7 +24,8 @@ export function useQueryCourseById(id: number) {
 export function useQueryModulesByCourseId(id: number) {
     const { data, isLoading, isError } = useQuery<ModuleType[]>({
         queryKey: ["courseModules", id],
-        queryFn: () => getModulesByCourseId(id)
+        queryFn: () => getModulesByCourseId(id),
+        enabled: !!id
     });
 
     return { data, isLoading, isError };
