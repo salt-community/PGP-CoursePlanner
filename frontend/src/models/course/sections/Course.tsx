@@ -9,7 +9,7 @@ import { CourseProps, CourseType } from "../Types";
 import FilterArea from "./FilterArea";
 import { ModuleType } from "@models/module/Types";
 import { useQueryModulesByCourseId } from "@api/course/courseQueries";
-import { useQueryModules } from "@api/modules/moduleQueries";
+import { useQueryModules } from "@api/module/moduleQueries";
 import { useMutationPostCourse, useMutationUpdateCourse } from "@api/course/courseMutations";
 
 export default function Course({ course, buttonText }: CourseProps) {

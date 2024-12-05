@@ -4,8 +4,8 @@ import { useIdFromPath } from "@helpers/helperHooks";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import { useQueryCourses } from "@api/course/courseQueries";
-import { useQueryModuleById } from "@api/modules/moduleQueries";
-import { useMutationDeleteModule } from "@api/modules/moduleMutations";
+import { useQueryModuleById } from "@api/module/moduleQueries";
+import { useMutationDeleteModule } from "@api/module/moduleMutations";
 
 export default function ModuleDetails() {
     const moduleId = useIdFromPath();

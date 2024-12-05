@@ -6,7 +6,7 @@ import AppliedModule from "./AppliedModule";
 import UpArrowBtn from "@components/buttons/UpArrowBtn";
 import DownArrowBtn from "@components/buttons/DownArrowBtn";
 import { DayType, EventType, ModuleType } from "@models/module/Types";
-import { useQueryModules } from "@api/modules/moduleQueries";
+import { useQueryModules } from "@api/module/moduleQueries";
 import { useMutationPostAppliedEvent } from "@api/appliedEvent/appliedEventMutations";
 import { useMutationPostAppliedDay } from "@api/appliedDay/appliedDayMutations";
 import { useMutationPostAppliedModule, useMutationUpdateAppliedModule } from "@api/appliedModule/appliedModuleMutations";
