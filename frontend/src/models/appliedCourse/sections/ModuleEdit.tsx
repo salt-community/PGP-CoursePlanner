@@ -9,7 +9,6 @@ import { DayType, EventType, ModuleType } from "@models/module/Types";
 import { useQueryModules } from "@api/module/moduleQueries";
 import { useMutationPostAppliedEvent } from "@api/appliedEvent/appliedEventMutations";
 import { useMutationPostAppliedDay } from "@api/appliedDay/appliedDayMutations";
-import { useMutationPostAppliedModule, useMutationUpdateAppliedModule } from "@api/appliedModule/appliedModuleMutations";
 
 interface ModuleEditProps {
     appliedModules: ModuleType[];
@@ -20,8 +19,6 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
     const { data: modules, isLoading, error } = useQueryModules();
     const postAppliedEventMutation = useMutationPostAppliedEvent();
     const postAppliedDayMutation = useMutationPostAppliedDay();
-    const postAppliedModuleMutation = useMutationPostAppliedModule();
-    const updateAppliedModuleMutation = useMutationUpdateAppliedModule();
 
     if (isLoading) return <p>Loading modules...</p>;
     if (error) return <p>Error loading modules</p>;
@@ -76,13 +73,9 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
             numberOfDays: listDays.length,
             days: listDays.sort((a, b) => a.dayNumber - b.dayNumber),
         };
-
-        updateAppliedModuleMutation.mutate(newAppliedModule)
-        if (updateAppliedModuleMutation.data) {
-            const updatedModules = [...appliedModules!];
-            updatedModules[moduleIndex] = newAppliedModule;
-            onUpdateModules(updatedModules);
-        }
+        const updatedModules = [...appliedModules!];
+        updatedModules[moduleIndex] = newAppliedModule;
+        onUpdateModules(updatedModules);
     };
 
     async function editAppliedModule(
@@ -101,13 +94,9 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
             numberOfDays: 1,
             days: [],
         };
-
-        postAppliedModuleMutation.mutate(emptyModule)
-        if (postAppliedModuleMutation.data) {
-            const editedModules = [...appliedModules!];
-            editedModules.splice(index + 1, 0, postAppliedModuleMutation.data);
-            onUpdateModules(editedModules);
-        }
+        const editedModules = [...appliedModules!];
+        editedModules.splice(index + 1, 0, emptyModule);
+        onUpdateModules(editedModules);
     };
 
     const handleDeleteModule = (index: number) => {
@@ -123,6 +112,9 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
         onUpdateModules(reorderModule(appliedModules, index, "down"));
     };
 
+    console.log(modules);
+    console.log(appliedModules);
+
     return (
         <>
             {modules &&
@@ -136,6 +128,25 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
                                     className="hidden"
                                 />
                                 <div className="collapse-title flex flex-row">
+                                    {index == 0 && index != appliedModules.length - 1 && (
+                                        <div className="flex flex-col w-[26px] mr-2" >
+                                            <DownArrowBtn onClick={() => moveModuleDown(index)} color={"#3F00E7"} />
+                                        </div>
+                                    )}
+                                    {index != 0 && index == appliedModules.length - 1 && (
+                                        <div className="flex flex-col w-[26px] mr-2">
+                                            <UpArrowBtn onClick={() => moveModuleUp(index)} color={"#3F00E7"} />
+                                        </div>
+                                    )}
+                                    {index != 0 && index != appliedModules.length - 1 && (
+                                        <div className="flex flex-col w-[26px] mr-2">
+                                            <UpArrowBtn onClick={() => moveModuleUp(index)} color={"#3F00E7"} />
+                                            <DownArrowBtn onClick={() => moveModuleDown(index)} color={"#3F00E7"} />
+                                        </div>
+                                    )}
+                                    {index == 0 && index == appliedModules.length - 1 && (
+                                        <div className="flex flex-col w-[26px] mr-2"></div>
+                                    )}
                                     <label
                                         htmlFor={`collapse-toggle-${index}`}
                                         className="cursor-pointer flex flex-row"
@@ -151,10 +162,11 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
                                             defaultValue={"DEFAULT"}
                                         >
                                             <option value="DEFAULT" disabled>
-                                                Select Topic
+                                                Select
                                             </option>
                                             {modules.map((module) => (
                                                 <option
+                                                    disabled={appliedModules.some((appliedModule) => appliedModule.name === module.name)}
                                                     key={module.id}
                                                     value={`${module.id}_${index}_${appliedModule.id}`}
                                                 >
@@ -163,9 +175,20 @@ export default function ModuleEdit({ appliedModules, onUpdateModules }: ModuleEd
                                             ))}
                                         </select>
                                     </div>
+                                    <div className="w-1/6 flex gap-1 justify-end items-center">
+                                        <PrimaryBtn onClick={() => handleAddModule(index)}>
+                                            +
+                                        </PrimaryBtn>
+                                        {appliedModules.length > 1 ? (
+                                            <TrashBtn
+                                                handleDelete={() => handleDeleteModule(index)}
+                                            />
+                                        ) : (
+                                            <div className="w-12"></div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-
                         ) : (
                             <div className="collapse border-primary border mb-2 ">
                                 <input
