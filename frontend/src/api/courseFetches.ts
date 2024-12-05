@@ -64,7 +64,7 @@ export async function postCourse(course: CourseType) {
   }
 }
 
-export async function editCourse(course: CourseType) {
+export async function updateCourse(course: CourseType) {
   const response = await fetch(`${BASE_URL}/${course.id}`, {
     method: "PUT",
     headers: {

@@ -10,7 +10,6 @@ export type CourseType = {
 }
 
 export type CourseProps = {
-    submitFunction: (course: CourseType) => Promise<void>;
     course: CourseType;
     buttonText: string;
 }
