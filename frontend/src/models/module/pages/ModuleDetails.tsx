@@ -1,18 +1,17 @@
-import { Link, useNavigate } from "react-router-dom";
-import { deleteModule } from "@api/moduleFetches";
+import { Link } from "react-router-dom";
 import Page from "@components/Page";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useIdFromPath } from "@helpers/helperHooks";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import { useQueryCourses } from "@api/courseQueries";
 import { useQueryModuleById } from "@api/moduleQueries";
+import { useMutationDeleteModule } from "@api/moduleMutations";
 
 export default function ModuleDetails() {
-    const navigate = useNavigate();
     const moduleId = useIdFromPath();
     const { data: module, isLoading, isError } = useQueryModuleById(moduleId);
     const { data: courses } = useQueryCourses();
+    const mutation = useMutationDeleteModule();
 
     const usedModules: number[] = [];
     if (courses) {
@@ -22,7 +21,7 @@ export default function ModuleDetails() {
             });
         });
     }
-    const queryClient = useQueryClient();
+
     const handleDelete = (id: number) => {
         if (!usedModules.find(m => m == id)) {
             mutation.mutate(id);
@@ -32,15 +31,6 @@ export default function ModuleDetails() {
             return;
         }
     }
-    const mutation = useMutation({
-        mutationFn: (id: number) => {
-            return deleteModule(id);
-        },
-        onSuccess: (_data, id) => {
-            queryClient.invalidateQueries({ queryKey: ['modules', id] })
-            navigate(`/modules`);
-        }
-    })
 
     return (
         <Page>

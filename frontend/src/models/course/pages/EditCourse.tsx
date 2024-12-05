@@ -1,4 +1,3 @@
-import { editCourse } from "@api/courseFetches";
 import Page from "@components/Page";
 import Course from "../sections/Course";
 import { useIdFromPath } from "@helpers/helperHooks";
@@ -13,7 +12,7 @@ export default function EditCourse() {
         <Page>
             {isLoading && <LoadingMessage />}
             {isError && <ErrorMessage />}
-            {course && <Course course={course} submitFunction={editCourse} buttonText="Save changes" />}
+            {course && <Course course={course} buttonText="Save changes" />}
         </Page>
     )
 }

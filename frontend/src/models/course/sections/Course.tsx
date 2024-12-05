@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import SuccessBtn from "@components/buttons/SuccessBtn";
 import InputSmall from "@components/inputFields/InputSmall";
 import DropDown from "@components/DropDown";
@@ -11,8 +10,9 @@ import FilterArea from "./FilterArea";
 import { ModuleType } from "@models/module/Types";
 import { useQueryModulesByCourseId } from "@api/courseQueries";
 import { useQueryModules } from "@api/moduleQueries";
+import { useMutationPostCourse, useMutationUpdateCourse } from "@api/courseMutations";
 
-export default function Course({ submitFunction, course, buttonText }: CourseProps) {
+export default function Course({ course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);
     const [numOfWeeks, setNumOfWeeks] = useState<number>(course.numberOfWeeks!);
     const [isIncorrectModuleInput, setIsIncorrectModuleInput] = useState<boolean>(false);
@@ -25,6 +25,8 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
     const navigate = useNavigate();
     const { data: courseModulesData } = useQueryModulesByCourseId(course.id!);
     const { data: modules } = useQueryModules();
+    const mutationPostCourse = useMutationPostCourse();
+    const mutationUpdateCourse = useMutationUpdateCourse();
 
     useEffect(() => {
         if (modules) {
@@ -102,18 +104,6 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
         setCourseModules(editedModules);
     }
 
-    const queryClient = useQueryClient();
-
-    const mutation = useMutation({
-        mutationFn: (course: CourseType) => {
-            return submitFunction(course);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['courses'] })
-            navigate(`/courses`)
-        }
-    })
-
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -145,7 +135,11 @@ export default function Course({ submitFunction, course, buttonText }: CoursePro
                 numberOfWeeks: numberOfWeeks.value,
                 moduleIds: courseModuleIds,
             };
-            mutation.mutate(newCourse);
+            if (newCourse.id == 0) {
+                mutationPostCourse.mutate(newCourse);
+            } else {
+                mutationUpdateCourse.mutate(newCourse);
+            }
         }
     }
 

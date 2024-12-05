@@ -1,4 +1,3 @@
-import { postCourse } from "@api/courseFetches";
 import Page from "@components/Page";
 import Course from "../sections/Course";
 import { CourseType } from "../Types";
@@ -15,7 +14,7 @@ export default function CreateCourse() {
     
     return (
         <Page>
-            <Course course={emptyCourse} submitFunction={postCourse} buttonText="Create" />
+            <Course course={emptyCourse} buttonText="Create" />
         </Page>
     )
 }

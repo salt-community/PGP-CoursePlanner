@@ -3,11 +3,11 @@ import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import SuccessBtn from "@components/buttons/SuccessBtn";
 import { useNavigate } from "react-router-dom";
 import { useState, FormEvent, useEffect, useRef } from "react";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { ModuleProps, DayType, ModuleType, EventType } from "../Types";
 import Day from "./Day";
+import { useMutationPostModule, useMutationUpdateModule } from "@api/moduleMutations";
 
-export default function Module({ submitFunction, module, buttonText }: ModuleProps) {
+export default function Module({ module, buttonText }: ModuleProps) {
     const navigate = useNavigate();
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
@@ -16,10 +16,8 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLUListElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
-
-    let editTrue = true;
-    if (submitFunction.name == "editModule")
-        editTrue = true;
+    const mutationPostModule = useMutationPostModule();
+    const mutationUpdateModule = useMutationUpdateModule("/modules");
 
     const handleDays = () => {
         const editedDays = days.slice();
@@ -41,18 +39,6 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
         }
         setDays(editedDays);
     };
-
-    const queryClient = useQueryClient();
-
-    const mutation = useMutation({
-        mutationFn: (module: ModuleType) => {
-            return submitFunction(module);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['modules'] });
-            navigate(`/modules`);
-        }
-    });
 
     const handleTrackChange = (selectedTrack: string) => {
         if (track.includes(selectedTrack)) {
@@ -86,8 +72,11 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                 days: days,
                 track: track
             };
-
-            mutation.mutate(newModule);
+            if (module.id == 0) {
+                mutationPostModule.mutate(newModule);
+            } else {
+                mutationUpdateModule.mutate(newModule);
+            }
         }
     }
 
@@ -204,7 +193,7 @@ export default function Module({ submitFunction, module, buttonText }: ModulePro
                 </div>
                 <div className="flex flex-col space-y-2">
                     {days.map((day) =>
-                        <Day key={"day_" + day.dayNumber} editTrue={editTrue} moduleId={module.id!} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays} />)}
+                        <Day key={"day_" + day.dayNumber} editTrue={module.id ? true : false} moduleId={module.id!} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays} />)}
                 </div>
                 {isIncompleteInput &&
                     <p className="error-message text-red-600 text-sm" id="invalid-helper">Please fill in all the fields</p>}
