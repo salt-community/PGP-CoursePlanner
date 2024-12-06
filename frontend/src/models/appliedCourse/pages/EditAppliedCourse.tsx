@@ -101,7 +101,6 @@ export default function EditAppliedCourse() {
     return (
         <Page>
             <section className="px-4 md:px-24 lg:px-56">
-
                 {appliedCourse !== undefined && (
                     <div>
                         <div className="flex flex-row gap-4 items-center p-1">
