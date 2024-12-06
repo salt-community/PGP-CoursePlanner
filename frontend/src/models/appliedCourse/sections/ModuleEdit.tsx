@@ -1,12 +1,10 @@
 import { SyntheticEvent, useEffect, useState } from "react";
-import { reorderModule } from "../helpers/reorderModule";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import TrashBtn from "@components/buttons/TrashBtn";
 import AppliedModule from "./AppliedModule";
-import UpArrowBtn from "@components/buttons/UpArrowBtn";
-import DownArrowBtn from "@components/buttons/DownArrowBtn";
 import { ModuleType } from "@models/module/Types";
 import { useQueryModules } from "@api/module/moduleQueries";
+import { ReorderModule } from "../components/ReorderModule";
 
 interface ModuleEditProps {
     incomingAppliedModules: ModuleType[];
@@ -21,7 +19,7 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
         setAppliedModules(incomingAppliedModules);
     }, [incomingAppliedModules]);
 
-    const handleChange = async (event: SyntheticEvent) => {
+    const handleAddAppliedModule = async (event: SyntheticEvent) => {
         const value = (event.target as HTMLSelectElement).value;
         const [moduleIdStr, indexStr] = value.split("_");
         const moduleIndex = parseInt(indexStr);
@@ -46,7 +44,7 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
         setAppliedModules(updatedModules);
     };
 
-    const handleAddAppliedModule = (index: number) => {
+    const handleCreateNewAppliedModule = (index: number) => {
         const emptyModule: ModuleType = {
             id: 0,
             name: "",
@@ -76,13 +74,6 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
         onUpdateModules(editedModules);
     };
 
-    const moveModuleUp = (index: number) => {
-        onUpdateModules(reorderModule(appliedModules, index, "up"));
-    };
-    const moveModuleDown = (index: number) => {
-        onUpdateModules(reorderModule(appliedModules, index, "down"));
-    };
-
     return (
         <>
             {modules &&
@@ -96,25 +87,7 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
                                     className="hidden"
                                 />
                                 <div className="collapse-title flex flex-row">
-                                    {index == 0 && index != appliedModules.length - 1 && (
-                                        <div className="flex flex-col w-[26px] mr-2" >
-                                            <DownArrowBtn onClick={() => moveModuleDown(index)} color={"#3F00E7"} />
-                                        </div>
-                                    )}
-                                    {index != 0 && index == appliedModules.length - 1 && (
-                                        <div className="flex flex-col w-[26px] mr-2">
-                                            <UpArrowBtn onClick={() => moveModuleUp(index)} color={"#3F00E7"} />
-                                        </div>
-                                    )}
-                                    {index != 0 && index != appliedModules.length - 1 && (
-                                        <div className="flex flex-col w-[26px] mr-2">
-                                            <UpArrowBtn onClick={() => moveModuleUp(index)} color={"#3F00E7"} />
-                                            <DownArrowBtn onClick={() => moveModuleDown(index)} color={"#3F00E7"} />
-                                        </div>
-                                    )}
-                                    {index == 0 && index == appliedModules.length - 1 && (
-                                        <div className="flex flex-col w-[26px] mr-2"></div>
-                                    )}
+                                    <ReorderModule index={index} appliedModules={appliedModules} onUpdateModules={onUpdateModules} />
                                     <label
                                         htmlFor={`collapse-toggle-${index}`}
                                         className="cursor-pointer flex flex-row"
@@ -126,7 +99,7 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
                                     <div className="flex flex-col ml-1">
                                         <select
                                             className="border border-gray-300 rounded-lg p-1 w-48"
-                                            onChange={handleChange}
+                                            onChange={handleAddAppliedModule}
                                             defaultValue={"DEFAULT"}
                                         >
                                             <option value="DEFAULT" disabled>
@@ -144,7 +117,7 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
                                         </select>
                                     </div>
                                     <div className="w-1/6 flex gap-1 justify-end items-center">
-                                        <PrimaryBtn onClick={() => handleAddAppliedModule(index)}>
+                                        <PrimaryBtn onClick={() => handleCreateNewAppliedModule(index)}>
                                             +
                                         </PrimaryBtn>
                                         {appliedModules.length > 1 ? (
@@ -165,25 +138,7 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
                                     className="hidden"
                                 />
                                 <div className="collapse-title flex flex-row">
-                                    {index == 0 && index != appliedModules.length - 1 && (
-                                        <div className="flex flex-col w-[26px] mr-2" >
-                                            <DownArrowBtn onClick={() => moveModuleDown(index)} color={"#3F00E7"} />
-                                        </div>
-                                    )}
-                                    {index != 0 && index == appliedModules.length - 1 && (
-                                        <div className="flex flex-col w-[26px] mr-2">
-                                            <UpArrowBtn onClick={() => moveModuleUp(index)} color={"#3F00E7"} />
-                                        </div>
-                                    )}
-                                    {index != 0 && index != appliedModules.length - 1 && (
-                                        <div className="flex flex-col w-[26px] mr-2">
-                                            <UpArrowBtn onClick={() => moveModuleUp(index)} color={"#3F00E7"} />
-                                            <DownArrowBtn onClick={() => moveModuleDown(index)} color={"#3F00E7"} />
-                                        </div>
-                                    )}
-                                    {index == 0 && index == appliedModules.length - 1 && (
-                                        <div className="flex flex-col w-[26px] mr-2"></div>
-                                    )}
+                                    <ReorderModule index={index} appliedModules={appliedModules} onUpdateModules={onUpdateModules} />
                                     <label
                                         htmlFor={`collapse-toggle-${index}`}
                                         className="cursor-pointer flex flex-row w-5/6"
@@ -193,7 +148,7 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
                                         </h1>
                                     </label>
                                     <div className="w-1/6 flex gap-1 justify-end items-center">
-                                        <PrimaryBtn onClick={() => handleAddAppliedModule(index)}>
+                                        <PrimaryBtn onClick={() => handleCreateNewAppliedModule(index)}>
                                             +
                                         </PrimaryBtn>
                                         {appliedModules.length > 1 ? (
