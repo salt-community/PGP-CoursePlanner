@@ -67,13 +67,9 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
         onUpdateModules(editedModules);
     };
 
-    if (isLoading) {
-        return <LoadingMessage />;
-    }
-    if (isError) {
-        return <ErrorMessage />;
-    }
-
+    if (isLoading) return <LoadingMessage />;
+    if (isError) return <ErrorMessage />;
+    
     return (
         <>
             {appliedModules.map((appliedModule, index) => (
