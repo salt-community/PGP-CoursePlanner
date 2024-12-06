@@ -87,14 +87,14 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
                                     className="hidden"
                                 />
                                 <div className="collapse-title flex flex-row">
-                                    <ReorderModule index={index} appliedModules={appliedModules} onUpdateModules={onUpdateModules} />
+                                    <ReorderModule index={index} appliedModules={appliedModules} setAppliedModules={setAppliedModules} />
                                     <label
                                         htmlFor={`collapse-toggle-${index}`}
                                         className="cursor-pointer flex flex-row"
                                     >
-                                        <h1 className="text-lg text-primary">
+                                        <h2 className="text-lg text-primary">
                                             Module {index + 1}:
-                                        </h1>
+                                        </h2>
                                     </label>
                                     <div className="flex flex-col ml-1">
                                         <select
@@ -138,14 +138,14 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
                                     className="hidden"
                                 />
                                 <div className="collapse-title flex flex-row">
-                                    <ReorderModule index={index} appliedModules={appliedModules} onUpdateModules={onUpdateModules} />
+                                    <ReorderModule index={index} appliedModules={appliedModules} setAppliedModules={setAppliedModules} />
                                     <label
                                         htmlFor={`collapse-toggle-${index}`}
                                         className="cursor-pointer flex flex-row w-5/6"
                                     >
-                                        <h1 className="text-lg text-primary self-center p-3">
+                                        <h2 className="text-lg text-primary self-center p-3">
                                             Module {index + 1}: {appliedModule.name}
-                                        </h1>
+                                        </h2>
                                     </label>
                                     <div className="w-1/6 flex gap-1 justify-end items-center">
                                         <PrimaryBtn onClick={() => handleCreateNewAppliedModule(index)}>

@@ -6,15 +6,15 @@ import { ModuleType } from "@models/module/Types";
 type Props = {
     index: number,
     appliedModules: ModuleType[],
-    onUpdateModules: (modules: ModuleType[]) => void
+    setAppliedModules: (modules: ModuleType[]) => void
 }
 
-export function ReorderModule({ index, appliedModules, onUpdateModules }: Props) {
+export function ReorderModule({ index, appliedModules, setAppliedModules }: Props) {
     const moveModuleUp = (index: number) => {
-        onUpdateModules(reorderModule(appliedModules, index, "up"));
+        setAppliedModules(reorderModule(appliedModules, index, "up"));
     };
     const moveModuleDown = (index: number) => {
-        onUpdateModules(reorderModule(appliedModules, index, "down"));
+        setAppliedModules(reorderModule(appliedModules, index, "down"));
     };
 
     return (
