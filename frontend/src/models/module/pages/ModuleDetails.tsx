@@ -3,9 +3,9 @@ import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import { useQueryCourses } from "@api/courseQueries";
-import { useQueryModuleById } from "@api/moduleQueries";
-import { useMutationDeleteModule } from "@api/moduleMutations";
+import { useQueryCourses } from "@api/course/courseQueries";
+import { useQueryModuleById } from "@api/module/moduleQueries";
+import { useMutationDeleteModule } from "@api/module/moduleMutations";
 
 export default function ModuleDetails() {
     const moduleId = useIdFromPath();

@@ -2,7 +2,7 @@ import Page from "@components/Page";
 import { Link } from "react-router-dom";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import { useQueryCourses } from "@api/courseQueries";
+import { useQueryCourses } from "@api/course/courseQueries";
 
 export default function Courses() {
     const { data, isLoading, isError } = useQueryCourses();

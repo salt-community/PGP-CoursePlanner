@@ -8,10 +8,10 @@ import ColorPickerModal from "@components/ColorPickerModal";
 import ModuleEdit from "../sections/ModuleEdit";
 import { ModuleType } from "@models/module/Types";
 import { CourseType } from "@models/course/Types";
-import { useQueryAppliedCourseById, useQueryAppliedCourses } from "@api/appliedCourseQueries";
-import { useQueryModulesByCourseId } from "@api/courseQueries";
-import { useMutationUpdateAppliedCourse } from "@api/appliedCourseMutations";
-import { useMutationUpdateAppliedModule } from "@api/appliedModuleMutations";
+import { useQueryAppliedCourseById, useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
+import { useQueryModulesByCourseId } from "@api/course/courseQueries";
+import { useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
+import { useMutationPostAppliedModule, useMutationUpdateAppliedModule } from "@api/appliedModule/appliedModuleMutations";
 
 export default function EditAppliedCourse() {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -25,13 +25,19 @@ export default function EditAppliedCourse() {
     const { data: appliedCourses } = useQueryAppliedCourses();
     const { data: appliedCourse } = useQueryAppliedCourseById(appliedCourseId);
     const { data: courseModules } = useQueryModulesByCourseId(appliedCourseId);
+    const mutationPostAppliedModule = useMutationPostAppliedModule();
     const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
     const mutationUpdateAppliedModule = useMutationUpdateAppliedModule();
 
     const handleUpdateModules = (updatedModules: ModuleType[]) => {
         setAppliedModules(updatedModules);
         for (let i = 0; i < updatedModules.length; i++) {
-            mutationUpdateAppliedModule.mutate(updatedModules[i]);
+            if (updatedModules[i].id !== 0) {
+                mutationUpdateAppliedModule.mutate(updatedModules[i]);
+            }
+            else {
+                mutationPostAppliedModule.mutate(updatedModules[i]);
+            }
         }
     };
 
@@ -135,7 +141,7 @@ export default function EditAppliedCourse() {
                             <ColorPickerModal color={color} setColor={setColor} />
                         </div>
                         <div className="mt-10 mb-10">
-                            <ModuleEdit appliedModules={appliedModules || []} onUpdateModules={handleUpdateModules} />
+                            <ModuleEdit incomingAppliedModules={appliedModules || []} onUpdateModules={handleUpdateModules} />
                         </div>
                         {isInvalidDate && (
                             <p

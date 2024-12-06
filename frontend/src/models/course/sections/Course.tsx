@@ -8,9 +8,9 @@ import TrashBtn from "@components/buttons/TrashBtn";
 import { CourseProps, CourseType } from "../Types";
 import FilterArea from "./FilterArea";
 import { ModuleType } from "@models/module/Types";
-import { useQueryModulesByCourseId } from "@api/courseQueries";
-import { useQueryModules } from "@api/moduleQueries";
-import { useMutationPostCourse, useMutationUpdateCourse } from "@api/courseMutations";
+import { useQueryModulesByCourseId } from "@api/course/courseQueries";
+import { useQueryModules } from "@api/module/moduleQueries";
+import { useMutationPostCourse, useMutationUpdateCourse } from "@api/course/courseMutations";
 
 export default function Course({ course, buttonText }: CourseProps) {
     const [courseName, setCourseName] = useState<string>(course.name);

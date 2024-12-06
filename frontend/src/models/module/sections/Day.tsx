@@ -9,8 +9,8 @@ import UpArrowBtn from '../../../components/buttons/UpArrowBtn';
 import EllipsisBtn from '../components/EllipsisBtn';
 import EditEventTable from '../../../components/EditEventTable';
 import { openCloseModal } from '../helpers/openCloseModal';
-import { useQueryModules } from '@api/moduleQueries';
-import { useMutationUpdateModule } from '@api/moduleMutations';
+import { useQueryModules } from '@api/module/moduleQueries';
+import { useMutationUpdateModule } from '@api/module/moduleMutations';
 
 export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");

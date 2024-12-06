@@ -11,10 +11,10 @@ import { CourseType } from "../Types";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import ColorPickerModal from "@components/ColorPickerModal";
-import { useQueryAppliedCourses } from "@api/appliedCourseQueries";
-import { useQueryCourseById, useQueryModulesByCourseId } from "@api/courseQueries";
-import { useMutationUpdateAppliedCourse, useMutationPostAppliedCourse } from "@api/appliedCourseMutations";
-import { useMutationDeleteCourse } from "@api/courseMutations";
+import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
+import { useQueryCourseById, useQueryModulesByCourseId } from "@api/course/courseQueries";
+import { useMutationUpdateAppliedCourse, useMutationPostAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
+import { useMutationDeleteCourse } from "@api/course/courseMutations";
 
 export default function CourseDetails() {
   const [startDate, setStartDate] = useState<Date>(new Date());

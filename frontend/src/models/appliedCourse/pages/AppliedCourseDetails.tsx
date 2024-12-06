@@ -6,9 +6,9 @@ import { Link } from "react-router-dom";
 import DeleteBtn from "@components/buttons/DeleteBtn";
 import PDFWeekGenerator from "../sections/PDFWeekGenerator";
 import PDFGenerator from "../sections/PDFGenerator";
-import { useQueryAppliedCourseById } from "@api/appliedCourseQueries";
-import { useQueryModulesByCourseId } from "@api/courseQueries";
-import { useMutationDeleteAppliedCourse } from "@api/appliedCourseMutations";
+import { useQueryAppliedCourseById } from "@api/appliedCourse/appliedCourseQueries";
+import { useQueryModulesByCourseId } from "@api/course/courseQueries";
+import { useMutationDeleteAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

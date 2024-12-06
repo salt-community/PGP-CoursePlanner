@@ -7,7 +7,7 @@ import TimeLineCourse from "../sections/TimeLineCourse";
 import TimeLineXaxis from "../sections/TimeLineXaxis";
 import { ZoomOutButton } from "../components/ZoomOutBtn";
 import { ZoomInButton } from "../components/ZoomInBtn";
-import { useQueryAppliedCourses } from "@api/appliedCourseQueries";
+import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 
 export type Activity = {
   id: number;

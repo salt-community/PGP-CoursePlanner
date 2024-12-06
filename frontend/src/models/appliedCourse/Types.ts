@@ -1,7 +1,7 @@
 import { DayType, EventType, ModuleType } from "../module/Types";
 
 export type AppliedModuleProps = {
-  submitFunction: (index: number, module: ModuleType) => Promise<void>;
+  saveAppliedModule: (index: number, module: ModuleType) => Promise<void>;
   module: ModuleType;
   index: number;
   buttonText: string;

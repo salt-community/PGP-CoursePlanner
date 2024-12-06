@@ -5,7 +5,7 @@ import { getWeek } from "date-fns"
 import { Link } from "react-router-dom"
 import CurrentWeek from "./CurrentWeek"
 import NextWeek from "./NextWeek"
-import { useQueryCalendarDateWeeks } from "@api/calendarDateQueries"
+import { useQueryCalendarDateWeeks } from "@api/calendarDate/calendarDateQueries"
 
 export default function WeeksContainer() {
     const thisWeek = new Date();

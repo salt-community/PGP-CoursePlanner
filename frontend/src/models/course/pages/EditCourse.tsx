@@ -3,7 +3,7 @@ import Course from "../sections/Course";
 import { useIdFromPath } from "@helpers/helperHooks";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import { useQueryCourseById } from "@api/courseQueries";
+import { useQueryCourseById } from "@api/course/courseQueries";
 
 export default function EditCourse() {
     const { data: course, isLoading, isError } = useQueryCourseById(useIdFromPath());
