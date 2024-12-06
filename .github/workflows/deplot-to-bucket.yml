@@ -34,6 +34,6 @@ jobs:
 
     - name: Upload files to GCS
       run: |
-        gsutil -m rsync -r ./frontend/dist gs://$GCP_BUCKET_NAME/
+        gsutil -m rsync -r ./frontend/dist gs://${{secrets.GCP_BUCKET_NAME}}/
       env:
         GCP_BUCKET_NAME: ${{ secrets.GCP_BUCKET_NAME }}
