@@ -4,6 +4,7 @@ import ModuleRow from "./ModuleRow";
 import { FormEvent, useState } from "react";
 import { CourseProps, CourseType } from "../Types";
 import { useMutationPostCourse, useMutationUpdateCourse } from "@api/course/courseMutations";
+import InputSmall from "@components/inputFields/InputSmall";
 
 export default function Course({ course, buttonText }: CourseProps) {
     const { courseModules, setCourseModules, filteredModules, tracks } = useCourse(course.id!);
@@ -40,6 +41,7 @@ export default function Course({ course, buttonText }: CourseProps) {
     }
 
     const moveUp = (index: number) => {
+
         const editedModules = [...courseModules];
 
         const temp = editedModules[index];
@@ -92,8 +94,9 @@ export default function Course({ course, buttonText }: CourseProps) {
     return (
         <form onSubmit={handleSubmit}>
             <p>Tracks: {tracks} </p>
-            <input type="text" value={courseName} onChange={(e) => setCourseName(e.target.value)} />
-            <input type="number" value={numOfWeeks} onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} />
+
+            <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
+            <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" value={ numOfWeeks == 0 ? "" : numOfWeeks.toString()} min="0" />
             {courseModules.map((module, index) => (
                 <ModuleRow
                     key={index}
@@ -104,8 +107,8 @@ export default function Course({ course, buttonText }: CourseProps) {
                     filteredModules={filteredModules}
                     onAdd={() => handleAddModule(index)}
                     onDelete={() => handleDeleteModule(index)}
-                    onMoveUp={() => moveUp(index) }
-                    onMoveDown={() => moveDown(index) }
+                    onMoveUp={() => moveUp(index)}
+                    onMoveDown={() => moveDown(index)}
                 />
             ))}
             <button type="submit">{buttonText}</button>
