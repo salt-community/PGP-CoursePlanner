@@ -5,6 +5,8 @@ import { FormEvent, useState } from "react";
 import { CourseProps, CourseType } from "../Types";
 import { useMutationPostCourse, useMutationUpdateCourse } from "@api/course/courseMutations";
 import InputSmall from "@components/inputFields/InputSmall";
+import SuccessBtn from "@components/buttons/SuccessBtn";
+import { useNavigate } from "react-router-dom";
 
 export default function Course({ course, buttonText }: CourseProps) {
     const { courseModules, setCourseModules, filteredModules, tracks } = useCourse(course.id!);
@@ -15,6 +17,7 @@ export default function Course({ course, buttonText }: CourseProps) {
     const [isNotSelected, setIsNotSelected] = useState<boolean>(false);
     const mutationPostCourse = useMutationPostCourse();
     const mutationUpdateCourse = useMutationUpdateCourse();
+    const navigate = useNavigate();
 
 
 
@@ -96,7 +99,7 @@ export default function Course({ course, buttonText }: CourseProps) {
             <p>Tracks: {tracks} </p>
 
             <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
-            <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" value={ numOfWeeks == 0 ? "" : numOfWeeks.toString()} min="0" />
+            <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" value={numOfWeeks == 0 ? "" : numOfWeeks.toString()} min="0" />
             {courseModules.map((module, index) => (
                 <ModuleRow
                     key={index}
@@ -111,7 +114,8 @@ export default function Course({ course, buttonText }: CourseProps) {
                     onMoveDown={() => moveDown(index)}
                 />
             ))}
-            <button type="submit">{buttonText}</button>
+            <SuccessBtn value={buttonText}></SuccessBtn>
+            <button onClick={() => navigate(`/courses/details/${course.id}`)} className="btn btn-sm mt-4 max-w-66 btn-info text-white">Go back without saving changes</button>
         </form>
     );
 }

@@ -22,8 +22,8 @@ export default function ModuleRow({
     return (
         <div className="flex flex-row items-center">
             <div className="flex flex-col w-[26px] mr-2">
-                {index > 0 && <button onClick={onMoveUp}>Up</button>}
-                {index < courseModules.length - 1 && <button onClick={onMoveDown}>Down</button>}
+                {index > 0 && <button type="button" onClick={onMoveUp}>Up</button>}
+                {index < courseModules.length - 1 && <button type="button" onClick={onMoveDown}>Down</button>}
             </div>
             <h2>Module {index + 1}</h2>
             <DropDown
