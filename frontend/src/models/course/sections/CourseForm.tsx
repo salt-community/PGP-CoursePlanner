@@ -104,8 +104,8 @@ export default function Course({ course, buttonText }: CourseProps) {
                     filteredModules={filteredModules}
                     onAdd={() => handleAddModule(index)}
                     onDelete={() => handleDeleteModule(index)}
-                    onMoveUp={() => moveUp(index) /* Logic */}
-                    onMoveDown={() => moveDown(index) /* Logic */}
+                    onMoveUp={() => moveUp(index) }
+                    onMoveDown={() => moveDown(index) }
                 />
             ))}
             <button type="submit">{buttonText}</button>
