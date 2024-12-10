@@ -1,7 +1,7 @@
 import { useCourse } from "../helpers/useCourse";
 import { findDuplicates, isStringInputIncorrect } from "../helpers/courseUtils";
 import ModuleRow from "./ModuleRow";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { CourseProps, CourseType } from "../Types";
 import { useMutationPostCourse, useMutationUpdateCourse } from "@api/course/courseMutations";
 import InputSmall from "@components/inputFields/InputSmall";
@@ -18,9 +18,16 @@ export default function Course({ course, buttonText }: CourseProps) {
     const mutationPostCourse = useMutationPostCourse();
     const mutationUpdateCourse = useMutationUpdateCourse();
     const navigate = useNavigate();
+    const [filledDaysCount, setFilledDaysCount] = useState<number>(0);
 
 
-
+    useEffect(() => {
+        let filledDays: number = 0;
+        if (courseModules) {
+            courseModules.forEach(module => filledDays += module.numberOfDays);
+            setFilledDaysCount(filledDays);
+        }
+    }, [courseModules]);
 
     const handleAddModule = (index: number) => {
         const newModules = [...courseModules];
@@ -96,6 +103,9 @@ export default function Course({ course, buttonText }: CourseProps) {
 
     return (
         <form onSubmit={handleSubmit}>
+
+            {isIncorrectName &&
+                <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
             <p>Tracks: {tracks} </p>
 
             <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
@@ -114,8 +124,18 @@ export default function Course({ course, buttonText }: CourseProps) {
                     onMoveDown={() => moveDown(index)}
                 />
             ))}
-            <SuccessBtn value={buttonText}></SuccessBtn>
-            <button onClick={() => navigate(`/courses/details/${course.id}`)} className="btn btn-sm mt-4 max-w-66 btn-info text-white">Go back without saving changes</button>
+
+
+            {isIncorrectModuleInput &&
+                <p className="error-message text-red-600 text-sm" id="invalid-helper">Cannot select duplicate modules</p>}
+            {isNotSelected &&
+                <p className="error-message text-red-600 text-sm" id="invalid-helper">Please select a module from the dropdown menu</p>}
+            <p>You have selected {Math.floor(filledDaysCount / 5)} week(s) and {filledDaysCount % 5} day(s) (target: {numOfWeeks} weeks)</p>
+
+            <div className="flex flex-row gap-2">
+                <SuccessBtn value={buttonText}></SuccessBtn>
+                <button onClick={() => navigate(`/courses/details/${course.id}`)} className="btn btn-sm mt-4 max-w-66 btn-info text-white">Go back without saving changes</button>
+            </div>
         </form>
     );
 }
