@@ -7,7 +7,7 @@ interface ModuleRowProps {
     module: ModuleType;
     index: number;
     courseModules: ModuleType[];
-    setCourseModules: (modules: ModuleType[]) => void;
+    setCourseModules: React.Dispatch<React.SetStateAction<ModuleType[]>>
     filteredModules: ModuleType[];
     onAdd: () => void;
     onDelete: () => void;
