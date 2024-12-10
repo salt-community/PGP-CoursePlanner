@@ -15,15 +15,21 @@ interface ModuleRowProps {
     onMoveDown: () => void;
 }
 
-export default function ModuleRow({ 
-    module, index, courseModules, setCourseModules, 
-    filteredModules, onAdd, onDelete, onMoveUp, onMoveDown 
+export default function ModuleRow({
+    module, index, courseModules, setCourseModules,
+    filteredModules, onAdd, onDelete, onMoveUp, onMoveDown
 }: ModuleRowProps) {
     return (
         <div className="flex flex-row items-center">
             <div className="flex flex-col w-[26px] mr-2">
-                {index > 0 && <button type="button" onClick={onMoveUp}>Up</button>}
-                {index < courseModules.length - 1 && <button type="button" onClick={onMoveDown}>Down</button>}
+                {index > 0 &&
+                    <button type="button" className="w-full h-full self-center stroke-base-content" onClick={onMoveUp}>
+                        <svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 15l-6-6-6 6" /></svg>
+                    </button>}
+                {index < courseModules.length - 1 &&
+                    <button type="button" className="w-full h-full self-center stroke-base-content" onClick={onMoveDown}>
+                        <svg className="self-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
+                    </button>}
             </div>
             <h2>Module {index + 1}</h2>
             <DropDown
