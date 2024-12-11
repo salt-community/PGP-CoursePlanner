@@ -28,10 +28,10 @@ export default function NavBar() {
   return (
     <>
       <div
-        className={`fixed left-0 top-0 h-full bg-gray-800 text-white shadow-lg transition-width duration-300 ${isSidebarExpanded ? 'w-64' : 'w-20'}`}
+        className={`fixed left-0 top-0 h-full bg-gray-800 text-white shadow-lg transition-all duration-200 ${isSidebarExpanded ? 'w-64' : 'w-20'}`}
       >
-        <div className="p-5 border-b border-gray-700 flex items-center justify-between">
-          <Link className="text-xl font-bold text-white" to="/">
+        <div className="p-5 border-b border-gray-700 flex items-center justify-between overflow-hidden">
+          <Link className="text-xl font-bold text-white whitespace-nowrap" to="/">
             {isSidebarExpanded ? "Course Planner" : "CP"}
           </Link>
           <button 
@@ -41,12 +41,12 @@ export default function NavBar() {
             {isSidebarExpanded ? "<" : ">"}
           </button>
         </div>
-        <ul className="menu menu-vertical p-4 text-lg space-y-2">
+        <ul className="menu menu-vertical p-4 text-lg space-y-2 overflow-hidden">
           <li>
             <Link
               onClick={toggleDropdown}
               to={`/calendar/month/monthyear=${currentMonth}-${currentYear}`}
-              className="hover:bg-gray-700 rounded p-2 flex items-center"
+              className="hover:bg-gray-700 rounded p-2 flex items-center whitespace-nowrap"
             >
               <span className="mr-2">📅</span>
               {isSidebarExpanded && "Calendar"}
@@ -56,7 +56,7 @@ export default function NavBar() {
             <Link
               onClick={toggleDropdown}
               to="/modules"
-              className="hover:bg-gray-700 rounded p-2 flex items-center"
+              className="hover:bg-gray-700 rounded p-2 flex items-center whitespace-nowrap"
             >
               <span className="mr-2">📂</span>
               {isSidebarExpanded && "Module Templates"}
@@ -66,7 +66,7 @@ export default function NavBar() {
             <Link
               onClick={toggleDropdown}
               to="/courses"
-              className="hover:bg-gray-700 rounded p-2 flex items-center"
+              className="hover:bg-gray-700 rounded p-2 flex items-center whitespace-nowrap"
             >
               <span className="mr-2">📘</span>
               {isSidebarExpanded && "Course Templates"}
@@ -76,7 +76,7 @@ export default function NavBar() {
             <Link
               onClick={toggleDropdown}
               to="/activecourses"
-              className="hover:bg-gray-700 rounded p-2 flex items-center"
+              className="hover:bg-gray-700 rounded p-2 flex items-center whitespace-nowrap"
             >
               <span className="mr-2">🚀</span>
               {isSidebarExpanded && "Bootcamps"}
