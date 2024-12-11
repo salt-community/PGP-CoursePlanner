@@ -7,6 +7,7 @@ import { currentMonth, currentYear } from "@helpers/dateHelpers";
 export default function NavBar() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -20,49 +21,65 @@ export default function NavBar() {
     window.location.reload();
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarExpanded(!isSidebarExpanded);
+  };
+
   return (
     <>
-      <div className="fixed left-0 top-0 h-full w-64 bg-gray-800 text-white shadow-lg">
-        <div className="p-5 border-b border-gray-700">
+      <div
+        className={`fixed left-0 top-0 h-full bg-gray-800 text-white shadow-lg transition-width duration-300 ${isSidebarExpanded ? 'w-64' : 'w-20'}`}
+      >
+        <div className="p-5 border-b border-gray-700 flex items-center justify-between">
           <Link className="text-xl font-bold text-white" to="/">
-            Course Planner
+            {isSidebarExpanded ? "Course Planner" : "CP"}
           </Link>
+          <button 
+            onClick={toggleSidebar} 
+            className="text-white bg-gray-700 p-2 rounded focus:outline-none hover:bg-gray-600"
+          >
+            {isSidebarExpanded ? "<" : ">"}
+          </button>
         </div>
         <ul className="menu menu-vertical p-4 text-lg space-y-2">
           <li>
             <Link
               onClick={toggleDropdown}
               to={`/calendar/month/monthyear=${currentMonth}-${currentYear}`}
-              className="hover:bg-gray-700 rounded p-2"
+              className="hover:bg-gray-700 rounded p-2 flex items-center"
             >
-              Calendar
+              <span className="mr-2">📅</span>
+              {isSidebarExpanded && "Calendar"}
             </Link>
           </li>
           <li>
             <Link
               onClick={toggleDropdown}
               to="/modules"
-              className="hover:bg-gray-700 rounded p-2"
+              className="hover:bg-gray-700 rounded p-2 flex items-center"
             >
-              Module Templates
+              <span className="mr-2">📂</span>
+              {isSidebarExpanded && "Module Templates"}
             </Link>
           </li>
           <li>
             <Link
               onClick={toggleDropdown}
               to="/courses"
-              className="hover:bg-gray-700 rounded p-2"
+              className="hover:bg-gray-700 rounded p-2 flex items-center"
             >
-              Course Templates
+              <span className="mr-2">📘</span>
+              {isSidebarExpanded && "Course Templates"}
             </Link>
           </li>
           <li>
             <Link
               onClick={toggleDropdown}
               to="/activecourses"
-              className="hover:bg-gray-700 rounded p-2"
+              className="hover:bg-gray-700 rounded p-2 flex items-center"
             >
-              Bootcamps
+              <span className="mr-2">🚀</span>
+              {isSidebarExpanded && "Bootcamps"}
             </Link>
           </li>
         </ul>
