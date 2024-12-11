@@ -4,7 +4,7 @@ import SuccessBtn from "@components/buttons/SuccessBtn";
 import { useNavigate } from "react-router-dom";
 import { useState, FormEvent, useEffect, useRef } from "react";
 import { ModuleProps, DayType, ModuleType, EventType } from "../Types";
-import Day from "./Day";
+import Day from "./DayRework";
 import { useMutationPostModule, useMutationUpdateModule } from "@api/module/moduleMutations";
 
 export default function Module({ module, buttonText }: ModuleProps) {
