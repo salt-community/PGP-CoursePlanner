@@ -19,7 +19,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
 
     const handleAddEvent = () => {
         const editedDays = [...days];
-        editedDays[day.dayNumber - 1].events.push({
+        editedDays[day.dayNumber-1].events.push({
             name: "",
             startTime: "",
             endTime: ""
@@ -83,6 +83,15 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
 
         setDays(editedDays);
     }
+
+    const handleSelectModule = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedModule(event.target.value);
+        setSelectedModuleDay("DEFAULT");
+    };
+
+    const handleSelectModuleDay = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedModuleDay(event.target.value);
+    };
 
     const handleMove = () => {
         setIsIncompleteInput(false);
@@ -183,8 +192,8 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                     handleMove={handleMove}
                                     setAllToFalse={setAllToFalse}
                                     isIncompleteInput={isIncompleteInput}
-                                    handleSelectModule={(event) => setSelectedModule(event.target.value)}
-                                    handleSelectModuleDay={(event) => setSelectedModuleDay(event.target.value)}
+                                    handleSelectModule={handleSelectModule}
+                                    handleSelectModuleDay={handleSelectModuleDay}
                                 />
                             </>
                         )}
