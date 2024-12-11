@@ -258,6 +258,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                             <>
                                 <TrashBtn handleDelete={() => handleDeleteDay(day.dayNumber - 1)} />
                                 <MoveDayDropdown
+                                    editTrue={editTrue}
                                     dayNumber={day.dayNumber}
                                     modules={modules}
                                     moduleId={moduleId}
@@ -268,8 +269,8 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                     handleMove={handleMove}
                                     setAllToFalse={setAllToFalse}
                                     isIncompleteInput={isIncompleteInput}
-                                    handleSelectModule={(event) => setSelectedModule(event.target.value)} 
-                                    handleSelectModuleDay={(event) => setSelectedModuleDay(event.target.value)} 
+                                    handleSelectModule={(event) => setSelectedModule(event.target.value)}
+                                    handleSelectModuleDay={(event) => setSelectedModuleDay(event.target.value)}
                                 />
                             </>
                         )}

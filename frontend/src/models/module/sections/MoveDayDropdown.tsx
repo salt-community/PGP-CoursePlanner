@@ -5,6 +5,7 @@ import { ModuleType } from '../Types';
 import { openCloseModal } from '../helpers/openCloseModal';
 
 function MoveDayDropdown({
+    editTrue,
     dayNumber,
     modules,
     moduleId,
@@ -19,6 +20,7 @@ function MoveDayDropdown({
     setSelectedModuleDay,
 } : MoveDayDropdownProps) {
     return (
+        editTrue && (
         <div className="dropdown">
             <EllipsisBtn />
             <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-60 p-2 shadow">
@@ -88,10 +90,12 @@ function MoveDayDropdown({
                 </ModalContainer>
             </ul>
         </div>
+        )
     );
 }
 
 export interface MoveDayDropdownProps  {
+    editTrue : boolean,
     dayNumber: number,
     modules: ModuleType[] | undefined,
     moduleId: number,
