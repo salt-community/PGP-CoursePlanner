@@ -3,12 +3,9 @@ import PrimaryBtn from '@components/buttons/PrimaryBtn';
 import TrashBtn from '@components/buttons/TrashBtn';
 import { DayProps, ModuleType } from '../Types';
 import { useState } from 'react';
-import ModalContainer from '../components/ModalContainer';
 import DownArrowBtn from '../../../components/buttons/DownArrowBtn';
 import UpArrowBtn from '../../../components/buttons/UpArrowBtn';
-import EllipsisBtn from '../components/EllipsisBtn';
 import EditEventTable from '../../../components/EditEventTable';
-import { openCloseModal } from '../helpers/openCloseModal';
 import { useQueryModules } from '@api/module/moduleQueries';
 import { useMutationUpdateModule } from '@api/module/moduleMutations';
 import MoveDayDropdown from './MoveDayDropdown';
@@ -87,15 +84,6 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
         setDays(editedDays);
     }
 
-    const handleSelectModule = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedModule(event.target.value);
-        setSelectedModuleDay("DEFAULT");
-    };
-
-    const handleSelectModuleDay = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedModuleDay(event.target.value);
-    };
-
     const handleMove = () => {
         setIsIncompleteInput(false);
         const originalDays = modules?.find(m => m.id == parseInt(selectedModule))?.days;
@@ -154,80 +142,6 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
         }
         return null;
     };
-
-    const renderDropdown = (dayNumber: number) => (
-        editTrue && (
-            <div className="dropdown">
-                <EllipsisBtn />
-                <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-60 p-2 shadow">
-                    <ModalContainer openModalText={"Move Day to another Module"} setAllToFalse={setAllToFalse} id={`${dayNumber - 1}`}>
-                        <h2 className="m-2 self-center">To which module do you want to move this event?</h2>
-                        <div className="flex flex-col self-center">
-                            <select
-                                onMouseDown={(e) => e.stopPropagation()}
-                                onClick={(e) => e.stopPropagation()}
-                                onChange={handleSelectModule}
-                                className="border border-gray-300 rounded-lg p-1 w-fit"
-                                defaultValue="DEFAULT"
-                            >
-                                <option value="DEFAULT" disabled>Select Module</option>
-                                {modules?.map((module) => (
-                                    module.id !== moduleId && (
-                                        <option key={module.id} value={module.id}>{module.name}</option>
-                                    )
-                                ))}
-                            </select>
-                        </div>
-                        {selectedModule !== "DEFAULT" && (
-                            <div className="flex flex-col items-center">
-                                <h2 className="m-2 self-center">To which day of this module do you want to move this event?</h2>
-                                <div className="flex flex-col self-center">
-                                    <select
-                                        onMouseDown={(e) => e.stopPropagation()}
-                                        onClick={(e) => e.stopPropagation()}
-                                        onChange={handleSelectModuleDay}
-                                        className="border border-gray-300 rounded-lg p-1 w-fit"
-                                        defaultValue="DEFAULT"
-                                    >
-                                        <option value="DEFAULT" disabled>Select Day</option>
-                                        {modules?.find(m => m.id === parseInt(selectedModule))?.days.map((dayOption) => (
-                                            <option key={dayOption.id} value={dayOption.dayNumber}>Day {dayOption.dayNumber}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
-                        )}
-                        {selectedModule !== "DEFAULT" && selectedModuleDay !== "DEFAULT" && (
-                            <>
-                                <h2 className="mt-4 self-center font-bold">Moving this day will save all changes!</h2>
-                                <h2 className="mt-4 self-center font-bold">If this module is part of a course, the course will also be modified!</h2>
-                            </>
-                        )}
-                        <div className="flex items-center justify-center mb-4 gap-2">
-                            <button
-                                className="btn btn-sm mt-4 w-40 btn-success text-white"
-                                type="button"
-                                onClick={() => {
-                                    handleMove();
-                                    openCloseModal("close", setAllToFalse, `${dayNumber - 1}`);
-                                    setSelectedModule("DEFAULT");
-                                    setSelectedModuleDay("DEFAULT");
-                                }}
-                            >Move Day and Save</button>
-                            <button
-                                className="btn btn-sm mt-4 w-24 btn-error text-white"
-                                type="button"
-                                onClick={() => openCloseModal("close", setAllToFalse, `${dayNumber - 1}`)}
-                            >Cancel</button>
-                        </div>
-                        {isIncompleteInput && (
-                            <p className="error-message text-red-600 text-sm mb-4 self-center" id="invalid-helper">Please select a module and a day</p>
-                        )}
-                    </ModalContainer>
-                </ul>
-            </div>
-        )
-    );
 
     return (
         <div className="relative">
