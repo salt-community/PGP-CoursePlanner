@@ -1,25 +1,22 @@
 import InputSmall from '@components/inputFields/InputSmall';
 import PrimaryBtn from '@components/buttons/PrimaryBtn';
 import TrashBtn from '@components/buttons/TrashBtn';
-import { DayProps, ModuleType } from '../Types';
+import { DayProps} from '../Types';
 import { useState } from 'react';
 import DownArrowBtn from '../../../components/buttons/DownArrowBtn';
 import UpArrowBtn from '../../../components/buttons/UpArrowBtn';
 import EditEventTable from '../../../components/EditEventTable';
 import { useQueryModules } from '@api/module/moduleQueries';
-import { useMutationUpdateModule } from '@api/module/moduleMutations';
 import MoveDayDropdown from './MoveDayDropdown';
 
 export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
     const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
-    const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
     const { data: modules } = useQueryModules();
-    const mutationUpdateModule = useMutationUpdateModule();
 
     const handleAddEvent = () => {
         const editedDays = [...days];
-        editedDays[day.dayNumber-1].events.push({
+        editedDays[day.dayNumber - 1].events.push({
             name: "",
             startTime: "",
             endTime: ""
@@ -93,46 +90,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
         setSelectedModuleDay(event.target.value);
     };
 
-    const handleMove = () => {
-        setIsIncompleteInput(false);
-        const originalDays = modules?.find(m => m.id == parseInt(selectedModule))?.days;
-        const module = modules?.find(m => m.id == parseInt(selectedModule));
-        if (originalDays && module && selectedModuleDay != "DEFAULT") {
-            const editedDaysCurrent = [...days];
-            editedDaysCurrent.splice(day.dayNumber - 1, 1);
-            for (let i = day.dayNumber - 1; i < editedDaysCurrent.length; i++) {
-                editedDaysCurrent[i].dayNumber = i + 1;
-            }
-            setNumOfDays(days.length - 1);
-            setDays(editedDaysCurrent);
 
-            const editedDays = [...originalDays];
-            editedDays.splice(parseInt(selectedModuleDay) - 1, 0, day);
-            for (let i = parseInt(selectedModuleDay) - 1; i < editedDays.length; i++) {
-                editedDays[i].dayNumber = i + 1;
-            }
-
-            const newModule: ModuleType = {
-                id: module.id,
-                name: module.name,
-                numberOfDays: module.numberOfDays + 1,
-                days: editedDays
-            };
-            mutationUpdateModule.mutate(newModule);
-            if (mutationUpdateModule.isSuccess) {
-                setAllToFalse();
-            }
-        }
-        else {
-            setIsIncompleteInput(true);
-        }
-    };
-
-    const setAllToFalse = () => {
-        setIsIncompleteInput(false);
-        setSelectedModule("DEFAULT");
-        setSelectedModuleDay("DEFAULT");
-    }
 
     const renderMoveButtons = (dayNumber: number, daysLength: number) => {
         if (dayNumber === 1 && dayNumber !== daysLength) {
@@ -185,15 +143,16 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                     dayNumber={day.dayNumber}
                                     modules={modules}
                                     moduleId={moduleId}
-                                    setSelectedModule={setSelectedModule}
                                     selectedModule={selectedModule}
-                                    setSelectedModuleDay={setSelectedModuleDay}
                                     selectedModuleDay={selectedModuleDay}
-                                    handleMove={handleMove}
-                                    setAllToFalse={setAllToFalse}
-                                    isIncompleteInput={isIncompleteInput}
-                                    handleSelectModule={handleSelectModule}
-                                    handleSelectModuleDay={handleSelectModuleDay}
+                                    handleSelectModule={handleSelectModule} 
+                                    handleSelectModuleDay={handleSelectModuleDay} 
+                                    setSelectedModule={setSelectedModule}
+                                    setSelectedModuleDay={setSelectedModuleDay}
+                                    setNumOfDays={setNumOfDays}
+                                    setDays={setDays}
+                                    day={day}
+                                    days={days}
                                 />
                             </>
                         )}
