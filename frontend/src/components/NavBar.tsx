@@ -66,11 +66,11 @@ export default function NavBar() {
             </Link>
           </li>
         </ul>
-        <div className="p-4 border-t border-gray-700">
-          <PrimaryBtn onClick={handleLogOut} >
-            Log Out
-          </PrimaryBtn>
-        </div>
+      </div>
+      <div className="fixed top-4 right-4">
+        <PrimaryBtn onClick={handleLogOut}>
+          Log Out
+        </PrimaryBtn>
       </div>
     </>
   );
