@@ -1,7 +1,7 @@
 import Login from "@models/login/Login";
 import { getCookie, setCookie } from "@helpers/cookieHelpers";
 import { useQueryToken } from "@api/user/userQueries";
-import Layout from "./Layout";
+import NavBar from "./NavBar";
 
 type Props = {
     children: React.ReactNode;
@@ -24,9 +24,12 @@ export default function Page({ children }: Props) {
                 <Login />
                 :
                 <section className="w-screen h-screen">
-                    <Layout>
-                        {children}
-                    </Layout>
+                    <div className="flex">
+                        <NavBar />
+                        <div className="ml-64 flex-1 p-5">
+                            {children}
+                        </div>
+                    </div>
                 </section>
             }
         </>
