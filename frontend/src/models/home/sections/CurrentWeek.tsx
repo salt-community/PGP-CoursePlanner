@@ -14,7 +14,6 @@ interface CurrentWeekProps {
 export default function CurrentWeek({ data }: CurrentWeekProps) {
     const thisWeek = getWeek(new Date());
 
-
     const renderSection = (day : Date , index : number, isToday : boolean) => {
         const commonClasses = "flex flex-col w-full gap-3";
         const borderClasses = isToday ? "border-2 border-primary" : "border border-black";
@@ -22,14 +21,13 @@ export default function CurrentWeek({ data }: CurrentWeekProps) {
         const formattedDay = getDateAsString(day);
     
         return (
-            <section key={format(day, 'd')} className={`${commonClasses} ${borderClasses}`} onClick={()=>document.getElementById(`${day.toDateString() + "_modal"}`)!.showModal()}>
+            <section key={format(day, 'd')} className={`${commonClasses} ${borderClasses}`} onClick={()=>document.getElementById(`${day.toDateString() + "_modal"}`)!.showModal()}> 
                 <DayModal popUpId={day.toDateString() + "_modal"}/>
-                <Link to={`/calendar/day/date=${formattedDay}`} className="hover:-translate-y-0.5">
+               
                     <h1 className={`item-center text-center ${textClasses}`}>
                         {format(formattedDay, 'EEEE')}<br />
                         {day.getDate()} {monthNames[day.getMonth()]}
                     </h1>
-                </Link>
                 {data && data[index] !== null ? <WeekDay dateContent={data[index].dateContent} /> : ""}
             </section>
         );
