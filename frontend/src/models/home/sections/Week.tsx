@@ -15,16 +15,18 @@ export default function Week({ data, isNextWeek }: WeekProps) {
     const thisWeek = getWeek(new Date());
 
     const renderSection = (day: Date, index: number, isToday: boolean) => {
-        const commonClasses = "flex flex-col w-full gap-3";
-        const borderClasses = isToday ? "border-2 border-primary" : "border border-black";
-        const textClasses = isToday ? "text-xl font-bold text-primary" : "text-lg";
-        const formattedDay = getDateAsString(day);
         if (isNextWeek) {
             index += 7;
             const weekAheadDay = new Date(day)
             weekAheadDay.setDate(day.getDate() +7 )
             day = weekAheadDay
+            isToday = false
         }
+        const commonClasses = "flex flex-col w-full gap-3";
+        const borderClasses = isToday ? "border-2 border-primary" : "border border-black";
+        const textClasses = isToday ? "text-xl font-bold text-primary" : "text-lg";
+        const formattedDay = getDateAsString(day);
+
         return (
             <section key={format(day, 'd')} className={`${commonClasses} ${borderClasses}`} onClick={() => document.getElementById(`${day.toDateString() + "_modal"}`)!.showModal()}>
                 <DayModal popUpId={day.toDateString() + "_modal"} />

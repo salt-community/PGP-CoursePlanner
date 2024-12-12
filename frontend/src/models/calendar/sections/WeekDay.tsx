@@ -7,9 +7,13 @@ type Props = {
 export default function WeekDay({ dateContent }: Props) {
 
     return (
-        <div className={`flex flex-col justify-start w-full h-full`}>
+        <div className={`flex flex-col justify-start w-full h-full p-4`} style={{ minHeight: '300px' }}>
             {dateContent && dateContent.map((content) =>
-                <div key={content.id} style={{ borderColor: content.color }} className="p-3 border-b-8">
+                <div 
+                    key={content.id} 
+                    style={{ borderBottom: `15px solid ${content.color}` }} 
+                    
+                >
                     <h2 className="font-bold">
                         {content.courseName}
                     </h2>
