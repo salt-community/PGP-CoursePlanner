@@ -27,10 +27,8 @@ export default function AppliedModule({ saveAppliedModule, module, index, button
                     description: "",
                     events: []
                 };
-
                 editedDays.push(newDay)
             })
-
         }
         setDays(editedDays);
     }
@@ -87,7 +85,7 @@ export default function AppliedModule({ saveAppliedModule, module, index, button
             </div>
             {isIncompleteInput &&
                 <p className="error-message text-red-600 text-sm" id="invalid-helper">Please fill in all the fields</p>}
-            
+                <SuccessBtn value={buttonText}></SuccessBtn>
             <div className="mb-4"></div>
         </form>
     )

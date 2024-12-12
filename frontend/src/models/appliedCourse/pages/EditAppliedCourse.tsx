@@ -31,6 +31,8 @@ export default function EditAppliedCourse() {
 
     const handleUpdateModules = (updatedModules: ModuleType[]) => {
         setAppliedModules(updatedModules);
+        console.log("Setting the modules..")
+        console.log({updatedModules});
         for (let i = 0; i < updatedModules.length; i++) {
             if (updatedModules[i].id !== 0) {
                 mutationUpdateAppliedModule.mutate(updatedModules[i]);
@@ -50,13 +52,15 @@ export default function EditAppliedCourse() {
             setAppliedCourseName(appliedCourse.name || "");
             setAppliedModules(courseModules || []);
         }
-    }, [appliedCourse, courseModules])
+    }, [])
 
     const defaultColor = appliedCourse?.color || "";
 
     const handleEdit = async () => {
+      
         setIsInvalidDate(false);
         setIsInvalidModule(false);
+        console.log(appliedModules)
         if (
             startDate.getDay() == 6 ||
             startDate.getDay() == 0 ||

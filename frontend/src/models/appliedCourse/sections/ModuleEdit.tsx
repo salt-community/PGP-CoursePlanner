@@ -74,6 +74,7 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
         <>
             {appliedModules.map((appliedModule, index) => (
                 <div key={appliedModule.id}>
+                    <p>{appliedModule.id}</p>
                     <div className="collapse border-primary border mb-2 ">
                         <input
                             type="checkbox"
