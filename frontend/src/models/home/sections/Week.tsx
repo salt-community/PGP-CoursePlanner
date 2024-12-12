@@ -1,7 +1,7 @@
 import { getDateAsString, today, weekDays } from "@helpers/dateHelpers";
 import WeekDay from "@models/calendar/sections/WeekDay";
 import { CalendarDateType } from "@models/calendar/Types";
-import { format, getWeek } from "date-fns";
+import { format, getWeek, setDate } from "date-fns";
 import { DayModal } from "./DayModal";
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -13,6 +13,10 @@ interface WeekProps {
 
 export default function Week({ data, isNextWeek }: WeekProps) {
     const thisWeek = getWeek(new Date());
+    const nextWeek = getWeek(new Date().setDate(new Date().getDate() +7))
+
+
+
 
     const renderSection = (day: Date, index: number, isToday: boolean) => {
         if (isNextWeek) {
@@ -22,14 +26,14 @@ export default function Week({ data, isNextWeek }: WeekProps) {
             day = weekAheadDay
             isToday = false
         }
-        const commonClasses = "flex flex-col w-full gap-3";
-        const borderClasses = isToday ? "border-2 border-primary" : "border border-black";
+        const commonClasses = "flex flex-col w-full gap-3 p-3";
+        const borderClasses = isToday ? "border-2 border-primary" : "border-l border-accent";
         const backgroundClasses = "bg-white"
         const textClasses = isToday ? "text-xl font-bold text-primary" : "text-lg";
         const formattedDay = getDateAsString(day);
 
         return (
-            <section key={format(day, 'd')} className={`${commonClasses} ${borderClasses} ${backgroundClasses}`} onClick={() => document.getElementById(`${day.toDateString() + "_modal"}`)!.showModal()}>
+            <section key={format(day, 'd')} className={`${commonClasses} ${borderClasses} ${backgroundClasses} `} onClick={() => document.getElementById(`${day.toDateString() + "_modal"}`)!.showModal()}>
                 <DayModal popUpId={day.toDateString() + "_modal"} />
 
                 <h1 className={`item-center text-center ${textClasses}`}>
@@ -42,10 +46,9 @@ export default function Week({ data, isNextWeek }: WeekProps) {
     };
 
     return (
-        <section className="flex w-full justify-between m-5 ">
-            <p>{thisWeek}</p>
-            {isNextWeek && weekDays.map((day, index) => renderSection(day, index, getDateAsString(day) === today))}
-            {!isNextWeek && weekDays.map((day, index) => renderSection(day, index, getDateAsString(day) === today))}
+        <section className="flex w-full justify-between m-5  rounded-xl bg-accent overflow-hidden drop-shadow-xl">
+            <p className="p-1">{!isNextWeek ?  thisWeek : nextWeek }</p>
+            {weekDays.map((day, index) => renderSection(day, index, getDateAsString(day) === today))}
 
         </section>
     )
