@@ -1,7 +1,7 @@
 import { getDateAsString, today, weekDays } from "@helpers/dateHelpers";
 import WeekDay from "@models/calendar/sections/WeekDay";
 import { CalendarDateType } from "@models/calendar/Types";
-import { format, getWeek, setDate } from "date-fns";
+import { format, getWeek } from "date-fns";
 import { DayModal } from "./DayModal";
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
