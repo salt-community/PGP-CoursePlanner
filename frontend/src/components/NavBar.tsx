@@ -25,7 +25,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded } : Pro
 
   return (
     <div
-      className={`fixed left-0 top-0 h-full bg-gray-800 text-white shadow-lg transition-all duration-200 ${isSidebarExpanded ? 'w-64' : 'w-20'}`}
+      className={`fixed left-0 top-0 h-full bg-[#ff7961] text-white shadow-lg transition-all duration-200 ${isSidebarExpanded ? 'w-64' : 'w-20'}`}
     >
       <div className="p-5 border-b border-gray-700 flex items-center justify-between overflow-hidden">
         <Link className="text-xl font-bold text-white whitespace-nowrap" to="/">
@@ -81,9 +81,9 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded } : Pro
         </li>
       </ul>
       <div className="fixed top-4 right-4">
-        <PrimaryBtn onClick={handleLogOut}>
+        <button className="btn btn-secondary" onClick={handleLogOut}>
           Log Out
-        </PrimaryBtn>
+        </button>
       </div>
     </div>
   );
