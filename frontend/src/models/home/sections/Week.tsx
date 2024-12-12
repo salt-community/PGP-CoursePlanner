@@ -24,11 +24,12 @@ export default function Week({ data, isNextWeek }: WeekProps) {
         }
         const commonClasses = "flex flex-col w-full gap-3";
         const borderClasses = isToday ? "border-2 border-primary" : "border border-black";
+        const backgroundClasses = "bg-white"
         const textClasses = isToday ? "text-xl font-bold text-primary" : "text-lg";
         const formattedDay = getDateAsString(day);
 
         return (
-            <section key={format(day, 'd')} className={`${commonClasses} ${borderClasses}`} onClick={() => document.getElementById(`${day.toDateString() + "_modal"}`)!.showModal()}>
+            <section key={format(day, 'd')} className={`${commonClasses} ${borderClasses} ${backgroundClasses}`} onClick={() => document.getElementById(`${day.toDateString() + "_modal"}`)!.showModal()}>
                 <DayModal popUpId={day.toDateString() + "_modal"} />
 
                 <h1 className={`item-center text-center ${textClasses}`}>
@@ -41,7 +42,7 @@ export default function Week({ data, isNextWeek }: WeekProps) {
     };
 
     return (
-        <section className="flex w-full justify-between m-5 p-5">
+        <section className="flex w-full justify-between m-5 ">
             <p>{thisWeek}</p>
             {isNextWeek && weekDays.map((day, index) => renderSection(day, index, getDateAsString(day) === today))}
             {!isNextWeek && weekDays.map((day, index) => renderSection(day, index, getDateAsString(day) === today))}
