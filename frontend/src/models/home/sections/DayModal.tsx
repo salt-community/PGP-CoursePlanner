@@ -14,9 +14,8 @@ export function DayModal({ popUpId, modalData }: Props) {
             <dialog id={popUpId} className="modal">
                 <div className="modal-box">
                     {/* <h2 className="text-lg font-bold">Date: {modalData.date.toDateString()}</h2> */}
-                    {modalData.dateContent.length > 0 ? (
-                        modalData.dateContent.map((content, index) => (
-                            
+                    {modalData && modalData.dateContent != null ? (
+                        modalData.dateContent.map((content, index) => (                    
                             <div key={content.id ?? index} className="mb-4">
                                 <h3 className="text-md font-semibold">
                                     Module: {content.moduleName ?? "No Module Name"}
