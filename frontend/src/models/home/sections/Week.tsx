@@ -34,7 +34,7 @@ export default function Week({ data, isNextWeek }: WeekProps) {
 
         return (
             <section key={format(day, 'd')} className={`${commonClasses} ${borderClasses} ${backgroundClasses} `} onClick={() => document.getElementById(`${day.toDateString() + "_modal"}`)!.showModal()}>
-                <DayModal popUpId={day.toDateString() + "_modal"} />
+               {data && <DayModal popUpId={day.toDateString() + "_modal"  }  modalData={data[index]}/> }
 
                 <h1 className={`item-center text-center ${textClasses}`}>
                     {format(formattedDay, 'EEEE')}<br />
