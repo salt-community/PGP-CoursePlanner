@@ -13,7 +13,8 @@ interface WeekProps {
 
 export default function Week({ data, isNextWeek }: WeekProps) {
     const thisWeek = getWeek(new Date());
-    const nextWeek = getWeek(new Date().setDate(new Date().getDate() +7))
+    const nextWeek = getWeek(new Date().setDate(new Date().getDate() + 7))
+
 
 
 
@@ -22,7 +23,7 @@ export default function Week({ data, isNextWeek }: WeekProps) {
         if (isNextWeek) {
             index += 7;
             const weekAheadDay = new Date(day)
-            weekAheadDay.setDate(day.getDate() +7 )
+            weekAheadDay.setDate(day.getDate() + 7)
             day = weekAheadDay
             isToday = false
         }
@@ -32,9 +33,28 @@ export default function Week({ data, isNextWeek }: WeekProps) {
         const textClasses = isToday ? "text-xl font-bold text-primary" : "text-lg";
         const formattedDay = getDateAsString(day);
 
+        const handleNextDay = (currentIndex: number) => {
+            const nextIndex = currentIndex + 1;
+            if (data && data[nextIndex]) {
+                const nextDay = new Date(day);
+                nextDay.setDate(day.getDate() + 1);
+                document.getElementById(nextDay.toDateString() + "_modal")!.showModal();
+            }
+        };
+
+        const handlePrevDay = (currentIndex: number) => {
+            const prevIndex = currentIndex - 1;
+            if (data && data[prevIndex]) {
+                const prevDay = new Date(day);
+                prevDay.setDate(day.getDate() - 1);
+                document.getElementById(prevDay.toDateString() + "_modal")!.showModal();
+            }
+        };
+
+
         return (
             <section key={format(day, 'd')} className={`${commonClasses} ${borderClasses} ${backgroundClasses} `} onClick={() => document.getElementById(`${day.toDateString() + "_modal"}`)!.showModal()}>
-               {data && <DayModal popUpId={day.toDateString() + "_modal"  }  modalData={data[index]}/> }
+                {data && <DayModal popUpId={day.toDateString() + "_modal"} modalData={data[index]} onNext={() => handleNextDay(index)} onPrev={() => handlePrevDay(index)} />}
 
                 <h1 className={`item-center text-center ${textClasses}`}>
                     {format(formattedDay, 'EEEE')}<br />
@@ -47,7 +67,7 @@ export default function Week({ data, isNextWeek }: WeekProps) {
 
     return (
         <section className="flex w-full justify-between m-5  rounded-xl bg-accent overflow-hidden drop-shadow-xl">
-            <p className="p-1">{!isNextWeek ?  thisWeek : nextWeek }</p>
+            <p className="p-1">{!isNextWeek ? thisWeek : nextWeek}</p>
             {weekDays.map((day, index) => renderSection(day, index, getDateAsString(day) === today))}
 
         </section>

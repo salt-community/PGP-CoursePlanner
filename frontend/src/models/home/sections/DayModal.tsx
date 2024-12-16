@@ -3,16 +3,23 @@ import { CalendarDateType } from "@models/calendar/Types";
 export type Props = {
     popUpId: string;
     modalData: CalendarDateType;
+    onNext: () => void;
+    onPrev: () => void;
 };
 
-export function DayModal({ popUpId, modalData }: Props) {
-
-    console.log(modalData);
-
+export function DayModal({ popUpId, modalData, onNext, onPrev }: Props) {
     return (
         <>
             <dialog id={popUpId} className="modal ">
                 <div className="modal-box bg-base-100">
+                    <div className="flex justify-between mb-4">
+                        <button onClick={onPrev} className="btn btn-outline">
+                            ← Previous Day
+                        </button>
+                        <button onClick={onNext} className="btn btn-outline">
+                            Next Day →
+                        </button>
+                    </div>
                     {modalData && modalData.dateContent.length > 0 ? (
                         modalData.dateContent.map((content, index) => (
                             <div key={content.id ?? index} className="mb-4 flex flex-col items-center">
@@ -37,7 +44,9 @@ export function DayModal({ popUpId, modalData }: Props) {
                                                         {event.startTime} - {event.endTime}
                                                     </p>
                                                 </div>
-                                                {event.description && <p className="pl-6 text-secondary">{event.description}</p>}
+                                                {event.description && (
+                                                    <p className="pl-6 text-secondary">{event.description}</p>
+                                                )}
                                             </div>
                                         ))
                                     ) : (
@@ -48,9 +57,7 @@ export function DayModal({ popUpId, modalData }: Props) {
                         ))
                     ) : (
                         <p>No content available for this date.</p>
-
                     )}
-
                 </div>
                 <form method="dialog" className="modal-backdrop">
                     <button>Close</button>
