@@ -1,22 +1,32 @@
 import { CalendarDateType } from "@models/calendar/Types";
 
 export type Props = {
-    popUpId: string;
     modalData: CalendarDateType;
+    onClose: () => void;
     onNext: () => void;
     onPrev: () => void;
+    isPrevDisabled: boolean;
+    isNextDisabled: boolean;
 };
 
-export function DayModal({ popUpId, modalData, onNext, onPrev }: Props) {
+export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, isNextDisabled }: Props) {
     return (
         <>
-            <dialog id={popUpId} className="modal ">
+            <dialog open className="modal">
                 <div className="modal-box bg-base-100">
                     <div className="flex justify-between mb-4">
-                        <button onClick={onPrev} className="btn btn-outline">
+                        <button
+                            onClick={onPrev}
+                            className={`btn btn-outline ${isPrevDisabled ? "btn-disabled" : ""}`}
+                            disabled={isPrevDisabled}
+                        >
                             ← Previous Day
                         </button>
-                        <button onClick={onNext} className="btn btn-outline">
+                        <button
+                            onClick={onNext}
+                            className={`btn btn-outline ${isNextDisabled ? "btn-disabled" : ""}`}
+                            disabled={isNextDisabled}
+                        >
                             Next Day →
                         </button>
                     </div>
@@ -58,10 +68,11 @@ export function DayModal({ popUpId, modalData, onNext, onPrev }: Props) {
                     ) : (
                         <p>No content available for this date.</p>
                     )}
+                    <form method="dialog" className="modal-backdrop">
+                        <button onClick={onClose}>Close</button>
+                    </form>
+
                 </div>
-                <form method="dialog" className="modal-backdrop">
-                    <button>Close</button>
-                </form>
             </dialog>
         </>
     );
