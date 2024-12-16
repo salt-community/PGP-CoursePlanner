@@ -38,12 +38,14 @@ export default function Week({ data, isNextWeek }: WeekProps) {
 
     const handleNextDay = () => {
         if (data && currentIndex !== null && currentIndex < data.length - 1) {
+            if (currentIndex == 4) return setCurrentIndex(currentIndex + 3)  //skip weekend
             setCurrentIndex(currentIndex + 1);
         }
     };
 
     const handlePrevDay = () => {
         if (data && currentIndex !== null && currentIndex > 0) {
+            if (currentIndex == 7) return setCurrentIndex(currentIndex - 3) //skip weekend
             setCurrentIndex(currentIndex - 1);
         }
     };
@@ -79,21 +81,21 @@ export default function Week({ data, isNextWeek }: WeekProps) {
 
     return (
         <>
-        <section className="flex w-full justify-between m-5 rounded-xl bg-accent overflow-hidden drop-shadow-xl">
-            <p className="p-1">{!isNextWeek ? thisWeek : nextWeek}</p>
-            {weekDays.map((day, index) => renderSection(day, index, getDateAsString(day) === today))}
-            
-        </section>
-        {currentIndex !== null && data && (
+            <section className="flex w-full justify-between m-5 rounded-xl bg-accent overflow-hidden drop-shadow-xl">
+                <p className="p-1">{!isNextWeek ? thisWeek : nextWeek}</p>
+                {weekDays.map((day, index) => renderSection(day, index, getDateAsString(day) === today))}
+
+            </section>
+            {currentIndex !== null && data && (
                 <DayModal
                     modalData={data[currentIndex]}
                     onClose={closeModal}
                     onNext={handleNextDay}
                     onPrev={handlePrevDay}
                     isPrevDisabled={currentIndex === 0}
-                    isNextDisabled={currentIndex === data.length - 1}
+                    isNextDisabled={currentIndex === data.length - 3}
                 />
-        )}
+            )}
         </>
     );
 }
