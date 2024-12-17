@@ -29,34 +29,54 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [onClose]);
 
+    console.log(modalData)
+
     return (
         <div
             className="modal modal-open"
             onClick={handleBackdropClick}
         >
-            <div className="modal-box bg-base-100 relative">
-                <button
-                    onClick={onClose}
-                    className="btn btn-sm btn-circle absolute right-2 top-2"
-                >
-                    ✕
-                </button>
-                <div className="flex justify-between mb-4">
-                    <button
-                        onClick={onPrev}
-                        className={`btn btn-outline ${isPrevDisabled ? "btn-disabled" : ""}`}
-                        disabled={isPrevDisabled}
-                    >
-                        ← Previous Day
-                    </button>
-                    <button
-                        onClick={onNext}
-                        className={`btn btn-outline ${isNextDisabled ? "btn-disabled" : ""}`}
-                        disabled={isNextDisabled}
-                    >
-                        Next Day →
-                    </button>
+            <div className="modal-box bg-base-100 relative p-0">
+
+                <div className="bg-primary w-full flex flex-col items-center gap-4">
+
+                    <div className="flex gap-2 mb-4 items-center">
+                        <button
+                            onClick={onPrev}
+                            className={`${isPrevDisabled ? "btn-disabled" : ""}`}
+                            disabled={isPrevDisabled}
+                        >
+                            ←
+                        </button>
+                        { modalData && <h3 className="text-xl">
+                            {`${new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }).format(new Date(modalData.date))}`}
+                        </h3> }
+                        <button
+                            onClick={onNext}
+                            className={`${isNextDisabled ? "btn-disabled" : ""}`}
+                            disabled={isNextDisabled}
+                        >
+                            →
+                        </button>
+                        <button
+                            onClick={onClose}
+                            className="btn btn-sm btn-circle absolute right-2 top-2"
+                        >
+                            ✕
+                        </button>
+                    </div>
+
+                    <label className="flex flex-col ">
+                        Filter Tracks
+                        <select className="select select-bordered w-full max-w-xs">
+                            <option disabled selected>All</option>
+                            <option>Han Solo</option>
+                            <option>Greedo</option>
+                        </select>
+                    </label>
+
                 </div>
+                
                 {modalData && modalData.dateContent.length > 0 ? (
                     modalData.dateContent.map((content, index) => (
                         <div key={content.id ?? index} className="mb-4 flex flex-col items-center">
