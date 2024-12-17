@@ -29,6 +29,8 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [onClose]);
 
+    console.log(modalData)
+
     return (
         <div
             className="modal modal-open"
@@ -46,9 +48,9 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
                         >
                             ←
                         </button>
-                        <h3 className="text-xl">
+                        { modalData && <h3 className="text-xl">
                             {`${new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }).format(new Date(modalData.date))}`}
-                        </h3>
+                        </h3> }
                         <button
                             onClick={onNext}
                             className={`${isNextDisabled ? "btn-disabled" : ""}`}
