@@ -36,7 +36,7 @@ export default function Page({ children }: Props) {
           : (
             <div >
               <NavBar isSidebarExpanded={isSidebarExpanded} setIsSidebarExpanded={setIsSidebarExpanded} />
-              <div className={`transition-all duration-200 ${isSidebarExpanded ? 'ml-64' : 'ml-20'} flex-1 p-4 `}>
+              <div className={`transition-all duration-200 ${isSidebarExpanded ? 'ml-64' : 'ml-20'} flex-1 p-4 h-screen flex flex-col`}>
                 {children}
               </div>
             </div>

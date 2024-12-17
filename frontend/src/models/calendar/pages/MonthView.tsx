@@ -60,9 +60,9 @@ export default function MonthView() {
                 </select>
             </header>
 
-            <section className="flex pb-1 flex-grow overflow-y-auto">
+            <section className="flex pb-1 flex-grow bg-red-600">
                 <div className="flex flex-col items-center w-full h-full">
-                    <div className={`justify-center w-full shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
+                    <div className={`justify-center w-full flex-grow shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
                         {fullWeek.map(day => (
                             <div key={format(day, 'E')} className="h-24 w-1/7 flex items-center justify-center py-1 px-1 border-b-2 border-gray-100 border-3">{format(day, 'E')}</div>
                         ))}
