@@ -244,15 +244,22 @@ export default function EditAppliedCourse() {
                     </div>
                     
                     {course.modules.map((courseModule, moduleIndex) => (
+
+                        
                         <div
                             key={moduleIndex}
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "10px",
-                                marginTop: "20px",
-                            }}
+                            className="collapse bg-base-200 mb-4"
+                            
                         >
+                            <input type="checkbox" />
+                            <div className="collapse-title text-xl font-medium">
+                                {courseModule.module.name}
+                                <div className="flex justify-end">
+                                    <PrimaryBtn onClick={() => handleRemoveModule(moduleIndex)}>Remove Module</PrimaryBtn>
+                                </div>
+                            </div>
+                            <div className="collapse-content">
+                                
                             <h3>Module {moduleIndex + 1}</h3>
 
                             <div style={{ display: "flex", gap: "10px" }}>
@@ -270,32 +277,21 @@ export default function EditAppliedCourse() {
                                     />
                                 </label>
                             </div>
-
-                            <div style={{ display: "flex", justifyContent: "flex-start" }}>
-                                <PrimaryBtn onClick={() => handleRemoveModule(moduleIndex)}>Remove Module</PrimaryBtn>
-                            </div>
-
-                            <div style={{ display: "flex", justifyContent: "flex-start" }}>
-                                <PrimaryBtn onClick={() => handleCreateNewDay(moduleIndex)}>
-                                    Add Day
-                                </PrimaryBtn>
-                            </div>
-
                             {courseModule.module.days.map((day, dayIndex) => (
                                 <div
                                 key={dayIndex}
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: "10px",
-                                    marginTop: "20px",
-                                    border: "1px solid gray", 
-                                    borderRadius: "8px",      
-                                    padding: "10px",          
-                                }}
+                                className="collapse bg-base-200 mb-4"
                             >
-                                    <h4>Day {dayIndex + 1}</h4>
-                                    <div style={{ display: "flex", gap: "10px" }}>
+                            <input type="checkbox" />
+                              <div className="collapse-title text-xl font-medium">
+                                Day {dayIndex + 1} 
+                              <div className="flex justify-end">
+                                        <PrimaryBtn onClick={() => handleRemoveDay(moduleIndex, dayIndex)}>
+                                            Remove Day
+                                        </PrimaryBtn>
+                              </div>
+                              </div>
+                                    <div className="collapse-content">
                                         <label>
                                             Day Description:
                                             <input
@@ -309,14 +305,6 @@ export default function EditAppliedCourse() {
                                                 style={{ padding: "5px", border: "1px solid gray" }}
                                             />
                                         </label>
-                                    </div>
-
-                                    <div style={{ display: "flex", justifyContent: "flex-start" }}>
-                                        <PrimaryBtn onClick={() => handleRemoveDay(moduleIndex, dayIndex)}>
-                                            Remove Day
-                                        </PrimaryBtn>
-                                    </div>
-
                                     {day.events.map((event, eventIndex) => (
                                     <div
                                         key={eventIndex}
@@ -344,9 +332,11 @@ export default function EditAppliedCourse() {
                                                 style={{ padding: "5px", border: "1px solid gray" }}
                                             />
                                         </label>
+                                        <div className="flex justify-end">
                                         <PrimaryBtn onClick={() => handleRemoveEvent(moduleIndex, dayIndex, eventIndex)}>
                                             Remove Event
                                         </PrimaryBtn>
+                                        </div>
                                     </div>
                                 ))}
 
@@ -357,7 +347,16 @@ export default function EditAppliedCourse() {
                                 </div>
 
                                 </div>
+                                </div>
                             ))}
+                            <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                                <PrimaryBtn onClick={() => handleCreateNewDay(moduleIndex)}>
+                                    Add Day
+                                </PrimaryBtn>
+                            </div>
+                            </div>
+
+
                         </div>
                     ))}
 
