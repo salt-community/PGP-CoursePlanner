@@ -281,9 +281,6 @@ export default function EditAppliedCourse() {
                                 </div>
                             </div>
                             <div className="collapse-content">
-                                
-                            <h3>Module {moduleIndex + 1}</h3>
-
                             <div style={{ display: "flex", gap: "10px" }}>
                                 <label>
                                     Module Name:
