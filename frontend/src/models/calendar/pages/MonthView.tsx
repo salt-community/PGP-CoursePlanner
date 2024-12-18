@@ -9,10 +9,13 @@ import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useMonthFromPath, useYearFromPath } from "@helpers/helperHooks"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
 import { trackUrl } from "@helpers/helperMethods"
+import { DayModal } from "@models/home/sections/DayModal"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(parseInt(useMonthFromPath()));
     const [year, setYear] = useState<number>(parseInt(useYearFromPath()));
+    const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+
     const navigate = useNavigate();
     trackUrl();
 
@@ -33,6 +36,29 @@ export default function MonthView() {
     const endOfMonth2 = getDateAsString(endOfMonth);
 
     const { data, isPending, isError, error } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
+
+    const openModal = (index: number) => {
+        setCurrentIndex(index);
+    };
+
+    const closeModal = () => {
+        setCurrentIndex(null);
+    };
+
+    const handleNextDay = () => {
+        if (data && currentIndex !== null && currentIndex < data.length - 1) {
+            
+            setCurrentIndex(currentIndex + 1);
+        }
+    };
+
+    const handlePrevDay = () => {
+        if (data && currentIndex !== null && currentIndex > 0) {
+           
+            setCurrentIndex(currentIndex - 1);
+        }
+    };
+
 
     if (isError) {
         console.log("Query error:", error);
@@ -71,13 +97,23 @@ export default function MonthView() {
                         ))}
                         {daysInMonth.map((thisDate, dateIndex) => {
                             return <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
-                                {data && data[dateIndex] !== null ? <CalendarDate dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                    : <CalendarDate dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
+                                {data && data[dateIndex] !== null ? <CalendarDate openModal = {openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                    : <CalendarDate   openModal={openModal} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
                             </div>
                         })}
                     </div>
                 </div>
             </section>
+            {currentIndex !== null && data && (
+                <DayModal
+                    modalData={data[currentIndex]}
+                    onClose={closeModal}
+                    onNext={handleNextDay}
+                    onPrev={handlePrevDay}
+                    isPrevDisabled={currentIndex === 0}
+                    isNextDisabled={currentIndex === data.length - 1}
+                />
+            )}
         </Page>
     )
 }

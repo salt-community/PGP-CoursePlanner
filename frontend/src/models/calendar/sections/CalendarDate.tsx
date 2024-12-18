@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { today } from "@helpers/dateHelpers";
 import { DateContent } from "../Types";
@@ -6,9 +5,11 @@ import { DateContent } from "../Types";
 type Props = {
     dateContent: DateContent[];
     date: string;
+    indexForModal : number;
+    openModal: (index : number) => void;
 }
 
-export default function CalenderDate({ dateContent, date }: Props) {
+export default function CalenderDate({ dateContent, date, openModal, indexForModal }: Props) {
     const border = today == date ? "border border-2 border-primary hover:border-primary" : "border";
     const text = today == date ? "text-primary font-bold" : "";
 
@@ -33,7 +34,7 @@ export default function CalenderDate({ dateContent, date }: Props) {
 
     return (
         <>
-            <Link to={`/calendar/day/date=${date}`}
+            <button onClick={() => openModal(indexForModal)}
             // todo: fix so that all cells are of equal height regardless of content.
                 className={`${border}  hover:shadow-md  w-1/7 hover:italic h-full `}> 
                 <h1 className={`${text} text-center self-start mb-1 mt-2`}>
@@ -48,7 +49,7 @@ export default function CalenderDate({ dateContent, date }: Props) {
                         <p className="truncate">{appliedModules[appliedCourseIndex]}</p>
                     </div>
                 ))}
-            </Link>
+            </button>
         </>
     )
 }

@@ -29,7 +29,6 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [onClose]);
 
-    console.log(modalData)
 
     return (
         <div
@@ -43,7 +42,7 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
                     <div className="flex gap-2 mb-4 items-center">
                         <button
                             onClick={onPrev}
-                            className={`${isPrevDisabled ? "btn-disabled" : ""}`}
+                            className={`btn ${isPrevDisabled ? "btn-disabled" : ""}`}
                             disabled={isPrevDisabled}
                         >
                             ←
@@ -53,7 +52,7 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
                         </h3> }
                         <button
                             onClick={onNext}
-                            className={`${isNextDisabled ? "btn-disabled" : ""}`}
+                            className={`btn ${isNextDisabled ? "btn-disabled" : ""}`}
                             disabled={isNextDisabled}
                         >
                             →
