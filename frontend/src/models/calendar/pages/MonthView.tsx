@@ -60,11 +60,11 @@ export default function MonthView() {
                 </select>
             </header>
 
-            <section className="flex pb-1 flex-grow">
+            <section className="flex py-2 flex-grow">
                 <div className="flex flex-col items-center w-full h-full">
                     <div className={` w-full flex-grow shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}> 
                         {fullWeek.map(day => (
-                            <div key={format(day, 'E')} className="h-24 w-1/7 flex justify-center p-1 border-b-2 border-gray-100 ">{format(day, 'E')}</div>
+                            <div key={format(day, 'E')} className="w-1/7 flex justify-center items-center p-1 border-b-2 border-gray-100 ">{format(day, 'E')}</div>
                         ))}
                         {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
                             <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-full"></div>

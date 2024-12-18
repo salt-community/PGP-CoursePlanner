@@ -34,7 +34,8 @@ export default function CalenderDate({ dateContent, date }: Props) {
     return (
         <>
             <Link to={`/calendar/day/date=${date}`}
-                className={`${border} rounded-md hover:shadow-md mx-px w-1/7 h-full hover:italic`}>
+            // todo: fix so that all cells are of equal height regardless of content.
+                className={`${border}  hover:shadow-md  w-1/7 hover:italic h-full `}> 
                 <h1 className={`${text} text-center self-start mb-1 mt-2`}>
                     {format(date, 'd')}
                 </h1>
