@@ -27,7 +27,7 @@ export default function MonthView() {
     }
 
     const numberOfWeeks = getWeek(endOfMonth) - getWeek(startOfMonth) + 1;
-    const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
+    const numberOfRows = "grid-rows-" + (numberOfWeeks +1).toString();
 
     const startOfMonth2 = getDateAsString(startOfMonth);
     const endOfMonth2 = getDateAsString(endOfMonth);

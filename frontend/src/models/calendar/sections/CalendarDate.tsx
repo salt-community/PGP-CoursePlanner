@@ -14,16 +14,14 @@ export default function CalenderDate({ dateContent, date }: Props) {
 
     const appliedCourseIds: number[] = [];
     const appliedCourseColors: string[] = [];
-    const appliedModules : string[] = []
+    const appliedModules: string[] = []
     dateContent.forEach(dc => {
-            if (appliedCourseIds.filter(id => id == dc.appliedCourseId!).length == 0) {
-                appliedCourseIds.push(dc.appliedCourseId!)
-                appliedCourseColors.push(dc.color!)
-                if(dc.moduleName != null) appliedModules.push( dc.moduleName! + `day (${dc.dayOfModule}/${dc.totalDaysInModule})`)
-            }
-        });
-    
-    //appliedCourseIds = [...new Set(appliedCourseIds.map(item => item))];
+        if (appliedCourseIds.filter(id => id == dc.appliedCourseId!).length == 0) {
+            appliedCourseIds.push(dc.appliedCourseId!)
+            appliedCourseColors.push(dc.color!)
+            if (dc.moduleName != null) appliedModules.push(dc.moduleName! + `day (${dc.dayOfModule}/${dc.totalDaysInModule})`)
+        }
+    });
 
     return (
         <>
@@ -33,13 +31,13 @@ export default function CalenderDate({ dateContent, date }: Props) {
                     {format(date, 'd')}
                 </h1>
                 {appliedCourseColors.length > 0 && appliedCourseColors.map((color, appliedCourseIndex) => (
-                <div
-                    key={appliedCourseIndex} 
-                    style={{ backgroundColor: color }}
-                    className="w-full h-7 mb-1"
-                >
-                    <p>{appliedModules[appliedCourseIndex]}</p>
-                </div>
+                    <div
+                        key={appliedCourseIndex}
+                        style={{ backgroundColor: color }}
+                        className="w-full h-7 mb-1 text-clip overflow-hidden whitespace-nowrap"
+                    >
+                        <p className="truncate">{appliedModules[appliedCourseIndex]}</p>
+                    </div>
                 ))}
             </Link>
         </>
