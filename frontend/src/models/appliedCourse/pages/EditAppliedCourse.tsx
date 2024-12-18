@@ -286,18 +286,11 @@ export default function EditAppliedCourse() {
                             {courseModule.module.days.map((day, dayIndex) => (
                                 <div
                                 key={dayIndex}
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: "10px",
-                                    marginTop: "20px",
-                                    border: "1px solid gray", 
-                                    borderRadius: "8px",      
-                                    padding: "10px",          
-                                }}
+                                className="collapse bg-base-200 mb-4"
                             >
-                                    <h4>Day {dayIndex + 1}</h4>
-                                    <div style={{ display: "flex", gap: "10px" }}>
+                            <input type="checkbox" />
+                              <div className="collapse-title text-xl font-medium">Day {dayIndex + 1}</div>
+                                    <div className="collapse-content">
                                         <label>
                                             Day Description:
                                             <input
@@ -311,8 +304,6 @@ export default function EditAppliedCourse() {
                                                 style={{ padding: "5px", border: "1px solid gray" }}
                                             />
                                         </label>
-                                    </div>
-
                                     <div style={{ display: "flex", justifyContent: "flex-start" }}>
                                         <PrimaryBtn onClick={() => handleRemoveDay(moduleIndex, dayIndex)}>
                                             Remove Day
@@ -358,6 +349,7 @@ export default function EditAppliedCourse() {
                                     </PrimaryBtn>
                                 </div>
 
+                                </div>
                                 </div>
                             ))}
                             </div>
