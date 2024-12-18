@@ -231,17 +231,39 @@ export default function EditAppliedCourse() {
                         marginTop: "20px", 
                     }}
                 >
-                    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                        <label>
-                            Name:
+                    <div className="flex flex-row gap-5 mt-2 mb-4">
+                        
+                    <div className="flex flex-col gap-2 flex-1">
+                        <label className="text-lg font-medium">
+                                Course name:
+                            </label>
                             <input
                                 type="text"
                                 value={course.name}
                                 onChange={(e) => setCourse({ ...course, name: e.target.value })}
-                                style={{ marginLeft: "10px", padding: "5px", border: "1px solid gray" }}
+                                className="w-full p-2 border border-gray-300 rounded-md"
                             />
-                        </label>
                     </div>
+                        
+
+                    <div className="flex flex-col gap-2 flex-1">
+                        <label className="text-lg font-medium">
+                            Track:
+                        </label>
+                        <select
+                            value={course.track}
+                            onChange={(e) => setCourse({ ...course, track: e.target.value })}
+                            className="w-full p-2 border border-gray-300 rounded-md"
+                        >
+                            <option value="" disabled>Select a track</option>
+                            <option value="Track 1">Track 1</option>
+                            <option value="Track 2">Track 2</option>
+                            <option value="Track 3">Track 3</option>
+                        </select>
+                    </div>
+                    
+                    </div>
+
                     
                     {course.modules.map((courseModule, moduleIndex) => (
 
@@ -280,7 +302,7 @@ export default function EditAppliedCourse() {
                             {courseModule.module.days.map((day, dayIndex) => (
                                 <div
                                 key={dayIndex}
-                                className="collapse bg-base-200 mb-4"
+                                className="collapse bg-base-100 mb-4"
                             >
                             <input type="checkbox" />
                               <div className="collapse-title text-xl font-medium">

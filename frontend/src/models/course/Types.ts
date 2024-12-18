@@ -37,6 +37,7 @@ export type ModuleType = {
 export type CourseType = {
   id?: number;
   name: string;
+  track: string;
   startDate: Date;
   endDate?: Date;
   numberOfWeeks?: number;
