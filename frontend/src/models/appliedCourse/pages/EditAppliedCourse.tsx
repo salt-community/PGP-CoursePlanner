@@ -231,17 +231,39 @@ export default function EditAppliedCourse() {
                         marginTop: "20px", 
                     }}
                 >
-                    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                        <label>
-                            Name:
+                    <div className="flex flex-row gap-5 mt-2 mb-4">
+                        
+                    <div className="flex flex-col gap-2 flex-1">
+                        <label className="text-lg font-medium">
+                                Course name:
+                            </label>
                             <input
                                 type="text"
                                 value={course.name}
                                 onChange={(e) => setCourse({ ...course, name: e.target.value })}
-                                style={{ marginLeft: "10px", padding: "5px", border: "1px solid gray" }}
+                                className="w-full p-2 border border-gray-300 rounded-md"
                             />
-                        </label>
                     </div>
+                        
+
+                    <div className="flex flex-col gap-2 flex-1">
+                        <label className="text-lg font-medium">
+                            Track:
+                        </label>
+                        <select
+                            value={course.track}
+                            onChange={(e) => setCourse({ ...course, track: e.target.value })}
+                            className="w-full p-2 border border-gray-300 rounded-md"
+                        >
+                            <option value="" disabled>Select a track</option>
+                            <option value="Track 1">Track 1</option>
+                            <option value="Track 2">Track 2</option>
+                            <option value="Track 3">Track 3</option>
+                        </select>
+                    </div>
+                    
+                    </div>
+
                     
                     {course.modules.map((courseModule, moduleIndex) => (
 
@@ -259,9 +281,6 @@ export default function EditAppliedCourse() {
                                 </div>
                             </div>
                             <div className="collapse-content">
-                                
-                            <h3>Module {moduleIndex + 1}</h3>
-
                             <div style={{ display: "flex", gap: "10px" }}>
                                 <label>
                                     Module Name:
@@ -280,11 +299,11 @@ export default function EditAppliedCourse() {
                             {courseModule.module.days.map((day, dayIndex) => (
                                 <div
                                 key={dayIndex}
-                                className="collapse bg-base-200 mb-4"
+                                className="collapse bg-base-100 mb-4"
                             >
                             <input type="checkbox" />
                               <div className="collapse-title text-xl font-medium">
-                                Day {dayIndex + 1} 
+                                Day {dayIndex + 1} {day.description}
                               <div className="flex justify-end">
                                         <PrimaryBtn onClick={() => handleRemoveDay(moduleIndex, dayIndex)}>
                                             Remove Day
@@ -293,7 +312,7 @@ export default function EditAppliedCourse() {
                               </div>
                                     <div className="collapse-content">
                                         <label>
-                                            Day Description:
+                                            Description:
                                             <input
                                                 type="text"
                                                 value={day.description}
@@ -305,40 +324,79 @@ export default function EditAppliedCourse() {
                                                 style={{ padding: "5px", border: "1px solid gray" }}
                                             />
                                         </label>
-                                    {day.events.map((event, eventIndex) => (
-                                    <div
-                                        key={eventIndex}
-                                        style={{
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            gap: "10px",
-                                            marginTop: "10px",
-                                            border: "1px solid lightgray",
-                                            borderRadius: "8px",
-                                            padding: "10px",
-                                        }}
-                                    >
-                                        <label>
-                                            Event Description:
-                                            <input
-                                                type="text"
-                                                value={event.description}
-                                                onChange={(e) => {
+                                        {day.events.map((event, eventIndex) => (
+                                            <div
+                                                key={eventIndex}
+                                                className="flex flex-row gap-4 mt-4 p-4 border border-gray-300 rounded-md"
+                                            >
+                                                <label className="flex flex-col">
+                                                Event Name:
+                                                <input
+                                                    type="text"
+                                                    value={event.name}
+                                                    onChange={(e) => {
+                                                    const updatedModules = [...course.modules];
+                                                    updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].name =
+                                                        e.target.value;
+                                                    setCourse({ ...course, modules: updatedModules });
+                                                    }}
+                                                    className="p-2 border border-gray-300 rounded-md"
+                                                />
+                                                </label>
+
+                                                <label className="flex flex-col">
+                                                Start Time:
+                                                <input
+                                                    type="time"
+                                                    value={event.startTime}
+                                                    onChange={(e) => {
+                                                    const updatedModules = [...course.modules];
+                                                    updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].startTime =
+                                                        e.target.value;
+                                                    setCourse({ ...course, modules: updatedModules });
+                                                    }}
+                                                    className="p-2 border border-gray-300 rounded-md"
+                                                />
+                                                </label>
+
+                                                <label className="flex flex-col">
+                                                End Time:
+                                                <input
+                                                    type="time"
+                                                    value={event.endTime}
+                                                    onChange={(e) => {
+                                                    const updatedModules = [...course.modules];
+                                                    updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].endTime =
+                                                        e.target.value;
+                                                    setCourse({ ...course, modules: updatedModules });
+                                                    }}
+                                                    className="p-2 border border-gray-300 rounded-md"
+                                                />
+                                                </label>
+
+                                                <label className="flex flex-col">
+                                                Description:
+                                                <input
+                                                    type="text"
+                                                    value={event.description}
+                                                    onChange={(e) => {
                                                     const updatedModules = [...course.modules];
                                                     updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].description =
                                                         e.target.value;
                                                     setCourse({ ...course, modules: updatedModules });
-                                                }}
-                                                style={{ padding: "5px", border: "1px solid gray" }}
-                                            />
-                                        </label>
-                                        <div className="flex justify-end">
-                                        <PrimaryBtn onClick={() => handleRemoveEvent(moduleIndex, dayIndex, eventIndex)}>
-                                            Remove Event
-                                        </PrimaryBtn>
-                                        </div>
-                                    </div>
-                                ))}
+                                                    }}
+                                                    className="p-2 border border-gray-300 rounded-md w-full sm:w-96 md:w-128"
+                                                />
+                                                </label>
+
+                                                <div className="flex ml-auto">
+                                                <PrimaryBtn onClick={() => handleRemoveEvent(moduleIndex, dayIndex, eventIndex)}>
+                                                    Remove Event
+                                                </PrimaryBtn>
+                                                </div>
+                                            </div>
+                                            ))}
+
 
                                 <div style={{ display: "flex", justifyContent: "flex-start" }}>
                                     <PrimaryBtn onClick={() => handleCreateNewEvent(moduleIndex, dayIndex)}>
