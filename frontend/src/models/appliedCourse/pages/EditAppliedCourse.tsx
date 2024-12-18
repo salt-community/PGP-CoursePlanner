@@ -244,15 +244,17 @@ export default function EditAppliedCourse() {
                     </div>
                     
                     {course.modules.map((courseModule, moduleIndex) => (
+
+                        
                         <div
                             key={moduleIndex}
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "10px",
-                                marginTop: "20px",
-                            }}
+                            className="collapse bg-base-200 mb-4"
+                            
                         >
+                            <input type="checkbox" />
+                            <div className="collapse-title text-xl font-medium">{courseModule.module.name}</div>
+                            <div className="collapse-content">
+                                
                             <h3>Module {moduleIndex + 1}</h3>
 
                             <div style={{ display: "flex", gap: "10px" }}>
@@ -358,6 +360,9 @@ export default function EditAppliedCourse() {
 
                                 </div>
                             ))}
+                            </div>
+
+
                         </div>
                     ))}
 
