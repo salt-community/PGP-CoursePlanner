@@ -4,7 +4,7 @@ import Page from "@components/Page"
 import { useState } from "react"
 import CalendarDate from "../sections/CalendarDate"
 import {  useNavigate } from "react-router-dom"
-import { firstDayOfMonth, allDaysInInterval, currentYear, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth, today } from "../../../helpers/dateHelpers"
+import { firstDayOfMonth, allDaysInInterval,  fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useMonthFromPath, useYearFromPath } from "@helpers/helperHooks"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
@@ -60,14 +60,14 @@ export default function MonthView() {
                 </select>
             </header>
 
-            <section className="flex pb-1 flex-grow bg-red-600">
+            <section className="flex pb-1 flex-grow">
                 <div className="flex flex-col items-center w-full h-full">
-                    <div className={`justify-center w-full flex-grow shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
+                    <div className={` w-full flex-grow shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}> 
                         {fullWeek.map(day => (
-                            <div key={format(day, 'E')} className="h-24 w-1/7 flex items-center justify-center py-1 px-1 border-b-2 border-gray-100 border-3">{format(day, 'E')}</div>
+                            <div key={format(day, 'E')} className="h-24 w-1/7 flex justify-center p-1 border-b-2 border-gray-100 ">{format(day, 'E')}</div>
                         ))}
                         {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
-                            <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-24"></div>
+                            <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-full"></div>
                         ))}
                         {daysInMonth.map((thisDate, dateIndex) => {
                             return <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
