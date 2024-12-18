@@ -19,7 +19,15 @@ export default function CalenderDate({ dateContent, date }: Props) {
         if (appliedCourseIds.filter(id => id == dc.appliedCourseId!).length == 0) {
             appliedCourseIds.push(dc.appliedCourseId!)
             appliedCourseColors.push(dc.color!)
-            if (dc.moduleName != null) appliedModules.push(dc.moduleName! + `day (${dc.dayOfModule}/${dc.totalDaysInModule})`)
+            if (dc.moduleName != null) {
+               
+                if (dc.dayOfModule != 0) {
+                    appliedModules.push(dc.moduleName! + `day (${dc.dayOfModule}/${dc.totalDaysInModule})`)
+                }
+                else {
+                    appliedModules.push("Weekend")
+                }
+            }
         }
     });
 
