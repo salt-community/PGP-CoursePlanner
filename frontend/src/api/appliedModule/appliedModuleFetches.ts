@@ -4,6 +4,7 @@ import { ModuleType } from "@models/module/Types";
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedModules`;
 
 export async function postAppliedModule(appliedModule: ModuleType): Promise<ModuleType> {
+  console.log("Post")
   const response = await fetch(BASE_URL, {
     method: "POST",
     headers: {
@@ -22,6 +23,8 @@ export async function postAppliedModule(appliedModule: ModuleType): Promise<Modu
 }
 
 export async function updateAppliedModule(appliedModule: ModuleType) {
+  console.log("Update")
+  console.log("Updating module:", appliedModule);
   const response = await fetch(`${BASE_URL}/${appliedModule.id}`, {
     method: "PUT",
     headers: {
@@ -32,6 +35,7 @@ export async function updateAppliedModule(appliedModule: ModuleType) {
   });
 
   if (!response.ok) {
+    console.error("Failed to update module:", response.status);
     throw new Error(response.statusText);
   }
 }

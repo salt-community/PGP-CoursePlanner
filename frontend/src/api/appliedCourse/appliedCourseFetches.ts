@@ -30,7 +30,14 @@ export async function getAppliedCourseById(id: number) {
     throw new Error(response.statusText);
   }
 
-  return await response.json();
+  // Log the entire response object
+  console.log("Response Object:", response);
+
+  // Log the actual JSON content of the response
+  const responseData = await response.json();
+  console.log("Response Data:", responseData);
+
+  return responseData;
 }
 
 export async function postAppliedCourse(appliedCourse: CourseType) {
@@ -50,6 +57,7 @@ export async function postAppliedCourse(appliedCourse: CourseType) {
 }
 
 export async function updateAppliedCourse(appliedCourse: CourseType) {
+  console.log(appliedCourse);
   const response = await fetch(`${BASE_URL}/${appliedCourse.id}`, {
     method: "PUT",
     headers: {

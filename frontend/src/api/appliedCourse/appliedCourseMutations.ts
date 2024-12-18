@@ -20,13 +20,16 @@ export function useMutationPostAppliedCourse() {
 }
 
 export function useMutationUpdateAppliedCourse() {
+    console.log("Entering mutation");
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const mutation = useMutation({
         mutationFn: (appliedCourse: CourseType) => {
+            console.log("MutatuinFN");
             return updateAppliedCourse(appliedCourse);
         },
         onSuccess: (_data, appliedCourse) => {
+            console.log("onSuccess");
             queryClient.invalidateQueries({ queryKey: ["appliedCourses", appliedCourse.id] });
             navigate(-1);
         },

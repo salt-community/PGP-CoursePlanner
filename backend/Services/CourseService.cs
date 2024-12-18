@@ -43,23 +43,23 @@ public class CourseService : IService<Course>
     public async Task<Course> GetOneAsync(int id)
     {
         var course = await _context.Courses
-           .Include(course => course.Modules)
+            .Include(course => course.Modules)
                 .ThenInclude(courseModule => courseModule.Module)
                 .ThenInclude(module => module!.Days)
                 .ThenInclude(day => day.Events)
-                .FirstOrDefaultAsync(course => course.Id == id)
-                ?? throw new NotFoundByIdException("Course", id);
+            .FirstOrDefaultAsync(course => course.Id == id)
+            ?? throw new NotFoundByIdException("Course", id);
 
-        foreach (var courseModule in course.Modules)
+    foreach (var courseModule in course.Modules)
+    {
+        courseModule.Module.Days = courseModule.Module.Days.OrderBy(d => d.DayNumber).ToList();
+        foreach (var day in courseModule.Module.Days)
         {
-            courseModule.Module.Days = courseModule.Module.Days.OrderBy(d => d.DayNumber).ToList();
-            foreach (var day in courseModule.Module.Days)
-            {
-                day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
-            }
+            day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
         }
-        return course;
     }
+    return course;
+}
 
 
 
@@ -111,33 +111,185 @@ public class CourseService : IService<Course>
         return course;
     }
 
+    // private async Task<Course> UpdateAppliedAsync(int id, Course appliedCourse)
+    // {
+    //     var appliedCourseToUpdate = await _context.Courses
+    //             .Include(course => course.Modules!)
+    //             .ThenInclude(module => module!.Module)
+    //             .ThenInclude(module => module!.Days)
+    //             .ThenInclude(day => day.Events)
+
+                
+    //             .FirstOrDefaultAsync(ac => ac.Id == id)
+    //             ?? throw new NotFoundByIdException("Course", appliedCourse.Id);
+
+    //     appliedCourseToUpdate = clearCourseModules(appliedCourseToUpdate);
+
+    //     appliedCourseToUpdate.moduleIds = appliedCourse.moduleIds;
+    //     appliedCourseToUpdate.StartDate = appliedCourse.StartDate;
+    //     appliedCourseToUpdate.Name = appliedCourse.Name;
+
+    //     var startDate = appliedCourseToUpdate.StartDate;
+    //     int order = 1;
+    //     foreach (var moduleId in appliedCourseToUpdate.moduleIds)
+    //     {
+    //         startDate = await addModuleToCourse(appliedCourseToUpdate, moduleId, startDate, order);
+    //         order++;
+    //     }
+    //     appliedCourseToUpdate.EndDate = calculateEndDate(appliedCourseToUpdate);
+    //     _context.SaveChanges();
+    //     return appliedCourseToUpdate;
+    // }
+
     private async Task<Course> UpdateAppliedAsync(int id, Course appliedCourse)
     {
         var appliedCourseToUpdate = await _context.Courses
-                .Include(course => course.Modules!)
-                .ThenInclude(module => module!.Module)
-                .ThenInclude(module => module!.Days)
-                .ThenInclude(day => day.Events)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(ac => ac.Id == id)
-                ?? throw new NotFoundByIdException("Course", appliedCourse.Id);
+            .Include(c => c.Modules)
+                .ThenInclude(cm => cm.Module)
+                .ThenInclude(m => m.Days)
+                .ThenInclude(d => d.Events)
+            .FirstOrDefaultAsync(c => c.Id == id)
+            ?? throw new NotFoundByIdException("Course", id);
 
-        appliedCourseToUpdate = clearCourseModules(appliedCourseToUpdate);
-
-        appliedCourseToUpdate.moduleIds = appliedCourse.moduleIds;
+        appliedCourseToUpdate.Name = appliedCourse.Name;
         appliedCourseToUpdate.StartDate = appliedCourse.StartDate;
+        appliedCourseToUpdate.EndDate = appliedCourse.EndDate;
+        appliedCourseToUpdate.NumberOfWeeks = appliedCourse.NumberOfWeeks;
+        appliedCourseToUpdate.Color = appliedCourse.Color;
+        appliedCourseToUpdate.IsApplied = appliedCourse.IsApplied;
 
-        var startDate = appliedCourseToUpdate.StartDate;
-        int order = 1;
-        foreach (var moduleId in appliedCourseToUpdate.moduleIds)
+        var incomingModuleIds = appliedCourse.Modules.Select(m => m.Module.Id).ToList();
+
+        var modulesToRemove = appliedCourseToUpdate.Modules
+            .Where(cm => !incomingModuleIds.Contains(cm.ModuleId))
+            .ToList();
+        _context.CourseModules.RemoveRange(modulesToRemove);
+
+        foreach (var module in appliedCourse.Modules)
         {
-            startDate = await addModuleToCourse(appliedCourseToUpdate, moduleId, startDate, order);
-            order++;
+            var existingModule = appliedCourseToUpdate.Modules
+                .FirstOrDefault(cm => cm.ModuleId == module.Module.Id)?.Module;
+
+            if (existingModule != null)
+            {
+                existingModule.Name = module.Module.Name;
+                existingModule.NumberOfDays = module.Module.NumberOfDays;
+                existingModule.Track = module.Module.Track;
+                existingModule.Order = module.Module.Order;
+                existingModule.IsApplied = module.Module.IsApplied;
+
+                var incomingDays = module.Module.Days;
+
+                var daysToRemove = existingModule.Days
+                    .Where(d => !incomingDays.Any(incoming => incoming.Id == d.Id))
+                    .ToList();
+                _context.Days.RemoveRange(daysToRemove);
+
+                foreach (var day in incomingDays)
+                {
+                    if (day.Id == 0)
+                    {
+                        existingModule.Days.Add(new Day
+                        {
+                            DayNumber = day.DayNumber,
+                            Description = day.Description,
+                            IsApplied = day.IsApplied,
+                            Events = day.Events.Select(e => new Event
+                            {
+                                Name = e.Name,
+                                StartTime = e.StartTime,
+                                EndTime = e.EndTime,
+                                Description = e.Description,
+                                IsApplied = e.IsApplied
+                            }).ToList()
+                        });
+                    }
+                    else
+                    {
+                        var existingDay = existingModule.Days.FirstOrDefault(d => d.Id == day.Id);
+                        if (existingDay != null)
+                        {
+                            existingDay.DayNumber = day.DayNumber;
+                            existingDay.Description = day.Description;
+                            existingDay.IsApplied = day.IsApplied;
+
+                            var incomingEvents = day.Events;
+
+                            var eventsToRemove = existingDay.Events
+                                .Where(e => !incomingEvents.Any(incoming => incoming.Id == e.Id))
+                                .ToList();
+                            _context.Events.RemoveRange(eventsToRemove);
+
+                            foreach (var eventObj in incomingEvents)
+                            {
+                                if (eventObj.Id == 0)
+                                {
+                                    existingDay.Events.Add(new Event
+                                    {
+                                        Name = eventObj.Name,
+                                        StartTime = eventObj.StartTime,
+                                        EndTime = eventObj.EndTime,
+                                        Description = eventObj.Description,
+                                        IsApplied = eventObj.IsApplied
+                                    });
+                                }
+                                else
+                                {
+                                    var existingEvent = existingDay.Events.FirstOrDefault(e => e.Id == eventObj.Id);
+                                    if (existingEvent != null)
+                                    {
+                                        existingEvent.Name = eventObj.Name;
+                                        existingEvent.StartTime = eventObj.StartTime;
+                                        existingEvent.EndTime = eventObj.EndTime;
+                                        existingEvent.Description = eventObj.Description;
+                                        existingEvent.IsApplied = eventObj.IsApplied;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                var newModule = new Module
+                {
+                    Name = module.Module.Name,
+                    NumberOfDays = module.Module.NumberOfDays,
+                    Track = module.Module.Track,
+                    Order = module.Module.Order,
+                    IsApplied = module.Module.IsApplied,
+                    Days = module.Module.Days.Select(day => new Day
+                    {
+                        DayNumber = day.DayNumber,
+                        Description = day.Description,
+                        IsApplied = day.IsApplied,
+                        Events = day.Events.Select(e => new Event
+                        {
+                            Name = e.Name,
+                            StartTime = e.StartTime,
+                            EndTime = e.EndTime,
+                            Description = e.Description,
+                            IsApplied = e.IsApplied
+                        }).ToList()
+                    }).ToList()
+                };
+
+                _context.Modules.Add(newModule);
+                appliedCourseToUpdate.Modules.Add(new CourseModule
+                {
+                    CourseId = appliedCourseToUpdate.Id,
+                    Module = newModule
+                });
+            }
         }
-        appliedCourseToUpdate.EndDate = calculateEndDate(appliedCourseToUpdate);
-        _context.SaveChanges();
+
+        await _context.SaveChangesAsync();
+
         return appliedCourseToUpdate;
     }
+
+
 
     private DateTime calculateEndDate(Course course)
     {

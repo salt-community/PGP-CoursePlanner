@@ -5,6 +5,8 @@ import AppliedModule from "./AppliedModule";
 import { ModuleType } from "@models/module/Types";
 import { useQueryModules } from "@api/module/moduleQueries";
 import { ReorderModule } from "../components/ReorderModule";
+import ErrorMessage from "@components/ErrorMessage";
+import LoadingMessage from "@components/LoadingMessage";
 
 interface ModuleEditProps {
     incomingAppliedModules: ModuleType[];
@@ -13,7 +15,7 @@ interface ModuleEditProps {
 
 export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: ModuleEditProps) {
     const [appliedModules, setAppliedModules] = useState<ModuleType[]>([]);
-    const { data: modules } = useQueryModules();
+    const { data: modules, isLoading, isError } = useQueryModules();
 
     useEffect(() => {
         setAppliedModules(incomingAppliedModules);
@@ -65,10 +67,14 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
         onUpdateModules(editedModules);
     };
 
+    if (isLoading) return <LoadingMessage />;
+    if (isError) return <ErrorMessage />;
+    
     return (
         <>
-            {modules && appliedModules.map((appliedModule, index) => (
+            {appliedModules.map((appliedModule, index) => (
                 <div key={appliedModule.id}>
+                    <p>{appliedModule.id}</p>
                     <div className="collapse border-primary border mb-2 ">
                         <input
                             type="checkbox"
@@ -96,7 +102,7 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
                                             <option value="DEFAULT" disabled>
                                                 Select
                                             </option>
-                                            {modules.map((module) => (
+                                            {modules?.map((module) => (
                                                 <option
                                                     disabled={appliedModules.some((appliedModule) => appliedModule.name === module.name)}
                                                     key={module.id}
@@ -114,7 +120,7 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
                                     +
                                 </PrimaryBtn>
                                 {appliedModules.length > 1 ? (
-                                    <TrashBtn handleDelete={() => handleDeleteAppliedModule(index)}/>
+                                    <TrashBtn handleDelete={() => handleDeleteAppliedModule(index)} />
                                 ) : (
                                     <div className="w-12"></div>
                                 )}
