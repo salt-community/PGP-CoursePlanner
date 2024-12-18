@@ -35,11 +35,11 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
             className="modal modal-open"
             onClick={handleBackdropClick}
         >
-            <div className="modal-box bg-base-100 relative p-0">
+            <div className="modal-box bg-base-100 p-0 h-3/4 w-1/3">
 
-                <div className="bg-primary w-full flex flex-col items-center gap-4">
+                <div className="bg-primary w-full flex flex-col items-center p-3">
 
-                    <div className="flex gap-2 mb-4 items-center">
+                    <div className="flex gap-6 mb-4 items-center">
                         <button
                             onClick={onPrev}
                             className={`btn ${isPrevDisabled ? "btn-disabled" : ""}`}
@@ -47,9 +47,9 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
                         >
                             ←
                         </button>
-                        { modalData && <h3 className="text-xl">
+                        {modalData && <h3 className="text-xl">
                             {`${new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }).format(new Date(modalData.date))}`}
-                        </h3> }
+                        </h3>}
                         <button
                             onClick={onNext}
                             className={`btn ${isNextDisabled ? "btn-disabled" : ""}`}
@@ -75,45 +75,46 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
                     </label>
 
                 </div>
-                
-                {modalData && modalData.dateContent.length > 0 ? (
-                    modalData.dateContent.map((content, index) => (
-                        <div key={content.id ?? index} className="mb-4 flex flex-col items-center">
-                            <div>
-                                <p>
-                                    Module: {content.moduleName} (day {content.dayOfModule}/{content.totalDaysInModule})
-                                </p>
-                                {content.events.length > 0 ? (
-                                    content.events.map((event) => (
-                                        <div key={event.id ?? event.name} className="pb-2 mb-2">
-                                            <div className="flex items-center gap-2">
-                                                <div
-                                                    style={{
-                                                        width: "15px",
-                                                        height: "15px",
-                                                        backgroundColor: content.color,
-                                                        borderRadius: "3px",
-                                                    }}
-                                                ></div>
-                                                <p>{event.name}</p>
-                                                <p>
-                                                    {event.startTime} - {event.endTime}
-                                                </p>
+                <div className="overflow-scroll">
+                    {modalData && modalData.dateContent.length > 0 ? (
+                        modalData.dateContent.map((content, index) => (
+                            <div key={content.id ?? index} className="mb-4 flex flex-col items-center">
+                                <div>
+                                    <p>
+                                        Module: {content.moduleName} (day {content.dayOfModule}/{content.totalDaysInModule})
+                                    </p>
+                                    {content.events.length > 0 ? (
+                                        content.events.map((event) => (
+                                            <div key={event.id ?? event.name} className="pb-2 mb-2">
+                                                <div className="flex items-center gap-2">
+                                                    <div
+                                                        style={{
+                                                            width: "15px",
+                                                            height: "15px",
+                                                            backgroundColor: content.color,
+                                                            borderRadius: "3px",
+                                                        }}
+                                                    ></div>
+                                                    <p>{event.name}</p>
+                                                    <p>
+                                                        {event.startTime} - {event.endTime}
+                                                    </p>
+                                                </div>
+                                                {event.description && (
+                                                    <p className="pl-6 text-secondary">{event.description}</p>
+                                                )}
                                             </div>
-                                            {event.description && (
-                                                <p className="pl-6 text-secondary">{event.description}</p>
-                                            )}
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p>No events for this module.</p>
-                                )}
+                                        ))
+                                    ) : (
+                                        <p>No events for this module.</p>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    ))
-                ) : (
-                    <p>No content available for this date.</p>
-                )}
+                        ))
+                    ) : (
+                        <p>No content available for this date.</p>
+                    )}
+                </div>
             </div>
         </div>
     );
