@@ -306,7 +306,7 @@ export default function EditAppliedCourse() {
                             >
                             <input type="checkbox" />
                               <div className="collapse-title text-xl font-medium">
-                                Day {dayIndex + 1} 
+                                Day {dayIndex + 1} {day.description}
                               <div className="flex justify-end">
                                         <PrimaryBtn onClick={() => handleRemoveDay(moduleIndex, dayIndex)}>
                                             Remove Day
@@ -315,7 +315,7 @@ export default function EditAppliedCourse() {
                               </div>
                                     <div className="collapse-content">
                                         <label>
-                                            Day Description:
+                                            Description:
                                             <input
                                                 type="text"
                                                 value={day.description}
