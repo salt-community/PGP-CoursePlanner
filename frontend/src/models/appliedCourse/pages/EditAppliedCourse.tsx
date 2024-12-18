@@ -4,88 +4,184 @@ import { useEffect, useState } from "react";
 import { useQueryAppliedCourseById } from "@api/appliedCourse/appliedCourseQueries";
 import { useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
-import { ModuleType } from "@models/course/Types";
+import { CourseType, CourseModuleType, DayType } from "@models/course/Types";
+import { useNavigate } from "react-router-dom";
 
 export default function EditAppliedCourse() {
     const appliedCourseId = useIdFromPath();
     const { data: appliedCourse, isLoading, isError } = useQueryAppliedCourseById(appliedCourseId);
     const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
 
-    const [courseName, setCourseName] = useState<string>("");
-    const [appliedModules, setAppliedModules] = useState<ModuleType[]>([]);
-    const [moduleNames, setModuleNames] = useState<Record<number, string>>({});
-    const [visibleModules, setVisibleModules] = useState<Set<number>>(new Set());
-    const [visibleDays, setVisibleDays] = useState<Set<number>>(new Set());
+    const [course, setCourse] = useState<CourseType>({
+        name: "",
+        startDate: new Date(),
+        modules: [],
+    });
+
+    const navigate = useNavigate();
+
+    const handleGoBack = () => {
+        navigate(-1); 
+    };
 
     useEffect(() => {
         if (appliedCourse) {
-            setCourseName(appliedCourse.name);
-            setAppliedModules(appliedCourse.modules); 
-            const initialNames = Object.fromEntries(
-                appliedCourse.modules.map((module) => [module.moduleId!, module.module?.name || ""])
-            );
-            setModuleNames(initialNames);
+            setCourse({
+                ...appliedCourse,
+                modules: appliedCourse.modules.map((module) => ({
+                    courseId: appliedCourse.id,
+                    moduleId: module.module.id,
+                    module: module.module, 
+                }))
+            });
         }
     }, [appliedCourse]);
 
+    const handleRemoveModule = (index: number) => {
+        setCourse((prevCourse) => ({
+            ...prevCourse,
+            modules: prevCourse.modules.filter((_, i) => i !== index),
+        }));
+    };
     const handleCreateNewAppliedModule = () => {
-        const newModule: ModuleType = {
-            moduleId: 0, 
+        const newModule: CourseModuleType = {
+            courseId: course.id || 0, 
+            moduleId: 0,
             module: {
+                id: 0,
                 name: "",
                 order: 0,
+                track: [],
+                isApplied: false,
+                numberOfDays: 0,
                 days: [],
             }
         };
-        setAppliedModules((prevModules) => [...prevModules, newModule]);
-    };
 
-    const toggleModuleVisibility = (moduleId: number) => {
-        setVisibleModules((prev) => {
-            const newSet = new Set(prev);
-            if (newSet.has(moduleId)) {
-                newSet.delete(moduleId);
-            } else {
-                newSet.add(moduleId);
-            }
-            return newSet;
-        });
-    };
-
-    const toggleDayVisibility = (dayId: number) => {
-        setVisibleDays((prev) => {
-            const newSet = new Set(prev);
-            if (newSet.has(dayId)) {
-                newSet.delete(dayId);
-            } else {
-                newSet.add(dayId);
-            }
-            return newSet;
-        });
-    };
-
-    const handleModuleNameChange = (moduleId: number, newName: string) => {
-        setModuleNames((prev) => ({
-            ...prev,
-            [moduleId]: newName,
+        setCourse((prevCourse) => ({
+            ...prevCourse,
+            modules: [...prevCourse.modules, newModule], 
         }));
     };
 
+    const handleCreateNewDay = (moduleIndex: number) => {
+        const newDay: DayType = {
+            id: 0,
+            dayNumber: 42,
+            description: "",
+            isApplied: true,
+            events: [],
+            
+        };
+    
+        setCourse((prevCourse) => {
+            const updatedModules = prevCourse.modules.map((module, index) => {
+                if (index === moduleIndex) {
+                    return {
+                        ...module, 
+                        module: {
+                            ...module.module, 
+                            days: [...module.module.days, newDay], 
+                        },
+                    };
+                }
+                return module; 
+            });
+    
+            return {
+                ...prevCourse, 
+                modules: updatedModules, 
+            };
+        });
+    };
+
+    const handleRemoveDay = (moduleIndex: number, dayIndex: number) => {
+        setCourse((prevCourse) => {
+            const updatedModules = [...prevCourse.modules];
+            updatedModules[moduleIndex].module.days = updatedModules[moduleIndex].module.days.filter(
+                (_, i) => i !== dayIndex
+            );
+            return { ...prevCourse, modules: updatedModules };
+        });
+    };
+
+    const handleCreateNewEvent = (moduleIndex: number, dayIndex: number) => {
+        const newEvent = {
+            id: 0,
+            name: "New Event",        
+            startTime: "00:00",       
+            endTime: "00:00",         
+            description: "",          
+            isApplied: true,          
+        };
+    
+        setCourse((prevCourse) => {
+            const updatedModules = prevCourse.modules.map((module, mIndex) => {
+                if (mIndex === moduleIndex) {
+                    return {
+                        ...module,
+                        module: {
+                            ...module.module,
+                            days: module.module.days.map((day, dIndex) => {
+                                if (dIndex === dayIndex) {
+                                    return {
+                                        ...day,
+                                        events: [...day.events, newEvent],
+                                    };
+                                }
+                                return day;
+                            }),
+                        },
+                    };
+                }
+                return module;
+            });
+    
+            return {
+                ...prevCourse,
+                modules: updatedModules,
+            };
+        });
+    };
+    
+    
+    const handleRemoveEvent = (moduleIndex: number, dayIndex: number, eventIndex: number) => {
+        setCourse((prevCourse) => {
+            const updatedModules = prevCourse.modules.map((module, mIndex) => {
+                if (mIndex === moduleIndex) {
+                    return {
+                        ...module,
+                        module: {
+                            ...module.module,
+                            days: module.module.days.map((day, dIndex) => {
+                                if (dIndex === dayIndex) {
+                                    return {
+                                        ...day,
+                                        events: day.events.filter((_, eIndex) => eIndex !== eventIndex),
+                                    };
+                                }
+                                return day;
+                            }),
+                        },
+                    };
+                }
+                return module;
+            });
+    
+            return {
+                ...prevCourse,
+                modules: updatedModules,
+            };
+        });
+    };
+    
+
     const handleUpdateCourse = () => {
         if (appliedCourse) {
-            const updatedModules = appliedModules.map((module) => ({
-                ...module,
-                module: {
-                    ...module.module,
-                    name: moduleNames[module.moduleId!] || module.module?.name,
-                },
-            }));
-
-            mutationUpdateAppliedCourse.mutate({
-                ...appliedCourse,
-                name: courseName,
-                modules: updatedModules,
-            });
+            console.log("The course im sending")
+            console.log(course);
+            mutationUpdateAppliedCourse.mutate(course);
+            
         }
     };
 
@@ -99,77 +195,187 @@ export default function EditAppliedCourse() {
 
     return (
         <Page>
-            <section className="px-4 md:px-24 lg:px-56">
-                <button onClick={handleUpdateCourse}>Save</button>
-                <div>
-                    <label>
-                        Course Name:
-                        <input
-                            type="text"
-                            value={courseName}
-                            onChange={(e) => setCourseName(e.target.value)}
-                            style={{ marginLeft: "10px", padding: "5px", border: "1px solid gray" }}
-                        />
-                    </label>
+            <div
+                style={{
+                    backgroundColor: "#f5f5f5",
+                    minHeight: "100vh",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center", 
+                    paddingTop: "20px", 
+                }}
+            >
+                <div
+                    style={{
+                        width: "80%", 
+                        display: "flex",
+                        gap: "10px",
+                        marginBottom: "20px", 
+                        marginTop: "20px", 
+                    }}
+                >
+                    <PrimaryBtn onClick={handleUpdateCourse}>Save</PrimaryBtn>
+                    <PrimaryBtn onClick={handleGoBack}>Abort</PrimaryBtn>
                 </div>
-                <div>
-                    {appliedModules.map((module) => (
-                        <div key={module.moduleId} style={{ border: "1px solid black", padding: "10px", margin: "10px 0" }}>
-                            <div onClick={() => toggleModuleVisibility(module.moduleId!)} style={{ cursor: "pointer" }}>
-                                <h2 style={{ textAlign: "center" }}>
-                                    {moduleNames[module.moduleId!] || "New Module"}
-                                </h2>
+                
+                <section
+                    className="px-4 md:px-24 lg:px-56"
+                    style={{
+                        backgroundColor: "#ffffff",
+                        borderRadius: "12px",
+                        padding: "20px",
+                        boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                        width: "80%", 
+                        display: "flex", 
+                        flexDirection: "column", 
+                        marginTop: "20px", 
+                    }}
+                >
+                    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                        <label>
+                            Name:
+                            <input
+                                type="text"
+                                value={course.name}
+                                onChange={(e) => setCourse({ ...course, name: e.target.value })}
+                                style={{ marginLeft: "10px", padding: "5px", border: "1px solid gray" }}
+                            />
+                        </label>
+                    </div>
+                    
+                    {course.modules.map((courseModule, moduleIndex) => (
+                        <div
+                            key={moduleIndex}
+                            style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "10px",
+                                marginTop: "20px",
+                            }}
+                        >
+                            <h3>Module {moduleIndex + 1}</h3>
+
+                            <div style={{ display: "flex", gap: "10px" }}>
+                                <label>
+                                    Module Name:
+                                    <input
+                                        type="text"
+                                        value={courseModule.module.name}
+                                        onChange={(e) => {
+                                            const updatedModules = [...course.modules];
+                                            updatedModules[moduleIndex].module.name = e.target.value;
+                                            setCourse({ ...course, modules: updatedModules });
+                                        }}
+                                        style={{ padding: "5px", border: "1px solid gray" }}
+                                    />
+                                </label>
                             </div>
 
-                            {visibleModules.has(module.moduleId!) && (
-                                <div>
-                                    <p>
+                            <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                                <PrimaryBtn onClick={() => handleRemoveModule(moduleIndex)}>Remove Module</PrimaryBtn>
+                            </div>
+
+                            <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                                <PrimaryBtn onClick={() => handleCreateNewDay(moduleIndex)}>
+                                    Add Day
+                                </PrimaryBtn>
+                            </div>
+
+                            {courseModule.module.days.map((day, dayIndex) => (
+                                <div
+                                key={dayIndex}
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: "10px",
+                                    marginTop: "20px",
+                                    border: "1px solid gray", 
+                                    borderRadius: "8px",      
+                                    padding: "10px",          
+                                }}
+                            >
+                                    <h4>Day {dayIndex + 1}</h4>
+                                    <div style={{ display: "flex", gap: "10px" }}>
                                         <label>
-                                            Module Name:
+                                            Day Description:
                                             <input
                                                 type="text"
-                                                value={moduleNames[module.moduleId!] || ""}
-                                                onChange={(e) => handleModuleNameChange(module.moduleId!, e.target.value)}
-                                                style={{ marginLeft: "10px", padding: "5px", border: "1px solid gray" }}
+                                                value={day.description}
+                                                onChange={(e) => {
+                                                    const updatedModules = [...course.modules];
+                                                    updatedModules[moduleIndex].module.days[dayIndex].description = e.target.value;
+                                                    setCourse({ ...course, modules: updatedModules });
+                                                }}
+                                                style={{ padding: "5px", border: "1px solid gray" }}
                                             />
                                         </label>
-                                    </p>
-                                    <p>Order: {module.module?.order}</p>
-                                    <p><strong>Days:</strong></p>
-                                    {module.module?.days.map((day) => (
-                                        <div key={day.id} style={{ border: "1px solid black", padding: "10px", margin: "10px 0" }}>
-                                            <div onClick={() => toggleDayVisibility(day.id)} style={{ cursor: "pointer" }}>
-                                                <h3>{day.description}</h3>
-                                            </div>
+                                    </div>
 
-                                            {visibleDays.has(day.id) && (
-                                                <div>
-                                                    <p>Day: {day.dayNumber}</p>
+                                    <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                                        <PrimaryBtn onClick={() => handleRemoveDay(moduleIndex, dayIndex)}>
+                                            Remove Day
+                                        </PrimaryBtn>
+                                    </div>
 
-                                                    {day.events && day.events.length > 0 && (
-                                                        <div style={{ border: "1px solid black", padding: "10px", margin: "10px 0" }}>
-                                                            <strong>Events:</strong>
-                                                            {day.events.map((event) => (
-                                                                <div key={event.id}>
-                                                                    <p>{event.name}</p>
-                                                                    <p>Start: {event.startTime}</p>
-                                                                    <p>End: {event.endTime}</p>
-                                                                    <p>{event.description}</p>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
+                                    {day.events.map((event, eventIndex) => (
+                                    <div
+                                        key={eventIndex}
+                                        style={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            gap: "10px",
+                                            marginTop: "10px",
+                                            border: "1px solid lightgray",
+                                            borderRadius: "8px",
+                                            padding: "10px",
+                                        }}
+                                    >
+                                        <label>
+                                            Event Description:
+                                            <input
+                                                type="text"
+                                                value={event.description}
+                                                onChange={(e) => {
+                                                    const updatedModules = [...course.modules];
+                                                    updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].description =
+                                                        e.target.value;
+                                                    setCourse({ ...course, modules: updatedModules });
+                                                }}
+                                                style={{ padding: "5px", border: "1px solid gray" }}
+                                            />
+                                        </label>
+                                        <PrimaryBtn onClick={() => handleRemoveEvent(moduleIndex, dayIndex, eventIndex)}>
+                                            Remove Event
+                                        </PrimaryBtn>
+                                    </div>
+                                ))}
+
+                                <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                                    <PrimaryBtn onClick={() => handleCreateNewEvent(moduleIndex, dayIndex)}>
+                                        Add Event
+                                    </PrimaryBtn>
                                 </div>
-                            )}
+
+                                </div>
+                            ))}
                         </div>
                     ))}
-                    <PrimaryBtn onClick={handleCreateNewAppliedModule}>+</PrimaryBtn>
-                </div>
-            </section>
+
+                    <div>
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                        >
+                            <PrimaryBtn onClick={handleCreateNewAppliedModule}>
+                                Add Module
+                            </PrimaryBtn>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </Page>
     );
 }
