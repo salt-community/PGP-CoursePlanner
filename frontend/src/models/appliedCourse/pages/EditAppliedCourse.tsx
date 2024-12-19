@@ -178,10 +178,7 @@ export default function EditAppliedCourse() {
 
     const handleUpdateCourse = () => {
         if (appliedCourse) {
-            console.log("The course im sending")
-            console.log(course);
             mutationUpdateAppliedCourse.mutate(course);
-            
         }
     };
 
@@ -268,14 +265,15 @@ export default function EditAppliedCourse() {
                     {course.modules.map((courseModule, moduleIndex) => (
 
                         
-                        <div className="bg-base-100 flex space-between" key={moduleIndex}>
-                        <div className="collapse  mb-4">
+                        <div className="bg-base-100 flex space-between mb-4 border border-red-400" key={moduleIndex}>
+                        <div className="collapse ">
 
                             <input type="checkbox" />
-                            <div className="collapse-title text-xl font-medium">
+                            <div className="collapse-title text-xl font-medium ">
                                 {courseModule.module.name}
                             </div>
-                            <div className="collapse-content">
+                            <div className="collapse-content border-t border-gray-300">
+
                             <div style={{ display: "flex", gap: "10px" }}>
                                 <label>
                                     Module Name:
@@ -378,7 +376,8 @@ export default function EditAppliedCourse() {
                                                 </label>
 
                                                 <div className="flex justify-end">
-                                                    <button onClick={() => handleRemoveEvent(moduleIndex, dayIndex, eventIndex)} className="btn btn-square btn-outline">
+                                                
+                                                    <button onClick={() => handleRemoveEvent(moduleIndex, dayIndex, eventIndex)} className="btn btn-square btn-outline scale-75">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                                         <path 
                                                         strokeLinecap="round"
@@ -431,7 +430,7 @@ export default function EditAppliedCourse() {
 
                         </div>
                         <div className="flex justify-end">
-                            <button onClick={() => handleRemoveModule(moduleIndex)} className="btn btn-square btn-outline">
+                            <button onClick={() => handleRemoveModule(moduleIndex)} className="btn btn-square btn-outline scale-100 w-16 h-16">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                 <path 
                                 strokeLinecap="round"
