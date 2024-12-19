@@ -13,12 +13,12 @@ export function useQueryCourses() {
 }
 
 export function useQueryCourseById(id: number) {
-    const { data, isLoading, isError } = useQuery({
+    const { data, isLoading, isError } = useQuery<CourseType>({
         queryKey: ['courses', id],
         queryFn: () => getCourseById(id)
     });
 
-    return { data, isLoading, isError };
+    return { data, isLoading , isError };
 }
 
 export function useQueryModulesByCourseId(id: number) {
