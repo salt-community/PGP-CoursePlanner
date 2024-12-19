@@ -8,7 +8,7 @@ export default function DayTable({ events }: Props) {
 
     return (
         <div className="overflow-x-auto overflow-scroll">
-            <table className="table table-sm table-zebra">
+            <table className="table table-sm table-zebra border rounded-lg">
                 {/* head */}
                 <thead>
                     <tr>
