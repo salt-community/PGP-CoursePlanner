@@ -268,17 +268,12 @@ export default function EditAppliedCourse() {
                     {course.modules.map((courseModule, moduleIndex) => (
 
                         
-                        <div
-                            key={moduleIndex}
-                            className="collapse bg-base-200 mb-4"
-                            
-                        >
+                        <div className="bg-base-100 flex space-between" key={moduleIndex}>
+                        <div className="collapse  mb-4">
+
                             <input type="checkbox" />
                             <div className="collapse-title text-xl font-medium">
                                 {courseModule.module.name}
-                                <div className="flex justify-end">
-                                    <PrimaryBtn onClick={() => handleRemoveModule(moduleIndex)}>Remove Module</PrimaryBtn>
-                                </div>
                             </div>
                             <div className="collapse-content">
                             <div style={{ display: "flex", gap: "10px" }}>
@@ -297,19 +292,12 @@ export default function EditAppliedCourse() {
                                 </label>
                             </div>
                             {courseModule.module.days.map((day, dayIndex) => (
-                                <div
-                                key={dayIndex}
-                                className="collapse bg-base-100 mb-4"
-                            >
-                            <input type="checkbox" />
-                              <div className="collapse-title text-xl font-medium">
-                                Day {dayIndex + 1} {day.description}
-                              <div className="flex justify-end">
-                                        <PrimaryBtn onClick={() => handleRemoveDay(moduleIndex, dayIndex)}>
-                                            Remove Day
-                                        </PrimaryBtn>
-                              </div>
-                              </div>
+                                <div className="bg-base-100 flex space-between" key={dayIndex} >
+                                    <div className="collapse mb-4">
+                                    <input type="checkbox" />
+                                    <div className="collapse-title text-xl font-medium">
+                                    Day {dayIndex + 1} {day.description}
+                                    </div>
                                     <div className="collapse-content">
                                         <label>
                                             Description:
@@ -391,7 +379,7 @@ export default function EditAppliedCourse() {
 
                                                 <div className="flex ml-auto">
                                                 <PrimaryBtn onClick={() => handleRemoveEvent(moduleIndex, dayIndex, eventIndex)}>
-                                                    Remove Event
+                                                    Del
                                                 </PrimaryBtn>
                                                 </div>
                                             </div>
@@ -406,6 +394,15 @@ export default function EditAppliedCourse() {
 
                                 </div>
                                 </div>
+                                    <PrimaryBtn
+                                        onClick={(e) => {
+                                            handleRemoveDay(moduleIndex, dayIndex);
+                                        }}
+                                        className="h-full"
+                                        >
+                                        Del
+                                    </PrimaryBtn>
+                                </div>
                             ))}
                             <div style={{ display: "flex", justifyContent: "flex-start" }}>
                                 <PrimaryBtn onClick={() => handleCreateNewDay(moduleIndex)}>
@@ -415,6 +412,25 @@ export default function EditAppliedCourse() {
                             </div>
 
 
+                        </div>
+                        <div className="flex justify-end">
+                                    
+                                    <button className="btn btn-square btn-outline">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-6 w-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    </button>
+                        </div>
+                        
                         </div>
                     ))}
 
