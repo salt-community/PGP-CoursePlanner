@@ -265,17 +265,17 @@ export default function EditAppliedCourse() {
                     {course.modules.map((courseModule, moduleIndex) => (
 
                         
-                        <div className="bg-base-100 flex space-between mb-4 border border-red-400" key={moduleIndex}>
+                        <div className="bg-base-100 flex space-between mb-4" key={moduleIndex}>
                         <div className="collapse ">
 
                             <input type="checkbox" />
-                            <div className="collapse-title text-xl font-medium ">
+                            <div className="collapse-title text-xl font-medium border border-black">
                                 {courseModule.module.name}
                             </div>
-                            <div className="collapse-content border-t border-gray-300">
+                            <div className="collapse-content">
 
                             <div style={{ display: "flex", gap: "10px" }}>
-                                <label>
+                                <label className="pt-4">
                                     Module Name:
                                     <input
                                         type="text"
@@ -430,7 +430,7 @@ export default function EditAppliedCourse() {
 
                         </div>
                         <div className="flex justify-end">
-                            <button onClick={() => handleRemoveModule(moduleIndex)} className="btn btn-square btn-outline scale-100 w-16 h-16">
+                            <button onClick={() => handleRemoveModule(moduleIndex)} className="btn btn-square btn-outline h-[62px] w-[62px] rounded-none rounded-r-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                                 <path 
                                 strokeLinecap="round"
