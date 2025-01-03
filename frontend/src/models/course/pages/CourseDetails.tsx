@@ -41,48 +41,62 @@ export default function CourseDetails() {
             <h2 className="text-3xl">Modules</h2>
           </div>
 
-          {/* Second Row, First Column */}
-          <div className="row-span-8 col-span-2 border-r-2 p-10 flex flex-col">
-            <div className="flex place-content-around p-3 border-b-4  h-20">
-              <div className="flex flex-col items-center"><h3>{modules.length}</h3> <p>Modules</p></div>
-              <div className="flex flex-col items-center"><h3>{numberOfDaysInCourse(course)}</h3> <p>Days</p></div>
-              <div className="flex flex-col items-center"><h3>{course.numberOfWeeks}</h3> <p>Weeks</p></div>
+          <div className="row-span-8 col-span-2 border-r-2 p-10 flex flex-col h-full">
+            <div className="flex place-content-around p-3 border-b-4 h-20">
+              <div className="flex flex-col items-center">
+                <h3>{modules.length}</h3>
+                <p>Modules</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <h3>{numberOfDaysInCourse(course)}</h3>
+                <p>Days</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <h3>{course.numberOfWeeks}</h3>
+                <p>Weeks</p>
+              </div>
             </div>
 
             <div className="p-7 text-center">
               <h3 className="text-xl">Module Timeline</h3>
             </div>
 
-            <ul className="timeline timeline-vertical">
-
-            <li>
-              <div className="timeline-middle">
-              <p>Week</p>
-              </div>
-              <hr/>
-              
-            </li>
-
-              {modules.map((moduleElement, index) =>
-
-                <li>
-                  <hr/>
-                  <div className={`${index % 2 == 0 ? "timeline-start" : "timeline-end"} timeline-box`}>{moduleElement.name}</div>
-                  <div className="timeline-middle">
-                    <p>[{getWeekNumberOfModule(course, moduleElement.id!)}]</p>
-                  </div>
-                  <hr />
+            <div className="relative flex-grow">
+              <ul className="timeline timeline-vertical relative flex flex-col h-full">
+                <li className="relative  flex flex-col items-center justify-center">
+                  <div className="bg-accent w-3 h-3 border rounded-lg"></div>
                 </li>
-              )}
-            <li className="h-max">
-              <hr/>
-              <div className="bg-accent w-3 h-3 border rounded-lg"></div>
-            </li>
-            </ul>
+                {modules.map((moduleElement, index) => (
+                  <li key={moduleElement.id} className="relative">
+                    <hr />
+                    <div
+                      className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"
+                        } timeline-box`}
+                    >
+                      {moduleElement.name}
+                    </div>
+                    <div className="timeline-middle">
+                      <p>[{getWeekNumberOfModule(course, moduleElement.id!)}]</p>
+                    </div>
+                    <hr />
+                  </li>
+                ))}
 
-            <button className="btn">Preview</button>
-            <button className="btn btn-primary">Deploy Course</button>
+                <li className="relative flex-grow flex flex-col items-center justify-center">
+                  <hr />
+                  <div className="bg-accent w-3 h-3 border rounded-lg"></div>
+                </li>
+              </ul>
+            </div>
+
+            <div className="mt-5 flex flex-col gap-6 p-8">
+              <button className="btn">Preview</button>
+              <button className="btn btn-primary">Deploy Course</button>
+            </div>
           </div>
+
+
+
 
           {/* Second Row, Second Column */}
           <div className="row-span-8 col-span-7">
