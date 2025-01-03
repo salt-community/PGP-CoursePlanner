@@ -5,12 +5,14 @@ import { useMutationPostAppliedCourse, useMutationUpdateAppliedCourse } from "@a
 import { useNavigate } from "react-router-dom";
 import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import { useQueryModulesByCourseId } from "@api/course/courseQueries";
+import LoadingMessage from "@components/LoadingMessage";
+import ErrorMessage from "@components/ErrorMessage";
 
 type Props = {
-    course : CourseType
+    course: CourseType
 }
 
-export default function DeployModal({course} : Props) {
+export default function DeployModal({ course }: Props) {
 
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -37,7 +39,7 @@ export default function DeployModal({course} : Props) {
             const appliedCoursesWithCourseId = appliedCourses!.filter(
                 (m) => m.id! == course!.id
             );
-            if (appliedCoursesWithCourseId.length > 0 ) {
+            if (appliedCoursesWithCourseId.length > 0) {
                 await Promise.all(
                     appliedCoursesWithCourseId!.map(async (appliedCourse) => {
                         const newAppliedCourse: CourseType = {
@@ -60,7 +62,7 @@ export default function DeployModal({course} : Props) {
                 startDate: startDate,
                 color: color,
                 moduleIds: courseModules?.map(m => m.id!),
-                modules: course.modules,
+                modules: [],
                 isApplied: true
             };
             mutationPostAppliedCourse.mutate(appliedCourse);
@@ -70,41 +72,56 @@ export default function DeployModal({course} : Props) {
 
 
     return (
-        <dialog id="my_DeployModal_1" className="modal">
-            <div className="modal-box">
-                <h3 className="font-bold text-lg">Choose a start date and deploy Bootcamp</h3>
-                <br/>
+        <>
+            {(isLoadingCourseModules || isLoadingAppliedCourses) && (
+                <LoadingMessage />
+            )}
+            {(isErrorCourseModules || isErrorAppliedCourses) && <ErrorMessage />}
 
-                <DatePicker
-                    name="startDate"
-                    value={startDate}
-                    onChange={(date) => setStartDate(date!)}
-                    sx={{
-                        height: "35px",
-                        padding: "0px",
-                        "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
-                            fontFamily: "Montserrat",
-                            color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
-                            padding: "6px",
-                        },
-                        "& .css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root": {
-                            color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
-                        },
-                        "& .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
-                            borderRadius: "var(--rounded-btn, 0.5rem)"
-                        }
-                    }}
-                    className="input input-bordered"
-                />
-                <br/>
-                <div className="modal-action">
-                    <form method="dialog" className="flex gap-5 justify-center">
-                        {/* if there is a button in form, it will close the modal */}
-                        <button className="btn">Cancel</button>
-                        <button className="btn btn-primary" onClick={handleApplyTemplate}> Deploy Bootcamp</button>
-                    </form>
+
+            <dialog id="my_DeployModal_1" className="modal">
+                <div className="modal-box">
+                    <h3 className="font-bold text-lg">Choose a start date and deploy Bootcamp</h3>
+                    <br />
+
+                    <DatePicker
+                        name="startDate"
+                        value={startDate}
+                        onChange={(date) => setStartDate(date!)}
+                        sx={{
+                            height: "35px",
+                            padding: "0px",
+                            "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+                                fontFamily: "Montserrat",
+                                color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
+                                padding: "6px",
+                            },
+                            "& .css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root": {
+                                color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
+                            },
+                            "& .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
+                                borderRadius: "var(--rounded-btn, 0.5rem)"
+                            }
+                        }}
+                        className="input input-bordered"
+                    />
+                    {isInvalidDate && (
+                        <p
+                            className="error-message text-red-600 text-sm"
+                            id="invalid-helper">
+                            Please select a weekday for the start date
+                        </p>
+                    )}
+                    <br />
+                    <div className="modal-action">
+                        <form method="dialog" className="flex gap-5 justify-center">
+                            {/* if there is a button in form, it will close the modal */}
+                            <button className="btn">Cancel</button>
+                            <button className="btn btn-primary" onClick={handleApplyTemplate}> Deploy Bootcamp</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        </dialog>
+            </dialog>
+        </>
     )
 }
