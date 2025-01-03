@@ -13,8 +13,9 @@ export default function Login() {
       <img
         src={"https://salt.dev/wp-content/uploads/2024/02/salt-logo-dark.svg"}
         alt="logo"
-        className="w-[40%] h-auto mb-10"
+        className="w-[40%] h-auto mb-3"
       />
+      <h1 className="text-6xl font-light mb-5">Course Planner</h1>
       <button
         type="button"
         onClick={() => handleLogin()}
