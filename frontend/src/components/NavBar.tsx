@@ -3,11 +3,11 @@ import { deleteCookie } from "@helpers/cookieHelpers";
 import { currentMonth, currentYear } from "@helpers/dateHelpers";
 
 type Props = {
-  isSidebarExpanded : boolean,
-  setIsSidebarExpanded : React.Dispatch<React.SetStateAction<boolean>>
+  isSidebarExpanded: boolean,
+  setIsSidebarExpanded: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded } : Props) {
+export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Props) {
   const navigate = useNavigate();
 
   const handleLogOut = () => {
@@ -26,21 +26,30 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded } : Pro
     <div
       className={`fixed left-0 top-0 h-full bg-[#ff7961] text-white shadow-lg transition-all duration-200 ${isSidebarExpanded ? 'w-64' : 'w-20'}`}
     >
-      <div className="p-5 border-b border-gray-700 flex items-center justify-between overflow-hidden">
-        <Link className="text-xl font-bold text-white whitespace-nowrap" to="/">
-          {isSidebarExpanded ? "Course Planner" : "CP"}
+      <div className="p-6 flex items-center justify-between">
+        <Link className={`flex flex-col text-xl ${isSidebarExpanded ? 'font-light' : 'font-bold'} text-white whitespace-nowrap`} to="/">
+          {isSidebarExpanded && <img src="https://salt.dev/wp-content/uploads/2024/02/salt-logo-light.svg" alt="logo" />}
+          {isSidebarExpanded ? "Course Planner" : "</>"}
         </Link>
-        <button
-          onClick={toggleSidebar}
-          className="text-white bg-gray-700 p-2 rounded focus:outline-none hover:bg-gray-600"
-        >
-          {isSidebarExpanded ? "<" : ">"}
-        </button>
+        {isSidebarExpanded ?
+          <button
+            onClick={toggleSidebar}
+            className="absolute right-[-24px] text-white text-3xl font-bold bg-primary-content p-4 mask mask-circle"
+          >
+            {"<"}
+          </button>
+          :
+          <button
+            onClick={toggleSidebar}
+            className="absolute right-[-12px] text-white text-lg font-bold bg-primary-content p-2 mask mask-circle"
+          >
+            {">"}
+          </button>}
       </div>
       <ul className="menu menu-vertical p-4 text-lg space-y-2 overflow-hidden">
         <li>
           <Link
-            
+
             to={`/calendar/month/monthyear=${currentMonth}-${currentYear}`}
             className="hover:bg-gray-700 rounded p-2 flex items-center whitespace-nowrap"
           >
@@ -50,7 +59,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded } : Pro
         </li>
         <li>
           <Link
-            
+
             to="/modules"
             className="hover:bg-gray-700 rounded p-2 flex items-center whitespace-nowrap"
           >
@@ -60,7 +69,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded } : Pro
         </li>
         <li>
           <Link
-            
+
             to="/courses"
             className="hover:bg-gray-700 rounded p-2 flex items-center whitespace-nowrap"
           >
@@ -70,7 +79,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded } : Pro
         </li>
         <li>
           <Link
-           
+
             to="/activecourses"
             className="hover:bg-gray-700 rounded p-2 flex items-center whitespace-nowrap"
           >
