@@ -46,6 +46,7 @@ export default function DeployModal({course} : Props) {
                             startDate: appliedCourse.startDate,
                             endDate: appliedCourse.endDate,
                             moduleIds: appliedCourse.moduleIds,
+                            modules: appliedCourse.modules,
                             color: color,
                             isApplied: appliedCourse.isApplied
                         };
@@ -59,6 +60,7 @@ export default function DeployModal({course} : Props) {
                 startDate: startDate,
                 color: color,
                 moduleIds: courseModules?.map(m => m.id!),
+                modules: course.modules,
                 isApplied: true
             };
             mutationPostAppliedCourse.mutate(appliedCourse);
