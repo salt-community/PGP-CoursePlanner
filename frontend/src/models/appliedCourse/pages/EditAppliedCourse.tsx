@@ -202,19 +202,6 @@ export default function EditAppliedCourse() {
                     paddingTop: "20px", 
                 }}
             >
-                <div
-                    style={{
-                        width: "80%", 
-                        display: "flex",
-                        gap: "10px",
-                        marginBottom: "20px", 
-                        marginTop: "20px", 
-                    }}
-                >
-                    <PrimaryBtn onClick={handleUpdateCourse}>Save</PrimaryBtn>
-                    <PrimaryBtn onClick={handleGoBack}>Abort</PrimaryBtn>
-                </div>
-                
                 <section
                     className="px-4 md:px-24 lg:px-56"
                     style={{
@@ -298,7 +285,7 @@ export default function EditAppliedCourse() {
                                 </label>
                             </div>
                             {courseModule.module.days.map((day, dayIndex) => (
-                                <div className="bg-base-100 flex space-between border border-black mb-4 rounded-r-lg" key={dayIndex} >
+                                <div className="bg-base-200 flex space-between border border-black mb-4 rounded-r-lg" key={dayIndex} >
                                     <div className="collapse">
                                     <input type="checkbox" />
                                     <div className="collapse-title text-xl font-medium">
@@ -476,6 +463,9 @@ export default function EditAppliedCourse() {
                                 Add Module
                             </PrimaryBtn>
                         </div>
+
+                        <PrimaryBtn onClick={handleUpdateCourse}>Save</PrimaryBtn>
+                    <PrimaryBtn onClick={handleGoBack}>Abort</PrimaryBtn>
                     </div>
                 </section>
             </div>
