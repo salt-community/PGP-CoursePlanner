@@ -70,7 +70,9 @@ export default function DeployModal({course} : Props) {
     return (
         <dialog id="my_DeployModal_1" className="modal">
             <div className="modal-box">
-                <h3 className="font-bold text-lg">Hello!</h3>
+                <h3 className="font-bold text-lg">Choose a start date and deploy Bootcamp</h3>
+                <br/>
+
                 <DatePicker
                     name="startDate"
                     value={startDate}
@@ -92,7 +94,7 @@ export default function DeployModal({course} : Props) {
                     }}
                     className="input input-bordered"
                 />
-                <p className="py-4">Press ESC key or click the button below to close</p>
+                <br/>
                 <div className="modal-action">
                     <form method="dialog" className="flex gap-5 justify-center">
                         {/* if there is a button in form, it will close the modal */}
