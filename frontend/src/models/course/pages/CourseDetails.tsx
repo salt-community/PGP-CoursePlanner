@@ -91,7 +91,7 @@ export default function CourseDetails() {
 
             <div className="mt-5 flex flex-col gap-6 p-8">
               <button className="btn">Preview</button>
-              <button className="btn btn-primary">Deploy Course</button>
+              <button className="btn btn-primary">Deploy Bootcamp</button>
             </div>
           </div>
 
