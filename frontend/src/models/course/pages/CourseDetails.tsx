@@ -6,6 +6,7 @@ import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import DeleteBtn from "@components/buttons/DeleteBtn";
 import { Link } from "react-router-dom";
+import { getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
 
 export default function CourseDetails() {
   const courseId = useIdFromPath();
@@ -21,6 +22,7 @@ export default function CourseDetails() {
   if (isErrorCourse || isErrorCourseModules) {
     return <ErrorMessage />;
   }
+
 
   return (
     <Page>
@@ -40,16 +42,46 @@ export default function CourseDetails() {
           </div>
 
           {/* Second Row, First Column */}
-          <div className="row-span-8 col-span-2 border-r-2 p-10">
+          <div className="row-span-8 col-span-2 border-r-2 p-10 flex flex-col">
             <div className="flex place-content-around p-3 border-b-4  h-20">
-              <div className="flex flex-col items-center"><h3>3</h3> <p>Modules</p></div>
-              <div className="flex flex-col items-center"><h3>10</h3> <p>Days</p></div>
-              <div className="flex flex-col items-center"><h3>2</h3> <p>Weeks</p></div>
+              <div className="flex flex-col items-center"><h3>{modules.length}</h3> <p>Modules</p></div>
+              <div className="flex flex-col items-center"><h3>{numberOfDaysInCourse(course)}</h3> <p>Days</p></div>
+              <div className="flex flex-col items-center"><h3>{course.numberOfWeeks}</h3> <p>Weeks</p></div>
             </div>
 
             <div className="p-7 text-center">
               <h3 className="text-xl">Module Timeline</h3>
             </div>
+
+            <ul className="timeline timeline-vertical">
+
+            <li>
+              <div className="timeline-middle">
+              <p>Week</p>
+              </div>
+              <hr/>
+              
+            </li>
+
+              {modules.map((moduleElement, index) =>
+
+                <li>
+                  <hr/>
+                  <div className={`${index % 2 == 0 ? "timeline-start" : "timeline-end"} timeline-box`}>{moduleElement.name}</div>
+                  <div className="timeline-middle">
+                    <p>[{getWeekNumberOfModule(course, moduleElement.id!)}]</p>
+                  </div>
+                  <hr />
+                </li>
+              )}
+            <li className="h-max">
+              <hr/>
+              <div className="bg-accent w-3 h-3 border rounded-lg"></div>
+            </li>
+            </ul>
+
+            <button className="btn">Preview</button>
+            <button className="btn btn-primary">Deploy Course</button>
           </div>
 
           {/* Second Row, Second Column */}
@@ -72,7 +104,7 @@ export default function CourseDetails() {
                 style={{
                   width: "15px",
                   height: "15px",
-                  backgroundColor: course?.color,
+                  backgroundColor: course.color,
                   borderRadius: "3px",
                 }}
               > </div>
