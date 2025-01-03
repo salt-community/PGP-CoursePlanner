@@ -1,0 +1,106 @@
+import { DatePicker } from "@mui/x-date-pickers";
+import { useState } from "react";
+import { CourseType } from "../Types";
+import { useMutationPostAppliedCourse, useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
+import { useNavigate } from "react-router-dom";
+import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
+import { useQueryModulesByCourseId } from "@api/course/courseQueries";
+
+type Props = {
+    course : CourseType
+}
+
+export default function DeployModal({course} : Props) {
+
+    const [startDate, setStartDate] = useState<Date>(new Date());
+    const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
+    const color = "#992233"
+
+    const mutationPostAppliedCourse = useMutationPostAppliedCourse();
+    const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
+    const navigate = useNavigate();
+
+    const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
+    const { data: courseModules, isLoading: isLoadingCourseModules, isError: isErrorCourseModules } = useQueryModulesByCourseId(course.id!);
+
+
+    const handleApplyTemplate = async () => {
+        // setIsColorNotSelected(false);
+        setIsInvalidDate(false);
+        if (
+            startDate.getDay() == 6 ||
+            startDate.getDay() == 0
+        ) {
+            if (startDate.getDay() == 6 || startDate.getDay() == 0)
+                setIsInvalidDate(true);
+        } else {
+            const appliedCoursesWithCourseId = appliedCourses!.filter(
+                (m) => m.id! == course!.id
+            );
+            if (appliedCoursesWithCourseId.length > 0 ) {
+                await Promise.all(
+                    appliedCoursesWithCourseId!.map(async (appliedCourse) => {
+                        const newAppliedCourse: CourseType = {
+                            id: appliedCourse.id,
+                            name: appliedCourse.name,
+                            startDate: appliedCourse.startDate,
+                            endDate: appliedCourse.endDate,
+                            moduleIds: appliedCourse.moduleIds,
+                            color: color,
+                            isApplied: appliedCourse.isApplied
+                        };
+                        mutationUpdateAppliedCourse.mutate(newAppliedCourse);
+                    })
+                );
+            }
+
+            const appliedCourse: CourseType = {
+                name: course?.name ?? "",
+                startDate: startDate,
+                color: color,
+                moduleIds: courseModules?.map(m => m.id!),
+                isApplied: true
+            };
+            mutationPostAppliedCourse.mutate(appliedCourse);
+            navigate("/activecourses");
+        }
+    };
+
+
+    return (
+        <dialog id="my_DeployModal_1" className="modal">
+            <div className="modal-box">
+                <h3 className="font-bold text-lg">Hello!</h3>
+                <DatePicker
+                    name="startDate"
+                    value={startDate}
+                    onChange={(date) => setStartDate(date!)}
+                    sx={{
+                        height: "35px",
+                        padding: "0px",
+                        "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
+                            fontFamily: "Montserrat",
+                            color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
+                            padding: "6px",
+                        },
+                        "& .css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root": {
+                            color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
+                        },
+                        "& .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
+                            borderRadius: "var(--rounded-btn, 0.5rem)"
+                        }
+                    }}
+                    className="input input-bordered"
+                />
+                <p className="py-4">Press ESC key or click the button below to close</p>
+                <div className="modal-action">
+                    <form method="dialog" className="flex gap-5 justify-center">
+                        {/* if there is a button in form, it will close the modal */}
+                        <button className="btn">Cancel</button>
+                        <button className="btn btn-primary" onClick={handleApplyTemplate}> Deploy Bootcamp</button>
+                    </form>
+                </div>
+            </div>
+        </dialog>
+    )
+}
