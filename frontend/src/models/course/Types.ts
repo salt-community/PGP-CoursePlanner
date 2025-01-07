@@ -1,8 +1,8 @@
 
 export type CourseModuleType = {
-  courseId: number;
-  moduleId: number;
-  course: CourseType;  
+  courseId?: number;
+  moduleId?: number;
+  course?: CourseType;  
   module: ModuleType;  
 }
 
@@ -31,13 +31,13 @@ export type ModuleType = {
   order: number;
   isApplied: boolean;
   days: DayType[];
-  courseModules: CourseModuleType[]; 
+  courseModules?: CourseModuleType[]; 
 }
 
 export type CourseType = {
   id?: number;
   name: string;
-  track: string;
+  track?: string;
   startDate: Date;
   endDate?: Date;
   numberOfWeeks?: number;

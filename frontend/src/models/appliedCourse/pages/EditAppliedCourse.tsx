@@ -462,8 +462,10 @@ export default function EditAppliedCourse() {
                             <PrimaryBtn onClick={handleCreateNewAppliedModule}>
                                 Add Module
                             </PrimaryBtn>
+                            <PrimaryBtn onClick={handleCreateNewAppliedModule}>
+                               from template!?
+                            </PrimaryBtn>
                         </div>
-
                         <PrimaryBtn onClick={handleUpdateCourse}>Save</PrimaryBtn>
                     <PrimaryBtn onClick={handleGoBack}>Abort</PrimaryBtn>
                     </div>
