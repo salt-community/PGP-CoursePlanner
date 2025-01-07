@@ -24,3 +24,8 @@ export const numberOfDaysInCourse = (course : CourseType) => {
   export const getWeekNumberOfModule = (course : CourseType, moduleId : number) => {
     return 1;
   }
+
+export const calculateCourseDayDates = ( course : CourseType, modules : ModuleType[], startDate : Date) => {
+  console.log(startDate)
+  for(i = 0; i < course.modules.length; )
+}
