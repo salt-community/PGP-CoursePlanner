@@ -6,6 +6,7 @@ import { useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourse
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import { CourseType, CourseModuleType, DayType } from "@models/course/Types";
 import { useNavigate } from "react-router-dom";
+import TrashIcon from "../components/TrashIcon";
 
 export default function EditAppliedCourse() {
     const appliedCourseId = useIdFromPath();
@@ -192,16 +193,8 @@ export default function EditAppliedCourse() {
 
     return (
         <Page>
-            <div
-                style={{
-                    backgroundColor: "#f5f5f5",
-                    minHeight: "100vh",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center", 
-                    paddingTop: "20px", 
-                }}
-            >
+            <div className="bg-gray-100 min-h-screen flex flex-col items-center pt-5">
+
                 <section
                     className="px-4 md:px-24 lg:px-56"
                     style={{
@@ -384,16 +377,7 @@ export default function EditAppliedCourse() {
                                                 </label>
                                                 </div>
                                                     <button onClick={() => handleRemoveEvent(moduleIndex, dayIndex, eventIndex)} className="btn btn-square btn-outline scale-75">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                        <path 
-                                                        strokeLinecap="round"
-                                                            strokeLinejoin="round" 
-                                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 
-                                                            1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25
-                                                            2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 
-                                                            .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964
-                                                            0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                                        </svg>
+                                                        <TrashIcon size={6} />
                                                     </button>
                                             </div>
                                             ))}
@@ -411,16 +395,7 @@ export default function EditAppliedCourse() {
                                 </div>
                                     <div className="flex justify-end">
                                         <button onClick={() => handleRemoveDay(moduleIndex, dayIndex)} className="btn btn-square btn-outline h-[61px] w-[61px] rounded-none rounded-r-lg">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                            <path 
-                                            strokeLinecap="round"
-                                                strokeLinejoin="round" 
-                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 
-                                                1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25
-                                                2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 
-                                                .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964
-                                                0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                            </svg>
+                                        <TrashIcon size={6} />
                                         </button>
                                     </div>
                                 </div>
@@ -434,20 +409,14 @@ export default function EditAppliedCourse() {
 
 
                         </div>
-                        <div className="flex justify-end ">
-                            <button onClick={() => handleRemoveModule(moduleIndex)} className="btn btn-square btn-outline h-[62px] w-[62px] rounded-none rounded-r-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                <path 
-                                strokeLinecap="round"
-                                    strokeLinejoin="round" 
-                                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 
-                                    1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25
-                                    2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 
-                                    .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964
-                                    0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                                </svg>
-                            </button>
-                        </div>
+                            <div className="flex justify-end ">
+                                <button
+                                    onClick={() => handleRemoveModule(moduleIndex)}
+                                    className="btn btn-square btn-outline h-[62px] w-[62px] rounded-none rounded-r-lg"
+                                >
+                                    <TrashIcon size={6} />
+                                </button>
+                            </div>
                         </div>
                     ))}
 
