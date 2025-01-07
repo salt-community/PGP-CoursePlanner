@@ -11,6 +11,8 @@ export default {
         mytheme: {
           primary: "#ff7961",
 
+          "primary-content": "#FF9886",
+
           secondary: "#0f2d45",
 
           accent: "#D9D9D9",
@@ -26,6 +28,21 @@ export default {
           warning: "#00ff00",
 
           error: "#ff0000",
+
+          ".menu li > *:not(ul, .menu-title, details, .btn):focus": {
+            "background-color": "#FF9886",
+            "color": "#fff",
+          },
+
+          ".menu li > *:not(ul, .menu-title, details, .btn):hover": {
+            "background-color": "#F35C7E",
+            "color": "#fff",
+          },
+
+          ".menu li > *:not(ul, .menu-title, details, .btn):active": {
+            "background-color": "#DB5472",
+            "color": "#fff",
+          },
         },
       },
     ],
