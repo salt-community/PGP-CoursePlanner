@@ -7,6 +7,7 @@ import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import { CourseType, CourseModuleType, DayType } from "@models/course/Types";
 import { useNavigate } from "react-router-dom";
 import TrashIcon from "../components/TrashIcon";
+import DotsIcon from "../components/DotsIcon";
 
 export default function EditAppliedCourse() {
     const appliedCourseId = useIdFromPath();
@@ -194,7 +195,6 @@ export default function EditAppliedCourse() {
     return (
         <Page>
             <div className="bg-gray-100 min-h-screen flex flex-col items-center pt-5">
-
                 <section
                     className="px-4 md:px-24 lg:px-56"
                     style={{
@@ -209,7 +209,6 @@ export default function EditAppliedCourse() {
                     }}
                 >
                     <div className="flex flex-row gap-5 mt-2 mb-4">
-                        
                     <div className="flex flex-col gap-2 flex-1">
                         <label className="text-lg font-medium">
                                 Course name:
@@ -221,8 +220,6 @@ export default function EditAppliedCourse() {
                                 className="w-full p-2 border border-gray-300 rounded-md"
                             />
                     </div>
-                        
-
                     <div className="flex flex-col gap-2 flex-1">
                         <label className="text-lg font-medium">
                             Track:
@@ -238,25 +235,14 @@ export default function EditAppliedCourse() {
                             <option value="Track 3">Track 3</option>
                         </select>
                     </div>
-                    
                     </div>
-
-                    
                     {course.modules.map((courseModule, moduleIndex) => (
-
-                        
                         <div className="bg-base-100 flex space-between mb-4 rounded-r-lg border-r border-b border-black" key={moduleIndex}>
                         <div className="collapse border-t border-l border-black rounded-none">
                             <input type="checkbox" />
                             <div className="collapse-title text-xl font-medium border-b border-black">
-
                                 <div className="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 mr-1">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                                    </svg>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 -ml-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                                    </svg>
+                                    <DotsIcon position="mr-1" size={6} />
                                     {courseModule.module.name}
                                 </div>
                             </div>
@@ -283,15 +269,9 @@ export default function EditAppliedCourse() {
                                     <input type="checkbox" />
                                     <div className="collapse-title text-xl font-medium">
                                         <div className="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 mr-1">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                                    </svg>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 -ml-5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                                    </svg>
-                                    Day {dayIndex + 1} {day.description}
-                                </div>
-                                    
+                                            <DotsIcon position="mr-1" size={6} />
+                                            Day {dayIndex + 1} {day.description}
+                                        </div>
                                     </div>
                                     <div className="collapse-content border-t border-black rounded-none">
                                         <div className="pt-4 pb-8">
@@ -381,17 +361,12 @@ export default function EditAppliedCourse() {
                                                     </button>
                                             </div>
                                             ))}
-
-
                                 <div style={{ display: "flex", justifyContent: "flex-start" }}>
                                     <PrimaryBtn onClick={() => handleCreateNewEvent(moduleIndex, dayIndex)}>
                                         Add Event
                                     </PrimaryBtn>
                                 </div>
-
                                 </div>
-                                
-
                                 </div>
                                     <div className="flex justify-end">
                                         <button onClick={() => handleRemoveDay(moduleIndex, dayIndex)} className="btn btn-square btn-outline h-[61px] w-[61px] rounded-none rounded-r-lg">
@@ -406,8 +381,6 @@ export default function EditAppliedCourse() {
                                 </PrimaryBtn>
                             </div>
                             </div>
-
-
                         </div>
                             <div className="flex justify-end ">
                                 <button
