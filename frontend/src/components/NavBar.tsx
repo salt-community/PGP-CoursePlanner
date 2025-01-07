@@ -1,6 +1,8 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { deleteCookie } from "@helpers/cookieHelpers";
 import { currentMonth, currentYear } from "@helpers/dateHelpers";
+import { useMemo, useState } from "react";
+import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 
 type Props = {
   isSidebarExpanded: boolean,
@@ -9,6 +11,24 @@ type Props = {
 
 export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Props) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [bootcampDetailsIsActive, setBootcampDetailsIsActive] = useState(false);
+  const { data } = useQueryAppliedCourses();
+
+  const activeCourses = useMemo(() => {
+    if (!data) return [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return data.filter(ac => { const sd = new Date(ac.startDate); sd.setHours(0, 0, 0, 0); return sd <= today }).filter(ac => { const ed = new Date(ac.endDate!); ed.setHours(0, 0, 0, 0); return ed >= today });
+  }, [data]);
+
+  useMemo(() => {
+    if (location.pathname.includes('/activecourses/details/')) {
+      setBootcampDetailsIsActive(true);
+    } else if (location.pathname === '/activecourses') {
+      setBootcampDetailsIsActive(false);
+    }
+  }, [location.pathname]);
 
   const handleLogOut = () => {
     deleteCookie('JWT');
@@ -75,7 +95,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
         <li className="hover:rounded-none">
           <NavLink
             to="/activecourses"
-            className={({ isActive }) => isActive ? "flex pl-5 text-2xl bg-primary-content rounded-none" : "flex pl-5 text-2xl rounded-none"}>
+            className={({ isActive }) => isActive && !bootcampDetailsIsActive ? "flex pl-5 text-2xl bg-primary-content rounded-none" : "flex pl-5 text-2xl rounded-none"}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-10">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
             </svg>
@@ -96,8 +116,18 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
         </li>
 
         <h2 className={`pt-6 pr-2 pb-3 pl-6 font-semibold text-2xl text-left whitespace-nowrap ${isSidebarExpanded ? "" : "invisible"}`}>Active Bootcamps</h2>
-        <h2 className={`pt-3 pr-2 pb-3 pl-6 font-semibold text-2xl text-left whitespace-nowrap ${isSidebarExpanded ? "" : "invisible"}`}>Templates</h2>
+        {activeCourses.map((course) => (
+          <li className="hover:rounded-none">
+            <NavLink
+              to={`/activecourses/details/${course.id}`}
+              className={({ isActive }) => isActive && bootcampDetailsIsActive ? "flex pl-5 text-2xl bg-primary-content rounded-none" : "flex pl-5 text-2xl rounded-none"}>
+              <div className="p-3 m-1 mask rounded-xl border-4 border-white" style={{ backgroundColor: course.color }}></div>
+              {isSidebarExpanded && course.name}
+            </NavLink>
+          </li>
+        ))}
 
+        <h2 className={`pt-3 pr-2 pb-3 pl-6 font-semibold text-2xl text-left whitespace-nowrap ${isSidebarExpanded ? "" : "invisible"}`}>Templates</h2>
         <li className="hover:rounded-none">
           <NavLink
             to="/modules"
