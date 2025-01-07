@@ -27,5 +27,12 @@ export const numberOfDaysInCourse = (course : CourseType) => {
 
 export const calculateCourseDayDates = ( course : CourseType, modules : ModuleType[], startDate : Date) => {
   console.log(startDate)
-  for(i = 0; i < course.modules.length; )
+  let totDays = 0;
+  for(let i = 0; i < modules.length; i++ ) {
+    for(let j = 0; j < modules[i].numberOfDays; j++) {
+      totDays +=1;
+      console.log(totDays)
+      console.log(modules[i].days[j])
+    }
+  }
 }
