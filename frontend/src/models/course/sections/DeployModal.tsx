@@ -27,7 +27,6 @@ export default function DeployModal({ course }: Props) {
 
 
     const handleApplyTemplate = async () => {
-        // setIsColorNotSelected(false);
         setIsInvalidDate(false);
         if (
             startDate.getDay() == 6 ||
