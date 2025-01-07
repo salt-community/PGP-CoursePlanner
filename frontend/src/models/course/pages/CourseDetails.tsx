@@ -1,231 +1,135 @@
-import { Link, useNavigate } from "react-router-dom";
 import Page from "@components/Page";
+import ModuleDetails from "../sections/ModuleDetails";
 import { useIdFromPath } from "@helpers/helperHooks";
-import { useEffect, useState } from "react";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { convertToGoogle } from "@helpers/googleHelpers";
-import DeleteBtn from "@components/buttons/DeleteBtn";
-import { deleteCourseFromGoogle } from "@api/googleCalendarFetches";
-import "reactjs-popup/dist/index.css";
-import { CourseType } from "../Types";
+import { useQueryCourseById, useQueryModulesByCourseId } from "@api/course/courseQueries";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import ColorPickerModal from "@components/ColorPickerModal";
-import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
-import { useQueryCourseById, useQueryModulesByCourseId } from "@api/course/courseQueries";
-import { useMutationUpdateAppliedCourse, useMutationPostAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
-import { useMutationDeleteCourse } from "@api/course/courseMutations";
+import DeleteBtn from "@components/buttons/DeleteBtn";
+import { Link } from "react-router-dom";
+import { getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
+import DeployModal from "../sections/DeployModal";
 
 export default function CourseDetails() {
-  const [startDate, setStartDate] = useState<Date>(new Date());
-  const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
-  const [groupEmail, setGroupEmail] = useState<string>("");
-  const navigate = useNavigate();
   const courseId = useIdFromPath();
-  const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
+
   const { data: course, isLoading: isLoadingCourse, isError: isErrorCourse } = useQueryCourseById(courseId);
-  const { data: courseModules, isLoading: isLoadingCourseModules, isError: isErrorCourseModules } = useQueryModulesByCourseId(courseId);
-  const mutationPostAppliedCourse = useMutationPostAppliedCourse();
-  const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
-  const mutationDeleteCourse = useMutationDeleteCourse();
+  const { data: modules, isLoading: isLoadingCourseModules, isError: isErrorCourseModules } = useQueryModulesByCourseId(courseId);
 
-  let defaultColor = "#FFFFFF";
-  const [color, setColor] = useState(defaultColor);
-  const [isColorNotSelected, setIsColorNotSelected] = useState<boolean>(false);
-  useEffect(() => {
-    if (course && appliedCourses) {
-      const appliedCoursesWithCourseId = appliedCourses.filter(
-        (m) => m.id! === course.id
-      );
+  // Loading or error state handling
+  if (isLoadingCourse || isLoadingCourseModules) {
+    return <LoadingMessage />;
+  }
 
-      if (appliedCoursesWithCourseId.length > 0) {
-        defaultColor = appliedCoursesWithCourseId[0].color!;
-        setColor(defaultColor);
-      }
-    }
-  }, [course, appliedCourses]);
-
-  const handleGoogleGroupAdd = async () => {
-    if (course && courseModules) {
-      convertToGoogle(courseModules, startDate, course.name, groupEmail);
-    }
-  };
-
-  const handleApplyTemplate = async () => {
-    setIsColorNotSelected(false);
-    setIsInvalidDate(false);
-    if (
-      color == "#FFFFFF" ||
-      startDate.getDay() == 6 ||
-      startDate.getDay() == 0
-    ) {
-      if (color == "#FFFFFF") setIsColorNotSelected(true);
-      if (startDate.getDay() == 6 || startDate.getDay() == 0)
-        setIsInvalidDate(true);
-    } else {
-      const appliedCoursesWithCourseId = appliedCourses!.filter(
-        (m) => m.id! == course!.id
-      );
-      if (appliedCoursesWithCourseId.length > 0 && color != defaultColor) {
-        await Promise.all(
-          appliedCoursesWithCourseId!.map(async (appliedCourse) => {
-            const newAppliedCourse: CourseType = {
-              id: appliedCourse.id,
-              name: appliedCourse.name,
-              startDate: appliedCourse.startDate,
-              endDate: appliedCourse.endDate,
-              moduleIds: appliedCourse.moduleIds,
-              color: color,
-              isApplied: appliedCourse.isApplied
-            };
-            mutationUpdateAppliedCourse.mutate(newAppliedCourse);
-          })
-        );
-      }
-
-      const appliedCourse: CourseType = {
-        name: course?.name ?? "",
-        startDate: startDate,
-        color: color,
-        moduleIds: courseModules?.map(m => m.id!),
-        isApplied: true
-      };
-      mutationPostAppliedCourse.mutate(appliedCourse);
-      navigate("/activecourses");
-    }
-  };
-
+  if (isErrorCourse || isErrorCourseModules) {
+    return <ErrorMessage />;
+  }
 
 
   return (
     <Page>
-      {(isLoadingCourse || isLoadingCourseModules || isLoadingAppliedCourses) && (
-        <LoadingMessage />
-      )}
-      {(isErrorCourse || isErrorCourseModules || isErrorAppliedCourses) && <ErrorMessage />}
-      {course && appliedCourses && (
-        <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
-          <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
-            <h1 className="pb-4 text-xl text-primary font-bold">
-              {course.name}
-            </h1>
-            {courseModules &&
-              courseModules.map((module, index) => (
-                <div key={module.id}>
-                  <h1 className="text-lg font-bold self-start">
-                    <Link
-                      to={`/modules/details/${module.id}`}
-                      className="hover:italic">
-                      Module {index + 1}: {module.name}
-                    </Link>
-                  </h1>
-                  <table
-                    className="table table-fixed table-sm lg:table-lg"
-                    key={"module_" + index}>
-                    <thead>
-                      <tr>
-                        <th className="text-sm w-1/6">Day</th>
-                        <th className="text-sm w-1/6">Events</th>
-                        <th className="text-sm w-2/3">Description</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {module.days.map((day, dayIndex) => (
-                        <tr key={dayIndex}>
-                          <td className="text-sm">{day.dayNumber}</td>
-                          <td className="text-sm">{day.events.length}</td>
-                          <td className="text-sm">{day.description}</td>
-                        </tr>
-                      ))}
-                      <tr></tr>
-                    </tbody>
-                  </table>
-                </div>
-              ))}
-          </section>
+      <h1 className="text-4xl pl-5">Course</h1>
 
-          <div className="pt-4 flex gap-4 flex-col sm:flex-row">
-            <Link
-              to={`/courses/edit/${courseId}`}
-              className="btn btn-sm py-1 max-w-xs btn-info text-white">
-              Edit Course
-            </Link>
-            <DeleteBtn onClick={() => mutationDeleteCourse.mutate(courseId)}>
-              Delete Course
-            </DeleteBtn>
+      {course && modules &&
+
+        <section className="grid grid-rows-9 grid-cols-9 h-screen bg-white m-5 rounded-lg overflow-hidden drop-shadow-xl">
+          {/* First Row, First Column */}
+          <div className="row-span-1 col-span-2 bg-yellow-500 text-center flex items-center justify-center">
+            <h2 className="text-3xl">{course?.name || "Course Name"}</h2>
           </div>
-          <p
-            className="error-message text-red-600 text-sm hidden"
-            id="invalid-module-delete">
-            Cannot delete this course, it is used in the calendar!
-          </p>
-          <div className="flex gap-4 mt-10">
-            <div className="self-start mt-2">
-              <h1 className="font-bold text-black] text-sm">
-                Enter start date:{" "}
-              </h1>
+
+          {/* First Row, Second Column */}
+          <div className="row-span-1 col-span-7 text-center flex items-center justify-center border-b-2">
+            <h2 className="text-3xl">Modules</h2>
+          </div>
+
+          <div className="row-span-8 col-span-2 border-r-2 p-10 flex flex-col h-full">
+            <div className="flex place-content-around p-3 border-b-4 h-20">
+              <div className="flex flex-col items-center">
+                <h3>{modules.length}</h3>
+                <p>Modules</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <h3>{numberOfDaysInCourse(course)}</h3>
+                <p>Days</p>
+              </div>
+              <div className="flex flex-col items-center">
+                <h3>{course.numberOfWeeks}</h3>
+                <p>Weeks</p>
+              </div>
             </div>
-            <DatePicker
-              name="startDate"
-              value={startDate}
-              onChange={(date) => setStartDate(date!)}
-              sx={{
-                height: "35px",
-                padding: "0px",
-                "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
-                  fontFamily: "Montserrat",
-                  color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
-                  padding: "6px",
-                },
-                "& .css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root": {
-                  color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
-                },
-                "& .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
-                  borderRadius: "var(--rounded-btn, 0.5rem)"
-                }
-              }}
-              className="input input-bordered"
-            />
-            <ColorPickerModal
-              color={color}
-              setColor={setColor}
-            />
-            <input
-              placeholder="Enter group email"
-              onChange={(e) => setGroupEmail(e.target.value)}
-              className="self-start mt-2"></input>
+
+            <div className="p-7 text-center">
+              <h3 className="text-xl">Module Timeline</h3>
+            </div>
+
+            <div className="relative flex-grow">
+              <ul className="timeline timeline-vertical relative flex flex-col h-full">
+                <li className="relative  flex flex-col items-center justify-center">
+                  <div className="bg-accent w-3 h-3 border rounded-lg"></div>
+                </li>
+                {modules.map((moduleElement, index) => (
+                  <li key={moduleElement.id} className="relative">
+                    <hr />
+                    <div
+                      className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"
+                        } timeline-box`}
+                    >
+                      {moduleElement.name}
+                    </div>
+                    <div className="timeline-middle">
+                      <p>[{getWeekNumberOfModule(course, moduleElement.id!)}]</p>
+                    </div>
+                    <hr />
+                  </li>
+                ))}
+
+                <li className="relative flex-grow flex flex-col items-center justify-center">
+                  <hr />
+                  <div className="bg-accent w-3 h-3 border rounded-lg"></div>
+                </li>
+              </ul>
+            </div>
+
+            <div className="mt-5 flex flex-col gap-6 p-8">
+              <button className="btn">Preview</button>
+              <button className="btn btn-primary" onClick={() => document.getElementById('my_DeployModal_1')!.showModal()}>Deploy Bootcamp</button>
+              <DeployModal course={course} />
+            </div>
           </div>
-          {isColorNotSelected && (
-            <p
-              className="error-message text-red-600 text-sm"
-              id="invalid-helper">
-              Please select a color for the calendar items
-            </p>
-          )}
-          {isInvalidDate && (
-            <p
-              className="error-message text-red-600 text-sm"
-              id="invalid-helper">
-              Please select a weekday for the start date
-            </p>
-          )}
-          <div className="pt-4 mb-4 flex gap-4 flex-col sm:flex-row">
-            <button
-              onClick={handleApplyTemplate}
-              className="btn btn-sm py-1 max-w-fit btn-primary text-white">
-              Add to app calendar
-            </button>
-            <button
-              onClick={() => handleGoogleGroupAdd()}
-              className="btn btn-sm py-1 max-w-xs btn-success text-white">
-              Add to Google calendar{" "}
-            </button>
-            <DeleteBtn onClick={() => deleteCourseFromGoogle(course.name)}>
-              Remove from Google calendar
-            </DeleteBtn>
+
+
+
+
+          {/* Second Row, Second Column */}
+          <div className="row-span-8 col-span-7">
+            <div className="h-5/6 overflow-scroll">
+              {modules && (
+                <>
+                  {modules.map((modulemap, index) =>
+                    <ModuleDetails module={modulemap} key={index} />
+                  )}
+                </>
+              )}
+            </div>
+            <div className="flex pl-14 pt-4 gap-6">
+              <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary" >Edit Course</Link>
+              <DeleteBtn onClick={() => console.log("you clicked delete")}>Delete Course</DeleteBtn>
+
+              <p> Track: {course?.name}</p>
+              <div
+                style={{
+                  width: "15px",
+                  height: "15px",
+                  backgroundColor: course.color,
+                  borderRadius: "3px",
+                }}
+              > </div>
+
+            </div>
           </div>
         </section>
-      )}
+      }
+
     </Page>
   );
 }
