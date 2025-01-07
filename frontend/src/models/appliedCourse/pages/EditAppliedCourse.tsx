@@ -178,10 +178,7 @@ export default function EditAppliedCourse() {
 
     const handleUpdateCourse = () => {
         if (appliedCourse) {
-            console.log("The course im sending")
-            console.log(course);
             mutationUpdateAppliedCourse.mutate(course);
-            
         }
     };
 
@@ -205,19 +202,6 @@ export default function EditAppliedCourse() {
                     paddingTop: "20px", 
                 }}
             >
-                <div
-                    style={{
-                        width: "80%", 
-                        display: "flex",
-                        gap: "10px",
-                        marginBottom: "20px", 
-                        marginTop: "20px", 
-                    }}
-                >
-                    <PrimaryBtn onClick={handleUpdateCourse}>Save</PrimaryBtn>
-                    <PrimaryBtn onClick={handleGoBack}>Abort</PrimaryBtn>
-                </div>
-                
                 <section
                     className="px-4 md:px-24 lg:px-56"
                     style={{
@@ -268,20 +252,24 @@ export default function EditAppliedCourse() {
                     {course.modules.map((courseModule, moduleIndex) => (
 
                         
-                        <div
-                            key={moduleIndex}
-                            className="collapse bg-base-200 mb-4"
-                            
-                        >
+                        <div className="bg-base-100 flex space-between mb-4 rounded-r-lg border-r border-b border-black" key={moduleIndex}>
+                        <div className="collapse border-t border-l border-black rounded-none">
                             <input type="checkbox" />
-                            <div className="collapse-title text-xl font-medium">
-                                {courseModule.module.name}
-                                <div className="flex justify-end">
-                                    <PrimaryBtn onClick={() => handleRemoveModule(moduleIndex)}>Remove Module</PrimaryBtn>
+                            <div className="collapse-title text-xl font-medium border-b border-black">
+
+                                <div className="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 mr-1">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 -ml-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                    </svg>
+                                    {courseModule.module.name}
                                 </div>
                             </div>
                             <div className="collapse-content">
-                            <div style={{ display: "flex", gap: "10px" }}>
+
+                            <div className="p-4">
                                 <label>
                                     Module Name:
                                     <input
@@ -297,20 +285,23 @@ export default function EditAppliedCourse() {
                                 </label>
                             </div>
                             {courseModule.module.days.map((day, dayIndex) => (
-                                <div
-                                key={dayIndex}
-                                className="collapse bg-base-100 mb-4"
-                            >
-                            <input type="checkbox" />
-                              <div className="collapse-title text-xl font-medium">
-                                Day {dayIndex + 1} {day.description}
-                              <div className="flex justify-end">
-                                        <PrimaryBtn onClick={() => handleRemoveDay(moduleIndex, dayIndex)}>
-                                            Remove Day
-                                        </PrimaryBtn>
-                              </div>
-                              </div>
-                                    <div className="collapse-content">
+                                <div className="bg-base-200 flex space-between border border-black mb-4 rounded-r-lg" key={dayIndex} >
+                                    <div className="collapse">
+                                    <input type="checkbox" />
+                                    <div className="collapse-title text-xl font-medium">
+                                        <div className="flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 mr-1">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 -ml-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                                    </svg>
+                                    Day {dayIndex + 1} {day.description}
+                                </div>
+                                    
+                                    </div>
+                                    <div className="collapse-content border-t border-black rounded-none">
+                                        <div className="pt-4 pb-8">
                                         <label>
                                             Description:
                                             <input
@@ -324,11 +315,14 @@ export default function EditAppliedCourse() {
                                                 style={{ padding: "5px", border: "1px solid gray" }}
                                             />
                                         </label>
+                                        </div>
                                         {day.events.map((event, eventIndex) => (
                                             <div
                                                 key={eventIndex}
-                                                className="flex flex-row gap-4 mt-4 p-4 border border-gray-300 rounded-md"
+                                                className="flex flex-row  items-center justify-between gap-4 mt-4 p-4 border-b border-gray-300 rounded-md"
                                             >
+                                                <div className="flex flex-row gap-4">
+                                                   
                                                 <label className="flex flex-col">
                                                 Event Name:
                                                 <input
@@ -343,6 +337,21 @@ export default function EditAppliedCourse() {
                                                     className="p-2 border border-gray-300 rounded-md"
                                                 />
                                                 </label>
+
+                                                <label className="flex flex-col">
+                                                Description:
+                                                <input
+                                                    type="text"
+                                                    value={event.description}
+                                                    onChange={(e) => {
+                                                    const updatedModules = [...course.modules];
+                                                    updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].description =
+                                                        e.target.value;
+                                                    setCourse({ ...course, modules: updatedModules });
+                                                    }}
+                                                    className="p-2 border border-gray-300 rounded-md w-full sm:w-96 md:w-128"
+                                                />
+                                                </label> 
 
                                                 <label className="flex flex-col">
                                                 Start Time:
@@ -373,27 +382,19 @@ export default function EditAppliedCourse() {
                                                     className="p-2 border border-gray-300 rounded-md"
                                                 />
                                                 </label>
-
-                                                <label className="flex flex-col">
-                                                Description:
-                                                <input
-                                                    type="text"
-                                                    value={event.description}
-                                                    onChange={(e) => {
-                                                    const updatedModules = [...course.modules];
-                                                    updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].description =
-                                                        e.target.value;
-                                                    setCourse({ ...course, modules: updatedModules });
-                                                    }}
-                                                    className="p-2 border border-gray-300 rounded-md w-full sm:w-96 md:w-128"
-                                                />
-                                                </label>
-
-                                                <div className="flex ml-auto">
-                                                <PrimaryBtn onClick={() => handleRemoveEvent(moduleIndex, dayIndex, eventIndex)}>
-                                                    Remove Event
-                                                </PrimaryBtn>
                                                 </div>
+                                                    <button onClick={() => handleRemoveEvent(moduleIndex, dayIndex, eventIndex)} className="btn btn-square btn-outline scale-75">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                                        <path 
+                                                        strokeLinecap="round"
+                                                            strokeLinejoin="round" 
+                                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 
+                                                            1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25
+                                                            2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 
+                                                            .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964
+                                                            0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                        </svg>
+                                                    </button>
                                             </div>
                                             ))}
 
@@ -405,6 +406,23 @@ export default function EditAppliedCourse() {
                                 </div>
 
                                 </div>
+                                
+
+                                </div>
+                                    <div className="flex justify-end">
+                                        <button onClick={() => handleRemoveDay(moduleIndex, dayIndex)} className="btn btn-square btn-outline h-[61px] w-[61px] rounded-none rounded-r-lg">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                            <path 
+                                            strokeLinecap="round"
+                                                strokeLinejoin="round" 
+                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 
+                                                1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25
+                                                2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 
+                                                .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964
+                                                0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                             <div style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -415,6 +433,21 @@ export default function EditAppliedCourse() {
                             </div>
 
 
+                        </div>
+                        <div className="flex justify-end ">
+                            <button onClick={() => handleRemoveModule(moduleIndex)} className="btn btn-square btn-outline h-[62px] w-[62px] rounded-none rounded-r-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                <path 
+                                strokeLinecap="round"
+                                    strokeLinejoin="round" 
+                                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 
+                                    1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25
+                                    2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 
+                                    .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964
+                                    0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                </svg>
+                            </button>
+                        </div>
                         </div>
                     ))}
 
@@ -429,7 +462,12 @@ export default function EditAppliedCourse() {
                             <PrimaryBtn onClick={handleCreateNewAppliedModule}>
                                 Add Module
                             </PrimaryBtn>
+                            <PrimaryBtn onClick={handleCreateNewAppliedModule}>
+                               from template!?
+                            </PrimaryBtn>
                         </div>
+                        <PrimaryBtn onClick={handleUpdateCourse}>Save</PrimaryBtn>
+                    <PrimaryBtn onClick={handleGoBack}>Abort</PrimaryBtn>
                     </div>
                 </section>
             </div>
