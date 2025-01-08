@@ -74,9 +74,7 @@ import Days from './Days';
                     />
                 </label>
             </div>
-            <div className="text-xl font-medium border-b border-t border-l border-r border-black max-w-full overflow-x-auto">
-                <Days moduleIndex={moduleIndex} courseModule={courseModule} course={course} setCourse={setCourse} />
-            </div>
+            <Days moduleIndex={moduleIndex} courseModule={courseModule} course={course} setCourse={setCourse} />
             <div style={{ display: "flex", justifyContent: "flex-start" }}>
                 <PrimaryBtn onClick={() => handleCreateNewDay(moduleIndex, courseModule.module.numberOfDays)}>
                     Add Day
