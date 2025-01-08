@@ -81,10 +81,9 @@ export default function Week({ data, isNextWeek }: WeekProps) {
 
     return (
         <>
-            <section className="flex w-full justify-between m-5 rounded-xl bg-accent overflow-hidden drop-shadow-xl">
-                <p className="p-1">{!isNextWeek ? thisWeek : nextWeek}</p>
+            <section className="flex w-full justify-between m-5 mt-0 rounded-xl bg-accent overflow-hidden drop-shadow-xl">
+                <p className="p-2 text-lg">{!isNextWeek ? thisWeek : nextWeek}</p>
                 {weekDays.map((day, index) => renderSection(day, index, getDateAsString(day) === today))}
-
             </section>
             {currentIndex !== null && data && (
                 <DayModal
