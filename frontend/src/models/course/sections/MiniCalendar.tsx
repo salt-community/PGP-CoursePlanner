@@ -54,7 +54,7 @@ export default function MiniCalendar({ startDate }: Props) {
 
             <section className="flex-grow flex py-2">
                 <div className="flex flex-col items-center w-full h-full">
-                    <div className={`w-full flex-grow shadow-xl drop-shadow-2xl grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
+                    <div className={`w-full flex-grow   grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
                         {fullWeek.map(day => (
                             <div key={format(day, 'E')} className="w-1/7 flex justify-center items-center p-1 border-b-2 border-gray-100">
                                 {format(day, 'E')}
