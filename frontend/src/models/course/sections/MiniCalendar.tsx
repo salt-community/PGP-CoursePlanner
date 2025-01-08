@@ -2,12 +2,9 @@ import NextBtn from "@components/buttons/NextBtn"
 import PreviousBtn from "@components/buttons/PreviousBtn"
 import { useState } from "react"
 
-import {  useNavigate } from "react-router-dom"
 import { firstDayOfMonth, allDaysInInterval,  fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
-import { trackUrl } from "@helpers/helperMethods"
-import { DayModal } from "@models/home/sections/DayModal"
 import CalendarDate from "@models/calendar/sections/CalendarDate"
 
 type Props = {
@@ -17,10 +14,7 @@ type Props = {
 export default function MiniCalendar({startDate} : Props) {
     const [month, setMonth] = useState<number>(startDate.getMonth());
     const [year, setYear] = useState<number>(startDate.getFullYear());
-    const [currentIndex, setCurrentIndex] = useState<number | null>(null);
 
-    const navigate = useNavigate();
-    trackUrl();
 
     const startOfMonth = firstDayOfMonth(month, year);
     const endOfMonth = lastDayOfMonth(month, year);
@@ -40,27 +34,7 @@ export default function MiniCalendar({startDate} : Props) {
 
     const { data, isPending, isError, error } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
 
-    const openModal = (index: number) => {
-        setCurrentIndex(index);
-    };
 
-    const closeModal = () => {
-        setCurrentIndex(null);
-    };
-
-    const handleNextDay = () => {
-        if (data && currentIndex !== null && currentIndex < data.length - 1) {
-            
-            setCurrentIndex(currentIndex + 1);
-        }
-    };
-
-    const handlePrevDay = () => {
-        if (data && currentIndex !== null && currentIndex > 0) {
-           
-            setCurrentIndex(currentIndex - 1);
-        }
-    };
 
 
     if (isError) {
@@ -91,23 +65,14 @@ export default function MiniCalendar({startDate} : Props) {
                         ))}
                         {daysInMonth.map((thisDate, dateIndex) => {
                             return <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
-                                {data && data[dateIndex] !== null ? <CalendarDate openModal = {openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                    : <CalendarDate   openModal={openModal} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
+                                {data && data[dateIndex] !== null ? <CalendarDate openModal = {() => null} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                    : <CalendarDate   openModal={() => null} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
                             </div>
                         })}
                     </div>
                 </div>
             </section>
-            {currentIndex !== null && data && (
-                <DayModal
-                    modalData={data[currentIndex]}
-                    onClose={closeModal}
-                    onNext={handleNextDay}
-                    onPrev={handlePrevDay}
-                    isPrevDisabled={currentIndex === 0}
-                    isNextDisabled={currentIndex === data.length - 1}
-                />
-            )}
+            
         </div>
     )
 }
