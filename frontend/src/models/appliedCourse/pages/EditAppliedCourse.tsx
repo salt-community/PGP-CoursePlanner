@@ -72,36 +72,15 @@ export default function EditAppliedCourse() {
     return (
         <Page>
             <div className="bg-gray-100 min-h-screen flex flex-col items-center pt-5">
-                <section
-                    className="px-4 md:px-24 lg:px-56"
-                    style={{
-                        backgroundColor: "#ffffff",
-                        borderRadius: "12px",
-                        padding: "20px",
-                        boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-                        width: "80%", 
-                        display: "flex", 
-                        flexDirection: "column", 
-                        marginTop: "20px", 
-                    }}
-                >
+                <section className="px-4 md:px-24 lg:px-56 bg-white rounded-lg p-5 shadow-md mt-5 w-4/5 flex flex-col">
                     <div className="flex flex-row gap-5 mt-2 mb-4">
                         <CourseInfo course={course} setCourse={setCourse} />
                     </div>
                     <Modules course={course} setCourse={setCourse} />
                     <div>
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                            }}
-                        >
+                        <div className="flex justify-center items-center">
                             <PrimaryBtn onClick={handleCreateNewAppliedModule}>
                                 Add Module
-                            </PrimaryBtn>
-                            <PrimaryBtn onClick={handleCreateNewAppliedModule}>
-                               from template!?
                             </PrimaryBtn>
                         </div>
                         <PrimaryBtn onClick={handleUpdateCourse}>Save</PrimaryBtn>
@@ -111,4 +90,5 @@ export default function EditAppliedCourse() {
             </div>
         </Page>
     );
+    
 }
