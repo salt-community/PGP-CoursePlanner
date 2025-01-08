@@ -6,9 +6,13 @@ import { firstDayOfMonth, allDaysInInterval, fullWeek, daysBeforeMonth, firstWee
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
 import CalendarDate from "@models/calendar/sections/CalendarDate"
+import { CourseType } from "../Types"
+import { ModuleType } from "@models/module/Types"
 
 type Props = {
     startDate: Date
+    course : CourseType
+    modules : ModuleType[]
 }
 
 export default function MiniCalendar({ startDate }: Props) {

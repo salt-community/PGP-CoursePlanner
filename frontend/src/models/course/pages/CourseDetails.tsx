@@ -93,7 +93,7 @@ export default function CourseDetails() {
             <div className="mt-5 flex flex-col gap-6 p-8">
               <button className="btn" onClick={() => calculateCourseDayDates(course, modules,  new Date())} >Preview</button>
               <button className="btn btn-primary" onClick={() => document.getElementById('my_DeployModal_1')!.showModal()}>Deploy Bootcamp</button>
-              <DeployModal course={course} />
+              <DeployModal course={course} modules={modules} />
             </div>
           </div>
 

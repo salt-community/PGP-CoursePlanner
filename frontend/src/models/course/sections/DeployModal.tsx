@@ -8,12 +8,14 @@ import { useQueryModulesByCourseId } from "@api/course/courseQueries";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import MiniCalendar from "./MiniCalendar";
+import { ModuleType } from "@models/module/Types";
 
 type Props = {
-    course: CourseType
+    course: CourseType,
+    modules : ModuleType[]
 }
 
-export default function DeployModal({ course }: Props) {
+export default function DeployModal({ course, modules }: Props) {
 
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -112,7 +114,7 @@ export default function DeployModal({ course }: Props) {
                     )}
                     <br />
                     <div className="flex-grow overflow-auto">
-                        <MiniCalendar startDate={startDate} />
+                        <MiniCalendar startDate={startDate} course={course} modules={modules} />
                     </div>
                     <div className="modal-action">
                         <form method="dialog" className="flex gap-5 justify-center">
