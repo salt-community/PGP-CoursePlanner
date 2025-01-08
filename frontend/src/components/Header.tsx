@@ -1,6 +1,7 @@
 type Props = {
     children: React.ReactNode;
 }
+
 export default function Header({ children }: Props) {
     return (
         <header className="flex justify-between items-center p-5 pl-10 pr-10">

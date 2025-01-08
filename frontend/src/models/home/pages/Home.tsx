@@ -4,12 +4,10 @@ import { trackUrl } from "@helpers/helperMethods";
 
 export default function Home() {
     trackUrl();
-    
+
     return (
-        <>
-            <Page>
-                <WeeksContainer />
-            </Page>
-        </>
+        <Page>
+            <WeeksContainer />
+        </Page>
     )
 }

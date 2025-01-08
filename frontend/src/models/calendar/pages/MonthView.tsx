@@ -3,13 +3,14 @@ import PreviousBtn from "@components/buttons/PreviousBtn"
 import Page from "@components/Page"
 import { useState } from "react"
 import CalendarDate from "../sections/CalendarDate"
-import {  useNavigate } from "react-router-dom"
-import { firstDayOfMonth, allDaysInInterval,  fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
+import { useNavigate } from "react-router-dom"
+import { firstDayOfMonth, allDaysInInterval, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useMonthFromPath, useYearFromPath } from "@helpers/helperHooks"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
 import { trackUrl } from "@helpers/helperMethods"
 import { DayModal } from "@models/home/sections/DayModal"
+import Header from "@components/Header"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(parseInt(useMonthFromPath()));
@@ -30,7 +31,7 @@ export default function MonthView() {
     }
 
     const numberOfWeeks = getWeek(endOfMonth) - getWeek(startOfMonth) + 1;
-    const numberOfRows = "grid-rows-" + (numberOfWeeks +1).toString();
+    const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
     const startOfMonth2 = getDateAsString(startOfMonth);
     const endOfMonth2 = getDateAsString(endOfMonth);
@@ -47,14 +48,12 @@ export default function MonthView() {
 
     const handleNextDay = () => {
         if (data && currentIndex !== null && currentIndex < data.length - 1) {
-            
             setCurrentIndex(currentIndex + 1);
         }
     };
 
     const handlePrevDay = () => {
         if (data && currentIndex !== null && currentIndex > 0) {
-           
             setCurrentIndex(currentIndex - 1);
         }
     };
@@ -67,28 +66,33 @@ export default function MonthView() {
 
     return (
         <Page >
-            <header className="flex mb-0 p-0 items-center gap-2">
-                <div className="flex items-center">
-                    <PreviousBtn onClick={() => { setMonth(month - 1); navigate(`/calendar/month/monthyear=${month - 1}-${year}`); }} />
-                    <NextBtn onClick={() => { setMonth(month + 1); navigate(`/calendar/month/monthyear=${month + 1}-${year}`); }} />
+            <Header>
+                <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1">
+                        <PreviousBtn onClick={() => { setMonth(month - 1); navigate(`/calendar/month/monthyear=${month - 1}-${year}`); }} />
+                        <NextBtn onClick={() => { setMonth(month + 1); navigate(`/calendar/month/monthyear=${month + 1}-${year}`); }} />
+                    </div>
+                    <h1 className="text-3xl font-semibold">{monthInText} {year}</h1>
+                    <select className="select select-bordered select-sm max-w-xs ">
+                        <option disabled selected>Month</option>
+                        <option>Option</option>
+                        <option>Option</option>
+                    </select>
                 </div>
-                <h1 className="text-3xl">{monthInText} {year}</h1>
-                <select className="select select-bordered select-sm max-w-xs ">
-                    <option disabled selected>Month</option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
-                </select>
-                <label> Filter Tracks</label>
-                <select className="select select-bordered select-sm max-w-xs">
-                    <option disabled selected>All</option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
-                </select>
-            </header>
+                <div className="flex-grow"></div>
+                <div className="flex items-center gap-2 mr-4">
+                    <label>Filter Tracks</label>
+                    <select className="select select-bordered select-sm max-w-xs">
+                        <option disabled selected>All</option>
+                        <option>Option</option>
+                        <option>Option</option>
+                    </select>
+                </div>
+            </Header>
 
-            <section className="flex py-2 flex-grow">
+            <section className="flex pb-2 flex-grow">
                 <div className="flex flex-col items-center w-full h-full">
-                    <div className={` w-full flex-grow shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}> 
+                    <div className={` w-full flex-grow shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
                         {fullWeek.map(day => (
                             <div key={format(day, 'E')} className="w-1/7 flex justify-center items-center p-1 border-b-2 border-gray-100 ">{format(day, 'E')}</div>
                         ))}
@@ -97,8 +101,8 @@ export default function MonthView() {
                         ))}
                         {daysInMonth.map((thisDate, dateIndex) => {
                             return <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
-                                {data && data[dateIndex] !== null ? <CalendarDate openModal = {openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                    : <CalendarDate   openModal={openModal} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
+                                {data && data[dateIndex] !== null ? <CalendarDate openModal={openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                    : <CalendarDate openModal={openModal} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
                             </div>
                         })}
                     </div>
