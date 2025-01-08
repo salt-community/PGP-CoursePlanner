@@ -125,7 +125,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
           </li>
         ))}
 
-        <h2 className={`pt-3 pr-2 pb-3 pl-6 font-semibold text-xl text-left whitespace-nowrap ${isSidebarExpanded ? "" : "invisible"}`}>Templates</h2>
+        <h2 className={`pt-6 pr-2 pb-3 pl-6 font-semibold text-xl text-left whitespace-nowrap ${isSidebarExpanded ? "" : "invisible"}`}>Templates</h2>
         <li className="hover:rounded-none">
           <NavLink
             to="/modules"
