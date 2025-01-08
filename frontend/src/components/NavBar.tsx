@@ -45,7 +45,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
   return (
     <div className={`fixed flex flex-col left-0 top-0 h-full bg-[#ff7961] text-white shadow-lg transition-all duration-200 ${isSidebarExpanded ? 'w-64' : 'w-20'}`}>
 
-      <div className={`p-6 h-28 flex items-center ${isSidebarExpanded ? 'justify-between' : 'pb-10'}`}>
+      <div className={`p-6 h-28 flex items-center ${isSidebarExpanded ? 'justify-between' : 'pt-10 pb-10'}`}>
         <Link className={`flex flex-col text-xl ${isSidebarExpanded ? 'font-light' : 'font-bold'} text-white whitespace-nowrap`} to="/">
           {isSidebarExpanded && <img src="https://salt.dev/wp-content/uploads/2024/02/salt-logo-light.svg" alt="logo" />}
           {isSidebarExpanded ? "Course Planner" : "</>"}
@@ -65,9 +65,8 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
             </svg>
-
-
-          </button>}
+          </button>
+        }
       </div>
 
       <ul className="menu menu-vertical text-center p-0 text-lg overflow-hidden">
@@ -161,12 +160,12 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
 
       <div className="flex-grow"></div>
 
-        <button className={`btn btn-secondary min-h-10 h-10 m-4 text-xl p-0 flex-nowrap overflow-hidden ${isSidebarExpanded && "min-w-32"}`} onClick={handleLogOut}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-          </svg>
-          {isSidebarExpanded && "Log Out"}
-        </button>
+      <button className={`btn btn-secondary min-h-10 h-10 m-4 text-xl p-0 flex-nowrap overflow-hidden ${isSidebarExpanded && "min-w-32"}`} onClick={handleLogOut}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+        </svg>
+        {isSidebarExpanded && "Log Out"}
+      </button>
     </div>
   );
 }
