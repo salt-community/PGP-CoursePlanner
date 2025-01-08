@@ -45,7 +45,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
   return (
     <div className={`fixed flex flex-col left-0 top-0 h-full bg-[#ff7961] text-white shadow-lg transition-all duration-200 ${isSidebarExpanded ? 'w-64' : 'w-20'}`}>
 
-      <div className={`p-6 h-28 flex items-center ${isSidebarExpanded ? 'justify-between' : 'pt-10 pb-10'}`}>
+      <div className={`p-6 h-28 flex items-center overflow-hidden ${isSidebarExpanded ? 'justify-between' : 'pt-10 pb-10'}`}>
         <Link className={`flex flex-col text-xl ${isSidebarExpanded ? 'font-light' : 'font-bold'} text-white whitespace-nowrap`} to="/">
           {isSidebarExpanded && <img src="https://salt.dev/wp-content/uploads/2024/02/salt-logo-light.svg" alt="logo" />}
           {isSidebarExpanded ? "Course Planner" : "</>"}
