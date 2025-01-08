@@ -1,6 +1,5 @@
 import NextBtn from "@components/buttons/NextBtn"
 import PreviousBtn from "@components/buttons/PreviousBtn"
-import Page from "@components/Page"
 import { useState } from "react"
 
 import {  useNavigate } from "react-router-dom"
@@ -73,8 +72,8 @@ export default function MiniCalendar({startDate} : Props) {
         <div >
             <header className="flex mb-0 p-0 items-center gap-2">
                 <div className="flex items-center">
-                    <PreviousBtn onClick={() => { setMonth(month - 1); navigate(`/calendar/month/monthyear=${month - 1}-${year}`); }} />
-                    <NextBtn onClick={() => { setMonth(month + 1); navigate(`/calendar/month/monthyear=${month + 1}-${year}`); }} />
+                    <PreviousBtn onClick={() => { setMonth(month - 1);  }} />
+                    <NextBtn onClick={() => { setMonth(month + 1);  }} />
                 </div>
                 <h1 className="text-3xl">{monthInText} {year}</h1>
 
