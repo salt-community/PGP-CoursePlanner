@@ -7,6 +7,8 @@ import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries"
 import { useQueryModulesByCourseId } from "@api/course/courseQueries";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
+import MonthView from "@models/calendar/pages/MonthView";
+import MiniCalendar from "./MiniCalendar";
 
 type Props = {
     course: CourseType
@@ -116,6 +118,7 @@ export default function DeployModal({ course }: Props) {
                         <form method="dialog" className="flex gap-5 justify-center">
                             {/* if there is a button in form, it will close the modal */}
                             <button className="btn">Cancel</button>
+                            <MiniCalendar startDate={startDate}/>
                             <button className="btn btn-primary" onClick={handleApplyTemplate}> Deploy Bootcamp</button>
                         </form>
                     </div>
