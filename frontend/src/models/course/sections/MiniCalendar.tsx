@@ -2,16 +2,16 @@ import NextBtn from "@components/buttons/NextBtn"
 import PreviousBtn from "@components/buttons/PreviousBtn"
 import { useState } from "react"
 
-import { firstDayOfMonth, allDaysInInterval,  fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
+import { firstDayOfMonth, allDaysInInterval, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
 import CalendarDate from "@models/calendar/sections/CalendarDate"
 
 type Props = {
-    startDate :Date
+    startDate: Date
 }
 
-export default function MiniCalendar({startDate} : Props) {
+export default function MiniCalendar({ startDate }: Props) {
     const [month, setMonth] = useState<number>(startDate.getMonth());
     const [year, setYear] = useState<number>(startDate.getFullYear());
 
@@ -27,7 +27,7 @@ export default function MiniCalendar({startDate} : Props) {
     }
 
     const numberOfWeeks = getWeek(endOfMonth) - getWeek(startOfMonth) + 1;
-    const numberOfRows = "grid-rows-" + (numberOfWeeks +1).toString();
+    const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
     const startOfMonth2 = getDateAsString(startOfMonth);
     const endOfMonth2 = getDateAsString(endOfMonth);
@@ -43,36 +43,41 @@ export default function MiniCalendar({startDate} : Props) {
     if (isPending) return "pending";
 
     return (
-        <div >
+        <div className="flex flex-col h-full">
             <header className="flex mb-0 p-0 items-center gap-2">
                 <div className="flex items-center">
-                    <PreviousBtn onClick={() => { setMonth(month - 1);  }} />
-                    <NextBtn onClick={() => { setMonth(month + 1);  }} />
+                    <PreviousBtn onClick={() => { setMonth(month - 1); }} />
+                    <NextBtn onClick={() => { setMonth(month + 1); }} />
                 </div>
                 <h1 className="text-3xl">{monthInText} {year}</h1>
-
-
             </header>
 
-            <section className="flex py-2 flex-grow">
+            <section className="flex-grow flex py-2">
                 <div className="flex flex-col items-center w-full h-full">
-                    <div className={` w-full flex-grow shadow-xl drop-shadow-2xl break-normal grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}> 
+                    <div className={`w-full flex-grow shadow-xl drop-shadow-2xl grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
                         {fullWeek.map(day => (
-                            <div key={format(day, 'E')} className="w-1/7 flex justify-center items-center p-1 border-b-2 border-gray-100 ">{format(day, 'E')}</div>
+                            <div key={format(day, 'E')} className="w-1/7 flex justify-center items-center p-1 border-b-2 border-gray-100">
+                                {format(day, 'E')}
+                            </div>
                         ))}
                         {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
                             <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-full"></div>
                         ))}
                         {daysInMonth.map((thisDate, dateIndex) => {
-                            return <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
-                                {data && data[dateIndex] !== null ? <CalendarDate openModal = {() => null} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                    : <CalendarDate   openModal={() => null} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
-                            </div>
+                            return (
+                                <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
+                                    {data && data[dateIndex] !== null ? (
+                                        <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                    ) : (
+                                        <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                    )}
+                                </div>
+                            );
                         })}
                     </div>
                 </div>
             </section>
-            
         </div>
-    )
+    );
+
 }

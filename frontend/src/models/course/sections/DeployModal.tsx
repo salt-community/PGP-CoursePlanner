@@ -7,7 +7,6 @@ import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries"
 import { useQueryModulesByCourseId } from "@api/course/courseQueries";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
-import MonthView from "@models/calendar/pages/MonthView";
 import MiniCalendar from "./MiniCalendar";
 
 type Props = {
@@ -81,7 +80,7 @@ export default function DeployModal({ course }: Props) {
 
 
             <dialog id="my_DeployModal_1" className="modal">
-                <div className="modal-box">
+                <div className="modal-box flex flex-col h-[80vh] w-11/12 max-w-5xl">
                     <h3 className="font-bold text-lg">Choose a start date and deploy Bootcamp</h3>
                     <br />
 
@@ -107,23 +106,23 @@ export default function DeployModal({ course }: Props) {
                         className="input input-bordered"
                     />
                     {isInvalidDate && (
-                        <p
-                            className="error-message text-red-600 text-sm"
-                            id="invalid-helper">
+                        <p className="error-message text-red-600 text-sm" id="invalid-helper">
                             Please select a weekday for the start date
                         </p>
                     )}
                     <br />
+                    <div className="flex-grow overflow-auto">
+                        <MiniCalendar startDate={startDate} />
+                    </div>
                     <div className="modal-action">
                         <form method="dialog" className="flex gap-5 justify-center">
-                            {/* if there is a button in form, it will close the modal */}
                             <button className="btn">Cancel</button>
-                            <button className="btn btn-primary" onClick={handleApplyTemplate}> Deploy Bootcamp</button>
+                            <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
                         </form>
                     </div>
-                            <MiniCalendar startDate={startDate}/>
                 </div>
             </dialog>
+
         </>
     )
 }
