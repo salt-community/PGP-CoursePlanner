@@ -118,10 +118,10 @@ export default function DeployModal({ course }: Props) {
                         <form method="dialog" className="flex gap-5 justify-center">
                             {/* if there is a button in form, it will close the modal */}
                             <button className="btn">Cancel</button>
-                            <MiniCalendar startDate={startDate}/>
                             <button className="btn btn-primary" onClick={handleApplyTemplate}> Deploy Bootcamp</button>
                         </form>
                     </div>
+                            <MiniCalendar startDate={startDate}/>
                 </div>
             </dialog>
         </>

@@ -77,17 +77,8 @@ export default function MiniCalendar({startDate} : Props) {
                     <NextBtn onClick={() => { setMonth(month + 1); navigate(`/calendar/month/monthyear=${month + 1}-${year}`); }} />
                 </div>
                 <h1 className="text-3xl">{monthInText} {year}</h1>
-                <select className="select select-bordered select-sm max-w-xs ">
-                    <option disabled selected>Month</option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
-                </select>
-                <label> Filter Tracks</label>
-                <select className="select select-bordered select-sm max-w-xs">
-                    <option disabled selected>All</option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
-                </select>
+
+
             </header>
 
             <section className="flex py-2 flex-grow">
