@@ -101,100 +101,100 @@ import PrimaryBtn from "@components/buttons/PrimaryBtn";
                         Day {dayIndex + 1} {day.description} {day.id}
                     </div>
                 </div>
-                <div className="collapse-content border-t border-black rounded-none">
-                    <div className="pt-4 pb-8">
-                    <label>
-                        Description:
-                        <input
-                            type="text"
-                            value={day.description}
-                            onChange={(e) => {
-                                const updatedModules = [...course.modules];
-                                updatedModules[moduleIndex].module.days[dayIndex].description = e.target.value;
-                                setCourse({ ...course, modules: updatedModules });
-                            }}
-                            style={{ padding: "5px", border: "1px solid gray" }}
-                        />
-                    </label>
-                    </div>
-                    {day.events.map((event, eventIndex) => (
-                        <div
-                            key={eventIndex}
-                            className="flex flex-row  items-center justify-between gap-4 mt-4 p-4 border-b border-gray-300 rounded-md"
-                        >
-                            <div className="flex flex-row gap-4">
-                            <p>{event.id}</p>    
-                            <label className="flex flex-col">
-                            Event Name:
-                            <input
-                                type="text"
-                                value={event.name}
-                                onChange={(e) => {
-                                const updatedModules = [...course.modules];
-                                updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].name =
-                                    e.target.value;
-                                setCourse({ ...course, modules: updatedModules });
-                                }}
-                                className="p-2 border border-gray-300 rounded-md"
-                            />
-                            </label>
+                <div className="collapse-content border-t border-black rounded-none overflow-y-auto flex flex-col">
+    <div className="pt-4 pb-8">
+        <label>
+            Description:
+            <input
+                type="text"
+                value={day.description}
+                onChange={(e) => {
+                    const updatedModules = [...course.modules];
+                    updatedModules[moduleIndex].module.days[dayIndex].description = e.target.value;
+                    setCourse({ ...course, modules: updatedModules });
+                }}
+                style={{ padding: "5px", border: "1px solid gray" }}
+            />
+        </label>
+    </div>
+    {day.events.map((event, eventIndex) => (
+        <div
+            key={eventIndex}
+            className="flex flex-wrap items-center justify-between gap-4 mt-4 p-4 border-b border-gray-300 rounded-md"
+        >
+            <div className="flex flex-wrap gap-4 w-full">
+                <button onClick={() => handleRemoveEvent(moduleIndex, dayIndex, eventIndex)} className="btn btn-square btn-outline scale-75">
+                    <TrashIcon size={6} />
+                </button>
+                <label className="flex flex-col">
+                    Event Name:
+                    <input
+                        type="text"
+                        value={event.name}
+                        onChange={(e) => {
+                            const updatedModules = [...course.modules];
+                            updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].name =
+                                e.target.value;
+                            setCourse({ ...course, modules: updatedModules });
+                        }}
+                        className="p-2 border border-gray-300 rounded-md"
+                    />
+                </label>
 
-                            <label className="flex flex-col">
-                            Description:
-                            <input
-                                type="text"
-                                value={event.description}
-                                onChange={(e) => {
-                                const updatedModules = [...course.modules];
-                                updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].description =
-                                    e.target.value;
-                                setCourse({ ...course, modules: updatedModules });
-                                }}
-                                className="p-2 border border-gray-300 rounded-md w-full sm:w-96 md:w-128"
-                            />
-                            </label> 
+                <label className="flex flex-col">
+                    Description:
+                    <input
+                        type="text"
+                        value={event.description}
+                        onChange={(e) => {
+                            const updatedModules = [...course.modules];
+                            updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].description =
+                                e.target.value;
+                            setCourse({ ...course, modules: updatedModules });
+                        }}
+                        className="p-2 border border-gray-300 rounded-md w-full sm:w-96 md:w-128"
+                    />
+                </label>
 
-                            <label className="flex flex-col">
-                            Start Time:
-                            <input
-                                type="time"
-                                value={event.startTime}
-                                onChange={(e) => {
-                                const updatedModules = [...course.modules];
-                                updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].startTime =
-                                    e.target.value;
-                                setCourse({ ...course, modules: updatedModules });
-                                }}
-                                className="p-2 border border-gray-300 rounded-md"
-                            />
-                            </label>
+                <label className="flex flex-col">
+                    Start Time:
+                    <input
+                        type="time"
+                        value={event.startTime}
+                        onChange={(e) => {
+                            const updatedModules = [...course.modules];
+                            updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].startTime =
+                                e.target.value;
+                            setCourse({ ...course, modules: updatedModules });
+                        }}
+                        className="p-2 border border-gray-300 rounded-md"
+                    />
+                </label>
 
-                            <label className="flex flex-col">
-                            End Time:
-                            <input
-                                type="time"
-                                value={event.endTime}
-                                onChange={(e) => {
-                                const updatedModules = [...course.modules];
-                                updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].endTime =
-                                    e.target.value;
-                                setCourse({ ...course, modules: updatedModules });
-                                }}
-                                className="p-2 border border-gray-300 rounded-md"
-                            />
-                            </label>
-                            </div>
-                                <button onClick={() => handleRemoveEvent(moduleIndex, dayIndex, eventIndex)} className="btn btn-square btn-outline scale-75">
-                                    <TrashIcon size={6} />
-                                </button>
-                        </div>
-                        ))}
-            <div style={{ display: "flex", justifyContent: "flex-start" }}>
-                <PrimaryBtn onClick={() => handleCreateNewEvent(moduleIndex, dayIndex)}>
-                    Add Event
-                </PrimaryBtn>
+                <label className="flex flex-col">
+                    End Time:
+                    <input
+                        type="time"
+                        value={event.endTime}
+                        onChange={(e) => {
+                            const updatedModules = [...course.modules];
+                            updatedModules[moduleIndex].module.days[dayIndex].events[eventIndex].endTime =
+                                e.target.value;
+                            setCourse({ ...course, modules: updatedModules });
+                        }}
+                        className="p-2 border border-gray-300 rounded-md"
+                    />
+                </label>
             </div>
-            </div>
+        </div>
+    ))}
+    <div className="mt-auto">
+        <PrimaryBtn onClick={() => handleCreateNewEvent(moduleIndex, dayIndex)}>
+            Add Event
+        </PrimaryBtn>
+    </div>
+</div>
+
             </div>
                 <div className="flex justify-end">
                     <button onClick={() => handleRemoveDay(moduleIndex, dayIndex)} className="btn btn-square btn-outline h-[61px] w-[61px] rounded-none rounded-r-lg">

@@ -49,7 +49,7 @@ import Days from './Days';
     <div>
       {course.modules.map((courseModule, moduleIndex) => (
         <div className="bg-base-100 flex space-between mb-4 rounded-r-lg border-r border-b border-black" key={moduleIndex}>
-        <div className="collapse border-t border-l border-black rounded-none">
+        <div className="collapse border-t border-r border-l border-black rounded-none">
             <input type="checkbox" />
             <div className="collapse-title text-xl font-medium border-b border-black">
                 <div className="flex items-center">
@@ -57,7 +57,7 @@ import Days from './Days';
                     {courseModule.module.name}
                 </div>
             </div>
-            <div className="collapse-content">
+            <div className="collapse-content max-w-full">
 
             <div className="p-4">
                 <label>
@@ -74,7 +74,9 @@ import Days from './Days';
                     />
                 </label>
             </div>
-            <Days moduleIndex={moduleIndex}courseModule={courseModule}course={course} setCourse={setCourse} />
+            <div className="text-xl font-medium border-b border-t border-l border-r border-black max-w-full overflow-x-auto">
+                <Days moduleIndex={moduleIndex} courseModule={courseModule} course={course} setCourse={setCourse} />
+            </div>
             <div style={{ display: "flex", justifyContent: "flex-start" }}>
                 <PrimaryBtn onClick={() => handleCreateNewDay(moduleIndex, courseModule.module.numberOfDays)}>
                     Add Day

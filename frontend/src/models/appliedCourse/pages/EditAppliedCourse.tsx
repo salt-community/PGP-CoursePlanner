@@ -7,6 +7,7 @@ import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import { CourseType, CourseModuleType} from "@models/course/Types";
 import { useNavigate } from "react-router-dom";
 import Modules from "../components/Modules";
+import CourseInfo from "../components/CourseInfo";
 
 export default function EditAppliedCourse() {
     const appliedCourseId = useIdFromPath();
@@ -85,32 +86,7 @@ export default function EditAppliedCourse() {
                     }}
                 >
                     <div className="flex flex-row gap-5 mt-2 mb-4">
-                    <div className="flex flex-col gap-2 flex-1">
-                        <label className="text-lg font-medium">
-                                Course name:
-                            </label>
-                            <input
-                                type="text"
-                                value={course.name}
-                                onChange={(e) => setCourse({ ...course, name: e.target.value })}
-                                className="w-full p-2 border border-gray-300 rounded-md"
-                            />
-                    </div>
-                    <div className="flex flex-col gap-2 flex-1">
-                        <label className="text-lg font-medium">
-                            Track:
-                        </label>
-                        <select
-                            value={course.track}
-                            onChange={(e) => setCourse({ ...course, track: e.target.value })}
-                            className="w-full p-2 border border-gray-300 rounded-md"
-                        >
-                            <option value="" disabled>Select a track</option>
-                            <option value="Track 1">Track 1</option>
-                            <option value="Track 2">Track 2</option>
-                            <option value="Track 3">Track 3</option>
-                        </select>
-                    </div>
+                        <CourseInfo course={course} setCourse={setCourse} />
                     </div>
                     <Modules course={course} setCourse={setCourse} />
                     <div>
