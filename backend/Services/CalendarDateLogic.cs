@@ -30,7 +30,7 @@ public static class CalendarDateLogic
             }
             else
             {
-                dates[i] = null;
+                dates[i] = new CalendarDate() { Date = convertedDateStart.AddDays(i) };
             }
         }
         return dates;

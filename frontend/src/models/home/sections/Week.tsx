@@ -66,10 +66,10 @@ export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps)
         const textClasses = "text-lg";
         const isTodayTextClasses = isToday && "text-xl font-bold text-primary";
         const formattedDay = getDateAsString(day);
-
+        
         return (
             <section
-                key={format(day, "d")}
+                key={formattedDay}
                 className={`${commonClasses} ${borderClasses} ${backgroundClasses} ${!isCalendarLoading && hoverClasses}`}
                 onClick={isCalendarLoading ? () => {} : () => openModal(index)}
             >
