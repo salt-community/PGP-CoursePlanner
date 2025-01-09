@@ -76,7 +76,10 @@ export default function EditAppliedCourse() {
                     <div className="flex flex-row gap-5 mt-2 mb-4">
                         <CourseInfo course={course} setCourse={setCourse} />
                     </div>
+                    <div>
                     <Modules course={course} setCourse={setCourse} />
+                    </div>
+                    
                     <div>
                         <div className="flex justify-center items-center">
                             <PrimaryBtn onClick={handleCreateNewAppliedModule}>
