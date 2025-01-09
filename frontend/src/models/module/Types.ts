@@ -19,6 +19,7 @@ export type DayType = {
   description: string;
   events: EventType[];
   isApplied?: boolean;
+  date: string;
 };
 
 export type DayProps = {

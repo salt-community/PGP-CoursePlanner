@@ -9,6 +9,7 @@ import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import MiniCalendar from "./MiniCalendar";
 import { ModuleType } from "@models/module/Types";
+import { stripIdsFromCourse } from "../helpers/courseUtils";
 
 type Props = {
     course: CourseType,
@@ -30,6 +31,21 @@ export default function DeployModal({ course, modules }: Props) {
 
 
     const handleApplyTemplate = async () => {
+        console.log(course)
+
+        // const myCourse : CourseType = {
+            
+        //     name: course.name,
+        //     track: course.track,
+        //     startDate: course.startDate,
+        //     moduleIds: course.moduleIds,
+        //     modules: course.modules,
+        //     numberOfWeeks: course.numberOfWeeks,
+            
+        // } 
+
+        const myCourse = stripIdsFromCourse(course)
+
         setIsInvalidDate(false);
         if (
             startDate.getDay() == 6 ||
@@ -54,7 +70,7 @@ export default function DeployModal({ course, modules }: Props) {
                             color: color,
                             isApplied: appliedCourse.isApplied
                         };
-                        mutationUpdateAppliedCourse.mutate(newAppliedCourse);
+                        mutationUpdateAppliedCourse.mutate(myCourse);
                     })
                 );
             }
@@ -67,7 +83,7 @@ export default function DeployModal({ course, modules }: Props) {
                 modules: [],
                 isApplied: true
             };
-            mutationPostAppliedCourse.mutate(appliedCourse);
+            mutationPostAppliedCourse.mutate(myCourse);
             navigate("/activecourses");
         }
     };
