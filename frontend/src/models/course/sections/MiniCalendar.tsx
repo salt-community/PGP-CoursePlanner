@@ -8,6 +8,7 @@ import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries
 import CalendarDate from "@models/calendar/sections/CalendarDate"
 import { CourseType } from "../Types"
 import { ModuleType } from "@models/module/Types"
+import { calculateCourseDayDates } from "../helpers/courseUtils"
 
 type Props = {
     startDate: Date
@@ -15,7 +16,7 @@ type Props = {
     modules : ModuleType[]
 }
 
-export default function MiniCalendar({ startDate }: Props) {
+export default function MiniCalendar({ startDate, course, modules }: Props) {
     const [month, setMonth] = useState<number>(startDate.getMonth());
     const [year, setYear] = useState<number>(startDate.getFullYear());
 
@@ -38,7 +39,8 @@ export default function MiniCalendar({ startDate }: Props) {
 
     const { data, isPending, isError, error } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
 
-
+    const initialCalendarDays = calculateCourseDayDates(course, modules, startDate )
+    console.log(initialCalendarDays)
 
 
     if (isError) {
@@ -75,6 +77,7 @@ export default function MiniCalendar({ startDate }: Props) {
                                     ) : (
                                         <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                     )}
+
                                 </div>
                             );
                         })}
