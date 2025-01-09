@@ -70,7 +70,7 @@ export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps)
         return (
             <section
                 key={format(day, "d")}
-                className={`${commonClasses} ${borderClasses} ${backgroundClasses} ${hoverClasses}`}
+                className={`${commonClasses} ${borderClasses} ${backgroundClasses} ${!isCalendarLoading && hoverClasses}`}
                 onClick={isCalendarLoading ? () => {} : () => openModal(index)}
             >
                 <h2 className={`item-center text-center ${textClasses} ${isTodayTextClasses}`}>
