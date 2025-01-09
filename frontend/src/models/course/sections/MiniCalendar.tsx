@@ -76,15 +76,17 @@ export default function MiniCalendar({ startDate, course, modules }: Props) {
                             if (initialCalendarDaysIndex > -1) {
                                 // console.log("date in initial fill: ", thisDate.toDateString())
                                 console.log("before:", initialCalendarDays[initialCalendarDaysIndex].dateContent)
-
+                                
+                                if(data[dateIndex] != null) {
                                 initialCalendarDays[initialCalendarDaysIndex].dateContent.push(...data[dateIndex].dateContent);
+                                }
                                 console.log("after: ", initialCalendarDays[initialCalendarDaysIndex].dateContent)
                                 return (
                                     <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
                                         {data && data[dateIndex] !== null ? (
                                             <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={initialCalendarDays[initialCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         ) : (
-                                            <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={initialCalendarDays[initialCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         )}
 
                                     </div>
