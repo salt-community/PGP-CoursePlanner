@@ -6,7 +6,7 @@ import Header from "@components/Header"
 export default function WeeksContainer() {
 
     const { data, isLoading: isCalendarLoading } = useQueryCalendarDateWeeks(currentWeek);
-    console.log(data);
+
     return (
         <>
             <Header>
