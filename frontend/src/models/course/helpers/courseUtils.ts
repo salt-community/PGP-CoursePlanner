@@ -42,7 +42,7 @@ export const calculateCourseDayDates = (
         currentDate.setDate(currentDate.getDate() + 1);
       }
       // console.log(`Module ${i + 1}, Day ${j + 1}:`, currentDate.toDateString());
-      calendarDateTypes.push({date: currentDate, dateContent: [{dayOfModule: modules[i].days[j].dayNumber, totalDaysInModule: modules[i].numberOfDays, courseName: course.name, events: modules[i].days[j].events, color: course.color ? course.color : "#777777" }] })
+      calendarDateTypes.push({date: new Date(currentDate), dateContent: [{dayOfModule: modules[i].days[j].dayNumber, totalDaysInModule: modules[i].numberOfDays, courseName: course.name, events: modules[i].days[j].events, color: course.color ? course.color : "#777777" }] })
       currentDate.setDate(currentDate.getDate() + 1);
     }
   }
