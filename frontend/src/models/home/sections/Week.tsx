@@ -8,9 +8,10 @@ import WeekDay from "@models/calendar/sections/WeekDay";
 interface WeekProps {
     data: CalendarDateType[] | undefined;
     isNextWeek: boolean;
+    isCalendarLoading: boolean
 }
 
-export default function Week({ data, isNextWeek }: WeekProps) {
+export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps) {
     const [currentIndex, setCurrentIndex] = useState<number | null>(null);
 
     const thisWeek = getWeek(new Date());
@@ -58,7 +59,7 @@ export default function Week({ data, isNextWeek }: WeekProps) {
             day = weekAheadDay;
             isToday = false;
         }
-        const commonClasses = "flex flex-col w-full gap-3 p-3";
+        const commonClasses = "flex flex-col w-full gap-3 p-3 min-h-[400px]";
         const borderClasses = isToday ? "border-2 border-primary" : "border-l border-accent";
         const backgroundClasses = "bg-white";
         const textClasses = isToday ? "text-xl font-bold text-primary" : "text-lg";
@@ -68,13 +69,24 @@ export default function Week({ data, isNextWeek }: WeekProps) {
             <section
                 key={format(day, "d")}
                 className={`${commonClasses} ${borderClasses} ${backgroundClasses}`}
-                onClick={() => openModal(index)}
+                onClick={isCalendarLoading ? () => {} : () => openModal(index)}
             >
-                <h1 className={`item-center text-center ${textClasses}`}>
+                <h2 className={`item-center text-center ${textClasses}`}>
                     {format(formattedDay, "EEEE")}<br />
                     {day.getDate()} {monthNames[day.getMonth()]}
-                </h1>
-                {data && data[index] !== null ? <WeekDay dateContent={data[index].dateContent} /> : ""}
+                </h2>
+                {isCalendarLoading ?
+                    <div className="flex flex-col gap-12 p-4">
+                        <div className="skeleton h-4 w-full mt-12"></div>
+                        <div className="skeleton h-4 w-full"></div>
+                        <div className="skeleton h-4 w-full"></div>
+                        <div className="skeleton h-4 w-full"></div>
+                    </div>
+                    :
+                    <>
+                        {data && data[index] !== null ? <WeekDay dateContent={data[index].dateContent} /> : ""}
+                    </>
+                }
             </section>
         );
     };
