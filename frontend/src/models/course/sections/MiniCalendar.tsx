@@ -40,7 +40,7 @@ export default function MiniCalendar({ startDate, course, modules }: Props) {
     const { data, isPending, isError, error } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
 
     const initialCalendarDays = calculateCourseDayDates(course, modules, startDate )
-    console.log(initialCalendarDays)
+    // console.log(initialCalendarDays)
 
 
     if (isError) {
@@ -70,6 +70,8 @@ export default function MiniCalendar({ startDate, course, modules }: Props) {
                             <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-full"></div>
                         ))}
                         {daysInMonth.map((thisDate, dateIndex) => {
+                            // if(initialCalendarDays.map(d =>d.date).includes(thisDate)) console.log("hejehejehejehejehjjjjjjjjjjjjjjjj XDDD")
+
                             return (
                                 <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
                                     {data && data[dateIndex] !== null ? (

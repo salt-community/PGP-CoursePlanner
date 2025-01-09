@@ -21,7 +21,7 @@ export const numberOfDaysInCourse = (course: CourseType) => {
 };
 
 export const getWeekNumberOfModule = (course: CourseType, moduleId: number) => {
-  console.log(course.color, moduleId)
+  // console.log(course.color, moduleId)
   return 1;
 };
 
@@ -30,7 +30,6 @@ export const calculateCourseDayDates = (
   modules: ModuleType[],
   startDate: Date
 ) => {
-  console.log("Start Date:", startDate);
 
   const calendarDateTypes : CalendarDateType[] = []
   // Create a copy of the startDate to avoid mutating the original date
@@ -42,7 +41,7 @@ export const calculateCourseDayDates = (
       while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
         currentDate.setDate(currentDate.getDate() + 1);
       }
-      console.log(`Module ${i + 1}, Day ${j + 1}:`, currentDate.toDateString());
+      // console.log(`Module ${i + 1}, Day ${j + 1}:`, currentDate.toDateString());
       calendarDateTypes.push({date: currentDate, dateContent: [{dayOfModule: modules[i].days[j].dayNumber, totalDaysInModule: modules[i].numberOfDays, courseName: course.name, events: modules[i].days[j].events, color: course.color ? course.color : "#777777" }] })
       currentDate.setDate(currentDate.getDate() + 1);
     }
