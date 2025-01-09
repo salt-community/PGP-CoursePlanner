@@ -104,7 +104,7 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
               cursor: "move", 
             }}
           >
-            <div className="collapse border-t border-r border-l border-black rounded-none">
+            <div className="collapse border-t  border-l border-black rounded-none">
               <input type="checkbox" />
               <div className="collapse-title text-xl font-medium border-b border-black">
                 <div className="flex items-center">
