@@ -60,18 +60,20 @@ export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps)
             isToday = false;
         }
         const commonClasses = "flex flex-col w-full gap-3 p-3 min-h-[400px]";
-        const borderClasses = isToday ? "border-2 border-primary" : "border-l border-accent";
+        const hoverClasses = "hover:bg-[#F9F9F9] hover:cursor-pointer  hover:scale-[1.03] hover:border-r transition-transform duration-200";
+        const borderClasses = "border-l border-accent";
         const backgroundClasses = "bg-white";
-        const textClasses = isToday ? "text-xl font-bold text-primary" : "text-lg";
+        const textClasses = "text-lg";
+        const isTodayTextClasses = isToday && "text-xl font-bold text-primary";
         const formattedDay = getDateAsString(day);
 
         return (
             <section
                 key={format(day, "d")}
-                className={`${commonClasses} ${borderClasses} ${backgroundClasses}`}
+                className={`${commonClasses} ${borderClasses} ${backgroundClasses} ${hoverClasses}`}
                 onClick={isCalendarLoading ? () => {} : () => openModal(index)}
             >
-                <h2 className={`item-center text-center ${textClasses}`}>
+                <h2 className={`item-center text-center ${textClasses} ${isTodayTextClasses}`}>
                     {format(formattedDay, "EEEE")}<br />
                     {day.getDate()} {monthNames[day.getMonth()]}
                 </h2>
@@ -93,7 +95,7 @@ export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps)
 
     return (
         <>
-            <section className="flex w-full justify-between m-5 mt-0 rounded-xl bg-accent overflow-hidden drop-shadow-xl">
+            <section className="flex w-full justify-between m-5 mt-0 rounded-xl bg-accent drop-shadow-xl">
                 <p className="p-2 text-lg">{!isNextWeek ? thisWeek : nextWeek}</p>
                 {weekDays.map((day, index) => renderSection(day, index, getDateAsString(day) === today))}
             </section>
