@@ -48,6 +48,10 @@ export default {
             "animation": "skeleton 1s ease-in-out infinite"
           },
 
+          "bg-primary": {
+            "background-color": "#ff7961",
+          },
+          
           ".btn-primary, .btn-secondary": {
             "color": "#fff",
           }

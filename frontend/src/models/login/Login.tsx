@@ -17,9 +17,8 @@ export default function Login() {
       />
       <h1 className="text-6xl font-light mb-5">Course Planner</h1>
       <button
-        type="button"
         onClick={() => handleLogin()}
-        className="text-white w-full  bg-primary hover:bg-primary/90 focus:ring-4 focus:outline-none focus:ring-primary/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between mr-2 mb-2 max-w-sm">
+        className="text-white w-full bg-[#ff7961] hover:bg-[#ff7961]/90 focus:ring-4 focus:outline-none focus:ring-[#ff7961]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between mr-2 mb-2 max-w-sm">
         <svg
           className="mr-2 -ml-1 w-4 h-4"
           aria-hidden="true"
