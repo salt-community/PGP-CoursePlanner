@@ -66,27 +66,47 @@ public class CourseService : IService<Course>
 
     private async Task<Course> CreateAppliedCourseAsync(Course appliedCourse)
     {
-        // _context.Courses.Add(appliedCourse);
-        // var startDate = appliedCourse.StartDate;
-        // _context.SaveChanges();
-
-        // int order = 1;
-        // foreach (var moduleId in appliedCourse.moduleIds)
-        // {
-        //     startDate = await addModuleToCourse(appliedCourse, moduleId, startDate, order);
-        //     order++;
-        // }
-        // appliedCourse.EndDate = calculateEndDate(appliedCourse);
-
-        // _context.SaveChanges();
-        // return appliedCourse;
-
         _context.Courses.Add(appliedCourse);
         _context.SaveChanges();
 
-        addDaysToCalendar(appliedCourse);
+          addDaysToCalendar(appliedCourse);
 
-        return appliedCourse; // ändra denna till _context.Courses blablabla
+        foreach(var module in appliedCourse.Modules)
+        {
+            foreach(var day in module.Module.Days)
+            {
+                foreach(var @event in day.Events)
+                {
+                    @event.DateContents = _context.CalendarDates.First(cd => cd.Date.Date == day.Date.Date).DateContent;
+                    @event.IsApplied = true;
+                }
+                day.IsApplied = true;
+            }            
+            module.Module.IsApplied = true;
+        }
+        _context.SaveChanges();
+
+        foreach(var courseModule in appliedCourse.Modules)
+        {
+            courseModule.Course = appliedCourse;
+            courseModule.CourseId = appliedCourse.Id;
+            courseModule.Module = courseModule.Module;
+            courseModule.ModuleId = courseModule.ModuleId;
+        }
+        _context.SaveChanges();
+
+        appliedCourse.moduleIds = appliedCourse.Modules.Select(m => m.ModuleId).ToList();
+        _context.SaveChanges();
+
+      
+
+        return  _context.Courses
+                                .Include(c => c.Modules)
+                                .ThenInclude(cm => cm.Module)
+                                .ThenInclude(m => m.Days)
+                                .ThenInclude(d => d.Events)
+                                .First(c => c.Id == appliedCourse.Id)
+                                    ; // ändra denna till _context.Courses blablabla
     }
 
 
