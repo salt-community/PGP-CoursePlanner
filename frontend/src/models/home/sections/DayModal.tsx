@@ -38,7 +38,7 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
             className="modal modal-open"
             onClick={handleBackdropClick}
         >
-            <div className="modal-box bg-base-100 p-0 h-3/4 w-1/3">
+            <div className="modal-box rounded-xl bg-base-100 p-0 h-3/4 w-1/3">
 
                 <div className="bg-primary w-full flex flex-col items-center p-3 ">
 
