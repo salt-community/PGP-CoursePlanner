@@ -27,7 +27,7 @@ export default function WeeksContainer() {
                 <h2 className="self-start text-3xl font-semibold mt-4 mb-5">Next Week</h2>
                 <Week data={data} isNextWeek={true} isCalendarLoading={isCalendarLoading} />
             </section>
-            {!isError && <ErrorModal error="Weeks" />}
+            {isError && <ErrorModal error="Weeks" />}
         </>
     )
 }
