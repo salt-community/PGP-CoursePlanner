@@ -25,27 +25,31 @@ import React from "react";
     
       const handleDragOver = (e: React.DragEvent, targetIndex: number) => {
         e.preventDefault();
+    
         if (draggedIndex === null || draggedIndex === targetIndex) return;
     
         setCourse((prevCourse) => {
-          const updatedModules = [...prevCourse.modules];
-          const days = [...updatedModules[moduleIndex].module.days];
-          const [draggedDay] = days.splice(draggedIndex, 1);
-          days.splice(targetIndex, 0, draggedDay);
+            const updatedModules = [...prevCourse.modules];
+            
+            const targetModule = { ...updatedModules[moduleIndex].module };
+            const days = [...targetModule.days];
     
-          updatedModules[moduleIndex].module.days = days.map((day, index) => ({
-            ...day,
-            dayNumber: index + 1, 
-          }));
+            const [draggedDay] = days.splice(draggedIndex, 1);
+            days.splice(targetIndex, 0, draggedDay);
     
-          return {
-            ...prevCourse,
-            modules: updatedModules,
-          };
+            targetModule.days = days;
+            updatedModules[moduleIndex] = { ...updatedModules[moduleIndex], module: targetModule };
+    
+            return {
+                ...prevCourse,
+                modules: updatedModules,
+            };
         });
     
         setDraggedIndex(targetIndex);
-      };
+    };
+    
+    
 
     const handleRemoveDay = (moduleIndex: number, dayIndex: number) => {
         setCourse((prevCourse) => {
