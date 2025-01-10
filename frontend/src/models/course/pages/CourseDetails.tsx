@@ -6,7 +6,7 @@ import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import DeleteBtn from "@components/buttons/DeleteBtn";
 import { Link } from "react-router-dom";
-import { getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
+import { calculateCourseDayDates, getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
 import DeployModal from "../sections/DeployModal";
 
 export default function CourseDetails() {
@@ -91,9 +91,8 @@ export default function CourseDetails() {
             </div>
 
             <div className="mt-5 flex flex-col gap-6 p-8">
-              <button className="btn">Preview</button>
               <button className="btn btn-primary" onClick={() => document.getElementById('my_DeployModal_1')!.showModal()}>Deploy Bootcamp</button>
-              <DeployModal course={course} />
+              <DeployModal course={course} modules={modules} />
             </div>
           </div>
 

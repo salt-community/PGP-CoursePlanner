@@ -38,6 +38,11 @@ export const getDateAsString = (date: Date) => {
   return format(date, "MM/dd/yyyy");
 };
 
+export const getDateAsStringYyyyMmDd = (date: Date) => {
+  return format(date, "yyyy-MM-dd");
+};
+
+
 export const today = getDateAsString(new Date());
 export const currentYear = getYear(new Date());
 export const currentMonth = getMonth(new Date());

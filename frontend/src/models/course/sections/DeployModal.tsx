@@ -7,12 +7,16 @@ import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries"
 import { useQueryModulesByCourseId } from "@api/course/courseQueries";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
+import MiniCalendar from "./MiniCalendar";
+import { ModuleType } from "@models/module/Types";
+import { stripIdsFromCourse } from "../helpers/courseUtils";
 
 type Props = {
-    course: CourseType
+    course: CourseType,
+    modules : ModuleType[]
 }
 
-export default function DeployModal({ course }: Props) {
+export default function DeployModal({ course, modules }: Props) {
 
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -27,6 +31,23 @@ export default function DeployModal({ course }: Props) {
 
 
     const handleApplyTemplate = async () => {
+
+        // const myCourse : CourseType = {
+            
+        //     name: course.name,
+        //     track: course.track,
+        //     startDate: course.startDate,
+        //     moduleIds: course.moduleIds,
+        //     modules: course.modules,
+        //     numberOfWeeks: course.numberOfWeeks,
+            
+        // } 
+
+        const myCourse = stripIdsFromCourse(course)
+
+        console.log(myCourse)
+        console.log(course)
+
         setIsInvalidDate(false);
         if (
             startDate.getDay() == 6 ||
@@ -51,7 +72,7 @@ export default function DeployModal({ course }: Props) {
                             color: color,
                             isApplied: appliedCourse.isApplied
                         };
-                        mutationUpdateAppliedCourse.mutate(newAppliedCourse);
+                        mutationUpdateAppliedCourse.mutate(myCourse);
                     })
                 );
             }
@@ -64,7 +85,7 @@ export default function DeployModal({ course }: Props) {
                 modules: [],
                 isApplied: true
             };
-            mutationPostAppliedCourse.mutate(appliedCourse);
+            mutationPostAppliedCourse.mutate(myCourse);
             navigate("/activecourses");
         }
     };
@@ -79,7 +100,7 @@ export default function DeployModal({ course }: Props) {
 
 
             <dialog id="my_DeployModal_1" className="modal">
-                <div className="modal-box">
+                <div className="modal-box flex flex-col h-[80vh] w-11/12 max-w-5xl">
                     <h3 className="font-bold text-lg">Choose a start date and deploy Bootcamp</h3>
                     <br />
 
@@ -105,22 +126,23 @@ export default function DeployModal({ course }: Props) {
                         className="input input-bordered"
                     />
                     {isInvalidDate && (
-                        <p
-                            className="error-message text-red-600 text-sm"
-                            id="invalid-helper">
+                        <p className="error-message text-red-600 text-sm" id="invalid-helper">
                             Please select a weekday for the start date
                         </p>
                     )}
                     <br />
+                    <div className="flex-grow overflow-auto">
+                        <MiniCalendar startDate={startDate} course={course} modules={modules} />
+                    </div>
                     <div className="modal-action">
                         <form method="dialog" className="flex gap-5 justify-center">
-                            {/* if there is a button in form, it will close the modal */}
                             <button className="btn">Cancel</button>
-                            <button className="btn btn-primary" onClick={handleApplyTemplate}> Deploy Bootcamp</button>
+                            <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
                         </form>
                     </div>
                 </div>
             </dialog>
+
         </>
     )
 }

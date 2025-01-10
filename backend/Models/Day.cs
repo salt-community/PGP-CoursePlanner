@@ -6,6 +6,7 @@ public class Day
     public string? Description { get; set; }
     public List<Event> Events { get; set; } = [];
     public bool IsApplied { get; set; } = false;
+    public DateTime Date {get; set;}
 
     public Day ShallowClone()
     {
@@ -13,7 +14,8 @@ public class Day
         {
             DayNumber = DayNumber,
             Description = Description,
-            IsApplied = IsApplied
+            IsApplied = IsApplied,
+            Date = Date
         };
     }
 

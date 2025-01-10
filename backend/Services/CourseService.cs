@@ -50,16 +50,16 @@ public class CourseService : IService<Course>
             .FirstOrDefaultAsync(course => course.Id == id)
             ?? throw new NotFoundByIdException("Course", id);
 
-    foreach (var courseModule in course.Modules)
-    {
-        courseModule.Module.Days = courseModule.Module.Days.OrderBy(d => d.DayNumber).ToList();
-        foreach (var day in courseModule.Module.Days)
+        foreach (var courseModule in course.Modules)
         {
-            day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
+            courseModule.Module.Days = courseModule.Module.Days.OrderBy(d => d.DayNumber).ToList();
+            foreach (var day in courseModule.Module.Days)
+            {
+                day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
+            }
         }
+        return course;
     }
-    return course;
-}
 
 
 
@@ -67,20 +67,85 @@ public class CourseService : IService<Course>
     private async Task<Course> CreateAppliedCourseAsync(Course appliedCourse)
     {
         _context.Courses.Add(appliedCourse);
-        var startDate = appliedCourse.StartDate;
         _context.SaveChanges();
 
-        int order = 1;
-        foreach (var moduleId in appliedCourse.moduleIds)
+          addDaysToCalendar(appliedCourse);
+
+        foreach(var module in appliedCourse.Modules)
         {
-            startDate = await addModuleToCourse(appliedCourse, moduleId, startDate, order);
-            order++;
+            foreach(var day in module.Module.Days)
+            {
+                foreach(var @event in day.Events)
+                {
+                    @event.DateContents = _context.CalendarDates.First(cd => cd.Date.Date == day.Date.Date).DateContent;
+                    @event.IsApplied = true;
+                }
+                day.IsApplied = true;
+            }            
+            module.Module.IsApplied = true;
         }
-        appliedCourse.EndDate = calculateEndDate(appliedCourse);
-
         _context.SaveChanges();
-        return appliedCourse;
 
+        foreach(var courseModule in appliedCourse.Modules)
+        {
+            courseModule.Course = appliedCourse;
+            courseModule.CourseId = appliedCourse.Id;
+            courseModule.Module = courseModule.Module;
+            courseModule.ModuleId = courseModule.ModuleId;
+        }
+        _context.SaveChanges();
+
+        appliedCourse.moduleIds = appliedCourse.Modules.Select(m => m.ModuleId).ToList();
+        _context.SaveChanges();
+
+      
+
+        return  _context.Courses
+                                .Include(c => c.Modules)
+                                .ThenInclude(cm => cm.Module)
+                                .ThenInclude(m => m.Days)
+                                .ThenInclude(d => d.Events)
+                                .First(c => c.Id == appliedCourse.Id)
+                                    ; // ändra denna till _context.Courses blablabla
+    }
+
+
+    private void addDaysToCalendar(Course appliedCourse)
+    {
+        foreach (var module in appliedCourse.Modules.Select(CM => CM.Module))
+        {
+            foreach (var day in module!.Days)
+            {
+                var calendarDate = _context.CalendarDates.FirstOrDefault(cd => cd.Date.Date == day.Date.Date);
+
+                var dateContent = new DateContent()
+                {
+                    CourseName = appliedCourse.Name!,
+                    ModuleName = module.Name,
+                    DayOfModule = day.DayNumber,
+                    TotalDaysInModule = module.NumberOfDays,
+                    Events = day.Events,
+                    Color = appliedCourse.Color,
+                    appliedCourseId = appliedCourse.Id,
+                };
+
+                if (calendarDate != null)
+                {
+                    calendarDate.DateContent.Add(dateContent);
+                }
+                else
+                {
+                    calendarDate = new CalendarDate
+                    {
+                        Date = day.Date.Date
+                    };
+                    _context.CalendarDates.Add(calendarDate);
+                    _context.SaveChanges();
+                    calendarDate.DateContent.Add(dateContent);
+                }
+            }
+        }
+        _context.SaveChanges();
     }
 
 
@@ -119,7 +184,7 @@ public class CourseService : IService<Course>
     //             .ThenInclude(module => module!.Days)
     //             .ThenInclude(day => day.Events)
 
-                
+
     //             .FirstOrDefaultAsync(ac => ac.Id == id)
     //             ?? throw new NotFoundByIdException("Course", appliedCourse.Id);
 
@@ -296,9 +361,9 @@ public class CourseService : IService<Course>
         var numberOfDays = _context.CalendarDates
             .Include(cd => cd.DateContent)
             .Where(cd => cd.DateContent.Any(dc => dc.appliedCourseId == course.Id)).Count();
-        
-        if(numberOfDays == 0) return course.StartDate;
-        
+
+        if (numberOfDays == 0) return course.StartDate;
+
         return course.StartDate.AddDays(numberOfDays - 1).Date;
     }
 

@@ -23,7 +23,7 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
             if (dc.moduleName != null) {
                
                 if (dc.dayOfModule != 0) {
-                    appliedModules.push(dc.moduleName! + `day (${dc.dayOfModule}/${dc.totalDaysInModule})`)
+                    appliedModules.push(dc.moduleName! + ` day(${dc.dayOfModule}/${dc.totalDaysInModule})`)
                 }
                 else {
                     appliedModules.push("Weekend")
