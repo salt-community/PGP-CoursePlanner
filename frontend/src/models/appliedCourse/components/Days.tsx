@@ -36,7 +36,10 @@ import React from "react";
     
             const [draggedDay] = days.splice(draggedIndex, 1);
             days.splice(targetIndex, 0, draggedDay);
-    
+            
+            days.forEach((day, index) =>{
+                day.dayNumber = index +1;
+            })
             targetModule.days = days;
             updatedModules[moduleIndex] = { ...updatedModules[moduleIndex], module: targetModule };
     
@@ -150,7 +153,7 @@ import React from "react";
                 <div className="collapse-title text-xl font-medium">
                     <div className="flex items-center">
                         <DotsIcon position="mr-1" size={6} />
-                        Day {dayIndex + 1} {day.description}
+                        Day {dayIndex + 1} {day.description} Day Number: {day.dayNumber}
                     </div>
                 </div>
             <div className="collapse-content border-t border-black rounded-none overflow-y-auto flex flex-col">
