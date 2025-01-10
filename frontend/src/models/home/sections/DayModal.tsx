@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { CalendarDateType } from "@models/calendar/Types";
 import PreviousBtn from "@components/buttons/PreviousBtn";
 import NextBtn from "@components/buttons/NextBtn";
+import CloseBtn from "@components/buttons/CloseBtn";
 
 export type Props = {
     modalData: CalendarDateType;
@@ -39,22 +40,17 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
         >
             <div className="modal-box bg-base-100 p-0 h-3/4 w-1/3">
 
-                <div className="bg-primary w-full flex flex-col items-center p-3 text-white">
+                <div className="bg-primary w-full flex flex-col items-center p-3 ">
 
-                    <div className="flex gap-6 mb-4 items-center">
-                        <PreviousBtn onClick={onPrev} isPrevDisabled={isPrevDisabled} />
+                    <div className="flex gap-6 mt-4 mb-4 items-center text-white">
+                        <PreviousBtn onClick={onPrev} isPrevDisabled={isPrevDisabled} color="white" />
                         {modalData &&
                             <h3 className="text-2xl min-w-52 text-center">
                                 {`${new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'short' }).format(new Date(modalData.date))}`}
                             </h3>
                         }
-                        <NextBtn onClick={onNext} isNextDisabled={isNextDisabled} />
-                        <button
-                            onClick={onClose}
-                            className="btn btn-sm btn-circle absolute right-2 top-2"
-                        >
-                            ✕
-                        </button>
+                        <NextBtn onClick={onNext} isNextDisabled={isNextDisabled} color="white" />
+                        <CloseBtn onClick={onClose} color={"white"} position={"absolute right-2 top-2"}/>
                     </div>
 
                     <label className="flex flex-col ">
