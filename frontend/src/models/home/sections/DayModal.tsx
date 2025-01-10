@@ -50,15 +50,15 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
                             </h3>
                         }
                         <NextBtn onClick={onNext} isNextDisabled={isNextDisabled} color="white" />
-                        <CloseBtn onClick={onClose} color={"white"} position={"absolute right-2 top-2"}/>
+                        <CloseBtn onClick={onClose} color="white" position="absolute right-2 top-2" hover="hover:bg-white hover:border-white"/>
                     </div>
 
                     <label className="flex flex-col ">
                         Filter Tracks
                         <select className="select select-bordered w-full max-w-xs">
                             <option disabled selected>All</option>
-                            <option>Han Solo</option>
-                            <option>Greedo</option>
+                            <option>Option</option>
+                            <option>Option</option>
                         </select>
                     </label>
 
