@@ -2,6 +2,7 @@ import { CalendarDateType } from "@models/calendar/Types";
 import { useQuery } from "@tanstack/react-query";
 import { getCalendarDate, getCalendarDateBatch, getCalendarDateWeeks } from "./calendarDateFetches";
 import { getCookie } from "@helpers/cookieHelpers";
+import { useState } from "react";
 
 export function useQueryCalendarDate(date: string) {
     const { data, isLoading, isError } = useQuery<CalendarDateType>({
@@ -18,7 +19,14 @@ export function useQueryCalendarDateWeeks(currentWeek: number) {
         queryFn: () => getCalendarDateWeeks(currentWeek),
         enabled: !!getCookie("JWT"),
     })
-    return { data, isLoading };
+    const [delayedLoading, setDelayedLoading] = useState(isLoading);
+
+    if (!isLoading) {
+        setTimeout(() => {
+            setDelayedLoading(isLoading);
+        }, 500)
+    }
+    return { data, isLoading: delayedLoading };
 }
 
 export function useQueryCalendarDateBatch(startDate: string, endDate: string) {

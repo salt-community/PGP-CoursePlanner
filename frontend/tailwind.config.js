@@ -43,6 +43,10 @@ export default {
             "background-color": "#DB5472",
             "color": "#fff",
           },
+
+          ".skeleton": {
+            "animation": "skeleton 1s ease-in-out infinite"
+          }
         },
       },
     ],
