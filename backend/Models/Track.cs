@@ -1,0 +1,13 @@
+
+using System.ComponentModel.DataAnnotations;
+
+namespace backend.Models;
+
+public class Track
+{
+    public int Id;
+    [Required]
+    public string Name {get; set;} = null!;
+    [Required] 
+    public string Color {get; set;} = null!;
+}
