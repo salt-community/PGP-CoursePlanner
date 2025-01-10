@@ -4,6 +4,7 @@ import { weekDays, getDateAsString, today } from "@helpers/dateHelpers";
 import { CalendarDateType } from "@models/calendar/Types";
 import { format, getWeek } from "date-fns";
 import WeekDay from "@models/calendar/sections/WeekDay";
+import LoadingSkeleton from "../components/LoadingSkeleton";
 
 interface WeekProps {
     data: CalendarDateType[] | undefined;
@@ -66,24 +67,19 @@ export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps)
         const textClasses = "text-lg";
         const isTodayTextClasses = isToday && "text-xl font-bold text-primary";
         const formattedDay = getDateAsString(day);
-        
+
         return (
             <section
                 key={formattedDay}
                 className={`${commonClasses} ${borderClasses} ${backgroundClasses} ${!isCalendarLoading && hoverClasses}`}
-                onClick={isCalendarLoading ? () => {} : () => openModal(index)}
+                onClick={isCalendarLoading ? () => { } : () => openModal(index)}
             >
                 <h2 className={`item-center text-center ${textClasses} ${isTodayTextClasses}`}>
                     {format(formattedDay, "EEEE")}<br />
                     {day.getDate()} {monthNames[day.getMonth()]}
                 </h2>
                 {isCalendarLoading ?
-                    <div className="flex flex-col gap-12 p-4">
-                        <div className="skeleton h-4 w-full mt-12"></div>
-                        <div className="skeleton h-4 w-full"></div>
-                        <div className="skeleton h-4 w-full"></div>
-                        <div className="skeleton h-4 w-full"></div>
-                    </div>
+                    <LoadingSkeleton />
                     :
                     <>
                         {data && data[index] !== null ? <WeekDay dateContent={data[index].dateContent} /> : ""}
