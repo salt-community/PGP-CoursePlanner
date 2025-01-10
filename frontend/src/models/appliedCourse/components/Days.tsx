@@ -153,7 +153,7 @@ import React from "react";
                 <div className="collapse-title text-xl font-medium">
                     <div className="flex items-center">
                         <DotsIcon position="mr-1" size={6} />
-                        Day {dayIndex + 1} {day.description} Day Number: {day.dayNumber}
+                        Day {dayIndex + 1} {day.description}
                     </div>
                 </div>
             <div className="collapse-content border-t border-black rounded-none overflow-y-auto flex flex-col">
