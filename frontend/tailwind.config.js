@@ -9,7 +9,7 @@ export default {
     themes: [
       {
         mytheme: {
-          primary: "#ff7961",
+          primary: "#F35C7E",
 
           "primary-content": "#FF9886",
 
@@ -46,6 +46,10 @@ export default {
 
           ".skeleton": {
             "animation": "skeleton 1s ease-in-out infinite"
+          },
+
+          ".btn-primary, .btn-secondary": {
+            "color": "#fff",
           }
         },
       },

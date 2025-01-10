@@ -2,7 +2,7 @@ type Props = {
     onClick: () => void
     color?: string
     hover?: string
-    position?: string
+    position: string
 }
 
 export default function CloseBtn({ onClick, color, hover, position }: Props) {

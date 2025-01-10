@@ -14,7 +14,7 @@ export function useQueryCalendarDate(date: string) {
 }
 
 export function useQueryCalendarDateWeeks(currentWeek: number) {
-    const { data, isLoading } = useQuery<CalendarDateType[]>({
+    const { data, isLoading, isError } = useQuery<CalendarDateType[]>({
         queryKey: ['calendarWeeks'],
         queryFn: () => getCalendarDateWeeks(currentWeek),
         enabled: !!getCookie("JWT"),
@@ -26,7 +26,7 @@ export function useQueryCalendarDateWeeks(currentWeek: number) {
             setDelayedLoading(isLoading);
         }, 500)
     }
-    return { data, isLoading: delayedLoading };
+    return { data, isLoading: delayedLoading, isError };
 }
 
 export function useQueryCalendarDateBatch(startDate: string, endDate: string) {

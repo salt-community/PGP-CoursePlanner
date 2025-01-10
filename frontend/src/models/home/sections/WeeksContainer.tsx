@@ -2,10 +2,11 @@ import { currentWeek } from "@helpers/dateHelpers"
 import { useQueryCalendarDateWeeks } from "@api/calendarDate/calendarDateQueries"
 import Week from "./Week"
 import Header from "@components/Header"
+import ErrorModal from "@components/ErrorModal";
 
 export default function WeeksContainer() {
 
-    const { data, isLoading: isCalendarLoading } = useQueryCalendarDateWeeks(currentWeek);
+    const { data, isLoading: isCalendarLoading, isError } = useQueryCalendarDateWeeks(currentWeek);
 
     return (
         <>
@@ -26,6 +27,7 @@ export default function WeeksContainer() {
                 <h2 className="self-start text-3xl font-semibold mt-4 mb-5">Next Week</h2>
                 <Week data={data} isNextWeek={true} isCalendarLoading={isCalendarLoading} />
             </section>
+            {!isError && <ErrorModal error="Weeks" />}
         </>
     )
 }
