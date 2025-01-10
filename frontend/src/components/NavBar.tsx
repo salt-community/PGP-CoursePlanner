@@ -114,7 +114,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
 
         <h2 className={`pt-6 pr-2 pb-3 pl-6 font-semibold text-xl text-left whitespace-nowrap ${isSidebarExpanded ? "" : "invisible"}`}>Active Bootcamps</h2>
         {activeCourses.map((course) => (
-          <li className="hover:rounded-none">
+          <li className="hover:rounded-none" key={course.id}>
             <NavLink
               to={`/activecourses/details/${course.id}`}
               className={({ isActive }) => isActive && bootcampDetailsIsActive ? "flex pl-6 text-xl bg-primary-content rounded-none" : "flex pl-6 text-xl rounded-none"}>

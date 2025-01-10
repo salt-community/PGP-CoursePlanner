@@ -4,13 +4,15 @@ import { weekDays, getDateAsString, today } from "@helpers/dateHelpers";
 import { CalendarDateType } from "@models/calendar/Types";
 import { format, getWeek } from "date-fns";
 import WeekDay from "@models/calendar/sections/WeekDay";
+import LoadingSkeleton from "../components/LoadingSkeleton";
 
 interface WeekProps {
     data: CalendarDateType[] | undefined;
     isNextWeek: boolean;
+    isCalendarLoading: boolean
 }
 
-export default function Week({ data, isNextWeek }: WeekProps) {
+export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps) {
     const [currentIndex, setCurrentIndex] = useState<number | null>(null);
 
     const thisWeek = getWeek(new Date());
@@ -58,30 +60,38 @@ export default function Week({ data, isNextWeek }: WeekProps) {
             day = weekAheadDay;
             isToday = false;
         }
-        const commonClasses = "flex flex-col w-full gap-3 p-3";
-        const borderClasses = isToday ? "border-2 border-primary" : "border-l border-accent";
+        const commonClasses = "flex flex-col w-full gap-3 p-3 min-h-[400px]";
+        const hoverClasses = "hover:bg-[#F9F9F9] hover:cursor-pointer  hover:scale-[1.03] hover:border-l hover:border-r transition-transform duration-200";
+        const borderClasses = "border-l-[0.5px] border-3-[0.5px] border-accent";
         const backgroundClasses = "bg-white";
-        const textClasses = isToday ? "text-xl font-bold text-primary" : "text-lg";
+        const textClasses = "text-lg";
+        const isTodayTextClasses = isToday && "text-xl font-bold text-primary";
         const formattedDay = getDateAsString(day);
 
         return (
             <section
-                key={format(day, "d")}
-                className={`${commonClasses} ${borderClasses} ${backgroundClasses}`}
-                onClick={() => openModal(index)}
+                key={formattedDay}
+                className={`${commonClasses} ${borderClasses} ${backgroundClasses} ${!isCalendarLoading && hoverClasses}`}
+                onClick={isCalendarLoading ? () => { } : () => openModal(index)}
             >
-                <h1 className={`item-center text-center ${textClasses}`}>
+                <h2 className={`item-center text-center ${textClasses} ${isTodayTextClasses}`}>
                     {format(formattedDay, "EEEE")}<br />
                     {day.getDate()} {monthNames[day.getMonth()]}
-                </h1>
-                {data && data[index] !== null ? <WeekDay dateContent={data[index].dateContent} /> : ""}
+                </h2>
+                {isCalendarLoading ?
+                    <LoadingSkeleton />
+                    :
+                    <>
+                        {data && data[index] !== null ? <WeekDay dateContent={data[index].dateContent} /> : ""}
+                    </>
+                }
             </section>
         );
     };
 
     return (
         <>
-            <section className="flex w-full justify-between m-5 mt-0 rounded-xl bg-accent overflow-hidden drop-shadow-xl">
+            <section className="flex w-full justify-between m-5 mt-0 rounded-xl bg-accent drop-shadow-xl">
                 <p className="p-2 text-lg">{!isNextWeek ? thisWeek : nextWeek}</p>
                 {weekDays.map((day, index) => renderSection(day, index, getDateAsString(day) === today))}
             </section>

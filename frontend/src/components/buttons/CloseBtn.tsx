@@ -1,11 +1,14 @@
 type Props = {
     onClick: () => void
+    color?: string
+    hover?: string
+    position?: string
 }
 
-export default function CloseBtn({ onClick }: Props) {
+export default function CloseBtn({ onClick, color, hover, position }: Props) {
     return (
-        <button>
-            <svg onClick={onClick} xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        <button onClick={onClick} className={`btn btn-sm btn-circle btn-outline ${color && "border-" + color} ${hover} ${position}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="p-1 hover:stroke-primary" fill="none" viewBox="0 0 24 24" stroke={color ? color : "currentColor"}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
     )
 }
