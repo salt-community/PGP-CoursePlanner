@@ -1,7 +1,7 @@
 import { ModuleType } from "@models/module/Types";
 import { CourseType } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
-import {getDateAsString} from "@helpers/dateHelpers"
+import {getDateAsStringYyyyMmDd} from "@helpers/dateHelpers"
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
   return modules.some((module, idx) =>
@@ -43,7 +43,7 @@ export const calculateCourseDayDates = (
       }
       // console.log(`Module ${i + 1}, Day ${j + 1}:`, currentDate.toDateString());
       // modules[i].days[j].date = new Date(currentDate);
-      course.modules[i].module.days[j].date = getDateAsString(new Date(currentDate))
+      course.modules[i].module.days[j].date = getDateAsStringYyyyMmDd(new Date(currentDate))
       calendarDateTypes.push({
         date: new Date(currentDate),
         dateContent: [
