@@ -34,6 +34,8 @@ export const calculateCourseDayDates = (
   const calendarDateTypes: CalendarDateType[] = [];
   // Create a copy of the startDate to avoid mutating the original date
   const currentDate = new Date(startDate);
+  course.startDate = new Date(startDate)
+  console.log("StartDate: ",startDate)
 
   for (let i = 0; i < modules.length; i++) {
     for (let j = 0; j < modules[i].numberOfDays; j++) {
@@ -43,13 +45,14 @@ export const calculateCourseDayDates = (
       }
       // console.log(`Module ${i + 1}, Day ${j + 1}:`, currentDate.toDateString());
       // modules[i].days[j].date = new Date(currentDate);
-      course.modules[i].module.days[j].date = getDateAsStringYyyyMmDd(new Date(currentDate))
+      course.modules[i].module.days[j].date = new Date(currentDate)
+      course.endDate = new Date(currentDate)
       calendarDateTypes.push({
         date: new Date(currentDate),
         dateContent: [
           {
             dayOfModule: modules[i].days[j].dayNumber,
-            totalDaysInModule: modules[i].numberOfDays,
+            totalDaysInModule: modules[i].numberOfDays, 
             courseName: course.name,
             events: modules[i].days[j].events,
             color: course.color ? course.color : "#777777",
@@ -68,9 +71,16 @@ export const calculateCourseDayDates = (
 /**
  * Utility function to deeply remove `id` property from objects.
  */
+/**
+ * Utility function to deeply remove `id` property from objects.
+ */
 export function deepRemoveId<T extends Record<string, any>>(obj: T): any {
   if (Array.isArray(obj)) {
     return obj.map((item) => deepRemoveId(item));
+  }
+
+  if (obj instanceof Date) {
+    return obj; // Return Date objects as-is
   }
 
   if (typeof obj === "object" && obj !== null) {
@@ -83,6 +93,7 @@ export function deepRemoveId<T extends Record<string, any>>(obj: T): any {
 
   return obj; // Primitive values are returned as-is
 }
+
 
 /**
  * Strip `id` recursively from a CourseType object.

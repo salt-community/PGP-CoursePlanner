@@ -66,20 +66,21 @@ public class CourseService : IService<Course>
 
     private async Task<Course> CreateAppliedCourseAsync(Course appliedCourse)
     {
-        _context.Courses.Add(appliedCourse);
-        var startDate = appliedCourse.StartDate;
-        _context.SaveChanges();
+        // _context.Courses.Add(appliedCourse);
+        // var startDate = appliedCourse.StartDate;
+        // _context.SaveChanges();
 
-        int order = 1;
-        foreach (var moduleId in appliedCourse.moduleIds)
-        {
-            startDate = await addModuleToCourse(appliedCourse, moduleId, startDate, order);
-            order++;
-        }
-        appliedCourse.EndDate = calculateEndDate(appliedCourse);
+        // int order = 1;
+        // foreach (var moduleId in appliedCourse.moduleIds)
+        // {
+        //     startDate = await addModuleToCourse(appliedCourse, moduleId, startDate, order);
+        //     order++;
+        // }
+        // appliedCourse.EndDate = calculateEndDate(appliedCourse);
 
-        _context.SaveChanges();
-        return appliedCourse;
+        // _context.SaveChanges();
+        // return appliedCourse;
+       return await UpdateAppliedAsync(0, appliedCourse);
 
     }
 

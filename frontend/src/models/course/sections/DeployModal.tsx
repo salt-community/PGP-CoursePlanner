@@ -31,7 +31,6 @@ export default function DeployModal({ course, modules }: Props) {
 
 
     const handleApplyTemplate = async () => {
-        console.log(course)
 
         // const myCourse : CourseType = {
             
@@ -45,6 +44,9 @@ export default function DeployModal({ course, modules }: Props) {
         // } 
 
         const myCourse = stripIdsFromCourse(course)
+
+        console.log(myCourse)
+        console.log(course)
 
         setIsInvalidDate(false);
         if (
