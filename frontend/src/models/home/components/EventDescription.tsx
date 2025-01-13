@@ -17,9 +17,7 @@ export default function EventDescription({ description }: Prop) {
 
     return (
         <div className="pl-6">
-            <div className="overflow-hidden" >
-                <p ref={refScrollHeight} className={`overflow-hidden font-light ${!expanded && 'line-clamp-1'}`}>{description}</p>
-            </div>
+            <p ref={refScrollHeight} className={`font-light ${!expanded && 'line-clamp-1'}`}>{description}</p>
             {showReadMore &&
                 <button
                     className="text-blue-800 min-w-fit"
