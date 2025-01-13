@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { CalendarDateType } from "@models/calendar/Types";
 import PreviousBtn from "@components/buttons/PreviousBtn";
 import NextBtn from "@components/buttons/NextBtn";
 import CloseBtn from "@components/buttons/CloseBtn";
+import EventDescription from "../components/EventDescription";
 
 export type Props = {
     modalData: CalendarDateType;
@@ -14,7 +15,6 @@ export type Props = {
 };
 
 export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, isNextDisabled }: Props) {
-    const [expanded, setExpanded] = useState(false);
     // Close modal when clicking on the backdrop
     const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if ((e.target as HTMLElement).classList.contains("modal")) {
@@ -67,7 +67,7 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
                                     {content.events.length > 0 ? (
                                         content.events.map((event) => (
                                             <div key={event.id ?? event.name} className="pb-2 mb-2">
-                                                <div className="flex items-center gap-2 justify-between">
+                                                <div className="flex items-center gap-2 justify-between min-w-96">
                                                     <div className="flex items-center gap-2">
                                                         <div
                                                             style={{
@@ -84,15 +84,7 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
                                                     </p>
                                                 </div>
                                                 {event.description && (
-                                                    <div className={`max-h-48 overflow-hidden transition-all duration-500 ${expanded ? 'max-h-screen' : ''}`}>
-                                                        <p className="pl-6 font-light">{"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."}</p>
-                                                        <button
-                                                            className="btn btn-primary btn-sm text-sm font-bold uppercase"
-                                                            onClick={() => setExpanded(!expanded)}
-                                                        >
-                                                            {expanded ? 'Read Less' : 'Read More'}
-                                                        </button>
-                                                    </div>
+                                                    <EventDescription description={event.description} />
                                                 )}
                                             </div>
                                         ))
