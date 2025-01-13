@@ -46,15 +46,17 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
                         {format(date, 'd')}
                     </h2>
                 </div>
-                {appliedCourseColors.length > 0 && appliedCourseColors.map((color, appliedCourseIndex) => (
-                    <div
-                        key={appliedCourseIndex}
-                        style={{ backgroundColor: color }}
-                        className="flex justify-center items-center w-full h-7 text-clip overflow-hidden whitespace-nowrap rounded-md"
-                    >
-                        <p className="truncate ">{appliedModules[appliedCourseIndex]}</p>
-                    </div>
-                ))}
+                <div className="flex flex-col gap-1 w-full">
+                    {appliedCourseColors.length > 0 && appliedCourseColors.map((color, appliedCourseIndex) => (
+                        <div
+                            key={appliedCourseIndex}
+                            style={{ backgroundColor: color }}
+                            className="flex justify-center items-center w-full h-7s text-clip overflow-hidden whitespace-nowrap rounded-md"
+                        >
+                            <p className="truncate ">{appliedModules[appliedCourseIndex]}</p>
+                        </div>
+                    ))}
+                </div>
             </button>
         </>
     )

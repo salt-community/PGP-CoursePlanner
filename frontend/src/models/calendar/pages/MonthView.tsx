@@ -79,7 +79,7 @@ export default function MonthView() {
                 </div>
             </Header>
 
-            <section className="flex flex-grow shadow-xl drop-shadow-2xl bg-white rounded-md">
+            <section className="flex flex-grow shadow-xl drop-shadow-2xl bg-white rounded-md border-l-[0.5px] border-r-[0.5px] border-b-[0.5px] border-gray-100">
                 <div className="flex flex-col items-center w-full">
                     <div className="w-full grid grid-cols-7">
                         {fullWeek.map(day => (
@@ -88,7 +88,7 @@ export default function MonthView() {
                     </div>
                     <div className={`w-full flex-grow break-normal grid grid-cols-7 ${numberOfRows}`}>
                         {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
-                            <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-full border-t-2 border-gray-100"></div>
+                            <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-full border-t-[0.5px] border-b-[0.5px] border-gray-100"></div>
                         ))}
                         {daysInMonth.map((thisDate, dateIndex) => {
                             return <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
