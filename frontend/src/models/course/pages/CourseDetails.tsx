@@ -33,7 +33,7 @@ export default function CourseDetails() {
 
         <section className="grid grid-rows-9 grid-cols-9 h-screen bg-white m-5 rounded-lg overflow-hidden drop-shadow-xl">
           {/* First Row, First Column */}
-          <div className="row-span-1 col-span-2 bg-yellow-500 text-center flex items-center justify-center">
+          <div className="row-span-1 col-span-2 bg-yellow-500 text-center flex items-center justify-center" style={ {backgroundColor: course.color} }>
             <h2 className="text-3xl">{course?.name || "Course Name"}</h2>
           </div>
 

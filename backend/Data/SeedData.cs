@@ -253,7 +253,7 @@ public static class SeedData
 
             List<List<int>> course_moduleIds = [[1, 2, 3], [1, 2, 3, 4], [1, 3, 4]];
 
-            List<Track> tracks = [new Track {Name = "Java", Color = "#D73A24"}, new Track {Name = "Dotnet", Color="#512BD4"}, new Track {Name = "Javascript", Color = "#F7DF1E"}];
+            List<Track> tracks = [new Track {Name = "Java", Color = "#D73A24"},  new Track {Name = "Javascript", Color = "#F7DF1E"}, new Track {Name = "Dotnet", Color="#512BD4"}];
 
      
 
