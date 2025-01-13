@@ -34,7 +34,6 @@ export const calculateCourseDayDates = (
   // Create a copy of the startDate to avoid mutating the original date
   const currentDate = new Date(startDate);
   course.startDate = new Date(startDate);
-  console.log("StartDate: ", startDate);
 
   for (let i = 0; i < modules.length; i++) {
     for (let j = 0; j < modules[i].numberOfDays; j++) {
@@ -78,25 +77,19 @@ export const moveDay = (
   course: CourseType,
   pushForward: boolean
 ) => {
-  //if positive, targetDate is after current
-  const dateDifference = getDifferenceInDays(currentDate, targetDate);
+  const days = course.modules.flatMap(m => m.module.days) 
+  
+  
+  days.forEach(day => { 
+    if(day.date.getTime() < targetDate.getTime())
+    day.date = targetDate
+  
+  })
 
-  //console.log(dateDifference);
 
-  // vi vill flytta startdatumet en dag framåt och byta plats med datumet framför
-  const dayArray = course.modules.flatMap((m) => m.module.days);
-  //const idk = modules.find(m =>m.days.indexOf({..days, })))
 
-  dayArray.forEach((day) => {
-    day.date = new Date(
-    targetDate
-    );
-  });
-
-  console.log("goofy course:", course.modules.map(m => m.module.days.map(d => d.date)))
-  console.log("goofy course 2: ", course)
-};
-
+  console.log("yo ", days.map(d => d.date));
+}
 /**
  * Utility function to deeply remove `id` property from objects.
  */
