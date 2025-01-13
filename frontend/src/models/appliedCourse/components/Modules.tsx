@@ -14,6 +14,13 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [collapseOpen, setCollapseOpen] = useState<Record<number, boolean>>({});
 
+  const toggleCollapse = (index: number) => {
+    setCollapseOpen((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index],
+    }));
+  };
+
   const handleDragStart = (index: number) => {
     setDraggedIndex(index);
   };
@@ -83,13 +90,6 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
         modules: updatedModules,
       };
     });
-  };
-
-  const toggleCollapse = (index: number) => {
-    setCollapseOpen((prevState) => ({
-      ...prevState,
-      [index]: !prevState[index],
-    }));
   };
 
   return (
