@@ -2,6 +2,7 @@ using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
+using backend.Models.DTOs;
 
 namespace backend.Controllers;
 
@@ -18,24 +19,24 @@ public class CoursesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
+    public async Task<ActionResult<IEnumerable<CourseResponse>>> GetCourses()
     {
         var response = await _service.GetAllAsync();
-        return Ok(response.Where(x => x.IsApplied == false));
+        return Ok(response.Where(x => x.IsApplied == false).Select(c => (CourseResponse) c));
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Course>> GetCourse(int id)
+    public async Task<ActionResult<CourseResponse>> GetCourse(int id)
     {
         var response = await _service.GetOneAsync(id);
-        return Ok(response);
+        return Ok((CourseResponse)response);
     }
 
     [HttpPost]
-    public async Task<ActionResult<Course>> CreateCourse([FromBody] Course course)
+    public async Task<ActionResult<CourseResponse>> CreateCourse([FromBody] Course course)
     {
         var response = await _service.CreateAsync(course);
-        return CreatedAtAction("GetCourse", new { id = response.Id }, response);
+        return CreatedAtAction("GetCourse", new { id = response.Id }, (CourseResponse) response);
     }
 
     [HttpPut("{id}")]
@@ -53,10 +54,10 @@ public class CoursesController : ControllerBase
     }
 
     [HttpGet("ModulesByCourse/{id}")]
-    public async Task<IEnumerable<Module>> GetModulesByCourseId(int id)
+    public async Task<IEnumerable<ModuleResponse>> GetModulesByCourseId(int id)
     {
         var course = await _service.GetOneAsync(id);
-        return course.Modules.Select(m => m.Module!).OrderBy(m => course.moduleIds.IndexOf(m.Id));
+        return course.Modules.Select(m => m.Module!).OrderBy(m => course.moduleIds.IndexOf(m.Id)).Select(m => (ModuleResponse) m);
 
     }
 

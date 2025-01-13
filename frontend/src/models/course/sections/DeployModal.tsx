@@ -4,7 +4,6 @@ import { CourseType } from "../Types";
 import { useMutationPostAppliedCourse, useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import { useNavigate } from "react-router-dom";
 import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
-import { useQueryModulesByCourseId } from "@api/course/courseQueries";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import MiniCalendar from "./MiniCalendar";
@@ -20,28 +19,17 @@ export default function DeployModal({ course, modules }: Props) {
 
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
-    const color = "#992233"
 
     const mutationPostAppliedCourse = useMutationPostAppliedCourse();
     const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
     const navigate = useNavigate();
 
     const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
-    const { data: courseModules, isLoading: isLoadingCourseModules, isError: isErrorCourseModules } = useQueryModulesByCourseId(course.id!);
 
 
     const handleApplyTemplate = async () => {
 
-        // const myCourse : CourseType = {
-            
-        //     name: course.name,
-        //     track: course.track,
-        //     startDate: course.startDate,
-        //     moduleIds: course.moduleIds,
-        //     modules: course.modules,
-        //     numberOfWeeks: course.numberOfWeeks,
-            
-        // } 
+ 
 
         const myCourse = stripIdsFromCourse(course)
 
@@ -60,31 +48,11 @@ export default function DeployModal({ course, modules }: Props) {
                 (m) => m.id! == course!.id
             );
             if (appliedCoursesWithCourseId.length > 0) {
-                await Promise.all(
-                    appliedCoursesWithCourseId!.map(async (appliedCourse) => {
-                        const newAppliedCourse: CourseType = {
-                            id: appliedCourse.id,
-                            name: appliedCourse.name,
-                            startDate: appliedCourse.startDate,
-                            endDate: appliedCourse.endDate,
-                            moduleIds: appliedCourse.moduleIds,
-                            modules: appliedCourse.modules,
-                            color: color,
-                            isApplied: appliedCourse.isApplied
-                        };
-                        mutationUpdateAppliedCourse.mutate(myCourse);
-                    })
-                );
+           
+                mutationUpdateAppliedCourse.mutate(myCourse);
             }
 
-            const appliedCourse: CourseType = {
-                name: course?.name ?? "",
-                startDate: startDate,
-                color: color,
-                moduleIds: courseModules?.map(m => m.id!),
-                modules: [],
-                isApplied: true
-            };
+           
             mutationPostAppliedCourse.mutate(myCourse);
             navigate("/activecourses");
         }
@@ -93,10 +61,10 @@ export default function DeployModal({ course, modules }: Props) {
 
     return (
         <>
-            {(isLoadingCourseModules || isLoadingAppliedCourses) && (
+            {(isLoadingAppliedCourses) && (
                 <LoadingMessage />
             )}
-            {(isErrorCourseModules || isErrorAppliedCourses) && <ErrorMessage />}
+            {(  isErrorAppliedCourses) && <ErrorMessage />}
 
 
             <dialog id="my_DeployModal_1" className="modal">

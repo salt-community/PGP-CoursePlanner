@@ -24,6 +24,7 @@ public class CourseService : IService<Course>
                 .ThenInclude(courseModule => courseModule.Module)
                 .ThenInclude(module => module!.Days)
                 .ThenInclude(day => day.Events)
+            .Include(c => c.Track)
                 .ToListAsync();
 
         foreach (var course in courses)
@@ -47,6 +48,7 @@ public class CourseService : IService<Course>
                 .ThenInclude(courseModule => courseModule.Module)
                 .ThenInclude(module => module!.Days)
                 .ThenInclude(day => day.Events)
+            .Include(c => c.Track)
             .FirstOrDefaultAsync(course => course.Id == id)
             ?? throw new NotFoundByIdException("Course", id);
 
@@ -69,24 +71,24 @@ public class CourseService : IService<Course>
         _context.Courses.Add(appliedCourse);
         _context.SaveChanges();
 
-          addDaysToCalendar(appliedCourse);
+        addDaysToCalendar(appliedCourse);
 
-        foreach(var module in appliedCourse.Modules)
+        foreach (var module in appliedCourse.Modules)
         {
-            foreach(var day in module.Module.Days)
+            foreach (var day in module.Module.Days)
             {
-                foreach(var @event in day.Events)
+                foreach (var @event in day.Events)
                 {
                     @event.DateContents = _context.CalendarDates.First(cd => cd.Date.Date == day.Date.Date).DateContent;
                     @event.IsApplied = true;
                 }
                 day.IsApplied = true;
-            }            
+            }
             module.Module.IsApplied = true;
         }
         _context.SaveChanges();
 
-        foreach(var courseModule in appliedCourse.Modules)
+        foreach (var courseModule in appliedCourse.Modules)
         {
             courseModule.Course = appliedCourse;
             courseModule.CourseId = appliedCourse.Id;
@@ -98,13 +100,14 @@ public class CourseService : IService<Course>
         appliedCourse.moduleIds = appliedCourse.Modules.Select(m => m.ModuleId).ToList();
         _context.SaveChanges();
 
-      
 
-        return  _context.Courses
+
+        return _context.Courses
                                 .Include(c => c.Modules)
-                                .ThenInclude(cm => cm.Module)
-                                .ThenInclude(m => m.Days)
-                                .ThenInclude(d => d.Events)
+                                    .ThenInclude(cm => cm.Module)
+                                    .ThenInclude(m => m.Days)
+                                    .ThenInclude(d => d.Events)
+                                .Include(c => c.Track)
                                 .First(c => c.Id == appliedCourse.Id)
                                     ; // ändra denna till _context.Courses blablabla
     }
@@ -209,6 +212,7 @@ public class CourseService : IService<Course>
     private async Task<Course> UpdateAppliedAsync(int id, Course appliedCourse)
     {
         var appliedCourseToUpdate = await _context.Courses
+            .Include(c => c.Track)
             .Include(c => c.Modules)
                 .ThenInclude(cm => cm.Module)
                 .ThenInclude(m => m.Days)

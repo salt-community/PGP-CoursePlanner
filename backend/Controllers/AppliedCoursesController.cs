@@ -1,4 +1,5 @@
 using backend.Models;
+using backend.Models.DTOs;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,27 +19,27 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Course>> CreateAppliedCourse(Course appliedCourse)
+        public async Task<ActionResult<CourseResponse>> CreateAppliedCourse(Course appliedCourse)
         {
             appliedCourse.IsApplied = true;
             await _service.CreateAsync(appliedCourse);
-            return CreatedAtAction("GetAppliedCourse", new { id = appliedCourse.Id }, appliedCourse);
+            return CreatedAtAction("GetAppliedCourse", new { id = appliedCourse.Id }, (CourseResponse) appliedCourse);
         }
 
         [HttpGet("{id}")]
 
-        public async Task<ActionResult<Course>> GetAppliedCourse(int id)
+        public async Task<ActionResult<CourseResponse>> GetAppliedCourse(int id)
         {
             var response = await _service.GetOneAsync(id);
-            return Ok(response);
+            return Ok((CourseResponse)response);
 
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Course>>> GetAppliedCourses()
+        public async Task<ActionResult<IEnumerable<CourseResponse>>> GetAppliedCourses()
         {
             var response = await _service.GetAllAsync();
-            return Ok(response.Where(x => x.IsApplied == true));
+            return Ok(response.Where(x => x.IsApplied == true).Select(c => (CourseResponse) c));
         }
 
         [HttpDelete("{id}")]

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace backend.Models
@@ -5,6 +6,8 @@ namespace backend.Models
     public class Course
     {
         public int Id {get; set; }
+        [Required]
+        public Track Track {get; set;} = null!;
         public string? Name {get; set;}
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

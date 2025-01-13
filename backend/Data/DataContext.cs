@@ -23,6 +23,8 @@ namespace backend.Data
         public DbSet<DateContent> DateContent { get; set; }
         public DbSet<LoggedInUser> LoggedInUser { get; set; }
 
+        public DbSet<Track> Tracks {get; set;}
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

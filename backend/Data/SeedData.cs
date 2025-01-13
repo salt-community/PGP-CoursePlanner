@@ -1,6 +1,7 @@
 using backend.Data;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop.Infrastructure;
 
 public static class SeedData
 {
@@ -252,6 +253,10 @@ public static class SeedData
 
             List<List<int>> course_moduleIds = [[1, 2, 3], [1, 2, 3, 4], [1, 3, 4]];
 
+            List<Track> tracks = [new Track {Name = "Java", Color = "#D73A24"},  new Track {Name = "Javascript", Color = "#F7DF1E"}, new Track {Name = "Dotnet", Color="#512BD4"}];
+
+     
+
             for (var i = 0; i < course_names.Length; i++)
             {
                 var courseModules = new List<CourseModule>();
@@ -264,13 +269,18 @@ public static class SeedData
                     };
                     courseModules.Add(courseModuleElement);
                 }
+
+                _context.Tracks.Add(tracks[i]);
+                _context.SaveChanges();
+
                 var course = new Course
                 {
                     Name = course_names[i],
                     NumberOfWeeks = course_numOfWeeks[i],
                     moduleIds = course_moduleIds[i],
                     Modules = courseModules,
-                    IsApplied = false
+                    IsApplied = false,
+                    Track = tracks[i]
                 };
                 _context.Courses.Add(course);
                 _context.SaveChanges();
