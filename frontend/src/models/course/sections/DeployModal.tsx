@@ -8,7 +8,7 @@ import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import MiniCalendar from "./MiniCalendar";
 import { ModuleType } from "@models/module/Types";
-import { stripIdsFromCourse } from "../helpers/courseUtils";
+import { moveDay, stripIdsFromCourse } from "../helpers/courseUtils";
 
 type Props = {
     course: CourseType,
@@ -58,6 +58,10 @@ export default function DeployModal({ course, modules }: Props) {
         }
     };
 
+    const startDatePlus2 = new Date(startDate)
+    startDatePlus2.setDate(startDatePlus2.getDate() +4)
+
+    moveDay(startDate, startDatePlus2, course, false)
 
     return (
         <>
