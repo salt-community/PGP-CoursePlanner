@@ -12,6 +12,7 @@ interface ModulesProps {
 
 const Modules = ({ course, setCourse }: ModulesProps) => {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [collapseOpen, setCollapseOpen] = useState<Record<number, boolean>>({});
 
   const handleDragStart = (index: number) => {
     setDraggedIndex(index);
@@ -84,70 +85,83 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
     });
   };
 
+  const toggleCollapse = (index: number) => {
+    setCollapseOpen((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index],
+    }));
+  };
+
   return (
     <div>
       {course.modules
-        .slice() 
-        .sort((a, b) => a.module.order - b.module.order) 
+        .slice()
+        .sort((a, b) => a.module.order - b.module.order)
         .map((courseModule, moduleIndex) => (
           <div
             key={moduleIndex}
             className={`bg-base-100 flex space-between mb-4 rounded-r-lg border-r border-b border-black ${
               draggedIndex === moduleIndex ? "dragging" : ""
             }`}
-            draggable
+            draggable={!collapseOpen[moduleIndex]} 
             onDragStart={() => handleDragStart(moduleIndex)}
             onDragEnd={handleDragEnd}
             onDragOver={(e) => handleDragOver(e, moduleIndex)}
             style={{
-              opacity: draggedIndex === moduleIndex ? 0.5 : 1, 
-              cursor: "move", 
+              opacity: draggedIndex === moduleIndex ? 0.5 : 1,
+              cursor: collapseOpen[moduleIndex] ? "default" : "move", 
             }}
           >
-            <div className="collapse border-t  border-l border-black rounded-none">
-              <input type="checkbox" />
+            <div className="collapse border-t border-l border-black rounded-none">
+              <input
+                type="checkbox"
+                checked={!!collapseOpen[moduleIndex]}
+                onChange={() => toggleCollapse(moduleIndex)}
+              />
               <div className="collapse-title text-xl font-medium border-b border-black">
                 <div className="flex items-center">
                   <DotsIcon position="mr-1" size={6} />
                   {courseModule.module.name}
                 </div>
               </div>
-              <div className="collapse-content max-w-full">
-                <div className="p-4">
-                  <label>
-                    Module Name:
-                    <input
-                      type="text"
-                      value={courseModule.module.name}
-                      onChange={(e) => {
-                        const updatedModules = [...course.modules];
-                        updatedModules[moduleIndex].module.name =
-                          e.target.value;
-                        setCourse({ ...course, modules: updatedModules });
-                      }}
-                      style={{ padding: "5px", border: "1px solid gray" }}
-                    />
-                  </label>
+              {collapseOpen[moduleIndex] && (
+                <div className="collapse-content max-w-full">
+                  <div className="p-4">
+                    <label>
+                      Module Name:
+                      <input
+                        type="text"
+                        value={courseModule.module.name}
+                        onChange={(e) => {
+                          const updatedModules = [...course.modules];
+                          updatedModules[moduleIndex].module.name =
+                            e.target.value;
+                          setCourse({ ...course, modules: updatedModules });
+                        }}
+                        style={{ padding: "5px", border: "1px solid gray" }}
+                      />
+                    </label>
+                  </div>
+                  <Days
+                    moduleIndex={moduleIndex}
+                    courseModule={courseModule}
+                    course={course}
+                    setCourse={setCourse}
+                  />
+                  <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                    <PrimaryBtn
+                      onClick={() =>
+                        handleCreateNewDay(
+                          moduleIndex,
+                          courseModule.module.numberOfDays
+                        )
+                      }
+                    >
+                      Add Day
+                    </PrimaryBtn>
+                  </div>
                 </div>
-                <Days
-                  moduleIndex={moduleIndex}
-                  courseModule={courseModule}
-                  course={course}
-                  setCourse={setCourse}
-                />
-                <div style={{ display: "flex", justifyContent: "flex-start" }}>
-                  <PrimaryBtn
-                    onClick={() =>
-                      handleCreateNewDay(
-                        moduleIndex,
-                        courseModule.module.numberOfDays
-                      )
-                    }
-                  >
-                    Add Day
-                  </PrimaryBtn>
-                </div>
-              </div>
+              )}
             </div>
             <div className="flex justify-end">
               <button
