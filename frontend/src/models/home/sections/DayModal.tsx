@@ -41,8 +41,7 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
         >
             <div className="modal-box rounded-xl bg-base-100 p-0 h-3/4 max-w-lg">
 
-                <div className="bg-[#ff7961] w-full flex flex-col items-center p-3 sticky top-0">
-
+                <div className="bg-[#ff7961] p-3 pt-6 pb-6 w-full flex flex-col items-center sticky top-0">
                     <div className="flex gap-6 mt-4 mb-4 items-center text-white">
                         <PreviousBtn onClick={onPrev} isPrevDisabled={isPrevDisabled} color="white" />
                         {modalData &&
@@ -53,25 +52,18 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
                         <NextBtn onClick={onNext} isNextDisabled={isNextDisabled} color="white" />
                         <CloseBtn onClick={onClose} color="white" position="absolute right-2 top-2" hover="hover:bg-white hover:border-white" />
                     </div>
-
-                    <label className="flex flex-col ">
-                        Filter Tracks
-                        <select className="select select-bordered w-full max-w-xs">
-                            <option disabled selected>All</option>
-                            <option>Option</option>
-                            <option>Option</option>
-                        </select>
-                    </label>
-
                 </div>
                 <div className="p-6">
                     {modalData && modalData.dateContent.length > 0 ? (
                         modalData.dateContent.map((content, index) => (
                             <div key={content.id ?? index} className="mb-4 flex flex-col items-center">
                                 <div>
-                                    <h2 className="text-xl font-semibold p-2">
-                                        {content.courseName} <br /> Module: {content.moduleName} (day {content.dayOfModule}/{content.totalDaysInModule})
+                                    <h2 className="text-xl font-semibold">
+                                        {content.courseName}
                                     </h2>
+                                    <h3 className="text-lg pb-2">
+                                        Module: {content.moduleName} (day {content.dayOfModule}/{content.totalDaysInModule})
+                                    </h3>
                                     {content.events.length > 0 ? (
                                         content.events.map((event) => (
                                             <div key={event.id ?? event.name} className="pb-2 mb-2">
