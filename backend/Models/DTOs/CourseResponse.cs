@@ -7,8 +7,8 @@ public record CourseResponse
     public DateTime EndDate { get; init; }
     public int NumberOfWeeks { get; init; }
     public List<int> ModuleIds { get; init; } = new();
-    public List<ModuleResponse> Modules { get; init; } = new();
-    public List<CourseModuleResponse> CourseModules { get; init; } = new();
+    public List<CourseModuleResponse> Modules { get; init; } = new();
+    // public List<CourseModuleResponse> CourseModules { get; init; } = new();
     public string? Color { get; init; }
     public bool IsApplied { get; init; }
 
@@ -21,8 +21,8 @@ public record CourseResponse
         EndDate = course.EndDate;
         NumberOfWeeks = course.NumberOfWeeks;
         ModuleIds = course.Modules.Select(cm => cm.ModuleId).ToList();
-        Modules = course.Modules.Select(cm => new ModuleResponse(cm.Module!)).ToList();
-        CourseModules = course.Modules.Select(cm => new CourseModuleResponse(cm)).ToList();
+        Modules = course.Modules.Select(cm => new CourseModuleResponse(cm)).ToList();
+        // Modules = course.Modules.Select(cm => new ModuleResponse(cm.Module!)).ToList();
         Color = course.Color;
         IsApplied = course.IsApplied;
     }
