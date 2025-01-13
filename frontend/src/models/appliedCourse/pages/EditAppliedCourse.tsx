@@ -43,8 +43,8 @@ export default function EditAppliedCourse() {
             moduleId: 0,
             module: {
                 id: 0,
-                name: "",
-                order: 0,
+                name: "New module",
+                order: course.modules.length,
                 track: [],
                 isApplied: false,
                 numberOfDays: 0,
