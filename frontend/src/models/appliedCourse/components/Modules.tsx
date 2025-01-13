@@ -61,7 +61,6 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
       modules: prevCourse.modules.filter((_, i) => i !== index),
     }));
   };
-
   const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
     const newDay: DayType = {
       id: 0,

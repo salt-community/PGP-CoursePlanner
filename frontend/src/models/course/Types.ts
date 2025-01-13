@@ -21,7 +21,7 @@ export type DayType = {
   description?: string;
   isApplied: boolean;
   events: EventType[];
-  date: Date;
+  date?: Date;
 }
 
 export type ModuleType = {
