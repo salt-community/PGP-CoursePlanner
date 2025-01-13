@@ -5,7 +5,7 @@ namespace backend.Models;
 
 public class Track
 {
-    public int Id;
+    public int Id {get; set;}
     [Required]
     public string Name {get; set;} = null!;
     [Required] 

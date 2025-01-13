@@ -2,6 +2,7 @@ namespace backend.Models.DTOs;
 public record CourseResponse
 {
     public int Id { get; init; }
+    public Track Track {get; init;}
     public string? Name { get; init; }
     public DateTime StartDate { get; init; }
     public DateTime EndDate { get; init; }
@@ -16,6 +17,7 @@ public record CourseResponse
     public CourseResponse(Course course)
     {
         Id = course.Id;
+        Track = course.Track;
         Name = course.Name;
         StartDate = course.StartDate;
         EndDate = course.EndDate;
@@ -23,7 +25,7 @@ public record CourseResponse
         ModuleIds = course.Modules.Select(cm => cm.ModuleId).ToList();
         Modules = course.Modules.Select(cm => new CourseModuleResponse(cm)).ToList();
         // Modules = course.Modules.Select(cm => new ModuleResponse(cm.Module!)).ToList();
-        Color = course.Color;
+        Color = course.Track.Color;
         IsApplied = course.IsApplied;
     }
 
