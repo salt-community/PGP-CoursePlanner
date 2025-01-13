@@ -12,15 +12,6 @@ export default function WeeksContainer() {
         <>
             <Header>
                 <h2 className="text-3xl font-semibold">Current Week</h2>
-                <div className="flex-grow"></div>
-                <div className="flex items-center gap-2 mr-4">
-                    <label>Filter Tracks</label>
-                    <select className="select select-bordered select-sm max-w-xs">
-                        <option disabled selected>All</option>
-                        <option>Option</option>
-                        <option>Option</option>
-                    </select>
-                </div>
             </Header>
             <section className="pl-10 pr-10 pb-4 flex flex-col items-center">
                 <Week data={data} isNextWeek={false} isCalendarLoading={isCalendarLoading} />

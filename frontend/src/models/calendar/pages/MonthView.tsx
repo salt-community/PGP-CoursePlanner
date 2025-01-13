@@ -75,17 +75,6 @@ export default function MonthView() {
                     <h1 className="text-3xl font-semibold">{monthInText} {year}</h1>
                     <select className="select select-bordered select-sm max-w-xs ">
                         <option disabled selected>Month</option>
-                        <option>Option</option>
-                        <option>Option</option>
-                    </select>
-                </div>
-                <div className="flex-grow"></div>
-                <div className="flex items-center gap-2 mr-4">
-                    <label>Filter Tracks</label>
-                    <select className="select select-bordered select-sm max-w-xs">
-                        <option disabled selected>All</option>
-                        <option>Option</option>
-                        <option>Option</option>
                     </select>
                 </div>
             </Header>
