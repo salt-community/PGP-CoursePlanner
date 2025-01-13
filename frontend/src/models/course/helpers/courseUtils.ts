@@ -1,5 +1,5 @@
 import { ModuleType } from "@models/module/Types";
-import { CourseType } from "../Types";
+import { CourseType, DayType } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
@@ -67,7 +67,7 @@ export const calculateCourseDayDates = (
 const getDifferenceInDays = (date1: Date, date2: Date) => {
   const date1Ms = new Date(date1).getTime();
   const date2Ms = new Date(date2).getTime();
-  const differenceMs = date2Ms - date1Ms;
+  const differenceMs = date1Ms - date2Ms;
   return Math.floor(differenceMs / (1000 * 60 * 60 * 24));
 };
 
@@ -77,19 +77,55 @@ export const moveDay = (
   course: CourseType,
   pushForward: boolean
 ) => {
-  const days = course.modules.flatMap(m => m.module.days) 
-  
-  
-  days.forEach(day => { 
-    if(day.date.getTime() < targetDate.getTime())
-    day.date = targetDate
-  
-  })
+  const courseDays = course.modules.flatMap((m) => m.module.days);
 
+  if (getDifferenceInDays(currentDate, targetDate) < 0)
+    return movDayForward(currentDate, targetDate, courseDays, pushForward);
+  else return movDayBackward(currentDate, targetDate, courseDays, pushForward);
+};
 
+const getNextDay = (today : Date) => {
+  const todayDate = new Date(today);
+  todayDate.setDate(todayDate.getDate() + 1);
+  return todayDate;
+};
 
-  console.log("yo ", days.map(d => d.date));
-}
+const getPreviousDay = (today : Date) => {
+  const todayDate = new Date(today);
+  todayDate.setDate(todayDate.getDate() - 1);
+  return todayDate;
+};
+
+const movDayForward = (
+  currentDate: Date,
+  targetDate: Date,
+  courseDays: DayType[],
+  pushForward: boolean
+) => {
+  // console.log(courseDays)
+
+  courseDays.forEach((day) => {
+    if (
+      getDifferenceInDays(day.date, targetDate) < 0 &&
+      getDifferenceInDays(day.date, currentDate) > 0
+    ) {
+      if (pushForward) {
+        day.date = getNextDay(day.date)
+      } else {
+        day.date = getPreviousDay(day.date)
+      }
+      console.log(day.date);
+    }
+  });
+};
+
+const movDayBackward = (
+  currentDate: Date,
+  targetDate: Date,
+  courseDays: DayType[],
+  pushForward: boolean
+) => {};
+
 /**
  * Utility function to deeply remove `id` property from objects.
  */
