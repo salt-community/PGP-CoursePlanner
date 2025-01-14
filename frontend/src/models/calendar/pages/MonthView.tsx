@@ -31,11 +31,9 @@ export default function MonthView() {
         setYear(getYear(endOfMonth));
     }
 
-    const numberOfWeeks = getWeek(endOfMonth) - getWeek(startOfMonth) + 1;
-    const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
-
     const startOfMonth2 = getDateAsString(startOfMonth);
     const endOfMonth2 = getDateAsString(endOfMonth);
+    const numberOfWeeks = weeksCalc(endOfMonth2);
 
     const { data, isPending, isError, error } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
 
@@ -64,7 +62,19 @@ export default function MonthView() {
         console.log("Query error:", error);
     }
     if (isPending) return "pending";
-    console.log(weeksCalc(year, month, endOfMonth2.slice(3, 5)).length);
+
+    const weeks: number[] = [];
+    function handleWeek(date: Date) {
+        const monthIndex = parseInt(getDateAsString(date).slice(0, 2)) - 1;
+        const day = parseInt(getDateAsString(date).slice(3, 5));
+        const year = parseInt(getDateAsString(date).slice(6, 10));
+        const weekNumber: number = getWeek(new Date(year, monthIndex, day, 0, 0, 0, -1));
+
+        if (weekNumber && !weeks.includes(weekNumber)) {
+            weeks.push(weekNumber);
+            return weekNumber;
+        }
+    }
 
     return (
         <Page >
@@ -81,31 +91,28 @@ export default function MonthView() {
                 </div>
             </Header>
 
-            <section className="flex flex-grow bg-white rounded-l-xl drop-shadow-xl">
-                <div className={`flex flex-col h-full bg-accent rounded-l-xl drop-shadow-xl`}>
-                    <div className="min-h-6"></div>
-                    {weeksCalc(year, month, endOfMonth2.slice(3, 5)).map(week => (
-                        <p className="min-w-10 p-2 h-full text-lg text-center border-t-[0.5px] border-gray-100">{week}</p>
-                    ))}
-                </div>
-                <div className="flex flex-col items-center w-full">
-                    <div className="w-full grid grid-cols-7">
-                        {fullWeek.map(day => (
-                            <div key={format(day, 'E')} className="flex justify-center items-center p-">{format(day, 'E')}</div>
-                        ))}
-                    </div>
-                    <div className={`w-full flex-grow break-normal grid grid-cols-7 ${numberOfRows}`}>
-                        {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
-                            <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-full border-t-[0.5px] border-b-[0.5px] border-gray-100"></div>
-                        ))}
-                        {daysInMonth.map((thisDate, dateIndex) => {
-                            return <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
-                                {data && data[dateIndex] !== null ? <CalendarDate openModal={openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                    : <CalendarDate openModal={openModal} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
-                            </div>
-                        })}
-                    </div>
-                </div>
+            <section className={`grid grid-cols-[40px,repeat(7,1fr)] grid-rows-[24px,repeat(${numberOfWeeks},1fr)] w-full h-full bg-white rounded-l-xl drop-shadow-xl`}>
+                <div className="bg-accent rounded-tl-xl"></div>
+                {fullWeek.map(day => (
+                    <div key={format(day, 'E')} className="flex justify-center items-center p-">{format(day, 'E')}</div>
+                ))}
+
+                <p className="bg-accent col-start-1 col-end-2 min-w-10 p-2 h-full text-lg text-center border-t-[0.5px] border-r-[0.5px] border-gray-100">{handleWeek(startOfMonth)}</p>
+
+                {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
+                    <div key={format(emptyDayIndex, 'd')} className="border-t-[0.5px] border-b-[0.5px] border-gray-100"></div>
+                ))}
+
+                {daysInMonth.map((thisDate, dateIndex) => {
+                    const weekNumber = handleWeek(thisDate);
+                    return <>
+                        {weekNumber && <p className="bg-accent col-start-1 col-end-2 min-w-10 p-2 h-full text-lg text-center border-t-[0.5px] border-gray-100">{weekNumber}</p>}
+                        <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
+                            {data && data[dateIndex] !== null ? <CalendarDate openModal={openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                : <CalendarDate openModal={openModal} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
+                        </div>
+                    </>
+                })}
             </section>
             {currentIndex !== null && data && (
                 <DayModal
