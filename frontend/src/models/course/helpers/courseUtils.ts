@@ -64,6 +64,40 @@ export const calculateCourseDayDates = (
   return calendarDateTypes;
 };
 
+export const updatePreviewCalendarDates = (course : CourseType) => {
+  const calendarDateTypes: CalendarDateType[] = [];
+  const modules = course.modules.map(m => m.module);
+  for (let i = 0; i < modules.length; i++) {
+    for (let j = 0; j < modules[i].numberOfDays; j++) {
+      // Skip weekends (Saturday: 6, Sunday: 0)
+      // while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
+      //   currentDate.setDate(currentDate.getDate() + 1);
+      // }
+
+      // course.modules[i].module.days[j].date = new Date(currentDate);
+      // course.endDate = new Date(currentDate);
+      calendarDateTypes.push({
+        date: new Date(modules[i].days[j].date),
+        dateContent: [
+          {
+            dayOfModule: modules[i].days[j].dayNumber,
+            totalDaysInModule: modules[i].numberOfDays,
+            courseName: course.name,
+            events: modules[i].days[j].events,
+            color: "#EEEEEE",
+            appliedCourseId: course.id,
+            moduleName: modules[i].name,
+          },
+        ],
+      });
+      // currentDate.setDate(currentDate.getDate() + 1);
+    }
+  }
+  return calendarDateTypes;
+
+}
+
+
 const getNextDay = (today: Date) => {
   const todayDate = new Date(today);
   todayDate.setDate(todayDate.getDate() + 1);

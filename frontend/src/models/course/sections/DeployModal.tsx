@@ -8,11 +8,11 @@ import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import MiniCalendar from "./MiniCalendar";
 import { ModuleType } from "@models/module/Types";
-import { moveDay, stripIdsFromCourse } from "../helpers/courseUtils";
+import { calculateCourseDayDates, moveDay, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
 
 type Props = {
     course: CourseType,
-    modules : ModuleType[]
+    modules: ModuleType[]
 }
 
 export default function DeployModal({ course, modules }: Props) {
@@ -25,11 +25,12 @@ export default function DeployModal({ course, modules }: Props) {
     const navigate = useNavigate();
 
     const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
+    const [previewCalendarDays, setPreviewCalendarDays] = useState(calculateCourseDayDates(course, modules, startDate))
 
 
     const handleApplyTemplate = async () => {
 
- 
+
 
         const myCourse = stripIdsFromCourse(course)
 
@@ -48,18 +49,18 @@ export default function DeployModal({ course, modules }: Props) {
                 (m) => m.id! == course!.id
             );
             if (appliedCoursesWithCourseId.length > 0) {
-           
+
                 mutationUpdateAppliedCourse.mutate(myCourse);
             }
 
-           
+
             mutationPostAppliedCourse.mutate(myCourse);
             navigate("/activecourses");
         }
     };
 
     const startDatePlus5 = new Date(startDate)
-    startDatePlus5.setDate(startDatePlus5.getDate() +5)
+    startDatePlus5.setDate(startDatePlus5.getDate() + 5)
 
     // moveDay(startDate, startDatePlus2, course, false)
 
@@ -68,7 +69,7 @@ export default function DeployModal({ course, modules }: Props) {
             {(isLoadingAppliedCourses) && (
                 <LoadingMessage />
             )}
-            {(  isErrorAppliedCourses) && <ErrorMessage />}
+            {(isErrorAppliedCourses) && <ErrorMessage />}
 
 
             <dialog id="my_DeployModal_1" className="modal">
@@ -104,13 +105,17 @@ export default function DeployModal({ course, modules }: Props) {
                     )}
                     <br />
                     <div className="flex-grow overflow-auto">
-                        <MiniCalendar startDate={startDate} course={course} modules={modules} />
+                        <MiniCalendar startDate={startDate} course={course} modules={modules} previewCalendarDays={previewCalendarDays}/>
                     </div>
                     <div className="modal-action">
                         <form method="dialog" className="flex gap-5 justify-center">
                             <button className="btn">Cancel</button>
                             <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
-                            <button className="btn" onClick={() => moveDay(startDate, startDatePlus5, course, false)}> test moveDay</button>
+                            <button className="btn" onClick={(event) => {
+                                event.preventDefault()
+                                moveDay(startDate, startDatePlus5, course, false)
+                                setPreviewCalendarDays(updatePreviewCalendarDates(course))
+                            }}> test moveDay</button>
                         </form>
                     </div>
                 </div>

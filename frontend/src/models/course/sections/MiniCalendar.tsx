@@ -9,14 +9,17 @@ import CalendarDate from "@models/calendar/sections/CalendarDate"
 import { CourseType } from "../Types"
 import { ModuleType } from "@models/module/Types"
 import { calculateCourseDayDates } from "../helpers/courseUtils"
+import { CalendarDateType } from "@models/calendar/Types"
 
 type Props = {
     startDate: Date
     course: CourseType
     modules: ModuleType[]
+    previewCalendarDays : CalendarDateType[]
+
 }
 
-export default function MiniCalendar({ startDate, course, modules }: Props) {
+export default function MiniCalendar({ startDate, course, modules, previewCalendarDays }: Props) {
     const [month, setMonth] = useState<number>(startDate.getMonth());
     const [year, setYear] = useState<number>(startDate.getFullYear());
 
@@ -41,7 +44,6 @@ export default function MiniCalendar({ startDate, course, modules }: Props) {
 
     // const previewCourseCalendarDays = calculateCourseDayDates(course, modules, startDate)
     // console.log(initialCalendarDays.map(d => d.date.toDateString()))
-    const [previewCalendarDays, setPreviewCalendarDays] = useState(calculateCourseDayDates(course, modules, startDate))
 
     if (isError) {
         console.log("Query error:", error);
