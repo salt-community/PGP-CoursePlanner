@@ -78,6 +78,7 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
             module: {
               ...module.module,
               days: [...module.module.days, newDay],
+              numberOfDays: numberOfDays+1,
             },
           };
         }
