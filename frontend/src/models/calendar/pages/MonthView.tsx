@@ -64,6 +64,7 @@ export default function MonthView() {
         console.log("Query error:", error);
     }
     if (isPending) return "pending";
+    console.log(weeksCalc(year, month, endOfMonth2.slice(3, 5)).length);
 
     return (
         <Page >
@@ -80,11 +81,11 @@ export default function MonthView() {
                 </div>
             </Header>
 
-            <section className="flex flex-grow shadow-xl drop-shadow-2xl bg-white rounded-lg border-r-[0.5px] border-b-[0.5px] border-gray-100">
-                <div className={`grid grid-rows-[24px,repeat(${weeksCalc(year, month, endOfMonth2.slice(3,5)).length},1fr)] h-full bg-accent rounded-l-lg shadow-xl drop-shadow-2xl`}>
-                    <div></div>
-                    {weeksCalc(year, month, endOfMonth2.slice(3,5)).map(week => (
-                        <p className="p-2 text-lg border-t-[0.5px] border-gray-100">{week}</p>
+            <section className="flex flex-grow bg-white rounded-l-xl drop-shadow-xl">
+                <div className={`flex flex-col h-full bg-accent rounded-l-xl drop-shadow-xl`}>
+                    <div className="min-h-6"></div>
+                    {weeksCalc(year, month, endOfMonth2.slice(3, 5)).map(week => (
+                        <p className="min-w-10 p-2 h-full text-lg text-center border-t-[0.5px] border-gray-100">{week}</p>
                     ))}
                 </div>
                 <div className="flex flex-col items-center w-full">
