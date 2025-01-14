@@ -1,5 +1,5 @@
 import { DatePicker } from "@mui/x-date-pickers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CourseType } from "../Types";
 import { useMutationPostAppliedCourse, useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import ErrorMessage from "@components/ErrorMessage";
 import MiniCalendar from "./MiniCalendar";
 import { ModuleType } from "@models/module/Types";
 import { calculateCourseDayDates, moveDay, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
+import EditCourseDays from "./EditCourseDays";
 
 type Props = {
     course: CourseType,
@@ -25,17 +26,23 @@ export default function DeployModal({ course, modules }: Props) {
     const navigate = useNavigate();
 
     const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
-    const [previewCalendarDays, setPreviewCalendarDays] = useState(calculateCourseDayDates(course, modules, startDate))
+    
+    
+    const [prevCourse, setCourse] = useState<CourseType>(course);
+    const [previewCalendarDays, setPreviewCalendarDays] = useState(calculateCourseDayDates(prevCourse, startDate))
+
+
+    useEffect(() => {
+        const updatedDays = calculateCourseDayDates(prevCourse, startDate);
+        setPreviewCalendarDays(updatedDays);
+    }, [prevCourse, startDate]);
 
 
     const handleApplyTemplate = async () => {
-
-
-
-        const myCourse = stripIdsFromCourse(course)
+        const myCourse = stripIdsFromCourse(prevCourse)
 
         console.log(myCourse)
-        console.log(course)
+        console.log(prevCourse)
 
         setIsInvalidDate(false);
         if (
@@ -58,7 +65,7 @@ export default function DeployModal({ course, modules }: Props) {
             navigate("/activecourses");
         }
     };
-    const date1 = new Date(course.startDate)
+    const date1 = new Date(prevCourse.startDate)
     const date2 = new Date(date1!)
     date2.setDate(date2.getDate() + 3)
 
@@ -104,17 +111,23 @@ export default function DeployModal({ course, modules }: Props) {
                         </p>
                     )}
                     <br />
-                    <div className="flex-grow overflow-auto">
-                        <MiniCalendar startDate={startDate} course={course} modules={modules} previewCalendarDays={previewCalendarDays}/>
-                    </div>
+                    <section className="flex flex-grow">
+                      
+                        <div className="flex-grow overflow-auto">
+                            <MiniCalendar startDate={startDate} course={prevCourse} modules={modules} previewCalendarDays={previewCalendarDays} />
+                        </div>
+                        <div >
+                            <EditCourseDays course={prevCourse} setCourse={setCourse} />
+                        </div>
+                    </section>
                     <div className="modal-action">
                         <form method="dialog" className="flex gap-5 justify-center">
                             <button className="btn">Cancel</button>
                             <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
                             <button className="btn" onClick={(event) => {
                                 event.preventDefault()
-                                moveDay(date1, date2, course, false)
-                                setPreviewCalendarDays(updatePreviewCalendarDates(course))
+                                moveDay(date1, date2, prevCourse, false)
+                                setPreviewCalendarDays(updatePreviewCalendarDates(prevCourse))
                             }}> test moveDay</button>
                         </form>
                     </div>

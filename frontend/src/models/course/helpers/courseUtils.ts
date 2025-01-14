@@ -1,5 +1,5 @@
-import { ModuleType } from "@models/module/Types";
-import { CourseType, DayType } from "../Types";
+
+import { CourseType, DayType, ModuleType } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
@@ -27,7 +27,6 @@ export const getWeekNumberOfModule = (course: CourseType, moduleId: number) => {
 
 export const calculateCourseDayDates = (
   course: CourseType,
-  modules: ModuleType[],
   startDate: Date
 ) => {
   const calendarDateTypes: CalendarDateType[] = [];
@@ -35,6 +34,9 @@ export const calculateCourseDayDates = (
   const currentDate = new Date(startDate);
   course.startDate = new Date(startDate);
 
+  const modules = course.modules.map(m => m.module)
+
+  console.log("modules length: ", modules.length)
   for (let i = 0; i < modules.length; i++) {
     for (let j = 0; j < modules[i].numberOfDays; j++) {
       // Skip weekends (Saturday: 6, Sunday: 0)
