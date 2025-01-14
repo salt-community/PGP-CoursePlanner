@@ -37,10 +37,9 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
     });
 
     return (
-        <>
-            <button ref={refButton} onClick={() => openModal(indexForModal)}
-                // todo: fix so that all cells are of equal height regardless of content.
-                className={`bg-white ${border} h-full flex flex-col justify-start items-center p-4 gap-4 hover:bg-[#F9F9F9] hover:cursor-pointer transition-transform duration-200 `}>
+        <button ref={refButton} onClick={() => openModal(indexForModal)}
+            className={`bg-white ${border} h-full flex flex-col justify-start items-center p-4 gap-4 hover:bg-[#F9F9F9] hover:cursor-pointer transition-transform duration-200 `}>
+            <div className="grid grid-rows-2 h-full w-full justify-items-center">
                 <div className={`${bg} h-10 w-10 rounded-full flex justify-center items-center`}>
                     <h2 className={`${text}`}>
                         {format(date, 'd')}
@@ -57,7 +56,7 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
                         </div>
                     ))}
                 </div>
-            </button>
-        </>
+            </div>
+        </button>
     )
 }
