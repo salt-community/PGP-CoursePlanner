@@ -29,21 +29,21 @@ export default function DeployModal({ course, modules }: Props) {
     const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
     
     
-    const [prevCourse, setCourse] = useState<CourseType>(course);
-    const [previewCalendarDays, setPreviewCalendarDays] = useState(calculateCourseDayDates(prevCourse, startDate))
+    const [previewCourse, setCourse] = useState<CourseType>(course);
+    const [previewCalendarDays, setPreviewCalendarDays] = useState(calculateCourseDayDates(previewCourse, startDate))
 
 
     useEffect(() => {
-        const updatedDays = calculateCourseDayDates(prevCourse, startDate);
+        const updatedDays = calculateCourseDayDates(previewCourse, startDate);
         setPreviewCalendarDays(updatedDays);
-    }, [prevCourse, startDate]);
+    }, [previewCourse, startDate]);
 
 
     const handleApplyTemplate = async () => {
-        const myCourse = stripIdsFromCourse(prevCourse)
+        const myCourse = stripIdsFromCourse(previewCourse)
 
         console.log(myCourse)
-        console.log(prevCourse)
+        console.log(previewCourse)
 
         setIsInvalidDate(false);
         if (
@@ -111,10 +111,10 @@ export default function DeployModal({ course, modules }: Props) {
                     <section className="flex flex-grow">
                       
                         <div className="flex-grow overflow-auto">
-                            <MiniCalendar startDate={startDate} course={prevCourse} modules={modules} previewCalendarDays={previewCalendarDays} />
+                            <MiniCalendar startDate={startDate} course={previewCourse} modules={modules} previewCalendarDays={previewCalendarDays} />
                         </div>
                         <div >
-                            <EditCourseDays course={prevCourse} setCourse={setCourse} />
+                            <EditCourseDays course={previewCourse} setCourse={setCourse} />
                         </div>
                     </section>
                     <div className="modal-action">

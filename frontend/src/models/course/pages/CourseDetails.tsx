@@ -6,7 +6,7 @@ import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import DeleteBtn from "@components/buttons/DeleteBtn";
 import { Link } from "react-router-dom";
-import { calculateCourseDayDates, getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
+import {  getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
 import DeployModal from "../sections/DeployModal";
 
 export default function CourseDetails() {
