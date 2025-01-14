@@ -8,8 +8,9 @@ import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import MiniCalendar from "./MiniCalendar";
 import { ModuleType } from "@models/module/Types";
-import { calculateCourseDayDates, moveDay, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
+import { calculateCourseDayDates,  stripIdsFromCourse } from "../helpers/courseUtils";
 import EditCourseDays from "./EditCourseDays";
+
 
 type Props = {
     course: CourseType,
