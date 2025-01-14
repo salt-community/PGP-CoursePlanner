@@ -42,9 +42,6 @@ export default function MiniCalendar({ startDate, course, modules, previewCalend
 
     const { data, isPending, isError, error } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
 
-    // const previewCourseCalendarDays = calculateCourseDayDates(course, modules, startDate)
-    // console.log(initialCalendarDays.map(d => d.date.toDateString()))
-
     if (isError) {
         console.log("Query error:", error);
     }

@@ -17,32 +17,15 @@ type Props = {
 }
 
 export default function EditCourseDays({ course, setCourse }: Props) {
-    // const appliedCourseId = useIdFromPath();
-    // const { data: appliedCourse, isLoading, isError } = useQueryAppliedCourseById(appliedCourseId);
+   
     const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
 
-    // const [course, setCourse] = useState<CourseType>({
-    //     name: "",
-    //     startDate: new Date(),
-    //     modules: [],
-    // });
     const navigate = useNavigate();
     const handleGoBack = () => {
         navigate(-1);
     };
 
-    // useEffect(() => {
-    //     if (appliedCourse) {
-    //         setCourse({
-    //             ...appliedCourse,
-    //             modules: appliedCourse.modules.map((module) => ({
-    //                 courseId: appliedCourse.id,
-    //                 moduleId: module.module.id,
-    //                 module: module.module,
-    //             }))
-    //         });
-    //     }
-    // }, [appliedCourse]);
+
 
     const handleCreateNewAppliedModule = () => {
         const newModule: CourseModuleType = {
@@ -82,7 +65,6 @@ export default function EditCourseDays({ course, setCourse }: Props) {
         <div className="flex flex-col items-center pt-5">
             <section className="  bg-white rounded-lg shadow-md mt-5 flex flex-col">
                 <div className="flex flex-row gap-5 ">
-                    {/* <CourseInfo course={course} setCourse={setCourse} /> */}
                 </div>
                 <div>
                     <Modules course={course} setCourse={setCourse} />

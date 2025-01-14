@@ -21,7 +21,6 @@ export const numberOfDaysInCourse = (course: CourseType) => {
 };
 
 export const getWeekNumberOfModule = (course: CourseType, moduleId: number) => {
-  console.log(course.color, moduleId);
   return 1;
 };
 
@@ -36,7 +35,6 @@ export const calculateCourseDayDates = (
 
   const modules = course.modules.map(m => m.module)
 
-  console.log("modules length: ", modules.length)
   for (let i = 0; i < modules.length; i++) {
     for (let j = 0; j < modules[i].numberOfDays; j++) {
       // Skip weekends (Saturday: 6, Sunday: 0)
@@ -118,11 +116,6 @@ export const moveDay = (
   course: CourseType,
   pushForward: boolean
 ) => {
-  // if(targetDate.getDay() === 0 || targetDate.getDay() === 6){
-  //   return;
-  // }
-  console.log("currentDate: ", currentDate, "targetDate: ", targetDate)
-
 
   const courseDays = course.modules.flatMap((m) => m.module.days);
 
@@ -149,7 +142,7 @@ const movDayForward = (
       if (pushForward) {
         day.date = getNextDay(day.date);
       } else {
-        day.date = getPreviousDay(day.date); // det här är den vi håller på med
+        day.date = getPreviousDay(day.date); 
       }
       console.log(day.date);
     }
