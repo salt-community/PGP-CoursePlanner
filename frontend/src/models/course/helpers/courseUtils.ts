@@ -1,7 +1,6 @@
-import { ModuleType } from "@models/module/Types";
-import { CourseType } from "../Types";
+
+import { CourseType, DayType, ModuleType } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
-import {getDateAsStringYyyyMmDd} from "@helpers/dateHelpers"
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
   return modules.some((module, idx) =>
@@ -22,20 +21,19 @@ export const numberOfDaysInCourse = (course: CourseType) => {
 };
 
 export const getWeekNumberOfModule = (course: CourseType, moduleId: number) => {
-  console.log(course.color, moduleId);
   return 1;
 };
 
 export const calculateCourseDayDates = (
   course: CourseType,
-  modules: ModuleType[],
   startDate: Date
 ) => {
   const calendarDateTypes: CalendarDateType[] = [];
   // Create a copy of the startDate to avoid mutating the original date
   const currentDate = new Date(startDate);
-  course.startDate = new Date(startDate)
-  console.log("StartDate: ",startDate)
+  course.startDate = new Date(startDate);
+
+  const modules = course.modules.map(m => m.module)
 
   for (let i = 0; i < modules.length; i++) {
     for (let j = 0; j < modules[i].numberOfDays; j++) {
@@ -43,19 +41,18 @@ export const calculateCourseDayDates = (
       while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
         currentDate.setDate(currentDate.getDate() + 1);
       }
-      // console.log(`Module ${i + 1}, Day ${j + 1}:`, currentDate.toDateString());
-      // modules[i].days[j].date = new Date(currentDate);
-      course.modules[i].module.days[j].date = new Date(currentDate)
-      course.endDate = new Date(currentDate)
+
+      course.modules[i].module.days[j].date = new Date(currentDate);
+      course.endDate = new Date(currentDate);
       calendarDateTypes.push({
         date: new Date(currentDate),
         dateContent: [
           {
             dayOfModule: modules[i].days[j].dayNumber,
-            totalDaysInModule: modules[i].numberOfDays, 
+            totalDaysInModule: modules[i].numberOfDays,
             courseName: course.name,
             events: modules[i].days[j].events,
-            color: course.color ? course.color : "#777777",
+            color: "#EEEEEE",
             appliedCourseId: course.id,
             moduleName: modules[i].name,
           },
@@ -67,44 +64,146 @@ export const calculateCourseDayDates = (
   return calendarDateTypes;
 };
 
+export const updatePreviewCalendarDates = (course : CourseType) => {
+  const calendarDateTypes: CalendarDateType[] = [];
+  const modules = course.modules.map(m => m.module);
+  for (let i = 0; i < modules.length; i++) {
+    for (let j = 0; j < modules[i].numberOfDays; j++) {
+     
+      calendarDateTypes.push({
+        date: new Date(modules[i].days[j].date),
+        dateContent: [
+          {
+            dayOfModule: modules[i].days[j].dayNumber,
+            totalDaysInModule: modules[i].numberOfDays,
+            courseName: course.name,
+            events: modules[i].days[j].events,
+            color: "#EEEEEE",
+            appliedCourseId: course.id,
+            moduleName: modules[i].name,
+          },
+        ],
+      });
+    }
+  }
+  return calendarDateTypes;
+
+}
+
+
+const getNextDay = (today: Date) => {
+  const todayDate = new Date(today);
+  todayDate.setDate(todayDate.getDate() + 1);
+  return todayDate;
+};
+
+const getPreviousDay = (today: Date) => {
+  const todayDate = new Date(today);
+  todayDate.setDate(todayDate.getDate() - 1);
+  return todayDate;
+};
+
+const getDifferenceInDays = (date1: Date, date2: Date) => {
+  const date1Ms = new Date(date1).getTime();
+  const date2Ms = new Date(date2).getTime();
+  const differenceMs = date1Ms - date2Ms;
+  return Math.floor(differenceMs / (1000 * 60 * 60 * 24));
+};
+
+export const moveDay = (
+  currentDate: Date,
+  targetDate: Date,
+  course: CourseType,
+  pushForward: boolean
+) => {
+
+  const courseDays = course.modules.flatMap((m) => m.module.days);
+
+  if (getDifferenceInDays(currentDate, targetDate) < 0)
+    return movDayForward(currentDate, targetDate, courseDays, pushForward);
+  else return movDayBackward(currentDate, targetDate, courseDays, pushForward);
+};
+
+const movDayForward = (
+  currentDate: Date,
+  targetDate: Date,
+  courseDays: DayType[],
+  pushForward: boolean
+) => {
+  const currentDay = courseDays.find(d => getDifferenceInDays(currentDate, d.date) == 0)
+
+  
+  courseDays.forEach((day) => {
+    if (
+      getDifferenceInDays(day.date, targetDate) <= 0 &&
+      getDifferenceInDays(day.date, currentDate) > 0
+    ) {
+      console.log(day.date);
+      if (pushForward) {
+        day.date = getNextDay(day.date);
+      } else {
+        day.date = getPreviousDay(day.date); 
+      }
+      console.log(day.date);
+    }
+  });
+  currentDay!.date = targetDate
+
+};
+
+const movDayBackward = (
+  currentDate: Date,
+  targetDate: Date,
+  courseDays: DayType[],
+  pushForward: boolean
+) => {
+  courseDays.forEach((day) => {
+    if (
+      getDifferenceInDays(day.date, targetDate) > 0 &&
+      getDifferenceInDays(day.date, currentDate) < 0
+    ) {
+      if (pushForward) {
+        day.date = getNextDay(day.date);
+      } else {
+        day.date = getPreviousDay(day.date);
+      }
+      console.log(day.date);
+    }
+  });
+};
 
 /**
  * Utility function to deeply remove `id` property from objects.
  */
-/**
- * Utility function to deeply remove `id` property from objects.
- */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function deepRemoveId<T extends Record<string, any>>(obj: T): any {
   if (Array.isArray(obj)) {
     return obj.map((item) => deepRemoveId(item));
   }
 
   if (obj instanceof Date) {
-    return obj; // Return Date objects as-is
+    return obj;
   }
 
   if (typeof obj === "object" && obj !== null) {
-    const { id, ...rest } = obj; // Remove `id` if it exists
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ...rest } = obj;
     return Object.entries(rest).reduce((acc, [key, value]) => {
-      acc[key] = deepRemoveId(value); // Recursively process nested properties
+      acc[key] = deepRemoveId(value);
       return acc;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }, {} as Record<string, any>);
   }
 
-  return obj; // Primitive values are returned as-is
+  return obj;
 }
 
-
-/**
- * Strip `id` recursively from a CourseType object.
- */
 export function stripIdsFromCourse(course: CourseType): Omit<CourseType, "id"> {
   return deepRemoveId(course);
 }
 
-/**
- * Strip `id` recursively from a ModuleType object.
- */
-export function stripIdsFromModules(modules: ModuleType[]): Omit<ModuleType, "id">[] {
+export function stripIdsFromModules(
+  modules: ModuleType[]
+): Omit<ModuleType, "id">[] {
   return modules.map((module) => deepRemoveId(module));
 }

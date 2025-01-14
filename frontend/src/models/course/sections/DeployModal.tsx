@@ -1,5 +1,5 @@
 import { DatePicker } from "@mui/x-date-pickers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CourseType } from "../Types";
 import { useMutationPostAppliedCourse, useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import { useNavigate } from "react-router-dom";
@@ -8,11 +8,12 @@ import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import MiniCalendar from "./MiniCalendar";
 import { ModuleType } from "@models/module/Types";
-import { stripIdsFromCourse } from "../helpers/courseUtils";
+import { calculateCourseDayDates, moveDay, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
+import EditCourseDays from "./EditCourseDays";
 
 type Props = {
     course: CourseType,
-    modules : ModuleType[]
+    modules: ModuleType[]
 }
 
 export default function DeployModal({ course, modules }: Props) {
@@ -25,16 +26,23 @@ export default function DeployModal({ course, modules }: Props) {
     const navigate = useNavigate();
 
     const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
+    
+    
+    const [prevCourse, setCourse] = useState<CourseType>(course);
+    const [previewCalendarDays, setPreviewCalendarDays] = useState(calculateCourseDayDates(prevCourse, startDate))
+
+
+    useEffect(() => {
+        const updatedDays = calculateCourseDayDates(prevCourse, startDate);
+        setPreviewCalendarDays(updatedDays);
+    }, [prevCourse, startDate]);
 
 
     const handleApplyTemplate = async () => {
-
- 
-
-        const myCourse = stripIdsFromCourse(course)
+        const myCourse = stripIdsFromCourse(prevCourse)
 
         console.log(myCourse)
-        console.log(course)
+        console.log(prevCourse)
 
         setIsInvalidDate(false);
         if (
@@ -48,11 +56,11 @@ export default function DeployModal({ course, modules }: Props) {
                 (m) => m.id! == course!.id
             );
             if (appliedCoursesWithCourseId.length > 0) {
-           
+
                 mutationUpdateAppliedCourse.mutate(myCourse);
             }
 
-           
+
             mutationPostAppliedCourse.mutate(myCourse);
             navigate("/activecourses");
         }
@@ -64,7 +72,7 @@ export default function DeployModal({ course, modules }: Props) {
             {(isLoadingAppliedCourses) && (
                 <LoadingMessage />
             )}
-            {(  isErrorAppliedCourses) && <ErrorMessage />}
+            {(isErrorAppliedCourses) && <ErrorMessage />}
 
 
             <dialog id="my_DeployModal_1" className="modal">
@@ -99,13 +107,20 @@ export default function DeployModal({ course, modules }: Props) {
                         </p>
                     )}
                     <br />
-                    <div className="flex-grow overflow-auto">
-                        <MiniCalendar startDate={startDate} course={course} modules={modules} />
-                    </div>
+                    <section className="flex flex-grow">
+                      
+                        <div className="flex-grow overflow-auto">
+                            <MiniCalendar startDate={startDate} course={prevCourse} modules={modules} previewCalendarDays={previewCalendarDays} />
+                        </div>
+                        <div >
+                            <EditCourseDays course={prevCourse} setCourse={setCourse} />
+                        </div>
+                    </section>
                     <div className="modal-action">
                         <form method="dialog" className="flex gap-5 justify-center">
                             <button className="btn">Cancel</button>
                             <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
+                       
                         </form>
                     </div>
                 </div>

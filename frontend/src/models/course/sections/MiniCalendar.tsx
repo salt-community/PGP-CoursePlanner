@@ -9,14 +9,17 @@ import CalendarDate from "@models/calendar/sections/CalendarDate"
 import { CourseType } from "../Types"
 import { ModuleType } from "@models/module/Types"
 import { calculateCourseDayDates } from "../helpers/courseUtils"
+import { CalendarDateType } from "@models/calendar/Types"
 
 type Props = {
     startDate: Date
     course: CourseType
     modules: ModuleType[]
+    previewCalendarDays : CalendarDateType[]
+
 }
 
-export default function MiniCalendar({ startDate, course, modules }: Props) {
+export default function MiniCalendar({ startDate, course, modules, previewCalendarDays }: Props) {
     const [month, setMonth] = useState<number>(startDate.getMonth());
     const [year, setYear] = useState<number>(startDate.getFullYear());
 
@@ -38,10 +41,6 @@ export default function MiniCalendar({ startDate, course, modules }: Props) {
     const endOfMonth2 = getDateAsString(endOfMonth);
 
     const { data, isPending, isError, error } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
-
-    const initialCalendarDays = calculateCourseDayDates(course, modules, startDate)
-    // console.log(initialCalendarDays.map(d => d.date.toDateString()))
-
 
     if (isError) {
         console.log("Query error:", error);
@@ -71,18 +70,18 @@ export default function MiniCalendar({ startDate, course, modules }: Props) {
                         ))}
                         {daysInMonth.map((thisDate, dateIndex) => {
                             
-                            const initialCalendarDaysIndex = initialCalendarDays.map(d => d.date.toDateString()).indexOf(thisDate.toDateString())
+                            const previewCalendarDaysIndex = previewCalendarDays.map(d => d.date.toDateString()).indexOf(thisDate.toDateString())
                             
-                            if (initialCalendarDaysIndex > -1) {                                
+                            if (previewCalendarDaysIndex > -1) {                                
                                 if(data![dateIndex] != null) {
-                                initialCalendarDays[initialCalendarDaysIndex].dateContent.push(...data![dateIndex].dateContent);
+                                    previewCalendarDays[previewCalendarDaysIndex].dateContent.push(...data![dateIndex].dateContent);
                                 }
                                 return (
                                     <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
                                         {data && data[dateIndex] !== null ? (
-                                            <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={initialCalendarDays[initialCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         ) : (
-                                            <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={initialCalendarDays[initialCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         )}
 
                                     </div>
