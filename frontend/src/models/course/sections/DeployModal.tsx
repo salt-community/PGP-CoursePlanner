@@ -110,7 +110,7 @@ export default function DeployModal({ course, modules }: Props) {
                         <form method="dialog" className="flex gap-5 justify-center">
                             <button className="btn">Cancel</button>
                             <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
-                            <button className="btn" onClick={() => moveDay(startDate, startDatePlus2, course, false)}> scrobble</button>
+                            <button className="btn" onClick={() => moveDay(startDate, startDatePlus2, course, false)}> test moveDay</button>
                         </form>
                     </div>
                 </div>

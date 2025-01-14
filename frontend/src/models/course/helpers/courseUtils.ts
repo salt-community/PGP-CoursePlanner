@@ -52,7 +52,7 @@ export const calculateCourseDayDates = (
             totalDaysInModule: modules[i].numberOfDays,
             courseName: course.name,
             events: modules[i].days[j].events,
-            color: course.color ? course.color : "#777777",
+            color: "#EEEEEE",
             appliedCourseId: course.id,
             moduleName: modules[i].name,
           },
@@ -62,6 +62,18 @@ export const calculateCourseDayDates = (
     }
   }
   return calendarDateTypes;
+};
+
+const getNextDay = (today: Date) => {
+  const todayDate = new Date(today);
+  todayDate.setDate(todayDate.getDate() + 1);
+  return todayDate;
+};
+
+const getPreviousDay = (today: Date) => {
+  const todayDate = new Date(today);
+  todayDate.setDate(todayDate.getDate() - 1);
+  return todayDate;
 };
 
 const getDifferenceInDays = (date1: Date, date2: Date) => {
@@ -84,18 +96,6 @@ export const moveDay = (
   else return movDayBackward(currentDate, targetDate, courseDays, pushForward);
 };
 
-const getNextDay = (today : Date) => {
-  const todayDate = new Date(today);
-  todayDate.setDate(todayDate.getDate() + 1);
-  return todayDate;
-};
-
-const getPreviousDay = (today : Date) => {
-  const todayDate = new Date(today);
-  todayDate.setDate(todayDate.getDate() - 1);
-  return todayDate;
-};
-
 const movDayForward = (
   currentDate: Date,
   targetDate: Date,
@@ -103,20 +103,26 @@ const movDayForward = (
   pushForward: boolean
 ) => {
   // console.log(courseDays)
+  const currentDay = courseDays.find(d => getDifferenceInDays(currentDate, d.date) == 0)
+  const targetDay = courseDays.find(d => getDifferenceInDays(targetDate, d.date) == 0)
 
+  
   courseDays.forEach((day) => {
     if (
-      getDifferenceInDays(day.date, targetDate) < 0 &&
+      getDifferenceInDays(day.date, targetDate) <= 0 &&
       getDifferenceInDays(day.date, currentDate) > 0
     ) {
+      console.log(day.date);
       if (pushForward) {
-        day.date = getNextDay(day.date)
+        day.date = getNextDay(day.date);
       } else {
-        day.date = getPreviousDay(day.date)
+        day.date = getPreviousDay(day.date); // det här är den vi håller på med
       }
       console.log(day.date);
     }
   });
+  currentDay!.date = targetDate
+
 };
 
 const movDayBackward = (
@@ -124,7 +130,21 @@ const movDayBackward = (
   targetDate: Date,
   courseDays: DayType[],
   pushForward: boolean
-) => {};
+) => {
+  courseDays.forEach((day) => {
+    if (
+      getDifferenceInDays(day.date, targetDate) > 0 &&
+      getDifferenceInDays(day.date, currentDate) < 0
+    ) {
+      if (pushForward) {
+        day.date = getNextDay(day.date);
+      } else {
+        day.date = getPreviousDay(day.date);
+      }
+      console.log(day.date);
+    }
+  });
+};
 
 /**
  * Utility function to deeply remove `id` property from objects.
