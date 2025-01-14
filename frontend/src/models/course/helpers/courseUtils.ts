@@ -104,7 +104,7 @@ const movDayForward = (
 ) => {
   // console.log(courseDays)
   const currentDay = courseDays.find(d => getDifferenceInDays(currentDate, d.date) == 0)
-  const targetDay = courseDays.find(d => getDifferenceInDays(targetDate, d.date) == 0)
+  // const targetDay = courseDays.find(d => getDifferenceInDays(targetDate, d.date) == 0)
 
   
   courseDays.forEach((day) => {

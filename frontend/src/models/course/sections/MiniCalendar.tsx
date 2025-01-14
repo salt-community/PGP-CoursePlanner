@@ -39,9 +39,9 @@ export default function MiniCalendar({ startDate, course, modules }: Props) {
 
     const { data, isPending, isError, error } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
 
-    const initialCalendarDays = calculateCourseDayDates(course, modules, startDate)
+    // const previewCourseCalendarDays = calculateCourseDayDates(course, modules, startDate)
     // console.log(initialCalendarDays.map(d => d.date.toDateString()))
-
+    const [previewCalendarDays, setPreviewCalendarDays] = useState(calculateCourseDayDates(course, modules, startDate))
 
     if (isError) {
         console.log("Query error:", error);
@@ -71,18 +71,18 @@ export default function MiniCalendar({ startDate, course, modules }: Props) {
                         ))}
                         {daysInMonth.map((thisDate, dateIndex) => {
                             
-                            const initialCalendarDaysIndex = initialCalendarDays.map(d => d.date.toDateString()).indexOf(thisDate.toDateString())
+                            const previewCalendarDaysIndex = previewCalendarDays.map(d => d.date.toDateString()).indexOf(thisDate.toDateString())
                             
-                            if (initialCalendarDaysIndex > -1) {                                
+                            if (previewCalendarDaysIndex > -1) {                                
                                 if(data![dateIndex] != null) {
-                                initialCalendarDays[initialCalendarDaysIndex].dateContent.push(...data![dateIndex].dateContent);
+                                    previewCalendarDays[previewCalendarDaysIndex].dateContent.push(...data![dateIndex].dateContent);
                                 }
                                 return (
                                     <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
                                         {data && data[dateIndex] !== null ? (
-                                            <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={initialCalendarDays[initialCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         ) : (
-                                            <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={initialCalendarDays[initialCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         )}
 
                                     </div>

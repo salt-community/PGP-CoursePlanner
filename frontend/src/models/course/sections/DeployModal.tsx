@@ -58,8 +58,8 @@ export default function DeployModal({ course, modules }: Props) {
         }
     };
 
-    const startDatePlus2 = new Date(startDate)
-    startDatePlus2.setDate(startDatePlus2.getDate() +2)
+    const startDatePlus5 = new Date(startDate)
+    startDatePlus5.setDate(startDatePlus5.getDate() +5)
 
     // moveDay(startDate, startDatePlus2, course, false)
 
@@ -110,7 +110,7 @@ export default function DeployModal({ course, modules }: Props) {
                         <form method="dialog" className="flex gap-5 justify-center">
                             <button className="btn">Cancel</button>
                             <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
-                            <button className="btn" onClick={() => moveDay(startDate, startDatePlus2, course, false)}> test moveDay</button>
+                            <button className="btn" onClick={() => moveDay(startDate, startDatePlus5, course, false)}> test moveDay</button>
                         </form>
                     </div>
                 </div>
