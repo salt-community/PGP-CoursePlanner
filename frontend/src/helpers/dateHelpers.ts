@@ -49,11 +49,11 @@ export const currentMonth = getMonth(new Date());
 export const currentWeek = getWeek(new Date());
 
 export const firstDayOfMonth = (month: number, year: number) => {
-  return new Date(year, month, 1);
+  return new Date(year, month, 1, 6);
 };
 
 export const lastDayOfMonth = (month: number, year: number) => {
-  return endOfMonth(new Date(year, month, 1));
+  return endOfMonth(new Date(year, month, 1, 6));
 };
 
 export const firstWeekDay = (date: Date) => {

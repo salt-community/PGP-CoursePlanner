@@ -11,6 +11,7 @@ import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries
 import { trackUrl } from "@helpers/helperMethods"
 import { DayModal } from "@models/home/sections/DayModal"
 import Header from "@components/Header"
+import { weeksCalc } from "../helpers/weeksCalc"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(parseInt(useMonthFromPath()));
@@ -79,7 +80,13 @@ export default function MonthView() {
                 </div>
             </Header>
 
-            <section className="flex flex-grow shadow-xl drop-shadow-2xl bg-white rounded-md border-l-[0.5px] border-r-[0.5px] border-b-[0.5px] border-gray-100">
+            <section className="flex flex-grow shadow-xl drop-shadow-2xl bg-white rounded-lg border-r-[0.5px] border-b-[0.5px] border-gray-100">
+                <div className={`grid grid-rows-[24px,repeat(${weeksCalc(year, month, endOfMonth2.slice(3,5)).length},1fr)] h-full bg-accent rounded-l-lg shadow-xl drop-shadow-2xl`}>
+                    <div></div>
+                    {weeksCalc(year, month, endOfMonth2.slice(3,5)).map(week => (
+                        <p className="p-2 text-lg border-t-[0.5px] border-gray-100">{week}</p>
+                    ))}
+                </div>
                 <div className="flex flex-col items-center w-full">
                     <div className="w-full grid grid-cols-7">
                         {fullWeek.map(day => (
