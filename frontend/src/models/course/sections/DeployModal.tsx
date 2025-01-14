@@ -58,9 +58,9 @@ export default function DeployModal({ course, modules }: Props) {
             navigate("/activecourses");
         }
     };
-
-    const startDatePlus5 = new Date(startDate)
-    startDatePlus5.setDate(startDatePlus5.getDate() + 5)
+    const date1 = new Date(course.startDate)
+    const date2 = new Date(date1!)
+    date2.setDate(date2.getDate() + 3)
 
     // moveDay(startDate, startDatePlus2, course, false)
 
@@ -113,7 +113,7 @@ export default function DeployModal({ course, modules }: Props) {
                             <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
                             <button className="btn" onClick={(event) => {
                                 event.preventDefault()
-                                moveDay(startDate, startDatePlus5, course, false)
+                                moveDay(date1, date2, course, false)
                                 setPreviewCalendarDays(updatePreviewCalendarDates(course))
                             }}> test moveDay</button>
                         </form>
