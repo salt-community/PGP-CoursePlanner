@@ -18,6 +18,10 @@ export default function EditAppliedCourse() {
         name: "",
         startDate: new Date(),
         modules: [],
+        track: {
+            color: "",
+            name: "",
+        }
     });
     const navigate = useNavigate();
     const handleGoBack = () => {

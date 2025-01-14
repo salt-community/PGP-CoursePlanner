@@ -18,10 +18,11 @@ const CourseInfo = ({ course, setCourse }: CourseInfoProps) => {
             />
         </div>
         <div className="flex flex-col gap-2 ml-auto">
+            <p>track: {course.track.name}</p>
             <label className="text-lg font-medium">Track:</label>
             <select
-                value={course.track}
-                onChange={(e) => setCourse({ ...course, track: e.target.value })}
+                value={course.track.name}
+                onChange={(e) => setCourse({ ...course, track:{ ...course.track, name: e.target.value } })}
                 className="w-full p-2 border border-gray-300 rounded-md"
             >
                 <option value="" disabled>Select a track</option>
