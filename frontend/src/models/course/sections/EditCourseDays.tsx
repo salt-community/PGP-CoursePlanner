@@ -1,7 +1,5 @@
-import { useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import { CourseType, CourseModuleType } from "@models/course/Types";
-import { useNavigate } from "react-router-dom";
 import Modules from "../components/Modules";
 import CourseInfo from "../components/CourseInfo";
 
@@ -12,17 +10,7 @@ type Props = {
 
 
 export default function EditCourseDays({ course, setCourse }: Props) {
-    // const appliedCourseId = useIdFromPath();
-    // const { data: appliedCourse, isLoading, isError } = useQueryAppliedCourseById(appliedCourseId);
-    const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
-
-
-    const navigate = useNavigate();
-    const handleGoBack = () => {
-        navigate(-1);
-    };
-
-
+ 
     const handleCreateNewAppliedModule = () => {
         const newModule: CourseModuleType = {
             courseId: course.id || 0,
@@ -42,11 +30,6 @@ export default function EditCourseDays({ course, setCourse }: Props) {
             ...prevCourse,
             modules: [...prevCourse.modules, newModule],
         }));
-    };
-    const handleUpdateCourse = () => {
-        if (course) {
-            mutationUpdateAppliedCourse.mutate(course);
-        }
     };
 
 
@@ -70,8 +53,7 @@ export default function EditCourseDays({ course, setCourse }: Props) {
                                 Add Module
                             </PrimaryBtn>
                         </div>
-                        <PrimaryBtn onClick={handleUpdateCourse}>Save</PrimaryBtn>
-                        <PrimaryBtn onClick={handleGoBack}>Abort</PrimaryBtn>
+                       
                     </div>
                 </section>
             </div>

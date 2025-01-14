@@ -7,17 +7,15 @@ import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries"
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import MiniCalendar from "./MiniCalendar";
-import { ModuleType } from "@models/module/Types";
-import { calculateCourseDayDates,  stripIdsFromCourse } from "../helpers/courseUtils";
+import { calculateCourseDayDates,  stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
 import EditCourseDays from "./EditCourseDays";
 
 
 type Props = {
     course: CourseType,
-    modules: ModuleType[]
 }
 
-export default function DeployModal({ course, modules }: Props) {
+export default function DeployModal({ course  }: Props) {
 
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -28,13 +26,13 @@ export default function DeployModal({ course, modules }: Props) {
 
     const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
     
-    
+    // calculateCourseDayDates(course, startDate)
     const [previewCourse, setCourse] = useState<CourseType>(course);
     const [previewCalendarDays, setPreviewCalendarDays] = useState(calculateCourseDayDates(previewCourse, startDate))
 
 
     useEffect(() => {
-        const updatedDays = calculateCourseDayDates(previewCourse, startDate);
+        const updatedDays = updatePreviewCalendarDates(previewCourse);
         setPreviewCalendarDays(updatedDays);
     }, [previewCourse, startDate]);
 
@@ -111,7 +109,7 @@ export default function DeployModal({ course, modules }: Props) {
                     <section className="flex flex-grow">
                       
                         <div className="flex-grow overflow-auto">
-                            <MiniCalendar startDate={startDate} course={previewCourse} modules={modules} previewCalendarDays={previewCalendarDays} />
+                            <MiniCalendar startDate={startDate}  previewCalendarDays={previewCalendarDays} />
                         </div>
                         <div >
                             <EditCourseDays course={previewCourse} setCourse={setCourse} />
