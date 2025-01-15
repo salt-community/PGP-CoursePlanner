@@ -7,15 +7,17 @@ import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
 import CalendarDate from "@models/calendar/sections/CalendarDate"
 import { CalendarDateType } from "@models/calendar/Types"
+import { ModuleType } from "../Types"
 
 type Props = {
     startDate: Date
-
+    selectedModule : ModuleType
+    selectedModuleStartDate : Date
     previewCalendarDays: CalendarDateType[]
-
+    setSelectedModuleStartDate : React.Dispatch<React.SetStateAction<Date>>
 }
 
-export default function MiniCalendar({ startDate, previewCalendarDays }: Props) {
+export default function MiniCalendar({ startDate, previewCalendarDays, selectedModule, selectedModuleStartDate, setSelectedModuleStartDate  }: Props) {
     const [month, setMonth] = useState<number>(startDate.getMonth());
     const [year, setYear] = useState<number>(startDate.getFullYear());
 
@@ -37,6 +39,15 @@ export default function MiniCalendar({ startDate, previewCalendarDays }: Props) 
     const endOfMonth2 = getDateAsString(endOfMonth);
 
     const { data, isLoading,  isError,  } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
+
+    const [currentIndex, setCurrentIndex] = useState<number>(15);
+
+
+    const openModal = (index: number) => {
+        setCurrentIndex(index);
+        setSelectedModuleStartDate(data![currentIndex].date)
+    };
+
 
     if (isError) {
         console.log("Query error");
@@ -76,9 +87,9 @@ export default function MiniCalendar({ startDate, previewCalendarDays }: Props) 
                                     return (
                                         <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
                                             {data && data[dateIndex] !== null ? (
-                                                <CalendarDate openModal={() => null} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                                <CalendarDate openModal={openModal} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                             ) : (
-                                                <CalendarDate openModal={() => null} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                                <CalendarDate openModal={openModal} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                             )}
 
                                         </div>
@@ -87,9 +98,9 @@ export default function MiniCalendar({ startDate, previewCalendarDays }: Props) 
                                 return (
                                     <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
                                         {data && data[dateIndex] !== null ? (
-                                            <CalendarDate openModal={() => null} isLoading={isLoading} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            <CalendarDate openModal={openModal} isLoading={isLoading} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         ) : (
-                                            <CalendarDate openModal={() => null} isLoading={isLoading} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            <CalendarDate openModal={openModal} isLoading={isLoading} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         )}
 
                                     </div>

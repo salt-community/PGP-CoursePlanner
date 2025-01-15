@@ -97,19 +97,19 @@ export default function DeployModal({ course }: Props) {
                     <section className="flex flex-grow">
 
                         <div className="flex-grow overflow-auto">
-                            <MiniCalendar startDate={startDate} previewCalendarDays={previewCalendarDays} />
+                            <MiniCalendar startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedModuleStartDate} setSelectedModuleStartDate= {setSelectedModuleStartDate}/>
                         </div>
                         <div >
                             {/* <EditCourseDays course={previewCourse} setCourse={setCourse} /> */}
                             <div>
-                                <p>Change start date of module</p>
+                                <h3 className="font-bold">Change start date of module</h3>
                                 <p>Selected module: {selectedModule.name} </p>
-                                <p>current start date for module: {getDateAsStringYyyyMmDd(selectedModule.startDate)} </p>
-                                <p>new start date for module: {getDateAsStringYyyyMmDd(selectedModuleStartDate)}</p>
+                                <p>current start: {getDateAsStringYyyyMmDd(selectedModule.startDate)} </p>
+                                <p>new start: {getDateAsStringYyyyMmDd(selectedModuleStartDate)}</p>
                                 <button className="btn" onClick={(event) => {
                                     event.preventDefault()
                                     const newModule = moveModule(selectedModule, selectedModuleStartDate)
-                                    const updatedModules: CourseModuleType[] = previewCourse.modules.map((m, index) =>
+                                    const updatedModules: CourseModuleType[] = previewCourse.modules.map((m) =>
                                         m.module.id == selectedModule.id
                                             ? { ...m, module: newModule }
                                             : m
