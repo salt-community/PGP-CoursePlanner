@@ -5,7 +5,7 @@ import { Fragment, useState } from "react"
 import CalendarDate from "../sections/CalendarDate"
 import { useNavigate } from "react-router-dom"
 import { firstDayOfMonth, allDaysInInterval, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
-import { format, getMonth, getWeek, getYear } from "date-fns"
+import { format, getMonth, getWeek, getYear} from "date-fns"
 import { useMonthFromPath, useYearFromPath } from "@helpers/helperHooks"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
 import { trackUrl } from "@helpers/helperMethods"
@@ -58,6 +58,22 @@ export default function MonthView() {
         }
     };
 
+    function handleNextMonth() {
+        setMonth(month === 11 ? 0 : month + 1);
+        if (month === 11) {
+            setYear(year + 1);
+        }
+        navigate(`/calendar/month/monthyear=${month === 11 ? 0 : month}-${month === 11 ? year + 1 : year}`)
+    }
+
+    function handlePrevMonth() {
+        setMonth(month === 0 ? 11 : month - 1);
+        if (month === 0) {
+            setYear(year - 1);
+        }
+        navigate(`/calendar/month/monthyear=${month === 0 ? 11 : month - 1}-${month === 0 ? year - 1 : year}`)
+    }
+
     const weeks: number[] = [];
     function handleWeek(date: Date) {
         const monthIndex = parseInt(getDateAsString(date).slice(0, 2)) - 1;
@@ -76,8 +92,8 @@ export default function MonthView() {
             <Header>
                 <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1">
-                        <PreviousBtn onClick={() => { setMonth(month - 1); navigate(`/calendar/month/monthyear=${month - 1}-${year}`); }} />
-                        <NextBtn onClick={() => { setMonth(month + 1); navigate(`/calendar/month/monthyear=${month + 1}-${year}`); }} />
+                        <PreviousBtn onClick={() => handlePrevMonth()} />
+                        <NextBtn onClick={() => handleNextMonth()} />
                     </div>
                     <h1 className="text-3xl font-semibold">{monthInText} {year}</h1>
                     <select className="select select-bordered select-sm max-w-xs ">
