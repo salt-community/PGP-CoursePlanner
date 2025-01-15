@@ -1,7 +1,6 @@
 import { format } from "date-fns";
 import { today } from "@helpers/dateHelpers";
 import { DateContent } from "../Types";
-import { useRef } from "react";
 import LoadingSkeletonMonth from "../components/LoadingSkeletonMonth";
 
 type Props = {
@@ -13,7 +12,6 @@ type Props = {
 }
 
 export default function CalenderDate({ dateContent, date, openModal, indexForModal, isLoading }: Props) {
-    const refButton = useRef<HTMLButtonElement>(null);
 
     const border = "border-[0.5px] border-gray-100";
     const text = today == date ? "font-bold text-[#EC0E40]" : "";
@@ -39,8 +37,8 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
     });
 
     return (
-        <button ref={refButton} onClick={() => openModal(indexForModal)}
-            className={`bg-white ${border} flex flex-col gap-2 p-4 pt-1 pb-2 items-center h-full hover:bg-[#F9F9F9] hover:cursor-pointer transition-transform duration-200`}>
+        <button onClick={isLoading ? () => { } : () => openModal(indexForModal)}
+            className={`bg-white ${border} flex flex-col gap-2 p-4 pt-1 pb-2 items-center h-full ${!isLoading ? "hover:bg-[#F9F9F9] hover:cursor-pointer" : "hover:cursor-default"} transition-transform duration-200`}>
             <div className={`${bg} h-10 w-10 rounded-full flex justify-center items-center`}>
                 <h2 className={`${text}`}>
                     {format(date, 'd')}
