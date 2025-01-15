@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { CourseModuleType, CourseType } from "../Types";
 import { useMutationPostAppliedCourse, useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import { useNavigate } from "react-router-dom";
-import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
+// import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import MiniCalendar from "./MiniCalendar";
@@ -21,10 +21,8 @@ export default function DeployModal({ course }: Props) {
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
 
     const mutationPostAppliedCourse = useMutationPostAppliedCourse();
-    const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
-    const navigate = useNavigate();
 
-    const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
+    const navigate = useNavigate();
 
     calculateCourseDayDates(course, startDate)
     const [previewCourse, setCourse] = useState<CourseType>(course);
@@ -53,15 +51,6 @@ export default function DeployModal({ course }: Props) {
             if (startDate.getDay() == 6 || startDate.getDay() == 0)
                 setIsInvalidDate(true);
         } else {
-            const appliedCoursesWithCourseId = appliedCourses!.filter(
-                (m) => m.id! == course!.id
-            );
-            if (appliedCoursesWithCourseId.length > 0) {
-
-                mutationUpdateAppliedCourse.mutate(myCourse);
-            }
-
-
             mutationPostAppliedCourse.mutate(myCourse);
             navigate("/activecourses");
         }
@@ -71,12 +60,6 @@ export default function DeployModal({ course }: Props) {
 
     return (
         <>
-            {(isLoadingAppliedCourses) && (previewCourse) && (
-                <LoadingMessage />
-            )}
-            {(isErrorAppliedCourses) && <ErrorMessage />}
-
-
             <dialog id="my_DeployModal_1" className="modal">
                 <div className="modal-box flex flex-col h-[80vh] w-11/12 max-w-5xl">
                     <h3 className="font-bold text-lg">Choose a start date and deploy Bootcamp</h3>
@@ -115,7 +98,11 @@ export default function DeployModal({ course }: Props) {
                             <MiniCalendar startDate={startDate} previewCalendarDays={previewCalendarDays} />
                         </div>
                         <div >
-                            <EditCourseDays course={previewCourse} setCourse={setCourse} />
+                            {/* <EditCourseDays course={previewCourse} setCourse={setCourse} /> */}
+                            <div>
+                                <p>Change start date of module</p>
+                                <p>Selected module: </p>
+                            </div>
                         </div>
                     </section>
                     <div className="modal-action">
