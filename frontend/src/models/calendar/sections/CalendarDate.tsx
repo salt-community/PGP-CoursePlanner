@@ -38,7 +38,7 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
 
     return (
         <button ref={refButton} onClick={() => openModal(indexForModal)}
-            className={`bg-white ${border} flex flex-col gap-2 p-4 items-center h-full hover:bg-[#F9F9F9] hover:cursor-pointer transition-transform duration-200`}>
+            className={`bg-white ${border} flex flex-col gap-2 p-4 pt-1 items-center h-full hover:bg-[#F9F9F9] hover:cursor-pointer transition-transform duration-200`}>
             <div className={`${bg} h-10 w-10 rounded-full flex justify-center items-center`}>
                 <h2 className={`${text}`}>
                     {format(date, 'd')}
