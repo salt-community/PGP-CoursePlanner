@@ -39,8 +39,11 @@ export default function DeployModal({ course }: Props) {
 
 
     const handleApplyTemplate = async () => {
-        const myCourse = stripIdsFromCourse(previewCourse)
 
+        const myTrack = previewCourse.track.id;
+        const myCourse = stripIdsFromCourse(previewCourse)
+        myCourse.track.id = myTrack
+        
         console.log(myCourse)
         console.log(previewCourse)
 

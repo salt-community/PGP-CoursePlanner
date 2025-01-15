@@ -68,6 +68,10 @@ public class CourseService : IService<Course>
 
     private async Task<Course> CreateAppliedCourseAsync(Course appliedCourse)
     {
+        var trackId = appliedCourse.Track.Id;
+        var existingTrack = _context.Tracks.First(t => t.Id == trackId);
+        appliedCourse.Track = existingTrack;
+
         _context.Courses.Add(appliedCourse);
         _context.SaveChanges();
 
