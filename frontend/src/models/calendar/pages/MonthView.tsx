@@ -91,13 +91,13 @@ export default function MonthView() {
                 </div>
             </Header>
 
-            <section className={`grid grid-cols-[40px,repeat(7,1fr)] grid-rows-[24px,repeat(${numberOfWeeks},1fr)] w-full h-full bg-white rounded-l-xl drop-shadow-xl`}>
+            <section className={`grid w-full h-full bg-white rounded-l-xl drop-shadow-xl`} style={{ gridTemplateRows: `24px repeat(${numberOfWeeks}, 1fr)`, gridTemplateColumns: `32px repeat(7, 1fr)` }}>
                 <div className="bg-accent rounded-tl-xl border-r-[0.5px] border-gray-100"></div>
                 {fullWeek.map(day => (
                     <div key={format(day, 'E')} className="flex justify-center items-center p-">{format(day, 'E')}</div>
                 ))}
 
-                <p className="bg-accent col-start-1 col-end-2 min-w-10 p-2 h-full text-lg text-center border-t-[0.5px] border-r-[0.5px] border-gray-100">{handleWeek(startOfMonth)}</p>
+                <p className="bg-accent col-start-1 col-end-2 min-w-8 p-1 h-full text-lg text-center border-t-[0.5px] border-r-[0.5px] border-gray-100">{handleWeek(startOfMonth)}</p>
 
                 {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
                     <div key={format(emptyDayIndex, 'd')} className="border-t-[0.5px] border-b-[0.5px] border-gray-100"></div>
@@ -106,7 +106,7 @@ export default function MonthView() {
                 {daysInMonth.map((thisDate, dateIndex) => {
                     const weekNumber = handleWeek(thisDate);
                     return <>
-                        {weekNumber && <p className="bg-accent col-start-1 col-end-2 min-w-10 p-2 h-full text-lg text-center border-t-[0.5px] border-r-[0.5px] border-gray-100">{weekNumber}</p>}
+                        {weekNumber && <p className="bg-accent col-start-1 col-end-2 min-w-8 p-1 h-full text-lg text-center border-t-[0.5px] border-r-[0.5px] border-gray-100">{weekNumber}</p>}
                         <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
                             {data && data[dateIndex] !== null ? <CalendarDate openModal={openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                 : <CalendarDate openModal={openModal} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
