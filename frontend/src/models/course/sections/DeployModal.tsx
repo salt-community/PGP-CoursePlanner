@@ -1,14 +1,13 @@
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
-import { CourseModuleType, CourseType } from "../Types";
+import { CourseModuleType, CourseType, ModuleType } from "../Types";
 import { useMutationPostAppliedCourse, useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import { useNavigate } from "react-router-dom";
 // import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
-import LoadingMessage from "@components/LoadingMessage";
-import ErrorMessage from "@components/ErrorMessage";
 import MiniCalendar from "./MiniCalendar";
 import { calculateCourseDayDates, getNewDate, moveModule, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
 import EditCourseDays from "./EditCourseDays";
+import { getDateAsStringYyyyMmDd } from "@helpers/dateHelpers";
 
 
 type Props = {
@@ -27,6 +26,9 @@ export default function DeployModal({ course }: Props) {
     calculateCourseDayDates(course, startDate)
     const [previewCourse, setCourse] = useState<CourseType>(course);
     const [previewCalendarDays, setPreviewCalendarDays] = useState(updatePreviewCalendarDates(previewCourse))
+
+    const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[2].module);
+    const [selectedModuleStartDate, setSelectedModuleStartDate] = useState<Date>(new Date())
 
 
     useEffect(() => {
@@ -61,7 +63,7 @@ export default function DeployModal({ course }: Props) {
     return (
         <>
             <dialog id="my_DeployModal_1" className="modal">
-                <div className="modal-box flex flex-col h-[80vh] w-11/12 max-w-5xl">
+                <div className="modal-box flex flex-col h-[80vh] w-full max-w-5xl">
                     <h3 className="font-bold text-lg">Choose a start date and deploy Bootcamp</h3>
                     <br />
 
@@ -101,7 +103,19 @@ export default function DeployModal({ course }: Props) {
                             {/* <EditCourseDays course={previewCourse} setCourse={setCourse} /> */}
                             <div>
                                 <p>Change start date of module</p>
-                                <p>Selected module: </p>
+                                <p>Selected module: {selectedModule.name} </p>
+                                <p>current start date for module: {getDateAsStringYyyyMmDd(selectedModule.startDate)} </p>
+                                <p>new start date for module: {getDateAsStringYyyyMmDd(selectedModuleStartDate)}</p>
+                                <button className="btn" onClick={(event) => {
+                                    event.preventDefault()
+                                    const updatedModules: CourseModuleType[] = previewCourse.modules.map((m, index) =>
+                                        index === 0
+                                            ? { ...m, module: moveModule(selectedModule, selectedModuleStartDate) }
+                                            : m
+                                    );
+                                    setCourse({ ...previewCourse, modules: updatedModules });
+
+                                }}>update module start date</button>
                             </div>
                         </div>
                     </section>
