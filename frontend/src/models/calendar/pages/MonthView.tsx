@@ -103,8 +103,8 @@ export default function MonthView() {
                     return <>
                         {weekNumber && <p className="bg-accent col-start-1 col-end-2 min-w-8 p-1 h-full text-lg text-center border-t-[0.5px] border-r-[0.5px] border-gray-100">{weekNumber}</p>}
                         <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
-                            {data && data[dateIndex] !== null ? <CalendarDate openModal={openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                : <CalendarDate openModal={openModal} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
+                            {data && data[dateIndex] !== null ? <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                : <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
                         </div>
                     </>
                 })}
