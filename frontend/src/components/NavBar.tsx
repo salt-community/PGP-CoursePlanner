@@ -3,6 +3,7 @@ import { deleteCookie } from "@helpers/cookieHelpers";
 import { currentMonth, currentYear } from "@helpers/dateHelpers";
 import { useMemo, useState } from "react";
 import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
+import { useQueryTracks } from "@api/track/trackQueries";
 
 type Props = {
   isSidebarExpanded: boolean,
@@ -14,6 +15,9 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
   const location = useLocation();
   const [bootcampDetailsIsActive, setBootcampDetailsIsActive] = useState(false);
   const { data } = useQueryAppliedCourses();
+  const { data: tracks } = useQueryTracks();
+
+  console.log(tracks);
 
   const activeCourses = useMemo(() => {
     if (!data) return [];
