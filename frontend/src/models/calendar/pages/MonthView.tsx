@@ -1,7 +1,7 @@
 import NextBtn from "@components/buttons/NextBtn"
 import PreviousBtn from "@components/buttons/PreviousBtn"
 import Page from "@components/Page"
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import CalendarDate from "../sections/CalendarDate"
 import { useNavigate } from "react-router-dom"
 import { firstDayOfMonth, allDaysInInterval, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
@@ -100,13 +100,13 @@ export default function MonthView() {
 
                 {daysInMonth.map((thisDate, dateIndex) => {
                     const weekNumber = handleWeek(thisDate);
-                    return <>
+                    return <Fragment key={format(thisDate, 'yyyy-MM-dd')}>
                         {weekNumber && <p className="bg-accent col-start-1 col-end-2 min-w-8 p-1 h-full text-lg text-center border-t-[0.5px] border-r-[0.5px] border-gray-100">{weekNumber}</p>}
-                        <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
-                            {data && data[dateIndex] !== null ? <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                : <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />}
+                        <div className="flex flex-col">
+                            {data && data[dateIndex] !== null ? <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} date={getDateAsString(thisDate)} />
+                                : <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={[]} date={getDateAsString(thisDate)} />}
                         </div>
-                    </>
+                    </Fragment>
                 })}
             </section>
             {isError && <ErrorModal error="Days" />}
