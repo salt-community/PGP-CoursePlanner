@@ -10,8 +10,8 @@ import { CalendarDateType } from "@models/calendar/Types"
 
 type Props = {
     startDate: Date
-    
-    previewCalendarDays : CalendarDateType[]
+
+    previewCalendarDays: CalendarDateType[]
 
 }
 
@@ -36,70 +36,73 @@ export default function MiniCalendar({ startDate, previewCalendarDays }: Props) 
     const startOfMonth2 = getDateAsString(startOfMonth);
     const endOfMonth2 = getDateAsString(endOfMonth);
 
-    const { data, isPending, isError, error } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
+    const { data, isLoading,  isError,  } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
 
     if (isError) {
-        console.log("Query error:", error);
+        console.log("Query error");
     }
-    if (isPending) return "pending";
+    if (isLoading) return "pending";
 
     return (
-        <div className="flex flex-col h-full">
-            <header className="flex mb-0 p-0 items-center gap-2">
-                <div className="flex items-center">
-                    <PreviousBtn onClick={() => { setMonth(month - 1); }} />
-                    <NextBtn onClick={() => { setMonth(month + 1); }} />
-                </div>
-                <h1 className="text-3xl">{monthInText} {year}</h1>
-            </header>
+        <>
+            {data && <div className="flex flex-col h-full">
+                <header className="flex mb-0 p-0 items-center gap-2">
+                    <div className="flex items-center">
+                        <PreviousBtn onClick={() => { setMonth(month - 1); }} />
+                        <NextBtn onClick={() => { setMonth(month + 1); }} />
+                    </div>
+                    <h1 className="text-3xl">{monthInText} {year}</h1>
+                </header>
 
-            <section className="flex-grow flex py-2">
-                <div className="flex flex-col items-center w-full h-full">
-                    <div className={`w-full flex-grow   grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
-                        {fullWeek.map(day => (
-                            <div key={format(day, 'E')} className="w-1/7 flex justify-center items-center p-1 border-b-2 border-gray-100">
-                                {format(day, 'E')}
-                            </div>
-                        ))}
-                        {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
-                            <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-full"></div>
-                        ))}
-                        {daysInMonth.map((thisDate, dateIndex) => {
-                            
-                            const previewCalendarDaysIndex = previewCalendarDays.map(d => d.date.toDateString()).indexOf(thisDate.toDateString())
-                            
-                            if (previewCalendarDaysIndex > -1) {                                
-                                if(data![dateIndex] != null) {
-                                    previewCalendarDays[previewCalendarDaysIndex].dateContent.push(...data![dateIndex].dateContent);
+                <section className="flex-grow flex py-2">
+                    <div className="flex flex-col items-center w-full h-full">
+                        <div className={`w-full flex-grow   grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
+                            {fullWeek.map(day => (
+                                <div key={format(day, 'E')} className="w-1/7 flex justify-center items-center p-1 border-b-2 border-gray-100">
+                                    {format(day, 'E')}
+                                </div>
+                            ))}
+                            {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
+                                <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-full"></div>
+                            ))}
+                            {daysInMonth.map((thisDate, dateIndex) => {
+
+                                const previewCalendarDaysIndex = previewCalendarDays.map(d => d.date.toDateString()).indexOf(thisDate.toDateString())
+
+                                if (previewCalendarDaysIndex > -1) {
+                                    if (data[dateIndex] != null) {
+                                        previewCalendarDays[previewCalendarDaysIndex].dateContent.push(...data![dateIndex].dateContent);
+                                    }
+                                    return (
+                                        <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
+                                            {data && data[dateIndex] !== null ? (
+                                                <CalendarDate openModal={() => null} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            ) : (
+                                                <CalendarDate openModal={() => null} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            )}
+
+                                        </div>
+                                    )
                                 }
+
+
                                 return (
                                     <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
                                         {data && data[dateIndex] !== null ? (
-                                            <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            <CalendarDate openModal={() => null} isLoading={isLoading} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         ) : (
-                                            <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            <CalendarDate openModal={() => null} isLoading={isLoading} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         )}
 
                                     </div>
-                                )
-                            }
-
-
-                            return (
-                                <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
-                                    {data && data[dateIndex] !== null ? (
-                                        <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                    ) : (
-                                        <CalendarDate openModal={() => null} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                    )}
-
-                                </div>
-                            );
-                        })}
+                                );
+                            })}
+                        </div>
                     </div>
-                </div>
-            </section>
-        </div>
+                </section>
+            </div>
+            }
+        </>
     );
 
 }
