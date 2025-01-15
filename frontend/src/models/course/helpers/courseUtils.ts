@@ -60,6 +60,7 @@ export const calculateCourseDayDates = (
       });
       currentDate.setDate(currentDate.getDate() + 1);
     }
+    modules[i].startDate = modules[i].days[0].date
   }
   return calendarDateTypes;
 };
@@ -107,17 +108,24 @@ export const getNewDate = (currentDate: Date, difference : number) => {
   return todayDate;
 };
 
+export const getCalculatedDays = (days : DayType[], offset : number) => {
+
+  const newDays : DayType[] = deepRemoveId(days);
+
+  newDays.forEach((day) => day.date = getNewDate(day.date, offset)) 
+  console.log("calc days")
+  return newDays;
+};
 
 
 export const moveModule = (module : ModuleType, targetDate : Date ) => {
-  const dateDifference = getDifferenceInDays(module.days[0].date, targetDate);
 
   const newModule : ModuleType = deepRemoveId(module)
 
-  newModule.days.forEach((day) => {
-    console.log("new date: ", getNewDate(day.date, dateDifference))
-    day.date = getNewDate(day.date, dateDifference)
-  })
+  const offset = getDifferenceInDays(module.startDate, targetDate)
+  newModule.startDate = targetDate
+  newModule.days = getCalculatedDays(newModule.days, offset)
+
   return newModule
 }
 

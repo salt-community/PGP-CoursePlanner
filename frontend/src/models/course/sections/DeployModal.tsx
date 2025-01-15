@@ -125,7 +125,7 @@ export default function DeployModal({ course }: Props) {
                             <button className="btn" onClick={(event) => {
                                 event.preventDefault();
                                 const updatedModules : CourseModuleType[] = previewCourse.modules.map((m, index) =>
-                                    index === 0
+                                    index >-1
                                         ? { ...m, module: moveModule(m.module, getNewDate(new Date(), 2)) }
                                         : m
                                 );

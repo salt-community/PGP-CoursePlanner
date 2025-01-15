@@ -19,6 +19,7 @@ public class Module
     public string[] Track { get; set; } = [];
     public int Order { get; set; }
     public bool IsApplied { get; set; } = false;
+    public DateTime StartDate {get; set;} 
 
     public Module ShallowClone()
     {

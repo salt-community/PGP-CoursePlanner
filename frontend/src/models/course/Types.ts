@@ -33,6 +33,8 @@ export type ModuleType = {
   isApplied: boolean;
   days: DayType[];
   courseModules?: CourseModuleType[]; 
+  startDate : Date
+
 }
 
 export type CourseType = {
