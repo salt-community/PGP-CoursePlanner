@@ -65,10 +65,11 @@ export const calculateCourseDayDates = (
 };
 
 
-export const updatePreviewCalendarDates = ({course, moduleStartDates} : updatePreviewCourseProps) => {
+export const updatePreviewCalendarDates = (course : CourseType) => {
   const calendarDateTypes: CalendarDateType[] = [];
   const modules = course.modules.map(m => m.module);
-  for (let i = 0; i < modules.length; i++) {
+
+  for (let i = 0; i < modules.length; i++) {    
     for (let j = 0; j < modules[i].numberOfDays; j++) {
      
       calendarDateTypes.push({
@@ -91,19 +92,6 @@ export const updatePreviewCalendarDates = ({course, moduleStartDates} : updatePr
 
 }
 
-
-const getNextDay = (today: Date) => {
-  const todayDate = new Date(today);
-  todayDate.setDate(todayDate.getDate() + 1);
-  return todayDate;
-};
-
-const getPreviousDay = (today: Date) => {
-  const todayDate = new Date(today);
-  todayDate.setDate(todayDate.getDate() - 1);
-  return todayDate;
-};
-
 const getDifferenceInDays = (date1: Date, date2: Date) => {
   const date1Ms = new Date(date1).getTime();
   const date2Ms = new Date(date2).getTime();
@@ -111,67 +99,7 @@ const getDifferenceInDays = (date1: Date, date2: Date) => {
   return Math.floor(differenceMs / (1000 * 60 * 60 * 24));
 };
 
-export const moveDay = (
-  currentDate: Date,
-  targetDate: Date,
-  course: CourseType,
-  pushForward: boolean
-) => {
 
-  const courseDays = course.modules.flatMap((m) => m.module.days);
-
-  if (getDifferenceInDays(currentDate, targetDate) < 0)
-    return movDayForward(currentDate, targetDate, courseDays, pushForward);
-  else return movDayBackward(currentDate, targetDate, courseDays, pushForward);
-};
-
-const movDayForward = (
-  currentDate: Date,
-  targetDate: Date,
-  courseDays: DayType[],
-  pushForward: boolean
-) => {
-  const currentDay = courseDays.find(d => getDifferenceInDays(currentDate, d.date) == 0)
-
-  
-  courseDays.forEach((day) => {
-    if (
-      getDifferenceInDays(day.date, targetDate) <= 0 &&
-      getDifferenceInDays(day.date, currentDate) > 0
-    ) {
-      console.log(day.date);
-      if (pushForward) {
-        day.date = getNextDay(day.date);
-      } else {
-        day.date = getPreviousDay(day.date); 
-      }
-      console.log(day.date);
-    }
-  });
-  currentDay!.date = targetDate
-
-};
-
-const movDayBackward = (
-  currentDate: Date,
-  targetDate: Date,
-  courseDays: DayType[],
-  pushForward: boolean
-) => {
-  courseDays.forEach((day) => {
-    if (
-      getDifferenceInDays(day.date, targetDate) > 0 &&
-      getDifferenceInDays(day.date, currentDate) < 0
-    ) {
-      if (pushForward) {
-        day.date = getNextDay(day.date);
-      } else {
-        day.date = getPreviousDay(day.date);
-      }
-      console.log(day.date);
-    }
-  });
-};
 
 export const getNewDate = (currentDate: Date, difference : number) => {
   const todayDate = new Date(currentDate);
@@ -181,9 +109,7 @@ export const getNewDate = (currentDate: Date, difference : number) => {
 
 
 
-export const moveModule = (course : CourseType, moduleIndex : number, targetDate : Date ) => {
-  const module = course.modules.map(m => m.module)[moduleIndex]
-
+export const moveModule = (module : ModuleType, targetDate : Date ) => {
   const dateDifference = getDifferenceInDays(module.days[0].date, targetDate);
 
   module.days.forEach((day) => {
