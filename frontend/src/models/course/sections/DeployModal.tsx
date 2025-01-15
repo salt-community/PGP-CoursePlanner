@@ -1,12 +1,12 @@
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { CourseModuleType, CourseType, ModuleType } from "../Types";
-import { useMutationPostAppliedCourse, useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
+import { useMutationPostAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import { useNavigate } from "react-router-dom";
 // import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import MiniCalendar from "./MiniCalendar";
 import { calculateCourseDayDates, getNewDate, moveModule, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
-import EditCourseDays from "./EditCourseDays";
+// import EditCourseDays from "./EditCourseDays";
 import { getDateAsStringYyyyMmDd } from "@helpers/dateHelpers";
 
 
@@ -34,7 +34,6 @@ export default function DeployModal({ course }: Props) {
     useEffect(() => {
         const updatedDays = updatePreviewCalendarDates(previewCourse);
         console.log("update days")
-        console.log(previewCourse)
         setPreviewCalendarDays(updatedDays);
     }, [previewCourse, startDate]);
 
@@ -97,7 +96,7 @@ export default function DeployModal({ course }: Props) {
                     <section className="flex flex-grow">
 
                         <div className="flex-grow overflow-auto">
-                            <MiniCalendar startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedModuleStartDate} setSelectedModuleStartDate= {setSelectedModuleStartDate}/>
+                            <MiniCalendar previewCourse={previewCourse} startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedModuleStartDate} setSelectedModuleStartDate={setSelectedModuleStartDate} setSelectedModule={setSelectedModule}/>
                         </div>
                         <div >
                             {/* <EditCourseDays course={previewCourse} setCourse={setCourse} /> */}
@@ -116,8 +115,6 @@ export default function DeployModal({ course }: Props) {
                                     );
                                     setCourse({ ...previewCourse, modules: updatedModules });
                                     setSelectedModule(newModule)
-                                    
-
                                 }}>update module start date</button>
                             </div>
                         </div>

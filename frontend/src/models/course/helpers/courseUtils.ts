@@ -1,6 +1,5 @@
 
-import { CourseType, DayType, ModuleType, updatePreviewCourseProps } from "../Types";
-import { CalendarDateType } from "@models/calendar/Types";
+import { CalendarDateType, CourseType, DayType, ModuleType, updatePreviewCourseProps } from "../Types";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
   return modules.some((module, idx) =>
@@ -55,6 +54,7 @@ export const calculateCourseDayDates = (
             color: "#999999",
             appliedCourseId: course.id,
             moduleName: modules[i].name,
+            moduleId: modules[i].id
           },
         ],
       });
@@ -84,6 +84,7 @@ export const updatePreviewCalendarDates = (course : CourseType) => {
             color: "#999999",
             appliedCourseId: course.id,
             moduleName: modules[i].name,
+            moduleId: modules[i].id            
           },
         ],
       });

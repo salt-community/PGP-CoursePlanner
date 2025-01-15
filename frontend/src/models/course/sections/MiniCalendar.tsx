@@ -5,9 +5,8 @@ import { useState } from "react"
 import { firstDayOfMonth, allDaysInInterval, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
-import CalendarDate from "@models/calendar/sections/CalendarDate"
-import { CalendarDateType } from "@models/calendar/Types"
-import { ModuleType } from "../Types"
+import { CalendarDateType, CourseType, ModuleType } from "../Types"
+import CalendarDate from "./CalendarDate"
 
 type Props = {
     startDate: Date
@@ -15,9 +14,11 @@ type Props = {
     selectedModuleStartDate : Date
     previewCalendarDays: CalendarDateType[]
     setSelectedModuleStartDate : React.Dispatch<React.SetStateAction<Date>>
+    previewCourse : CourseType
+    setSelectedModule :React.Dispatch<React.SetStateAction<ModuleType>>
 }
 
-export default function MiniCalendar({ startDate, previewCalendarDays, selectedModule, selectedModuleStartDate, setSelectedModuleStartDate  }: Props) {
+export default function MiniCalendar({ startDate, previewCalendarDays, selectedModule, selectedModuleStartDate, setSelectedModuleStartDate, previewCourse, setSelectedModule  }: Props) {
     const [month, setMonth] = useState<number>(startDate.getMonth());
     const [year, setYear] = useState<number>(startDate.getFullYear());
 
@@ -38,7 +39,7 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
     const startOfMonth2 = getDateAsString(startOfMonth);
     const endOfMonth2 = getDateAsString(endOfMonth);
 
-    const { data, isLoading,  isError,  } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
+    const { data, isLoading,  isError,  } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2); // we get lint issues because data here is not of the exact same type
 
 
 
@@ -51,6 +52,8 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
         console.log("Query error");
     }
     if (isLoading) return "pending";
+
+    const moduleDateStrings = selectedModule.days.map(d => getDateAsString(d.date))
 
     return (
         <>
@@ -85,9 +88,9 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                                     return (
                                         <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
                                             {data && data[dateIndex] !== null ? (
-                                                <CalendarDate openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                                <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate) == getDateAsString(thisDate) } openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                             ) : (
-                                                <CalendarDate openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                                <CalendarDate setSelectedModule={setSelectedModule}  previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate) == getDateAsString(thisDate) }  openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                             )}
 
                                         </div>
@@ -96,9 +99,9 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                                 return (
                                     <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
                                         {data && data[dateIndex] !== null ? (
-                                            <CalendarDate openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            <CalendarDate setSelectedModule={setSelectedModule}  previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate) == getDateAsString(thisDate) }  openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         ) : (
-                                            <CalendarDate openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            <CalendarDate setSelectedModule={setSelectedModule}  previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate) == getDateAsString(thisDate) }  openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         )}
 
                                     </div>
