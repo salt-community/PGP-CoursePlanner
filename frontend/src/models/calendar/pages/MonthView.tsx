@@ -12,6 +12,7 @@ import { trackUrl } from "@helpers/helperMethods"
 import { DayModal } from "@models/home/sections/DayModal"
 import Header from "@components/Header"
 import { weeksCalc } from "../helpers/weeksCalc"
+import ErrorModal from "@components/ErrorModal"
 
 export default function MonthView() {
     const [month, setMonth] = useState<number>(parseInt(useMonthFromPath()));
@@ -35,7 +36,7 @@ export default function MonthView() {
     const endOfMonth2 = getDateAsString(endOfMonth);
     const numberOfWeeks = weeksCalc(endOfMonth2);
 
-    const { data, isPending, isError, error } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
+    const { data, isLoading, isError } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
 
     const openModal = (index: number) => {
         setCurrentIndex(index);
@@ -56,12 +57,6 @@ export default function MonthView() {
             setCurrentIndex(currentIndex - 1);
         }
     };
-
-
-    if (isError) {
-        console.log("Query error:", error);
-    }
-    if (isPending) return "pending";
 
     const weeks: number[] = [];
     function handleWeek(date: Date) {
@@ -114,6 +109,7 @@ export default function MonthView() {
                     </>
                 })}
             </section>
+            {isError && <ErrorModal error="Days" />}
             {currentIndex !== null && data && (
                 <DayModal
                     modalData={data[currentIndex]}
