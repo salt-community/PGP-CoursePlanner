@@ -61,7 +61,7 @@ export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps)
             isToday = false;
         }
         const commonClasses = "flex flex-col w-full gap-3 p-3 min-h-[400px]";
-        const hoverClasses = "hover:bg-[#F9F9F9] hover:cursor-pointer  hover:scale-[1.03] hover:border-l hover:border-r transition-transform duration-200";
+        const hoverClasses = "hover:bg-[#F9F9F9] hover:cursor-pointer";
         const borderClasses = "border-l-[0.5px] border-3-[0.5px] border-accent";
         const backgroundClasses = "bg-white";
         const textClasses = "text-lg";
