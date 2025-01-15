@@ -4,6 +4,7 @@ import { currentMonth, currentYear } from "@helpers/dateHelpers";
 import { useMemo, useState } from "react";
 import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import { useQueryTracks } from "@api/track/trackQueries";
+import { Track } from "@models/course/Types";
 
 type Props = {
   isSidebarExpanded: boolean,
@@ -16,8 +17,20 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
   const [bootcampDetailsIsActive, setBootcampDetailsIsActive] = useState(false);
   const { data } = useQueryAppliedCourses();
   const { data: tracks } = useQueryTracks();
+  const [isVisibleTracks, setIsVisibleTracks] = useState<number[]>([]);
 
-  console.log(tracks);
+  function getVisibleTracks() {
+    const visibleTracks = localStorage.getItem('visibleTracks');
+    if (visibleTracks) {
+      const parsedVisibleTracks: number[] = JSON.parse(visibleTracks);
+      setIsVisibleTracks(parsedVisibleTracks);
+    }
+  }
+
+  function saveVisibleTracks(tracks: Track[]) {
+    const visibleTracks = tracks.map(track => track.id);
+    localStorage.setItem('visibleTracks', JSON.stringify(visibleTracks  ));
+  }
 
   const activeCourses = useMemo(() => {
     if (!data) return [];
