@@ -4,7 +4,7 @@ import { weekDays, getDateAsString, today } from "@helpers/dateHelpers";
 import { CalendarDateType } from "@models/calendar/Types";
 import { format, getWeek } from "date-fns";
 import WeekDay from "@models/calendar/sections/WeekDay";
-import LoadingSkeleton from "../components/LoadingSkeleton";
+import LoadingSkeletonWeeks from "../components/LoadingSkeletonWeeks";
 
 interface WeekProps {
     data: CalendarDateType[] | undefined;
@@ -79,7 +79,7 @@ export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps)
                     {day.getDate()} {monthNames[day.getMonth()]}
                 </h2>
                 {isCalendarLoading ?
-                    <LoadingSkeleton />
+                    <LoadingSkeletonWeeks />
                     :
                     <>
                         {data && data[index] !== null ? <WeekDay dateContent={data[index].dateContent} /> : ""}
