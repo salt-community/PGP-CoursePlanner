@@ -34,7 +34,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
     deleteCookie('JWT');
     deleteCookie("access_token");
     deleteCookie("auth_code");
-    navigate("/");
+    navigate("/login");
     window.location.reload();
   };
 
