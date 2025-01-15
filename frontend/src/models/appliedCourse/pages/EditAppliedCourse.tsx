@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useQueryAppliedCourseById } from "@api/appliedCourse/appliedCourseQueries";
 import { useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
-import { CourseType, CourseModuleType} from "@models/course/Types";
+import { CourseType, CourseModuleType } from "@models/course/Types";
 import { useNavigate } from "react-router-dom";
 import Modules from "../components/Modules";
 import CourseInfo from "../components/CourseInfo";
@@ -20,8 +20,9 @@ export default function EditAppliedCourse() {
         modules: [],
     });
     const navigate = useNavigate();
+
     const handleGoBack = () => {
-        navigate(-1); 
+        navigate(-1);
     };
 
     useEffect(() => {
@@ -31,15 +32,15 @@ export default function EditAppliedCourse() {
                 modules: appliedCourse.modules.map((module) => ({
                     courseId: appliedCourse.id,
                     moduleId: module.module.id,
-                    module: module.module, 
-                }))
+                    module: module.module,
+                })),
             });
         }
     }, [appliedCourse]);
 
     const handleCreateNewAppliedModule = () => {
         const newModule: CourseModuleType = {
-            courseId: course.id || 0, 
+            courseId: course.id || 0,
             moduleId: 0,
             module: {
                 id: 0,
@@ -49,19 +50,66 @@ export default function EditAppliedCourse() {
                 isApplied: false,
                 numberOfDays: 0,
                 days: [],
-            }
+            },
         };
 
         setCourse((prevCourse) => ({
             ...prevCourse,
-            modules: [...prevCourse.modules, newModule], 
+            modules: [...prevCourse.modules, newModule],
         }));
     };
+
     const handleUpdateCourse = () => {
         if (appliedCourse) {
-            mutationUpdateAppliedCourse.mutate(course);
+            const updatedCourse = assignDatesToModules(course);
+            mutationUpdateAppliedCourse.mutate(updatedCourse);
         }
     };
+
+    function getWeekDayList(startDate: Date, totalDays: number): Date[] {
+        const days: Date[] = [];
+        const start = new Date(startDate);
+
+        for (let current = new Date(start); days.length < totalDays; current.setDate(current.getDate() + 1)) {
+            const day = current.getDay();
+            if (day !== 0 && day !== 6) {
+                days.push(new Date(current));
+            }
+        }
+
+        return days;
+    }
+
+    function assignDatesToModules(course: CourseType): CourseType {
+        const totalDays = course.modules.reduce((sum, module) => sum + module.module.numberOfDays, 0);
+        const weekdays = getWeekDayList(course.startDate, totalDays);
+    
+        let dateIndex = 0;
+    
+        const updatedModules = course.modules.map((module) => {
+            const moduleDays = weekdays.slice(dateIndex, dateIndex + module.module.numberOfDays);
+            dateIndex += module.module.numberOfDays;
+
+            const updatedDays = module.module.days.map((existingDay, index) => ({
+                ...existingDay,
+                date: moduleDays[index], 
+            }));
+    
+            return {
+                ...module,
+                module: {
+                    ...module.module,
+                    days: updatedDays,
+                },
+            };
+        });
+    
+        return {
+            ...course,
+            modules: updatedModules,
+        };
+    }
+    
 
     if (isLoading) {
         return <p>Loading course data...</p>;
@@ -69,6 +117,7 @@ export default function EditAppliedCourse() {
     if (isError || !appliedCourse) {
         return <p>There was an error loading the course data.</p>;
     }
+
     return (
         <Page>
             <div className="bg-gray-100 min-h-screen flex flex-col items-center pt-5">
@@ -77,9 +126,8 @@ export default function EditAppliedCourse() {
                         <CourseInfo course={course} setCourse={setCourse} />
                     </div>
                     <div>
-                    <Modules course={course} setCourse={setCourse} />
+                        <Modules course={course} setCourse={setCourse} />
                     </div>
-                    
                     <div>
                         <div className="flex justify-center items-center">
                             <PrimaryBtn onClick={handleCreateNewAppliedModule}>
@@ -93,5 +141,4 @@ export default function EditAppliedCourse() {
             </div>
         </Page>
     );
-    
 }

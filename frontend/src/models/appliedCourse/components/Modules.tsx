@@ -65,9 +65,9 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
     const newDay: DayType = {
       id: 0,
       dayNumber: numberOfDays + 1,
-      description: "",
+      description: "New day",
       isApplied: true,
-      events: [],
+      events: []
     };
 
     setCourse((prevCourse) => {
@@ -78,6 +78,7 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
             module: {
               ...module.module,
               days: [...module.module.days, newDay],
+              numberOfDays: numberOfDays + 1
             },
           };
         }

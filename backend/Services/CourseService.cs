@@ -208,7 +208,11 @@ public class CourseService : IService<Course>
     //     _context.SaveChanges();
     //     return appliedCourseToUpdate;
     // }
-
+    private void RemoveAllDaysFromCalendar(int id)
+    {
+        var courseDaysContet = _context.DateContent.Where(dc => dc.appliedCourseId == id);
+        _context.DateContent.RemoveRange(courseDaysContet);
+    }
     private async Task<Course> UpdateAppliedAsync(int id, Course appliedCourse)
     {
         var appliedCourseToUpdate = await _context.Courses
@@ -219,6 +223,8 @@ public class CourseService : IService<Course>
                 .ThenInclude(d => d.Events)
             .FirstOrDefaultAsync(c => c.Id == id)
             ?? throw new NotFoundByIdException("Course", id);
+
+        RemoveAllDaysFromCalendar(id);
 
         appliedCourseToUpdate.Name = appliedCourse.Name;
         appliedCourseToUpdate.StartDate = appliedCourse.StartDate;
@@ -297,13 +303,14 @@ public class CourseService : IService<Course>
                                 DayNumber = day.DayNumber,
                                 Description = day.Description,
                                 IsApplied = day.IsApplied,
+                                Date = day.Date,
                                 Events = day.Events.Select(e => new Event
                                 {
                                     Name = e.Name,
                                     StartTime = e.StartTime,
                                     EndTime = e.EndTime,
                                     Description = e.Description,
-                                    IsApplied = e.IsApplied
+                                    IsApplied = e.IsApplied,
                                 }).ToList()
                             });
                         }
@@ -315,6 +322,7 @@ public class CourseService : IService<Course>
                                 existingDay.DayNumber = day.DayNumber;
                                 existingDay.Description = day.Description;
                                 existingDay.IsApplied = day.IsApplied;
+                                existingDay.Date = day.Date;
 
                                 var incomingEvents = day.Events;
                                 var eventsToRemove = existingDay.Events
@@ -356,7 +364,8 @@ public class CourseService : IService<Course>
         }
 
         await _context.SaveChangesAsync();
-
+        
+        addDaysToCalendar(appliedCourseToUpdate);
         return appliedCourseToUpdate;
     }
 
