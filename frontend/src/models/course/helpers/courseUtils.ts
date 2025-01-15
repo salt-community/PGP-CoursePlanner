@@ -1,5 +1,5 @@
 
-import { CourseType, DayType, ModuleType } from "../Types";
+import { CourseType, DayType, ModuleType, updatePreviewCourseProps } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
@@ -60,14 +60,17 @@ export const calculateCourseDayDates = (
       });
       currentDate.setDate(currentDate.getDate() + 1);
     }
+    modules[i].startDate = modules[i].days[0].date
   }
   return calendarDateTypes;
 };
 
+
 export const updatePreviewCalendarDates = (course : CourseType) => {
   const calendarDateTypes: CalendarDateType[] = [];
   const modules = course.modules.map(m => m.module);
-  for (let i = 0; i < modules.length; i++) {
+
+  for (let i = 0; i < modules.length; i++) {    
     for (let j = 0; j < modules[i].numberOfDays; j++) {
      
       calendarDateTypes.push({
@@ -90,19 +93,6 @@ export const updatePreviewCalendarDates = (course : CourseType) => {
 
 }
 
-
-const getNextDay = (today: Date) => {
-  const todayDate = new Date(today);
-  todayDate.setDate(todayDate.getDate() + 1);
-  return todayDate;
-};
-
-const getPreviousDay = (today: Date) => {
-  const todayDate = new Date(today);
-  todayDate.setDate(todayDate.getDate() - 1);
-  return todayDate;
-};
-
 const getDifferenceInDays = (date1: Date, date2: Date) => {
   const date1Ms = new Date(date1).getTime();
   const date2Ms = new Date(date2).getTime();
@@ -110,67 +100,43 @@ const getDifferenceInDays = (date1: Date, date2: Date) => {
   return Math.floor(differenceMs / (1000 * 60 * 60 * 24));
 };
 
-export const moveDay = (
-  currentDate: Date,
-  targetDate: Date,
-  course: CourseType,
-  pushForward: boolean
-) => {
 
-  const courseDays = course.modules.flatMap((m) => m.module.days);
 
-  if (getDifferenceInDays(currentDate, targetDate) < 0)
-    return movDayForward(currentDate, targetDate, courseDays, pushForward);
-  else return movDayBackward(currentDate, targetDate, courseDays, pushForward);
+export const getNewDate = (currentDate: Date, difference : number) => {
+  const todayDate = new Date(currentDate);
+  todayDate.setDate(todayDate.getDate() + difference);
+  return todayDate;
 };
 
-const movDayForward = (
-  currentDate: Date,
-  targetDate: Date,
-  courseDays: DayType[],
-  pushForward: boolean
-) => {
-  const currentDay = courseDays.find(d => getDifferenceInDays(currentDate, d.date) == 0)
+export const getCalculatedDays = (days : DayType[], startDate : Date) => {
 
-  
-  courseDays.forEach((day) => {
-    if (
-      getDifferenceInDays(day.date, targetDate) <= 0 &&
-      getDifferenceInDays(day.date, currentDate) > 0
-    ) {
-      console.log(day.date);
-      if (pushForward) {
-        day.date = getNextDay(day.date);
-      } else {
-        day.date = getPreviousDay(day.date); 
-      }
-      console.log(day.date);
+  const currentDate = new Date(startDate);
+  const newDays : DayType[] = deepRemoveId(days);
+
+  for(let i = 0; i < days.length; i++) {
+    while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
+      currentDate.setDate(currentDate.getDate() + 1);
     }
-  });
-  currentDay!.date = targetDate
+    newDays[i].date = new Date(currentDate)
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
 
+  return newDays;
 };
 
-const movDayBackward = (
-  currentDate: Date,
-  targetDate: Date,
-  courseDays: DayType[],
-  pushForward: boolean
-) => {
-  courseDays.forEach((day) => {
-    if (
-      getDifferenceInDays(day.date, targetDate) > 0 &&
-      getDifferenceInDays(day.date, currentDate) < 0
-    ) {
-      if (pushForward) {
-        day.date = getNextDay(day.date);
-      } else {
-        day.date = getPreviousDay(day.date);
-      }
-      console.log(day.date);
-    }
-  });
-};
+
+export const moveModule = (module : ModuleType, targetDate : Date ) => {
+
+  const newModule : ModuleType = deepRemoveId(module)
+
+  newModule.startDate = new Date(targetDate)
+  newModule.days = getCalculatedDays(newModule.days, newModule.startDate)
+
+  return newModule
+}
+
+
+
 
 /**
  * Utility function to deeply remove `id` property from objects.

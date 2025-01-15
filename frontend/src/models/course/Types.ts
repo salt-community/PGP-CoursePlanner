@@ -21,7 +21,7 @@ export type DayType = {
   description?: string;
   isApplied: boolean;
   events: EventType[];
-  date?: Date;
+  date: Date;
 }
 
 export type ModuleType = {
@@ -33,6 +33,8 @@ export type ModuleType = {
   isApplied: boolean;
   days: DayType[];
   courseModules?: CourseModuleType[]; 
+  startDate : Date
+
 }
 
 export type CourseType = {
@@ -59,3 +61,13 @@ export type Track = {
     buttonText: string;
   }
   
+
+  export type moduleStartDate = {
+    moduleId : number
+    startDate : Date
+  }
+  
+  export type updatePreviewCourseProps = {
+    course : CourseType
+    moduleStartDates : moduleStartDate[]
+  }

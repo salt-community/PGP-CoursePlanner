@@ -2,7 +2,7 @@ import { CourseModuleType, CourseType } from "@models/course/Types";
 import DotsIcon from "./DotsIcon";
 import TrashIcon from "./TrashIcon";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
-import React from "react";
+import React, { useState } from "react";
 
     interface DaysProps {
         course: CourseType;
@@ -12,8 +12,16 @@ import React from "react";
     }
   
   const Days = ({ course, setCourse, courseModule,moduleIndex }: DaysProps) => {
+    const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+    const [collapseOpen, setCollapseOpen] = useState<Record<number, boolean>>({});
 
-    const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
+    const toggleCollapse = (index: number) => {
+        setCollapseOpen((prevState) => ({
+          ...prevState,
+          [index]: !prevState[index],
+        }));
+      };
+
 
     const handleDragStart = (dayIndex: number) => {
         setDraggedIndex(dayIndex);
@@ -139,7 +147,7 @@ import React from "react";
         className={`bg-base-200 flex space-between border border-black mb-4 rounded-r-lg ${
             draggedIndex === dayIndex ? "dragging" : ""
         }`}
-        draggable
+        draggable={!collapseOpen[dayIndex]} 
         onDragStart={() => handleDragStart(dayIndex)}
         onDragEnd={handleDragEnd}
         onDragOver={(e) => handleDragOver(e, dayIndex)}
@@ -149,7 +157,10 @@ import React from "react";
         }}
         >
         <div className="collapse">
-            <input type="checkbox" />
+            <input 
+                type="checkbox"
+                checked={!!collapseOpen[dayIndex]}
+                onChange={() => toggleCollapse(dayIndex)} />
                 <div className="collapse-title text-xl font-medium">
                     <div className="flex items-center">
                         <DotsIcon position="mr-1" size={6} />

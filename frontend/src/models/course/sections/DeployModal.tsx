@@ -1,48 +1,49 @@
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
-import { CourseType } from "../Types";
+import { CourseModuleType, CourseType, ModuleType } from "../Types";
 import { useMutationPostAppliedCourse, useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import { useNavigate } from "react-router-dom";
-import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
-import LoadingMessage from "@components/LoadingMessage";
-import ErrorMessage from "@components/ErrorMessage";
+// import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import MiniCalendar from "./MiniCalendar";
-import { ModuleType } from "@models/module/Types";
-import { calculateCourseDayDates, moveDay, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
+import { calculateCourseDayDates, getNewDate, moveModule, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
 import EditCourseDays from "./EditCourseDays";
+import { getDateAsStringYyyyMmDd } from "@helpers/dateHelpers";
+
 
 type Props = {
     course: CourseType,
-    modules: ModuleType[]
 }
 
-export default function DeployModal({ course, modules }: Props) {
+export default function DeployModal({ course }: Props) {
 
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
 
     const mutationPostAppliedCourse = useMutationPostAppliedCourse();
-    const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
+
     const navigate = useNavigate();
 
-    const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
-    
-    
-    const [prevCourse, setCourse] = useState<CourseType>(course);
-    const [previewCalendarDays, setPreviewCalendarDays] = useState(calculateCourseDayDates(prevCourse, startDate))
+    calculateCourseDayDates(course, startDate)
+    const [previewCourse, setCourse] = useState<CourseType>(course);
+    const [previewCalendarDays, setPreviewCalendarDays] = useState(updatePreviewCalendarDates(previewCourse))
+
+    const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[2].module);
+    const [selectedModuleStartDate, setSelectedModuleStartDate] = useState<Date>(new Date())
 
 
     useEffect(() => {
-        const updatedDays = calculateCourseDayDates(prevCourse, startDate);
+        const updatedDays = updatePreviewCalendarDates(previewCourse);
+        console.log("update days")
+        console.log(previewCourse)
         setPreviewCalendarDays(updatedDays);
-    }, [prevCourse, startDate]);
+    }, [previewCourse, startDate]);
 
 
     const handleApplyTemplate = async () => {
-        const myCourse = stripIdsFromCourse(prevCourse)
+        const myCourse = stripIdsFromCourse(previewCourse)
 
         console.log(myCourse)
-        console.log(prevCourse)
+        console.log(previewCourse)
 
         setIsInvalidDate(false);
         if (
@@ -52,31 +53,17 @@ export default function DeployModal({ course, modules }: Props) {
             if (startDate.getDay() == 6 || startDate.getDay() == 0)
                 setIsInvalidDate(true);
         } else {
-            const appliedCoursesWithCourseId = appliedCourses!.filter(
-                (m) => m.id! == course!.id
-            );
-            if (appliedCoursesWithCourseId.length > 0) {
-
-                mutationUpdateAppliedCourse.mutate(myCourse);
-            }
-
-
             mutationPostAppliedCourse.mutate(myCourse);
             navigate("/activecourses");
         }
     };
 
 
+
     return (
         <>
-            {(isLoadingAppliedCourses) && (
-                <LoadingMessage />
-            )}
-            {(isErrorAppliedCourses) && <ErrorMessage />}
-
-
             <dialog id="my_DeployModal_1" className="modal">
-                <div className="modal-box flex flex-col h-[80vh] w-11/12 max-w-5xl">
+                <div className="modal-box flex flex-col h-[80vh] w-full max-w-5xl">
                     <h3 className="font-bold text-lg">Choose a start date and deploy Bootcamp</h3>
                     <br />
 
@@ -108,19 +95,44 @@ export default function DeployModal({ course, modules }: Props) {
                     )}
                     <br />
                     <section className="flex flex-grow">
-                      
+
                         <div className="flex-grow overflow-auto">
-                            <MiniCalendar startDate={startDate} course={prevCourse} modules={modules} previewCalendarDays={previewCalendarDays} />
+                            <MiniCalendar startDate={startDate} previewCalendarDays={previewCalendarDays} />
                         </div>
                         <div >
-                            <EditCourseDays course={prevCourse} setCourse={setCourse} />
+                            {/* <EditCourseDays course={previewCourse} setCourse={setCourse} /> */}
+                            <div>
+                                <p>Change start date of module</p>
+                                <p>Selected module: {selectedModule.name} </p>
+                                <p>current start date for module: {getDateAsStringYyyyMmDd(selectedModule.startDate)} </p>
+                                <p>new start date for module: {getDateAsStringYyyyMmDd(selectedModuleStartDate)}</p>
+                                <button className="btn" onClick={(event) => {
+                                    event.preventDefault()
+                                    const updatedModules: CourseModuleType[] = previewCourse.modules.map((m, index) =>
+                                        index === 0
+                                            ? { ...m, module: moveModule(selectedModule, selectedModuleStartDate) }
+                                            : m
+                                    );
+                                    setCourse({ ...previewCourse, modules: updatedModules });
+
+                                }}>update module start date</button>
+                            </div>
                         </div>
                     </section>
                     <div className="modal-action">
                         <form method="dialog" className="flex gap-5 justify-center">
                             <button className="btn">Cancel</button>
                             <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
-                       
+                            <button className="btn" onClick={(event) => {
+                                event.preventDefault();
+                                const updatedModules: CourseModuleType[] = previewCourse.modules.map((m, index) =>
+                                    index === 0
+                                        ? { ...m, module: moveModule(m.module, getNewDate(new Date(), -2)) }
+                                        : m
+                                );
+                                setCourse({ ...previewCourse, modules: updatedModules });
+                            }}>test moveModule</button>
+
                         </form>
                     </div>
                 </div>

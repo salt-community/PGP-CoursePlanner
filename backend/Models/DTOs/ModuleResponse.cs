@@ -9,6 +9,7 @@ public record ModuleResponse
     public string[] Track { get; init; } = Array.Empty<string>();
     public int Order { get; init; }
     public bool IsApplied { get; init; }
+    public DateTime StartDate {get; init;}
 
     // Constructor
     public ModuleResponse(Module module)
@@ -20,6 +21,7 @@ public record ModuleResponse
         Track = module.Track;
         Order = module.Order;
         IsApplied = module.IsApplied;
+        StartDate = module.StartDate;
     }
 
     // Implicit operator
