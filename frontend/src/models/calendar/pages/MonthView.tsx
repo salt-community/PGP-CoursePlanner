@@ -100,13 +100,14 @@ export default function MonthView() {
 
                 {daysInMonth.map((thisDate, dateIndex) => {
                     const weekNumber = handleWeek(thisDate);
-                    return <Fragment key={format(thisDate, 'yyyy-MM-dd')}>
-                        {weekNumber && <p className="bg-accent col-start-1 col-end-2 min-w-8 p-1 h-full text-lg text-center border-t-[0.5px] border-r-[0.5px] border-gray-100">{weekNumber}</p>}
-                        <div className="flex flex-col">
-                            {data && data[dateIndex] !== null ? <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} date={getDateAsString(thisDate)} />
-                                : <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={[]} date={getDateAsString(thisDate)} />}
-                        </div>
-                    </Fragment>
+                    return (
+                        <Fragment key={format(thisDate, 'yyyy-MM-dd')}>
+                            {weekNumber && <p className="bg-accent col-start-1 col-end-2 min-w-8 p-1 h-full text-lg text-center border-t-[0.5px] border-r-[0.5px] border-gray-100">{weekNumber}</p>}
+                            <div className="flex flex-col">
+                                {data && data[dateIndex] !== null ? <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} date={getDateAsString(thisDate)} />
+                                    : <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={[]} date={getDateAsString(thisDate)} />}
+                            </div>
+                        </Fragment>)
                 })}
             </section>
             {isError && <ErrorModal error="Days" />}
