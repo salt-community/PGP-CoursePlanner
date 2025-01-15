@@ -27,8 +27,8 @@ export default function DeployModal({ course }: Props) {
     const [previewCourse, setCourse] = useState<CourseType>(course);
     const [previewCalendarDays, setPreviewCalendarDays] = useState(updatePreviewCalendarDates(previewCourse))
 
-    const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[2].module);
-    const [selectedModuleStartDate, setSelectedModuleStartDate] = useState<Date>(new Date())
+    const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[1].module);
+    const [selectedModuleStartDate, setSelectedModuleStartDate] = useState<Date>(getNewDate(new Date(), -8))
 
 
     useEffect(() => {
@@ -108,12 +108,15 @@ export default function DeployModal({ course }: Props) {
                                 <p>new start date for module: {getDateAsStringYyyyMmDd(selectedModuleStartDate)}</p>
                                 <button className="btn" onClick={(event) => {
                                     event.preventDefault()
+                                    const newModule = moveModule(selectedModule, selectedModuleStartDate)
                                     const updatedModules: CourseModuleType[] = previewCourse.modules.map((m, index) =>
-                                        index === 0
-                                            ? { ...m, module: moveModule(selectedModule, selectedModuleStartDate) }
+                                        m.module.id == selectedModule.id
+                                            ? { ...m, module: newModule }
                                             : m
                                     );
                                     setCourse({ ...previewCourse, modules: updatedModules });
+                                    setSelectedModule(newModule)
+                                    
 
                                 }}>update module start date</button>
                             </div>

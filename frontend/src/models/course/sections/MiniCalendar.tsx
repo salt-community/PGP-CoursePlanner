@@ -84,8 +84,6 @@ export default function MiniCalendar({ startDate, previewCalendarDays }: Props) 
                                         </div>
                                     )
                                 }
-
-
                                 return (
                                     <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
                                         {data && data[dateIndex] !== null ? (
