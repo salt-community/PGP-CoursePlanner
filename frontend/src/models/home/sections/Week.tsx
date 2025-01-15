@@ -92,7 +92,7 @@ export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps)
     return (
         <>
             <section className="flex w-full justify-between m-5 mt-0 rounded-xl bg-accent drop-shadow-xl">
-                <p className="p-2 text-lg">{!isNextWeek ? thisWeek : nextWeek}</p>
+                <p className="min-w-8 p-1 text-center text-lg">{!isNextWeek ? thisWeek : nextWeek}</p>
                 {weekDays.map((day, index) => renderSection(day, index, getDateAsString(day) === today))}
             </section>
             {currentIndex !== null && data && (
