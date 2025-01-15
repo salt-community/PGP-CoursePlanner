@@ -124,13 +124,14 @@ export default function DeployModal({ course }: Props) {
                             <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
                             <button className="btn" onClick={(event) => {
                                 event.preventDefault();
-                                const updatedModules : CourseModuleType[] = previewCourse.modules.map((m, index) =>
-                                    index >-1
-                                        ? { ...m, module: moveModule(m.module, getNewDate(new Date(), 2)) }
+                                const updatedModules: CourseModuleType[] = previewCourse.modules.map((m, index) =>
+                                    index === 0
+                                        ? { ...m, module: moveModule(m.module, getNewDate(new Date(), -2)) }
                                         : m
                                 );
-                                setCourse({ ...previewCourse, modules: updatedModules  });
+                                setCourse({ ...previewCourse, modules: updatedModules });
                             }}>test moveModule</button>
+
                         </form>
                     </div>
                 </div>

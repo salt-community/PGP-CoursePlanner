@@ -108,12 +108,19 @@ export const getNewDate = (currentDate: Date, difference : number) => {
   return todayDate;
 };
 
-export const getCalculatedDays = (days : DayType[], offset : number) => {
+export const getCalculatedDays = (days : DayType[], startDate : Date) => {
 
+  const currentDate = new Date(startDate);
   const newDays : DayType[] = deepRemoveId(days);
 
-  newDays.forEach((day) => day.date = getNewDate(day.date, offset)) 
-  console.log("calc days")
+  for(let i = 0; i < days.length; i++) {
+    while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    newDays[i].date = new Date(currentDate)
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
   return newDays;
 };
 
@@ -122,9 +129,8 @@ export const moveModule = (module : ModuleType, targetDate : Date ) => {
 
   const newModule : ModuleType = deepRemoveId(module)
 
-  const offset = getDifferenceInDays(module.startDate, targetDate)
-  newModule.startDate = targetDate
-  newModule.days = getCalculatedDays(newModule.days, offset)
+  newModule.startDate = new Date(targetDate)
+  newModule.days = getCalculatedDays(newModule.days, newModule.startDate)
 
   return newModule
 }
