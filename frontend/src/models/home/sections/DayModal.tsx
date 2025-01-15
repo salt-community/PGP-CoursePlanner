@@ -89,13 +89,13 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
                                             </div>
                                         ))
                                     ) : (
-                                        <p>No events for this module.</p>
+                                        <p className="text-center text-lg">No events for this module.</p>
                                     )}
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <p>No content available for this date.</p>
+                        <p className="text-center text-lg">No content available for this date.</p>
                     )}
                 </div>
             </div>
