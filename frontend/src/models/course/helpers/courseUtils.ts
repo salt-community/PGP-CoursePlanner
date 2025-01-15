@@ -1,6 +1,5 @@
 
-import { CourseType, DayType, ModuleType, updatePreviewCourseProps } from "../Types";
-import { CalendarDateType } from "@models/calendar/Types";
+import { CalendarDateType, CourseType, DayType, ModuleType, updatePreviewCourseProps } from "../Types";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
   return modules.some((module, idx) =>
@@ -52,9 +51,10 @@ export const calculateCourseDayDates = (
             totalDaysInModule: modules[i].numberOfDays,
             courseName: course.name,
             events: modules[i].days[j].events,
-            color: "#EEEEEE",
+            color: "#999999",
             appliedCourseId: course.id,
             moduleName: modules[i].name,
+            moduleId: modules[i].id
           },
         ],
       });
@@ -81,9 +81,10 @@ export const updatePreviewCalendarDates = (course : CourseType) => {
             totalDaysInModule: modules[i].numberOfDays,
             courseName: course.name,
             events: modules[i].days[j].events,
-            color: "#EEEEEE",
+            color: "#999999",
             appliedCourseId: course.id,
             moduleName: modules[i].name,
+            moduleId: modules[i].id            
           },
         ],
       });
@@ -128,6 +129,7 @@ export const getCalculatedDays = (days : DayType[], startDate : Date) => {
 export const moveModule = (module : ModuleType, targetDate : Date ) => {
 
   const newModule : ModuleType = deepRemoveId(module)
+  newModule.id = module.id
 
   newModule.startDate = new Date(targetDate)
   newModule.days = getCalculatedDays(newModule.days, newModule.startDate)

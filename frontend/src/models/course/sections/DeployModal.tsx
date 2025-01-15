@@ -1,12 +1,12 @@
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
 import { CourseModuleType, CourseType, ModuleType } from "../Types";
-import { useMutationPostAppliedCourse, useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
+import { useMutationPostAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import { useNavigate } from "react-router-dom";
 // import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import MiniCalendar from "./MiniCalendar";
 import { calculateCourseDayDates, getNewDate, moveModule, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
-import EditCourseDays from "./EditCourseDays";
+// import EditCourseDays from "./EditCourseDays";
 import { getDateAsStringYyyyMmDd } from "@helpers/dateHelpers";
 
 
@@ -27,14 +27,13 @@ export default function DeployModal({ course }: Props) {
     const [previewCourse, setCourse] = useState<CourseType>(course);
     const [previewCalendarDays, setPreviewCalendarDays] = useState(updatePreviewCalendarDates(previewCourse))
 
-    const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[2].module);
-    const [selectedModuleStartDate, setSelectedModuleStartDate] = useState<Date>(new Date())
+    const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[1].module);
+    const [selectedModuleStartDate, setSelectedModuleStartDate] = useState<Date>(getNewDate(new Date(), -8))
 
 
     useEffect(() => {
         const updatedDays = updatePreviewCalendarDates(previewCourse);
         console.log("update days")
-        console.log(previewCourse)
         setPreviewCalendarDays(updatedDays);
     }, [previewCourse, startDate]);
 
@@ -97,24 +96,25 @@ export default function DeployModal({ course }: Props) {
                     <section className="flex flex-grow">
 
                         <div className="flex-grow overflow-auto">
-                            <MiniCalendar startDate={startDate} previewCalendarDays={previewCalendarDays} />
+                            <MiniCalendar previewCourse={previewCourse} startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedModuleStartDate} setSelectedModuleStartDate={setSelectedModuleStartDate} setSelectedModule={setSelectedModule}/>
                         </div>
                         <div >
                             {/* <EditCourseDays course={previewCourse} setCourse={setCourse} /> */}
                             <div>
-                                <p>Change start date of module</p>
+                                <h3 className="font-bold">Change start date of module</h3>
                                 <p>Selected module: {selectedModule.name} </p>
-                                <p>current start date for module: {getDateAsStringYyyyMmDd(selectedModule.startDate)} </p>
-                                <p>new start date for module: {getDateAsStringYyyyMmDd(selectedModuleStartDate)}</p>
+                                <p>current start: {getDateAsStringYyyyMmDd(selectedModule.startDate)} </p>
+                                <p>new start: {getDateAsStringYyyyMmDd(selectedModuleStartDate)}</p>
                                 <button className="btn" onClick={(event) => {
                                     event.preventDefault()
-                                    const updatedModules: CourseModuleType[] = previewCourse.modules.map((m, index) =>
-                                        index === 0
-                                            ? { ...m, module: moveModule(selectedModule, selectedModuleStartDate) }
+                                    const newModule = moveModule(selectedModule, selectedModuleStartDate)
+                                    const updatedModules: CourseModuleType[] = previewCourse.modules.map((m) =>
+                                        m.module.id == selectedModule.id
+                                            ? { ...m, module: newModule }
                                             : m
                                     );
                                     setCourse({ ...previewCourse, modules: updatedModules });
-
+                                    setSelectedModule(newModule)
                                 }}>update module start date</button>
                             </div>
                         </div>
