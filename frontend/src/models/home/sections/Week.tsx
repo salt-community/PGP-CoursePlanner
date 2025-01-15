@@ -4,7 +4,7 @@ import { weekDays, getDateAsString, today } from "@helpers/dateHelpers";
 import { CalendarDateType } from "@models/calendar/Types";
 import { format, getWeek } from "date-fns";
 import WeekDay from "@models/calendar/sections/WeekDay";
-import LoadingSkeleton from "../components/LoadingSkeleton";
+import LoadingSkeletonWeeks from "../components/LoadingSkeletonWeeks";
 
 interface WeekProps {
     data: CalendarDateType[] | undefined;
@@ -61,7 +61,7 @@ export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps)
             isToday = false;
         }
         const commonClasses = "flex flex-col w-full gap-3 p-3 min-h-[400px]";
-        const hoverClasses = "hover:bg-[#F9F9F9] hover:cursor-pointer  hover:scale-[1.03] hover:border-l hover:border-r transition-transform duration-200";
+        const hoverClasses = "hover:bg-[#F9F9F9] hover:cursor-pointer";
         const borderClasses = "border-l-[0.5px] border-3-[0.5px] border-accent";
         const backgroundClasses = "bg-white";
         const textClasses = "text-lg";
@@ -79,7 +79,7 @@ export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps)
                     {day.getDate()} {monthNames[day.getMonth()]}
                 </h2>
                 {isCalendarLoading ?
-                    <LoadingSkeleton />
+                    <LoadingSkeletonWeeks />
                     :
                     <>
                         {data && data[index] !== null ? <WeekDay dateContent={data[index].dateContent} /> : ""}
@@ -92,7 +92,7 @@ export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps)
     return (
         <>
             <section className="flex w-full justify-between m-5 mt-0 rounded-xl bg-accent drop-shadow-xl">
-                <p className="p-2 text-lg">{!isNextWeek ? thisWeek : nextWeek}</p>
+                <p className="min-w-8 p-1 text-center text-lg">{!isNextWeek ? thisWeek : nextWeek}</p>
                 {weekDays.map((day, index) => renderSection(day, index, getDateAsString(day) === today))}
             </section>
             {currentIndex !== null && data && (

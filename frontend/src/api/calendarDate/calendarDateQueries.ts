@@ -30,11 +30,18 @@ export function useQueryCalendarDateWeeks(currentWeek: number) {
 }
 
 export function useQueryCalendarDateBatch(startDate: string, endDate: string) {
-    const { data, isPending, isError, error } = useQuery<CalendarDateType[]>({
+    const { data, isLoading, isError } = useQuery<CalendarDateType[]>({
         queryKey: ['calendarBatch', startDate, endDate],
         queryFn: () => {
             return getCalendarDateBatch(startDate, endDate);
         },
     })
-    return { data, isPending, isError, error }
+    const [delayedLoading, setDelayedLoading] = useState(isLoading);
+
+    if (!isLoading) {
+        setTimeout(() => {
+            setDelayedLoading(isLoading);
+        }, 500)
+    }
+    return { data, isLoading: delayedLoading, isError };
 }

@@ -1,17 +1,21 @@
 import { format } from "date-fns";
 import { today } from "@helpers/dateHelpers";
 import { DateContent } from "../Types";
+import LoadingSkeletonMonth from "../components/LoadingSkeletonMonth";
 
 type Props = {
     dateContent: DateContent[];
     date: string;
-    indexForModal : number;
-    openModal: (index : number) => void;
+    indexForModal: number;
+    openModal: (index: number) => void;
+    isLoading: boolean
 }
 
-export default function CalenderDate({ dateContent, date, openModal, indexForModal }: Props) {
-    const border = today == date ? "border border-2 border-primary hover:border-primary" : "border";
-    const text = today == date ? "text-primary font-bold" : "";
+export default function CalenderDate({ dateContent, date, openModal, indexForModal, isLoading }: Props) {
+
+    const border = "border-[0.5px] border-gray-100";
+    const text = today == date ? "font-bold text-[#EC0E40]" : "";
+    const bg = today == date ? "bg-[#FFAEC0]" : "";
 
     const appliedCourseIds: number[] = [];
     const appliedCourseColors: string[] = [];
@@ -21,9 +25,9 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
             appliedCourseIds.push(dc.appliedCourseId!)
             appliedCourseColors.push(dc.color!)
             if (dc.moduleName != null) {
-               
+
                 if (dc.dayOfModule != 0) {
-                    appliedModules.push(dc.moduleName! + ` day(${dc.dayOfModule}/${dc.totalDaysInModule})`)
+                    appliedModules.push(dc.moduleName! + ` day (${dc.dayOfModule}/${dc.totalDaysInModule})`)
                 }
                 else {
                     appliedModules.push("Weekend")
@@ -33,23 +37,31 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
     });
 
     return (
-        <>
-            <button onClick={() => openModal(indexForModal)}
-            // todo: fix so that all cells are of equal height regardless of content.
-                className={`${border}  hover:shadow-md  w-1/7 hover:italic h-full `}> 
-                <h1 className={`${text} text-center self-start mb-1 mt-2`}>
+        <button onClick={isLoading ? () => { } : () => openModal(indexForModal)}
+            className={`bg-white ${border} flex flex-col gap-2 p-4 pt-1 pb-2 items-center h-full ${!isLoading ? "hover:bg-[#F9F9F9] hover:cursor-pointer" : "hover:cursor-default"}`}>
+            <div className={`${bg} h-10 w-10 rounded-full flex justify-center items-center`}>
+                <h2 className={`${text}`}>
                     {format(date, 'd')}
-                </h1>
-                {appliedCourseColors.length > 0 && appliedCourseColors.map((color, appliedCourseIndex) => (
-                    <div
-                        key={appliedCourseIndex}
-                        style={{ backgroundColor: color }}
-                        className="w-full h-7 mb-1 text-clip overflow-hidden whitespace-nowrap"
-                    >
-                        <p className="truncate">{appliedModules[appliedCourseIndex]}</p>
-                    </div>
-                ))}
-            </button>
-        </>
+                </h2>
+            </div>
+            <div className="flex flex-col gap-1 w-full">
+                {isLoading ? (
+                    <LoadingSkeletonMonth />
+                ) :
+                    <>
+                        {appliedCourseColors.length > 0 && appliedCourseColors.map((color, appliedCourseIndex) => (
+                            <div
+                                key={appliedCourseIndex}
+                                style={{ backgroundColor: color }}
+                                className="flex justify-center items-center w-full h-5 text-sm text-white text-clip overflow-hidden whitespace-nowrap rounded-md"
+                            >
+                                <p>{appliedModules[appliedCourseIndex]}</p>
+                            </div>
+                        ))
+                        }
+                    </>
+                }
+            </div>
+        </button>
     )
 }
