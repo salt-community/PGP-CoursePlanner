@@ -64,13 +64,18 @@ import React, { useState } from "react";
 
     const handleRemoveDay = (moduleIndex: number, dayIndex: number) => {
         setCourse((prevCourse) => {
-            const updatedModules = [...prevCourse.modules];
-            updatedModules[moduleIndex].module.days = updatedModules[moduleIndex].module.days.filter(
-                (_, i) => i !== dayIndex
-            );
-            return { ...prevCourse, modules: updatedModules };
+          const updatedModules = [...prevCourse.modules];
+      
+          updatedModules[moduleIndex].module.days = updatedModules[moduleIndex].module.days.filter(
+            (_, i) => i !== dayIndex
+          );
+      
+          updatedModules[moduleIndex].module.numberOfDays = updatedModules[moduleIndex].module.days.length;
+      
+          return { ...prevCourse, modules: updatedModules };
         });
-    };
+      };
+      
 
     const handleCreateNewEvent = (moduleIndex: number, dayIndex: number) => {
         const newEvent = {

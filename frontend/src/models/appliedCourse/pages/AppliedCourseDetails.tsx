@@ -31,17 +31,24 @@ export default function AppliedCourseDetails() {
     }, [appliedCourse]);
 
     function getWeekDayList() {
-        const days = []
-        const end = new Date(endDate)
-        for (let start = new Date(startDate); start <= end; start.setDate(start.getDate() + 1)) {
-            const day = start.getDay();
-            if (day != 6 && day != 0) {
-                days.push(new Date(start));
-            }
+    const days = [];
+    const start = new Date(startDate);
+    
+    for (let current = new Date(start); ; current.setDate(current.getDate() + 1)) {
+        const day = current.getDay();
+      
+        if (day !== 0 && day !== 6) {
+            days.push(new Date(current));
         }
-        days.push(endDate)
-        return days;
+        
+        if (days.length >= 360) {
+            break;
+        }
     }
+
+    return days;
+    }
+
 
     const courseWeekDates = getWeekDayList();
     const courseWeekDays = courseWeekDates.map(e => monthNamesShort[e.getMonth()] + " " + e.getDate().toString());
@@ -118,6 +125,8 @@ export default function AppliedCourseDetails() {
                                 </div>
                             )}
                         </section>
+                        <p>Wakwakwkakwa</p>
+                        <p>{courseWeekDays[300]}</p>
                         <div className="flex flex-row gap-2 px-1 mb-6 sm:p-0 md:px-24">
                             <Link to={`/activecourses/edit/${appliedCourse.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit</Link>
                             <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>DeleteAll</DeleteBtn>
