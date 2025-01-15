@@ -40,12 +40,10 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
     const { data, isLoading,  isError,  } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
 
-    const [currentIndex, setCurrentIndex] = useState<number>(15);
 
 
-    const openModal = (index: number) => {
-        setCurrentIndex(index);
-        setSelectedModuleStartDate(data![currentIndex].date)
+    const selectDate = (index: number) => {
+        setSelectedModuleStartDate(data![index].date)
     };
 
 
@@ -87,9 +85,9 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                                     return (
                                         <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
                                             {data && data[dateIndex] !== null ? (
-                                                <CalendarDate openModal={openModal} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                                <CalendarDate openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                             ) : (
-                                                <CalendarDate openModal={openModal} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                                <CalendarDate openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                             )}
 
                                         </div>
@@ -98,9 +96,9 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                                 return (
                                     <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
                                         {data && data[dateIndex] !== null ? (
-                                            <CalendarDate openModal={openModal} isLoading={isLoading} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            <CalendarDate openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         ) : (
-                                            <CalendarDate openModal={openModal} isLoading={isLoading} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                            <CalendarDate openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
                                         )}
 
                                     </div>
