@@ -1,9 +1,8 @@
-
 export type CourseModuleType = {
   courseId?: number;
   moduleId?: number;
-  course?: CourseType;  
-  module: ModuleType;  
+  course?: CourseType;
+  module: ModuleType;
 }
 
 export type EventType = {
@@ -32,9 +31,8 @@ export type ModuleType = {
   order: number;
   isApplied: boolean;
   days: DayType[];
-  courseModules?: CourseModuleType[]; 
-  startDate : Date
-
+  courseModules?: CourseModuleType[];
+  startDate: Date
 }
 
 export type CourseType = {
@@ -44,23 +42,27 @@ export type CourseType = {
   startDate: Date;
   endDate?: Date;
   numberOfWeeks?: number;
-  moduleIds?: number[]; 
+  moduleIds?: number[];
   color?: string;
   isApplied?: boolean;
-  modules: CourseModuleType[]; 
+  modules: CourseModuleType[];
 }
 
 export type Track = {
+  id?: number;
   color: string;
   name: string;
 }
 
-  
-  export type CourseProps = {
-    course: CourseType;
-    buttonText: string;
-  }
-  
+export type CourseProps = {
+  course: CourseType;
+  buttonText: string;
+}
+
+export type moduleStartDate = {
+  moduleId: number
+  startDate: Date
+}
 
   export type moduleStartDate = {
     moduleId : number
@@ -89,3 +91,4 @@ export type Track = {
       events: EventType[];
       color: string
   }
+
