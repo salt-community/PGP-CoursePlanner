@@ -20,7 +20,6 @@ export function useMutationPostAppliedCourse() {
 }
 
 export function useMutationUpdateAppliedCourse() {
-    console.log("Entering mutation");
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const mutation = useMutation({

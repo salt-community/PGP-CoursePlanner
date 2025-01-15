@@ -112,9 +112,13 @@ export const getNewDate = (currentDate: Date, difference : number) => {
 export const moveModule = (module : ModuleType, targetDate : Date ) => {
   const dateDifference = getDifferenceInDays(module.days[0].date, targetDate);
 
-  module.days.forEach((day) => {
+  const newModule : ModuleType = deepRemoveId(module)
+
+  newModule.days.forEach((day) => {
+    console.log("new date: ", getNewDate(day.date, dateDifference))
     day.date = getNewDate(day.date, dateDifference)
   })
+  return newModule
 }
 
 

@@ -1,6 +1,6 @@
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
-import { CourseType } from "../Types";
+import { CourseModuleType, CourseType } from "../Types";
 import { useMutationPostAppliedCourse, useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import { useNavigate } from "react-router-dom";
 import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
@@ -33,6 +33,8 @@ export default function DeployModal({ course }: Props) {
 
     useEffect(() => {
         const updatedDays = updatePreviewCalendarDates(previewCourse);
+        console.log("update days")
+        console.log(previewCourse)
         setPreviewCalendarDays(updatedDays);
     }, [previewCourse, startDate]);
 
@@ -69,7 +71,7 @@ export default function DeployModal({ course }: Props) {
 
     return (
         <>
-            {(isLoadingAppliedCourses) && (
+            {(isLoadingAppliedCourses) && (previewCourse) && (
                 <LoadingMessage />
             )}
             {(isErrorAppliedCourses) && <ErrorMessage />}
@@ -121,9 +123,13 @@ export default function DeployModal({ course }: Props) {
                             <button className="btn">Cancel</button>
                             <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
                             <button className="btn" onClick={(event) => {
-                                event.preventDefault()
-                                moveModule(previewCourse, 0, getNewDate(new Date(), 2))
-                                setCourse({...previewCourse})
+                                event.preventDefault();
+                                const updatedModules : CourseModuleType[] = previewCourse.modules.map((m, index) =>
+                                    index === 0
+                                        ? { ...m, module: moveModule(m.module, getNewDate(new Date(), 2)) }
+                                        : m
+                                );
+                                setCourse({ ...previewCourse, modules: updatedModules  });
                             }}>test moveModule</button>
                         </form>
                     </div>
