@@ -7,7 +7,7 @@ import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries"
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import MiniCalendar from "./MiniCalendar";
-import { calculateCourseDayDates,  stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
+import { calculateCourseDayDates, getNewDate, moveModule, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
 import EditCourseDays from "./EditCourseDays";
 
 
@@ -15,7 +15,7 @@ type Props = {
     course: CourseType,
 }
 
-export default function DeployModal({ course  }: Props) {
+export default function DeployModal({ course }: Props) {
 
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
@@ -25,10 +25,10 @@ export default function DeployModal({ course  }: Props) {
     const navigate = useNavigate();
 
     const { data: appliedCourses, isLoading: isLoadingAppliedCourses, isError: isErrorAppliedCourses } = useQueryAppliedCourses();
-    
-    // calculateCourseDayDates(course, startDate)
+
+    calculateCourseDayDates(course, startDate)
     const [previewCourse, setCourse] = useState<CourseType>(course);
-    const [previewCalendarDays, setPreviewCalendarDays] = useState(calculateCourseDayDates(previewCourse, startDate))
+    const [previewCalendarDays, setPreviewCalendarDays] = useState(updatePreviewCalendarDates(previewCourse))
 
 
     useEffect(() => {
@@ -64,6 +64,7 @@ export default function DeployModal({ course  }: Props) {
             navigate("/activecourses");
         }
     };
+
 
 
     return (
@@ -107,9 +108,9 @@ export default function DeployModal({ course  }: Props) {
                     )}
                     <br />
                     <section className="flex flex-grow">
-                      
+
                         <div className="flex-grow overflow-auto">
-                            <MiniCalendar startDate={startDate}  previewCalendarDays={previewCalendarDays} />
+                            <MiniCalendar startDate={startDate} previewCalendarDays={previewCalendarDays} />
                         </div>
                         <div >
                             <EditCourseDays course={previewCourse} setCourse={setCourse} />
@@ -119,7 +120,11 @@ export default function DeployModal({ course  }: Props) {
                         <form method="dialog" className="flex gap-5 justify-center">
                             <button className="btn">Cancel</button>
                             <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
-                       
+                            <button className="btn" onClick={(event) => {
+                                event.preventDefault()
+                                moveModule(previewCourse, 0, getNewDate(new Date(), 2))
+                                setCourse({...previewCourse})
+                            }}>test moveModule</button>
                         </form>
                     </div>
                 </div>

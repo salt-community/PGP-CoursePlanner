@@ -149,7 +149,7 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
                     setCourse={setCourse}
                   />
                   <div style={{ display: "flex", justifyContent: "flex-start" }}>
-                    <PrimaryBtn
+                    {/* <PrimaryBtn
                       onClick={() =>
                         handleCreateNewDay(
                           moduleIndex,
@@ -158,7 +158,7 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
                       }
                     >
                       Add Day
-                    </PrimaryBtn>
+                    </PrimaryBtn> */}
                   </div>
                 </div>
               )}

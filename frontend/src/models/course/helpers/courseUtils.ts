@@ -1,5 +1,5 @@
 
-import { CourseType, DayType, ModuleType } from "../Types";
+import { CourseType, DayType, ModuleType, updatePreviewCourseProps } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
@@ -64,7 +64,8 @@ export const calculateCourseDayDates = (
   return calendarDateTypes;
 };
 
-export const updatePreviewCalendarDates = (course : CourseType) => {
+
+export const updatePreviewCalendarDates = ({course, moduleStartDates} : updatePreviewCourseProps) => {
   const calendarDateTypes: CalendarDateType[] = [];
   const modules = course.modules.map(m => m.module);
   for (let i = 0; i < modules.length; i++) {
@@ -171,6 +172,27 @@ const movDayBackward = (
     }
   });
 };
+
+export const getNewDate = (currentDate: Date, difference : number) => {
+  const todayDate = new Date(currentDate);
+  todayDate.setDate(todayDate.getDate() + difference);
+  return todayDate;
+};
+
+
+
+export const moveModule = (course : CourseType, moduleIndex : number, targetDate : Date ) => {
+  const module = course.modules.map(m => m.module)[moduleIndex]
+
+  const dateDifference = getDifferenceInDays(module.days[0].date, targetDate);
+
+  module.days.forEach((day) => {
+    day.date = getNewDate(day.date, dateDifference)
+  })
+}
+
+
+
 
 /**
  * Utility function to deeply remove `id` property from objects.

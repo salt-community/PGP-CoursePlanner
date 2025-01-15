@@ -48,11 +48,11 @@ export default function EditCourseDays({ course, setCourse }: Props) {
                     </div>
 
                     <div>
-                        <div className="flex justify-center items-center">
+                        {/* <div className="flex justify-center items-center">
                             <PrimaryBtn onClick={handleCreateNewAppliedModule}>
                                 Add Module
                             </PrimaryBtn>
-                        </div>
+                        </div> */}
                        
                     </div>
                 </section>

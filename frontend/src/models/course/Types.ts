@@ -59,3 +59,13 @@ export type Track = {
     buttonText: string;
   }
   
+
+  export type moduleStartDate = {
+    moduleId : number
+    startDate : Date
+  }
+  
+  export type updatePreviewCourseProps = {
+    course : CourseType
+    moduleStartDates : moduleStartDate[]
+  }
