@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import { useQueryTracks } from "@api/track/trackQueries";
 import { getStorageTrackVisibility, initialStorageTrackVisibility, TrackVisibility, updateStorageTrackVisibility } from "@helpers/localStorage";
+import VisibilityButton from "./VisibilityButton";
 
 type Props = {
   isSidebarExpanded: boolean,
@@ -176,9 +177,9 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
 
       <div className="flex-grow"></div>
 
-      <div>
+      <div className="flex justify-center gap-2">
         {trackVisibility.map(t => (
-          <button key={t.id} onClick={() => handleTrackVisibility(t.id, !t.visibility)}>{t.name}{t.color}{`${t.visibility}`}</button>
+          <VisibilityButton key={t.id} id={t.id} color={t.color} visibility={t.visibility} handleTrackVisibility={handleTrackVisibility} />
         ))}
       </div>
 
