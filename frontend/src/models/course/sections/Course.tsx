@@ -7,6 +7,7 @@ import { useMutationPostCourse, useMutationUpdateCourse } from "@api/course/cour
 import InputSmall from "@components/inputFields/InputSmall";
 import SuccessBtn from "@components/buttons/SuccessBtn";
 import { useNavigate } from "react-router-dom";
+import { useQueryTracks } from "@api/track/trackQueries";
 
 export default function Course({ course, buttonText }: CourseProps) {
     const { courseModules, setCourseModules, filteredModules, tracks } = useCourse(course.id!);
@@ -19,7 +20,7 @@ export default function Course({ course, buttonText }: CourseProps) {
     const mutationUpdateCourse = useMutationUpdateCourse();
     const navigate = useNavigate();
     const [filledDaysCount, setFilledDaysCount] = useState<number>(0);
-
+  const { data: trackData, isLoading: isLoadingTracks, isError: isErrorTracks } = useQueryTracks();
 
     useEffect(() => {
         let filledDays: number = 0;
@@ -31,7 +32,7 @@ export default function Course({ course, buttonText }: CourseProps) {
 
     const handleAddModule = (index: number) => {
         const newModules = [...courseModules];
-        newModules.splice(index + 1, 0, { id: 0, name: "", numberOfDays: 0, days: [] });
+        newModules.splice(index + 1, 0, { id: 0, name: "", numberOfDays: 0, days: [], startDate: new Date() });
         setCourseModules(newModules);
     };
 
@@ -92,8 +93,11 @@ export default function Course({ course, buttonText }: CourseProps) {
                 startDate: course.startDate,
                 numberOfWeeks: numberOfWeeks.value,
                 moduleIds: courseModuleIds,
+                track: course.track,
+                modules: []
             };
             if (newCourse.id == 0) {
+                console.log(newCourse)
                 mutationPostCourse.mutate(newCourse);
             } else {
                 mutationUpdateCourse.mutate(newCourse);
@@ -106,7 +110,7 @@ export default function Course({ course, buttonText }: CourseProps) {
 
             {isIncorrectName &&
                 <p className="error-message text-red-600 text-sm" id="invalid-helper">Enter a correct name and number of weeks</p>}
-            <p>Tracks: {tracks} </p>
+            <p>Tracks: {trackData?.map(t => t.name)}</p>
 
             <InputSmall type="text" name="courseName" onChange={(e) => setCourseName(e.target.value)} placeholder="Course name" value={courseName} />
             <input className="w-3/4 input input-bordered input-sm" type="number" name="numberOfWeeks" onChange={(e) => setNumOfWeeks(parseInt(e.target.value))} placeholder="Number of weeks" value={numOfWeeks == 0 ? "" : numOfWeeks.toString()} min="0" />
