@@ -24,7 +24,6 @@ export const getWeekNumberOfModule = (course: CourseType, moduleId: number) => {
   const modules = course.modules.map(m => m.module);
   for (let i = 0; i < modules.length; i++) {
     if(modules[i].id == moduleId){
-      console.log(weeknumber)
       return weeknumber;
     }
     nrOfDays += modules[i].numberOfDays;
