@@ -54,6 +54,7 @@ export type Track = {
   id?: number;
   color: string;
   name: string;
+  visibility: boolean;
 }
 
 export type CourseProps = {
@@ -78,4 +79,5 @@ export type CourseProps = {
       color: string
       moduleId : number;
   }
+
 

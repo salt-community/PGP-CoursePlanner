@@ -1,5 +1,4 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import React, { useState } from 'react'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Courses from '@models/course/pages/Courses.tsx'
@@ -20,11 +19,10 @@ import EditModule from '@models/module/pages/EditModule'
 import ModuleDetails from '@models/module/pages/ModuleDetails'
 import Modules from '@models/module/pages/Modules'
 import Login from '@models/login/Login.tsx'
-import {
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import AppliedCourseDetails from './models/appliedCourse/pages/AppliedCourseDetails.tsx'
+import { TrackVisibilityContext } from './context/TrackVisibilityContext.tsx'
+import { TrackVisibility } from '@helpers/localStorage.ts'
 
 const router = createBrowserRouter([
   {
@@ -107,12 +105,18 @@ const router = createBrowserRouter([
 
 const queryClient = new QueryClient();
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <RouterProvider router={router} />
-      </LocalizationProvider>
-    </QueryClientProvider>
-  </React.StrictMode>,
-)
+export function App() {
+  const [trackVisibility, setTrackVisibility] = useState<TrackVisibility[]>([]);
+
+  return (
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <TrackVisibilityContext.Provider value={{ trackVisibility, setTrackVisibility }}>
+            <RouterProvider router={router} />
+          </TrackVisibilityContext.Provider>
+        </LocalizationProvider>
+      </QueryClientProvider>
+    </React.StrictMode>
+  );
+}

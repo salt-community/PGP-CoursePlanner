@@ -5,7 +5,6 @@ import Header from "@components/Header"
 import ErrorModal from "@components/ErrorModal";
 
 export default function WeeksContainer() {
-
     const { data, isLoading: isCalendarLoading, isError } = useQueryCalendarDateWeeks(currentWeek);
 
     return (

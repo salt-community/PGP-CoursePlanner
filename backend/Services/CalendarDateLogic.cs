@@ -16,6 +16,8 @@ public static class CalendarDateLogic
 
         var dbDates = context.CalendarDates
                         .Include(convertedDate => convertedDate.DateContent)
+                        .ThenInclude(content => content.Track)
+                        .Include(convertedDate => convertedDate.DateContent)
                         .ThenInclude(content => content.Events)
                         .Where(calendarDate => calendarDate.Date.Date >= convertedDateStart.Date && calendarDate.Date.Date <= convertedDateEnd.Date).ToList();
 

@@ -125,10 +125,11 @@ public class CourseService : IService<Course>
             foreach (var day in module!.Days)
             {
                 var calendarDate = _context.CalendarDates.FirstOrDefault(cd => cd.Date.Date == day.Date.Date);
-
+                
                 var dateContent = new DateContent()
                 {
                     CourseName = appliedCourse.Name!,
+                    Track = appliedCourse.Track,
                     ModuleName = module.Name,
                     DayOfModule = day.DayNumber,
                     TotalDaysInModule = module.NumberOfDays,
@@ -375,7 +376,7 @@ public class CourseService : IService<Course>
         }
 
         await _context.SaveChangesAsync();
-        
+
         addDaysToCalendar(appliedCourseToUpdate);
         return appliedCourseToUpdate;
     }

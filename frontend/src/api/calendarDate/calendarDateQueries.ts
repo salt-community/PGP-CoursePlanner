@@ -2,7 +2,8 @@ import { CalendarDateType } from "@models/calendar/Types";
 import { useQuery } from "@tanstack/react-query";
 import { getCalendarDate, getCalendarDateBatch, getCalendarDateWeeks } from "./calendarDateFetches";
 import { getCookie } from "@helpers/cookieHelpers";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { TrackVisibilityContext } from "../../context/TrackVisibilityContext.tsx";
 
 export function useQueryCalendarDate(date: string) {
     const { data, isLoading, isError } = useQuery<CalendarDateType>({
@@ -20,13 +21,26 @@ export function useQueryCalendarDateWeeks(currentWeek: number) {
         enabled: !!getCookie("JWT"),
     })
     const [delayedLoading, setDelayedLoading] = useState(isLoading);
+    const { trackVisibility } = useContext(TrackVisibilityContext);
 
+    let filteredData = data;
     if (!isLoading) {
         setTimeout(() => {
             setDelayedLoading(isLoading);
         }, 500)
+
+        filteredData = data?.map((c) => {
+            return {
+                id: c.id,
+                date: c.date,
+                dateContent: c.dateContent.filter((d) => {
+                    const track = trackVisibility.find((item) => item.id === d.track.id);
+                    return track?.visibility;
+                })
+            }
+        })
     }
-    return { data, isLoading: delayedLoading, isError };
+    return { data: filteredData, isLoading: delayedLoading, isError };
 }
 
 export function useQueryCalendarDateBatch(startDate: string, endDate: string) {
