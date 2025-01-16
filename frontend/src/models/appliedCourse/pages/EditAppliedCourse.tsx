@@ -8,6 +8,7 @@ import { CourseType, CourseModuleType } from "@models/course/Types";
 import { useNavigate } from "react-router-dom";
 import Modules from "../components/Modules";
 import CourseInfo from "../components/CourseInfo";
+import Calendar from "../components/Calendar";
 
 export default function EditAppliedCourse() {
     const appliedCourseId = useIdFromPath();
@@ -29,7 +30,6 @@ export default function EditAppliedCourse() {
     if (appliedCourse) {
         const sortedModules = appliedCourse.modules
         .map((module) => ({
-            courseId: appliedCourse.id,
             moduleId: module.module.id,
             module: module.module,
         }))
@@ -54,6 +54,7 @@ export default function EditAppliedCourse() {
                 isApplied: false,
                 numberOfDays: 0,
                 days: [],
+                date: new Date().toISOString()
             },
         };
 
@@ -68,6 +69,10 @@ export default function EditAppliedCourse() {
             const updatedCourse = assignDatesToModules(course);
             mutationUpdateAppliedCourse.mutate(updatedCourse);
         }
+    };
+    const handleUpdateCourseCalendar = () => {
+        assignDatesToModules(course);
+        
     };
 
     function getWeekDayList(startDate: Date, totalDays: number): Date[] {
@@ -107,13 +112,15 @@ export default function EditAppliedCourse() {
                 },
             };
         });
+
+        console.log("doing getting date for day..");
+        console.log(course);
     
         return {
             ...course,
             modules: updatedModules,
         };
     }
-    
 
     if (isLoading) {
         return <p>Loading course data...</p>;
@@ -126,11 +133,14 @@ export default function EditAppliedCourse() {
         <Page>
             <div className="bg-gray-100 min-h-screen flex flex-col items-center pt-5">
                 <section className="px-4 md:px-24 lg:px-56 bg-white rounded-lg p-5 shadow-md mt-5 w-4/5 flex flex-col">
+                    <Calendar course={course}/>
+                </section>
+                <section className="px-4 md:px-24 lg:px-56 bg-white rounded-lg p-5 shadow-md mt-5 w-4/5 flex flex-col">
                     <div className="flex flex-row gap-5 mt-2 mb-4">
                         <CourseInfo course={course} setCourse={setCourse} />
                     </div>
                     <div>
-                        <Modules course={course} setCourse={setCourse} />
+                        <Modules course={course} setCourse={setCourse} assignDatesToModules={assignDatesToModules}/>
                     </div>
                     <div>
                         <div className="flex justify-center items-center">
@@ -139,6 +149,7 @@ export default function EditAppliedCourse() {
                             </PrimaryBtn>
                         </div>
                         <PrimaryBtn onClick={handleUpdateCourse}>Save</PrimaryBtn>
+                        <PrimaryBtn onClick={handleUpdateCourseCalendar}>Save now..</PrimaryBtn>
                         <PrimaryBtn onClick={handleGoBack}>Abort</PrimaryBtn>
                     </div>
                 </section>

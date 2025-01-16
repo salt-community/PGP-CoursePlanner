@@ -63,8 +63,15 @@ import React, { useState } from "react";
     
 
     const handleRemoveDay = (moduleIndex: number, dayIndex: number) => {
+        console.log("moduleIndex")
+        console.log(moduleIndex)
+
         setCourse((prevCourse) => {
           const updatedModules = [...prevCourse.modules];
+          console.log("updatedModules")
+          console.log(updatedModules)
+          console.log(updatedModules[moduleIndex].module.name)
+          console.log("updatedModules")
       
           updatedModules[moduleIndex].module.days = updatedModules[moduleIndex].module.days.filter(
             (_, i) => i !== dayIndex

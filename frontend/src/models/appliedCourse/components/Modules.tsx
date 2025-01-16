@@ -8,9 +8,10 @@ import Days from "./Days";
 interface ModulesProps {
   course: CourseType;
   setCourse: React.Dispatch<React.SetStateAction<CourseType>>;
+  assignDatesToModules: (course: CourseType) => void;
 }
 
-const Modules = ({ course, setCourse }: ModulesProps) => {
+const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [collapseOpen, setCollapseOpen] = useState<Record<number, boolean>>({});
 
@@ -27,6 +28,7 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
 
   const handleDragEnd = () => {
     setDraggedIndex(null);
+    assignDatesToModules(course)
   };
 
   const handleDragOver = (e: React.DragEvent, targetIndex: number) => {
@@ -60,6 +62,7 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
       ...prevCourse,
       modules: prevCourse.modules.filter((_, i) => i !== index),
     }));
+    assignDatesToModules(course)
   };
   const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
     const newDay: DayType = {
@@ -67,9 +70,10 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
       dayNumber: numberOfDays + 1,
       description: "New day",
       isApplied: true,
-      events: []
+      events: [],
+      date: new Date().toISOString()
     };
-
+  
     setCourse((prevCourse) => {
       const updatedModules = prevCourse.modules.map((module, index) => {
         if (index === moduleIndex) {
@@ -84,11 +88,13 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
         }
         return module;
       });
-
-      return {
+  
+      const updatedCourse = {
         ...prevCourse,
         modules: updatedModules,
       };
+      assignDatesToModules(updatedCourse);
+      return updatedCourse;
     });
   };
 
