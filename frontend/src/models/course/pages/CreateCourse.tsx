@@ -1,17 +1,22 @@
 import Page from "@components/Page";
 import Course from "../sections/Course";
-import { CourseType } from "../Types";
+import { CourseType, Track } from "../Types";
 
 export default function CreateCourse() {
 
+    const myTrack: Track = { id: 0, color: "",  name: "" }
+
     const emptyCourse: CourseType =
     {
+        id: 0,
         name: "",
         numberOfWeeks: 0,
         startDate: new Date(),
-        moduleIds: [0]
+        moduleIds: [0],
+        track: myTrack,
+        modules: []
     }
-    
+
     return (
         <Page>
             <Course course={emptyCourse} buttonText="Create" />

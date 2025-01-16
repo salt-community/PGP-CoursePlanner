@@ -27,13 +27,12 @@ export default function DeployModal({ course }: Props) {
     const [previewCourse, setCourse] = useState<CourseType>(course);
     const [previewCalendarDays, setPreviewCalendarDays] = useState(updatePreviewCalendarDates(previewCourse))
 
-    const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[1].module);
+    const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[0].module);
     const [selectedModuleStartDate, setSelectedModuleStartDate] = useState<Date>(getNewDate(new Date(), -8))
 
 
     useEffect(() => {
         const updatedDays = updatePreviewCalendarDates(previewCourse);
-        console.log("update days")
         setPreviewCalendarDays(updatedDays);
     }, [previewCourse, startDate]);
 
@@ -43,9 +42,6 @@ export default function DeployModal({ course }: Props) {
         const myTrack = previewCourse.track.id;
         const myCourse = stripIdsFromCourse(previewCourse)
         myCourse.track.id = myTrack
-        
-        console.log(myCourse)
-        console.log(previewCourse)
 
         setIsInvalidDate(false);
         if (

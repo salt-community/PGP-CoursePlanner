@@ -1,5 +1,4 @@
-
-import { CalendarDateType, CourseType, DayType, ModuleType, updatePreviewCourseProps } from "../Types";
+import { CalendarDateType, CourseType, DayType, ModuleType } from "../Types";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
   return modules.some((module, idx) =>
@@ -20,6 +19,16 @@ export const numberOfDaysInCourse = (course: CourseType) => {
 };
 
 export const getWeekNumberOfModule = (course: CourseType, moduleId: number) => {
+  let weeknumber = 1;
+  let nrOfDays = 0;
+  const modules = course.modules.map(m => m.module);
+  for (let i = 0; i < modules.length; i++) {
+    if(modules[i].id == moduleId){
+      return weeknumber;
+    }
+    nrOfDays += modules[i].numberOfDays;
+    weeknumber = Math.floor(nrOfDays/5) +1 
+  }
   return 1;
 };
 
@@ -32,7 +41,7 @@ export const calculateCourseDayDates = (
   const currentDate = new Date(startDate);
   course.startDate = new Date(startDate);
 
-  const modules = course.modules.map(m => m.module)
+  const modules = course.modules.map((m) => m.module);
 
   for (let i = 0; i < modules.length; i++) {
     for (let j = 0; j < modules[i].numberOfDays; j++) {
@@ -54,25 +63,23 @@ export const calculateCourseDayDates = (
             color: "#999999",
             appliedCourseId: course.id,
             moduleName: modules[i].name,
-            moduleId: modules[i].id
+            moduleId: modules[i].id,
           },
         ],
       });
       currentDate.setDate(currentDate.getDate() + 1);
     }
-    modules[i].startDate = modules[i].days[0].date
+    modules[i].startDate = modules[i].days[0].date;
   }
   return calendarDateTypes;
 };
 
-
-export const updatePreviewCalendarDates = (course : CourseType) => {
+export const updatePreviewCalendarDates = (course: CourseType) => {
   const calendarDateTypes: CalendarDateType[] = [];
-  const modules = course.modules.map(m => m.module);
+  const modules = course.modules.map((m) => m.module);
 
-  for (let i = 0; i < modules.length; i++) {    
+  for (let i = 0; i < modules.length; i++) {
     for (let j = 0; j < modules[i].numberOfDays; j++) {
-     
       calendarDateTypes.push({
         date: new Date(modules[i].days[j].date),
         dateContent: [
@@ -84,61 +91,52 @@ export const updatePreviewCalendarDates = (course : CourseType) => {
             color: "#999999",
             appliedCourseId: course.id,
             moduleName: modules[i].name,
-            moduleId: modules[i].id            
+            moduleId: modules[i].id,
           },
         ],
       });
     }
   }
   return calendarDateTypes;
+};
 
-}
-
-const getDifferenceInDays = (date1: Date, date2: Date) => {
+export const getDifferenceInDays = (date1: Date, date2: Date) => {
   const date1Ms = new Date(date1).getTime();
   const date2Ms = new Date(date2).getTime();
   const differenceMs = date1Ms - date2Ms;
   return Math.floor(differenceMs / (1000 * 60 * 60 * 24));
 };
 
-
-
-export const getNewDate = (currentDate: Date, difference : number) => {
+export const getNewDate = (currentDate: Date, difference: number) => {
   const todayDate = new Date(currentDate);
   todayDate.setDate(todayDate.getDate() + difference);
   return todayDate;
 };
 
-export const getCalculatedDays = (days : DayType[], startDate : Date) => {
-
+export const getCalculatedDays = (days: DayType[], startDate: Date) => {
   const currentDate = new Date(startDate);
-  const newDays : DayType[] = deepRemoveId(days);
+  const newDays: DayType[] = deepRemoveId(days);
 
-  for(let i = 0; i < days.length; i++) {
+  for (let i = 0; i < days.length; i++) {
     while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
       currentDate.setDate(currentDate.getDate() + 1);
     }
-    newDays[i].date = new Date(currentDate)
+    newDays[i].date = new Date(currentDate);
     currentDate.setDate(currentDate.getDate() + 1);
   }
 
   return newDays;
 };
 
+export const moveModule = (module: ModuleType, targetDate: Date) => {
+  const newModule: ModuleType = deepRemoveId(module);
+  newModule.id = module.id;
 
-export const moveModule = (module : ModuleType, targetDate : Date ) => {
+  newModule.startDate = new Date(targetDate);
+  newModule.days = getCalculatedDays(newModule.days, newModule.startDate);
 
-  const newModule : ModuleType = deepRemoveId(module)
-  newModule.id = module.id
-
-  newModule.startDate = new Date(targetDate)
-  newModule.days = getCalculatedDays(newModule.days, newModule.startDate)
-
-  return newModule
-}
-
-
-
+  return newModule;
+};
 
 /**
  * Utility function to deeply remove `id` property from objects.

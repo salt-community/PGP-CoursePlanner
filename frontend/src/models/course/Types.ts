@@ -1,3 +1,5 @@
+import { EventType } from "@models/module/Types";
+
 export type CourseModuleType = {
   courseId?: number;
   moduleId?: number;
@@ -5,14 +7,14 @@ export type CourseModuleType = {
   module: ModuleType;
 }
 
-export type EventType = {
-  id: number;
-  name: string;
-  startTime: string;
-  endTime: string;
-  description?: string;
-  isApplied?: boolean;
-}
+// export type EventType = {
+//   id: number;
+//   name: string;
+//   startTime: string;
+//   endTime: string;
+//   description?: string;
+//   isApplied?: boolean;
+// }
 
 export type DayType = {
   id: number;
@@ -27,7 +29,7 @@ export type ModuleType = {
   id: number;
   name: string;
   numberOfDays: number;
-  track: string[];
+  track: Track[];
   order: number;
   isApplied: boolean;
   days: DayType[];
@@ -60,31 +62,22 @@ export type CourseProps = {
   buttonText: string;
 }
 
-export type moduleStartDate = {
-  moduleId: number
-  startDate: Date
-}
+  export type CalendarDateType = {
+      id?: number;
+      date: Date;
+      dateContent: DateContentModified[];
+  }
+  
+  export type DateContentModified = {
+      appliedCourseId?: number;
+      id?: number;
+      moduleName?: string;
+      dayOfModule: number;
+      totalDaysInModule: number;
+      courseName: string;
+      events: EventType[];
+      color: string
+      moduleId : number;
+  }
 
-export type updatePreviewCourseProps = {
-  course: CourseType
-  moduleStartDates: moduleStartDate[]
-}
-
-export type CalendarDateType = {
-  id?: number;
-  date: Date;
-  dateContent: DateContent[];
-}
-
-export type DateContent = {
-  appliedCourseId?: number;
-  id?: number;
-  moduleName?: string;
-  moduleId: number;
-  dayOfModule: number;
-  totalDaysInModule: number;
-  courseName: string;
-  events: EventType[];
-  color: string
-}
 

@@ -6,6 +6,7 @@ export type ModuleType = {
   track?: string[];
   order?: number;
   isApplied?: boolean;
+  startDate: Date
 };
 
 export type ModuleProps = {

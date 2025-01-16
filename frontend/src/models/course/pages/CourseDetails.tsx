@@ -91,7 +91,7 @@ export default function CourseDetails() {
             </div>
 
             <div className="mt-5 flex flex-col gap-6 p-8">
-              <button className="btn btn-primary" onClick={() => document.getElementById('my_DeployModal_1')!.showModal()}>Deploy Bootcamp</button>
+              <button className="btn btn-primary" onClick={() =>  (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal() }>Deploy Bootcamp</button>
               <DeployModal course={course} />
             </div>
           </div>
@@ -114,7 +114,8 @@ export default function CourseDetails() {
               <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary" >Edit Course</Link>
               <DeleteBtn onClick={() => console.log("you clicked delete")}>Delete Course</DeleteBtn>
 
-              <p> Track: {course?.name}</p>
+              <p> Track: {course?.track.name
+                }</p>
               <div
                 style={{
                   width: "15px",
