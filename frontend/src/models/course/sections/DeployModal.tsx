@@ -27,7 +27,7 @@ export default function DeployModal({ course }: Props) {
     const [previewCourse, setCourse] = useState<CourseType>(course);
     const [previewCalendarDays, setPreviewCalendarDays] = useState(updatePreviewCalendarDates(previewCourse))
 
-    const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[1].module);
+    const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[0].module);
     const [selectedModuleStartDate, setSelectedModuleStartDate] = useState<Date>(getNewDate(new Date(), -8))
 
 
