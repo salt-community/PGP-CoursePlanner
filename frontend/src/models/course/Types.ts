@@ -52,6 +52,7 @@ export type Track = {
   id?: number;
   color: string;
   name: string;
+  visibility: boolean;
 }
 
 export type CourseProps = {
@@ -64,31 +65,26 @@ export type moduleStartDate = {
   startDate: Date
 }
 
-  export type moduleStartDate = {
-    moduleId : number
-    startDate : Date
-  }
-  
-  export type updatePreviewCourseProps = {
-    course : CourseType
-    moduleStartDates : moduleStartDate[]
-  }
-  
-  export type CalendarDateType = {
-      id?: number;
-      date: Date;
-      dateContent: DateContent[];
-  }
-  
-  export type DateContent = {
-      appliedCourseId?: number;
-      id?: number;
-      moduleName?: string;
-      moduleId : number;
-      dayOfModule: number;
-      totalDaysInModule: number;
-      courseName: string;
-      events: EventType[];
-      color: string
-  }
+export type updatePreviewCourseProps = {
+  course: CourseType
+  moduleStartDates: moduleStartDate[]
+}
+
+export type CalendarDateType = {
+  id?: number;
+  date: Date;
+  dateContent: DateContent[];
+}
+
+export type DateContent = {
+  appliedCourseId?: number;
+  id?: number;
+  moduleName?: string;
+  moduleId: number;
+  dayOfModule: number;
+  totalDaysInModule: number;
+  courseName: string;
+  events: EventType[];
+  color: string
+}
 
