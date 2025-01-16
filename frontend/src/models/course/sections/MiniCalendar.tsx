@@ -41,7 +41,7 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
     const { data, isLoading,  isError,  } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2); // we get lint issues because data here is not of the exact same type
 
-
+    
 
     const selectDate = (index: number) => {
         setSelectedModuleStartDate(data![index].date)

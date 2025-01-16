@@ -1,5 +1,5 @@
 
-import { CalendarDateType, CourseType, DayType, ModuleType, updatePreviewCourseProps } from "../Types";
+import { CalendarDateType, CourseType, DayType, ModuleType } from "../Types";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
   return modules.some((module, idx) =>
@@ -94,7 +94,7 @@ export const updatePreviewCalendarDates = (course : CourseType) => {
 
 }
 
-const getDifferenceInDays = (date1: Date, date2: Date) => {
+export const getDifferenceInDays = (date1: Date, date2: Date) => {
   const date1Ms = new Date(date1).getTime();
   const date2Ms = new Date(date2).getTime();
   const differenceMs = date1Ms - date2Ms;

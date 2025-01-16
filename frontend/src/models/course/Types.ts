@@ -59,21 +59,6 @@ export type CourseProps = {
   buttonText: string;
 }
 
-export type moduleStartDate = {
-  moduleId: number
-  startDate: Date
-}
-
-  export type moduleStartDate = {
-    moduleId : number
-    startDate : Date
-  }
-  
-  export type updatePreviewCourseProps = {
-    course : CourseType
-    moduleStartDates : moduleStartDate[]
-  }
-  
   export type CalendarDateType = {
       id?: number;
       date: Date;
