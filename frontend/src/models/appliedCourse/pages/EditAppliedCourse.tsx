@@ -26,16 +26,20 @@ export default function EditAppliedCourse() {
     };
 
     useEffect(() => {
-        if (appliedCourse) {
-            setCourse({
-                ...appliedCourse,
-                modules: appliedCourse.modules.map((module) => ({
-                    courseId: appliedCourse.id,
-                    moduleId: module.module.id,
-                    module: module.module,
-                })),
-            });
-        }
+    if (appliedCourse) {
+        const sortedModules = appliedCourse.modules
+        .map((module) => ({
+            courseId: appliedCourse.id,
+            moduleId: module.module.id,
+            module: module.module,
+        }))
+        .sort((a, b) => a.module.order - b.module.order); 
+
+        setCourse({
+        ...appliedCourse,
+        modules: sortedModules,
+        });
+    }
     }, [appliedCourse]);
 
     const handleCreateNewAppliedModule = () => {
