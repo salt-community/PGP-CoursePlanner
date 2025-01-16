@@ -1,3 +1,4 @@
+import { Track } from "@models/course/Types";
 import { EventType } from "../module/Types";
 
 export type CalendarDateType = {
@@ -9,6 +10,7 @@ export type CalendarDateType = {
 export type DateContent = {
     appliedCourseId?: number;
     id?: number;
+    track: Track;
     moduleName?: string;
     dayOfModule: number;
     totalDaysInModule: number;
