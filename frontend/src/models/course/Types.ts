@@ -5,14 +5,14 @@ export type CourseModuleType = {
   module: ModuleType;
 }
 
-export type EventType = {
-  id: number;
-  name: string;
-  startTime: string;
-  endTime: string;
-  description?: string;
-  isApplied?: boolean;
-}
+// export type EventType = {
+//   id: number;
+//   name: string;
+//   startTime: string;
+//   endTime: string;
+//   description?: string;
+//   isApplied?: boolean;
+// }
 
 export type DayType = {
   id: number;
@@ -62,18 +62,18 @@ export type CourseProps = {
   export type CalendarDateType = {
       id?: number;
       date: Date;
-      dateContent: DateContent[];
+      dateContent: DateContentModified[];
   }
   
-  export type DateContent = {
+  export type DateContentModified = {
       appliedCourseId?: number;
       id?: number;
       moduleName?: string;
-      moduleId : number;
       dayOfModule: number;
       totalDaysInModule: number;
       courseName: string;
       events: EventType[];
       color: string
+      moduleId : number;
   }
 

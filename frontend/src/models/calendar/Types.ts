@@ -1,4 +1,4 @@
-import { EventType } from "../module/Types";
+import { EventType } from "@models/module/Types";
 
 export type CalendarDateType = {
     id?: number;
