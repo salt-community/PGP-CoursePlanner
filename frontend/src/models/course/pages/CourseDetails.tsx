@@ -114,7 +114,8 @@ export default function CourseDetails() {
               <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary" >Edit Course</Link>
               <DeleteBtn onClick={() => console.log("you clicked delete")}>Delete Course</DeleteBtn>
 
-              <p> Track: {course?.name}</p>
+              <p> Track: {course?.track.name
+                }</p>
               <div
                 style={{
                   width: "15px",

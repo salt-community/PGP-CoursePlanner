@@ -1,3 +1,4 @@
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using backend.Controllers;
 using backend.Data;
@@ -163,6 +164,12 @@ public class CourseService : IService<Course>
         {
             return await CreateAppliedCourseAsync(course);
         }
+
+
+        var track = _context.Tracks.First(t => t.Id == course.Track.Id);
+
+        course.Track = track;
+
         var modulesInDb = await _context.Modules
                 .Where(m => course.moduleIds.Contains(m.Id))
                 .ToListAsync();
