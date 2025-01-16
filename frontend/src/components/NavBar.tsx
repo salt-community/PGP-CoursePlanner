@@ -177,7 +177,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
 
       <div className="flex-grow"></div>
 
-      <div className="flex justify-center gap-2">
+      <div className={`flex ${!isSidebarExpanded && "flex-col"} justify-center items-center gap-2`}>
         {trackVisibility.map(t => (
           <VisibilityButton key={t.id} id={t.id} color={t.color} visibility={t.visibility} handleTrackVisibility={handleTrackVisibility} />
         ))}
