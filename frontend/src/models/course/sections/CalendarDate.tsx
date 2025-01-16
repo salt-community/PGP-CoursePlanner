@@ -1,11 +1,11 @@
 import { format } from "date-fns";
 import { today } from "@helpers/dateHelpers";
 import LoadingSkeletonMonth from "@models/calendar/components/LoadingSkeletonMonth";
-import { CourseType, DateContent, ModuleType } from "../Types";
+import { CourseType, DateContentModified, ModuleType } from "../Types";
 
 
 type Props = {
-    dateContent: DateContent[];
+    dateContent: DateContentModified[];
     date: string;
     indexForModal: number;
     openModal: (index: number) => void;

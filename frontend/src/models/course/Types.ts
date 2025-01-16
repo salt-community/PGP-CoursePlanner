@@ -1,3 +1,5 @@
+import { EventType } from "@models/module/Types";
+
 export type CourseModuleType = {
   courseId?: number;
   moduleId?: number;
