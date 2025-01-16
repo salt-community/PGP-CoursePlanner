@@ -4,6 +4,8 @@ import { currentMonth, currentYear } from "@helpers/dateHelpers";
 import { useMemo, useState } from "react";
 import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import { useQueryTracks } from "@api/track/trackQueries";
+import { getStorageTrackVisibility, initialStorageTrackVisibility, TrackVisibility, updateStorageTrackVisibility } from "@helpers/localStorage";
+import VisibilityButton from "./VisibilityButton";
 
 type Props = {
   isSidebarExpanded: boolean,
@@ -16,8 +18,19 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
   const [bootcampDetailsIsActive, setBootcampDetailsIsActive] = useState(false);
   const { data } = useQueryAppliedCourses();
   const { data: tracks } = useQueryTracks();
+  const [trackVisibility, setTrackVisibility] = useState<TrackVisibility[]>([]);
 
-  console.log(tracks);
+  useMemo(() => {
+    if (tracks) {
+      initialStorageTrackVisibility(tracks);
+      setTrackVisibility(getStorageTrackVisibility());
+    }
+  }, [tracks]);
+
+  function handleTrackVisibility(id: number, visibility: boolean) {
+    updateStorageTrackVisibility(id, visibility);
+    setTrackVisibility(getStorageTrackVisibility());
+  }
 
   const activeCourses = useMemo(() => {
     if (!data) return [];
@@ -163,6 +176,12 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
       </ul>
 
       <div className="flex-grow"></div>
+
+      <div className={`flex ${!isSidebarExpanded && "flex-col"} justify-center items-center gap-2`}>
+        {trackVisibility.map(t => (
+          <VisibilityButton key={t.id} id={t.id} color={t.color} visibility={t.visibility} handleTrackVisibility={handleTrackVisibility} />
+        ))}
+      </div>
 
       <div className="m-4 overflow-hidden">
         <button className={`btn btn-secondary min-h-10 h-10 w-full text-xl p-0 flex-nowrap ${isSidebarExpanded && "min-w-32"}`} onClick={handleLogOut}>
