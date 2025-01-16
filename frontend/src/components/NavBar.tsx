@@ -4,7 +4,7 @@ import { currentMonth, currentYear } from "@helpers/dateHelpers";
 import { useMemo, useState } from "react";
 import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import { useQueryTracks } from "@api/track/trackQueries";
-import { Track } from "@models/course/Types";
+import { getStorageTrackVisibility, initialStorageTrackVisibility, TrackVisibility, updateStorageTrackVisibility } from "@helpers/localStorage";
 
 type Props = {
   isSidebarExpanded: boolean,
@@ -17,19 +17,18 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
   const [bootcampDetailsIsActive, setBootcampDetailsIsActive] = useState(false);
   const { data } = useQueryAppliedCourses();
   const { data: tracks } = useQueryTracks();
-  const [isVisibleTracks, setIsVisibleTracks] = useState<number[]>([]);
+  const [trackVisibility, setTrackVisibility] = useState<TrackVisibility[]>([]);
 
-  function getVisibleTracks() {
-    const visibleTracks = localStorage.getItem('visibleTracks');
-    if (visibleTracks) {
-      const parsedVisibleTracks: number[] = JSON.parse(visibleTracks);
-      setIsVisibleTracks(parsedVisibleTracks);
+  useMemo(() => {
+    if (tracks) {
+      initialStorageTrackVisibility(tracks);
+      setTrackVisibility(getStorageTrackVisibility());
     }
-  }
+  }, [tracks]);
 
-  function saveVisibleTracks(tracks: Track[]) {
-    const visibleTracks = tracks.map(track => track.id);
-    localStorage.setItem('visibleTracks', JSON.stringify(visibleTracks  ));
+  function handleTrackVisibility(id: number, visibility: boolean) {
+    updateStorageTrackVisibility(id, visibility);
+    setTrackVisibility(getStorageTrackVisibility());
   }
 
   const activeCourses = useMemo(() => {
@@ -176,6 +175,12 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
       </ul>
 
       <div className="flex-grow"></div>
+
+      <div>
+        {trackVisibility.map(t => (
+          <button key={t.id} onClick={() => handleTrackVisibility(t.id, !t.visibility)}>{t.name}{t.color}{`${t.visibility}`}</button>
+        ))}
+      </div>
 
       <div className="m-4 overflow-hidden">
         <button className={`btn btn-secondary min-h-10 h-10 w-full text-xl p-0 flex-nowrap ${isSidebarExpanded && "min-w-32"}`} onClick={handleLogOut}>
