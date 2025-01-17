@@ -69,14 +69,7 @@ export function DayModal({ modalData, onClose, onNext, onPrev, isPrevDisabled, i
                                             <div key={event.id ?? event.name} className="pb-2 mb-2">
                                                 <div className="flex items-center gap-2 justify-between min-w-96">
                                                     <div className="flex items-center gap-2">
-                                                        <div
-                                                            style={{
-                                                                width: "15px",
-                                                                height: "15px",
-                                                                backgroundColor: "#ff7961",
-                                                                borderRadius: "3px",
-                                                            }}>
-                                                        </div>
+                                                        <div className="w-4 h-4 rounded-[3px]" style={{ backgroundColor: `${content.track.color}` }}></div>
                                                         <p>{event.name}</p>
                                                     </div>
                                                     <p>
