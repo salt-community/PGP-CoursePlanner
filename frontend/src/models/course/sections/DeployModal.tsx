@@ -122,15 +122,7 @@ export default function DeployModal({ course }: Props) {
                         <form method="dialog" className="flex gap-5 justify-center">
                             <button className="btn">Cancel</button>
                             <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
-                            <button className="btn" onClick={(event) => {
-                                event.preventDefault();
-                                const updatedModules: CourseModuleType[] = previewCourse.modules.map((m, index) =>
-                                    index === 0
-                                        ? { ...m, module: moveModule(m.module, getNewDate(new Date(), -2)) }
-                                        : m
-                                );
-                                setCourse({ ...previewCourse, modules: updatedModules });
-                            }}>test moveModule</button>
+                           
 
                         </form>
                     </div>
