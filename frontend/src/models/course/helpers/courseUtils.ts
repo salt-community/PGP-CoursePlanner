@@ -142,28 +142,41 @@ export const moveModule = (module: ModuleType, targetDate: Date) => {
 };
 
 
+const formatDateTime = (date: Date, time: string): string => {
+  const [hours, minutes] = time.split(":").map(Number); // Extract hours and minutes
+  const updatedDate = new Date(date); // Clone the date object to avoid mutation
+  updatedDate.setHours(hours, minutes, 0, 0); // Set the time
+  return updatedDate.toISOString(); // Convert to ISO 8601 string
+};
+
+
+
+
 export const getGoogleEventListForCourse = (course : CourseType) => {
   const days = course.modules.flatMap(m => m.module.days)
 
   const events: GoogleEvent[] = days.flatMap((day) =>
-    day.events.map((e: EventType) => ({
-      attendees: [], // Populate as needed or leave empty if not applicable
-      summary: e.name,
-      description: e.description,
-      start: {
-        dateTime: e.startTime,
-        timeZone: "UTC",
-      },
-      end: {
-        dateTime: e.endTime,
-        timeZone: "UTC", 
-      },
-      extendedProperties: {
-        shared: {
-          course: course.name, // den här är rätt skum
+    day.events.map((e: EventType) => {
+
+      return {
+        attendees: [], // Populate as needed or leave empty
+        summary: e.name,
+        description: e.description,
+        start: {
+          dateTime: formatDateTime(day.date, e.startTime),
+          timeZone: "Europe/Stockholm", // Swedish timezone
         },
-      },
-    }))
+        end: {
+          dateTime: formatDateTime(day.date, e.endTime),
+          timeZone: "Europe/Stockholm", // Swedish timezone
+        },
+        extendedProperties: {
+          shared: {
+            course: "", // Populate as needed or leave empty
+          },
+        },
+      };
+    })
   );
   
   return events;
