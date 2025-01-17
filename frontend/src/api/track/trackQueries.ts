@@ -7,6 +7,7 @@ export function useQueryTracks() {
         queryKey: ['tracks'],
         queryFn: getTracks
     });
+    // console.log("Tracks:", data);
 
     return { data, isLoading, isError };
 }

@@ -15,11 +15,10 @@ public class Module
     public List<Day> Days { get; set; } = [];
     [JsonIgnore]
     public List<CourseModule> CourseModules { get; set; } = new List<CourseModule>();
-
-    public string[] Track { get; set; } = [];
+    public List<Track> Tracks { get; set; } = [];
     public int Order { get; set; }
     public bool IsApplied { get; set; } = false;
-    public DateTime StartDate {get; set;} 
+    public DateTime StartDate { get; set; }
 
     public Module ShallowClone()
     {
@@ -27,7 +26,7 @@ public class Module
         {
             Name = Name,
             NumberOfDays = NumberOfDays,
-            Track = Track,
+            Tracks = Tracks,
             Order = Order,
             IsApplied = IsApplied
         };
@@ -36,7 +35,6 @@ public class Module
     {
         IsApplied = true;
     }
-
 }
 
 

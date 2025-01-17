@@ -7,6 +7,7 @@ export function useQueryModules() {
         queryKey: ['modules'],
         queryFn: getModules
     });
+    console.log("Modules:",data);
 
     return { data, isLoading, isError, error };
 }
