@@ -24,13 +24,13 @@ export const numberOfDaysInCourse = (course: CourseType) => {
 export const getWeekNumberOfModule = (course: CourseType, moduleId: number) => {
   let weeknumber = 1;
   let nrOfDays = 0;
-  const modules = course.modules.map(m => m.module);
+  const modules = course.modules.map((m) => m.module);
   for (let i = 0; i < modules.length; i++) {
-    if(modules[i].id == moduleId){
+    if (modules[i].id == moduleId) {
       return weeknumber;
     }
     nrOfDays += modules[i].numberOfDays;
-    weeknumber = Math.floor(nrOfDays/5) +1 
+    weeknumber = Math.floor(nrOfDays / 5) + 1;
   }
   return 1;
 };
@@ -141,7 +141,6 @@ export const moveModule = (module: ModuleType, targetDate: Date) => {
   return newModule;
 };
 
-
 const formatDateTime = (date: Date, time: string): string => {
   const [hours, minutes] = time.split(":").map(Number); // Extract hours and minutes
   const updatedDate = new Date(date); // Clone the date object to avoid mutation
@@ -149,17 +148,16 @@ const formatDateTime = (date: Date, time: string): string => {
   return updatedDate.toISOString(); // Convert to ISO 8601 string
 };
 
-
-
-
-export const getGoogleEventListForCourse = (course : CourseType, groupEmail: string) => {
-  const days = course.modules.flatMap(m => m.module.days)
+export const getGoogleEventListForCourse = (
+  course: CourseType,
+  groupEmail: string
+) => {
+  const days = course.modules.flatMap((m) => m.module.days);
 
   const events: GoogleEvent[] = days.flatMap((day) =>
     day.events.map((e: EventType) => {
-
       return {
-        attendees: [], // Populate as needed or leave empty
+        attendees: groupEmail ? [{ email: groupEmail }] : [], // Check if groupEmail is not empty
         summary: course.name + e.name,
         description: e.description,
         start: {
@@ -178,10 +176,9 @@ export const getGoogleEventListForCourse = (course : CourseType, groupEmail: str
       };
     })
   );
-  
-  return events;
-}
 
+  return events;
+};
 
 /**
  * Utility function to deeply remove `id` property from objects.
