@@ -5,14 +5,23 @@ import { useMutationPostAppliedCourse } from "@api/appliedCourse/appliedCourseMu
 import { useNavigate } from "react-router-dom";
 // import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import MiniCalendar from "./MiniCalendar";
-import { calculateCourseDayDates, getNewDate, moveModule, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
+import { calculateCourseDayDates, getGoogleEventListForCourse, getNewDate, moveModule, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
 // import EditCourseDays from "./EditCourseDays";
 import { getDateAsStringYyyyMmDd } from "@helpers/dateHelpers";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { postCourseToGoogle } from "@api/googleCalendarFetches";
 
 
 type Props = {
     course: CourseType,
 }
+
+type Inputs = {
+    isDeployingToGoogle: boolean;
+    groupEmail: string;
+};
+
+
 
 export default function DeployModal({ course }: Props) {
 
@@ -37,6 +46,24 @@ export default function DeployModal({ course }: Props) {
     }, [previewCourse, startDate]);
 
 
+    const {
+        register,
+        handleSubmit,
+        watch,
+        // formState: { errors },
+    } = useForm<Inputs>()
+    const onSubmit: SubmitHandler<Inputs> = (data) => {
+        console.log(data)
+        if(data.isDeployingToGoogle) {
+            const events =getGoogleEventListForCourse(previewCourse, "")
+            console.log("Events: ", events)
+            postCourseToGoogle(events);
+        }
+
+        handleApplyTemplate()
+    }
+
+
     const handleApplyTemplate = async () => {
 
         const myTrack = previewCourse.track.id;
@@ -56,6 +83,7 @@ export default function DeployModal({ course }: Props) {
         }
     };
 
+    console.log(watch("isDeployingToGoogle"))
 
 
     return (
@@ -95,7 +123,7 @@ export default function DeployModal({ course }: Props) {
                     <section className="flex flex-grow">
 
                         <div className="flex-grow overflow-auto">
-                            <MiniCalendar previewCourse={previewCourse} startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedModuleStartDate} setSelectedModuleStartDate={setSelectedModuleStartDate} setSelectedModule={setSelectedModule}/>
+                            <MiniCalendar previewCourse={previewCourse} startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedModuleStartDate} setSelectedModuleStartDate={setSelectedModuleStartDate} setSelectedModule={setSelectedModule} />
                         </div>
                         <div >
                             {/* <EditCourseDays course={previewCourse} setCourse={setCourse} /> */}
@@ -119,10 +147,14 @@ export default function DeployModal({ course }: Props) {
                         </div>
                     </section>
                     <div className="modal-action">
-                        <form method="dialog" className="flex gap-5 justify-center">
+                        <form method="dialog" className="flex gap-5 justify-center" onSubmit={handleSubmit(onSubmit)}>
                             <button className="btn">Cancel</button>
-                            <button className="btn btn-primary" onClick={handleApplyTemplate}>Deploy Bootcamp</button>
-                           
+                            <div className="flex flex-col">
+                                <label>add to google calendar<input type="checkbox"  {...register("isDeployingToGoogle", { required: false })}></input></label>
+                                <label>Group email <input type="email" defaultValue={course.name} {...register("groupEmail", { required: false })}></input></label> 
+                            </div>
+                            <button className="btn btn-primary" type="submit">Deploy Bootcamp</button>
+
 
                         </form>
                     </div>

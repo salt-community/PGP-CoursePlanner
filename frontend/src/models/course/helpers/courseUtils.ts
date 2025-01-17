@@ -1,4 +1,7 @@
+import { GoogleEvent } from "@helpers/googleHelpers";
 import { CalendarDateType, CourseType, DayType, ModuleType } from "../Types";
+import DayTable from "../sections/DayTable";
+import { EventType } from "@models/module/Types";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
   return modules.some((module, idx) =>
@@ -21,13 +24,13 @@ export const numberOfDaysInCourse = (course: CourseType) => {
 export const getWeekNumberOfModule = (course: CourseType, moduleId: number) => {
   let weeknumber = 1;
   let nrOfDays = 0;
-  const modules = course.modules.map(m => m.module);
+  const modules = course.modules.map((m) => m.module);
   for (let i = 0; i < modules.length; i++) {
-    if(modules[i].id == moduleId){
+    if (modules[i].id == moduleId) {
       return weeknumber;
     }
     nrOfDays += modules[i].numberOfDays;
-    weeknumber = Math.floor(nrOfDays/5) +1 
+    weeknumber = Math.floor(nrOfDays / 5) + 1;
   }
   return 1;
 };
@@ -136,6 +139,45 @@ export const moveModule = (module: ModuleType, targetDate: Date) => {
   newModule.days = getCalculatedDays(newModule.days, newModule.startDate);
 
   return newModule;
+};
+
+const formatDateTime = (date: Date, time: string): string => {
+  const [hours, minutes] = time.split(":").map(Number); // Extract hours and minutes
+  const updatedDate = new Date(date); // Clone the date object to avoid mutation
+  updatedDate.setHours(hours, minutes, 0, 0); // Set the time
+  return updatedDate.toISOString(); // Convert to ISO 8601 string
+};
+
+export const getGoogleEventListForCourse = (
+  course: CourseType,
+  groupEmail: string
+) => {
+  const days = course.modules.flatMap((m) => m.module.days);
+
+  const events: GoogleEvent[] = days.flatMap((day) =>
+    day.events.map((e: EventType) => {
+      return {
+        attendees: groupEmail ? [{ email: groupEmail }] : [], // Check if groupEmail is not empty
+        summary: course.name + e.name,
+        description: e.description,
+        start: {
+          dateTime: formatDateTime(day.date, e.startTime),
+          timeZone: "Europe/Stockholm", // Swedish timezone
+        },
+        end: {
+          dateTime: formatDateTime(day.date, e.endTime),
+          timeZone: "Europe/Stockholm", // Swedish timezone
+        },
+        extendedProperties: {
+          shared: {
+            course: course.name, // Populate as needed or leave empty
+          },
+        },
+      };
+    })
+  );
+
+  return events;
 };
 
 /**

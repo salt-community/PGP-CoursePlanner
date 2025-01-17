@@ -4,7 +4,7 @@ import { CourseType, Track } from "../Types";
 
 export default function CreateCourse() {
 
-    const myTrack: Track = { id: 0, color: "",  name: "" }
+    const myTrack: Track = { id: 0, color: "",  name: "", visibility: true}
 
     const emptyCourse: CourseType =
     {
