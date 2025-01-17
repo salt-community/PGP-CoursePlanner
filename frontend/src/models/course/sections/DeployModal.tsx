@@ -9,6 +9,7 @@ import { calculateCourseDayDates, getGoogleEventListForCourse, getNewDate, moveM
 // import EditCourseDays from "./EditCourseDays";
 import { getDateAsStringYyyyMmDd } from "@helpers/dateHelpers";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { postCourseToGoogle } from "@api/googleCalendarFetches";
 
 
 type Props = {
@@ -49,13 +50,15 @@ export default function DeployModal({ course }: Props) {
         register,
         handleSubmit,
         watch,
-        formState: { errors },
+        // formState: { errors },
     } = useForm<Inputs>()
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         console.log(data)
-        const events =getGoogleEventListForCourse(previewCourse)
-
-        console.log("Events: ", events)
+        if(data.isDeployingToGoogle) {
+            const events =getGoogleEventListForCourse(previewCourse, "")
+            console.log("Events: ", events)
+            postCourseToGoogle(events);
+        }
 
         handleApplyTemplate()
     }

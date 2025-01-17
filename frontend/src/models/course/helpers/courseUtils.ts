@@ -152,7 +152,7 @@ const formatDateTime = (date: Date, time: string): string => {
 
 
 
-export const getGoogleEventListForCourse = (course : CourseType) => {
+export const getGoogleEventListForCourse = (course : CourseType, groupEmail: string) => {
   const days = course.modules.flatMap(m => m.module.days)
 
   const events: GoogleEvent[] = days.flatMap((day) =>
@@ -160,7 +160,7 @@ export const getGoogleEventListForCourse = (course : CourseType) => {
 
       return {
         attendees: [], // Populate as needed or leave empty
-        summary: e.name,
+        summary: course.name + e.name,
         description: e.description,
         start: {
           dateTime: formatDateTime(day.date, e.startTime),
@@ -172,7 +172,7 @@ export const getGoogleEventListForCourse = (course : CourseType) => {
         },
         extendedProperties: {
           shared: {
-            course: "", // Populate as needed or leave empty
+            course: course.name, // Populate as needed or leave empty
           },
         },
       };
