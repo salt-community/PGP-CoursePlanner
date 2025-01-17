@@ -1,4 +1,7 @@
+import { GoogleEvent } from "@helpers/googleHelpers";
 import { CalendarDateType, CourseType, DayType, ModuleType } from "../Types";
+import DayTable from "../sections/DayTable";
+import { EventType } from "@models/module/Types";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
   return modules.some((module, idx) =>
@@ -137,6 +140,35 @@ export const moveModule = (module: ModuleType, targetDate: Date) => {
 
   return newModule;
 };
+
+
+export const getGoogleEventListForCourse = (course : CourseType) => {
+  const days = course.modules.flatMap(m => m.module.days)
+
+  const events: GoogleEvent[] = days.flatMap((day) =>
+    day.events.map((e: EventType) => ({
+      attendees: [], // Populate as needed or leave empty if not applicable
+      summary: e.name,
+      description: e.description,
+      start: {
+        dateTime: e.startTime,
+        timeZone: "UTC",
+      },
+      end: {
+        dateTime: e.endTime,
+        timeZone: "UTC", 
+      },
+      extendedProperties: {
+        shared: {
+          course: course.name, // den här är rätt skum
+        },
+      },
+    }))
+  );
+  
+  return events;
+}
+
 
 /**
  * Utility function to deeply remove `id` property from objects.
