@@ -8,7 +8,6 @@ export function useQueryCourses() {
         queryKey: ['courses'],
         queryFn: getCourses
     });
-    // console.log("Courses:", data);
 
     return { data, isLoading, isError };
 }
