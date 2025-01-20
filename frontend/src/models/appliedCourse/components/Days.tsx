@@ -9,9 +9,10 @@ import React, { useState } from "react";
         setCourse: React.Dispatch<React.SetStateAction<CourseType>>;
         courseModule: CourseModuleType;
         moduleIndex: number;
+        assignDatesToModules: (course: CourseType) => void;
     }
   
-  const Days = ({ course, setCourse, courseModule,moduleIndex }: DaysProps) => {
+  const Days = ({ course, setCourse, courseModule,moduleIndex, assignDatesToModules }: DaysProps) => {
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
     const [collapseOpen, setCollapseOpen] = useState<Record<number, boolean>>({});
 
@@ -21,8 +22,6 @@ import React, { useState } from "react";
           [index]: !prevState[index],
         }));
       };
-
-
     const handleDragStart = (dayIndex: number) => {
         setDraggedIndex(dayIndex);
       };
@@ -59,31 +58,23 @@ import React, { useState } from "react";
     
         setDraggedIndex(targetIndex);
     };
-    
-    
-
     const handleRemoveDay = (moduleIndex: number, dayIndex: number) => {
-        console.log("moduleIndex")
-        console.log(moduleIndex)
-
         setCourse((prevCourse) => {
-          const updatedModules = [...prevCourse.modules];
-          console.log("updatedModules")
-          console.log(updatedModules)
-          console.log(updatedModules[moduleIndex].module.name)
-          console.log("updatedModules")
-      
-          updatedModules[moduleIndex].module.days = updatedModules[moduleIndex].module.days.filter(
-            (_, i) => i !== dayIndex
-          );
-      
-          updatedModules[moduleIndex].module.numberOfDays = updatedModules[moduleIndex].module.days.length;
-      
-          return { ...prevCourse, modules: updatedModules };
+            const updatedModules = [...prevCourse.modules];
+    
+            updatedModules[moduleIndex].module.days = updatedModules[moduleIndex].module.days.filter(
+                (_, i) => i !== dayIndex
+            );
+    
+            updatedModules[moduleIndex].module.numberOfDays = updatedModules[moduleIndex].module.days.length;
+    
+            const updatedCourse = { ...prevCourse, modules: updatedModules };
+    
+            assignDatesToModules(updatedCourse);
+    
+            return updatedCourse;
         });
-      };
-      
-
+    };
     const handleCreateNewEvent = (moduleIndex: number, dayIndex: number) => {
         const newEvent = {
             id: 0,

@@ -58,45 +58,48 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
   };
 
   const handleRemoveModule = (index: number) => {
-    setCourse((prevCourse) => ({
-      ...prevCourse,
-      modules: prevCourse.modules.filter((_, i) => i !== index),
-    }));
-    assignDatesToModules(course)
-  };
-  const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
-    const newDay: DayType = {
+    setCourse((prevCourse) => {
+        const updatedModules = prevCourse.modules.filter((_, i) => i !== index);
+        const updatedCourse = {
+            ...prevCourse,
+            modules: updatedModules,
+        };
+        
+        assignDatesToModules(updatedCourse);
+
+        return updatedCourse; 
+    });
+};
+
+const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
+  const newDay: DayType = {
       id: 0,
       dayNumber: numberOfDays + 1,
       description: "New day",
       isApplied: true,
       events: [],
-      date: new Date().toISOString()
-    };
-  
-    setCourse((prevCourse) => {
-      const updatedModules = prevCourse.modules.map((module, index) => {
-        if (index === moduleIndex) {
-          return {
-            ...module,
-            module: {
-              ...module.module,
-              days: [...module.module.days, newDay],
-              numberOfDays: numberOfDays + 1
-            },
-          };
-        }
-        return module;
-      });
-  
-      const updatedCourse = {
-        ...prevCourse,
-        modules: updatedModules,
-      };
-      assignDatesToModules(updatedCourse);
-      return updatedCourse;
-    });
+      date: new Date('2025-02-02').toISOString() // Placeholder date
   };
+
+  const updatedCourse = {
+      ...course, 
+      modules: course.modules.map((module, index) => {
+          if (index === moduleIndex) {
+              return {
+                  ...module,
+                  module: {
+                      ...module.module,
+                      days: [...module.module.days, newDay],
+                  },
+              };
+          }
+          return module;
+      }),
+  };
+  assignDatesToModules(updatedCourse);
+};
+
+
 
   return (
     <div>
@@ -153,6 +156,7 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
                     courseModule={courseModule}
                     course={course}
                     setCourse={setCourse}
+                    assignDatesToModules={assignDatesToModules}
                   />
                   <div style={{ display: "flex", justifyContent: "flex-start" }}>
                     <PrimaryBtn

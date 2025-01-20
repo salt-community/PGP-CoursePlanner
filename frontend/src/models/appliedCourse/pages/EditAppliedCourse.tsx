@@ -14,6 +14,11 @@ export default function EditAppliedCourse() {
     const appliedCourseId = useIdFromPath();
     const { data: appliedCourse, isLoading, isError } = useQueryAppliedCourseById(appliedCourseId);
     const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
+    const [isColumn, setIsColumn] = useState(true);
+
+    const toggleLayout = () => {
+        setIsColumn(prevState => !prevState);
+    }
 
     const [course, setCourse] = useState<CourseType>({
         name: "",
@@ -70,11 +75,6 @@ export default function EditAppliedCourse() {
             mutationUpdateAppliedCourse.mutate(updatedCourse);
         }
     };
-    const handleUpdateCourseCalendar = () => {
-        assignDatesToModules(course);
-        
-    };
-
     function getWeekDayList(startDate: Date, totalDays: number): Date[] {
         const days: Date[] = [];
         const start = new Date(startDate);
@@ -89,19 +89,22 @@ export default function EditAppliedCourse() {
         return days;
     }
 
-    function assignDatesToModules(course: CourseType): CourseType {
-        const totalDays = course.modules.reduce((sum, module) => sum + module.module.numberOfDays, 0);
+    function assignDatesToModules(course: CourseType) {
+        const totalDays = course.modules.reduce((sum, module) => sum + module.module.days.length, 0);
         const weekdays = getWeekDayList(course.startDate, totalDays);
-    
+        
         let dateIndex = 0;
     
-        const updatedModules = course.modules.map((module) => {
-            const moduleDays = weekdays.slice(dateIndex, dateIndex + module.module.numberOfDays);
-            dateIndex += module.module.numberOfDays;
-
+        const sortedModules = [...course.modules].sort((a, b) => a.module.order - b.module.order);
+    
+        const updatedModules = sortedModules.map((module) => {
+          
+            const moduleDays = weekdays.slice(dateIndex, dateIndex + module.module.days.length);
+            dateIndex += module.module.days.length;
+    
             const updatedDays = module.module.days.map((existingDay, index) => ({
                 ...existingDay,
-                date: moduleDays[index], 
+                date: moduleDays[index].toISOString(), 
             }));
     
             return {
@@ -112,16 +115,12 @@ export default function EditAppliedCourse() {
                 },
             };
         });
-
-        console.log("doing getting date for day..");
-        console.log(course);
     
-        return {
+        setCourse({
             ...course,
             modules: updatedModules,
-        };
+        });
     }
-
     if (isLoading) {
         return <p>Loading course data...</p>;
     }
@@ -131,8 +130,11 @@ export default function EditAppliedCourse() {
 
     return (
         <Page>
-            <div className="bg-gray-100 min-h-screen flex flex-col items-center pt-5">
+            <div className={`bg-gray-100 min-h-screen flex ${isColumn ? 'flex-col' : 'flex-row'} items-center pt-5`}>
                 <section className="px-4 md:px-24 lg:px-56 bg-white rounded-lg p-5 shadow-md mt-5 w-4/5 flex flex-col">
+                <PrimaryBtn onClick={toggleLayout}>
+                    toggle
+                </PrimaryBtn>
                     <Calendar course={course}/>
                 </section>
                 <section className="px-4 md:px-24 lg:px-56 bg-white rounded-lg p-5 shadow-md mt-5 w-4/5 flex flex-col">
@@ -149,7 +151,6 @@ export default function EditAppliedCourse() {
                             </PrimaryBtn>
                         </div>
                         <PrimaryBtn onClick={handleUpdateCourse}>Save</PrimaryBtn>
-                        <PrimaryBtn onClick={handleUpdateCourseCalendar}>Save now..</PrimaryBtn>
                         <PrimaryBtn onClick={handleGoBack}>Abort</PrimaryBtn>
                     </div>
                 </section>
