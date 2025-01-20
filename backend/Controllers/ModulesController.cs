@@ -1,5 +1,6 @@
 using backend.ExceptionHandler.Exceptions;
 using backend.Models;
+using backend.Models.DTOs;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,10 +20,11 @@ public class ModulesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Module>>> GetModules()
+    public async Task<ActionResult<IEnumerable<ModuleResponse>>> GetModules()
     {
         var response = await _service.GetAllAsync();
-        return Ok(response.Where(x => x.IsApplied == false));
+        var moduleResponse = response.Select(m => new ModuleResponse(m)).ToList();
+        return Ok(moduleResponse.Where(x => x.IsApplied == false));
     }
 
     [HttpGet("{id}")]
@@ -35,8 +37,8 @@ public class ModulesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Module>> CreateModule(Module module)
     {
-            var response = await _service.CreateAsync(module);
-            return CreatedAtAction("GetModule", new { id = response.Id }, response);
+        var response = await _service.CreateAsync(module);
+        return CreatedAtAction("GetModule", new { id = response.Id }, response);
     }
 
     [HttpPut("{id}")]
