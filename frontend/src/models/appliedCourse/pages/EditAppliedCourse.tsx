@@ -8,11 +8,17 @@ import { CourseType, CourseModuleType } from "@models/course/Types";
 import { useNavigate } from "react-router-dom";
 import Modules from "../components/Modules";
 import CourseInfo from "../components/CourseInfo";
+import Calendar from "../components/Calendar";
 
 export default function EditAppliedCourse() {
     const appliedCourseId = useIdFromPath();
     const { data: appliedCourse, isLoading, isError } = useQueryAppliedCourseById(appliedCourseId);
     const mutationUpdateAppliedCourse = useMutationUpdateAppliedCourse();
+    const [isColumn, setIsColumn] = useState(true);
+
+    const toggleLayout = () => {
+        setIsColumn(prevState => !prevState);
+    }
 
     const [course, setCourse] = useState<CourseType>({
         name: "",
@@ -26,16 +32,19 @@ export default function EditAppliedCourse() {
     };
 
     useEffect(() => {
-        if (appliedCourse) {
-            setCourse({
-                ...appliedCourse,
-                modules: appliedCourse.modules.map((module) => ({
-                    courseId: appliedCourse.id,
-                    moduleId: module.module.id,
-                    module: module.module,
-                })),
-            });
-        }
+    if (appliedCourse) {
+        const sortedModules = appliedCourse.modules
+        .map((module) => ({
+            moduleId: module.module.id,
+            module: module.module,
+        }))
+        .sort((a, b) => a.module.order - b.module.order); 
+
+        setCourse({
+        ...appliedCourse,
+        modules: sortedModules,
+        });
+    }
     }, [appliedCourse]);
 
     const handleCreateNewAppliedModule = () => {
@@ -50,6 +59,7 @@ export default function EditAppliedCourse() {
                 isApplied: false,
                 numberOfDays: 0,
                 days: [],
+                date: new Date().toISOString()
             },
         };
 
@@ -65,7 +75,6 @@ export default function EditAppliedCourse() {
             mutationUpdateAppliedCourse.mutate(updatedCourse);
         }
     };
-
     function getWeekDayList(startDate: Date, totalDays: number): Date[] {
         const days: Date[] = [];
         const start = new Date(startDate);
@@ -80,19 +89,22 @@ export default function EditAppliedCourse() {
         return days;
     }
 
-    function assignDatesToModules(course: CourseType): CourseType {
-        const totalDays = course.modules.reduce((sum, module) => sum + module.module.numberOfDays, 0);
+    function assignDatesToModules(course: CourseType) {
+        const totalDays = course.modules.reduce((sum, module) => sum + module.module.days.length, 0);
         const weekdays = getWeekDayList(course.startDate, totalDays);
-    
+        
         let dateIndex = 0;
     
-        const updatedModules = course.modules.map((module) => {
-            const moduleDays = weekdays.slice(dateIndex, dateIndex + module.module.numberOfDays);
-            dateIndex += module.module.numberOfDays;
-
+        const sortedModules = [...course.modules].sort((a, b) => a.module.order - b.module.order);
+    
+        const updatedModules = sortedModules.map((module) => {
+          
+            const moduleDays = weekdays.slice(dateIndex, dateIndex + module.module.days.length);
+            dateIndex += module.module.days.length;
+    
             const updatedDays = module.module.days.map((existingDay, index) => ({
                 ...existingDay,
-                date: moduleDays[index], 
+                date: moduleDays[index].toISOString(), 
             }));
     
             return {
@@ -104,13 +116,11 @@ export default function EditAppliedCourse() {
             };
         });
     
-        return {
+        setCourse({
             ...course,
             modules: updatedModules,
-        };
+        });
     }
-    
-
     if (isLoading) {
         return <p>Loading course data...</p>;
     }
@@ -120,13 +130,19 @@ export default function EditAppliedCourse() {
 
     return (
         <Page>
-            <div className="bg-gray-100 min-h-screen flex flex-col items-center pt-5">
+            <div className={`bg-gray-100 min-h-screen flex ${isColumn ? 'flex-col' : 'flex-row'} items-center pt-5`}>
+                <section className="px-4 md:px-24 lg:px-56 bg-white rounded-lg p-5 shadow-md mt-5 w-4/5 flex flex-col">
+                <PrimaryBtn onClick={toggleLayout}>
+                    toggle
+                </PrimaryBtn>
+                    <Calendar course={course}/>
+                </section>
                 <section className="px-4 md:px-24 lg:px-56 bg-white rounded-lg p-5 shadow-md mt-5 w-4/5 flex flex-col">
                     <div className="flex flex-row gap-5 mt-2 mb-4">
                         <CourseInfo course={course} setCourse={setCourse} />
                     </div>
                     <div>
-                        <Modules course={course} setCourse={setCourse} />
+                        <Modules course={course} setCourse={setCourse} assignDatesToModules={assignDatesToModules}/>
                     </div>
                     <div>
                         <div className="flex justify-center items-center">
