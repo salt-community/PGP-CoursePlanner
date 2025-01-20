@@ -62,16 +62,16 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
     const selectDate = (index: number) => {
         const previewCalendarDaysIndex = previewCalendarDays.map(d => getDateAsString(d.date)).indexOf(getDateAsString(data![index].date))
 
-        const newDateContent =   transformDateContent(deepRemoveId(data![index].dateContent))
-        console.log("previewCDIndex: ", previewCalendarDaysIndex)
-        console.log("data date: ", data![index].date )
+        const newDateContent =   transformDateContent(data![index].dateContent)
+        console.log("new Date Content: ", newDateContent)
 
         if(previewCalendarDaysIndex >-1){
-            previewCalendarDays[previewCalendarDaysIndex].dateContent.forEach((dc)=>{
-                newDateContent.push(dc)
-            } )
+            // newDateContent.push(...previewCalendarDays[previewCalendarDaysIndex].dateContent)
+            setSelectedModuleStartDate({ dateContent: previewCalendarDays[previewCalendarDaysIndex].dateContent, date: data![index].date })
         }
-        setSelectedModuleStartDate({ dateContent: newDateContent, date: data![index].date })
+        else {
+            setSelectedModuleStartDate({ dateContent: newDateContent, date: data![index].date })
+        }
     };
 
 
