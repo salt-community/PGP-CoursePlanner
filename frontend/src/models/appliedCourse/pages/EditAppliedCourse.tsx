@@ -132,15 +132,13 @@ export default function EditAppliedCourse() {
     return (
         <Page>
             <div className={`bg-gray-100 min-h-screen flex ${isColumn ? 'flex-col' : 'flex-row'} items-center pt-5`}>
-            <section
-    className="relative px-4 md:px-24 lg:px-56 bg-white rounded-lg p-5 shadow-md mt-5 w-4/5 flex flex-col"
->
-                <div className="absolute top-0 left-0 m-2">
-                    <ToggleRowColumn isColumn={isColumn} toggleLayout={toggleLayout}/>
-                </div>
+                <section className="relative px-2 md:px-4 lg:px-16 bg-white rounded-lg p-5 shadow-md mt-5 w-4/5 flex flex-col">
+                    <div className="absolute top-0 left-0 m-2">
+                        <ToggleRowColumn isColumn={isColumn} toggleLayout={toggleLayout}/>
+                    </div>
                     <Calendar course={course}/>
                 </section>
-                <section className="px-4 md:px-24 lg:px-56 bg-white rounded-lg p-5 shadow-md mt-5 w-4/5 flex flex-col">
+                <section className="px-2 md:px-4 lg:px-8 bg-white rounded-lg p-5 shadow-md mt-5 w-4/5 flex flex-col">
                     <div className="flex flex-row gap-5 mt-2 mb-4">
                         <CourseInfo course={course} setCourse={setCourse} />
                     </div>
