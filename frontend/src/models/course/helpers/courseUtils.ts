@@ -1,6 +1,5 @@
 import { GoogleEvent } from "@helpers/googleHelpers";
 import { CalendarDateType, CourseType, DayType, ModuleType } from "../Types";
-import DayTable from "../sections/DayTable";
 import { EventType } from "@models/module/Types";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
