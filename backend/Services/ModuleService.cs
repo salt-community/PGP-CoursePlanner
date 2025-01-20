@@ -18,6 +18,7 @@ public class ModuleService : IService<Module>
     {
         var modules = await _context.Modules
                         .Include(module => module.Tracks)
+                            .ThenInclude(moduleTrack => moduleTrack.Track)
                         .Include(module => module.Days)
                         .ThenInclude(day => day.Events)
                         .ToListAsync();
@@ -69,18 +70,6 @@ public class ModuleService : IService<Module>
         {
             throw new BadRequestException<int>("Cannot create module with zero days");
         }
-        _context.ChangeTracker.Clear();
-        _context.Entry(module).State = EntityState.Added;
-
-        for (int i = 0; i < module.Tracks.Count; i++)
-        {
-            var trackId = module.Tracks[i].Id;
-            var existingTrack = _context.Tracks.First(t => t.Id == trackId);
-            module.Tracks[i] = existingTrack;
-        }
-
-        _context.Modules.Add(module);
-        _context.SaveChanges();
 
         foreach (var day in module.Days)
         {
@@ -105,6 +94,7 @@ public class ModuleService : IService<Module>
         }
         var moduleToUpdate = await _context.Modules
                     .Include(module => module.Tracks)
+                        .ThenInclude(moduleTrack => moduleTrack.Track)
                     .Include(module => module.Days)
                     .ThenInclude(day => day.Events)
                     .AsNoTracking()
