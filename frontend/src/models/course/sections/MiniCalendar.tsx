@@ -37,10 +37,10 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
     const numberOfWeeks = getWeek(endOfMonth) - getWeek(startOfMonth) + 1;
     const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
-    const startOfMonth2 = getDateAsString(startOfMonth);
-    const endOfMonth2 = getDateAsString(endOfMonth);
+    const startOfMonthFormatted = getDateAsString(startOfMonth);
+    const endOfMonthFormatted = getDateAsString(endOfMonth);
 
-    const { data, isLoading, isError, } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2); 
+    const { data, isLoading, isError, } = useQueryCalendarDateBatch(startOfMonthFormatted, endOfMonthFormatted); 
 
 
 
