@@ -1,29 +1,15 @@
 namespace backend.Models.DTOs;
 
-public record ModuleResponse
+public record ModuleResponse(Module module)
 {
-    public int Id { get; init; }
-    public string Name { get; init; } = string.Empty;
-    public int NumberOfDays { get; init; }
-    public List<DayResponse> Days { get; init; } = [];
-    public List<ModuleTrackResponse> Tracks { get; init; } = [];
-    public int Order { get; init; }
-    public bool IsApplied { get; init; }
-    public DateTime StartDate { get; init; }
+    public int Id { get; init; } = module.Id;
+    public string Name { get; init; } = module.Name;
+    public int NumberOfDays { get; init; } = module.NumberOfDays;
+    public List<DayResponse> Days { get; init; } = module.Days.Select(day => new DayResponse(day)).ToList();
+    public List<TrackResponse> Tracks { get; init; } = module.Tracks.Select(mt => mt.Track).Select(t => new TrackResponse(t)).ToList();
+    public int Order { get; init; } = module.Order;
+    public bool IsApplied { get; init; } = module.IsApplied;
+    public DateTime StartDate { get; init; } = module.StartDate;
 
-    // Constructor
-    public ModuleResponse(Module module)
-    {
-        Id = module.Id;
-        Name = module.Name;
-        NumberOfDays = module.NumberOfDays;
-        Days = module.Days.Select(day => new DayResponse(day)).ToList();
-        Tracks = module.Tracks.Select(mt => new ModuleTrackResponse(mt)).ToList();
-        Order = module.Order;
-        IsApplied = module.IsApplied;
-        StartDate = module.StartDate;
-    }
-
-    // Implicit operator
     public static implicit operator ModuleResponse(Module module) => new(module);
 }

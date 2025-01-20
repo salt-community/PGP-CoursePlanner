@@ -1,6 +1,6 @@
 namespace backend.Models.DTOs;
 
-public class TrackResponse(Track track)
+public record TrackResponse(Track track)
 {
     public int Id { get; set; } = track.Id;
     public string Name { get; set; } = track.Name;
