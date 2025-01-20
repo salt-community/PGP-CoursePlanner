@@ -146,29 +146,38 @@ export default function DeployModal({ course }: Props) {
                             </div>
                             <div>
                                 <h4 className="font-bold pt-6">selected day's events </h4>
-                                {selectedDate.dateContent.map(content => {
-                                    return (
-                                        <>{content.events.map(event => {
-                                            return (
-                                                <div key={event.id ?? event.name} className="pb-2 mb-2">
-                                                    <div className="flex items-center gap-2 justify-between min-w-96">
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="w-4 h-4 rounded-[3px]" style={{ backgroundColor: `${content.color}` }}></div>
-                                                            <p>{event.name}</p>
+                                {selectedDate.dateContent.map((content, index) => (
+                                    <div key={content.id ?? index} className="mb-4 flex flex-col items-center">
+                                        <div>
+                                            <h2 className="text-xl font-semibold">
+                                                {content.courseName}
+                                            </h2>
+                                            <h3 className="text-lg pb-2">
+                                                Module: {content.moduleName} (day {content.dayOfModule}/{content.totalDaysInModule})
+                                            </h3>
+                                            {content.events.length > 0 ? (
+                                                content.events.map((event) => (
+                                                    <div key={event.id ?? event.name} className="pb-2 mb-2">
+                                                        <div className="flex items-center gap-2 justify-between min-w-96">
+                                                            <div className="flex items-center gap-2">
+                                                                <div className="w-4 h-4 rounded-[3px]" style={{ backgroundColor: `${content.color}` }}></div>
+                                                                <p>{event.name}</p>
+                                                            </div>
+                                                            <p>
+                                                                {event.startTime} - {event.endTime}
+                                                            </p>
                                                         </div>
-                                                        <p>
-                                                            {event.startTime} - {event.endTime}
-                                                        </p>
+                                                        {event.description && (
+                                                            <EventDescription description={event.description} />
+                                                        )}
                                                     </div>
-                                                    {event.description && (
-                                                        <EventDescription description={event.description} />
-                                                    )}
-                                                </div>
-                                            )
-                                        })}</>
-                                    )
-                                })
-                                }
+                                                ))
+                                            ) : (
+                                                <p className="text-center text-lg">No events for this module.</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
 
                             </div>
                         </div>
