@@ -50,7 +50,7 @@ export default function DeployModal({ course }: Props) {
         register,
         handleSubmit,
         watch,
-        // formState: { errors },
+        formState: { errors },
     } = useForm<Inputs>()
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         console.log(data)
@@ -150,7 +150,8 @@ export default function DeployModal({ course }: Props) {
                             <button className="btn">Cancel</button>
                             <div className="flex flex-col">
                                 <label>add to google calendar<input type="checkbox"  {...register("isDeployingToGoogle", { required: false })}></input></label>
-                                <label>Group email <input type="email" defaultValue={""} {...register("groupEmail", { required: watch("isDeployingToGoogle") })}></input></label> 
+                               {watch("isDeployingToGoogle") && <label>Group email <input type="email" defaultValue={""} {...register("groupEmail", { required: false })}></input></label> }
+
                             </div>
                             <button className="btn btn-primary" type="submit" onClick={handleSubmit(onSubmit)}>Deploy Bootcamp</button>
 
