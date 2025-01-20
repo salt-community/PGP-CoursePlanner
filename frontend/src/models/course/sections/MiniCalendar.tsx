@@ -8,6 +8,7 @@ import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries
 import { CalendarDateType, CourseType, DateContentModified, ModuleType } from "../Types"
 import CalendarDate from "./CalendarDate"
 import { DateContent } from "@models/calendar/Types"
+import { deepRemoveId } from "../helpers/courseUtils"
 
 type Props = {
     startDate: Date
@@ -59,8 +60,18 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
 
     const selectDate = (index: number) => {
+        const previewCalendarDaysIndex = previewCalendarDays.map(d => getDateAsString(d.date)).indexOf(getDateAsString(data![index].date))
 
-        setSelectedModuleStartDate({ dateContent: transformDateContent(data![index].dateContent), date: data![index].date })
+        const newDateContent =   transformDateContent(deepRemoveId(data![index].dateContent))
+        console.log("previewCDIndex: ", previewCalendarDaysIndex)
+        console.log("data date: ", data![index].date )
+
+        if(previewCalendarDaysIndex >-1){
+            previewCalendarDays[previewCalendarDaysIndex].dateContent.forEach((dc)=>{
+                newDateContent.push(dc)
+            } )
+        }
+        setSelectedModuleStartDate({ dateContent: newDateContent, date: data![index].date })
     };
 
 

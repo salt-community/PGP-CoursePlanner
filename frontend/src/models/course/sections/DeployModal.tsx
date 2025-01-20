@@ -5,7 +5,7 @@ import { useMutationPostAppliedCourse } from "@api/appliedCourse/appliedCourseMu
 import { useNavigate } from "react-router-dom";
 // import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import MiniCalendar from "./MiniCalendar";
-import { calculateCourseDayDates, getGoogleEventListForCourse, getNewDate, moveModule, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
+import { calculateCourseDayDates, getGoogleEventListForCourse, moveModule, stripIdsFromCourse, updatePreviewCalendarDates } from "../helpers/courseUtils";
 // import EditCourseDays from "./EditCourseDays";
 import { getDateAsStringYyyyMmDd } from "@helpers/dateHelpers";
 import { useForm, SubmitHandler } from "react-hook-form";
