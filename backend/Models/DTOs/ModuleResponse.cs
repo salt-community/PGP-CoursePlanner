@@ -5,8 +5,8 @@ public record ModuleResponse
     public int Id { get; init; }
     public string Name { get; init; } = string.Empty;
     public int NumberOfDays { get; init; }
-    public List<DayResponse> Days { get; init; } = new();
-    public List<Track> Tracks { get; init; } = new();
+    public List<DayResponse> Days { get; init; } = [];
+    public List<ModuleTrackResponse> Tracks { get; init; } = [];
     public int Order { get; init; }
     public bool IsApplied { get; init; }
     public DateTime StartDate { get; init; }

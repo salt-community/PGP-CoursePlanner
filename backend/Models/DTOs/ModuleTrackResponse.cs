@@ -2,18 +2,18 @@ namespace backend.Models.DTOs;
 
 public record ModuleTrackResponse
 {
-    public int CourseId { get; init; }
     public int ModuleId { get; init; }
-    public ModuleResponse? Module { get; init; }
+    public int TrackId { get; init; }
+    public TrackResponse? Track { get; init; }
 
     // Constructor
-    public ModuleTrackResponse(CourseModule moduleTrack)
+    public ModuleTrackResponse(ModuleTrack moduleTrack)
     {
         ModuleId = moduleTrack.ModuleId;
         TrackId = moduleTrack.TrackId;
-        Tracks = moduleTrack.Module != null ? new TrackResponse(moduleTrack.Module) : null;
+        Track = moduleTrack.Track != null ? new TrackResponse(moduleTrack.Track) : null;
     }
 
     // Implicit operator
-    public static implicit operator ModuleTrackResponse(ModuleTrack courseModule) => new(courseModule);
+    public static implicit operator ModuleTrackResponse(ModuleTrack moduleTrack) => new(moduleTrack);
 }
