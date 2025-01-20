@@ -56,7 +56,6 @@ export default function DeployModal({ course }: Props) {
         console.log(data)
         if(data.isDeployingToGoogle) {
             const events =getGoogleEventListForCourse(previewCourse, "")
-            console.log("Events: ", events)
             postCourseToGoogle(events);
         }
 
@@ -81,7 +80,7 @@ export default function DeployModal({ course }: Props) {
             mutationPostAppliedCourse.mutate(myCourse);
             navigate("/activecourses");
         }
-    };
+    };  
 
     console.log(watch("isDeployingToGoogle"))
 
@@ -151,7 +150,7 @@ export default function DeployModal({ course }: Props) {
                             <button className="btn">Cancel</button>
                             <div className="flex flex-col">
                                 <label>add to google calendar<input type="checkbox"  {...register("isDeployingToGoogle", { required: false })}></input></label>
-                                <label>Group email <input type="email" defaultValue={""} {...register("groupEmail", { required: false })}></input></label> 
+                                <label>Group email <input type="email" defaultValue={""} {...register("groupEmail", { required: watch("isDeployingToGoogle") })}></input></label> 
                             </div>
                             <button className="btn btn-primary" type="submit" onClick={handleSubmit(onSubmit)}>Deploy Bootcamp</button>
 
