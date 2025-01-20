@@ -147,13 +147,13 @@ export default function DeployModal({ course }: Props) {
                         </div>
                     </section>
                     <div className="modal-action">
-                        <form method="dialog" className="flex gap-5 justify-center" onSubmit={handleSubmit(onSubmit)}>
+                        <form method="dialog" className="flex gap-5 justify-center" >
                             <button className="btn">Cancel</button>
                             <div className="flex flex-col">
                                 <label>add to google calendar<input type="checkbox"  {...register("isDeployingToGoogle", { required: false })}></input></label>
-                                <label>Group email <input type="email" defaultValue={course.name} {...register("groupEmail", { required: false })}></input></label> 
+                                <label>Group email <input type="email" defaultValue={""} {...register("groupEmail", { required: false })}></input></label> 
                             </div>
-                            <button className="btn btn-primary" type="submit">Deploy Bootcamp</button>
+                            <button className="btn btn-primary" type="submit" onClick={handleSubmit(onSubmit)}>Deploy Bootcamp</button>
 
 
                         </form>
