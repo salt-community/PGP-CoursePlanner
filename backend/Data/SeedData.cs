@@ -43,35 +43,37 @@ public static class SeedData
 
     private static void SeedModules(DataContext _context)
     {
-        var moduleTracks = ModuleTracksList(_context);
-        var moduleDays = ModuleDaysList();
+        var tracks = _context.Tracks.ToList();
+        var days = ModuleDaysList();
 
         string[] moduleNames = ["Hell Week", "API", "React", "Cloud"];
 
         for (var i = 0; i < moduleNames.Length; i++)
         {
+            List<List<int>> moduleTrackIds = [[1, 2, 3], [1], [1, 2], [3]];
+
+            var moduleTracks = new List<ModuleTrack>();
+            for (int j = 0; j < moduleTrackIds[i].Count; j++)
+            {
+                var moduleTrack = new ModuleTrack
+                {
+                    TrackId = moduleTrackIds[i][j],
+                    Track = _context.Tracks.First(t => t.Id == moduleTrackIds[i][j])
+                };
+                moduleTracks.Add(moduleTrack);
+            }
+
             var module = new Module
             {
                 Name = moduleNames[i],
-                NumberOfDays = moduleDays[i].Count,
-                Days = moduleDays[i],
-                Tracks = moduleTracks[i]
+                NumberOfDays = days[i].Count,
+                Days = days[i],
+                TrackIds = moduleTrackIds[i],
+                Tracks = moduleTracks
             };
             _context.Modules.Add(module);
             _context.SaveChanges();
         }
-    }
-
-    private static List<List<Track>> ModuleTracksList(DataContext _context)
-    {
-        var tracks = _context.Tracks.ToList();
-
-        List<Track> hellWeekTracks = [tracks[0], tracks[1], tracks[2]];
-        List<Track> APITracks = [tracks[0]];
-        List<Track> reactTracks = [tracks[0], tracks[1]];
-        List<Track> cloudTracks = [tracks[2]];
-
-        return [hellWeekTracks, APITracks, reactTracks, cloudTracks];
     }
 
     private static List<List<Day>> ModuleDaysList()
