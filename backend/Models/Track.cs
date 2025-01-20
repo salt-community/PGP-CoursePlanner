@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace backend.Models;
 
@@ -11,6 +10,4 @@ public class Track
     [Required]
     public string Color { get; set; } = null!;
     public bool Visibility { get; set; } = true;
-    [JsonIgnore]
-    public List<ModuleTrack> ModuleTracks {get; set;} = [];
 }

@@ -43,18 +43,8 @@ namespace backend.Data
                 .WithMany(m => m.CourseModules)
                 .HasForeignKey(cm => cm.ModuleId);
 
-            modelBuilder.Entity<ModuleTrack>()
-                .HasKey(mt => new { mt.TrackId, mt.ModuleId });
-
-            modelBuilder.Entity<ModuleTrack>()
-                .HasOne(mt => mt.Module)
-                .WithMany(m => m.Tracks)
-                .HasForeignKey(mt => mt.ModuleId);
-
-            modelBuilder.Entity<ModuleTrack>()
-                .HasOne(mt => mt.Track)
-                .WithMany(t => t.ModuleTracks)
-                .HasForeignKey(mt => mt.TrackId);
+            modelBuilder.Entity<Module>()
+                .HasMany(m => m.Tracks);
         }
     }
 }

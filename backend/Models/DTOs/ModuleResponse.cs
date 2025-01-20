@@ -6,7 +6,7 @@ public record ModuleResponse(Module module)
     public string Name { get; init; } = module.Name;
     public int NumberOfDays { get; init; } = module.NumberOfDays;
     public List<DayResponse> Days { get; init; } = module.Days.Select(day => new DayResponse(day)).ToList();
-    public List<TrackResponse> Tracks { get; init; } = module.Tracks.Select(mt => mt.Track).Select(t => new TrackResponse(t)).ToList();
+    public List<Track> Tracks { get; init; } = module.Tracks;
     public int Order { get; init; } = module.Order;
     public bool IsApplied { get; init; } = module.IsApplied;
     public DateTime StartDate { get; init; } = module.StartDate;

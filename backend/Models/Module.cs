@@ -16,7 +16,7 @@ public class Module
     public List<CourseModule> CourseModules { get; set; } = [];
     public List<int> TrackIds {get; set;} = [];
     [Required]
-    public List<ModuleTrack> Tracks { get; set; } = [];
+    public List<Track> Tracks { get; set; } = [];
     public int Order { get; set; }
     public bool IsApplied { get; set; } = false;
     public DateTime StartDate { get; set; }

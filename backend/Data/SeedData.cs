@@ -52,24 +52,13 @@ public static class SeedData
         {
             List<List<int>> moduleTrackIds = [[1, 2, 3], [1], [1, 2], [3]];
 
-            var moduleTracks = new List<ModuleTrack>();
-            for (int j = 0; j < moduleTrackIds[i].Count; j++)
-            {
-                var moduleTrack = new ModuleTrack
-                {
-                    TrackId = moduleTrackIds[i][j],
-                    Track = _context.Tracks.First(t => t.Id == moduleTrackIds[i][j])
-                };
-                moduleTracks.Add(moduleTrack);
-            }
-
             var module = new Module
             {
                 Name = moduleNames[i],
                 NumberOfDays = days[i].Count,
                 Days = days[i],
                 TrackIds = moduleTrackIds[i],
-                Tracks = moduleTracks
+                Tracks = tracks
             };
             _context.Modules.Add(module);
             _context.SaveChanges();

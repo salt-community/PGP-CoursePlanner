@@ -18,7 +18,6 @@ public class ModuleService : IService<Module>
     {
         var modules = await _context.Modules
                         .Include(module => module.Tracks)
-                            .ThenInclude(moduleTrack => moduleTrack.Track)
                         .Include(module => module.Days)
                         .ThenInclude(day => day.Events)
                         .ToListAsync();
@@ -94,7 +93,6 @@ public class ModuleService : IService<Module>
         }
         var moduleToUpdate = await _context.Modules
                     .Include(module => module.Tracks)
-                        .ThenInclude(moduleTrack => moduleTrack.Track)
                     .Include(module => module.Days)
                     .ThenInclude(day => day.Events)
                     .AsNoTracking()
