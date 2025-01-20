@@ -1,6 +1,6 @@
 import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect, useState } from "react";
-import { CourseModuleType, CourseType, ModuleType } from "../Types";
+import { CalendarDateType, CourseModuleType, CourseType, ModuleType } from "../Types";
 import { useMutationPostAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import { useNavigate } from "react-router-dom";
 // import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
@@ -10,6 +10,7 @@ import { calculateCourseDayDates, getGoogleEventListForCourse, getNewDate, moveM
 import { getDateAsStringYyyyMmDd } from "@helpers/dateHelpers";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { postCourseToGoogle } from "@api/googleCalendarFetches";
+import EventDescription from "@models/home/components/EventDescription";
 
 
 type Props = {
@@ -37,7 +38,7 @@ export default function DeployModal({ course }: Props) {
     const [previewCalendarDays, setPreviewCalendarDays] = useState(updatePreviewCalendarDates(previewCourse))
 
     const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[0].module);
-    const [selectedDate, setSelectedDate] = useState<Date>(getNewDate(new Date(), -8))
+    const [selectedDate, setSelectedDate] = useState<CalendarDateType>({ date: (new Date()), dateContent: [] })
 
 
     useEffect(() => {
@@ -54,8 +55,8 @@ export default function DeployModal({ course }: Props) {
     } = useForm<Inputs>()
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         console.log(data)
-        if(data.isDeployingToGoogle) {
-            const events =getGoogleEventListForCourse(previewCourse, "")
+        if (data.isDeployingToGoogle) {
+            const events = getGoogleEventListForCourse(previewCourse, "")
             postCourseToGoogle(events);
         }
 
@@ -80,7 +81,7 @@ export default function DeployModal({ course }: Props) {
             mutationPostAppliedCourse.mutate(myCourse);
             navigate("/activecourses");
         }
-    };  
+    };
 
     console.log(watch("isDeployingToGoogle"))
 
@@ -130,10 +131,10 @@ export default function DeployModal({ course }: Props) {
                                 <h3 className="font-bold">Change start date of module</h3>
                                 <p>Selected module: {selectedModule.name} </p>
                                 <p>current start: {getDateAsStringYyyyMmDd(selectedModule.startDate)} </p>
-                                <p>new start: {getDateAsStringYyyyMmDd(selectedDate)}</p>
+                                <p>new start: {getDateAsStringYyyyMmDd(selectedDate.date)}</p>
                                 <button className="btn" onClick={(event) => {
                                     event.preventDefault()
-                                    const newModule = moveModule(selectedModule, selectedDate)
+                                    const newModule = moveModule(selectedModule, selectedDate.date)
                                     const updatedModules: CourseModuleType[] = previewCourse.modules.map((m) =>
                                         m.module.id == selectedModule.id
                                             ? { ...m, module: newModule }
@@ -144,8 +145,30 @@ export default function DeployModal({ course }: Props) {
                                 }}>update module start date</button>
                             </div>
                             <div>
-                            <h4 className="font-bold">selected day's events </h4>
-                                
+                                <h4 className="font-bold pt-6">selected day's events </h4>
+                                {selectedDate.dateContent.map(content => {
+                                    return (
+                                        <>{content.events.map(event => {
+                                            return (
+                                                <div key={event.id ?? event.name} className="pb-2 mb-2">
+                                                    <div className="flex items-center gap-2 justify-between min-w-96">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-4 h-4 rounded-[3px]" style={{ backgroundColor: `${content.color}` }}></div>
+                                                            <p>{event.name}</p>
+                                                        </div>
+                                                        <p>
+                                                            {event.startTime} - {event.endTime}
+                                                        </p>
+                                                    </div>
+                                                    {event.description && (
+                                                        <EventDescription description={event.description} />
+                                                    )}
+                                                </div>
+                                            )
+                                        })}</>
+                                    )
+                                })
+                                }
 
                             </div>
                         </div>
@@ -155,7 +178,7 @@ export default function DeployModal({ course }: Props) {
                             <button className="btn">Cancel</button>
                             <div className="flex flex-col">
                                 <label>add to google calendar<input type="checkbox"  {...register("isDeployingToGoogle", { required: false })}></input></label>
-                               {watch("isDeployingToGoogle") && <label>Group email <input type="email" defaultValue={""} {...register("groupEmail", { required: false })}></input></label> }
+                                {watch("isDeployingToGoogle") && <label>Group email <input type="email" defaultValue={""} {...register("groupEmail", { required: false })}></input></label>}
 
                             </div>
                             <button className="btn btn-primary" type="submit" onClick={handleSubmit(onSubmit)}>Deploy Bootcamp</button>
