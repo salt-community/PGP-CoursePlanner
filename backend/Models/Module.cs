@@ -14,7 +14,6 @@ public class Module
     public List<Day> Days { get; set; } = [];
     [JsonIgnore]
     public List<CourseModule> CourseModules { get; set; } = [];
-    public List<int> TrackIds {get; set;} = [];
     [Required]
     public List<Track> Tracks { get; set; } = [];
     public int Order { get; set; }
@@ -27,7 +26,6 @@ public class Module
         {
             Name = Name,
             NumberOfDays = NumberOfDays,
-            TrackIds = TrackIds,
             Order = Order,
             IsApplied = IsApplied
         };

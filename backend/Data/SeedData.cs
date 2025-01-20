@@ -57,8 +57,7 @@ public static class SeedData
                 Name = moduleNames[i],
                 NumberOfDays = days[i].Count,
                 Days = days[i],
-                TrackIds = moduleTrackIds[i],
-                Tracks = tracks
+                Tracks = tracks.Where(t => moduleTrackIds[i].Contains(t.Id)).ToList()
             };
             _context.Modules.Add(module);
             _context.SaveChanges();
