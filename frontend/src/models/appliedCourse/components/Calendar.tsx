@@ -14,10 +14,10 @@ import {
 import { CourseType } from "@models/course/Types";
 
 type Props = {
-  course: CourseType
+  course: CourseType;
 };
 
-export default function Calendar({course}: Props) {
+export default function Calendar({ course }: Props) {
   const startDateObj = new Date(course.startDate);
   if (isNaN(startDateObj.getTime())) {
     console.error("Invalid startDate");
@@ -42,19 +42,19 @@ export default function Calendar({course}: Props) {
   const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
   function getCourseDays(course: CourseType): { date: Date; moduleName: string }[] {
-          const daysWithModules: { date: Date; moduleName: string }[] = [];
-          course.modules.forEach((module) => {
-              module.module.days.forEach((day) => {
-                  if (day.date) {
-                      daysWithModules.push({
-                          date: new Date(day.date),
-                          moduleName: module.module.name,
-                      });
-                  }
-              });
+    const daysWithModules: { date: Date; moduleName: string }[] = [];
+    course.modules.forEach((module) => {
+      module.module.days.forEach((day) => {
+        if (day.date) {
+          daysWithModules.push({
+            date: new Date(day.date),
+            moduleName: module.module.name,
           });
-          return daysWithModules;
-      }
+        }
+      });
+    });
+    return daysWithModules;
+  }
 
   return (
     <div className="flex flex-col h-full">
@@ -68,33 +68,39 @@ export default function Calendar({course}: Props) {
 
       <section className="flex-grow flex py-2">
         <div className="flex flex-col items-center w-full h-full">
-          <div className={`w-full flex-grow grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
-            
+          <div
+            className={`w-full flex-grow grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}
+          >
             {fullWeek.map((day) => (
-              <div key={format(day, "E")} className="w-1/7 flex justify-center items-center p-1 border-b-2 border-gray-100">
+              <div
+                key={format(day, "E")}
+                className="flex justify-center items-center p-1 border-b-2 border-gray-100"
+              >
                 {format(day, "E")}
               </div>
             ))}
             {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
-              <div key={format(emptyDayIndex, "d")} className="w-1/7 h-full"></div>
+              <div key={format(emptyDayIndex, "d")} className="h-full"></div>
             ))}
             {daysInMonth.map((thisDate) => {
               const dateString = getDateAsString(thisDate);
               const courseDay = getCourseDays(course).find(
                 (day) => getDateAsString(day.date) === dateString
               );
-
               return (
-                <div key={format(thisDate, "yyyy-MM-dd")} className="flex flex-col relative">
+                <div
+                  key={format(thisDate, "yyyy-MM-dd")}
+                  className="flex flex-col relative border border-gray-200 h-24"
+                >
                   <div className="w-full h-10 flex justify-center items-center">
                     <p className="font-semibold">{format(thisDate, "d")}</p>
                   </div>
                   {courseDay && (
-                    <div className="left-0 w-full p-1 bg-purple-200 text-xs text-center rounded-b-md mt-1">
+                    <div className="left-0 w-full p-1 bg-purple-200 text-xs text-center rounded-b-md mt-1 overflow-hidden">
                       <p>{courseDay.moduleName}</p>
                     </div>
                   )}
-                   
+                  
                 </div>
               );
             })}

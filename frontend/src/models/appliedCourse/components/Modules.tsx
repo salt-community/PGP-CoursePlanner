@@ -109,7 +109,7 @@ const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
         .map((courseModule, moduleIndex) => (
           <div
             key={moduleIndex}
-            className={`bg-base-100 flex space-between mb-4 rounded-r-lg border-r border-b border-black ${
+            className={` flex space-between mb-4 rounded-r-lg border-r border-b border-black ${
               draggedIndex === moduleIndex ? "dragging" : ""
             }`}
             draggable={!collapseOpen[moduleIndex]} 
