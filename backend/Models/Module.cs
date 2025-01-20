@@ -1,10 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
-using Npgsql.Replication;
 
 namespace backend.Models;
+
 public class Module
 {
     [Key]
@@ -14,8 +13,9 @@ public class Module
     public int NumberOfDays { get; set; }
     public List<Day> Days { get; set; } = [];
     [JsonIgnore]
-    public List<CourseModule> CourseModules { get; set; } = new List<CourseModule>();
-    public List<Track> Tracks { get; set; } = [];
+    public List<CourseModule> CourseModules { get; set; } = [];
+    public List<int> TrackIds {get; set;} = [];
+    public List<ModuleTrack> Tracks { get; set; } = [];
     public int Order { get; set; }
     public bool IsApplied { get; set; } = false;
     public DateTime StartDate { get; set; }
@@ -26,7 +26,7 @@ public class Module
         {
             Name = Name,
             NumberOfDays = NumberOfDays,
-            Tracks = Tracks,
+            TrackIds = TrackIds,
             Order = Order,
             IsApplied = IsApplied
         };

@@ -18,7 +18,7 @@ public record ModuleResponse
         Name = module.Name;
         NumberOfDays = module.NumberOfDays;
         Days = module.Days.Select(day => new DayResponse(day)).ToList();
-        Tracks = module.Tracks;
+        Tracks = module.Tracks.Select(mt => new ModuleTrackResponse(mt)).ToList();
         Order = module.Order;
         IsApplied = module.IsApplied;
         StartDate = module.StartDate;
