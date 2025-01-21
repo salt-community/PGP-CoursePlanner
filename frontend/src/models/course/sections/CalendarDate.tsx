@@ -63,6 +63,7 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
         }
     }
 
+    console.log(dateContent)
     return (
         <button onClick={isLoading ? () => { } : () => openModal(indexForModal)}
             className={`${bgBox} ${border} flex flex-col gap-2 p-4 pt-1 pb-2 items-center h-full ${!isLoading ? "hover:bg-[#F9F9F9] hover:cursor-pointer" : "hover:cursor-default"} ${isInSelectedModule ? "hover:bg-pink-50" : ""}`}>

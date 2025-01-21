@@ -1,6 +1,6 @@
 import NextBtn from "@components/buttons/NextBtn"
 import PreviousBtn from "@components/buttons/PreviousBtn"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { firstDayOfMonth, allDaysInInterval, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
 import { format, getMonth, getWeek, getYear } from "date-fns"
@@ -24,7 +24,7 @@ type Props = {
 export default function MiniCalendar({ startDate, previewCalendarDays, selectedModule, selectedModuleStartDate, setSelectedModuleStartDate, previewCourse, setSelectedModule }: Props) {
     const [month, setMonth] = useState<number>(startDate.getMonth());
     const [year, setYear] = useState<number>(startDate.getFullYear());
-
+    const [calData, setCalData] = useState<CalendarDateType>();
 
     const startOfMonth = firstDayOfMonth(month, year);
     const endOfMonth = lastDayOfMonth(month, year);
@@ -59,19 +59,29 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
     // })
 
 
+    useEffect(() => {
+        if (!data || !previewCalendarDays) return;
+
+
+        for (let i = 0; i < data!.length; i++) {
+            
+            const previewCalendarDaysIndex = previewCalendarDays.map(d => getDateAsString(d.date)).indexOf(getDateAsString(data[i].date))
+            if (previewCalendarDaysIndex > -1) {
+                data![i].dateContent.push(...previewCalendarDays[previewCalendarDaysIndex].dateContent)
+            }
+        }
+        // setCalData(data)
+
+    }, [data, previewCalendarDays, calData]);
+
+
+
     const selectDate = (index: number) => {
-        const previewCalendarDaysIndex = previewCalendarDays.map(d => getDateAsString(d.date)).indexOf(getDateAsString(data![index].date))
 
-        const newDateContent =   transformDateContent(data![index].dateContent)
-        console.log("new Date Content: ", newDateContent)
 
-        if(previewCalendarDaysIndex >-1){
-            // newDateContent.push(...previewCalendarDays[previewCalendarDaysIndex].dateContent)
-            setSelectedModuleStartDate({ dateContent: previewCalendarDays[previewCalendarDaysIndex].dateContent, date: data![index].date })
-        }
-        else {
-            setSelectedModuleStartDate({ dateContent: newDateContent, date: data![index].date })
-        }
+        // newDateContent.push(...previewCalendarDays[previewCalendarDaysIndex].dateContent)
+        setSelectedModuleStartDate({ dateContent: data[index].dateContent, date: data![index].date })
+
     };
 
 
@@ -108,32 +118,39 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                             ))}
                             {daysInMonth.map((thisDate, dateIndex) => {
 
-                                const previewCalendarDaysIndex = previewCalendarDays.map(d => d.date.toDateString()).indexOf(thisDate.toDateString())
+                                // const previewCalendarDaysIndex = previewCalendarDays.map(d => d.date.toDateString()).indexOf(thisDate.toDateString())
 
-                                if (previewCalendarDaysIndex > -1) {
-                                    if (data[dateIndex] != null) {
-                                        previewCalendarDays[previewCalendarDaysIndex].dateContent.push(...transformDateContent(data![dateIndex].dateContent));
-                                    }
-                                    return (
-                                        <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
-                                            {data && data[dateIndex] !== null ? (
-                                                <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                            ) : (
-                                                <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                            )}
+                                // if (previewCalendarDaysIndex > -1) {
+                                //     if (data[dateIndex] != null) {
+                                //         previewCalendarDays[previewCalendarDaysIndex].dateContent.push(...transformDateContent(data![dateIndex].dateContent));
+                                //     }
+                                //     return (
+                                //         <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
+                                //             {data && data[dateIndex] !== null ? (
+                                //                 <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                //             ) : (
+                                //                 <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                //             )}
 
-                                        </div>
-                                    )
-                                }
+                                //         </div>
+                                //     )
+                                // }
                                 return (
-                                    <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
-                                        {data && data[dateIndex] !== null ? (
-                                            <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={transformDateContent(data[dateIndex].dateContent)} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                        ) : (
-                                            <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                        )}
+                                    // <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
+                                    //     {data && data[dateIndex] !== null ? (
+                                    //         <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={transformDateContent(data[dateIndex].dateContent)} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                    //     ) : (
+                                    //         <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                    //     )}
 
-                                    </div>
+                                    // </div>
+
+                                    <>
+                                        {calData &&
+                                        <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={transformDateContent(data[dateIndex].dateContent)} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                        }
+                                    
+                                    </>
                                 );
                             })}
                         </div>
