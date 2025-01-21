@@ -24,8 +24,9 @@
     "baseUrl": "src", // The root directory of your source files
     "paths": {
       "@api/*": ["api/*"],
-      "@helpers/*": ["helpers/*"],
       "@components/*": ["components/*"],
+      "@context/*": ["context/*"],
+      "@helpers/*": ["helpers/*"],
       "@models/*": ["models/*"],
     }
   },
