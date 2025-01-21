@@ -10,18 +10,9 @@ type Props = {
 export function InfoPanel({ selectedDate, selectedModule, handleMoveModule }: Props) {
 
     return (
-        <div className="p-4">
+        <div className="p-4 ">
             {/* <EditCourseDays course={previewCourse} setCourse={setCourse} /> */}
-            <div >
-                <h3 className="font-bold">Change start date of module</h3>
-                <p>Selected module: {selectedModule.name} </p>
-                <p>current start: {getDateAsStringYyyyMmDd(selectedModule.startDate)} </p>
-                <p>new start: {getDateAsStringYyyyMmDd(selectedDate.date)}</p>
-                <button className="btn" onClick={(event) => {
-                    event.preventDefault()
-                    handleMoveModule()
-                }}>update module start date</button>
-            </div>
+
             <div>
                 <h4 className="font-bold pt-6">selected day's events </h4>
                 {selectedDate.dateContent.map((content, index) => {
@@ -61,6 +52,14 @@ export function InfoPanel({ selectedDate, selectedModule, handleMoveModule }: Pr
                 })}
 
             </div>
+
+            <div className="flex flex-grow">hej</div>
+            <button className="btn" onClick={(event) => {
+                event.preventDefault()
+                handleMoveModule()
+            }}>update module start date</button>
+
+
         </div>
     )
 }

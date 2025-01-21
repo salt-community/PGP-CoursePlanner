@@ -18,7 +18,7 @@ export function EditCourseDays({appliedCourse, course, setCourse}:Props) {
 
 
     return (
-    <section className="px-2 md:px-4 lg:px-8 bg-white rounded-lg p-5 shadow-md mt-5 w-4/5 flex flex-col">
+    <section className="px-2 md:px-4 lg:px-8 bg-white rounded-lg p-5 shadow-md mt-5 w-2/5 flex flex-col">
         <div className="flex flex-row gap-5 mt-2 mb-4">
             <CourseInfo course={course} setCourse={setCourse} />
         </div>
