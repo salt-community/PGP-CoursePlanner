@@ -148,7 +148,6 @@ export default function DeployModal({ course }: Props) {
                                 <h4 className="font-bold pt-6">selected day's events </h4>
                                 {selectedDate.dateContent.map((content, index) => {
                                     
-                                    console.log(content)
                                     return (
                                     <div key={index} className="mb-4 flex flex-col items-center">
                                         <div>
