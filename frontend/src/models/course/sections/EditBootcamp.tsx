@@ -28,8 +28,9 @@ export function EditBootcamp({ course }: Props) {
     const mutationPostAppliedCourse = useMutationPostAppliedCourse();
 
     const navigate = useNavigate();
+    
+    calculateCourseDayDates(course, startDate)
 
-   
     const [previewCourse, setCourse] = useState<CourseType>(course);
     const [previewCalendarDays, setPreviewCalendarDays] = useState(updatePreviewCalendarDates(previewCourse))
 
