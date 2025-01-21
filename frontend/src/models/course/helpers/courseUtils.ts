@@ -66,6 +66,7 @@ export const calculateCourseDayDates = (
             appliedCourseId: course.id,
             moduleName: modules[i].name,
             moduleId: modules[i].id,
+            track: course.track,
           },
         ],
       });
@@ -94,6 +95,7 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
             appliedCourseId: course.id,
             moduleName: modules[i].name,
             moduleId: modules[i].id,
+            track: course.track,
           },
         ],
       });

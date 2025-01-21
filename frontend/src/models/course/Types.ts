@@ -78,6 +78,7 @@ export type CourseProps = {
       events: EventType[];
       color: string
       moduleId : number;
+      track: Track
   }
 
 

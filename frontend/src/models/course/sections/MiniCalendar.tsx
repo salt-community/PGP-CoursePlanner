@@ -122,8 +122,6 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
 
                                 return (
-
-
                                     <>
                                         {calendarData && calendarData[dateIndex] &&
                                             <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={calendarData[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
