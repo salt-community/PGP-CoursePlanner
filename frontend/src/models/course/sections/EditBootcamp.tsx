@@ -33,7 +33,9 @@ export function EditBootcamp({ course }: Props) {
     const [previewCourse, setCourse] = useState<CourseType>(course);
     const [previewCalendarDays, setPreviewCalendarDays] = useState(updatePreviewCalendarDates(previewCourse))
 
+    // const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[0].module);
     const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[0].module);
+
     const [selectedDate, setSelectedDate] = useState<CalendarDateType>({ date: (new Date()), dateContent: [] })
 
 
@@ -95,7 +97,7 @@ export function EditBootcamp({ course }: Props) {
 
     return (
         <>
-                <div className="modal-box flex flex-col h-[80vh] w-full max-w-5xl">
+                <div className="flex flex-col h-[80vh] max-w-full">
 
                     <br />
                     <section className="flex flex-grow">

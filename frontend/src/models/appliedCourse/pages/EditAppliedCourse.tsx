@@ -10,6 +10,8 @@ import Modules from "../components/Modules";
 import CourseInfo from "../components/CourseInfo";
 import Calendar from "../components/Calendar";
 import ToggleRowColumn from "../components/ToggleRowColumn";
+import { EditBootcamp } from "@models/course/sections/EditBootcamp";
+import { circularProgressClasses } from "@mui/material";
 
 export default function EditAppliedCourse() {
     const appliedCourseId = useIdFromPath();
