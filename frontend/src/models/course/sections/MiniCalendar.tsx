@@ -117,22 +117,18 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                                 <div key={`empty-${index}`} className="w-1/7 h-full"></div>
                             ))}
                             {daysInMonth.map((thisDate, dateIndex) => (
-                              
-                                   
-                                        <CalendarDate
-                                            setSelectedModule={setSelectedModule}
-                                            previewCourse={previewCourse}
-                                            isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1}
-                                            isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) === getDateAsString(thisDate)}
-                                            openModal={selectDate}
-                                            isLoading={isLoading}
-                                            indexForModal={dateIndex}
-                                            dateContent={calendarData[dateIndex].dateContent}
-                                            key={`${getDateAsString(thisDate)}-${dateIndex}`} // Unique key
-                                            date={getDateAsString(thisDate)}
-                                        />
-                                   
-                             
+                                <CalendarDate
+                                    setSelectedModule={setSelectedModule}
+                                    previewCourse={previewCourse}
+                                    isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1}
+                                    isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) === getDateAsString(thisDate)}
+                                    openModal={selectDate}
+                                    isLoading={isLoading}
+                                    indexForModal={dateIndex}
+                                    dateContent={calendarData[dateIndex].dateContent}
+                                    key={`${getDateAsString(thisDate)}-${dateIndex}`} // Unique key
+                                    date={getDateAsString(thisDate)}
+                                />
                             ))}
                         </div>
                     </div>
