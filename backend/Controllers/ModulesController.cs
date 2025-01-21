@@ -1,4 +1,3 @@
-using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using backend.Models.DTOs;
 using backend.Services;
@@ -28,17 +27,18 @@ public class ModulesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Module>> GetModule(int id)
+    public async Task<ActionResult<ModuleResponse>> GetModule(int id)
     {
         var response = await _service.GetOneAsync(id);
-        return Ok(response);
+        return Ok(new ModuleResponse(response));
     }
 
     [HttpPost]
-    public async Task<ActionResult<Module>> CreateModule(Module module)
+    public async Task<ActionResult<ModuleResponse>> CreateModule(Module module)
     {
         var response = await _service.CreateAsync(module);
-        return CreatedAtAction("GetModule", new { id = response.Id }, response);
+        var moduleResponse = new ModuleResponse(response);
+        return CreatedAtAction("GetModule", new { id = moduleResponse.Id }, moduleResponse);
     }
 
     [HttpPut("{id}")]
