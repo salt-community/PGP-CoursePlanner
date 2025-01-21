@@ -101,10 +101,10 @@ export default function DeployModal({ course }: Props) {
         <>
             <dialog id="my_DeployModal_1" className="modal">
                 <div className="modal-box flex flex-col h-[80vh] w-full max-w-5xl">
-                    <h3 className="font-bold text-lg">Choose a start date and deploy Bootcamp</h3>
-                    <br />
+                    {/* <h3 className="font-bold text-lg">Choose a start date and deploy Bootcamp</h3>
+                    <br /> */}
 
-                    <DatePicker
+                    {/* <DatePicker
                         name="startDate"
                         value={startDate}
                         onChange={(date) => setStartDate(date!)}
@@ -129,7 +129,7 @@ export default function DeployModal({ course }: Props) {
                         <p className="error-message text-red-600 text-sm" id="invalid-helper">
                             Please select a weekday for the start date
                         </p>
-                    )}
+                    )} */}
                     <br />
                     <section className="flex flex-grow">
 
