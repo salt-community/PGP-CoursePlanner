@@ -5,9 +5,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { calculateCourseDayDates, updatePreviewCalendarDates, getGoogleEventListForCourse, stripIdsFromCourse, moveModule } from "../helpers/courseUtils";
 import { CourseType, ModuleType, CalendarDateType, CourseModuleType } from "../Types";
-import EditCourseDays from "./EditCourseDays";
 import { InfoPanel } from "./InfoPanel";
 import MiniCalendar from "./MiniCalendar";
+import { EditCourseDays } from "@models/appliedCourse/sections/EditCourseDays";
 
 type Props = {
     course: CourseType,
@@ -93,7 +93,6 @@ export function EditBootcamp({ course }: Props) {
         setSelectedModule(newModule)
     }
 
-    console.log(watch("isDeployingToGoogle"))
 
     return (
         <>
@@ -106,7 +105,7 @@ export function EditBootcamp({ course }: Props) {
                             <MiniCalendar previewCourse={previewCourse} startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedDate} setSelectedModuleStartDate={setSelectedDate} setSelectedModule={setSelectedModule} />
                         </div>
                         <InfoPanel selectedModule={selectedModule} selectedDate={selectedDate} handleMoveModule={handleMoveModule} />
-                        <EditCourseDays course={previewCourse} setCourse={setCourse} />
+                        <EditCourseDays appliedCourse={course} course={previewCourse} setCourse={setCourse} />
                     </section>
                     <div className="modal-action">
                         <form method="dialog" className="flex gap-5 justify-center" >

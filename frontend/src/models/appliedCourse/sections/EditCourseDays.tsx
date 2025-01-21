@@ -32,7 +32,7 @@ export function EditCourseDays({appliedCourse, course, setCourse}:Props) {
                 </PrimaryBtn>
             </div>
             <PrimaryBtn onClick={() => handleUpdateCourse(course, appliedCourse, setCourse, mutationUpdateAppliedCourse)}>Save</PrimaryBtn>
-            <PrimaryBtn onClick={handleGoBack}>Abort</PrimaryBtn>
+            {/* <PrimaryBtn onClick={handleGoBack}>Abort</PrimaryBtn> */}
         </div>
     </section>
     )
