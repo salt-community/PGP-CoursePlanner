@@ -81,7 +81,6 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
 
     const selectDate = (index: number) => {
-
         setSelectedModuleStartDate({ dateContent: calendarData[index].dateContent, date: calendarData![index].date })
 
     };
