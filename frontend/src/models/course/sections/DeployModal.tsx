@@ -101,35 +101,7 @@ export default function DeployModal({ course }: Props) {
         <>
             <dialog id="my_DeployModal_1" className="modal">
                 <div className="modal-box flex flex-col h-[80vh] w-full max-w-5xl">
-                    {/* <h3 className="font-bold text-lg">Choose a start date and deploy Bootcamp</h3>
-                    <br /> */}
-
-                    {/* <DatePicker
-                        name="startDate"
-                        value={startDate}
-                        onChange={(date) => setStartDate(date!)}
-                        sx={{
-                            height: "35px",
-                            padding: "0px",
-                            "& .css-nxo287-MuiInputBase-input-MuiOutlinedInput-input": {
-                                fontFamily: "Montserrat",
-                                color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
-                                padding: "6px",
-                            },
-                            "& .css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root": {
-                                color: "var(--fallback-bc,oklch(var(--bc)/0.7))",
-                            },
-                            "& .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root": {
-                                borderRadius: "var(--rounded-btn, 0.5rem)"
-                            }
-                        }}
-                        className="input input-bordered"
-                    />
-                    {isInvalidDate && (
-                        <p className="error-message text-red-600 text-sm" id="invalid-helper">
-                            Please select a weekday for the start date
-                        </p>
-                    )} */}
+                   
                     <br />
                     <section className="flex flex-grow">
 
