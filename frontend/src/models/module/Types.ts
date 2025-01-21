@@ -1,9 +1,11 @@
+import { Track } from "@models/course/Types";
+
 export type ModuleType = {
   id?: number;
   name: string;
   numberOfDays: number;
   days: DayType[];
-  track?: string[];
+  tracks: Track[];
   order?: number;
   isApplied?: boolean;
   startDate: Date

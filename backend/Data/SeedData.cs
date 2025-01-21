@@ -1,20 +1,72 @@
-using backend.Data;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.JSInterop.Infrastructure;
+
+namespace backend.Data;
 
 public static class SeedData
 {
     public static void Initialize(IServiceProvider serviceProvider)
     {
-        using (var _context = new DataContext(
-                   serviceProvider.GetRequiredService<DbContextOptions<DataContext>>()))
+        using (var _context = new DataContext(serviceProvider.GetRequiredService<DbContextOptions<DataContext>>()))
         {
             _context.Database.EnsureDeleted();
             _context.Database.Migrate();
             _context.Database.EnsureCreated();
 
-            List<Day> hellWeekDays = [
+            SeedTracks(_context);
+            SeedModules(_context);
+            SeedCourses(_context);
+        }
+    }
+
+    private static void SeedTracks(DataContext _context)
+    {
+        var tracks = TracksList();
+
+        foreach (var track in tracks)
+        {
+            _context.Tracks.Add(track);
+            _context.SaveChanges();
+        }
+    }
+
+    private static List<Track> TracksList()
+    {
+        List<Track> tracks = [
+            new Track { Name = "Java", Color = "#D73A24", Visibility = true },
+            new Track { Name = "Javascript", Color = "#F7DF1E", Visibility = true },
+            new Track { Name = ".NET", Color = "#512BD4", Visibility = true }
+        ];
+
+        return tracks;
+    }
+
+    private static void SeedModules(DataContext _context)
+    {
+        var tracks = _context.Tracks.ToList();
+        var days = ModuleDaysList();
+
+        string[] moduleNames = ["Hell Week", "API", "React", "Cloud"];
+
+        for (var i = 0; i < moduleNames.Length; i++)
+        {
+            List<List<int>> moduleTrackIds = [[1, 2, 3], [1], [1, 2], [3]];
+
+            var module = new Module
+            {
+                Name = moduleNames[i],
+                NumberOfDays = days[i].Count,
+                Days = days[i],
+                Tracks = tracks.Where(t => moduleTrackIds[i].Contains(t.Id)).ToList()
+            };
+            _context.Modules.Add(module);
+            _context.SaveChanges();
+        }
+    }
+
+    private static List<List<Day>> ModuleDaysList()
+    {
+        List<Day> hellWeekDays = [
                 new Day{
                     DayNumber = 1,
                     Description = "Introduction",
@@ -94,9 +146,9 @@ public static class SeedData
                         }
                     ]
                 }
-            ];
+                    ];
 
-            List<Day> APIDays = [
+        List<Day> APIDays = [
                 new Day{
                     DayNumber = 1,
                     Description = "Introduction ASP.NET",
@@ -142,9 +194,9 @@ public static class SeedData
                             }
                     ]
                 }
-            ];
+        ];
 
-            List<Day> reactDays = [
+        List<Day> reactDays = [
                 new Day{
                     DayNumber = 1,
                     Description = "Introduction React",
@@ -177,9 +229,9 @@ public static class SeedData
                             IsApplied = true
                             }],
                 }
-            ];
+        ];
 
-            List<Day> cloudDays = [
+        List<Day> cloudDays = [
                 new Day{
                     DayNumber = 1,
                     Description = "Setting up Azure",
@@ -226,65 +278,44 @@ public static class SeedData
                             }],
                 }];
 
-            string[] module_names = { "Hell Week", "API", "React", "Cloud" };
-            int[] module_numOfDays = { 5, 3, 2, 3 };
-            List<List<Day>> module_days = [hellWeekDays, APIDays, reactDays, cloudDays];
-            List<string[]> module_tracks = [["Java", "Javascript", ".NET"], ["Java"], ["Java", "Javascript"], [".NET"]];
+        return [hellWeekDays, APIDays, reactDays, cloudDays];
+    }
 
-            List<Module> moduleList = new();
-            for (var i = 0; i < module_names.Length; i++)
+    private static void SeedCourses(DataContext _context)
+    {
+        var tracks = _context.Tracks.ToList();
+        var modules = _context.Modules.ToList();
+
+        string[] courseNames = { "Java", "JavaScript", "Dotnet" };
+        int[] courseNumOfWeeks = { 2, 3, 2 };
+
+        List<List<int>> courseModuleIds = [[1, 2, 3], [1, 2, 3, 4], [1, 3, 4]];
+
+        for (var i = 0; i < courseNames.Length; i++)
+        {
+            var courseModules = new List<CourseModule>();
+            for (int j = 0; j < courseModuleIds[i].Count; j++)
             {
-                var module = new Module
+                var courseModuleElement = new CourseModule
                 {
-                    Name = module_names[i],
-                    NumberOfDays = module_numOfDays[i],
-                    Days = module_days.ElementAt(i),
-                    Track = module_tracks[i]
+                    ModuleId = courseModuleIds[i][j],
+                    Module = modules.First(m => m.Id == courseModuleIds[i][j])
                 };
-                _context.Modules.Add(module);
-                _context.SaveChanges();
-                moduleList.Add(module);
+                courseModules.Add(courseModuleElement);
             }
 
-            string[] course_names = { "Java", "JavaScript", "Dotnet" };
-            int[] course_numOfWeeks = { 2, 3, 2 };
-
-            var moduleDays = _context.Modules.Select(m => m.Days);
-
-            List<List<int>> course_moduleIds = [[1, 2, 3], [1, 2, 3, 4], [1, 3, 4]];
-
-            List<Track> tracks = [new Track {Name = "Java", Color = "#D73A24"},  new Track {Name = "Javascript", Color = "#F7DF1E"}, new Track {Name = "Dotnet", Color="#512BD4"}];
-
-     
-
-            for (var i = 0; i < course_names.Length; i++)
+            var course = new Course
             {
-                var courseModules = new List<CourseModule>();
-                for (int j = 0; j < course_moduleIds[i].Count; j++)
-                {
-                    var courseModuleElement = new CourseModule
-                    {
-                        ModuleId = course_moduleIds[i][j],
-                        Module = moduleList.First(m => m.Id == course_moduleIds[i][j])
-                    };
-                    courseModules.Add(courseModuleElement);
-                }
+                Name = courseNames[i],
+                NumberOfWeeks = courseNumOfWeeks[i],
+                moduleIds = courseModuleIds[i],
+                Modules = courseModules,
+                IsApplied = false,
+                Track = tracks[i]
+            };
 
-                _context.Tracks.Add(tracks[i]);
-                _context.SaveChanges();
-
-                var course = new Course
-                {
-                    Name = course_names[i],
-                    NumberOfWeeks = course_numOfWeeks[i],
-                    moduleIds = course_moduleIds[i],
-                    Modules = courseModules,
-                    IsApplied = false,
-                    Track = tracks[i]
-                };
-                _context.Courses.Add(course);
-                _context.SaveChanges();
-            }
+            _context.Courses.Add(course);
+            _context.SaveChanges();
         }
     }
 }

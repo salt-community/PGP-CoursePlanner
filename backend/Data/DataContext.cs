@@ -22,8 +22,7 @@ namespace backend.Data
         public DbSet<CalendarDate> CalendarDates { get; set; }
         public DbSet<DateContent> DateContent { get; set; }
         public DbSet<LoggedInUser> LoggedInUser { get; set; }
-
-        public DbSet<Track> Tracks {get; set;}
+        public DbSet<Track> Tracks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +41,15 @@ namespace backend.Data
                 .HasOne(cm => cm.Module)
                 .WithMany(m => m.CourseModules)
                 .HasForeignKey(cm => cm.ModuleId);
+
+            modelBuilder.Entity<Module>()
+                .HasMany(m => m.Tracks)
+                .WithMany()
+                .UsingEntity<Dictionary<string, object>>(
+                    "ModuleTrack",
+                    j => j.HasOne<Track>().WithMany().HasForeignKey("TrackId"),
+                    j => j.HasOne<Module>().WithMany().HasForeignKey("ModuleId")
+                );
         }
     }
 }

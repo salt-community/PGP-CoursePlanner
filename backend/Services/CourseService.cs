@@ -125,7 +125,7 @@ public class CourseService : IService<Course>
             foreach (var day in module!.Days)
             {
                 var calendarDate = _context.CalendarDates.FirstOrDefault(cd => cd.Date.Date == day.Date.Date);
-                
+
                 var dateContent = new DateContent()
                 {
                     CourseName = appliedCourse.Name!,
@@ -259,7 +259,7 @@ public class CourseService : IService<Course>
                 {
                     Name = module.Module.Name,
                     NumberOfDays = module.Module.NumberOfDays,
-                    Track = module.Module.Track,
+                    Tracks = module.Module.Tracks,
                     Order = module.Module.Order,
                     IsApplied = module.Module.IsApplied,
                     Days = module.Module.Days.Select(day => new Day
@@ -295,7 +295,7 @@ public class CourseService : IService<Course>
                 {
                     existingModule.Name = module.Module.Name;
                     existingModule.NumberOfDays = module.Module.NumberOfDays;
-                    existingModule.Track = module.Module.Track;
+                    existingModule.Tracks = module.Module.Tracks;
                     existingModule.Order = module.Module.Order;
                     existingModule.IsApplied = module.Module.IsApplied;
 

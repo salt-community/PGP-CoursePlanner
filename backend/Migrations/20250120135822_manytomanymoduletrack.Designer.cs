@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using backend.Data;
@@ -12,9 +13,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250120135822_manytomanymoduletrack")]
+    partial class manytomanymoduletrack
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +54,6 @@ namespace backend.Migrations
                     b.HasIndex("EventsId");
 
                     b.ToTable("DateContentEvent");
-                });
-
-            modelBuilder.Entity("ModuleTrack", b =>
-                {
-                    b.Property<int>("ModuleId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TrackId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ModuleId", "TrackId");
-
-                    b.HasIndex("TrackId");
-
-                    b.ToTable("ModuleTrack");
                 });
 
             modelBuilder.Entity("backend.Models.CalendarDate", b =>
@@ -273,9 +261,28 @@ namespace backend.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<List<int>>("TrackIds")
+                        .IsRequired()
+                        .HasColumnType("integer[]");
+
                     b.HasKey("Id");
 
                     b.ToTable("Modules");
+                });
+
+            modelBuilder.Entity("backend.Models.ModuleTrack", b =>
+                {
+                    b.Property<int>("TrackId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("TrackId", "ModuleId");
+
+                    b.HasIndex("ModuleId");
+
+                    b.ToTable("ModuleTrack");
                 });
 
             modelBuilder.Entity("backend.Models.Track", b =>
@@ -336,21 +343,6 @@ namespace backend.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ModuleTrack", b =>
-                {
-                    b.HasOne("backend.Models.Module", null)
-                        .WithMany()
-                        .HasForeignKey("ModuleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("backend.Models.Track", null)
-                        .WithMany()
-                        .HasForeignKey("TrackId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("backend.Models.Course", b =>
                 {
                     b.HasOne("backend.Models.Track", "Track")
@@ -391,6 +383,25 @@ namespace backend.Migrations
                         .HasForeignKey("DayId");
                 });
 
+            modelBuilder.Entity("backend.Models.ModuleTrack", b =>
+                {
+                    b.HasOne("backend.Models.Module", "Module")
+                        .WithMany("Tracks")
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.Track", "Track")
+                        .WithMany("ModuleTracks")
+                        .HasForeignKey("TrackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Module");
+
+                    b.Navigation("Track");
+                });
+
             modelBuilder.Entity("backend.Models.CalendarDate", b =>
                 {
                     b.Navigation("DateContent");
@@ -411,6 +422,13 @@ namespace backend.Migrations
                     b.Navigation("CourseModules");
 
                     b.Navigation("Days");
+
+                    b.Navigation("Tracks");
+                });
+
+            modelBuilder.Entity("backend.Models.Track", b =>
+                {
+                    b.Navigation("ModuleTracks");
                 });
 #pragma warning restore 612, 618
         }

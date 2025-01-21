@@ -2,7 +2,6 @@ using backend.Data;
 using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace backend.Services;
 
@@ -17,8 +16,8 @@ public class ModuleService : IService<Module>
 
     public async Task<List<Module>> GetAllAsync()
     {
-
         var modules = await _context.Modules
+                        .Include(module => module.Tracks)
                         .Include(module => module.Days)
                         .ThenInclude(day => day.Events)
                         .ToListAsync();
@@ -40,9 +39,11 @@ public class ModuleService : IService<Module>
         }
         return modules;
     }
+
     public async Task<Module> GetOneAsync(int id)
     {
         var module = await _context.Modules
+                    .Include(module => module.Tracks)
                     .Include(module => module.Days)
                     .ThenInclude(day => day.Events)
                     .FirstOrDefaultAsync(module => module.Id == id) ?? throw new NotFoundByIdException("Module", id);
@@ -61,13 +62,26 @@ public class ModuleService : IService<Module>
         }
         return module;
     }
+
     public async Task<Module> CreateAsync(Module module)
     {
-        if(module.Days.Count == 0) {
+        if (module.Days.Count == 0)
+        {
             throw new BadRequestException<int>("Cannot create module with zero days");
         }
+
         _context.ChangeTracker.Clear();
         _context.Entry(module).State = EntityState.Added;
+
+        for (int i = 0; i < module.Tracks.Count; i++)
+        {
+            var trackId = module.Tracks[i].Id;
+            var existingTrack = _context.Tracks.First(t => t.Id == trackId);
+            module.Tracks[i] = existingTrack;
+        }
+
+        _context.Modules.Add(module);
+        _context.SaveChanges();
 
         foreach (var day in module.Days)
         {
@@ -83,12 +97,15 @@ public class ModuleService : IService<Module>
 
         return module;
     }
+
     public async Task<Module> UpdateAsync(int id, Module module)
     {
-        if(module.Days.Count == 0) {
+        if (module.Days.Count == 0)
+        {
             throw new BadRequestException<int>("Cannot update module to have zero days");
         }
         var moduleToUpdate = await _context.Modules
+                    .Include(module => module.Tracks)
                     .Include(module => module.Days)
                     .ThenInclude(day => day.Events)
                     .AsNoTracking()
@@ -118,9 +135,9 @@ public class ModuleService : IService<Module>
         await _context.SaveChangesAsync();
         return module;
     }
+
     public async Task<bool> DeleteAsync(int id)
     {
-
         var module = await _context.Modules
             .Include(module => module.Days)
             .ThenInclude(day => day.Events)
@@ -128,7 +145,6 @@ public class ModuleService : IService<Module>
         _context.Remove(module);
         await _context.SaveChangesAsync();
         return true;
-
     }
 
     private Module updateModule(Module newModule, Module module)
@@ -136,7 +152,7 @@ public class ModuleService : IService<Module>
         module.Name = newModule.Name;
         module.NumberOfDays = newModule.NumberOfDays;
         module.Days = newModule.Days;
-        module.Track = newModule.Track;
+        module.Tracks = newModule.Tracks;
 
         return module;
     }

@@ -1,6 +1,7 @@
 import { ModuleType } from "@models/module/Types";
 import { useQuery } from "@tanstack/react-query";
 import { getModules, getModuleById } from "./moduleFetches";
+import { useFilterModules } from "@helpers/filterDataHooks";
 
 export function useQueryModules() {
     const { data, isLoading, isError, error } = useQuery<ModuleType[]>({
@@ -8,7 +9,7 @@ export function useQueryModules() {
         queryFn: getModules
     });
 
-    return { data, isLoading, isError, error };
+    return { data: useFilterModules(data), isLoading, isError, error };
 }
 
 export function useQueryModuleById(id: number) {
