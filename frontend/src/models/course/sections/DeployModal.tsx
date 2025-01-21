@@ -10,7 +10,6 @@ import { calculateCourseDayDates, getGoogleEventListForCourse, moveModule, strip
 import { getDateAsStringYyyyMmDd } from "@helpers/dateHelpers";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { postCourseToGoogle } from "@api/googleCalendarFetches";
-import EventDescription from "@models/home/components/EventDescription";
 
 
 type Props = {
