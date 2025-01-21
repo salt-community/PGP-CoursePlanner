@@ -29,7 +29,7 @@ export function EditBootcamp({ course }: Props) {
 
     const navigate = useNavigate();
 
-    calculateCourseDayDates(course, startDate)
+   
     const [previewCourse, setCourse] = useState<CourseType>(course);
     const [previewCalendarDays, setPreviewCalendarDays] = useState(updatePreviewCalendarDates(previewCourse))
 
@@ -40,8 +40,10 @@ export function EditBootcamp({ course }: Props) {
 
 
     useEffect(() => {
-        const updatedDays = calculateCourseDayDates(previewCourse, startDate);
+        console.log("update")
+        const updatedDays = updatePreviewCalendarDates(previewCourse);
         setPreviewCalendarDays(updatedDays);
+
     }, [previewCourse, startDate]);
 
 

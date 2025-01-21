@@ -92,7 +92,7 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
             courseName: course.name,
             events: modules[i].days[j].events,
             color: "#999999",
-            appliedCourseId: course.id,
+            appliedCourseId: -1, //do we really want this?
             moduleName: modules[i].name,
             moduleId: modules[i].id,
             track: course.track,

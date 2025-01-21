@@ -33,8 +33,6 @@ export const handleUpdateCourse = (
   mutationUpdateAppliedCourse: UseMutationResult<void, Error, CourseType, unknown>
 
 ) => {
-
-    
   if (appliedCourse) {
     const updatedCourse = assignDatesToModules(course, setCourse);
     mutationUpdateAppliedCourse.mutate(updatedCourse);

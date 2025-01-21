@@ -37,6 +37,7 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
     const appliedModules: string[] = []
     const appliedModuleIds: number[] = []
 
+
     dateContent.forEach(dc => {
         if (appliedCourseIds.filter(id => id == dc.appliedCourseId!).length == 0) {
             appliedCourseIds.push(dc.appliedCourseId!)
@@ -53,6 +54,9 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
             }
         }
     });
+
+    console.log(appliedCourseIds)
+
 
     const updateSelectedModule = (moduleId: number) => {
         console.log(moduleId)
