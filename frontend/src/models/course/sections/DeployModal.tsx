@@ -146,8 +146,11 @@ export default function DeployModal({ course }: Props) {
                             </div>
                             <div>
                                 <h4 className="font-bold pt-6">selected day's events </h4>
-                                {selectedDate.dateContent.map((content, index) => (
-                                    <div key={content.id ?? index} className="mb-4 flex flex-col items-center">
+                                {selectedDate.dateContent.map((content, index) => {
+                                    
+                                    console.log(content)
+                                    return (
+                                    <div key={index} className="mb-4 flex flex-col items-center">
                                         <div>
                                             <h2 className="text-xl font-semibold">
                                                 {content.courseName}
@@ -167,9 +170,9 @@ export default function DeployModal({ course }: Props) {
                                                                 {event.startTime} - {event.endTime}
                                                             </p>
                                                         </div>
-                                                        {event.description && (
+                                                        {/* {event.description && (
                                                             <EventDescription description={event.description} />
-                                                        )}
+                                                        )} */}
                                                     </div>
                                                 ))
                                             ) : (
@@ -177,7 +180,7 @@ export default function DeployModal({ course }: Props) {
                                             )}
                                         </div>
                                     </div>
-                                ))}
+                                )})}
 
                             </div>
                         </div>
