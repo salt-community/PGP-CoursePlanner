@@ -34,7 +34,7 @@ export function useFilterMonthCalendar(data?: CalendarDateType[]) {
     })
 }
 
-export function useFilterModule(data?: ModuleType[]) {
+export function useFilterModules(data?: ModuleType[]) {
     const { trackVisibility } = useContext(TrackVisibilityContext);
 
     data = data?.map((c) => {
