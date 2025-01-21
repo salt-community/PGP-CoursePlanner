@@ -78,7 +78,7 @@ const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
       description: "New day",
       isApplied: true,
       events: [],
-      date: new Date('2025-02-02').toISOString() // Placeholder date
+      date: new Date('2025-02-02').toISOString()
   };
 
   const updatedCourse = {
@@ -109,7 +109,7 @@ const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
         .map((courseModule, moduleIndex) => (
           <div
             key={moduleIndex}
-            className={`bg-base-100 flex space-between mb-4 rounded-r-lg border-r border-b border-black ${
+            className={` flex space-between mb-4 rounded-r-lg border-r border-b border-gray-300 ${
               draggedIndex === moduleIndex ? "dragging" : ""
             }`}
             draggable={!collapseOpen[moduleIndex]} 
@@ -121,13 +121,13 @@ const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
               cursor: collapseOpen[moduleIndex] ? "default" : "move", 
             }}
           >
-            <div className="collapse border-t border-l border-black rounded-none">
+            <div className="collapse border-t border-l border-gray-300 rounded-none">
               <input
                 type="checkbox"
                 checked={!!collapseOpen[moduleIndex]}
                 onChange={() => toggleCollapse(moduleIndex)}
               />
-              <div className="collapse-title text-xl font-medium border-b border-black">
+              <div className="collapse-title text-xl font-medium border-b border-gray-300">
                 <div className="flex items-center">
                   <DotsIcon position="mr-1" size={6} />
                   {courseModule.module.name}
@@ -167,7 +167,7 @@ const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
                         )
                       }
                     >
-                      Add Day
+                      + Day
                     </PrimaryBtn>
                   </div>
                 </div>
