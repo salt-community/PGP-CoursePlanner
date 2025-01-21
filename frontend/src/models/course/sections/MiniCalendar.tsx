@@ -1,6 +1,6 @@
 import NextBtn from "@components/buttons/NextBtn"
 import PreviousBtn from "@components/buttons/PreviousBtn"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { firstDayOfMonth, allDaysInInterval, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
 import { format, getMonth, getWeek, getYear } from "date-fns"
@@ -12,9 +12,10 @@ import { DateContent } from "@models/calendar/Types"
 type Props = {
     startDate: Date
     selectedModule: ModuleType
-    selectedModuleStartDate: Date
+    selectedModuleStartDate: CalendarDateType
     previewCalendarDays: CalendarDateType[]
-    setSelectedModuleStartDate: React.Dispatch<React.SetStateAction<Date>>
+    setSelectedModuleStartDate: React.Dispatch<React.SetStateAction<CalendarDateType>>
+
     previewCourse: CourseType
     setSelectedModule: React.Dispatch<React.SetStateAction<ModuleType>>
 }
@@ -22,7 +23,7 @@ type Props = {
 export default function MiniCalendar({ startDate, previewCalendarDays, selectedModule, selectedModuleStartDate, setSelectedModuleStartDate, previewCourse, setSelectedModule }: Props) {
     const [month, setMonth] = useState<number>(startDate.getMonth());
     const [year, setYear] = useState<number>(startDate.getFullYear());
-
+    const [calendarData, setCalendarData] = useState<CalendarDateType[]>([]);
 
     const startOfMonth = firstDayOfMonth(month, year);
     const endOfMonth = lastDayOfMonth(month, year);
@@ -37,16 +38,55 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
     const numberOfWeeks = getWeek(endOfMonth) - getWeek(startOfMonth) + 1;
     const numberOfRows = "grid-rows-" + (numberOfWeeks + 1).toString();
 
-    const startOfMonth2 = getDateAsString(startOfMonth);
-    const endOfMonth2 = getDateAsString(endOfMonth);
+    const startOfMonthFormatted = getDateAsString(startOfMonth);
+    const endOfMonthFormatted = getDateAsString(endOfMonth);
 
-    const { data, isLoading, isError, } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2); 
+    const { data, isLoading, isError, } = useQueryCalendarDateBatch(startOfMonthFormatted, endOfMonthFormatted);
+
+    const transformDateContent = (content: DateContent[]): DateContentModified[] => {
+        return content.map(item => ({
+            ...item,
+            moduleId: item.moduleId ? item.moduleId : -1,
+        }));
+    };
+
+    useEffect(() => {
+        if (!data || !previewCalendarDays) return;
+
+        console.log("vi kör useEffect")
+        // Avoid re-processing if the data is already updated
+        const updatedData = data.map(datum => {
+            const previewCalendarDaysIndex = previewCalendarDays
+                .map(d => getDateAsString(d.date))
+                .indexOf(getDateAsString(datum.date));
+
+            const updatedDateContent = previewCalendarDaysIndex > -1
+                ? [
+                    ...datum.dateContent,
+                    ...previewCalendarDays[previewCalendarDaysIndex].dateContent,
+                ]
+                : datum.dateContent;
+
+            return {
+                ...datum,
+                dateContent: transformDateContent(updatedDateContent),
+            };
+        });
+
+        if (JSON.stringify(updatedData) !== JSON.stringify(calendarData)) {
+            setCalendarData(updatedData);
+        }
+    }, [data, previewCalendarDays, calendarData]);
 
 
 
     const selectDate = (index: number) => {
-        setSelectedModuleStartDate(data![index].date)
+        setSelectedModuleStartDate({ dateContent: calendarData[index].dateContent, date: calendarData![index].date })
+
     };
+
+
+    const moduleDateStrings = selectedModule.days.map(d => getDateAsString(d.date))
 
 
     if (isError) {
@@ -54,20 +94,10 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
     }
     if (isLoading) return "pending";
 
-    const moduleDateStrings = selectedModule.days.map(d => getDateAsString(d.date))
 
-    
-    const transformDateContent = (content: DateContent[]): DateContentModified[] => {
-        return content.map(item => ({
-            ...item,
-            moduleId: -1, 
-        }));
-    };
-
-    
     return (
         <>
-            {data && <div className="flex flex-col h-full">
+            {calendarData && <div className="flex flex-col h-full">
                 <header className="flex mb-0 p-0 items-center gap-2">
                     <div className="flex items-center">
                         <PreviousBtn onClick={() => { setMonth(month - 1); }} />
@@ -89,32 +119,14 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                             ))}
                             {daysInMonth.map((thisDate, dateIndex) => {
 
-                                const previewCalendarDaysIndex = previewCalendarDays.map(d => d.date.toDateString()).indexOf(thisDate.toDateString())
 
-                                if (previewCalendarDaysIndex > -1) {
-                                    if (data[dateIndex] != null) {
-                                        previewCalendarDays[previewCalendarDaysIndex].dateContent.push( ...transformDateContent(data![dateIndex].dateContent));
-                                    }
-                                    return (
-                                        <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
-                                            {data && data[dateIndex] !== null ? (
-                                                <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                            ) : (
-                                                <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={previewCalendarDays[previewCalendarDaysIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                            )}
-
-                                        </div>
-                                    )
-                                }
                                 return (
-                                    <div key={format(thisDate, 'yyyy-MM-dd')} className="flex flex-col">
-                                        {data && data[dateIndex] !== null ? (
-                                            <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={transformDateContent(data[dateIndex].dateContent)} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                        ) : (
-                                            <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={[]} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                        )}
+                                    <>
+                                        {calendarData && calendarData[dateIndex] &&
+                                            <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={calendarData[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
+                                        }
 
-                                    </div>
+                                    </>
                                 );
                             })}
                         </div>

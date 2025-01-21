@@ -32,11 +32,11 @@ export default function MonthView() {
         setYear(getYear(endOfMonth));
     }
 
-    const startOfMonth2 = getDateAsString(startOfMonth);
-    const endOfMonth2 = getDateAsString(endOfMonth);
-    const numberOfWeeks = weeksCalc(endOfMonth2);
+    const startOfMonthFormatted = getDateAsString(startOfMonth);
+    const endOfMonthFormatted = getDateAsString(endOfMonth);
+    const numberOfWeeks = weeksCalc(endOfMonthFormatted);
 
-    const { data, isLoading, isError } = useQueryCalendarDateBatch(startOfMonth2, endOfMonth2);
+    const { data, isLoading, isError } = useQueryCalendarDateBatch(startOfMonthFormatted, endOfMonthFormatted);
 
     const openModal = (index: number) => {
         setCurrentIndex(index);
