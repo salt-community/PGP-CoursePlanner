@@ -4,7 +4,7 @@ import { CalendarDateType } from "@models/calendar/Types";
 import { ModuleType } from "@models/module/Types";
 import { useContext } from "react";
 
-export function useFilterMonthCalendar(data: CalendarDateType[] | undefined) {
+export function useFilterWeeksCalendar(data?: CalendarDateType[]) {
     const { trackVisibility } = useContext(TrackVisibilityContext);
 
     return data?.map((c) => {
@@ -19,7 +19,22 @@ export function useFilterMonthCalendar(data: CalendarDateType[] | undefined) {
     })
 }
 
-export function useFilterModule(data: ModuleType[] | undefined) {
+export function useFilterMonthCalendar(data?: CalendarDateType[]) {
+    const { trackVisibility } = useContext(TrackVisibilityContext);
+
+    return data?.map((c) => {
+        return {
+            id: c.id,
+            date: c.date,
+            dateContent: c.dateContent.filter((d) => {
+                const track = trackVisibility.find((item) => item.id === d.track.id);
+                return track?.visibility;
+            })
+        }
+    })
+}
+
+export function useFilterModule(data?: ModuleType[]) {
     const { trackVisibility } = useContext(TrackVisibilityContext);
 
     data = data?.map((c) => {
