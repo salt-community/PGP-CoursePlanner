@@ -167,7 +167,7 @@ const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
                         )
                       }
                     >
-                      Add Day
+                      + Day
                     </PrimaryBtn>
                   </div>
                 </div>

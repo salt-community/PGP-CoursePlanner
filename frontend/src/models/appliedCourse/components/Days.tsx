@@ -256,7 +256,7 @@ import React, { useState } from "react";
                 ))}
                 <div className="mt-auto">
                     <PrimaryBtn onClick={() => handleCreateNewEvent(moduleIndex, dayIndex)}>
-                        Add Event
+                        + Event
                     </PrimaryBtn>
                 </div>
             </div>
