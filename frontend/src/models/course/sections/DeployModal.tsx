@@ -10,6 +10,7 @@ import { calculateCourseDayDates, getGoogleEventListForCourse, moveModule, strip
 import { useForm, SubmitHandler } from "react-hook-form";
 import { postCourseToGoogle } from "@api/googleCalendarFetches";
 import { InfoPanel } from "./InfoPanel";
+import EditCourseDays from "./EditCourseDays";
 
 
 type Props = {
@@ -109,6 +110,7 @@ export default function DeployModal({ course }: Props) {
                             <MiniCalendar previewCourse={previewCourse} startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedDate} setSelectedModuleStartDate={setSelectedDate} setSelectedModule={setSelectedModule} />
                         </div>
                         <InfoPanel selectedModule={selectedModule} selectedDate={selectedDate} handleMoveModule={handleMoveModule} />
+                        {/* <EditCourseDays course={previewCourse} setCourse={setCourse} /> */}
                     </section>
                     <div className="modal-action">
                         <form method="dialog" className="flex gap-5 justify-center" >
