@@ -117,8 +117,8 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                                 <div key={`empty-${index}`} className="w-1/7 h-full"></div>
                             ))}
                             {daysInMonth.map((thisDate, dateIndex) => (
-                                <div key={`wrapper-${dateIndex}`}>
-                                    {calendarData && calendarData[dateIndex] && (
+                              
+                                   
                                         <CalendarDate
                                             setSelectedModule={setSelectedModule}
                                             previewCourse={previewCourse}
@@ -131,8 +131,8 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                                             key={`${getDateAsString(thisDate)}-${dateIndex}`} // Unique key
                                             date={getDateAsString(thisDate)}
                                         />
-                                    )}
-                                </div>
+                                   
+                             
                             ))}
                         </div>
                     </div>
