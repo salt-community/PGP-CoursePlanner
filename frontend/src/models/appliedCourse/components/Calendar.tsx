@@ -74,28 +74,28 @@ export default function Calendar({ course }: Props) {
 
       <section className="flex-grow flex py-2 p-1">
         <div className="flex flex-row items-start w-full h-full">
-          <div className="flex flex-col items-center bg-gray-50 border-r-2 border-gray-300">
-            <div className="w-14 h-12 bg-gray-100 border-b-2 border-gray-300 flex justify-center items-center font-bold">
-              Wk
+          <div className="flex flex-col items-center bg-gray-50 border-l-2 border-t-2 rounded-md border-gray-300">
+            <div className="w-8 h-12 bg-gray-100  border-b-2 border-gray-300 flex justify-center items-center font-bold">
+              
             </div>
             {Array.from({ length: Math.ceil(totalDays / 7) }).map((_, index) => {
               const weekStart = addDays(calendarStart, index * 7);
               return (
                 <div
                   key={`week-${index}`}
-                  className="w-14 h-12 flex justify-center items-center font-semibold border-b border-gray-300"
+                  className="w-8 h-12 flex justify-center items-center font-semibold border-b border-gray-300"
                 >
                   {getWeek(weekStart, { weekStartsOn: 1 })}
                 </div>
               );
             })}
           </div>
-          <div className="w-full flex-grow grid grid-cols-7 auto-rows-[3rem] rounded-md bg-white border-2 border-gray-300">
+          <div className="w-full flex-grow grid grid-cols-7 auto-rows-[3rem] bg-white border-2 border-gray-300">
           
             {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
               <div
                 key={day}
-                className="h-12 flex justify-center items-center border-b-2 border-gray-300 bg-gray-100 font-bold"
+                className="h-12 flex justify-center items-center border-b-2 border-l-2 border-gray-300 bg-gray-100 font-bold"
               >
                 {day}
               </div>
