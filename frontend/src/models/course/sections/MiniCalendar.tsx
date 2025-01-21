@@ -126,7 +126,7 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                                     isLoading={isLoading}
                                     indexForModal={dateIndex}
                                     dateContent={calendarData[dateIndex].dateContent}
-                                    key={`${getDateAsString(thisDate)}-${dateIndex}`} // Unique key
+                                    key={`${getDateAsString(thisDate)}-${dateIndex}`}
                                     date={getDateAsString(thisDate)}
                                 />
                             ))}
