@@ -1,6 +1,5 @@
 import { GoogleEvent } from "@helpers/googleHelpers";
 import { CalendarDateType, CourseType, DayType, ModuleType } from "../Types";
-import DayTable from "../sections/DayTable";
 import { EventType } from "@models/module/Types";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
@@ -67,6 +66,7 @@ export const calculateCourseDayDates = (
             appliedCourseId: course.id,
             moduleName: modules[i].name,
             moduleId: modules[i].id,
+            track: course.track,
           },
         ],
       });
@@ -95,6 +95,7 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
             appliedCourseId: course.id,
             moduleName: modules[i].name,
             moduleId: modules[i].id,
+            track: course.track,
           },
         ],
       });

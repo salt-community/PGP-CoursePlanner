@@ -8,9 +8,10 @@ import Days from "./Days";
 interface ModulesProps {
   course: CourseType;
   setCourse: React.Dispatch<React.SetStateAction<CourseType>>;
+  assignDatesToModules: (course: CourseType) => void;
 }
 
-const Modules = ({ course, setCourse }: ModulesProps) => {
+const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [collapseOpen, setCollapseOpen] = useState<Record<number, boolean>>({});
 
@@ -27,6 +28,7 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
 
   const handleDragEnd = () => {
     setDraggedIndex(null);
+    assignDatesToModules(course)
   };
 
   const handleDragOver = (e: React.DragEvent, targetIndex: number) => {
@@ -56,41 +58,48 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
   };
 
   const handleRemoveModule = (index: number) => {
-    setCourse((prevCourse) => ({
-      ...prevCourse,
-      modules: prevCourse.modules.filter((_, i) => i !== index),
-    }));
-  };
-  const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
-    const newDay: DayType = {
+    setCourse((prevCourse) => {
+        const updatedModules = prevCourse.modules.filter((_, i) => i !== index);
+        const updatedCourse = {
+            ...prevCourse,
+            modules: updatedModules,
+        };
+        
+        assignDatesToModules(updatedCourse);
+
+        return updatedCourse; 
+    });
+};
+
+const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
+  const newDay: DayType = {
       id: 0,
       dayNumber: numberOfDays + 1,
       description: "New day",
       isApplied: true,
-      events: []
-    };
-
-    setCourse((prevCourse) => {
-      const updatedModules = prevCourse.modules.map((module, index) => {
-        if (index === moduleIndex) {
-          return {
-            ...module,
-            module: {
-              ...module.module,
-              days: [...module.module.days, newDay],
-              numberOfDays: numberOfDays + 1
-            },
-          };
-        }
-        return module;
-      });
-
-      return {
-        ...prevCourse,
-        modules: updatedModules,
-      };
-    });
+      events: [],
+      date: new Date('2025-02-02').toISOString() // Placeholder date
   };
+
+  const updatedCourse = {
+      ...course, 
+      modules: course.modules.map((module, index) => {
+          if (index === moduleIndex) {
+              return {
+                  ...module,
+                  module: {
+                      ...module.module,
+                      days: [...module.module.days, newDay],
+                  },
+              };
+          }
+          return module;
+      }),
+  };
+  assignDatesToModules(updatedCourse);
+};
+
+
 
   return (
     <div>
@@ -147,6 +156,7 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
                     courseModule={courseModule}
                     course={course}
                     setCourse={setCourse}
+                    assignDatesToModules={assignDatesToModules}
                   />
                   <div style={{ display: "flex", justifyContent: "flex-start" }}>
                     <PrimaryBtn

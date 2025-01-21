@@ -80,5 +80,3 @@ export type DateContentModified = {
   color: string
   moduleId: number;
 }
-
-
