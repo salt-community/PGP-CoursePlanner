@@ -52,5 +52,5 @@ export function useFilterModules(data?: ModuleType[]) {
             })
         }
     })
-    return data?.filter((module) => module.tracks.some((t) => t.visibility));
+    return data?.filter((module) => module.tracks.some((track) => track?.visibility ?? false));
 }
