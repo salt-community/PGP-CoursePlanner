@@ -147,7 +147,7 @@ import React, { useState } from "react";
         {courseModule.module.days.map((day, dayIndex) => (
         <div
         key={dayIndex}
-        className={`bg-base-200 flex space-between border border-black mb-4 rounded-r-lg ${
+        className={`bg-base-100 flex space-between border border-black mb-4 rounded-r-lg ${
             draggedIndex === dayIndex ? "dragging" : ""
         }`}
         draggable={!collapseOpen[dayIndex]} 
@@ -256,7 +256,7 @@ import React, { useState } from "react";
                 ))}
                 <div className="mt-auto">
                     <PrimaryBtn onClick={() => handleCreateNewEvent(moduleIndex, dayIndex)}>
-                        Add Event
+                        + Event
                     </PrimaryBtn>
                 </div>
             </div>

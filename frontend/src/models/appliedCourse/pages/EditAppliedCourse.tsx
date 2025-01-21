@@ -148,7 +148,7 @@ export default function EditAppliedCourse() {
                     <div>
                         <div className="flex justify-center items-center">
                             <PrimaryBtn onClick={handleCreateNewAppliedModule}>
-                                Add Module
+                                + Module
                             </PrimaryBtn>
                         </div>
                         <PrimaryBtn onClick={handleUpdateCourse}>Save</PrimaryBtn>
