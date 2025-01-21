@@ -62,22 +62,23 @@ export type CourseProps = {
   buttonText: string;
 }
 
-  export type CalendarDateType = {
-      id?: number;
-      date: Date;
-      dateContent: DateContentModified[];
-  }
-  
-  export type DateContentModified = {
-      appliedCourseId?: number;
-      id?: number;
-      moduleName?: string;
-      dayOfModule: number;
-      totalDaysInModule: number;
-      courseName: string;
-      events: EventType[];
-      color: string
-      moduleId : number;
-  }
+export type CalendarDateType = {
+  id?: number;
+  date: Date;
+  dateContent: DateContentModified[];
+}
+
+export type DateContentModified = {
+  appliedCourseId?: number;
+  id?: number;
+  track: Track;
+  moduleName?: string;
+  dayOfModule: number;
+  totalDaysInModule: number;
+  courseName: string;
+  events: EventType[];
+  color: string
+  moduleId: number;
+}
 
 
