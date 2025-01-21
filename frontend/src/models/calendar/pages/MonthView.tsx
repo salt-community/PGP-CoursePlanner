@@ -98,6 +98,8 @@ export default function MonthView() {
                     <h1 className="text-3xl font-semibold">{monthInText} {year}</h1>
                     <select className="select select-bordered select-sm max-w-xs ">
                         <option disabled selected>Month</option>
+                        <option>Week</option>
+                        <option>Year</option>
                     </select>
                 </div>
             </Header>
