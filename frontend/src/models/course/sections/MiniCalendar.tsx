@@ -8,6 +8,7 @@ import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries
 import { CalendarDateType, CourseType, DateContentModified, ModuleType } from "../Types"
 import CalendarDate from "./CalendarDate"
 import { DateContent } from "@models/calendar/Types"
+import { datePickerToolbarClasses } from "@mui/x-date-pickers"
 
 type Props = {
     startDate: Date
@@ -116,7 +117,9 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                             {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDay, index) => (
                                 <div key={`empty-${index}`} className="w-1/7 h-full"></div>
                             ))}
-                            {daysInMonth.map((thisDate, dateIndex) => (
+                            {daysInMonth.map((thisDate, dateIndex) => { 
+                                
+                                if(calendarData[dateIndex])  return(
                                 <CalendarDate
                                     setSelectedModule={setSelectedModule}
                                     previewCourse={previewCourse}
@@ -129,7 +132,7 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                                     key={`${getDateAsString(thisDate)}-${dateIndex}`}
                                     date={getDateAsString(thisDate)}
                                 />
-                            ))}
+                            )})}
                         </div>
                     </div>
                 </section>
