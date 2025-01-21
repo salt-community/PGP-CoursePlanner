@@ -8,6 +8,7 @@ import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries
 import { CalendarDateType, CourseType, DateContentModified, ModuleType } from "../Types"
 import CalendarDate from "./CalendarDate"
 import { DateContent } from "@models/calendar/Types"
+import { datePickerToolbarClasses } from "@mui/x-date-pickers"
 
 type Props = {
     startDate: Date
@@ -53,7 +54,6 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
     useEffect(() => {
         if (!data || !previewCalendarDays) return;
 
-        console.log("vi kör useEffect")
         // Avoid re-processing if the data is already updated
         const updatedData = data.map(datum => {
             const previewCalendarDaysIndex = previewCalendarDays
@@ -109,26 +109,30 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                 <section className="flex-grow flex py-2">
                     <div className="flex flex-col items-center w-full h-full">
                         <div className={`w-full flex-grow   grid grid-cols-7 ${numberOfRows} rounded-md bg-white`}>
-                            {fullWeek.map(day => (
-                                <div key={format(day, 'E')} className="w-1/7 flex justify-center items-center p-1 border-b-2 border-gray-100">
+                            {fullWeek.map((day, index) => (
+                                <div key={`${format(day, 'E')}-${index}`} className="w-1/7 flex justify-center items-center p-1 border-b-2 border-gray-100">
                                     {format(day, 'E')}
                                 </div>
                             ))}
-                            {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDayIndex) => (
-                                <div key={format(emptyDayIndex, 'd')} className="w-1/7 h-full"></div>
+                            {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDay, index) => (
+                                <div key={`empty-${index}`} className="w-1/7 h-full"></div>
                             ))}
-                            {daysInMonth.map((thisDate, dateIndex) => {
-
-
-                                return (
-                                    <>
-                                        {calendarData && calendarData[dateIndex] &&
-                                            <CalendarDate setSelectedModule={setSelectedModule} previewCourse={previewCourse} isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1} isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) == getDateAsString(thisDate)} openModal={selectDate} isLoading={isLoading} indexForModal={dateIndex} dateContent={calendarData[dateIndex].dateContent} key={format(thisDate, 'd')} date={getDateAsString(thisDate)} />
-                                        }
-
-                                    </>
-                                );
-                            })}
+                            {daysInMonth.map((thisDate, dateIndex) => { 
+                                
+                                if(calendarData[dateIndex])  return(
+                                <CalendarDate
+                                    setSelectedModule={setSelectedModule}
+                                    previewCourse={previewCourse}
+                                    isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1}
+                                    isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) === getDateAsString(thisDate)}
+                                    openModal={selectDate}
+                                    isLoading={isLoading}
+                                    indexForModal={dateIndex}
+                                    dateContent={calendarData[dateIndex].dateContent}
+                                    key={`${getDateAsString(thisDate)}-${dateIndex}`}
+                                    date={getDateAsString(thisDate)}
+                                />
+                            )})}
                         </div>
                     </div>
                 </section>
