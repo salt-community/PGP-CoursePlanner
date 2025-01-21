@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { deleteCookie } from "@helpers/cookieHelpers";
 import { currentMonth, currentYear } from "@helpers/dateHelpers";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import { useQueryTracks } from "@api/track/trackQueries";
 import { getStorageTrackVisibility, initialStorageTrackVisibility, updateStorageTrackVisibility } from "@helpers/localStorage";
@@ -21,7 +21,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
   const { data: tracks } = useQueryTracks();
   const { trackVisibility, setTrackVisibility } = useContext(TrackVisibilityContext);
 
-  useMemo(() => {
+  useEffect(() => {
     if (tracks) {
       initialStorageTrackVisibility(tracks);
       setTrackVisibility(getStorageTrackVisibility());
