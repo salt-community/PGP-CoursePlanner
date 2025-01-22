@@ -11,5 +11,6 @@ namespace backend.Models
         public List<Event> Events { get; set; } = [];
         public string? Color { get; set; }
         public int appliedCourseId { get; set; }
+        public int ModuleId {get; set;}
     }
 }

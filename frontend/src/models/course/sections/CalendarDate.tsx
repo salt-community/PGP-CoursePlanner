@@ -55,7 +55,6 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
         }
     });
 
-    console.log(appliedCourseIds)
 
 
     const updateSelectedModule = (moduleId: number) => {

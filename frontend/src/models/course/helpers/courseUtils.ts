@@ -34,16 +34,16 @@ export const getWeekNumberOfModule = (course: CourseType, moduleId: number) => {
   return 1;
 };
 
-export const calculateCourseDayDates = (
+export const getCourseDayDates = (
   course: CourseType,
   startDate: Date
 ) => {
   const calendarDateTypes: CalendarDateType[] = [];
-  // Create a copy of the startDate to avoid mutating the original date
+  // Use a local variable instead of mutating course.startDate
   const currentDate = new Date(startDate);
-  course.startDate = new Date(startDate);
 
-  const modules = course.modules.map((m) => m.module);
+  const updatedCourse = { ...course, startDate: new Date(startDate) }; // Avoid mutating course
+  const modules = updatedCourse.modules.map((m) => m.module);
 
   for (let i = 0; i < modules.length; i++) {
     for (let j = 0; j < modules[i].numberOfDays; j++) {
@@ -52,8 +52,8 @@ export const calculateCourseDayDates = (
         currentDate.setDate(currentDate.getDate() + 1);
       }
 
-      course.modules[i].module.days[j].date = new Date(currentDate);
-      course.endDate = new Date(currentDate);
+      modules[i].days[j].date = new Date(currentDate);
+      updatedCourse.endDate = new Date(currentDate);
       calendarDateTypes.push({
         date: new Date(currentDate),
         dateContent: [
@@ -77,6 +77,51 @@ export const calculateCourseDayDates = (
   return calendarDateTypes;
 };
 
+export const getCourseWithDates = (
+  course: CourseType,
+  startDate: Date
+) => {
+  const calendarDateTypes: CalendarDateType[] = [];
+  // Use a local variable instead of mutating course.startDate
+  const currentDate = new Date(startDate);
+
+  const updatedCourse = { ...course, startDate: new Date(startDate) }; // Avoid mutating course
+  const modules = updatedCourse.modules.map((m) => m.module);
+
+  for (let i = 0; i < modules.length; i++) {
+    for (let j = 0; j < modules[i].numberOfDays; j++) {
+      // Skip weekends (Saturday: 6, Sunday: 0)
+      while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+
+      modules[i].days[j].date = new Date(currentDate);
+      updatedCourse.endDate = new Date(currentDate);
+      calendarDateTypes.push({
+        date: new Date(currentDate),
+        dateContent: [
+          {
+            dayOfModule: modules[i].days[j].dayNumber,
+            totalDaysInModule: modules[i].numberOfDays,
+            courseName: course.name,
+            events: modules[i].days[j].events,
+            color: "#999999",
+            appliedCourseId: course.id,
+            moduleName: modules[i].name,
+            moduleId: modules[i].id,
+            track: course.track,
+          },
+        ],
+      });
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    modules[i].startDate = modules[i].days[0].date;
+  }
+  return updatedCourse;
+};
+
+
+
 export const updatePreviewCalendarDates = (course: CourseType) => {
   const calendarDateTypes: CalendarDateType[] = [];
   const modules = course.modules.map((m) => m.module);
@@ -92,7 +137,7 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
             courseName: course.name,
             events: modules[i].days[j].events,
             color: "#999999",
-            appliedCourseId: -1, //do we really want this?
+            appliedCourseId: course.id, //do we really want this?
             moduleName: modules[i].name,
             moduleId: modules[i].id,
             track: course.track,

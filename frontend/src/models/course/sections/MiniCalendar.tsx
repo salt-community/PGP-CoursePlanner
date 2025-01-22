@@ -22,8 +22,8 @@ type Props = {
 }
 
 export default function MiniCalendar({ startDate, previewCalendarDays, selectedModule, selectedModuleStartDate, setSelectedModuleStartDate, previewCourse, setSelectedModule }: Props) {
-    const [month, setMonth] = useState<number>(startDate.getMonth());
-    const [year, setYear] = useState<number>(startDate.getFullYear());
+    const [month, setMonth] = useState<number>(getMonth(startDate));
+    const [year, setYear] = useState<number>(getYear(startDate));
     const [calendarData, setCalendarData] = useState<CalendarDateType[]>([]);
 
     const startOfMonth = firstDayOfMonth(month, year);
