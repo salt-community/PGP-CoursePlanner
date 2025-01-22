@@ -6,6 +6,7 @@ import ErrorMessage from "@components/ErrorMessage";
 import { useQueryCourses } from "@api/course/courseQueries";
 import { useQueryModuleById } from "@api/module/moduleQueries";
 import { useMutationDeleteModule } from "@api/module/moduleMutations";
+import ErrorModal from "@components/ErrorModal";
 
 export default function ModuleDetails() {
     const moduleId = useIdFromPath();
@@ -88,6 +89,7 @@ export default function ModuleDetails() {
                     </div>
                 </section>
             }
+            {isError && <ErrorModal error="Module" />}
         </Page>
     )
 }
