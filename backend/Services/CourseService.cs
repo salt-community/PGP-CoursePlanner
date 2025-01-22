@@ -136,6 +136,7 @@ public class CourseService : IService<Course>
                     Events = day.Events,
                     Color = appliedCourse.Color,
                     appliedCourseId = appliedCourse.Id,
+                    ModuleId = module.Id,
                 };
 
                 if (calendarDate != null)
