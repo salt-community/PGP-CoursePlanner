@@ -93,14 +93,10 @@ const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
       ...course, 
       modules: course.modules.map((module, index) => {
           if (index === moduleIndex) {
-            // console.log("index == index", newDay)
-            // console.log(myModule)
               return {
                   ...module,
                   module: {
-                      ...module.module,
-                      days: [...module.module.days, newDay],
-                      numberOfDays: numberOfDays+1,
+                      ...myModule
                   },
               };
           }
