@@ -1,4 +1,4 @@
-export default function LoadingSkeleton() {
+export default function LoadingSkeletonDay() {
     return (
         <div className="flex flex-col gap-12 p-4">
             <div className="skeleton h-4 w-full mt-12"></div>
