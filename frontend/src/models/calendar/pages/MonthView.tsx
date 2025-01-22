@@ -139,7 +139,6 @@ export default function MonthView() {
                     isNextDisabled={currentIndex === data.length - 1}
                 />
             )}
-            {isError && <ErrorModal error="Days" />}
         </Page>
     )
 }
