@@ -50,7 +50,7 @@ export function EditBootcamp({ course }: Props) {
 
 
     useEffect(() => {
-        console.log("update")
+        console.log("update", previewCourse)
         const updatedDays = updatePreviewCalendarDates(previewCourse);
         setPreviewCalendarDays(updatedDays);
 

@@ -33,7 +33,7 @@ export type ModuleType = {
   order: number;
   isApplied: boolean;
   days: DayType[];
-  courseModules?: CourseModuleType[];
+  // courseModules?: CourseModuleType[];
   startDate: Date
 }
 

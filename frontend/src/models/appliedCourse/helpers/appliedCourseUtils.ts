@@ -64,13 +64,14 @@ export function assignDatesToModules(
 
     const updatedDays = module.module.days.map((existingDay, index) => ({
       ...existingDay,
-      date: moduleDays[index].toISOString(),
+      date: moduleDays[index]
     }));
 
     return {
       ...module,
       module: {
         ...module.module,
+        numberOfDays: updatedDays.length,
         days: updatedDays,
       },
     };
@@ -80,6 +81,9 @@ export function assignDatesToModules(
     ...course,
     modules: updatedModules,
   });
+
+  return course
+
 }
 
 function getWeekDayList(startDate: Date, totalDays: number): Date[] {
