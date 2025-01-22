@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { today } from "@helpers/dateHelpers";
-import { DateContent } from "../Types";
+import { CalendarDateType, DateContent } from "../Types";
 import LoadingSkeletonDay from "../components/LoadingSkeletonDay";
 
 type Props = {
@@ -9,9 +9,10 @@ type Props = {
     indexForModal: number;
     openModal: (index: number) => void;
     isLoading: boolean
+    data: CalendarDateType[] | undefined
 }
 
-export default function CalenderDate({ dateContent, date, openModal, indexForModal, isLoading }: Props) {
+export default function CalenderDate({ dateContent, date, openModal, indexForModal, isLoading, data }: Props) {
 
     const border = "border-[0.5px] border-gray-100";
     const text = today == date ? "font-bold text-[#EC0E40]" : "";
@@ -35,10 +36,10 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
             }
         }
     });
-
+    console.log(dateContent)
     return (
-        <button onClick={isLoading ? () => { } : () => openModal(indexForModal)}
-            className={`bg-white ${border} flex flex-col gap-2 p-4 pt-1 pb-2 items-center h-full ${!isLoading ? "hover:bg-[#F9F9F9] hover:cursor-pointer" : "hover:cursor-default"}`}>
+        <button onClick={() => openModal(indexForModal)}
+            className={`bg-white ${border} flex flex-col gap-2 p-4 pt-1 pb-2 items-center h-full ${(isLoading || !data) ? "cursor-default pointer-events-none" : "hover:bg-[#F9F9F9] hover:cursor-pointer"}`}>
             <div className={`${bg} h-10 w-10 rounded-full flex justify-center items-center`}>
                 <h2 className={`${text}`}>
                     {format(date, 'd')}
