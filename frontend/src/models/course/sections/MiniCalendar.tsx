@@ -5,10 +5,10 @@ import { useEffect, useState } from "react"
 import { firstDayOfMonth, allDaysInInterval, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
-import { CalendarDateType, CourseType, DateContentModified, ModuleType } from "../Types"
+import { CourseType, ModuleType } from "../Types"
 import CalendarDate from "./CalendarDate"
-import { DateContent } from "@models/calendar/Types"
-import { datePickerToolbarClasses } from "@mui/x-date-pickers"
+import { CalendarDateType } from "@models/calendar/Types"
+// import { datePickerToolbarClasses } from "@mui/x-date-pickers"
 
 type Props = {
     startDate: Date
@@ -44,12 +44,12 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
     const { data, isLoading, isError, } = useQueryCalendarDateBatch(startOfMonthFormatted, endOfMonthFormatted);
 
-    const transformDateContent = (content: DateContent[]): DateContentModified[] => {
-        return content.map(item => ({
-            ...item,
-            moduleId: item.moduleId ? item.moduleId : -1,
-        }));
-    };
+    // const transformDateContent = (content: DateContent[]): DateContent[] => {
+    //     return content.map(item => ({
+    //         ...item,
+    //         moduleId: item.moduleId ? item.moduleId : -1,
+    //     }));
+    // };
 
     useEffect(() => {
         if (!data || !previewCalendarDays) return;
@@ -69,7 +69,7 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
             return {
                 ...datum,
-                dateContent: transformDateContent(updatedDateContent),
+                dateContent: (updatedDateContent),
             };
         });
 

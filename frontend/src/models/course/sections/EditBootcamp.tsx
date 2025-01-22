@@ -3,11 +3,12 @@ import { postCourseToGoogle } from "@api/googleCalendarFetches";
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { calculateCourseDayDates, updatePreviewCalendarDates, getGoogleEventListForCourse, stripIdsFromCourse, moveModule, getCourseDayDates, getCourseWithDates } from "../helpers/courseUtils";
-import { CourseType, ModuleType, CalendarDateType, CourseModuleType } from "../Types";
+import {  updatePreviewCalendarDates, getGoogleEventListForCourse, stripIdsFromCourse, moveModule, getCourseWithDates } from "../helpers/courseUtils";
+import { CourseType, ModuleType, CourseModuleType } from "../Types";
 import { InfoPanel } from "./InfoPanel";
 import MiniCalendar from "./MiniCalendar";
 import { EditCourseDays } from "@models/appliedCourse/sections/EditCourseDays";
+import { CalendarDateType } from "@models/calendar/Types";
 
 type Props = {
     course: CourseType,

@@ -1,5 +1,6 @@
 import { getDateAsStringYyyyMmDd } from "@helpers/dateHelpers";
-import { CalendarDateType, ModuleType } from "../Types";
+import {  ModuleType } from "../Types";
+import { CalendarDateType } from "@models/calendar/Types";
 
 type Props = {
     selectedDate: CalendarDateType
