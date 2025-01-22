@@ -67,7 +67,7 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                     ...previewCalendarDays[previewCalendarDaysIndex].dateContent,
                     ...datum.dateContent.filter(dc => dc.appliedCourseId != previewCourse.id),
                 ]
-                : datum.dateContent;
+                : datum.dateContent.filter(dc => dc.appliedCourseId != previewCourse.id);
 
             return {
                 ...datum,
