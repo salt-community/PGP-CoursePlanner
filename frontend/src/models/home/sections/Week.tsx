@@ -71,8 +71,8 @@ export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps)
         return (
             <section
                 key={formattedDay}
-                className={`${commonClasses} ${borderClasses} ${backgroundClasses} ${!isCalendarLoading && hoverClasses}`}
-                onClick={isCalendarLoading ? () => { } : () => openModal(index)}
+                className={`${commonClasses} ${borderClasses} ${backgroundClasses} ${(isCalendarLoading || !data) ? "cursor-default pointer-events-none" : hoverClasses}`}
+                onClick={() => openModal(index)}
             >
                 <h2 className={`item-center text-center ${textClasses} ${isTodayTextClasses}`}>
                     {format(formattedDay, "EEEE")}<br />

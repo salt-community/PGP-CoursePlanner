@@ -38,15 +38,15 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
     });
     console.log(dateContent)
     return (
-        <button onClick={isLoading ? () => { } : () => openModal(indexForModal)}
-            className={`bg-white ${border} flex flex-col gap-2 p-4 pt-1 pb-2 items-center h-full ${!isLoading ? "hover:bg-[#F9F9F9] hover:cursor-pointer" : "hover:cursor-default"}`}>
+        <button onClick={() => openModal(indexForModal)}
+            className={`bg-white ${border} flex flex-col gap-2 p-4 pt-1 pb-2 items-center h-full ${(isLoading || !data) ? "cursor-default pointer-events-none" : "hover:bg-[#F9F9F9] hover:cursor-pointer"}`}>
             <div className={`${bg} h-10 w-10 rounded-full flex justify-center items-center`}>
                 <h2 className={`${text}`}>
                     {format(date, 'd')}
                 </h2>
             </div>
             <div className="flex flex-col gap-1 w-full">
-                {isLoading || !data ? (
+                {isLoading ? (
                     <LoadingSkeletonDay />
                 ) :
                     <>
