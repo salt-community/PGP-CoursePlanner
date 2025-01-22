@@ -5,7 +5,7 @@ import { Fragment, useState } from "react"
 import CalendarDate from "../sections/CalendarDate"
 import { useNavigate } from "react-router-dom"
 import { firstDayOfMonth, allDaysInInterval, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
-import { format, getMonth, getWeek, getYear} from "date-fns"
+import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useMonthFromPath, useYearFromPath } from "@helpers/helperHooks"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
 import { trackUrl } from "@helpers/helperMethods"
@@ -128,7 +128,6 @@ export default function MonthView() {
                         </Fragment>)
                 })}
             </section>
-            {isError && <ErrorModal error="Days" />}
             {currentIndex !== null && data && (
                 <DayModal
                     modalData={data[currentIndex]}
@@ -139,6 +138,7 @@ export default function MonthView() {
                     isNextDisabled={currentIndex === data.length - 1}
                 />
             )}
+            {isError && <ErrorModal error="Days" />}
         </Page>
     )
 }
