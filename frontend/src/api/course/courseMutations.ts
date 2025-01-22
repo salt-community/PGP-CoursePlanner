@@ -42,9 +42,9 @@ export function useMutationDeleteCourse() {
         mutationFn: (id: number) => {
             return deleteCourse(id);
         },
-        onSuccess: (_data, id) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["courses", id],
+                queryKey: ["courses"],
             });
             navigate(`/courses`);
         },
