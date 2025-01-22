@@ -2,9 +2,10 @@ import Page from "@components/Page";
 import { Link } from "react-router-dom";
 import { useQueryModules } from "@api/module/moduleQueries";
 import Header from "@components/Header";
+import ErrorModal from "@components/ErrorModal";
 
 export default function Modules() {
-    const { data: modules } = useQueryModules();
+    const { data: modules, isError } = useQueryModules();
 
     return (
         <Page>
@@ -30,6 +31,7 @@ export default function Modules() {
                     </Link>
                 )}
             </section>
+            {isError && <ErrorModal error="Modules" />}
         </Page>
     )
 }
