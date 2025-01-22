@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorMessage from "@components/ErrorMessage";
 import { useQueryCourses } from "@api/course/courseQueries";
+import ErrorModal from "@components/ErrorModal";
 
 export default function Courses() {
     const { data, isLoading, isError } = useQueryCourses();
@@ -26,6 +27,9 @@ export default function Courses() {
                     </Link>
                 )}
             </section>
+
+            {isError && <ErrorModal error="courses" />}
+
         </Page>
     )
 }
