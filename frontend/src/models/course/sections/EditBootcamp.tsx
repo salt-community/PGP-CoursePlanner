@@ -3,7 +3,7 @@ import { postCourseToGoogle } from "@api/googleCalendarFetches";
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import {  updatePreviewCalendarDates, getGoogleEventListForCourse, stripIdsFromCourse, moveModule, getCourseWithDates } from "../helpers/courseUtils";
+import { updatePreviewCalendarDates, getGoogleEventListForCourse, stripIdsFromCourse, moveModule, getCourseWithDates } from "../helpers/courseUtils";
 import { CourseType, ModuleType, CourseModuleType } from "../Types";
 import { InfoPanel } from "./InfoPanel";
 import MiniCalendar from "./MiniCalendar";
@@ -30,13 +30,17 @@ export function EditBootcamp({ course }: Props) {
 
     const navigate = useNavigate();
 
-    if (startDate !== course.startDate && course.isApplied ) {
+    if (startDate !== course.startDate && course.isApplied) {
         console.log("startdate: ", startDate, "course startdate:", course.startDate)
         setStartDate(course.startDate);
     }
 
-    const courseWithDates = getCourseWithDates(course, startDate)
-
+    let courseWithDates = null
+    if (course.isApplied) {
+        courseWithDates = course
+    } else {
+        courseWithDates = getCourseWithDates(course, startDate)
+    }
 
     const [previewCourse, setCourse] = useState<CourseType>(courseWithDates);
     const [previewCalendarDays, setPreviewCalendarDays] = useState(updatePreviewCalendarDates(previewCourse))
