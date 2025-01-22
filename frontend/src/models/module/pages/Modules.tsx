@@ -14,12 +14,11 @@ export default function Modules() {
                 <h1 className="text-3xl font-semibold">Modules</h1>
             </Header>
             <section className="flex flex-wrap gap-6 p-10 pt-0">
-                {modules &&
-                    <Link to={"/modules/create"} className="flex items-center justify-center bg-primary rounded-xl hover:bg-[#EF4E72] hover:cursor-pointer drop-shadow-xl text-white min-h-72 min-w-72">
-                        <div className="text-lg">
-                            Create new module
-                        </div>
-                    </Link>}
+                <Link to={"/modules/create"} className="flex items-center justify-center bg-primary rounded-xl hover:bg-[#EF4E72] hover:cursor-pointer drop-shadow-xl text-white min-h-72 min-w-72">
+                    <div className="text-lg">
+                        Create new module
+                    </div>
+                </Link>
                 {modules && modules.map((module, index) =>
                     <Link to={`/modules/details/${module.id}`} key={module.name + index} className={`flex items-center justify-center flex-col gap-2 relative ${isLoading ? "cursor-default pointer-events-none" : "hover:bg-[#F9F9F9]"} bg-white rounded-xl drop-shadow-xl min-h-72 min-w-72`}>
                         {isLoading ?
@@ -37,6 +36,19 @@ export default function Modules() {
                         }
                     </Link>
                 )}
+                {isLoading || !modules &&
+                    <>
+                        <div className={`flex items-center justify-center flex-col gap-2 relative bg-white rounded-xl drop-shadow-xl min-h-72 min-w-72`}>
+                            <LoadingSkeletonModule />
+                        </div>
+                        <div className={`flex items-center justify-center flex-col gap-2 relative bg-white rounded-xl drop-shadow-xl min-h-72 min-w-72`}>
+                            <LoadingSkeletonModule />
+                        </div>
+                        <div className={`flex items-center justify-center flex-col gap-2 relative bg-white rounded-xl drop-shadow-xl min-h-72 min-w-72`}>
+                            <LoadingSkeletonModule />
+                        </div>
+                    </>
+                }
             </section>
             {isError && <ErrorModal error="Modules" />}
         </Page>
