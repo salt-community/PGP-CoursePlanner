@@ -5,7 +5,7 @@ import Header from "@components/Header";
 
 export default function Modules() {
     const { data: modules } = useQueryModules();
-    console.log(modules)
+
     return (
         <Page>
             <Header>
