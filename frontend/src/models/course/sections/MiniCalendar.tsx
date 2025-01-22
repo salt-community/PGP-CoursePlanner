@@ -60,10 +60,12 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                 .map(d => getDateAsString(d.date))
                 .indexOf(getDateAsString(datum.date));
 
+            // const dcs = datum.dateContent.filter(dc => dc.appliedCourseId != previewCourse.id)
             const updatedDateContent = previewCalendarDaysIndex > -1
                 ? [
-                    ...datum.dateContent,
+                    
                     ...previewCalendarDays[previewCalendarDaysIndex].dateContent,
+                    ...datum.dateContent.filter(dc => dc.appliedCourseId != previewCourse.id),
                 ]
                 : datum.dateContent;
 
@@ -76,7 +78,7 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
         if (JSON.stringify(updatedData) !== JSON.stringify(calendarData)) {
             setCalendarData(updatedData);
         }
-    }, [data, previewCalendarDays, calendarData]);
+    }, [data, previewCalendarDays, calendarData, previewCourse.id]);
 
 
 
