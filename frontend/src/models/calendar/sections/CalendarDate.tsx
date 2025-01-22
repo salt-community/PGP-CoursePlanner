@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { today } from "@helpers/dateHelpers";
 import { DateContent } from "../Types";
-import LoadingSkeletonMonth from "../components/LoadingSkeletonMonth";
+import LoadingSkeletonDay from "../components/LoadingSkeletonDay";
 
 type Props = {
     dateContent: DateContent[];
@@ -46,7 +46,7 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
             </div>
             <div className="flex flex-col gap-1 w-full">
                 {isLoading ? (
-                    <LoadingSkeletonMonth />
+                    <LoadingSkeletonDay />
                 ) :
                     <>
                         {appliedCourseColors.length > 0 && appliedCourseColors.map((color, appliedCourseIndex) => (

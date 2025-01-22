@@ -1,4 +1,4 @@
-export default function LoadingSkeletonMonth() {
+export default function LoadingSkeletonDay() {
     return (
         <>
             <div className="skeleton h-4 rounded-md w-full"></div>
