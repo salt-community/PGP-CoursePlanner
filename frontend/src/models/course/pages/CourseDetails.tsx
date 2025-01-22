@@ -3,11 +3,11 @@ import ModuleDetails from "../sections/ModuleDetails";
 import { useIdFromPath } from "@helpers/helperHooks";
 import { useQueryCourseById, useQueryModulesByCourseId } from "@api/course/courseQueries";
 import LoadingMessage from "@components/LoadingMessage";
-import ErrorMessage from "@components/ErrorMessage";
 import DeleteBtn from "@components/buttons/DeleteBtn";
 import { Link } from "react-router-dom";
 import {  getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
 import DeployModal from "../sections/DeployModal";
+import ErrorModal from "@components/ErrorModal";
 
 export default function CourseDetails() {
   const courseId = useIdFromPath();
@@ -18,10 +18,6 @@ export default function CourseDetails() {
   // Loading or error state handling
   if (isLoadingCourse || isLoadingCourseModules) {
     return <LoadingMessage />;
-  }
-
-  if (isErrorCourse || isErrorCourseModules) {
-    return <ErrorMessage />;
   }
 
 
@@ -129,7 +125,7 @@ export default function CourseDetails() {
           </div>
         </section>
       }
-
+    { (isErrorCourse || isErrorCourseModules) && <ErrorModal error="Days" />}
     </Page>
   );
 }
