@@ -1,8 +1,8 @@
 import { TrackVisibilityContext } from "@context/TrackVisibilityContext";
-import { Track } from "@models/course/Types";
+import { CourseType, Track } from "@models/course/Types";
 import { CalendarDateType } from "@models/calendar/Types";
 import { ModuleType } from "@models/module/Types";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
 export function useFilterWeeksCalendar(data?: CalendarDateType[]) {
     const { trackVisibility } = useContext(TrackVisibilityContext);
@@ -37,20 +37,44 @@ export function useFilterMonthCalendar(data?: CalendarDateType[]) {
 export function useFilterModules(data?: ModuleType[]) {
     const { trackVisibility } = useContext(TrackVisibilityContext);
 
-    data = data?.map((c) => {
+    return data?.map((m) => {
         return {
-            id: c.id,
-            name: c.name,
-            numberOfDays: c.numberOfDays,
-            days: c.days,
-            order: c.order,
-            startDate: c.startDate,
-            isApplied: c.isApplied,
-            tracks: c.tracks.map((t) => {
-                const track = trackVisibility.find((item) => item.id === t.id);
+            id: m.id,
+            name: m.name,
+            numberOfDays: m.numberOfDays,
+            days: m.days,
+            order: m.order,
+            startDate: m.startDate,
+            isApplied: m.isApplied,
+            tracks: m.tracks.map((t) => {
+                const track = trackVisibility.find((track) => track.id === t.id);
                 return track as Track;
             })
         }
-    })
-    return data?.filter((module) => module.tracks.some((track) => track?.visibility ?? false));
+    }).filter((module) => module.tracks.some((track) => track?.visibility ?? false));
+}
+
+export function useFilterCourses(data?: CourseType[]) {
+    const { trackVisibility } = useContext(TrackVisibilityContext);
+
+    const filteredData = useMemo(() => {
+        if (!data) return [];
+        return data.map((c) => {
+            const track = trackVisibility.find((t) => t.id === c.track.id)
+            return {
+                id: c.id,
+                name: c.name,
+                startDate: c.startDate,
+                endDate: c.endDate,
+                numberOfWeeks: c.numberOfWeeks,
+                color: c.color,
+                moduleIds: c.moduleIds,
+                modules: c.modules,
+                isApplied: c.isApplied,
+                track: track ? track : c.track
+            }
+        }).filter((course) => course.track.visibility === true);
+    }, [data, trackVisibility]);
+
+    return filteredData;
 }

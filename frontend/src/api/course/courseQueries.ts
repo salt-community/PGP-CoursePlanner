@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getCourses, getCourseById, getModulesByCourseId } from "./courseFetches";
 import { ModuleType } from "@models/module/Types";
 import { useState } from "react";
+import { useFilterCourses } from "@helpers/filterDataHooks";
 
 export function useQueryCourses() {
     const { data, isLoading, isError } = useQuery<CourseType[]>({
@@ -17,7 +18,7 @@ export function useQueryCourses() {
         }, 500)
     }
 
-    return { data: data, isLoading: delayedLoading, isError };
+    return { data: useFilterCourses(data), isLoading: delayedLoading, isError };
 }
 
 export function useQueryCourseById(id: number) {
