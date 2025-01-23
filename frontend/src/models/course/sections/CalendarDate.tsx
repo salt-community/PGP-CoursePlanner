@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { today } from "@helpers/dateHelpers";
-import LoadingSkeletonMonth from "@models/calendar/components/LoadingSkeletonMonth";
+import LoadingSkeletonMonth from "@models/calendar/components/LoadingSkeletonDay";
 import { CourseType, ModuleType } from "../Types";
 import { DateContent } from "@models/calendar/Types";
 
