@@ -35,7 +35,7 @@ export default function Courses() {
                         {courses && courses.map((course, index) =>
                             course.track.name == trackName &&
                             <div key={index} className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
-                                {!isLoading ?
+                                {isLoading ?
                                     <LoadingSkeletonCourse />
                                     :
                                     <>
