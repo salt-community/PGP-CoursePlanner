@@ -27,7 +27,7 @@ export default function CourseCard({ data, isLoading, trackName, mutationDelete,
                                 </h3>
                                 {bootcamps &&
                                     <h3 className="text-lg p-6">
-                                        {new Date(course.startDate).toISOString().slice(0, 10)}
+                                        Starting Date: {new Date(course.startDate).toISOString().slice(0, 10)}
                                     </h3>
                                 }
                                 <h4 className="text-sm text-[#636363] text-end p-7 w-96">
