@@ -7,31 +7,39 @@ import { useContext, useMemo } from "react";
 export function useFilterWeeksCalendar(data?: CalendarDateType[]) {
     const { trackVisibility } = useContext(TrackVisibilityContext);
 
-    return data?.map((c) => {
-        return {
-            id: c.id,
-            date: c.date,
-            dateContent: c.dateContent.filter((d) => {
-                const track = trackVisibility.find((item) => item.id === d.track.id);
-                return track?.visibility;
-            })
-        }
-    })
+    const filteredData = useMemo(() => {
+        return data?.map((c) => {
+            return {
+                id: c.id,
+                date: c.date,
+                dateContent: c.dateContent.filter((d) => {
+                    const track = trackVisibility.find((item) => item.id === d.track.id);
+                    return track?.visibility;
+                })
+            }
+        })
+    }, [data, trackVisibility]);
+
+    return filteredData;
 }
 
 export function useFilterMonthCalendar(data?: CalendarDateType[]) {
     const { trackVisibility } = useContext(TrackVisibilityContext);
 
-    return data?.map((c) => {
-        return {
-            id: c.id,
-            date: c.date,
-            dateContent: c.dateContent.filter((d) => {
-                const track = trackVisibility.find((item) => item.id === d.track.id);
-                return track?.visibility;
-            })
-        }
-    })
+    const filteredData = useMemo(() => {
+        return data?.map((c) => {
+            return {
+                id: c.id,
+                date: c.date,
+                dateContent: c.dateContent.filter((d) => {
+                    const track = trackVisibility.find((item) => item.id === d.track.id);
+                    return track?.visibility;
+                })
+            }
+        })
+    }, [data, trackVisibility]);
+
+    return filteredData;
 }
 
 
@@ -39,7 +47,6 @@ export function useFilterModules(data?: ModuleType[]) {
     const { trackVisibility } = useContext(TrackVisibilityContext);
 
     const filteredData = useMemo(() => {
-        if (!data) return [];
         return data?.map((m) => {
             return {
                 id: m.id,
@@ -64,8 +71,7 @@ export function useFilterCourses(data?: CourseType[]) {
     const { trackVisibility } = useContext(TrackVisibilityContext);
 
     const filteredData = useMemo(() => {
-        if (!data) return [];
-        return data.map((c) => {
+        return data?.map((c) => {
             const track = trackVisibility.find((t) => t.id === c.track.id)
             return {
                 id: c.id,

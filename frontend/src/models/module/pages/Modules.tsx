@@ -36,16 +36,16 @@ export default function Modules() {
                         }
                     </Link>
                 )}
-                {!modules &&
+                {(!modules && isLoading) &&
                     <>
                         <div className={`flex items-center justify-center flex-col gap-2 relative bg-white rounded-xl drop-shadow-xl min-h-72 min-w-72`}>
-                            {isLoading && <LoadingSkeletonModule />}
+                            <LoadingSkeletonModule />
                         </div>
                         <div className={`flex items-center justify-center flex-col gap-2 relative bg-white rounded-xl drop-shadow-xl min-h-72 min-w-72`}>
-                            {isLoading && <LoadingSkeletonModule />}
+                            <LoadingSkeletonModule />
                         </div>
                         <div className={`flex items-center justify-center flex-col gap-2 relative bg-white rounded-xl drop-shadow-xl min-h-72 min-w-72`}>
-                            {isLoading && <LoadingSkeletonModule />}
+                            <LoadingSkeletonModule />
                         </div>
                     </>
                 }

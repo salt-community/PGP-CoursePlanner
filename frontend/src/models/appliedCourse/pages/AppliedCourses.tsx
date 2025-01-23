@@ -1,21 +1,19 @@
 import Page from "@components/Page";
-import DeleteBtn from "@components/buttons/DeleteBtn";
-import { Link } from "react-router-dom";
-import LoadingMessage from "@components/LoadingMessage";
-import ErrorMessage from "@components/ErrorMessage";
 import { useEffect, useState } from "react";
 import { CourseType } from "@models/course/Types";
 import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import { useMutationDeleteAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
-
-const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+import Header from "@components/Header";
+import CourseCard from "@components/CourseCard";
+import LoadingSkeletonCourse from "@models/course/components/LoadingSkeletonCourse";
+import ErrorModal from "@components/ErrorModal";
 
 export default function AppliedCourses() {
     const [activeCourses, setActiveCourses] = useState<CourseType[]>([]);
     const [pastCourses, setPastCourses] = useState<CourseType[]>([]);
     const [futureCourses, setFutureCourses] = useState<CourseType[]>([]);
     const { data: appliedCourses, isLoading, isError } = useQueryAppliedCourses();
-    const mutation = useMutationDeleteAppliedCourse();
+    const mutationDeleteAppliedCourse = useMutationDeleteAppliedCourse();
 
     useEffect(() => {
         if (appliedCourses) {
@@ -52,108 +50,48 @@ export default function AppliedCourses() {
 
     return (
         <Page>
-            <section className="px-4 pb-10 md:px-24 lg:px-56">
-                {isLoading && <LoadingMessage />}
-                {isError && <ErrorMessage />}
-                {appliedCourses
-                    && <>
-                        {appliedCourses && activeCourses.length > 0
-                            ? <>
-                                <h1 className="text-xl text-primary mb-2 font-bold">Active bootcamps</h1>
-                                {activeCourses.map((appliedCourse, index) =>
+            <Header>
+                <h1 className="text-3xl font-semibold">
+                    Bootcamps
+                </h1>
+            </Header>
 
-                                    <div key={index} className="border-primary border rounded-xl mb-2">
-                                        <div className="collapse-title flex flex-col w-full gap-4">
-                                            <Link to={`/activecourses/details/${appliedCourse.id}`} className="text-lg font-bold mb-2">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</Link>
-                                            <div className="flex flex-row">
-                                                <div className=" flex flex-row w-1/2">
-                                                    <h2 className=" text-lg flex items-center">Calendar color:
-                                                        <div style={{ backgroundColor: appliedCourse.color }} className="w-5 h-5 ml-2"></div>
-                                                    </h2>
-                                                </div>
-                                                <div className="w-1/2 flex flex-row items-end justify-end gap-12">
-                                                    <div className="flex flex-row gap-1">
-                                                        <Link to={`/activecourses/edit/${appliedCourse.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit</Link>
-                                                        <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                )}
-                                <div className="border border-1 border-gray-200 mt-6"></div>
-                            </>
-                            : <>
-                                <h1 className="text-xl font-bold text-primary mb-2">Active bootcamps</h1>
-                                <h1 className="text-lg">No active bootcamps</h1>
-                                <div className="border border-1 border-gray-200 mt-6"></div>
-                            </>}
-                        {appliedCourses && futureCourses.length > 0
-                            ? <>
-                                <h1 className="text-xl text-black mt-6 mb-2">Future bootcamps</h1>
-                                {futureCourses.map((appliedCourse, index) =>
-
-                                    <div key={index} className="border-black border rounded-xl mb-2">
-                                        <div className="collapse-title flex flex-col w-full gap-4">
-                                            <Link to={`/activecourses/details/${appliedCourse.id}`} className="text-lg font-bold mb-2">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</Link>
-                                            <div className="flex flex-row">
-                                                <div className=" flex flex-row w-1/2">
-                                                    <h2 className=" text-lg flex items-center">Calendar color:
-                                                        <div style={{ backgroundColor: appliedCourse.color }} className="w-5 h-5 ml-2"></div>
-                                                    </h2>
-                                                </div>
-                                                <div className="w-1/2 flex flex-row items-end justify-end gap-12">
-                                                    <div className="flex flex-row gap-1">
-                                                        <Link to={`/activecourses/edit/${appliedCourse.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit</Link>
-                                                        <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                )}
-                                <div className="border border-1 border-gray-200 mt-6"></div>
-                            </>
-                            : <>
-                                <h1 className="text-xl text-black mt-8 mb-2">Future bootcamps</h1>
-                                <h1 className="text-lg">No future bootcamps</h1>
-                                <div className="border border-1 border-gray-200 mt-6"></div>
-                            </>}
-                        {appliedCourses && pastCourses.length > 0
-                            ? <>
-                                <h1 className="text-xl text-black mt-6 mb-2">Completed bootcamps</h1>
-                                {pastCourses.map((appliedCourse, index) =>
-
-                                    <div key={index} className="border-black border rounded-xl mb-2">
-                                        <div className="collapse-title flex flex-col w-full gap-4">
-                                            <Link to={`/activecourses/details/${appliedCourse.id}`} className="text-lg font-bold mb-2">{appliedCourse.name} ({new Date(appliedCourse.startDate).getDate()} {monthNames[new Date(appliedCourse.startDate).getMonth()]} {new Date(appliedCourse.startDate).getFullYear()} - {new Date(appliedCourse.endDate!).getDate()} {monthNames[new Date(appliedCourse.endDate!).getMonth()]} {new Date(appliedCourse.endDate!).getFullYear()})</Link>
-                                            <div className="flex flex-row">
-                                                <div className=" flex flex-row w-1/2">
-                                                    <h2 className=" text-lg flex items-center">Calendar color:
-                                                        <div style={{ backgroundColor: appliedCourse.color }} className="w-5 h-5 ml-2"></div>
-                                                    </h2>
-                                                </div>
-                                                <div className="w-1/2 flex flex-row items-end justify-end gap-12">
-                                                    <div className="flex flex-row gap-1">
-                                                        <Link to={`/activecourses/edit/${appliedCourse.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit</Link>
-                                                        <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>Delete</DeleteBtn>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                )}
-                            </>
-                            : <>
-                                <h1 className="text-xl text-black mt-8 mb-2">Completed bootcamps</h1>
-                                <h1 className="text-lg">No completed bootcamps</h1>
-                            </>}
-                    </>
+            <section className="flex flex-col gap-4 p-10 pt-0">
+                <h2 className="text-2xl font-semibold mt-4 gap-4">Active Bootcamps</h2>
+                {activeCourses.length !== 0 ?
+                    <CourseCard data={activeCourses} isLoading={isLoading} bootcamps={true} mutationDelete={mutationDeleteAppliedCourse} />
+                    :
+                    <p className="text-lg ml-2">No Active Bootcamps</p>
+                }
+                {(!appliedCourses && isLoading) &&
+                    <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
+                        <LoadingSkeletonCourse />
+                    </div>
+                }
+                <h2 className="text-2xl font-semibold mt-4 gap-4">Upcoming Bootcamps</h2>
+                {futureCourses.length !== 0 ?
+                    <CourseCard data={futureCourses} isLoading={isLoading} bootcamps={true} mutationDelete={mutationDeleteAppliedCourse} />
+                    :
+                    <p className="text-lg ml-2">No Upcoming Bootcamps</p>
+                }
+                {(!appliedCourses && isLoading) &&
+                    <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
+                        <LoadingSkeletonCourse />
+                    </div>
+                }
+                <h2 className="text-2xl font-semibold mt-4 gap-4">Completed Bootcamps</h2>
+                {pastCourses.length !== 0 ?
+                    <CourseCard data={pastCourses} isLoading={isLoading} bootcamps={true} mutationDelete={mutationDeleteAppliedCourse} />
+                    :
+                    <p className="text-lg ml-2">No Completed Bootcamps</p>
+                }
+                {(!appliedCourses && isLoading) &&
+                    <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
+                        <LoadingSkeletonCourse />
+                    </div>
                 }
             </section>
+            {isError && <ErrorModal error="Bootcamps" />}
         </Page >
     )
 }
