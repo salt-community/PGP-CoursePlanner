@@ -39,7 +39,6 @@ export function useFilterModules(data?: ModuleType[]) {
     const { trackVisibility } = useContext(TrackVisibilityContext);
 
     const filteredData = useMemo(() => {
-        if (!data) return [];
         return data?.map((m) => {
             return {
                 id: m.id,
@@ -64,8 +63,7 @@ export function useFilterCourses(data?: CourseType[]) {
     const { trackVisibility } = useContext(TrackVisibilityContext);
 
     const filteredData = useMemo(() => {
-        if (!data) return [];
-        return data.map((c) => {
+        return data?.map((c) => {
             const track = trackVisibility.find((t) => t.id === c.track.id)
             return {
                 id: c.id,

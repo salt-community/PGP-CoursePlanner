@@ -31,22 +31,22 @@ export default function Courses() {
                         Create new course
                     </div>
                 </Link>
-                {trackNames.map((trackName) =>
+                {courses && trackNames.map((trackName) =>
                     <Fragment key={trackName}>
                         <h2 className="text-2xl font-semibold mt-4">{trackName}</h2>
                         <CourseCard data={courses} isLoading={isLoading} trackName={trackName} mutationDelete={mutationDeleteCourse} />
                     </Fragment>
                 )}
-                {!courses &&
+                {(!courses && isLoading) &&
                     <>
                         <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
-                            {isLoading && <LoadingSkeletonCourse />}
+                            <LoadingSkeletonCourse />
                         </div>
                         <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
-                            {isLoading && <LoadingSkeletonCourse />}
+                            <LoadingSkeletonCourse />
                         </div>
                         <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
-                            {isLoading && <LoadingSkeletonCourse />}
+                            <LoadingSkeletonCourse />
                         </div>
                     </>
                 }

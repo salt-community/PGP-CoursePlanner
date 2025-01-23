@@ -63,9 +63,9 @@ export default function AppliedCourses() {
                     :
                     <p className="text-lg ml-2">No Active Bootcamps</p>
                 }
-                {!appliedCourses &&
+                {(!appliedCourses && isLoading) &&
                     <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
-                        {isLoading && <LoadingSkeletonCourse />}
+                        <LoadingSkeletonCourse />
                     </div>
                 }
                 <h2 className="text-2xl font-semibold mt-4 gap-4">Upcoming Bootcamps</h2>
@@ -74,9 +74,9 @@ export default function AppliedCourses() {
                     :
                     <p className="text-lg ml-2">No Upcoming Bootcamps</p>
                 }
-                {!appliedCourses &&
+                {(!appliedCourses && isLoading) &&
                     <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
-                        {isLoading && <LoadingSkeletonCourse />}
+                        <LoadingSkeletonCourse />
                     </div>
                 }
                 <h2 className="text-2xl font-semibold mt-4 gap-4">Completed Bootcamps</h2>
@@ -85,9 +85,9 @@ export default function AppliedCourses() {
                     :
                     <p className="text-lg ml-2">No Completed Bootcamps</p>
                 }
-                {!appliedCourses &&
+                {(!appliedCourses && isLoading) &&
                     <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
-                        {isLoading && <LoadingSkeletonCourse />}
+                        <LoadingSkeletonCourse />
                     </div>
                 }
             </section>
