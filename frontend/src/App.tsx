@@ -23,6 +23,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import AppliedCourseDetails from './models/appliedCourse/pages/AppliedCourseDetails.tsx'
 import { TrackVisibilityContext } from './context/TrackVisibilityContext.tsx'
 import { TrackVisibility } from '@helpers/localStorage.ts'
+import Tracks from '@models/track/pages/Tracks.tsx'
+import TrackDetails from '@models/track/pages/TrackDetails.tsx'
 
 const router = createBrowserRouter([
   {
@@ -103,11 +105,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/tracks",
-    element: <></>
+    element: <Tracks />
   },
   {
     path: "/tracks/details/*",
-    element: <></>
+    element: <TrackDetails />
   }
 ]);
 
