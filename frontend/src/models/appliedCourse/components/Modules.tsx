@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { CourseType, DayType } from "@models/course/Types";
+import { CourseType, DayType, ModuleType } from "@models/course/Types";
 import DotsIcon from "./DotsIcon";
 import TrashIcon from "./TrashIcon";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import Days from "./Days";
+import { getNewDate } from "@models/course/helpers/courseUtils";
 
 interface ModulesProps {
   course: CourseType;
@@ -72,14 +73,21 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
 };
 
 const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
+
+  const myModule : ModuleType= {...course.modules[moduleIndex].module}
+
   const newDay: DayType = {
       id: 0,
       dayNumber: numberOfDays + 1,
       description: "New day",
       isApplied: true,
       events: [],
-      date: new Date('2025-02-02').toISOString()
+      date: getNewDate(myModule.startDate, myModule.numberOfDays +2)
+      
   };
+
+  myModule.days.push(newDay)
+  myModule.numberOfDays +=1
 
   const updatedCourse = {
       ...course, 
@@ -88,11 +96,11 @@ const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
               return {
                   ...module,
                   module: {
-                      ...module.module,
-                      days: [...module.module.days, newDay],
+                      ...myModule
                   },
               };
           }
+           console.log(module)
           return module;
       }),
   };

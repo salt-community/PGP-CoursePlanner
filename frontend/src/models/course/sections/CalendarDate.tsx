@@ -1,11 +1,13 @@
 import { format } from "date-fns";
 import { today } from "@helpers/dateHelpers";
-import LoadingSkeletonMonth from "@models/calendar/components/LoadingSkeletonDay";
-import { CourseType, DateContentModified, ModuleType } from "../Types";
+import LoadingSkeletonMonth from "@models/calendar/components/LoadingSkeletonMonth";
+import { CourseType, ModuleType } from "../Types";
+import { DateContent } from "@models/calendar/Types";
+
 
 
 type Props = {
-    dateContent: DateContentModified[];
+    dateContent: DateContent[];
     date: string;
     indexForModal: number;
     openModal: (index: number) => void;
@@ -37,6 +39,7 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
     const appliedModules: string[] = []
     const appliedModuleIds: number[] = []
 
+
     dateContent.forEach(dc => {
         if (appliedCourseIds.filter(id => id == dc.appliedCourseId!).length == 0) {
             appliedCourseIds.push(dc.appliedCourseId!)
@@ -53,6 +56,8 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
             }
         }
     });
+
+
 
     const updateSelectedModule = (moduleId: number) => {
         console.log(moduleId)

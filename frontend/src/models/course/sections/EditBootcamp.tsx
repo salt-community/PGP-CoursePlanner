@@ -3,11 +3,12 @@ import { postCourseToGoogle } from "@api/googleCalendarFetches";
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { calculateCourseDayDates, updatePreviewCalendarDates, getGoogleEventListForCourse, stripIdsFromCourse, moveModule } from "../helpers/courseUtils";
-import { CourseType, ModuleType, CalendarDateType, CourseModuleType } from "../Types";
-import EditCourseDays from "./EditCourseDays";
+import { updatePreviewCalendarDates, getGoogleEventListForCourse, stripIdsFromCourse, moveModule, getCourseWithDates } from "../helpers/courseUtils";
+import { CourseType, ModuleType, CourseModuleType } from "../Types";
 import { InfoPanel } from "./InfoPanel";
 import MiniCalendar from "./MiniCalendar";
+import { EditCourseDays } from "@models/appliedCourse/sections/EditCourseDays";
+import { CalendarDateType } from "@models/calendar/Types";
 
 type Props = {
     course: CourseType,
@@ -29,17 +30,34 @@ export function EditBootcamp({ course }: Props) {
 
     const navigate = useNavigate();
 
-    calculateCourseDayDates(course, startDate)
-    const [previewCourse, setCourse] = useState<CourseType>(course);
+    if (startDate !== course.startDate && course.isApplied) {
+        console.log("startdate: ", startDate, "course startdate:", course.startDate)
+        setStartDate(course.startDate);
+    }
+
+    let courseWithDates = null
+    if (course.isApplied) {
+        courseWithDates = course
+    } else {
+        courseWithDates = getCourseWithDates(course, startDate)
+    }
+
+    const [previewCourse, setCourse] = useState<CourseType>(courseWithDates);
     const [previewCalendarDays, setPreviewCalendarDays] = useState(updatePreviewCalendarDates(previewCourse))
 
+    // const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[0].module);
     const [selectedModule, setSelectedModule] = useState<ModuleType>(previewCourse.modules[0].module);
+
     const [selectedDate, setSelectedDate] = useState<CalendarDateType>({ date: (new Date()), dateContent: [] })
+
+    const [toggle, setToggle] = useState<string>("info")
 
 
     useEffect(() => {
-        const updatedDays = calculateCourseDayDates(previewCourse, startDate);
+        console.log("update", previewCourse)
+        const updatedDays = updatePreviewCalendarDates(previewCourse);
         setPreviewCalendarDays(updatedDays);
+
     }, [previewCourse, startDate]);
 
 
@@ -91,35 +109,40 @@ export function EditBootcamp({ course }: Props) {
         setSelectedModule(newModule)
     }
 
-    console.log(watch("isDeployingToGoogle"))
 
     return (
         <>
-                <div className="modal-box flex flex-col h-[80vh] w-full max-w-5xl">
+            <div className="flex flex-col h-[80vh] max-w-full">
+                <br />
+                <section className="flex flex-grow">
 
-                    <br />
-                    <section className="flex flex-grow">
-
-                        <div className="flex-grow overflow-auto">
-                            <MiniCalendar previewCourse={previewCourse} startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedDate} setSelectedModuleStartDate={setSelectedDate} setSelectedModule={setSelectedModule} />
-                        </div>
-                        <InfoPanel selectedModule={selectedModule} selectedDate={selectedDate} handleMoveModule={handleMoveModule} />
-                        <EditCourseDays course={previewCourse} setCourse={setCourse} />
-                    </section>
-                    <div className="modal-action">
-                        <form method="dialog" className="flex gap-5 justify-center" >
-                            <button className="btn">Cancel</button>
-                            <div className="flex flex-col">
-                                <label>add to google calendar<input type="checkbox"  {...register("isDeployingToGoogle", { required: false })}></input></label>
-                                {watch("isDeployingToGoogle") && <label>Group email <input type="email" defaultValue={""} {...register("groupEmail", { required: false })}></input></label>}
-
-                            </div>
-                            <button className="btn btn-primary" type="submit" onClick={handleSubmit(onSubmit)}>Deploy Bootcamp</button>
-
-
-                        </form>
+                    <div className="flex-grow overflow-auto">
+                        <MiniCalendar previewCourse={previewCourse} startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedDate} setSelectedModuleStartDate={setSelectedDate} setSelectedModule={setSelectedModule} />
                     </div>
+                    <div className="flex flex-col w-2/5">
+                        <div className="flex">
+                            <button className="btn w-1/3" onClick={() => setToggle("info")}>Info</button>
+                            <button className="btn w-1/3" onClick={() => setToggle("edit")}>Edit</button>
+                            <button className="btn w-1/3">Nothing</button>
+                        </div>
+                        {toggle == "info" && <InfoPanel selectedModule={selectedModule} selectedDate={selectedDate} handleMoveModule={handleMoveModule} />}
+                        {toggle == "edit" && <EditCourseDays appliedCourse={course} course={previewCourse} setCourse={setCourse} />}
+                    </div>
+                </section>
+                <div className="modal-action">
+                    <form method="dialog" className="flex gap-5 justify-center" >
+                        <button className="btn">Cancel</button>
+                        <div className="flex flex-col">
+                            <label>add to google calendar<input type="checkbox"  {...register("isDeployingToGoogle", { required: false })}></input></label>
+                            {watch("isDeployingToGoogle") && <label>Group email <input type="email" defaultValue={""} {...register("groupEmail", { required: false })}></input></label>}
+
+                        </div>
+                        <button className="btn btn-primary" type="submit" onClick={handleSubmit(onSubmit)}>Deploy Bootcamp</button>
+
+
+                    </form>
                 </div>
+            </div>
 
         </>
     )

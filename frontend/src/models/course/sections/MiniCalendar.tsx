@@ -5,10 +5,10 @@ import { useEffect, useState } from "react"
 import { firstDayOfMonth, allDaysInInterval, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
-import { CalendarDateType, CourseType, DateContentModified, ModuleType } from "../Types"
+import { CourseType, ModuleType } from "../Types"
 import CalendarDate from "./CalendarDate"
-import { DateContent } from "@models/calendar/Types"
-import { datePickerToolbarClasses } from "@mui/x-date-pickers"
+import { CalendarDateType } from "@models/calendar/Types"
+// import { datePickerToolbarClasses } from "@mui/x-date-pickers"
 
 type Props = {
     startDate: Date
@@ -22,8 +22,8 @@ type Props = {
 }
 
 export default function MiniCalendar({ startDate, previewCalendarDays, selectedModule, selectedModuleStartDate, setSelectedModuleStartDate, previewCourse, setSelectedModule }: Props) {
-    const [month, setMonth] = useState<number>(startDate.getMonth());
-    const [year, setYear] = useState<number>(startDate.getFullYear());
+    const [month, setMonth] = useState<number>(getMonth(startDate));
+    const [year, setYear] = useState<number>(getYear(startDate));
     const [calendarData, setCalendarData] = useState<CalendarDateType[]>([]);
 
     const startOfMonth = firstDayOfMonth(month, year);
@@ -44,13 +44,6 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
     const { data, isLoading, isError, } = useQueryCalendarDateBatch(startOfMonthFormatted, endOfMonthFormatted);
 
-    const transformDateContent = (content: DateContent[]): DateContentModified[] => {
-        return content.map(item => ({
-            ...item,
-            moduleId: item.moduleId ? item.moduleId : -1,
-        }));
-    };
-
     useEffect(() => {
         if (!data || !previewCalendarDays) return;
 
@@ -60,23 +53,25 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                 .map(d => getDateAsString(d.date))
                 .indexOf(getDateAsString(datum.date));
 
+            // const dcs = datum.dateContent.filter(dc => dc.appliedCourseId != previewCourse.id)
             const updatedDateContent = previewCalendarDaysIndex > -1
                 ? [
-                    ...datum.dateContent,
+                    
                     ...previewCalendarDays[previewCalendarDaysIndex].dateContent,
+                    ...datum.dateContent.filter(dc => dc.appliedCourseId != previewCourse.id),
                 ]
-                : datum.dateContent;
+                : datum.dateContent.filter(dc => dc.appliedCourseId != previewCourse.id);
 
             return {
                 ...datum,
-                dateContent: transformDateContent(updatedDateContent),
+                dateContent: (updatedDateContent),
             };
         });
 
         if (JSON.stringify(updatedData) !== JSON.stringify(calendarData)) {
             setCalendarData(updatedData);
         }
-    }, [data, previewCalendarDays, calendarData]);
+    }, [data, previewCalendarDays, calendarData, previewCourse.id]);
 
 
 

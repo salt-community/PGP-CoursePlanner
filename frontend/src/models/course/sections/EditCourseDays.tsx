@@ -10,7 +10,6 @@ type Props = {
 
 
 export default function EditCourseDays({ course, setCourse }: Props) {
- 
     const handleCreateNewAppliedModule = () => {
         const newModule: CourseModuleType = {
             courseId: course.id || 0,
@@ -23,6 +22,7 @@ export default function EditCourseDays({ course, setCourse }: Props) {
                 isApplied: false,
                 numberOfDays: 0,
                 days: [],
+                startDate: course.endDate!
             }
         };
 

@@ -8,7 +8,7 @@ export type CalendarDateType = {
 }
 
 export type DateContent = {
-    moduleId?: number;
+    moduleId: number;
     appliedCourseId?: number;
     id?: number;
     track: Track;

@@ -33,7 +33,7 @@ export type ModuleType = {
   order: number;
   isApplied: boolean;
   days: DayType[];
-  courseModules?: CourseModuleType[];
+  // courseModules?: CourseModuleType[];
   startDate: Date
 }
 
@@ -60,23 +60,4 @@ export type Track = {
 export type CourseProps = {
   course: CourseType;
   buttonText: string;
-}
-
-export type CalendarDateType = {
-  id?: number;
-  date: Date;
-  dateContent: DateContentModified[];
-}
-
-export type DateContentModified = {
-  appliedCourseId?: number;
-  id?: number;
-  track: Track;
-  moduleName?: string;
-  dayOfModule: number;
-  totalDaysInModule: number;
-  courseName: string;
-  events: EventType[];
-  color: string
-  moduleId: number;
 }

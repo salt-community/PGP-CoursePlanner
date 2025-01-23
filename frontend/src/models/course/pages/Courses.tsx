@@ -2,6 +2,7 @@ import Page from "@components/Page";
 import { Link } from "react-router-dom";
 import { useQueryCourses } from "@api/course/courseQueries";
 import ErrorModal from "@components/ErrorModal";
+
 import Header from "@components/Header";
 import { Fragment, useMemo, useState } from "react";
 import { useMutationDeleteCourse } from "@api/course/courseMutations";
@@ -55,6 +56,7 @@ export default function Courses() {
                     </Fragment>
                 )}
             </section>
+
             {isError && <ErrorModal error="Courses" />}
         </Page>
     )

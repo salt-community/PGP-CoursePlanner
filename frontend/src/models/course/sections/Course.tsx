@@ -11,6 +11,7 @@ import { useQueryTracks } from "@api/track/trackQueries";
 
 import { useForm, SubmitHandler } from "react-hook-form"
 import LoadingMessage from "@components/LoadingMessage";
+import ErrorModal from "@components/ErrorModal";
 
 type Inputs = {
     courseName: string;
@@ -210,7 +211,7 @@ export default function Course({ course }: CourseProps) {
                     </form>
                 </div>
             }
-
+        {isErrorTracks && <ErrorModal error="Tracks" />}
         </>
     );
 }
