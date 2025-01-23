@@ -78,7 +78,7 @@ export default function Week({ data, isNextWeek, isCalendarLoading }: WeekProps)
                     {format(formattedDay, "EEEE")}<br />
                     {day.getDate()} {monthNames[day.getMonth()]}
                 </h2>
-                {isCalendarLoading ?
+                {isCalendarLoading || (!data && isCalendarLoading) ?
                     <LoadingSkeletonDay />
                     :
                     <>
