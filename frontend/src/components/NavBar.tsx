@@ -16,7 +16,7 @@ type Props = {
 export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [bootcampDetailsIsActive, setBootcampDetailsIsActive] = useState(false);
+  const [bootcampIsActive, setBootcampIsActive] = useState(false);
   const { data } = useQueryAppliedCourses();
   const { data: tracks } = useQueryTracks();
   const { trackVisibility, setTrackVisibility } = useContext(TrackVisibilityContext);
@@ -41,10 +41,10 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
   }, [data]);
 
   useMemo(() => {
-    if (location.pathname.includes('/activecourses/details/')) {
-      setBootcampDetailsIsActive(true);
+    if (location.pathname.includes('/activecourses/details/') || location.pathname.includes('/activecourses/edit/')) {
+      setBootcampIsActive(true);
     } else if (location.pathname === '/activecourses') {
-      setBootcampDetailsIsActive(false);
+      setBootcampIsActive(false);
     }
   }, [location.pathname]);
 
@@ -111,7 +111,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
         <li className="hover:rounded-none">
           <NavLink
             to="/activecourses"
-            className={({ isActive }) => isActive && !bootcampDetailsIsActive ? "flex pl-6 text-xl bg-primary-content rounded-none" : "flex pl-6 text-xl rounded-none"}>
+            className={({ isActive }) => isActive && !bootcampIsActive ? "flex pl-6 text-xl bg-primary-content rounded-none" : "flex pl-6 text-xl rounded-none"}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
             </svg>
@@ -135,7 +135,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
           <li className="hover:rounded-none" key={course.id}>
             <NavLink
               to={`/activecourses/details/${course.id}`}
-              className={({ isActive }) => isActive && bootcampDetailsIsActive ? "flex pl-6 text-xl bg-primary-content rounded-none" : "flex pl-6 text-xl rounded-none"}>
+              className={({ isActive }) => isActive || (bootcampIsActive && (location.pathname.includes(`/activecourses/details/${course.id}`) || location.pathname.includes(`/activecourses/edit/${course.id}`))) ? "flex pl-6 text-xl bg-primary-content rounded-none" : "flex pl-6 text-xl rounded-none"}>
               <div className="p-2.5 m-1 mask rounded border-2 border-white" style={{ backgroundColor: course.color }}></div>
               {isSidebarExpanded && course.name}
             </NavLink>

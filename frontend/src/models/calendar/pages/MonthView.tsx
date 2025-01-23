@@ -5,7 +5,7 @@ import { Fragment, useState } from "react"
 import CalendarDate from "../sections/CalendarDate"
 import { useNavigate } from "react-router-dom"
 import { firstDayOfMonth, allDaysInInterval, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
-import { format, getMonth, getWeek, getYear} from "date-fns"
+import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useMonthFromPath, useYearFromPath } from "@helpers/helperHooks"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
 import { trackUrl } from "@helpers/helperMethods"
@@ -98,6 +98,8 @@ export default function MonthView() {
                     <h1 className="text-3xl font-semibold">{monthInText} {year}</h1>
                     <select className="select select-bordered select-sm max-w-xs ">
                         <option disabled selected>Month</option>
+                        <option>Week</option>
+                        <option>Year</option>
                     </select>
                 </div>
             </Header>
@@ -120,13 +122,12 @@ export default function MonthView() {
                         <Fragment key={format(thisDate, 'yyyy-MM-dd')}>
                             {weekNumber && <p className="bg-accent col-start-1 col-end-2 min-w-8 p-1 h-full text-lg text-center border-t-[0.5px] border-r-[0.5px] border-gray-100">{weekNumber}</p>}
                             <div className="flex flex-col">
-                                {data && data[dateIndex] !== null ? <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} date={getDateAsString(thisDate)} />
-                                    : <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={[]} date={getDateAsString(thisDate)} />}
+                                {data && data[dateIndex] !== null ? <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={data[dateIndex].dateContent} date={getDateAsString(thisDate)} data={data} />
+                                    : <CalendarDate isLoading={isLoading} openModal={openModal} indexForModal={dateIndex} dateContent={[]} date={getDateAsString(thisDate)} data={data} />}
                             </div>
                         </Fragment>)
                 })}
             </section>
-            {isError && <ErrorModal error="Days" />}
             {currentIndex !== null && data && (
                 <DayModal
                     modalData={data[currentIndex]}
@@ -137,6 +138,7 @@ export default function MonthView() {
                     isNextDisabled={currentIndex === data.length - 1}
                 />
             )}
+            {isError && <ErrorModal error="Days" />}
         </Page>
     )
 }

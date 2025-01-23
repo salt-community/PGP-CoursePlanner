@@ -6,6 +6,7 @@ import ErrorMessage from "@components/ErrorMessage";
 import { useQueryCourses } from "@api/course/courseQueries";
 import { useQueryModuleById } from "@api/module/moduleQueries";
 import { useMutationDeleteModule } from "@api/module/moduleMutations";
+import ErrorModal from "@components/ErrorModal";
 
 export default function ModuleDetails() {
     const moduleId = useIdFromPath();
@@ -36,16 +37,12 @@ export default function ModuleDetails() {
         <Page>
             {isLoading && <LoadingMessage />}
             {isError && <ErrorMessage />}
-            {module && module.track &&
+            {module &&
                 <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
                     <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
                         <section className="flex items-center flex-col gap-4 px-1 sm:p-0">
                             <div className="flex flex-col items-center">
                                 <h1 className="pb-0 text-xl text-primary font-bold">{module.name}</h1>
-                                {module.track.length > 0
-                                    ? <p className="pb-4 text-lg font-medium">Track: {module.track.join(', ')}</p>
-                                    : <p className="pb-4 text-lg font-medium">Track: not selected</p>
-                                }
                             </div>
                             {module.days.map((day) =>
                                 <div className="w-full" key={"day_" + day.dayNumber}>
@@ -92,6 +89,7 @@ export default function ModuleDetails() {
                     </div>
                 </section>
             }
+            {isError && <ErrorModal error="Module" />}
         </Page>
     )
 }

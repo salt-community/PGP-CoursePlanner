@@ -5,6 +5,7 @@ import { CourseType, ModuleType } from "../Types";
 import { DateContent } from "@models/calendar/Types";
 
 
+
 type Props = {
     dateContent: DateContent[];
     date: string;
