@@ -44,13 +44,6 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
     const { data, isLoading, isError, } = useQueryCalendarDateBatch(startOfMonthFormatted, endOfMonthFormatted);
 
-    // const transformDateContent = (content: DateContent[]): DateContent[] => {
-    //     return content.map(item => ({
-    //         ...item,
-    //         moduleId: item.moduleId ? item.moduleId : -1,
-    //     }));
-    // };
-
     useEffect(() => {
         if (!data || !previewCalendarDays) return;
 
