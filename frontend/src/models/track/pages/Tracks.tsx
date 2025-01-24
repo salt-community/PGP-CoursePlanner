@@ -11,7 +11,9 @@ export default function Track() {
     return (
         <Page>
             <Header>
-                <h1 className="text-3xl font-semibold">Track Templates</h1>
+                <h1 className="text-3xl font-semibold">
+                    Track Templates
+                </h1>
             </Header>
             <section className="flex flex-wrap gap-6 p-10 pt-0">
                 <Link to={"/tracks/create"} className="flex items-center justify-center bg-primary rounded-xl hover:bg-[#EF4E72] drop-shadow-xl text-white min-h-72 min-w-72">

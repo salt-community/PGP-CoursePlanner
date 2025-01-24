@@ -57,33 +57,45 @@ export default function AppliedCourses() {
             </Header>
 
             <section className="flex flex-col gap-4 p-10 pt-0">
-                <h2 className="text-2xl font-semibold mt-4 gap-4">Active Bootcamps</h2>
+                <h2 className="text-2xl font-semibold mt-4 gap-4">
+                    Active Bootcamps
+                </h2>
                 {activeCourses.length !== 0 ?
                     <RectangularCard data={activeCourses} isLoading={isLoading} bootcamps={true} mutationDelete={mutationDeleteAppliedCourse} />
                     :
-                    <p className="text-lg ml-2">No Active Bootcamps</p>
+                    <p className="text-lg ml-2">
+                        No Active Bootcamps
+                    </p>
                 }
                 {(!appliedCourses && isLoading) &&
                     <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
                         <LoadingSkeletonCourse />
                     </div>
                 }
-                <h2 className="text-2xl font-semibold mt-4 gap-4">Upcoming Bootcamps</h2>
+                <h2 className="text-2xl font-semibold mt-4 gap-4">
+                    Upcoming Bootcamps
+                </h2>
                 {futureCourses.length !== 0 ?
                     <RectangularCard data={futureCourses} isLoading={isLoading} bootcamps={true} mutationDelete={mutationDeleteAppliedCourse} />
                     :
-                    <p className="text-lg ml-2">No Upcoming Bootcamps</p>
+                    <p className="text-lg ml-2">
+                        No Upcoming Bootcamps
+                    </p>
                 }
                 {(!appliedCourses && isLoading) &&
                     <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
                         <LoadingSkeletonCourse />
                     </div>
                 }
-                <h2 className="text-2xl font-semibold mt-4 gap-4">Completed Bootcamps</h2>
+                <h2 className="text-2xl font-semibold mt-4 gap-4">
+                    Completed Bootcamps
+                </h2>
                 {pastCourses.length !== 0 ?
                     <RectangularCard data={pastCourses} isLoading={isLoading} bootcamps={true} mutationDelete={mutationDeleteAppliedCourse} />
                     :
-                    <p className="text-lg ml-2">No Completed Bootcamps</p>
+                    <p className="text-lg ml-2">
+                        No Completed Bootcamps
+                    </p>
                 }
                 {(!appliedCourses && isLoading) &&
                     <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
