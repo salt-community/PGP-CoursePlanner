@@ -1,6 +1,6 @@
 import Login from "@models/login/Login";
 import { getCookie, setCookie } from "@helpers/cookieHelpers";
-import { useQueryToken, useRefrehToken } from "@api/user/userQueries";
+import { useQueryToken } from "@api/user/userQueries";
 import NavBar from "./NavBar";
 import { useEffect, useState } from "react";
 
@@ -20,7 +20,7 @@ export default function Page({ children }: Props) {
     localStorage.setItem("isSidebarExpanded", JSON.stringify(isSidebarExpanded));
   }, [isSidebarExpanded]);
 
-   useQueryToken();
+  useQueryToken();
 
   if (location.search) {
     const authCode = new URLSearchParams(location.search).get('code');
@@ -28,8 +28,6 @@ export default function Page({ children }: Props) {
       setCookie("auth_code", authCode);
     }
   }
-
-    //  useRefrehToken()
 
   return (
     <>
