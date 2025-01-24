@@ -11,7 +11,7 @@ type Props = {
     bootcamps?: boolean
 }
 
-export default function CourseCard({ data, isLoading, trackName, mutationDelete, bootcamps }: Props) {
+export default function RectangularCard({ data, isLoading, trackName, mutationDelete, bootcamps }: Props) {
     return (
         <>
             {data && data.map((course, index) =>
@@ -22,9 +22,12 @@ export default function CourseCard({ data, isLoading, trackName, mutationDelete,
                         :
                         <>
                             <Link to={`/courses/details/${course.id}`} key={course.name + index} className={`flex justify-between items-center w-full rounded-l-md ${isLoading ? "cursor-default pointer-events-none" : "hover:bg-[#F9F9F9]"}`}>
-                                <h3 className="text-lg p-6 w-96">
-                                    {course.name}
-                                </h3>
+                                <div className="flex gap-2 p-6 w-96">
+                                    <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: course.color }}></div>
+                                    <h3 className="text-lg">
+                                        {course.name}
+                                    </h3>
+                                </div>
                                 {bootcamps &&
                                     <h3 className="text-lg p-6">
                                         Starting Date: {new Date(course.startDate).toISOString().slice(0, 10)}
