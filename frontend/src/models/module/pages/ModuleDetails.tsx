@@ -24,13 +24,8 @@ export default function ModuleDetails() {
     }
 
     const handleDelete = (id: number) => {
-        if (!usedModules.find(m => m == id)) {
-            mutation.mutate(id);
-        }
-        else {
-            document.getElementById("invalid-module-delete")?.classList.remove("hidden");
-            return;
-        }
+        mutation.mutate(id);
+        document.getElementById("invalid-module-delete")?.classList.remove("hidden");
     }
 
     return (
