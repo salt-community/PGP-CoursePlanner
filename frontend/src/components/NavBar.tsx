@@ -7,6 +7,7 @@ import { useQueryTracks } from "@api/track/trackQueries";
 import { getStorageTrackVisibility, initialStorageTrackVisibility, updateStorageTrackVisibility } from "@helpers/localStorage";
 import VisibilityButton from "./VisibilityButton";
 import { TrackVisibilityContext } from "../context/TrackVisibilityContext";
+import { refreshToken } from "@api/user/userFetches";
 
 type Props = {
   isSidebarExpanded: boolean,
@@ -182,6 +183,8 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
           <VisibilityButton key={t.id} id={t.id} color={t.color} visibility={t.visibility} handleTrackVisibility={handleTrackVisibility} />
         ))}
       </div>
+
+      <button className="btn btn-secondary mx-10 mt-2" onClick={() => refreshToken().then(data => console.log(data))}>RefreshToken</button> 
 
       <div className="m-4 overflow-hidden">
         <button className={`btn btn-secondary min-h-10 h-10 w-full text-xl p-0 flex-nowrap ${isSidebarExpanded && "min-w-32"}`} onClick={handleLogOut}>

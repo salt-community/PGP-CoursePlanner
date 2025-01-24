@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-
-
 namespace backend.Controllers
 {
     [ApiController]
@@ -32,7 +30,6 @@ namespace backend.Controllers
 
             var parameters = new Dictionary<string, string>
         {
-
             {"grant_type", "authorization_code"},
             {$"code", code},
             {$"client_id", ClientId},
@@ -41,11 +38,9 @@ namespace backend.Controllers
         };
 
             var encodedParameters = new FormUrlEncodedContent(parameters);
-            var paramText = await encodedParameters.ReadAsStringAsync();
 
             request.Content = encodedParameters;
             request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-
 
             var response = await client.SendAsync(request);
 
@@ -59,7 +54,6 @@ namespace backend.Controllers
             var errorData = JsonConvert.DeserializeObject<GoogleErrorResponse>
                 (await response.Content.ReadAsStringAsync());
             throw new BadRequestInvalidGrantException($"Error: {errorData!.Error} Description: {errorData.Error_Description}");
-
         }
 
         private async Task<ActionResult<TokenResponse>> RefreshTokensFromGoogle(string Url, string Refresh_token, string ClientId, string ClientSecret)
@@ -68,21 +62,18 @@ namespace backend.Controllers
 
             var request = new HttpRequestMessage(HttpMethod.Post, Url);
 
-
             var parameters = new Dictionary<string, string>
-        {
-
+            {
             {"grant_type", "refresh_token"},
             {$"client_id", ClientId},
             {$"client_secret", ClientSecret},
             {$"refresh_token", Refresh_token}
-        };
+            };
 
             var encodedParameters = new FormUrlEncodedContent(parameters);
 
             request.Content = encodedParameters;
             request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-
 
             var response = await client.SendAsync(request);
 
@@ -96,12 +87,10 @@ namespace backend.Controllers
             var errorData = JsonConvert.DeserializeObject<GoogleErrorResponse>
                 (await response.Content.ReadAsStringAsync());
             throw new BadRequestInvalidGrantException($"Error: {errorData!.Error} Description: {errorData.Error_Description}");
-
         }
 
-
         [HttpGet("{code}/{redirectUri}")]
-        public async Task<ActionResult<TokenResponse>> GetTokens(string code, string redirectUri)
+        public async Task<ActionResult<AccessTokenResponse>> GetTokens(string code, string redirectUri)
         {
             var builder = WebApplication.CreateBuilder();
             code = HttpUtility.UrlDecode(code);
@@ -139,29 +128,36 @@ namespace backend.Controllers
                 var responseData = (OkObjectResult)response.Result!;
                 var data = responseData.Value as TokenResponse;
 
-                var loggedInUser = new LoggedInUser() { Refresh_Token = data!.Refresh_token };
+                var loggedInUser = new LoggedInUser() { Refresh_Token = data!.Refresh_token, Access_Token = data.Access_token };
                 _context.LoggedInUser.Add(loggedInUser);
                 _context.SaveChanges();
-                return new TokenResponse()
+                return new AccessTokenResponse()
                 {
                     Access_token = data!.Access_token,
-                    Id_token = data.Id_token,
-                    Expires_in = data.Expires_in
+                    Id_token = data.Id_token
                 };
             }
-
-            return response;
-
+            else
+            {
+                // Convert the response to AccessTokenResponse
+                var tokenResponse = response.Result as OkObjectResult;
+                var tokenData = tokenResponse.Value as TokenResponse;
+                return new AccessTokenResponse()
+                {
+                    Access_token = tokenData.Access_token,
+                    Id_token = tokenData.Id_token
+                };
+            }
         }
 
         [HttpGet]
-        public async Task<ActionResult<TokenResponse>> RefreshTokens()
+        public async Task<ActionResult<AccessTokenResponse>> RefreshTokens()
         {
             var refreshToken = await _context.LoggedInUser.Select(user => user.Refresh_Token).FirstOrDefaultAsync()
             ?? throw new NotFoundByIdException("No refresh tokens found");
             var builder = WebApplication.CreateBuilder();
 
-                        string client_id;
+            string client_id;
             if (builder.Configuration["AppInfo:ClientId"] == "Secret")
             {
                 client_id = Environment.GetEnvironmentVariable("CLIENT_ID")!;
@@ -191,15 +187,23 @@ namespace backend.Controllers
                 var responseData = (OkObjectResult)response.Result!;
                 var data = responseData.Value as TokenResponse;
 
-                return new TokenResponse()
+                return new AccessTokenResponse()
                 {
                     Access_token = data!.Access_token,
-                    Id_token = data.Id_token,
-                    Expires_in = data.Expires_in
+                    Id_token = data.Id_token
                 };
             }
-
-            return response;
+            else
+            {
+                // Convert the response to AccessTokenResponse
+                var tokenResponse = response.Result as OkObjectResult;
+                var tokenData = tokenResponse.Value as TokenResponse;
+                return new AccessTokenResponse()
+                {
+                    Access_token = tokenData.Access_token,
+                    Id_token = tokenData.Id_token
+                };
+            }
         }
 
         [HttpDelete]
