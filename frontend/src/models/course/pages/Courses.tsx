@@ -7,7 +7,7 @@ import Header from "@components/Header";
 import { Fragment, useMemo, useState } from "react";
 import { useMutationDeleteCourse } from "@api/course/courseMutations";
 import LoadingSkeletonCourse from "../components/LoadingSkeletonCourse";
-import CourseCard from "@components/CourseCard";
+import RectangularCard from "@components/RectangularCard";
 
 export default function Courses() {
     const { data: courses, isLoading, isError } = useQueryCourses();
@@ -34,7 +34,7 @@ export default function Courses() {
                 {courses && trackNames.map((trackName) =>
                     <Fragment key={trackName}>
                         <h2 className="text-2xl font-semibold mt-4">{trackName}</h2>
-                        <CourseCard data={courses} isLoading={isLoading} trackName={trackName} mutationDelete={mutationDeleteCourse} />
+                        <RectangularCard data={courses} isLoading={isLoading} trackName={trackName} mutationDelete={mutationDeleteCourse} />
                     </Fragment>
                 )}
                 {(!courses && isLoading) &&

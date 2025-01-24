@@ -4,7 +4,7 @@ import { CourseType } from "@models/course/Types";
 import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import { useMutationDeleteAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import Header from "@components/Header";
-import CourseCard from "@components/CourseCard";
+import RectangularCard from "@components/RectangularCard";
 import LoadingSkeletonCourse from "@models/course/components/LoadingSkeletonCourse";
 import ErrorModal from "@components/ErrorModal";
 
@@ -59,7 +59,7 @@ export default function AppliedCourses() {
             <section className="flex flex-col gap-4 p-10 pt-0">
                 <h2 className="text-2xl font-semibold mt-4 gap-4">Active Bootcamps</h2>
                 {activeCourses.length !== 0 ?
-                    <CourseCard data={activeCourses} isLoading={isLoading} bootcamps={true} mutationDelete={mutationDeleteAppliedCourse} />
+                    <RectangularCard data={activeCourses} isLoading={isLoading} bootcamps={true} mutationDelete={mutationDeleteAppliedCourse} />
                     :
                     <p className="text-lg ml-2">No Active Bootcamps</p>
                 }
@@ -70,7 +70,7 @@ export default function AppliedCourses() {
                 }
                 <h2 className="text-2xl font-semibold mt-4 gap-4">Upcoming Bootcamps</h2>
                 {futureCourses.length !== 0 ?
-                    <CourseCard data={futureCourses} isLoading={isLoading} bootcamps={true} mutationDelete={mutationDeleteAppliedCourse} />
+                    <RectangularCard data={futureCourses} isLoading={isLoading} bootcamps={true} mutationDelete={mutationDeleteAppliedCourse} />
                     :
                     <p className="text-lg ml-2">No Upcoming Bootcamps</p>
                 }
@@ -81,7 +81,7 @@ export default function AppliedCourses() {
                 }
                 <h2 className="text-2xl font-semibold mt-4 gap-4">Completed Bootcamps</h2>
                 {pastCourses.length !== 0 ?
-                    <CourseCard data={pastCourses} isLoading={isLoading} bootcamps={true} mutationDelete={mutationDeleteAppliedCourse} />
+                    <RectangularCard data={pastCourses} isLoading={isLoading} bootcamps={true} mutationDelete={mutationDeleteAppliedCourse} />
                     :
                     <p className="text-lg ml-2">No Completed Bootcamps</p>
                 }

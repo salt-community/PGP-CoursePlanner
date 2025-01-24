@@ -11,7 +11,7 @@ type Props = {
     bootcamps?: boolean
 }
 
-export default function CourseCard({ data, isLoading, trackName, mutationDelete, bootcamps }: Props) {
+export default function RectangularCard({ data, isLoading, trackName, mutationDelete, bootcamps }: Props) {
     return (
         <>
             {data && data.map((course, index) =>
