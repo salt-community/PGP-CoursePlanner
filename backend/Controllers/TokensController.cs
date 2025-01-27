@@ -90,7 +90,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{code}/{redirectUri}")]
-        public async Task<ActionResult<AccessTokenResponse>> GetTokens(string code, string redirectUri)
+        public async Task<ActionResult<JWTResponse>> GetTokens(string code, string redirectUri)
         {
             var builder = WebApplication.CreateBuilder();
             code = HttpUtility.UrlDecode(code);
@@ -128,13 +128,14 @@ namespace backend.Controllers
                 var responseData = (OkObjectResult)response.Result!;
                 var data = responseData.Value as TokenResponse;
 
-                var loggedInUser = new LoggedInUser() { Refresh_Token = data!.Refresh_token, Access_Token = data.Access_token };
+                var loggedInUser = new LoggedInUser() { Refresh_Token = data!.Refresh_token, Access_Token = data.Access_token, Id_token = data.Id_token };
                 _context.LoggedInUser.Add(loggedInUser);
                 _context.SaveChanges();
-                return new AccessTokenResponse()
+                return new JWTResponse()
                 {
                     Access_token = data!.Access_token,
-                    Id_token = data.Id_token
+                    Id_token = data.Id_token,
+                    Expires_in = data!.Expires_in
                 };
             }
             else
@@ -142,16 +143,17 @@ namespace backend.Controllers
                 // Convert the response to AccessTokenResponse
                 var tokenResponse = response.Result as OkObjectResult;
                 var tokenData = tokenResponse.Value as TokenResponse;
-                return new AccessTokenResponse()
+                return new JWTResponse()
                 {
                     Access_token = tokenData.Access_token,
-                    Id_token = tokenData.Id_token
+                    Id_token = tokenData.Id_token,
+                    Expires_in = tokenData.Expires_in
                 };
             }
         }
 
         [HttpGet]
-        public async Task<ActionResult<AccessTokenResponse>> RefreshTokens()
+        public async Task<ActionResult<JWTResponse>> RefreshTokens()
         {
             var refreshToken = await _context.LoggedInUser.Select(user => user.Refresh_Token).FirstOrDefaultAsync()
             ?? throw new NotFoundByIdException("No refresh tokens found");
@@ -187,10 +189,11 @@ namespace backend.Controllers
                 var responseData = (OkObjectResult)response.Result!;
                 var data = responseData.Value as TokenResponse;
 
-                return new AccessTokenResponse()
+                return new JWTResponse()
                 {
                     Access_token = data!.Access_token,
-                    Id_token = data.Id_token
+                    Id_token = data.Id_token,
+                    Expires_in = data!.Expires_in
                 };
             }
             else
@@ -198,10 +201,11 @@ namespace backend.Controllers
                 // Convert the response to AccessTokenResponse
                 var tokenResponse = response.Result as OkObjectResult;
                 var tokenData = tokenResponse.Value as TokenResponse;
-                return new AccessTokenResponse()
+                return new JWTResponse()
                 {
                     Access_token = tokenData.Access_token,
-                    Id_token = tokenData.Id_token
+                    Id_token = tokenData.Id_token,
+                    Expires_in = tokenData.Expires_in
                 };
             }
         }
