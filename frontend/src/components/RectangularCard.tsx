@@ -21,7 +21,7 @@ export default function RectangularCard({ data, isLoading, trackName, mutationDe
                         <LoadingSkeletonCourse />
                         :
                         <>
-                            <Link to={`/courses/details/${course.id}`} key={course.name + index} className={`flex justify-between items-center w-full rounded-l-md ${isLoading ? "cursor-default pointer-events-none" : "hover:bg-[#F9F9F9]"}`}>
+                            <Link to={`/activecourses/details/${course.id}`} key={course.name + index} className={`flex justify-between items-center w-full rounded-l-md ${isLoading ? "cursor-default pointer-events-none" : "hover:bg-[#F9F9F9]"}`}>
                                 <div className="flex gap-2 p-6 w-96">
                                     <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: course.color }}></div>
                                     <h3 className="text-lg">
