@@ -1,13 +1,11 @@
 using backend.Data;
 using backend.Models;
 using backend.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 
 namespace backend.Controllers;
-[Authorize]
+
 [ApiController]
 [Route("[controller]")]
 public class CalendarDatesController : ControllerBase
@@ -49,7 +47,7 @@ public class CalendarDatesController : ControllerBase
     [HttpGet("Weeks/{weekNumber}")]
     public ActionResult<CalendarDate?[]> GetCalendarDate2Weeks(int weekNumber)
     {
-        if(weekNumber < 1 || weekNumber > 53)
+        if (weekNumber < 1 || weekNumber > 53)
         {
             return BadRequest("Weeknumber has to be between 1 and 53");
         }

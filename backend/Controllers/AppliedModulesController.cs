@@ -1,13 +1,9 @@
-
-using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using backend.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class AppliedModulesController : ControllerBase
