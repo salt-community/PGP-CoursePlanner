@@ -7,7 +7,6 @@ import { useQueryTracks } from "@api/track/trackQueries";
 import { getStorageTrackVisibility, initialStorageTrackVisibility, updateStorageTrackVisibility } from "@helpers/localStorage";
 import VisibilityButton from "./VisibilityButton";
 import { TrackVisibilityContext } from "../context/TrackVisibilityContext";
-import { refreshToken } from "@api/user/userFetches";
 
 type Props = {
   isSidebarExpanded: boolean,
