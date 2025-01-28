@@ -16,15 +16,22 @@ public class TracksController(IService<Track> service) : ControllerBase
     [HttpGet]
     public async Task<List<TrackResponse>> GetTracks()
     {
-        var tracks = await _service.GetAllAsync();
-        return [.. tracks.Select(track => (TrackResponse)track)];
+        var response = await _service.GetAllAsync();
+        return [.. response.Select(track => (TrackResponse)track)];
     }
 
     [HttpGet("{id}")]
     public async Task<TrackResponse> GetTrack(int id)
     {
-        var track = await _service.GetOneAsync(id);
-        return (TrackResponse)track;
+        var response = await _service.GetOneAsync(id);
+        return (TrackResponse)response;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<TrackResponse>> CreateTrack(TrackRequest track)
+    {
+        var response = await _service.CreateAsync(new Track { Name = track.Name, Color = track.Color });
+        return CreatedAtAction("GetTrack", new { id = response.Id }, (TrackResponse)response);
     }
 
     [HttpDelete("{id}")]

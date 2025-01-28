@@ -13,9 +13,11 @@ public class TrackService(DataContext context) : IService<Track>
 
     public async Task<Track> GetOneAsync(int id) => await _context.Tracks.FindAsync(id) ?? throw new NotFoundByIdException("Track", id);
 
-    public Task<Track> CreateAsync(Track T)
+    public async Task<Track> CreateAsync(Track track)
     {
-        throw new NotImplementedException();
+        var newTrack = await _context.Tracks.AddAsync(track);
+        await _context.SaveChangesAsync();
+        return newTrack.Entity;
     }
 
     public Task<Track> UpdateAsync(int id, Track T)
@@ -26,7 +28,8 @@ public class TrackService(DataContext context) : IService<Track>
     public async Task<bool> DeleteAsync(int id)
     {
         var track = _context.Tracks.Find(id);
-        if (track == null) {
+        if (track == null)
+        {
             return true;
         }
         _context.Tracks.Remove(track);
