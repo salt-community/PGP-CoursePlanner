@@ -34,6 +34,13 @@ public class TracksController(IService<Track> service) : ControllerBase
         return CreatedAtAction("GetTrack", new { id = response.Id }, (TrackResponse)response);
     }
 
+    [HttpPut("{id}")]
+    public async Task<ActionResult> UpdateTrack(int id, TrackRequest track)
+    {
+        await _service.UpdateAsync(id, new Track { Name = track.Name, Color = track.Color });
+        return NoContent();
+    }
+
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteTrack(int id)
     {

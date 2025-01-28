@@ -9,25 +9,30 @@ public class TrackService(DataContext context) : IService<Track>
 {
     private readonly DataContext _context = context;
 
-    public async Task<List<Track>> GetAllAsync() => await _context.Tracks.ToListAsync();
+    public async Task<List<Track>> GetAllAsync() => await _context.Tracks.OrderBy(track => track.Id).ToListAsync();
 
     public async Task<Track> GetOneAsync(int id) => await _context.Tracks.FindAsync(id) ?? throw new NotFoundByIdException("Track", id);
 
     public async Task<Track> CreateAsync(Track track)
     {
-        var newTrack = await _context.Tracks.AddAsync(track);
+        var newTrack = _context.Tracks.Add(track);
         await _context.SaveChangesAsync();
         return newTrack.Entity;
     }
 
-    public Task<Track> UpdateAsync(int id, Track T)
+    public async Task<Track> UpdateAsync(int id, Track track)
     {
-        throw new NotImplementedException();
+        var foundTrack = await _context.Tracks.FindAsync(id) ?? throw new NotFoundByIdException("Track", id);
+        foundTrack.Name = track.Name;
+        foundTrack.Color = track.Color;
+        _context.Tracks.Update(foundTrack);
+        await _context.SaveChangesAsync();
+        return foundTrack;
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var track = _context.Tracks.Find(id);
+        var track = await _context.Tracks.FindAsync(id);
         if (track == null)
         {
             return true;
