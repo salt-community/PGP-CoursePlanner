@@ -113,10 +113,9 @@ const router = createBrowserRouter([
   }
 ]);
 
-const queryClient = new QueryClient();
-
 export function App() {
   const [trackVisibility, setTrackVisibility] = useState<TrackVisibility[]>([]);
+  const queryClient = new QueryClient();
 
   return (
     <React.StrictMode>

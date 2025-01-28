@@ -1,10 +1,11 @@
 import { getCookie } from "@helpers/cookieHelpers";
+import { fetchWithRefreshTokenInterceptor } from "@helpers/interceptorHelpers";
 import { DayType } from "@models/module/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedDays`;
 
 export async function postAppliedDay(day: DayType): Promise<DayType> {
-  const response = await fetch(BASE_URL, {
+  const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",

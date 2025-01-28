@@ -1,4 +1,4 @@
-import { setCookie } from "@helpers/cookieHelpers";
+import { setCookie, setTokenCookies } from "@helpers/cookieHelpers";
 import { getHomeUrl } from "@helpers/helperMethods";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Tokens`;
@@ -26,7 +26,7 @@ export async function getToken() {
     throw new Error(response.statusText);
   }
 
-  return await response.json();
+  setTokenCookies(await response.json());
 }
 
 export async function refreshToken() {

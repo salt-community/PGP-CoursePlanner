@@ -1,8 +1,8 @@
 import Login from "@models/login/Login";
 import { getCookie, setCookie } from "@helpers/cookieHelpers";
-import { useQueryToken } from "@api/user/userQueries";
 import NavBar from "./NavBar";
 import { useEffect, useState } from "react";
+import { getToken } from "@api/user/userFetches";
 
 
 type Props = {
@@ -16,18 +16,17 @@ export default function Page({ children }: Props) {
     return savedState !== null ? JSON.parse(savedState) : true;
   });
 
-  useEffect(() => {
-    localStorage.setItem("isSidebarExpanded", JSON.stringify(isSidebarExpanded));
-  }, [isSidebarExpanded]);
-
-  useQueryToken();
-
   if (location.search) {
     const authCode = new URLSearchParams(location.search).get('code');
     if (authCode !== null) {
       setCookie("auth_code", authCode);
+      getToken();
     }
   }
+
+  useEffect(() => {
+    localStorage.setItem("isSidebarExpanded", JSON.stringify(isSidebarExpanded));
+  }, [isSidebarExpanded]);
 
   return (
     <>

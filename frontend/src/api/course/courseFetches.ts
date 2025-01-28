@@ -1,10 +1,11 @@
 import { getCookie } from "@helpers/cookieHelpers";
+import { fetchWithRefreshTokenInterceptor } from "@helpers/interceptorHelpers";
 import { CourseType } from "@models/course/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Courses`;
 
 export async function getCourses() {
-  const response = await fetch(BASE_URL, {
+  const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",
@@ -19,7 +20,7 @@ export async function getCourses() {
 }
 
 export async function getCourseById(id: number) {
-  const response = await fetch(`${BASE_URL}/${id}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${id}`, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",
@@ -34,7 +35,7 @@ export async function getCourseById(id: number) {
 }
 
 export async function getModulesByCourseId(courseId: number) {
-  const response = await fetch(`${BASE_URL}/ModulesByCourse/${courseId}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/ModulesByCourse/${courseId}`, {
       headers: {
           Authorization: `Bearer ${getCookie("JWT")}`,
           Accept: "application/json",
@@ -49,7 +50,7 @@ export async function getModulesByCourseId(courseId: number) {
 }
 
 export async function postCourse(course: CourseType) {
-  const response = await fetch(BASE_URL, {
+  const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
@@ -65,7 +66,7 @@ export async function postCourse(course: CourseType) {
 }
 
 export async function updateCourse(course: CourseType) {
-  const response = await fetch(`${BASE_URL}/${course.id}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${course.id}`, {
     method: "PUT",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
@@ -81,7 +82,7 @@ export async function updateCourse(course: CourseType) {
 }
 
 export async function deleteCourse(id: number) {
-  const response = await fetch(`${BASE_URL}/${id}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${id}`, {
     method: "DELETE",
     headers: {
       "Content-type": "application/json; charset=UTF-8",

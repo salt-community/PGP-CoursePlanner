@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class AppliedEventsController : ControllerBase

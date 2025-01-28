@@ -1,6 +1,6 @@
 import { addDays, addHours, addMinutes, startOfDay } from "date-fns";
-import { postCourseToGoogle } from "../api/googleCalendarFetches";
 import { ModuleType } from "../models/module/Types";
+import { postCourseToGoogle } from "@api/googleCalendar/googleCalendarFetches";
 
 interface Attendee {
   email: string; // Email of the guest
