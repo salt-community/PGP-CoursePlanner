@@ -1,9 +1,10 @@
 import { getCookie } from "@helpers/cookieHelpers";
+import { fetchWithRefreshTokenInterceptor } from "@helpers/interceptorHelpers";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/CalendarDates`;
 
 export async function getCalendarDateBatch(startDate: string, endDate: string) {
-  const response = await fetch(`${BASE_URL}/batch?start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/batch?start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}`, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",
@@ -18,7 +19,7 @@ export async function getCalendarDateBatch(startDate: string, endDate: string) {
 }
 
 export async function getCalendarDateWeeks(week: number) {
-  const response = await fetch(`${BASE_URL}/Weeks/${week}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/Weeks/${week}`, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",
@@ -33,7 +34,7 @@ export async function getCalendarDateWeeks(week: number) {
 }
 
 export async function getCalendarDate(date: string) {
-  const response = await fetch(`${BASE_URL}/${date}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${date}`, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",

@@ -1,10 +1,11 @@
 import { getCookie } from "@helpers/cookieHelpers";
+import { fetchWithRefreshTokenInterceptor } from "@helpers/interceptorHelpers";
 import { ModuleType } from "@models/module/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Modules`;
 
 export async function getModules() {
-  const response = await fetch(BASE_URL, {
+  const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",
@@ -19,7 +20,7 @@ export async function getModules() {
 }
 
 export async function getModuleById(id: number) {
-  const response = await fetch(`${BASE_URL}/${id}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${id}`, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",
@@ -34,7 +35,7 @@ export async function getModuleById(id: number) {
 }
 
 export async function postModule(module: ModuleType) {
-  const response = await fetch(BASE_URL, {
+  const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
@@ -50,7 +51,7 @@ export async function postModule(module: ModuleType) {
 }
 
 export async function updateModule(module: ModuleType) {
-  const response = await fetch(`${BASE_URL}/${module.id}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${module.id}`, {
     method: "PUT",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
@@ -66,7 +67,7 @@ export async function updateModule(module: ModuleType) {
 }
 
 export async function deleteModule(id: number) {
-  const response = await fetch(`${BASE_URL}/${id}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${id}`, {
     method: "DELETE",
     headers: {
       "Content-type": "application/json; charset=UTF-8",

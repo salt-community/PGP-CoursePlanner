@@ -1,5 +1,5 @@
 import { addDays, addHours, addMinutes, startOfDay } from "date-fns";
-import { postCourseToGoogle } from "../api/googleCalendarFetches";
+import { postCourseToGoogle } from "../api/googleCalendar/googleCalendarFetches";
 import { ModuleType } from "../models/module/Types";
 
 interface Attendee {

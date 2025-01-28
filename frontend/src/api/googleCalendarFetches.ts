@@ -1,5 +1,6 @@
 import { getCookie } from "@helpers/cookieHelpers";
 import { GoogleEvent } from "@helpers/googleHelpers";
+import { fetchWithRefreshTokenInterceptor } from "@helpers/interceptorHelpers";
 
 interface EventData {
   summary: string;
@@ -16,7 +17,7 @@ interface EventDataArr {
 const BASE_URL = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
 
 export const getGoogleCourseEvents = async (course: string): Promise<EventDataArr> => {
-  const response = await fetch(BASE_URL + `?sharedExtendedProperty=course%3D${course}`, {
+  const response = await fetchWithRefreshTokenInterceptor(BASE_URL + `?sharedExtendedProperty=course%3D${course}`, {
     headers: {
       Authorization: `Bearer ${getCookie("access_token")}`,
       Accept: "application/json",
@@ -47,7 +48,7 @@ export async function postCourseToGoogle(eventTemplate: GoogleEvent[]) {
 }
 
 export async function postSingleGoogleEvent(event: GoogleEvent) {
-  const response = await fetch(BASE_URL, {
+  const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
@@ -78,7 +79,7 @@ export async function deleteCourseFromGoogle(course: string) {
 }
 
 export async function deleteSingleGoogleEvent(eventId: string) {
-  const response = await fetch(BASE_URL + `/${eventId}`, {
+  const response = await fetchWithRefreshTokenInterceptor(BASE_URL + `/${eventId}`, {
     method: "DELETE",
     headers: {
       "Content-type": "application/json",

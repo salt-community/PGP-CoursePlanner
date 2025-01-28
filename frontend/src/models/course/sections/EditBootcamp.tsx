@@ -1,5 +1,5 @@
 import { useMutationPostAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
-import { postCourseToGoogle } from "@api/googleCalendarFetches";
+import { postCourseToGoogle } from "@api/googleCalendar/googleCalendarFetches";
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";

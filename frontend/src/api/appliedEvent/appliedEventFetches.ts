@@ -1,10 +1,11 @@
 import { getCookie } from "@helpers/cookieHelpers";
+import { fetchWithRefreshTokenInterceptor } from "@helpers/interceptorHelpers";
 import { EventType } from "@models/module/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedEvents`;
 
 export async function postAppliedEvent(event: EventType): Promise<EventType> {
-  const response = await fetch(BASE_URL, {
+  const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",

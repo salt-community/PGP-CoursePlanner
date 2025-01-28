@@ -1,11 +1,12 @@
 import { getCookie } from "@helpers/cookieHelpers";
+import { fetchWithRefreshTokenInterceptor } from "@helpers/interceptorHelpers";
 import { ModuleType } from "@models/module/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedModules`;
 
 export async function postAppliedModule(appliedModule: ModuleType): Promise<ModuleType> {
   console.log("Post")
-  const response = await fetch(BASE_URL, {
+  const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
@@ -25,7 +26,7 @@ export async function postAppliedModule(appliedModule: ModuleType): Promise<Modu
 export async function updateAppliedModule(appliedModule: ModuleType) {
   console.log("Update")
   console.log("Updating module:", appliedModule);
-  const response = await fetch(`${BASE_URL}/${appliedModule.id}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${appliedModule.id}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,

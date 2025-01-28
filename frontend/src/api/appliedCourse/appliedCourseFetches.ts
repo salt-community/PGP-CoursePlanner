@@ -1,10 +1,11 @@
 import { getCookie } from "@helpers/cookieHelpers";
+import { fetchWithRefreshTokenInterceptor } from "@helpers/interceptorHelpers";
 import { CourseType } from "@models/course/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedCourses`;
 
 export async function getAppliedCourses() {
-  const response = await fetch(BASE_URL, {
+  const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       Accept: "application/json",
@@ -19,7 +20,7 @@ export async function getAppliedCourses() {
 }
 
 export async function getAppliedCourseById(id: number) {
-  const response = await fetch(`${BASE_URL}/${id}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${id}`, {
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
       "Content-type": "application/json; charset=UTF-8",
@@ -41,7 +42,7 @@ export async function getAppliedCourseById(id: number) {
 }
 
 export async function postAppliedCourse(appliedCourse: CourseType) {
-  const response = await fetch(BASE_URL, {
+  const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
@@ -58,7 +59,7 @@ export async function postAppliedCourse(appliedCourse: CourseType) {
 
 export async function updateAppliedCourse(appliedCourse: CourseType) {
   console.log(appliedCourse);
-  const response = await fetch(`${BASE_URL}/${appliedCourse.id}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${appliedCourse.id}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
@@ -73,7 +74,7 @@ export async function updateAppliedCourse(appliedCourse: CourseType) {
 }
 
 export async function deleteAppliedCourse(id: number) {
-  const response = await fetch(`${BASE_URL}/${id}`, {
+  const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${getCookie("JWT")}`,
