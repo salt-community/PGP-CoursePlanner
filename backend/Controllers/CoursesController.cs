@@ -6,6 +6,7 @@ using backend.Models.DTOs;
 
 namespace backend.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class CoursesController : ControllerBase

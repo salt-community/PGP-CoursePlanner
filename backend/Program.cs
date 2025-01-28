@@ -84,6 +84,8 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
+app.UseAuthorization();
+
 // Use Kestrel and listen on the port specified by the PORT environment variable
 // var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 

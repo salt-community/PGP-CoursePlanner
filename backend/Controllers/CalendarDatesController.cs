@@ -1,11 +1,13 @@
 using backend.Data;
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class CalendarDatesController : ControllerBase
