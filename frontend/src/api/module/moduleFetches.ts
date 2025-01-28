@@ -7,7 +7,7 @@ const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Modules`;
 export async function getModules() {
   const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
     headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
   });
@@ -22,7 +22,7 @@ export async function getModules() {
 export async function getModuleById(id: number) {
   const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${id}`, {
     headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
   });
@@ -39,7 +39,7 @@ export async function postModule(module: ModuleType) {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
     body: JSON.stringify(module),
@@ -55,7 +55,7 @@ export async function updateModule(module: ModuleType) {
     method: "PUT",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
     body: JSON.stringify(module),
@@ -71,7 +71,7 @@ export async function deleteModule(id: number) {
     method: "DELETE",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
   });

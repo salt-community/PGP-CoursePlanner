@@ -9,7 +9,7 @@ export async function postAppliedDay(day: DayType): Promise<DayType> {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
     body: JSON.stringify(day),

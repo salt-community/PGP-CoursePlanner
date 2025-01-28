@@ -9,7 +9,7 @@ export async function postAppliedEvent(event: EventType): Promise<EventType> {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
     body: JSON.stringify(event),

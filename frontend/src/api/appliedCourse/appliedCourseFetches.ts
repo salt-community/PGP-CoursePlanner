@@ -7,7 +7,7 @@ const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/AppliedCourses`;
 export async function getAppliedCourses() {
   const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
     headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
   });
@@ -22,7 +22,7 @@ export async function getAppliedCourses() {
 export async function getAppliedCourseById(id: number) {
   const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${id}`, {
     headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       "Content-type": "application/json; charset=UTF-8",
     },
   });
@@ -46,7 +46,7 @@ export async function postAppliedCourse(appliedCourse: CourseType) {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
     body: JSON.stringify(appliedCourse),
@@ -62,7 +62,7 @@ export async function updateAppliedCourse(appliedCourse: CourseType) {
   const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${appliedCourse.id}`, {
     method: "PUT",
     headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       "Content-type": "application/json; charset=UTF-8",
     },
     body: JSON.stringify(appliedCourse),
@@ -77,7 +77,7 @@ export async function deleteAppliedCourse(id: number) {
   const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${id}`, {
     method: "DELETE",
     headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       "Content-type": "application/json; charset=UTF-8",
     },
   });

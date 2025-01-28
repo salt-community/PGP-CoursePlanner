@@ -10,7 +10,7 @@ export async function postAppliedModule(appliedModule: ModuleType): Promise<Modu
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
     body: JSON.stringify(appliedModule),
@@ -29,7 +29,7 @@ export async function updateAppliedModule(appliedModule: ModuleType) {
   const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${appliedModule.id}`, {
     method: "PUT",
     headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       "Content-type": "application/json; charset=UTF-8",
     },
     body: JSON.stringify(appliedModule),

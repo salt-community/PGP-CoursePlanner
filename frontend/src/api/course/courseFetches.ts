@@ -7,7 +7,7 @@ const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Courses`;
 export async function getCourses() {
   const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
     headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
   });
@@ -22,7 +22,7 @@ export async function getCourses() {
 export async function getCourseById(id: number) {
   const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/${id}`, {
     headers: {
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
   });
@@ -37,7 +37,7 @@ export async function getCourseById(id: number) {
 export async function getModulesByCourseId(courseId: number) {
   const response = await fetchWithRefreshTokenInterceptor(`${BASE_URL}/ModulesByCourse/${courseId}`, {
       headers: {
-          Authorization: `Bearer ${getCookie("JWT")}`,
+          Authorization: `Bearer ${getCookie("id_token")}`,
           Accept: "application/json",
       },
   });
@@ -54,7 +54,7 @@ export async function postCourse(course: CourseType) {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
     body: JSON.stringify(course),
@@ -70,7 +70,7 @@ export async function updateCourse(course: CourseType) {
     method: "PUT",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
     body: JSON.stringify(course),
@@ -86,7 +86,7 @@ export async function deleteCourse(id: number) {
     method: "DELETE",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
-      Authorization: `Bearer ${getCookie("JWT")}`,
+      Authorization: `Bearer ${getCookie("id_token")}`,
       Accept: "application/json",
     },
   });

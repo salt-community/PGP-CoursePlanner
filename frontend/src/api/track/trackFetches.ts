@@ -6,7 +6,7 @@ const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/tracks`;
 export async function getTracks() {
     const response = await fetchWithRefreshTokenInterceptor(BASE_URL, {
         headers: {
-            Authorization: `Bearer ${getCookie("JWT")}`,
+            Authorization: `Bearer ${getCookie("id_token")}`,
             Accept: "application/json",
         },
     });

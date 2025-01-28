@@ -53,7 +53,7 @@ export function useNewTokenCookies() {
     }
 
     setCookie("access_token", access_token, expires_in);
-    setCookie("JWT", id_token, expires_in);
+    setCookie("id_token", id_token, expires_in);
 
     history.back();
   }

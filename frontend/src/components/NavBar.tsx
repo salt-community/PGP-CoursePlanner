@@ -50,7 +50,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
   }, [location.pathname]);
 
   const handleLogOut = () => {
-    deleteCookie('JWT');
+    deleteCookie('id_token');
     deleteCookie("access_token");
     deleteCookie("auth_code");
     navigate("/login");

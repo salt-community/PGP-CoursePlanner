@@ -30,7 +30,7 @@ export default function Page({ children }: Props) {
 
   return (
     <>
-      {!getCookie("auth_code") && (!getCookie("JWT") || !getCookie("access_token"))
+      {!getCookie("auth_code") && (!getCookie("id_token") || !getCookie("access_token"))
         ? <Login />
         : (
           <>
