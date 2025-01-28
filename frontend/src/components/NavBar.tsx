@@ -184,8 +184,6 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
         ))}
       </div>
 
-      <button className="btn btn-secondary mx-10 mt-2" onClick={() => refreshToken().then(data => console.log(data))}>RefreshToken</button> 
-
       <div className="m-4 overflow-hidden">
         <button className={`btn btn-secondary min-h-10 h-10 w-full text-xl p-0 flex-nowrap ${isSidebarExpanded && "min-w-32"}`} onClick={handleLogOut}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
