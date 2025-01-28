@@ -26,5 +26,12 @@ public class TracksController(IService<Track> service) : ControllerBase
         var track = await _service.GetOneAsync(id);
         return (TrackResponse)track;
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteTrack(int id)
+    {
+        await _service.DeleteAsync(id);
+        return NoContent();
+    }
 }
 

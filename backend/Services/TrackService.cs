@@ -23,8 +23,14 @@ public class TrackService(DataContext context) : IService<Track>
         throw new NotImplementedException();
     }
 
-    public Task<bool> DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var track = _context.Tracks.Find(id);
+        if (track == null) {
+            return true;
+        }
+        _context.Tracks.Remove(track);
+        await _context.SaveChangesAsync();
+        return true;
     }
 }
