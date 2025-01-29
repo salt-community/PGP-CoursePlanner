@@ -10,13 +10,16 @@ namespace backend.Controllers;
 [Authorize]
 [ApiController]
 [Route("[controller]")]
-public class AppliedEventsController : ControllerBase
+public class AppliedEventsController(DataContext context) : ControllerBase
 {
-    // private readonly IService<Event> _service; // I removed IService from this controller since it caused errors.
-    private DataContext _context;
-    public AppliedEventsController(DataContext context)
+    // Removed IService from this controller since it caused errors.
+    private DataContext _context = context;
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Event>> GetAppliedEvent(int id)
     {
-        _context = context;
+        return await _context.Events.FirstOrDefaultAsync(e => e.Id == id)
+        ?? throw new NotFoundByIdException("Event", id);
     }
 
     [HttpPost]
@@ -31,14 +34,4 @@ public class AppliedEventsController : ControllerBase
 
         return CreatedAtAction("GetAppliedEvent", new { id = appliedEvent.Id }, appliedEvent);
     }
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Event>> GetAppliedEvent(int id)
-    {
-        return await _context.Events.FirstOrDefaultAsync(e => e.Id == id)
-        ?? throw new NotFoundByIdException("Event", id);
-
-    }
-
-
 }

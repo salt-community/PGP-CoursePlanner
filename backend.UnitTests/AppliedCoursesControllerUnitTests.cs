@@ -35,7 +35,7 @@ namespace backend.Tests.UnitTests
             // arrange
             var AppliedCourse = new Course() { StartDate = new DateTime(2024 - 07 - 12), IsApplied = true };
             var list = new List<Course>() { AppliedCourse };
-            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(list);
+            _mockService.Setup(service => service.GetAll()).ReturnsAsync(list);
             var controller = new AppliedCoursesController(_mockService.Object);
 
             // act

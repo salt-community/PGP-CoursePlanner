@@ -8,13 +8,19 @@ namespace backend.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class AppliedDaysController : ControllerBase
+    public class AppliedDaysController(IService<Day> service) : ControllerBase
     {
-        private readonly IService<Day> _service;
+        private readonly IService<Day> _service = service;
 
-        public AppliedDaysController(IService<Day> service)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Day>> GetAppliedDay(int id)
         {
-            _service = service;
+            var response = await _service.GetOneAsync(id);
+            if (response != null)
+            {
+                return Ok(response);
+            }
+            return NotFound("Applied day does not exist");
         }
 
         [HttpPost]
@@ -27,17 +33,6 @@ namespace backend.Controllers
                 return BadRequest("Unable to create appliedDay");
             }
             return CreatedAtAction("GetAppliedDay", new { id = appliedDay.Id }, appliedDay);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Day>> GetAppliedDay(int id)
-        {
-            var response = await _service.GetOneAsync(id);
-            if (response != null)
-            {
-                return Ok(response);
-            }
-            return NotFound("Applied day does not exist");
         }
     }
 }

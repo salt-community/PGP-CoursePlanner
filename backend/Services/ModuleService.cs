@@ -130,12 +130,12 @@ public class ModuleService : IService<Module>
             }
         }
 
-        moduleToUpdate = updateModule(module, moduleToUpdate);
+        moduleToUpdate = UpdateModule(module, moduleToUpdate);
         _context.Set<Module>().Update(moduleToUpdate);
         await _context.SaveChangesAsync();
     }
 
-    private Module updateModule(Module newModule, Module module)
+    private Module UpdateModule(Module newModule, Module module)
     {
         module.Name = newModule.Name;
         module.NumberOfDays = newModule.NumberOfDays;

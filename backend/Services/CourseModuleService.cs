@@ -38,7 +38,7 @@ namespace backend.Services
         }
 
 
-        public Task<List<CourseModule>> GetAllAsync()
+        public Task<List<CourseModule>> GetAll()
         {
             return _context.CourseModules.ToListAsync();
         }

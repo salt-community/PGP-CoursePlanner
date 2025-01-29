@@ -17,7 +17,7 @@ namespace backend.Tests.UnitTests
         {
             // arrange
             var module = new Module() { Name = "TestModule" };
-            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(new List<Module>() { module });
+            _mockService.Setup(service => service.GetAll()).ReturnsAsync(new List<Module>() { module });
             var controller = new ModulesController(_mockService.Object);
 
             // act
@@ -33,7 +33,7 @@ namespace backend.Tests.UnitTests
             // arrange
             var module = new Module() { Name = "TestModule" };
             var list = new List<Module>() { module };
-            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(list);
+            _mockService.Setup(service => service.GetAll()).ReturnsAsync(list);
             var controller = new ModulesController(_mockService.Object);
 
             // act

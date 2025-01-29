@@ -32,17 +32,17 @@ namespace backend.Services
             return appliedDay;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public Task<List<Day>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Day>> GetAllAsync()
+        public Task UpdateAsync(int id, Day T)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Day> UpdateAsync(int id, Day T)
+        public Task DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
