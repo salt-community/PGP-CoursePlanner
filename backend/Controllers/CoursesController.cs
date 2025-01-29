@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using backend.Models.DTOs;
+using backend.ExceptionHandler.Exceptions;
 
 namespace backend.Controllers;
 
@@ -21,10 +22,17 @@ public class CoursesController(IService<Course> service) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<CourseResponse> GetCourse(int id)
+    public async Task<ActionResult<CourseResponse>> GetCourse(int id)
     {
-        var response = await _service.GetOneAsync(id);
-        return (CourseResponse)response;
+        try
+        {
+            var response = await _service.GetOneAsync(id);
+            return Ok((CourseResponse)response);
+        }
+        catch (NotFoundByIdException ex)
+        {
+            return NotFound(ex.Message);
+        }
     }
 
     [HttpPost]
@@ -37,8 +45,15 @@ public class CoursesController(IService<Course> service) : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateCourse(int id, [FromBody] Course course)
     {
-        await _service.UpdateAsync(id, course);
-        return NoContent();
+        try
+        {
+            await _service.UpdateAsync(id, course);
+            return NoContent();
+        }
+        catch (NotFoundByIdException ex)
+        {
+            return NotFound(ex.Message);
+        }
     }
 
     [HttpDelete("{id}")]
