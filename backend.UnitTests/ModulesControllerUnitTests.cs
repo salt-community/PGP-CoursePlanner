@@ -94,7 +94,6 @@ namespace backend.Tests.UnitTests
         public async void UpdateModule_Returns_NoContent()
         {
             // arrange
-            var module = new Module() { Id = 1, Name = "TestModule" };
             _mockService.Setup(service => service.UpdateAsync(1, module));
             var controller = new ModulesController(_mockService.Object);
 
@@ -102,7 +101,6 @@ namespace backend.Tests.UnitTests
             var result = await controller.UpdateModule(1, module);
 
             // assert
-            result.Should().NotBeNull();
             result.Should().BeOfType<NoContentResult>();
         }
 
