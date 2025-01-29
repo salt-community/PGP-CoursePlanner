@@ -117,7 +117,6 @@ namespace backend.Tests.UnitTests
             var result = await controller.DeleteModule(1);
 
             // assert
-            result.Should().NotBeNull();
             result.Should().BeOfType<NoContentResult>();
         }
     }
