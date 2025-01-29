@@ -3,6 +3,7 @@ using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using backend.Models.DTOs;
 using backend.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace backend.Tests.UnitTests
 {
@@ -102,6 +103,22 @@ namespace backend.Tests.UnitTests
 
             // assert
             result.Should().BeOfType<NoContentResult>();
+        }
+
+                [Fact]
+        public async void UpdateModule_Returns_NotFound_With_Message()
+        {
+            // arrange
+            _mockService.Setup(service => service.UpdateAsync(1, module)).ThrowsAsync(new NotFoundByIdException("Module", 1));
+            var controller = new ModulesController(_mockService.Object);
+
+            // act
+            var result = await controller.UpdateModule(1, module);
+            var message = (result as ObjectResult)!.Value as string;
+
+            // assert
+            result.Should().BeOfType<NotFoundObjectResult>();
+            message.Should().Be("Module with ID 1 was not found.");
         }
 
         [Fact]

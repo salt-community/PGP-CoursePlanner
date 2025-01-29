@@ -52,8 +52,15 @@ public class ModulesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateModule(int id, Module module)
     {
-        await _service.UpdateAsync(id, module);
-        return NoContent();
+        try
+        {
+            await _service.UpdateAsync(id, module);
+            return NoContent();
+        }
+        catch (NotFoundByIdException ex)
+        {
+            return NotFound(ex.Message);
+        }
     }
 
     [HttpDelete("{id}")]
