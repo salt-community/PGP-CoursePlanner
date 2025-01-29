@@ -631,8 +631,9 @@ public class CourseService(DataContext context) : IService<Course>
                .ThenInclude(module => module!.Days)
                .ThenInclude(day => day.Events)
                .AsNoTracking()
-               .FirstOrDefault(ac => ac.Id == id)
-               ?? throw new NotFoundByIdException("Course", id);
+               .FirstOrDefault(ac => ac.Id == id);
+
+        if (course == null) return;
 
         if (course.IsApplied)
         {

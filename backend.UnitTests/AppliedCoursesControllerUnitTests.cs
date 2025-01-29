@@ -22,25 +22,6 @@ namespace backend.Tests.UnitTests
         };
 
         [Fact]
-        public async void CreateAppliedCourse_Returns_CreatedAtAction_With_CourseResponse()
-        {
-            // arrange
-            var expectedResponse = (CourseResponse)appliedCourse;
-
-            _mockService.Setup(service => service.CreateAsync(appliedCourse)).ReturnsAsync(appliedCourse);
-            var controller = new AppliedCoursesController(_mockService.Object);
-
-            // act
-            var result = (await controller.CreateAppliedCourse(appliedCourse)).Result;
-            var value = (result as ObjectResult)!.Value;
-
-            // assert
-            result.Should().BeOfType<CreatedAtActionResult>();
-            value.Should().BeOfType<CourseResponse>();
-            value.Should().BeEquivalentTo(expectedResponse);
-        }
-
-        [Fact]
         public async void GetAppliedCourses_Returns_ListOfCourseResponses()
         {
             // arrange
@@ -85,6 +66,55 @@ namespace backend.Tests.UnitTests
 
             // act
             var result = (await controller.GetAppliedCourse(1)).Result;
+            var message = (result as ObjectResult)!.Value as string;
+
+            // assert
+            result.Should().BeOfType<NotFoundObjectResult>();
+            message.Should().Be("Course with ID 1 was not found.");
+        }
+
+        [Fact]
+        public async void CreateAppliedCourse_Returns_CreatedAtAction_With_CourseResponse()
+        {
+            // arrange
+            var expectedResponse = (CourseResponse)appliedCourse;
+
+            _mockService.Setup(service => service.CreateAsync(appliedCourse)).ReturnsAsync(appliedCourse);
+            var controller = new AppliedCoursesController(_mockService.Object);
+
+            // act
+            var result = (await controller.CreateAppliedCourse(appliedCourse)).Result;
+            var value = (result as ObjectResult)!.Value;
+
+            // assert
+            result.Should().BeOfType<CreatedAtActionResult>();
+            value.Should().BeOfType<CourseResponse>();
+            value.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [Fact]
+        public async void UpdateAppliedCourse_Returns_NoContent()
+        {
+            //arrange
+            _mockService.Setup(service => service.UpdateAsync(1, appliedCourse));
+            var controller = new AppliedCoursesController(_mockService.Object);
+
+            // act
+            var result = await controller.UpdateAppliedCourse(1, appliedCourse);
+
+            // assert
+            result.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public async void UpdateAppliedCourse_Returns_NotFound_With_Message()
+        {
+            // arrange
+            _mockService.Setup(service => service.UpdateAsync(1, appliedCourse)).ThrowsAsync(new NotFoundByIdException("Course", 1));
+            var controller = new AppliedCoursesController(_mockService.Object);
+
+            // act
+            var result = await controller.UpdateAppliedCourse(1, appliedCourse);
             var message = (result as ObjectResult)!.Value as string;
 
             // assert

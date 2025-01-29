@@ -47,8 +47,15 @@ namespace backend.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateAppliedCourse(int id, [FromBody] Course appliedCourse)
         {
-            await _service.UpdateAsync(id, appliedCourse);
-            return NoContent();
+            try
+            {
+                await _service.UpdateAsync(id, appliedCourse);
+                return NoContent();
+            }
+            catch (NotFoundByIdException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
