@@ -20,25 +20,20 @@ public class TrackService(DataContext context) : IService<Track>
         return newTrack.Entity;
     }
 
-    public async Task<Track> UpdateAsync(int id, Track track)
+    public async Task UpdateAsync(int id, Track track)
     {
         var foundTrack = await _context.Tracks.FindAsync(id) ?? throw new NotFoundByIdException("Track", id);
         foundTrack.Name = track.Name;
         foundTrack.Color = track.Color;
         _context.Tracks.Update(foundTrack);
         await _context.SaveChangesAsync();
-        return foundTrack;
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task DeleteAsync(int id)
     {
         var track = await _context.Tracks.FindAsync(id);
-        if (track == null)
-        {
-            return true;
-        }
+        if (track == null) return;
         _context.Tracks.Remove(track);
         await _context.SaveChangesAsync();
-        return true;
     }
 }

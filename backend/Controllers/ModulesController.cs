@@ -19,11 +19,11 @@ public class ModulesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ModuleResponse>>> GetModules()
+    public async Task<IEnumerable<ModuleResponse>> GetModules()
     {
         var response = await _service.GetAllAsync();
         var moduleResponse = response.Select(m => new ModuleResponse(m)).ToList();
-        return Ok(moduleResponse.Where(x => x.IsApplied == false));
+        return moduleResponse.Where(x => x.IsApplied == false);
     }
 
     [HttpGet("{id}")]
@@ -42,14 +42,14 @@ public class ModulesController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateModule(int id, [FromBody] Module module)
+    public async Task<ActionResult> UpdateModule(int id, Module module)
     {
         await _service.UpdateAsync(id, module);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteModule(int id)
+    public async Task<ActionResult> DeleteModule(int id)
     {
         await _service.DeleteAsync(id);
         return NoContent();

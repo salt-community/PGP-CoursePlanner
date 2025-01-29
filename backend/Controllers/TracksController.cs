@@ -14,10 +14,10 @@ public class TracksController(IService<Track> service) : ControllerBase
     private readonly IService<Track> _service = service;
 
     [HttpGet]
-    public async Task<List<TrackResponse>> GetTracks()
+    public async Task<IEnumerable<TrackResponse>> GetTracks()
     {
         var response = await _service.GetAllAsync();
-        return [.. response.Select(track => (TrackResponse)track)];
+        return response.Select(track => (TrackResponse)track);
     }
 
     [HttpGet("{id}")]
