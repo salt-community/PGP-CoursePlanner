@@ -9,21 +9,21 @@ namespace backend.Tests.UnitTests
     {
         readonly Mock<IService<Course>> _mockService = new();
 
+        readonly Course appliedCourse = new Course()
+        {
+            Track = new Track() { Id = 1, Name = "Java", Color = "#D73A24", Visibility = true },
+            Name = "Java",
+            StartDate = new DateTime(2024, 7, 12),
+            EndDate = new DateTime(2024, 8, 23),
+            NumberOfWeeks = 6,
+            Color = "#D73A24",
+            IsApplied = true
+        };
+
         [Fact]
         public async void CreateAppliedCourse_Returns_Created_201_And_CourseResponse()
         {
             // arrange
-            var appliedCourse = new Course()
-            {
-                Track = new Track() { Id = 1, Name = "Java", Color = "#D73A24", Visibility = true },
-                Name = "Java",
-                StartDate = new DateTime(2024, 7, 12),
-                EndDate = new DateTime(2024, 8, 23),
-                NumberOfWeeks = 6,
-                Color = "#D73A24",
-                IsApplied = true
-            };
-
             var expectedResponse = (CourseResponse)appliedCourse;
 
             _mockService.Setup(service => service.CreateAsync(appliedCourse)).ReturnsAsync(appliedCourse);
@@ -40,20 +40,21 @@ namespace backend.Tests.UnitTests
         }
 
         [Fact]
-        public async void GetAppliedCourses_Returns_CollectionOfAppliedCourses()
+        public async void GetAppliedCourses_Returns_ListOfCourseResponses()
         {
             // arrange
-            var AppliedCourse = new Course() { StartDate = new DateTime(2024 - 07 - 12), IsApplied = true };
-            var list = new List<Course>() { AppliedCourse };
-            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(list);
+            var appliedCourseList = new List<Course>() { appliedCourse };
+            var expectedResponse = new List<CourseResponse>() {(CourseResponse)appliedCourse};
+
+            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(appliedCourseList);
             var controller = new AppliedCoursesController(_mockService.Object);
 
             // act
             var result = await controller.GetAppliedCourses();
 
             // assert
-            result.Should().NotBeNull();
-            result.Should().BeAssignableTo<IEnumerable<Course>>();
+            result.Should().BeOfType<List<CourseResponse>>();
+            result.Should().BeEquivalentTo(expectedResponse);
         }
 
         // [Fact]

@@ -14,10 +14,10 @@ namespace backend.Controllers
         private readonly IService<Course> _service = service;
 
         [HttpGet]
-        public async Task<IEnumerable<CourseResponse>> GetAppliedCourses()
+        public async Task<List<CourseResponse>> GetAppliedCourses()
         {
             var response = await _service.GetAllAsync();
-            return response.Where(x => x.IsApplied == true).Select(c => (CourseResponse)c);
+            return response.Where(x => x.IsApplied == true).Select(c => (CourseResponse)c).ToList();
         }
 
         [HttpGet("{id}")]
