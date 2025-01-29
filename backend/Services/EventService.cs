@@ -32,19 +32,17 @@ namespace backend.Services
                     ?? throw new NotFoundByIdException("Event", id);
         }
 
-
-
-        public Task<bool> DeleteAsync(int id)
+        public Task<List<Event>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Event>> GetAllAsync()
+        public Task UpdateAsync(int id, Event T)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Event> UpdateAsync(int id, Event T)
+        public Task DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }

@@ -98,7 +98,7 @@ public class ModuleService : IService<Module>
         return module;
     }
 
-    public async Task<Module> UpdateAsync(int id, Module module)
+    public async Task UpdateAsync(int id, Module module)
     {
         if (module.Days.Count == 0)
         {
@@ -130,24 +130,12 @@ public class ModuleService : IService<Module>
             }
         }
 
-        moduleToUpdate = updateModule(module, moduleToUpdate);
+        moduleToUpdate = UpdateModule(module, moduleToUpdate);
         _context.Set<Module>().Update(moduleToUpdate);
         await _context.SaveChangesAsync();
-        return module;
     }
 
-    public async Task<bool> DeleteAsync(int id)
-    {
-        var module = await _context.Modules
-            .Include(module => module.Days)
-            .ThenInclude(day => day.Events)
-            .FirstAsync(module => module.Id == id);
-        _context.Remove(module);
-        await _context.SaveChangesAsync();
-        return true;
-    }
-
-    private Module updateModule(Module newModule, Module module)
+    private Module UpdateModule(Module newModule, Module module)
     {
         module.Name = newModule.Name;
         module.NumberOfDays = newModule.NumberOfDays;
@@ -155,5 +143,15 @@ public class ModuleService : IService<Module>
         module.Tracks = newModule.Tracks;
 
         return module;
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var module = await _context.Modules
+            .Include(module => module.Days)
+            .ThenInclude(day => day.Events)
+            .FirstAsync(module => module.Id == id);
+        _context.Remove(module);
+        await _context.SaveChangesAsync();
     }
 }

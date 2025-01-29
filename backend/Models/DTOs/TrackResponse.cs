@@ -1,11 +1,19 @@
 namespace backend.Models.DTOs;
 
-public record TrackResponse(Track track)
+public record TrackResponse
 {
-    public int Id { get; set; } = track.Id;
-    public string Name { get; set; } = track.Name;
-    public string Color { get; set; } = track.Color;
-    public bool Visibility { get; set; } = track.Visibility;
+    public int Id { get; init; }
+    public string Name { get; init; }
+    public string Color { get; init; }
+    public bool Visibility { get; init; }
+
+    public TrackResponse(Track track)
+    {
+        Id = track.Id;
+        Name = track.Name;
+        Color = track.Color;
+        Visibility = track.Visibility;
+    }
 
     public static implicit operator TrackResponse(Track track) => new(track);
 }

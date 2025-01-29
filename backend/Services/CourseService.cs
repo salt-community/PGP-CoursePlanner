@@ -1,23 +1,14 @@
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using backend.Controllers;
 using backend.Data;
 using backend.ExceptionHandler.Exceptions;
 using backend.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace backend.Services;
 
-public class CourseService : IService<Course>
+public class CourseService(DataContext context) : IService<Course>
 {
-    private readonly DataContext _context;
+    private readonly DataContext _context = context;
 
-    public CourseService(DataContext context)
-    {
-        _context = context;
-    }
     public async Task<List<Course>> GetAllAsync()
     {
         var courses = await _context.Courses
@@ -40,8 +31,8 @@ public class CourseService : IService<Course>
             }
         }
         return courses;
-
     }
+
     public async Task<Course> GetOneAsync(int id)
     {
         var course = await _context.Courses
@@ -63,9 +54,6 @@ public class CourseService : IService<Course>
         }
         return course;
     }
-
-
-
 
     private async Task<Course> CreateAppliedCourseAsync(Course appliedCourse)
     {
@@ -557,14 +545,14 @@ public class CourseService : IService<Course>
     {
         foreach (var module in course.Modules.Select(m => m.Module!))
         {
-            clearModuleOfDays(module, course.Id);
+            ClearModuleOfDays(module, course.Id);
         }
         _context.CourseModules.RemoveRange(course.Modules);
         _context.SaveChanges();
         return course;
     }
 
-    private bool clearModuleOfDays(Module module, int courseId)
+    private bool ClearModuleOfDays(Module module, int courseId)
     {
         foreach (var day in module.Days)
         {
@@ -596,11 +584,12 @@ public class CourseService : IService<Course>
         return true;
     }
 
-    public async Task<Course> UpdateAsync(int id, Course course)
+    public async Task UpdateAsync(int id, Course course)
     {
         if (course.IsApplied)
         {
-            return await UpdateAppliedAsync(id, course);
+            await UpdateAppliedAsync(id, course);
+            return;
         }
 
         var courseToUpdate = await _context.Courses
@@ -632,10 +621,9 @@ public class CourseService : IService<Course>
         }
         _context.Courses.Update(courseToUpdate);
         await _context.SaveChangesAsync();
-        return courseToUpdate;
-
     }
-    public async Task<bool> DeleteAsync(int id)
+
+    public async Task DeleteAsync(int id)
     {
         var course = _context.Courses
                .Include(course => course.Modules!)
@@ -648,24 +636,17 @@ public class CourseService : IService<Course>
 
         if (course.IsApplied)
         {
-            return await DeleteAppliedAsync(course);
+            await DeleteAppliedAsync(course);
+            return;
         }
         _context.Courses.Remove(course);
         await _context.SaveChangesAsync();
-
-        return true;
     }
 
-    public async Task<bool> DeleteAppliedAsync(Course course)
+    public async Task DeleteAppliedAsync(Course course)
     {
-
         clearCourseModules(course);
-
         _context.Courses.Remove(course);
         await _context.SaveChangesAsync();
-
-        return true;
     }
-
-
 }
