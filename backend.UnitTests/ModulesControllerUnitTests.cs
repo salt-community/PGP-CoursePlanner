@@ -20,7 +20,7 @@ namespace backend.Tests.UnitTests
         };
 
         [Fact]
-        public async void GetModules_Returns_CollectionOfModules()
+        public async void GetModules_Returns_CollectionOfModuleResponses()
         {
             // arrange
             var expectedResponse = new List<ModuleResponse>() { (ModuleResponse)module };
