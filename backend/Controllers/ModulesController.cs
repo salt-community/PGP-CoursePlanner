@@ -22,15 +22,15 @@ public class ModulesController : ControllerBase
     public async Task<IEnumerable<ModuleResponse>> GetModules()
     {
         var response = await _service.GetAllAsync();
-        var moduleResponse = response.Select(m => new ModuleResponse(m)).ToList();
+        var moduleResponse = response.Select(m => (ModuleResponse)m).ToList();
         return moduleResponse.Where(x => x.IsApplied == false);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ModuleResponse>> GetModule(int id)
+    public async Task<ModuleResponse> GetModule(int id)
     {
         var response = await _service.GetOneAsync(id);
-        return Ok(new ModuleResponse(response));
+        return (ModuleResponse)response;
     }
 
     [HttpPost]
