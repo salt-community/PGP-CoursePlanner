@@ -21,7 +21,7 @@ namespace backend.Tests.UnitTests
         };
 
         [Fact]
-        public async void CreateAppliedCourse_Returns_Created_201_And_CourseResponse()
+        public async void CreateAppliedCourse_Returns_CreatedAtAction_With_CourseResponse()
         {
             // arrange
             var expectedResponse = (CourseResponse)appliedCourse;
