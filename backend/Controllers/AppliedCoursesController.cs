@@ -1,3 +1,4 @@
+using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using backend.Models.DTOs;
 using backend.Services;
@@ -22,10 +23,17 @@ namespace backend.Controllers
 
         [HttpGet("{id}")]
 
-        public async Task<CourseResponse> GetAppliedCourse(int id)
+        public async Task<ActionResult<CourseResponse>> GetAppliedCourse(int id)
         {
-            var response = await _service.GetOneAsync(id);
-            return (CourseResponse)response;
+            try
+            {
+                var response = await _service.GetOneAsync(id);
+                return Ok((CourseResponse)response);
+            }
+            catch (NotFoundByIdException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]

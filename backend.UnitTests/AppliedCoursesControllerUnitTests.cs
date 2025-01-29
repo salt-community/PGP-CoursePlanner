@@ -1,4 +1,5 @@
 using backend.Controllers;
+using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using backend.Models.DTOs;
 using backend.Services;
@@ -31,12 +32,12 @@ namespace backend.Tests.UnitTests
 
             // act
             var result = (await controller.CreateAppliedCourse(appliedCourse)).Result;
-            var objectResult = (result as ObjectResult)!;
+            var value = (result as ObjectResult)!.Value;
 
             // assert
             result.Should().BeOfType<CreatedAtActionResult>();
-            objectResult.Value.Should().BeOfType<CourseResponse>();
-            objectResult.Value.Should().BeEquivalentTo(expectedResponse);
+            value.Should().BeOfType<CourseResponse>();
+            value.Should().BeEquivalentTo(expectedResponse);
         }
 
         [Fact]
@@ -57,22 +58,6 @@ namespace backend.Tests.UnitTests
             result.Should().BeEquivalentTo(expectedResponse);
         }
 
-        // [Fact]
-        // public async void CreateAppliedCourse_Returns_BadRequest()
-        // {
-        //     // arrange
-        //     var AppliedCourse = new AppliedCourse() { StartDate = new DateTime(2024 - 07 - 12) };
-        //     _mockService.Setup(service => service.CreateAsync(AppliedCourse)).ReturnsAsync((AppliedCourse)null!);
-        //     var controller = new AppliedCoursesController(_mockService.Object);
-
-        //     // act
-        //     var result = await controller.CreateAppliedCourse(AppliedCourse);
-
-        //     // assert
-        //     result.Result.Should().NotBeNull();
-        //     result.Result.Should().BeOfType<BadRequestObjectResult>();
-        // }
-
         [Fact]
         public async void GetAppliedCourse_Returns_CourseResponse()
         {
@@ -82,30 +67,30 @@ namespace backend.Tests.UnitTests
             var controller = new AppliedCoursesController(_mockService.Object);
 
             // act
-            var result = await controller.GetAppliedCourse(1);
+            var result = (await controller.GetAppliedCourse(1)).Result;
+            var value = (result as ObjectResult)!.Value;
 
             // assert
-            result.Should().BeOfType<CourseResponse>();
-            result.Should().BeEquivalentTo(expectedResponse);
+            result.Should().BeOfType<OkObjectResult>();
+            value.Should().BeOfType<CourseResponse>();
+            value.Should().BeEquivalentTo(expectedResponse);
         }
 
-        // [Fact]
-        // public async void GetAppliedCourse_Returns_NotFound()
-        // {
-        //     // arrange
-        //     var AppliedCourse = new AppliedCourse() { Id = 1, StartDate = new DateTime(2024-07-12) };
-        //     _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(AppliedCourse);
-        //     var controller = new AppliedCoursesController(_mockService.Object);
+        [Fact]
+        public async void GetAppliedCourse_Returns_NotFound_With_Message()
+        {
+            // arrange
+            _mockService.Setup(service => service.GetOneAsync(1)).ThrowsAsync(new NotFoundByIdException("Course", 1));
+            var controller = new AppliedCoursesController(_mockService.Object);
 
-        //     // act
-        //     var result = await controller.GetAppliedCourse(2);
-        //     var resultValue = result.Result;
+            // act
+            var result = (await controller.GetAppliedCourse(1)).Result;
+            var message = (result as ObjectResult)!.Value as string;
 
-        //     // assert
-        //     resultValue.Should().NotBeNull();
-        //     resultValue.Should().BeOfType<NotFoundObjectResult>();
-        // }
-
+            // assert
+            result.Should().BeOfType<NotFoundObjectResult>();
+            message.Should().Be("Course with ID 1 was not found.");
+        }
 
         [Fact]
         public async void DeleteAppliedCourse_Returns_NoContent()
@@ -120,20 +105,5 @@ namespace backend.Tests.UnitTests
             // assert
             result.Should().BeOfType<NoContentResult>();
         }
-
-        // [Fact]
-        // public async void DeleteAppliedCourse_Returns_BadRequest()
-        // {
-        //     // arrange
-        //     _mockService.Setup(service => service.DeleteAsync(1)).ReturnsAsync(false);
-        //     var controller = new AppliedCoursesController(_mockService.Object);
-
-        //     // act
-        //     var result = await controller.DeleteAppliedCourse(1);
-
-        //     // assert
-        //     result.Should().NotBeNull();
-        //     result.Should().BeOfType<BadRequestObjectResult>();
-        // }
     }
 }
