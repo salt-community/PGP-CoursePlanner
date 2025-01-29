@@ -9,7 +9,7 @@ namespace backend.Tests.UnitTests
     {
         readonly Mock<IService<Course>> _mockService = new();
 
-        readonly Course appliedCourse = new Course()
+        readonly Course appliedCourse = new()
         {
             Track = new Track() { Id = 1, Name = "Java", Color = "#D73A24", Visibility = true },
             Name = "Java",
@@ -44,7 +44,7 @@ namespace backend.Tests.UnitTests
         {
             // arrange
             var appliedCourseList = new List<Course>() { appliedCourse };
-            var expectedResponse = new List<CourseResponse>() {(CourseResponse)appliedCourse};
+            var expectedResponse = new List<CourseResponse>() { (CourseResponse)appliedCourse };
 
             _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(appliedCourseList);
             var controller = new AppliedCoursesController(_mockService.Object);
@@ -74,20 +74,19 @@ namespace backend.Tests.UnitTests
         // }
 
         [Fact]
-        public async void GetAppliedCourse_Returns_CorrectAppliedCourse()
+        public async void GetAppliedCourse_Returns_CourseResponse()
         {
             // arrange
-            var AppliedCourse = new Course() { Id = 1, StartDate = new DateTime(2024 - 07 - 12) };
-            _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(AppliedCourse);
+            var expectedResponse = (CourseResponse)appliedCourse;
+            _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(appliedCourse);
             var controller = new AppliedCoursesController(_mockService.Object);
 
             // act
             var result = await controller.GetAppliedCourse(1);
 
             // assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType<Course>();
-            result.StartDate.Should().Be(new DateTime(2024 - 07 - 12));
+            result.Should().BeOfType<CourseResponse>();
+            result.Should().BeEquivalentTo(expectedResponse);
         }
 
         // [Fact]
@@ -119,7 +118,6 @@ namespace backend.Tests.UnitTests
             var result = await controller.DeleteAppliedCourse(1);
 
             // assert
-            result.Should().NotBeNull();
             result.Should().BeOfType<NoContentResult>();
         }
 
