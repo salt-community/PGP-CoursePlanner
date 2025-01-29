@@ -1,3 +1,4 @@
+using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using backend.Models.DTOs;
 using backend.Services;
@@ -27,10 +28,17 @@ public class ModulesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ModuleResponse> GetModule(int id)
+    public async Task<ActionResult<ModuleResponse>> GetModule(int id)
     {
-        var response = await _service.GetOneAsync(id);
-        return (ModuleResponse)response;
+        try
+        {
+            var response = await _service.GetOneAsync(id);
+            return Ok((ModuleResponse)response);
+        }
+        catch (NotFoundByIdException ex)
+        {
+            return NotFound(ex.Message);
+        }
     }
 
     [HttpPost]

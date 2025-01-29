@@ -25,10 +25,9 @@ namespace backend.Tests.UnitTests
         public async void GetAppliedCourses_Returns_CollectionOfCourseResponses()
         {
             // arrange
-            var appliedCourseList = new List<Course>() { appliedCourse };
             var expectedResponse = new List<CourseResponse>() { (CourseResponse)appliedCourse };
 
-            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(appliedCourseList);
+            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync([appliedCourse]);
             var controller = new AppliedCoursesController(_mockService.Object);
 
             // act

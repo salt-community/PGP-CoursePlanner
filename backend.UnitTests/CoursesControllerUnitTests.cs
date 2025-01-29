@@ -8,7 +8,7 @@ namespace backend.Tests.UnitTests
 {
     public class CoursesControllerTests
     {
-        readonly Mock<IService<Course>> _mockService = new Mock<IService<Course>>();
+        readonly Mock<IService<Course>> _mockService = new();
 
         readonly Course course = new()
         {
@@ -25,10 +25,9 @@ namespace backend.Tests.UnitTests
         public async void GetCourses_Returns_CollectionOfCourseResponses()
         {
             // arrange
-            var courseList = new List<Course>() { course };
             var expectedResponse = new List<CourseResponse>() { (CourseResponse)course };
 
-            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(courseList);
+            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync([course]);
             var controller = new CoursesController(_mockService.Object);
 
             // act

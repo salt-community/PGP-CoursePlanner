@@ -37,6 +37,41 @@ namespace backend.Tests.UnitTests
         }
 
         [Fact]
+        public async void GetModule_Returns_ModuleResponse()
+        {
+            // arrange
+            var expectedResponse = (ModuleResponse)module;
+
+            _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(module);
+            var controller = new ModulesController(_mockService.Object);
+
+            // act
+            var result = (await controller.GetModule(1)).Result;
+            var value = (result as ObjectResult)!.Value;
+
+            // assert
+            result.Should().BeOfType<OkObjectResult>();
+            value.Should().BeOfType<ModuleResponse>();
+            value.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [Fact]
+        public async void GetModule_Returns_NotFound_With_Message()
+        {
+            // arrange
+            _mockService.Setup(service => service.GetOneAsync(1)).ThrowsAsync(new NotFoundByIdException("Module", 1));
+            var controller = new ModulesController(_mockService.Object);
+
+            // act
+            var result = (await controller.GetModule(1)).Result;
+            var value = (result as ObjectResult)!.Value;
+
+            // assert
+            result.Should().BeOfType<NotFoundObjectResult>();
+            value.Should().Be("Module with ID 1 was not found.");
+        }
+
+        [Fact]
         public async void CreateModule_Returns_CreatedModule()
         {
             // arrange
@@ -52,40 +87,6 @@ namespace backend.Tests.UnitTests
             resultValue.Should().NotBeNull();
             resultValue.Should().BeOfType<Module>();
             resultValue!.Name.Should().Be("TestModule");
-        }
-
-        [Fact]
-        public async void GetModule_Returns_CorrectModule()
-        {
-            // arrange
-            var module = new Module() { Id = 1, Name = "TestModule" };
-            _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(module);
-            var controller = new ModulesController(_mockService.Object);
-
-            // act
-            var result = await controller.GetModule(1);
-
-            // assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType<Module>();
-            result.Name.Should().Be("TestModule");
-        }
-
-        [Fact]
-        public async void GetModule_Returns_NotFound()
-        {
-            // arrange
-            var module = new Module() { Id = 1, Name = "TestModule" };
-            _mockService.Setup(service => service.GetOneAsync(2)).ThrowsAsync(new NotFoundByIdException("Module", 2));
-            var controller = new ModulesController(_mockService.Object);
-
-            // act
-            var result = await controller.GetModule(2);
-            var resultValue = result;
-
-            // assert
-            resultValue.Should().NotBeNull();
-            resultValue.Should().BeOfType<NotFoundObjectResult>();
         }
 
         [Fact]
