@@ -17,14 +17,14 @@ namespace backend.Tests.UnitTests
         {
             // arrange
             var module = new Module() { Name = "TestModule" };
-            _mockService.Setup(service => service.GetAll()).ReturnsAsync(new List<Module>() { module });
+            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(new List<Module>() { module });
             var controller = new ModulesController(_mockService.Object);
 
             // act
             var result = await controller.GetModules();
 
             // assert
-            result.Result.Should().BeOfType<OkObjectResult>();
+            result.Should().BeOfType<OkObjectResult>();
         }
 
         [Fact]
@@ -33,12 +33,12 @@ namespace backend.Tests.UnitTests
             // arrange
             var module = new Module() { Name = "TestModule" };
             var list = new List<Module>() { module };
-            _mockService.Setup(service => service.GetAll()).ReturnsAsync(list);
+            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(list);
             var controller = new ModulesController(_mockService.Object);
 
             // act
             var result = await controller.GetModules();
-            var resultValue = (result.Result as OkObjectResult)!.Value;
+            var resultValue = (result as OkObjectResult)!.Value;
 
             // assert
             resultValue.Should().NotBeNull();
@@ -89,12 +89,11 @@ namespace backend.Tests.UnitTests
 
             // act
             var result = await controller.GetModule(1);
-            var resultValue = (result.Result as OkObjectResult)!.Value as Module;
 
             // assert
-            resultValue.Should().NotBeNull();
-            resultValue.Should().BeOfType<Module>();
-            resultValue!.Name.Should().Be("TestModule");
+            result.Should().NotBeNull();
+            result.Should().BeOfType<Module>();
+            result.Name.Should().Be("TestModule");
         }
 
         // //TODO: Fix so that it works or remove!!
@@ -120,7 +119,7 @@ namespace backend.Tests.UnitTests
         {
             // arrange
             var module = new Module() { Id = 1, Name = "TestModule" };
-            _mockService.Setup(service => service.UpdateAsync(1, module)).ReturnsAsync(module);
+            _mockService.Setup(service => service.UpdateAsync(1, module));
             var controller = new ModulesController(_mockService.Object);
 
             // act
@@ -151,7 +150,7 @@ namespace backend.Tests.UnitTests
         public async void DeleteModule_Returns_NoContent()
         {
             // arrange
-            _mockService.Setup(service => service.DeleteAsync(1)).ReturnsAsync(true);
+            _mockService.Setup(service => service.DeleteAsync(1));
             var controller = new ModulesController(_mockService.Object);
 
             // act
