@@ -3,7 +3,6 @@ using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using backend.Models.DTOs;
 using backend.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace backend.Tests.UnitTests
 {
@@ -77,7 +76,7 @@ namespace backend.Tests.UnitTests
         {
             // arrange
             var expectedResponse = (ModuleResponse)module;
-            
+
             _mockService.Setup(service => service.CreateAsync(module)).ReturnsAsync(module);
             var controller = new ModulesController(_mockService.Object);
 
@@ -105,7 +104,7 @@ namespace backend.Tests.UnitTests
             result.Should().BeOfType<NoContentResult>();
         }
 
-                [Fact]
+        [Fact]
         public async void UpdateModule_Returns_NotFound_With_Message()
         {
             // arrange
