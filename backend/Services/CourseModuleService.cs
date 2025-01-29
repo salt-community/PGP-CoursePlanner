@@ -1,33 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using backend.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services
 {
-    public class CourseModuleService : IService<CourseModule>
+    public class CourseModuleService(DataContext context) : IService<CourseModule>
     {
+        private readonly DataContext _context = context;
 
-        private readonly DataContext _context;
-
-        public CourseModuleService(DataContext context)
+        public Task<List<CourseModule>> GetAllAsync()
         {
-            _context = context;
-        }
-
-        public Task<bool> DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
+            return _context.CourseModules.ToListAsync();
         }
 
         public Task<CourseModule> GetOneAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<CourseModule> UpdateAsync(int id, CourseModule T)
         {
             throw new NotImplementedException();
         }
@@ -37,12 +22,14 @@ namespace backend.Services
             throw new NotImplementedException();
         }
 
-
-        public Task<List<CourseModule>> GetAll()
+        public Task UpdateAsync(int id, CourseModule T)
         {
-            return _context.CourseModules.ToListAsync();
+            throw new NotImplementedException();
         }
 
-
+        public Task DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
