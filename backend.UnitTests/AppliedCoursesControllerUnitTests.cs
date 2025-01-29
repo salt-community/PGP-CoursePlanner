@@ -2,10 +2,6 @@ using backend.Controllers;
 using backend.Models;
 using backend.Models.DTOs;
 using backend.Services;
-using Castle.Components.DictionaryAdapter.Xml;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
 
 namespace backend.Tests.UnitTests
 {
@@ -14,7 +10,7 @@ namespace backend.Tests.UnitTests
         readonly Mock<IService<Course>> _mockService = new();
 
         [Fact]
-        public async void CreateAppliedCourse_Returns_Created_201()
+        public async void CreateAppliedCourse_Returns_Created_201_And_CourseResponse()
         {
             // arrange
             var appliedCourse = new Course()

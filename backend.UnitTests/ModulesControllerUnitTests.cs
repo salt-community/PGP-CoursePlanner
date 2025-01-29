@@ -2,9 +2,6 @@ using backend.Controllers;
 using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using backend.Services;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
 
 namespace backend.Tests.UnitTests
 {
