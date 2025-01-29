@@ -72,21 +72,22 @@ namespace backend.Tests.UnitTests
         }
 
         [Fact]
-        public async void CreateModule_Returns_CreatedModule()
+        public async void CreateModule_Returns_CreatedAtAction_With_ModuleResponse()
         {
             // arrange
-            var module = new Module() { Name = "TestModule" };
+            var expectedResponse = (ModuleResponse)module;
+            
             _mockService.Setup(service => service.CreateAsync(module)).ReturnsAsync(module);
             var controller = new ModulesController(_mockService.Object);
 
             // act
-            var result = await controller.CreateModule(module);
-            var resultValue = (result.Result as CreatedAtActionResult)!.Value as Module;
+            var result = (await controller.CreateModule(module)).Result;
+            var value = (result as ObjectResult)!.Value;
 
             // assert
-            resultValue.Should().NotBeNull();
-            resultValue.Should().BeOfType<Module>();
-            resultValue!.Name.Should().Be("TestModule");
+            result.Should().BeOfType<CreatedAtActionResult>();
+            value.Should().BeOfType<ModuleResponse>();
+            value.Should().BeEquivalentTo(expectedResponse);
         }
 
         [Fact]
