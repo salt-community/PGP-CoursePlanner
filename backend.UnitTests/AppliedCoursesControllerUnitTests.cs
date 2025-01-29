@@ -22,7 +22,7 @@ namespace backend.Tests.UnitTests
         };
 
         [Fact]
-        public async void GetAppliedCourses_Returns_ListOfCourseResponses()
+        public async void GetAppliedCourses_Returns_CollectionOfCourseResponses()
         {
             // arrange
             var appliedCourseList = new List<Course>() { appliedCourse };
@@ -35,7 +35,7 @@ namespace backend.Tests.UnitTests
             var result = await controller.GetAppliedCourses();
 
             // assert
-            result.Should().BeOfType<List<CourseResponse>>();
+            result.Should().BeAssignableTo<IEnumerable<CourseResponse>>();
             result.Should().BeEquivalentTo(expectedResponse);
         }
 
@@ -44,6 +44,7 @@ namespace backend.Tests.UnitTests
         {
             // arrange
             var expectedResponse = (CourseResponse)appliedCourse;
+
             _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(appliedCourse);
             var controller = new AppliedCoursesController(_mockService.Object);
 
