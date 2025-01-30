@@ -39,7 +39,7 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
 
     setCourse((prevCourse) => {
       const updatedModules = [...prevCourse.modules];
-      
+
       const targetNewStart = updatedModules[draggedIndex].module.startDate;
       const draggedNewStart = updatedModules[targetIndex].module.startDate;
 

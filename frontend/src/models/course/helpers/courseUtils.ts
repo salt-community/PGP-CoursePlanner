@@ -138,7 +138,7 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
             courseName: course.name,
             events: modules[i].days[j].events,
             color: "#999999",
-            appliedCourseId: course.id, //do we really want this?
+            appliedCourseId: course.id, 
             moduleName: modules[i].name,
             moduleId: modules[i].id,
             track: course.track,
@@ -148,6 +148,38 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
     }
   }
   return calendarDateTypes;
+};
+
+export const getUpdatedCourse = (course: CourseType, startDate : Date) => {
+
+  const updatedCourse = { ...course, startDate: new Date(startDate) }; // Avoid mutating course
+
+  const modules = course.modules.map((m) => m.module);
+
+
+
+  for (let i = 0; i < modules.length; i++) {
+    for (let j = 0; j < modules[i].numberOfDays; j++) {
+      modules[i].days[j].date = getNewDate(modules[i].startDate, j)
+      // calendarDateTypes.push({
+      //   date: new Date(modules[i].days[j].date),
+      //   dateContent: [
+      //     {
+      //       dayOfModule: modules[i].days[j].dayNumber,
+      //       totalDaysInModule: modules[i].numberOfDays,
+      //       courseName: course.name,
+      //       events: modules[i].days[j].events,
+      //       color: "#999999",
+      //       appliedCourseId: course.id, 
+      //       moduleName: modules[i].name,
+      //       moduleId: modules[i].id,
+      //       track: course.track,
+      //     },
+      //   ],
+      // });
+    }
+  }
+  return updatedCourse;
 };
 
 export const getDifferenceInDays = (date1: Date, date2: Date) => {
