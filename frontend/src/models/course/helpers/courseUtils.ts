@@ -90,6 +90,10 @@ export const getCourseWithDates = (
   const modules = updatedCourse.modules.map((m) => m.module);
 
   for (let i = 0; i < modules.length; i++) {
+    while (currentDate.getDay() !== 1) {
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
     for (let j = 0; j < modules[i].numberOfDays; j++) {
       // Skip weekends (Saturday: 6, Sunday: 0)
       while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
@@ -138,7 +142,7 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
             courseName: course.name,
             events: modules[i].days[j].events,
             color: "#999999",
-            appliedCourseId: course.id, //do we really want this?
+            appliedCourseId: course.id, 
             moduleName: modules[i].name,
             moduleId: modules[i].id,
             track: course.track,
@@ -148,6 +152,29 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
     }
   }
   return calendarDateTypes;
+};
+
+export const getUpdatedCourse = (course: CourseType, startDate : Date) => {
+
+  const updatedCourse = { ...course, startDate: new Date(startDate) }; // Avoid mutating course
+
+  const modules = course.modules.map((m) => m.module);
+
+  for (let i = 0; i < modules.length; i++) {
+    let currentDate = new Date(modules[i].startDate);
+
+    for (let j = 0; j < modules[i].numberOfDays; j++) {
+
+      while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
+        currentDate = getNewDate(currentDate, 1)
+      }
+
+
+      modules[i].days[j].date = getNewDate(currentDate, 0)
+      currentDate = getNewDate(currentDate, 1)
+    }
+  }
+  return updatedCourse;
 };
 
 export const getDifferenceInDays = (date1: Date, date2: Date) => {

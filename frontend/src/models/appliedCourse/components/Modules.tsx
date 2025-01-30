@@ -39,6 +39,14 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
 
     setCourse((prevCourse) => {
       const updatedModules = [...prevCourse.modules];
+
+      const targetNewStart = updatedModules[draggedIndex].module.startDate;
+      const draggedNewStart = updatedModules[targetIndex].module.startDate;
+
+      updatedModules[draggedIndex].module.startDate = draggedNewStart;
+      updatedModules[targetIndex].module.startDate = targetNewStart;
+
+
       const [draggedModule] = updatedModules.splice(draggedIndex, 1);
       updatedModules.splice(targetIndex, 0, draggedModule);
 
@@ -60,52 +68,52 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
 
   const handleRemoveModule = (index: number) => {
     setCourse((prevCourse) => {
-        const updatedModules = prevCourse.modules.filter((_, i) => i !== index);
-        const updatedCourse = {
-            ...prevCourse,
-            modules: updatedModules,
-        };
-        
-        assignDatesToModules(updatedCourse);
+      const updatedModules = prevCourse.modules.filter((_, i) => i !== index);
+      const updatedCourse = {
+        ...prevCourse,
+        modules: updatedModules,
+      };
 
-        return updatedCourse; 
+      assignDatesToModules(updatedCourse);
+
+      return updatedCourse;
     });
-};
+  };
 
-const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
+  const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
 
-  const myModule : ModuleType= {...course.modules[moduleIndex].module}
+    const myModule: ModuleType = { ...course.modules[moduleIndex].module }
 
-  const newDay: DayType = {
+    const newDay: DayType = {
       id: 0,
       dayNumber: numberOfDays + 1,
       description: "New day",
       isApplied: true,
       events: [],
-      date: getNewDate(myModule.startDate, myModule.numberOfDays +2)
-      
-  };
+      date: getNewDate(myModule.startDate, myModule.numberOfDays + 2)
 
-  myModule.days.push(newDay)
-  myModule.numberOfDays +=1
+    };
 
-  const updatedCourse = {
-      ...course, 
+    myModule.days.push(newDay)
+    myModule.numberOfDays += 1
+
+    const updatedCourse = {
+      ...course,
       modules: course.modules.map((module, index) => {
-          if (index === moduleIndex) {
-              return {
-                  ...module,
-                  module: {
-                      ...myModule
-                  },
-              };
-          }
-           console.log(module)
-          return module;
+        if (index === moduleIndex) {
+          return {
+            ...module,
+            module: {
+              ...myModule
+            },
+          };
+        }
+        console.log(module)
+        return module;
       }),
+    };
+    assignDatesToModules(updatedCourse);
   };
-  assignDatesToModules(updatedCourse);
-};
 
 
 
@@ -117,16 +125,15 @@ const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
         .map((courseModule, moduleIndex) => (
           <div
             key={moduleIndex}
-            className={` flex space-between mb-4 rounded-r-lg border-r border-b border-gray-300 ${
-              draggedIndex === moduleIndex ? "dragging" : ""
-            }`}
-            draggable={!collapseOpen[moduleIndex]} 
+            className={` flex space-between mb-4 rounded-r-lg border-r border-b border-gray-300 ${draggedIndex === moduleIndex ? "dragging" : ""
+              }`}
+            draggable={!collapseOpen[moduleIndex]}
             onDragStart={() => handleDragStart(moduleIndex)}
             onDragEnd={handleDragEnd}
             onDragOver={(e) => handleDragOver(e, moduleIndex)}
             style={{
               opacity: draggedIndex === moduleIndex ? 0.5 : 1,
-              cursor: collapseOpen[moduleIndex] ? "default" : "move", 
+              cursor: collapseOpen[moduleIndex] ? "default" : "move",
             }}
           >
             <div className="collapse border-t border-l border-gray-300 rounded-none">
