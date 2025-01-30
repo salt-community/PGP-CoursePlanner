@@ -1,4 +1,4 @@
-import { setCookie, setTokenCookies } from "@helpers/cookieHelpers";
+import { getCookie, setCookie, setTokenCookies } from "@helpers/cookieHelpers";
 import { getHomeUrl } from "@helpers/helperMethods";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Tokens`;
@@ -30,18 +30,30 @@ export async function getToken() {
 }
 
 export async function refreshToken() {
+  const accessToken = getCookie("access_token"); 
+
   const response = await fetch(BASE_URL, {
+    method: 'PUT',
     headers: {
       Accept: "application/json",
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify(accessToken) 
   });
 
   if (!response.ok) {
     throw new Error(response.statusText);
   }
+  const data = await response.json();
+  const { access_token, id_token } = data;
 
-  return await response.json();
+  setCookie("access_token", access_token, 72000);
+  setCookie("id_token", id_token, 72000);
+
+  return data; 
 }
+
+
 
 export async function deleteRefreshToken() {
   const response = await fetch(BASE_URL, {

@@ -20,9 +20,9 @@ export function setTokenCookies(data: tokenResponse | undefined) {
   if (data === undefined) {
       return;
   }
-  const { access_token, id_token, expires_in } = data;
-  setCookie('access_token', access_token, expires_in);
-  setCookie('id_token', id_token, expires_in);
+  const { access_token, id_token} = data;
+  setCookie('access_token', access_token, 72000);
+  setCookie('id_token', id_token, 72000);
   deleteCookie('auth_code');
   location.href = "/";
 }
