@@ -53,8 +53,6 @@ export async function refreshToken() {
   return data; 
 }
 
-
-
 export async function deleteRefreshToken() {
   const response = await fetch(BASE_URL, {
     method: "DELETE",
