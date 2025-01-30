@@ -38,7 +38,7 @@ export async function refreshToken() {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(accessToken) 
+    body: JSON.stringify({access_token: accessToken}) 
   });
 
   if (!response.ok) {
@@ -52,8 +52,6 @@ export async function refreshToken() {
 
   return data; 
 }
-
-
 
 export async function deleteRefreshToken() {
   const response = await fetch(BASE_URL, {

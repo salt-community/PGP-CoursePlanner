@@ -1,7 +1,9 @@
-namespace backend.Models.DTOs
+using System.ComponentModel.DataAnnotations;
+
+namespace backend.Models.DTOs;
+
+public record TokenRequest
 {
-    public class TokenRequest
-    {
-        
-    }
+    [Required]
+    public string Access_token { get; set; } = null!;
 }
