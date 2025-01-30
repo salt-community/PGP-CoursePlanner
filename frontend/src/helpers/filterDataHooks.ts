@@ -56,7 +56,7 @@ export function useFilterModules(data?: ModuleType[]) {
                 order: m.order,
                 startDate: m.startDate,
                 isApplied: m.isApplied,
-                tracks: m.tracks.map((t) => {
+                tracks: m.tracks!.map((t) => {
                     const track = trackVisibility.find((track) => track.id === t.id);
                     return track as Track;
                 })

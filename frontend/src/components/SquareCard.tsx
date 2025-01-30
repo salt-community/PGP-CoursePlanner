@@ -30,18 +30,16 @@ export default function SquareCard({ data, isLoading, tracks }: Props) {
                                     {item.name}
                                 </h2>
                             }
-                            {!tracks &&
+                            {tracks && ((item as ModuleType).tracks ?? []).length > 0 && (
                                 <div className="flex gap-2 flex-wrap justify-center max-w-60">
-                                    {(item as ModuleType).tracks.map((t) =>
+                                    {(item as ModuleType).tracks?.map((t) => (
                                         <div className="flex gap-2" key={t.id}>
                                             <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: (t as Track).color }}></div>
-                                            <h3 className="text-lg text-[#636363]">
-                                                {t.name}
-                                            </h3>
+                                            <h3 className="text-lg text-[#636363]">{t.name}</h3>
                                         </div>
-                                    )}
+                                    ))}
                                 </div>
-                            }
+                            )}
                             <h4 className="absolute text-sm text-[#636363] bottom-0 mb-8">Creation Date: 2024-01-13</h4>
                         </>
                     }

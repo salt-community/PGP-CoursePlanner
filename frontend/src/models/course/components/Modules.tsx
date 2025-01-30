@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CourseType, DayType } from "@models/course/Types";
+import { CourseType } from "@models/course/Types";
 import DotsIcon from "./DotsIcon";
 import TrashIcon from "./TrashIcon";
 import Days from "./Days";
