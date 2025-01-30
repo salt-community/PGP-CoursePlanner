@@ -1,5 +1,4 @@
 import { useCourse } from "../helpers/useCourse";
-import { findDuplicates, isStringInputIncorrect } from "../helpers/courseUtils";
 import ModuleRow from "./ModuleRow";
 import { useEffect, useState } from "react";
 import { CourseProps, CourseType } from "../Types";
@@ -100,31 +99,23 @@ export default function Course({ course }: CourseProps) {
 
         setIsIncorrectModuleInput(false);
         setIsNotSelected(false);
-        const isDuplicate = findDuplicates(courseModules);
-        if (isDuplicate || isStringInputIncorrect(courseName) || numberOfWeeks == 0 || courseModules.some(cm => cm.id == 0)) {
-            if (isDuplicate)
-                setIsIncorrectModuleInput(true);
-            if (isStringInputIncorrect(courseName) || numberOfWeeks == 0)
-                if (courseModules.some(cm => cm.id == 0) || course.moduleIds!.some(mid => mid == 0))
-                    setIsNotSelected(true);
+        
+        const newCourse: CourseType = {
+            id: course.id,
+            name: courseName.trim(),
+            startDate: course.startDate,
+            numberOfWeeks: numberOfWeeks,
+            moduleIds: courseModuleIds,
+            track: trackData!.find(t => t.id == inputs.trackId)!,
+            modules: []
+        };
+        if (newCourse.id == 0) {
+            console.log(newCourse)
+            mutationPostCourse.mutate(newCourse);
+        } else {
+            mutationUpdateCourse.mutate(newCourse);
         }
-        else {
-            const newCourse: CourseType = {
-                id: course.id,
-                name: courseName.trim(),
-                startDate: course.startDate,
-                numberOfWeeks: numberOfWeeks,
-                moduleIds: courseModuleIds,
-                track: trackData!.find(t => t.id == inputs.trackId)!,
-                modules: []
-            };
-            if (newCourse.id == 0) {
-                console.log(newCourse)
-                mutationPostCourse.mutate(newCourse);
-            } else {
-                mutationUpdateCourse.mutate(newCourse);
-            }
-        }
+        
     }
 
 

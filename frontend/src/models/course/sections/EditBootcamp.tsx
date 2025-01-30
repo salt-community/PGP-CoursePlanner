@@ -83,7 +83,7 @@ export function EditBootcamp({ course }: Props) {
         const myTrack = previewCourse.track.id;
         const myCourse = stripIdsFromCourse(previewCourse)
         myCourse.track.id = myTrack
-
+        console.log(isInvalidDate);
         setIsInvalidDate(false);
         if (
             startDate.getDay() == 6 ||

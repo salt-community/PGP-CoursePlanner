@@ -25,7 +25,8 @@ export default function AppliedModule({ saveAppliedModule, module, index, button
                 const newDay = {
                     dayNumber: num + days.length,
                     description: "",
-                    events: []
+                    events: [],
+                    date: new Date().toISOString()
                 };
                 editedDays.push(newDay)
             })
@@ -56,7 +57,8 @@ export default function AppliedModule({ saveAppliedModule, module, index, button
                 id: module.id ?? 0,
                 name: moduleName.value,
                 numberOfDays: numberOfDays.value,
-                days: days
+                days: days,
+                
             };
 
             saveAppliedModule(index, newModule);

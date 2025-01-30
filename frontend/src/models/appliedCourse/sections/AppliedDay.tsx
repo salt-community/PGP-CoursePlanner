@@ -29,7 +29,8 @@ export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDa
         const emptyDay = {
             dayNumber: index + 2,
             description: "",
-            events: []
+            events: [],
+            date: new Date().toISOString(),
         };
         const editedDays = [...days];
         editedDays.splice(index + 1, 0, emptyDay);

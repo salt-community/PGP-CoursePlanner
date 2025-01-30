@@ -32,12 +32,12 @@ export default function MonthView() {
     const monday = getDateAsString(allWeekDays[0])
     const sunday = getDateAsString(allWeekDays[6])
 
-    const {data, isPending, isError, error} = useQueryCalendarDateBatch(monday, sunday);
+    const {data, isLoading, isError} = useQueryCalendarDateBatch(monday, sunday);
 
     if (isError) {
-        console.log("Query error:", error);
+        console.log("Query error:", isError);
     }
-    if (isPending) return "pending"
+    if (isLoading) return "pending"
 
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 

@@ -10,9 +10,10 @@ export default function CreateModule() {
         days: [{
             dayNumber: 1,
             description: "",
-            events: []
+            events: [],
+            date: new Date().toISOString(),
         }],
-        track: []
+        tracks: []
     }
 
     return (

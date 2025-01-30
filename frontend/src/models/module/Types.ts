@@ -5,10 +5,10 @@ export type ModuleType = {
   name: string;
   numberOfDays: number;
   days: DayType[];
-  tracks: Track[];
+  tracks?: Track[];
   order?: number;
   isApplied?: boolean;
-  startDate: Date
+  startDate?: Date
 };
 
 export type ModuleProps = {
