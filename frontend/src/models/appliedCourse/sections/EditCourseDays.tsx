@@ -4,6 +4,7 @@ import Modules from "../components/Modules"
 import PrimaryBtn from "@components/buttons/PrimaryBtn"
 import { assignDatesToModules, handleCreateNewAppliedModule, handleUpdateCourse } from "../helpers/appliedCourseUtils"
 import { useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations"
+import { getCourseDayDates, getCourseWithDates } from "@models/course/helpers/courseUtils"
 
 type Props = {
     appliedCourse: CourseType
@@ -23,7 +24,9 @@ export function EditCourseDays({appliedCourse, course, setCourse}:Props) {
             <CourseInfo course={course} setCourse={setCourse} />
         </div>
         <div>
-            <Modules course={course} setCourse={setCourse} assignDatesToModules={() => assignDatesToModules(course, setCourse)} />
+            <Modules course={course} setCourse={setCourse} assignDatesToModules={() => {const crs =  getCourseWithDates(course, course.modules[0].module.startDate) 
+                                                                                         setCourse(crs)
+            }} />
         </div>
         <div>
             <div className="flex justify-center items-center">
