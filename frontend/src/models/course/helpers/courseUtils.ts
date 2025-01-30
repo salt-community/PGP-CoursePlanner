@@ -156,27 +156,10 @@ export const getUpdatedCourse = (course: CourseType, startDate : Date) => {
 
   const modules = course.modules.map((m) => m.module);
 
-
-
   for (let i = 0; i < modules.length; i++) {
     for (let j = 0; j < modules[i].numberOfDays; j++) {
       modules[i].days[j].date = getNewDate(modules[i].startDate, j)
-      // calendarDateTypes.push({
-      //   date: new Date(modules[i].days[j].date),
-      //   dateContent: [
-      //     {
-      //       dayOfModule: modules[i].days[j].dayNumber,
-      //       totalDaysInModule: modules[i].numberOfDays,
-      //       courseName: course.name,
-      //       events: modules[i].days[j].events,
-      //       color: "#999999",
-      //       appliedCourseId: course.id, 
-      //       moduleName: modules[i].name,
-      //       moduleId: modules[i].id,
-      //       track: course.track,
-      //     },
-      //   ],
-      // });
+
     }
   }
   return updatedCourse;
