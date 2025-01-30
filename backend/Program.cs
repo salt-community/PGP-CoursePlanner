@@ -2,6 +2,7 @@ using backend.Config;
 using backend.Data;
 using backend.ExceptionHandler;
 using backend.Models;
+using backend.Models.DTOs;
 using backend.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -57,6 +58,7 @@ builder.Services.AddScoped<IService<Module>, ModuleService>();
 builder.Services.AddScoped<IService<Course>, CourseService>();
 builder.Services.AddScoped<IService<Day>, DayService>();
 builder.Services.AddScoped<IService<Track>, TrackService>();
+builder.Services.AddScoped<IServiceTokens<TokenResponse>, TokenService>();
 
 var app = builder.Build();
 
