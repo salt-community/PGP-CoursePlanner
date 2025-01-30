@@ -1,4 +1,3 @@
-using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using backend.Models.DTOs;
 using backend.Services;
@@ -25,15 +24,8 @@ namespace backend.Controllers
 
         public async Task<ActionResult<CourseResponse>> GetAppliedCourse(int id)
         {
-            try
-            {
-                var response = await _service.GetOneAsync(id);
-                return Ok((CourseResponse)response);
-            }
-            catch (NotFoundByIdException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            var response = await _service.GetOneAsync(id);
+            return Ok((CourseResponse)response);
         }
 
         [HttpPost]
@@ -47,15 +39,8 @@ namespace backend.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateAppliedCourse(int id, [FromBody] Course appliedCourse)
         {
-            try
-            {
-                await _service.UpdateAsync(id, appliedCourse);
-                return NoContent();
-            }
-            catch (NotFoundByIdException ex)
-            {
-                return NotFound(ex.Message);
-            }
+            await _service.UpdateAsync(id, appliedCourse);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

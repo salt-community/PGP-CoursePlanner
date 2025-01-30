@@ -63,12 +63,11 @@ namespace backend.Tests.UnitTests
             var controller = new ModulesController(_mockService.Object);
 
             // act
-            var result = (await controller.GetModule(1)).Result;
-            var value = (result as ObjectResult)!.Value;
+            var exception = await Record.ExceptionAsync(() => controller.GetModule(1));
 
             // assert
-            result.Should().BeOfType<NotFoundObjectResult>();
-            value.Should().Be("Module with ID 1 was not found.");
+            exception.Should().BeOfType<NotFoundByIdException>();
+            exception.Message.Should().Be("Module with ID 1 was not found.");
         }
 
         [Fact]
@@ -77,7 +76,7 @@ namespace backend.Tests.UnitTests
             // arrange
             var expectedResponse = (ModuleResponse)module;
 
-            _mockService.Setup(service => service.CreateAsync(module)).ReturnsAsync(module);
+            _mockService.Setup(service => service.CreateAsync(It.IsAny<Module>())).ReturnsAsync(module);
             var controller = new ModulesController(_mockService.Object);
 
             // act
@@ -108,16 +107,15 @@ namespace backend.Tests.UnitTests
         public async void UpdateModule_Returns_NotFound_With_Message()
         {
             // arrange
-            _mockService.Setup(service => service.UpdateAsync(1, module)).ThrowsAsync(new NotFoundByIdException("Module", 1));
+            _mockService.Setup(service => service.UpdateAsync(1, It.IsAny<Module>())).ThrowsAsync(new NotFoundByIdException("Module", 1));
             var controller = new ModulesController(_mockService.Object);
 
             // act
-            var result = await controller.UpdateModule(1, module);
-            var message = (result as ObjectResult)!.Value as string;
+            var exception = await Record.ExceptionAsync(() => controller.UpdateModule(1, module));
 
             // assert
-            result.Should().BeOfType<NotFoundObjectResult>();
-            message.Should().Be("Module with ID 1 was not found.");
+            exception.Should().BeOfType<NotFoundByIdException>();
+            exception.Message.Should().Be("Module with ID 1 was not found.");
         }
 
         [Fact]

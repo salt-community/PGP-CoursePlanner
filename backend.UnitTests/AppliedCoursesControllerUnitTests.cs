@@ -65,12 +65,11 @@ namespace backend.Tests.UnitTests
             var controller = new AppliedCoursesController(_mockService.Object);
 
             // act
-            var result = (await controller.GetAppliedCourse(1)).Result;
-            var message = (result as ObjectResult)!.Value as string;
+            var exception = await Record.ExceptionAsync(() => controller.GetAppliedCourse(1));
 
             // assert
-            result.Should().BeOfType<NotFoundObjectResult>();
-            message.Should().Be("Course with ID 1 was not found.");
+            exception.Should().BeOfType<NotFoundByIdException>();
+            exception.Message.Should().Be("Course with ID 1 was not found.");
         }
 
         [Fact]
@@ -110,16 +109,15 @@ namespace backend.Tests.UnitTests
         public async void UpdateAppliedCourse_Returns_NotFound_With_Message()
         {
             // arrange
-            _mockService.Setup(service => service.UpdateAsync(1, appliedCourse)).ThrowsAsync(new NotFoundByIdException("Course", 1));
+            _mockService.Setup(service => service.UpdateAsync(1, It.IsAny<Course>())).ThrowsAsync(new NotFoundByIdException("Course", 1));
             var controller = new AppliedCoursesController(_mockService.Object);
 
             // act
-            var result = await controller.UpdateAppliedCourse(1, appliedCourse);
-            var message = (result as ObjectResult)!.Value as string;
+            var exception = await Record.ExceptionAsync(() => controller.UpdateAppliedCourse(1, appliedCourse));
 
             // assert
-            result.Should().BeOfType<NotFoundObjectResult>();
-            message.Should().Be("Course with ID 1 was not found.");
+            exception.Should().BeOfType<NotFoundByIdException>();
+            exception.Message.Should().Be("Course with ID 1 was not found.");
         }
 
         [Fact]

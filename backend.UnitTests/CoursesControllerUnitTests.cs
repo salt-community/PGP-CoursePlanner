@@ -65,12 +65,11 @@ namespace backend.Tests.UnitTests
             var controller = new CoursesController(_mockService.Object);
 
             // act
-            var result = (await controller.GetCourse(1)).Result;
-            var message = (result as ObjectResult)!.Value as string;
+            var exception = await Record.ExceptionAsync(() => controller.GetCourse(1));
 
             // assert
-            result.Should().BeOfType<NotFoundObjectResult>();
-            message.Should().Be("Course with ID 1 was not found.");
+            exception.Should().BeOfType<NotFoundByIdException>();
+            exception.Message.Should().Be("Course with ID 1 was not found.");
         }
 
         [Fact]
@@ -79,7 +78,7 @@ namespace backend.Tests.UnitTests
             // arrange
             var expectedResponse = (CourseResponse)course;
 
-            _mockService.Setup(service => service.CreateAsync(course)).ReturnsAsync(course);
+            _mockService.Setup(service => service.CreateAsync(It.IsAny<Course>())).ReturnsAsync(course);
             var controller = new CoursesController(_mockService.Object);
 
             // act
@@ -110,16 +109,15 @@ namespace backend.Tests.UnitTests
         public async void UpdateCourse_Returns_NotFound_With_Message()
         {
             // arrange
-            _mockService.Setup(service => service.UpdateAsync(1, course)).ThrowsAsync(new NotFoundByIdException("Course", 1));
+            _mockService.Setup(service => service.UpdateAsync(1, It.IsAny<Course>())).ThrowsAsync(new NotFoundByIdException("Course", 1));
             var controller = new CoursesController(_mockService.Object);
 
             // act
-            var result = await controller.UpdateCourse(1, course);
-            var message = (result as ObjectResult)!.Value as string;
+            var exception = await Record.ExceptionAsync(() => controller.UpdateCourse(1, course));
 
             // assert
-            result.Should().BeOfType<NotFoundObjectResult>();
-            message.Should().Be("Course with ID 1 was not found.");
+            exception.Should().BeOfType<NotFoundByIdException>();
+            exception.Message.Should().Be("Course with ID 1 was not found.");
         }
 
         [Fact]

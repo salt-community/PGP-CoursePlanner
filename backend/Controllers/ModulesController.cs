@@ -1,4 +1,3 @@
-using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using backend.Models.DTOs;
 using backend.Services;
@@ -30,15 +29,8 @@ public class ModulesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ModuleResponse>> GetModule(int id)
     {
-        try
-        {
-            var response = await _service.GetOneAsync(id);
-            return Ok((ModuleResponse)response);
-        }
-        catch (NotFoundByIdException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        var response = await _service.GetOneAsync(id);
+        return Ok((ModuleResponse)response);
     }
 
     [HttpPost]
@@ -52,15 +44,8 @@ public class ModulesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult> UpdateModule(int id, Module module)
     {
-        try
-        {
-            await _service.UpdateAsync(id, module);
-            return NoContent();
-        }
-        catch (NotFoundByIdException ex)
-        {
-            return NotFound(ex.Message);
-        }
+        await _service.UpdateAsync(id, module);
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
