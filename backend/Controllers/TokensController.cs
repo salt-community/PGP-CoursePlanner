@@ -19,19 +19,19 @@ namespace backend.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<JWTResponse>> UpdateTokens(TokenRequest token)
+        public async Task<JWTResponse> UpdateTokens(TokenRequest token)
         {
             var response = await _service.RefreshTokens(token.Access_token);
             await _service.UpdateTokens(response, token.Access_token);
             return (JWTResponse)response;
         }
 
-        //     [HttpDelete]
-        //     public async Task<IActionResult> DeleteRefreshTokens()
-        //     {
-        //         await _context.LoggedInUser.ForEachAsync(user => _context.LoggedInUser.Remove(user));
-        //         await _context.SaveChangesAsync();
-        //         return NoContent();
-        //     }
+        // TODO: Implement delete user tokens endpoint
+        [HttpDelete]
+        public async Task<ActionResult> DeleteTokens()
+        {
+            await _service.DeleteTokens();
+            return NoContent();
+        }
     }
 }
