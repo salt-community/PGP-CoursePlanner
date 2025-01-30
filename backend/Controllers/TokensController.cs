@@ -152,63 +152,73 @@ namespace backend.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult<JWTResponse>> RefreshTokens()
+        [HttpPut]
+        public async Task<ActionResult<JWTResponse>> RefreshTokens([FromBody] string access_token)
         {
-            var refreshToken = await _context.LoggedInUser.Select(user => user.Refresh_Token).FirstOrDefaultAsync()
-            ?? throw new NotFoundByIdException("No refresh tokens found");
+            if (string.IsNullOrEmpty(access_token))
+            {
+                return BadRequest("access_token is required");
+            }
+
+            // Get the user based on the provided id_token
+            var user = await _context.LoggedInUser
+                .FirstOrDefaultAsync(u => u.Access_Token == access_token);
+
+            Console.WriteLine(user);
+            Console.WriteLine("Look here");
+
+            if (user == null)
+            {
+                return NotFound("User not found for the provided access_token");
+            }
+
+            // Get the refresh token associated with the user
+            var refreshToken = user.Refresh_Token;
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return NotFound("No refresh token found for this user");
+            }
+
             var builder = WebApplication.CreateBuilder();
-
-            string client_id;
-            if (builder.Configuration["AppInfo:ClientId"] == "Secret")
-            {
-                client_id = Environment.GetEnvironmentVariable("CLIENT_ID")!;
-            }
-            else
-            {
-                client_id = builder.Configuration["AppInfo:ClientId"]!;
-            }
-
-            string client_secret;
-            if (builder.Configuration["AppInfo:ClientSecret"] == "Secret")
-            {
-                client_secret = Environment.GetEnvironmentVariable("CLIENT_SECRET")!;
-            }
-            else
-            {
-                client_secret = builder.Configuration["AppInfo:ClientSecret"]!;
-            }
-
+            string client_id = builder.Configuration["AppInfo:ClientId"] == "Secret" 
+                ? Environment.GetEnvironmentVariable("CLIENT_ID")! 
+                : builder.Configuration["AppInfo:ClientId"]!;
+            
+            string client_secret = builder.Configuration["AppInfo:ClientSecret"] == "Secret" 
+                ? Environment.GetEnvironmentVariable("CLIENT_SECRET")! 
+                : builder.Configuration["AppInfo:ClientSecret"]!;
+            
             var response = await RefreshTokensFromGoogle(
-                "https://accounts.google.com/o/oauth2/token",
-                refreshToken,
-                client_id,
+                "https://accounts.google.com/o/oauth2/token", 
+                refreshToken, 
+                client_id, 
                 client_secret);
-            if (response.Result.GetType() == typeof(OkObjectResult))
+
+            if (response.Result is OkObjectResult responseData)
             {
-                var responseData = (OkObjectResult)response.Result!;
                 var data = responseData.Value as TokenResponse;
 
+                // Update the user's tokens in the database
+                user.Access_Token = data!.Access_token;
+                user.Id_token = data.Id_token;
+
+                // Save the changes to the database
+                _context.LoggedInUser.Update(user);
+                await _context.SaveChangesAsync();
+
+                // Return the new tokens in the response
                 return new JWTResponse()
                 {
-                    Access_token = data!.Access_token,
+                    Access_token = data.Access_token,
                     Id_token = data.Id_token,
-                    Expires_in = data!.Expires_in
+                    Expires_in = data.Expires_in
                 };
             }
-            else
-            {
-                // Convert the response to AccessTokenResponse
-                var tokenResponse = response.Result as OkObjectResult;
-                var tokenData = tokenResponse.Value as TokenResponse;
-                return new JWTResponse()
-                {
-                    Access_token = tokenData.Access_token,
-                    Id_token = tokenData.Id_token,
-                    Expires_in = tokenData.Expires_in
-                };
-            }
+
+            return StatusCode(500, "Error refreshing tokens");
         }
+
+
 
         [HttpDelete]
         public async Task<IActionResult> DeleteRefreshTokens()
