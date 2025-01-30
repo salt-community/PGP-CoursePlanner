@@ -157,9 +157,17 @@ export const getUpdatedCourse = (course: CourseType, startDate : Date) => {
   const modules = course.modules.map((m) => m.module);
 
   for (let i = 0; i < modules.length; i++) {
-    for (let j = 0; j < modules[i].numberOfDays; j++) {
-      modules[i].days[j].date = getNewDate(modules[i].startDate, j)
+    let currentDate = new Date(modules[i].startDate);
 
+    for (let j = 0; j < modules[i].numberOfDays; j++) {
+
+      while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
+        currentDate = getNewDate(currentDate, 1)
+      }
+
+
+      modules[i].days[j].date = getNewDate(currentDate, 0)
+      currentDate = getNewDate(currentDate, 1)
     }
   }
   return updatedCourse;
