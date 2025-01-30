@@ -1,124 +1,98 @@
 using backend.Controllers;
 using backend.ExceptionHandler.Exceptions;
 using backend.Models;
+using backend.Models.DTOs;
 using backend.Services;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
 
 namespace backend.Tests.UnitTests
 {
     public class ModulesControllerTests
     {
-        readonly Mock<IService<Module>> _mockService = new Mock<IService<Module>>();
+        readonly Mock<IService<Module>> _mockService = new();
+
+        readonly Module module = new()
+        {
+            Name = "Hell Week",
+            NumberOfDays = 10,
+            Tracks = new List<Track> { new() { Id = 1, Name = "Java", Color = "#D73A24", Visibility = true } },
+            Order = 1,
+            StartDate = new DateTime(2024, 7, 12),
+        };
 
         [Fact]
-        public async void GetModules_Returns_Ok()
+        public async void GetModules_Returns_CollectionOfModuleResponses()
         {
             // arrange
-            var module = new Module() { Name = "TestModule" };
-            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(new List<Module>() { module });
+            var expectedResponse = new List<ModuleResponse>() { (ModuleResponse)module };
+
+            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync([module]);
             var controller = new ModulesController(_mockService.Object);
 
             // act
             var result = await controller.GetModules();
 
             // assert
-            result.Should().BeOfType<OkObjectResult>();
+            result.Should().BeAssignableTo<IEnumerable<ModuleResponse>>();
+            result.Should().BeEquivalentTo(expectedResponse);
         }
 
         [Fact]
-        public async void GetModules_Returns_CollectionOfModules()
+        public async void GetModule_Returns_ModuleResponse()
         {
             // arrange
-            var module = new Module() { Name = "TestModule" };
-            var list = new List<Module>() { module };
-            _mockService.Setup(service => service.GetAllAsync()).ReturnsAsync(list);
-            var controller = new ModulesController(_mockService.Object);
+            var expectedResponse = (ModuleResponse)module;
 
-            // act
-            var result = await controller.GetModules();
-            var resultValue = (result as OkObjectResult)!.Value;
-
-            // assert
-            resultValue.Should().NotBeNull();
-            resultValue.Should().BeAssignableTo<IEnumerable<Module>>();
-        }
-
-        [Fact]
-        public async void CreateModule_Returns_CreatedModule()
-        {
-            // arrange
-            var module = new Module() { Name = "TestModule" };
-            _mockService.Setup(service => service.CreateAsync(module)).ReturnsAsync(module);
-            var controller = new ModulesController(_mockService.Object);
-
-            // act
-            var result = await controller.CreateModule(module);
-            var resultValue = (result.Result as CreatedAtActionResult)!.Value as Module;
-
-            // assert
-            resultValue.Should().NotBeNull();
-            resultValue.Should().BeOfType<Module>();
-            resultValue!.Name.Should().Be("TestModule");
-        }
-
-        // [Fact]
-        // public async void CreateModule_Returns_BadRequest()
-        // {
-        //     // arrange
-        //     var module = new Module() { Name = "TestModule" };
-        //     _mockService.Setup(service => service.CreateAsync(module)).ReturnsAsync((Module)null!);
-        //     var controller = new ModulesController(_mockService.Object);
-
-        //     // act
-        //     var result = await controller.CreateModule(module);
-
-        //     // assert
-        //     result.Result.Should().NotBeNull();
-        //     result.Result.Should().BeOfType<BadRequestObjectResult>();
-        // }
-
-        [Fact]
-        public async void GetModule_Returns_CorrectModule()
-        {
-            // arrange
-            var module = new Module() { Id = 1, Name = "TestModule" };
             _mockService.Setup(service => service.GetOneAsync(1)).ReturnsAsync(module);
             var controller = new ModulesController(_mockService.Object);
 
             // act
-            var result = await controller.GetModule(1);
+            var result = (await controller.GetModule(1)).Result;
+            var value = (result as ObjectResult)!.Value;
 
             // assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType<Module>();
-            result.Name.Should().Be("TestModule");
+            result.Should().BeOfType<OkObjectResult>();
+            value.Should().BeOfType<ModuleResponse>();
+            value.Should().BeEquivalentTo(expectedResponse);
         }
 
-        // //TODO: Fix so that it works or remove!!
-        // [Fact]
-        // public async void GetModule_Returns_NotFound()
-        // {
-        //     // arrange
-        //     var module = new Module() { Id = 1, Name = "TestModule" };
-        //     _mockService.Setup(service => service.GetOneAsync(2)).ThrowsAsync(new NotFoundByIdException("Module", 2));
-        //     var controller = new ModulesController(_mockService.Object);
+        [Fact]
+        public async void GetModule_Returns_NotFound_With_Message()
+        {
+            // arrange
+            _mockService.Setup(service => service.GetOneAsync(1)).ThrowsAsync(new NotFoundByIdException("Module", 1));
+            var controller = new ModulesController(_mockService.Object);
 
-        //     // act
-        //     var result = await controller.GetModule(2);
-        //     var resultValue = result.Result;
+            // act
+            var exception = await Record.ExceptionAsync(() => controller.GetModule(1));
 
-        //     // assert
-        //     resultValue.Should().NotBeNull();
-        //     resultValue.Should().BeOfType<NotFoundObjectResult>();
-        // }
+            // assert
+            exception.Should().BeOfType<NotFoundByIdException>();
+            exception.Message.Should().Be("Module with ID 1 was not found.");
+        }
+
+        [Fact]
+        public async void CreateModule_Returns_CreatedAtAction_With_ModuleResponse()
+        {
+            // arrange
+            var expectedResponse = (ModuleResponse)module;
+
+            _mockService.Setup(service => service.CreateAsync(It.IsAny<Module>())).ReturnsAsync(module);
+            var controller = new ModulesController(_mockService.Object);
+
+            // act
+            var result = (await controller.CreateModule(module)).Result;
+            var value = (result as ObjectResult)!.Value;
+
+            // assert
+            result.Should().BeOfType<CreatedAtActionResult>();
+            value.Should().BeOfType<ModuleResponse>();
+            value.Should().BeEquivalentTo(expectedResponse);
+        }
 
         [Fact]
         public async void UpdateModule_Returns_NoContent()
         {
             // arrange
-            var module = new Module() { Id = 1, Name = "TestModule" };
             _mockService.Setup(service => service.UpdateAsync(1, module));
             var controller = new ModulesController(_mockService.Object);
 
@@ -126,25 +100,23 @@ namespace backend.Tests.UnitTests
             var result = await controller.UpdateModule(1, module);
 
             // assert
-            result.Should().NotBeNull();
             result.Should().BeOfType<NoContentResult>();
         }
 
-        // [Fact]
-        // public async void Updateodule_Returns_BadRequest()
-        // {
-        //     // arrange
-        //     var module = new Module() { Id = 1, Name = "TestModule" };
-        //     _mockService.Setup(service => service.UpdateAsync(1, module)).ReturnsAsync((Module)null!);
-        //     var controller = new ModulesController(_mockService.Object);
+        [Fact]
+        public async void UpdateModule_Returns_NotFound_With_Message()
+        {
+            // arrange
+            _mockService.Setup(service => service.UpdateAsync(1, It.IsAny<Module>())).ThrowsAsync(new NotFoundByIdException("Module", 1));
+            var controller = new ModulesController(_mockService.Object);
 
-        //     // act
-        //     var result = await controller.DeleteModule(1);
+            // act
+            var exception = await Record.ExceptionAsync(() => controller.UpdateModule(1, module));
 
-        //     // assert
-        //     result.Should().NotBeNull();
-        //     result.Should().BeOfType<BadRequestObjectResult>();
-        // }
+            // assert
+            exception.Should().BeOfType<NotFoundByIdException>();
+            exception.Message.Should().Be("Module with ID 1 was not found.");
+        }
 
         [Fact]
         public async void DeleteModule_Returns_NoContent()
@@ -157,23 +129,7 @@ namespace backend.Tests.UnitTests
             var result = await controller.DeleteModule(1);
 
             // assert
-            result.Should().NotBeNull();
             result.Should().BeOfType<NoContentResult>();
         }
-
-        // [Fact]
-        // public async void DeleteModule_Returns_BadRequest()
-        // {
-        //     // arrange
-        //     _mockService.Setup(service => service.DeleteAsync(1)).ReturnsAsync(false);
-        //     var controller = new ModulesController(_mockService.Object);
-
-        //     // act
-        //     var result = await controller.DeleteModule(1);
-
-        //     // assert
-        //     result.Should().NotBeNull();
-        //     result.Should().BeOfType<BadRequestObjectResult>();
-        // }
     }
 }

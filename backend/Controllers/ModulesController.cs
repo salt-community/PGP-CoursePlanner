@@ -27,10 +27,10 @@ public class ModulesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ModuleResponse> GetModule(int id)
+    public async Task<ActionResult<ModuleResponse>> GetModule(int id)
     {
         var response = await _service.GetOneAsync(id);
-        return (ModuleResponse)response;
+        return Ok((ModuleResponse)response);
     }
 
     [HttpPost]

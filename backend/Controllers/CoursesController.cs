@@ -21,10 +21,10 @@ public class CoursesController(IService<Course> service) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<CourseResponse> GetCourse(int id)
+    public async Task<ActionResult<CourseResponse>> GetCourse(int id)
     {
         var response = await _service.GetOneAsync(id);
-        return (CourseResponse)response;
+        return Ok((CourseResponse)response);
     }
 
     [HttpPost]

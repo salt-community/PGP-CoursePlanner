@@ -21,10 +21,10 @@ public class TracksController(IService<Track> service) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<TrackResponse> GetTrack(int id)
+    public async Task<ActionResult<TrackResponse>> GetTrack(int id)
     {
         var response = await _service.GetOneAsync(id);
-        return (TrackResponse)response;
+        return Ok((TrackResponse)response);
     }
 
     [HttpPost]

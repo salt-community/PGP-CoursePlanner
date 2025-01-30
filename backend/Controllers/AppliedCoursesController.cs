@@ -22,10 +22,10 @@ namespace backend.Controllers
 
         [HttpGet("{id}")]
 
-        public async Task<CourseResponse> GetAppliedCourse(int id)
+        public async Task<ActionResult<CourseResponse>> GetAppliedCourse(int id)
         {
             var response = await _service.GetOneAsync(id);
-            return (CourseResponse)response;
+            return Ok((CourseResponse)response);
         }
 
         [HttpPost]
