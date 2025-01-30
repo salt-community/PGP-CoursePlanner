@@ -2,8 +2,9 @@ namespace backend.Services;
 
 public interface IServiceTokens<T>
 {
-    public Task<T> GetTokensFromGoogle(string auth_code, string redirectUri);
-    public void StoreTokens(T tokenResponse);
-    public Task<T> UpdateTokens(string access_token);
+    public Task<T> GetTokensFromGoogle(string? auth_code, string? redirectUrl, string? refresh_token);
+    public void CreateTokens(T tokenResponse);
+    public Task<T> RefreshTokens(string access_token);
+    public Task UpdateTokens(T tokenResponse, string access_token);
     public Task DeleteTokens();
 }

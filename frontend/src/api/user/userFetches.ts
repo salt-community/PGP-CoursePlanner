@@ -38,7 +38,7 @@ export async function refreshToken() {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(accessToken) 
+    body: JSON.stringify({access_token: accessToken}) 
   });
 
   if (!response.ok) {
