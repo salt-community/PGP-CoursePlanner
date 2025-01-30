@@ -90,6 +90,10 @@ export const getCourseWithDates = (
   const modules = updatedCourse.modules.map((m) => m.module);
 
   for (let i = 0; i < modules.length; i++) {
+    while (currentDate.getDay() !== 1) {
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
     for (let j = 0; j < modules[i].numberOfDays; j++) {
       // Skip weekends (Saturday: 6, Sunday: 0)
       while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
