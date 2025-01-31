@@ -58,7 +58,7 @@ export default function AppliedModule({ saveAppliedModule, module, index, button
                 name: moduleName.value,
                 numberOfDays: numberOfDays.value,
                 days: days,
-                
+                tracks: []
             };
 
             saveAppliedModule(index, newModule);
