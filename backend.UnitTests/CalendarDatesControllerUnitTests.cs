@@ -97,4 +97,41 @@ public class CalendarDatesControllerUnitTests
         result.Should().BeAssignableTo<BadRequestObjectResult>();
         Message.Should().Be("Start date has to be before end date");
     }
+
+    [Fact]
+    public async void GetCalendarDate2Weeks_Returns_2WeeksOfCalendarDates()
+    {
+        // arrange
+        var expectedResponse = new List<CalendarDate>() { calendarDate };
+
+        _mockService.Setup(service => service.GetCalendarDate2Weeks(1)).ReturnsAsync(expectedResponse);
+        var controller = new CalendarDatesController(_mockService.Object);
+
+        // act
+        var result = (await controller.GetCalendarDate2Weeks(1)).Result;
+        var value = (result as ObjectResult)!.Value;
+
+        // assert
+        result.Should().BeAssignableTo<OkObjectResult>();
+        value.Should().BeOfType<List<CalendarDate>>();
+        value.Should().BeEquivalentTo(expectedResponse);
+    }
+
+    [Fact]
+    public async void GetCalendarDate2Weeks_Returns_BadRequest_With_Message()
+    {
+        // arrange
+        var expectedResponse = new List<CalendarDate>() { calendarDate };
+
+        _mockService.Setup(service => service.GetCalendarDate2Weeks(1)).ReturnsAsync(expectedResponse);
+        var controller = new CalendarDatesController(_mockService.Object);
+
+        // act
+        var result = (await controller.GetCalendarDate2Weeks(54)).Result;
+        var Message = (result as ObjectResult)!.Value;
+
+        // assert
+        result.Should().BeAssignableTo<BadRequestObjectResult>();
+        Message.Should().Be("Week number has to be between 1 and 53");
+    }
 }
