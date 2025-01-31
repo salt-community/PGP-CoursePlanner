@@ -117,17 +117,20 @@ public class CalendarDatesControllerUnitTests
         value.Should().BeEquivalentTo(expectedResponse);
     }
 
-    [Fact]
-    public async void GetCalendarDate2Weeks_Returns_BadRequest_With_Message()
+    [Theory]
+    [InlineData(0)]
+    [InlineData(54)]
+    [InlineData(-1)]
+    public async void GetCalendarDate2Weeks_Returns_BadRequest_With_Message(int weekNumber)
     {
         // arrange
         var expectedResponse = new List<CalendarDate>() { calendarDate };
 
-        _mockService.Setup(service => service.GetCalendarDate2Weeks(1)).ReturnsAsync(expectedResponse);
+        _mockService.Setup(service => service.GetCalendarDate2Weeks(weekNumber)).ReturnsAsync(expectedResponse);
         var controller = new CalendarDatesController(_mockService.Object);
 
         // act
-        var result = (await controller.GetCalendarDate2Weeks(54)).Result;
+        var result = (await controller.GetCalendarDate2Weeks(weekNumber)).Result;
         var Message = (result as ObjectResult)!.Value;
 
         // assert
