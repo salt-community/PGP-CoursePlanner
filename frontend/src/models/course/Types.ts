@@ -29,7 +29,7 @@ export type ModuleType = {
   id: number;
   name: string;
   numberOfDays: number;
-  track: Track[];
+  track?: Track[];
   order: number;
   isApplied: boolean;
   days: DayType[];

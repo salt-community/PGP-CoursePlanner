@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { CourseType, DayType } from "@models/course/Types";
+import { CourseType } from "@models/course/Types";
 import DotsIcon from "./DotsIcon";
 import TrashIcon from "./TrashIcon";
-import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import Days from "./Days";
 
 interface ModulesProps {
@@ -61,7 +60,8 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
       modules: prevCourse.modules.filter((_, i) => i !== index),
     }));
   };
-  const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
+  /*
+   const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
     const newDay: DayType = {
       id: 0,
       dayNumber: numberOfDays + 1,
@@ -91,6 +91,7 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
       };
     });
   };
+  */
 
   return (
     <div>

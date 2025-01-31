@@ -114,7 +114,8 @@ export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumb
                 id: module.id,
                 name: module.name,
                 numberOfDays: module.numberOfDays,
-                days: module.days
+                days: module.days,
+                tracks: []
             };
             newModule.days.find(d => d.dayNumber == parseInt(selectedModuleDay))?.events.push(event);
             newModule.days.find(d => d.dayNumber == parseInt(selectedModuleDay))?.events.sort((a, b) => {

@@ -8,7 +8,7 @@ export type ModuleType = {
   tracks: Track[];
   order?: number;
   isApplied?: boolean;
-  startDate: Date
+  startDate?: Date
 };
 
 export type ModuleProps = {

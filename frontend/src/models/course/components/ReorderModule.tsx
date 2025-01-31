@@ -1,6 +1,6 @@
 import DownArrowBtn from "@components/buttons/DownArrowBtn";
-import { reorderModule } from "../helpers/reorderModule";
 import UpArrowBtn from "@components/buttons/UpArrowBtn";
+import { reorderModule } from "@models/appliedCourse/helpers/reorderModule";
 import { ModuleType } from "@models/module/Types";
 
 type Props = {

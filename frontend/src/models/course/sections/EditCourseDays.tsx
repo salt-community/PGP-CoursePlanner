@@ -1,5 +1,4 @@
-import PrimaryBtn from "@components/buttons/PrimaryBtn";
-import { CourseType, CourseModuleType } from "@models/course/Types";
+import { CourseType} from "@models/course/Types";
 import Modules from "../components/Modules";
 import CourseInfo from "../components/CourseInfo";
 
@@ -10,7 +9,8 @@ type Props = {
 
 
 export default function EditCourseDays({ course, setCourse }: Props) {
-    const handleCreateNewAppliedModule = () => {
+   /*
+     const handleCreateNewAppliedModule = () => {
         const newModule: CourseModuleType = {
             courseId: course.id || 0,
             moduleId: 0,
@@ -32,7 +32,7 @@ export default function EditCourseDays({ course, setCourse }: Props) {
         }));
     };
 
-
+   */
     if (!course) {
         return <p>There was an error loading the course data.</p>;
     }

@@ -109,7 +109,7 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                                     {format(day, 'E')}
                                 </div>
                             ))}
-                            {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((emptyDay, index) => (
+                            {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((index) => (
                                 <div key={`empty-${index}`} className="w-1/7 h-full"></div>
                             ))}
                             {daysInMonth.map((thisDate, dateIndex) => { 

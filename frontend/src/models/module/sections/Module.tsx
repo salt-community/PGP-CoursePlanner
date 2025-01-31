@@ -12,7 +12,7 @@ export default function Module({ module, buttonText }: ModuleProps) {
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
     const [days, setDays] = useState<DayType[]>(module.days);
-    const [track, setTrack] = useState<string[]>(module.track || [".NET"]);
+    const [track, setTrack] = useState<string[]>(module.tracks?.map(t => t.name) || [".NET"]);
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLUListElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
@@ -31,7 +31,8 @@ export default function Module({ module, buttonText }: ModuleProps) {
                 const newDay = {
                     dayNumber: num + days.length,
                     description: "",
-                    events: []
+                    events: [],
+                    date: new Date().toISOString()
                 };
 
                 editedDays.push(newDay);
@@ -70,7 +71,7 @@ export default function Module({ module, buttonText }: ModuleProps) {
                 name: moduleName.value.trim(),
                 numberOfDays: numberOfDays.value,
                 days: days,
-                track: track
+                tracks: []
             };
             if (module.id == 0) {
                 mutationPostModule.mutate(newModule);

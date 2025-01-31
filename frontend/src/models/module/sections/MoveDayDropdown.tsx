@@ -57,7 +57,8 @@ function MoveDayDropdown({
                 id: module.id,
                 name: module.name,
                 numberOfDays: module.numberOfDays + 1,
-                days: editedDays
+                days: editedDays,
+                tracks: []
             };
             mutationUpdateModule.mutate(newModule);
             if (mutationUpdateModule.isSuccess) {

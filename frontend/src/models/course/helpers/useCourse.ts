@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { ModuleType } from "@models/module/Types";
 import { useQueryModules } from "@api/module/moduleQueries";
 import { useQueryModulesByCourseId } from "@api/course/courseQueries";
+import { Track } from "../Types";
 
 export function useCourse(courseId: number) {
     const [filteredModules, setFilteredModules] = useState<ModuleType[]>([]);
-    const [tracks, setTracks] = useState<string[]>([]);
+    const [tracks, setTracks] = useState<Track[]>([]);
     const [courseModules, setCourseModules] = useState<ModuleType[]>([]);
     const { data: modules } = useQueryModules();
     const { data: courseModulesData } = useQueryModulesByCourseId(courseId);
@@ -13,7 +14,7 @@ export function useCourse(courseId: number) {
     useEffect(() => {
         if (modules) {
             setFilteredModules(modules);
-            const uniqueTracks = Array.from(new Set(modules.flatMap(m => m.track || [])));
+            const uniqueTracks = Array.from(new Set(modules.flatMap(m => m.tracks || [])));
             setTracks(uniqueTracks);
         }
     }, [modules]);
@@ -22,7 +23,10 @@ export function useCourse(courseId: number) {
         if (courseModulesData) {
             setCourseModules(courseModulesData);
         } else {
-            setCourseModules([{ id: 0, name: "", numberOfDays: 0, days: [] }]);
+            setCourseModules([{
+                id: 0, name: "", numberOfDays: 0, days: [],
+                tracks: []
+            }]);
         }
     }, [courseModulesData]);
 

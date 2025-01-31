@@ -1,4 +1,3 @@
-import { getDateAsStringYyyyMmDd } from "@helpers/dateHelpers";
 import {  ModuleType } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
 
@@ -8,7 +7,7 @@ type Props = {
     handleMoveModule: () => void
 }
 
-export function InfoPanel({ selectedDate, selectedModule, handleMoveModule }: Props) {
+export function InfoPanel({ selectedDate, handleMoveModule }: Props) {
 
     return (
         <div className="p-4 ">

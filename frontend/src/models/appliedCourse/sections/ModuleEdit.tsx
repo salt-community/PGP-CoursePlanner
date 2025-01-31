@@ -31,7 +31,7 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
             name: module.name,
             numberOfDays: module.numberOfDays,
             days: module.days,
-            track: module.track,
+            tracks: module.tracks,
             isApplied: true,
             order: module.order
         };
@@ -46,7 +46,7 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
             name: "",
             numberOfDays: 1,
             days: [],
-            track: [],
+            tracks: [],
             isApplied: true,
             order: 0
         };
