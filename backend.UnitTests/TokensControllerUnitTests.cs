@@ -3,7 +3,7 @@ using backend.ExceptionHandler.Exceptions;
 using backend.Models.DTOs;
 using backend.Services;
 
-namespace backend.Tests.UnitTests;
+namespace backend.UnitTests;
 
 public class TokensControllerUnitTests
 {

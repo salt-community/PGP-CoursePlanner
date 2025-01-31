@@ -4,9 +4,9 @@ using backend.Models;
 using backend.Models.DTOs;
 using backend.Services;
 
-namespace backend.Tests.UnitTests
+namespace backend.UnitTests
 {
-    public class CoursesControllerTests
+    public class CoursesControllerUnitTests
     {
         readonly Mock<IService<Course>> _mockService = new();
 
