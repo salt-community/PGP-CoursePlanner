@@ -2,9 +2,9 @@ import { CourseType } from "@models/course/Types"
 import CourseInfo from "../components/CourseInfo"
 import Modules from "../components/Modules"
 import PrimaryBtn from "@components/buttons/PrimaryBtn"
-import { assignDatesToModules, handleCreateNewAppliedModule, handleUpdateCourse } from "../helpers/appliedCourseUtils"
+import { handleCreateNewAppliedModule, handleUpdateCourse } from "../helpers/appliedCourseUtils"
 import { useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations"
-import { getCourseDayDates, getCourseWithDates, getUpdatedCourse } from "@models/course/helpers/courseUtils"
+import { getUpdatedCourse } from "@models/course/helpers/courseUtils"
 
 type Props = {
     appliedCourse: CourseType
