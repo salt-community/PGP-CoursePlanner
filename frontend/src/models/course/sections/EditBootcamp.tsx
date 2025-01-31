@@ -1,32 +1,34 @@
-import { useMutationPostAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { updatePreviewCalendarDates, getGoogleEventListForCourse, moveModule, getCourseWithDates, detectOverlappingDays, handleApplyTemplate } from "../helpers/courseUtils";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import { updatePreviewCalendarDates, getGoogleEventListForCourse, moveModule, getCourseWithDates, detectOverlappingDays } from "../helpers/courseUtils";
 import { CourseType, ModuleType, CourseModuleType, DayType } from "../Types";
 import { InfoPanel } from "./InfoPanel";
 import MiniCalendar from "./MiniCalendar";
 import { EditCourseDays } from "@models/appliedCourse/sections/EditCourseDays";
 import { CalendarDateType } from "@models/calendar/Types";
 import { postCourseToGoogle } from "@api/googleCalendar/googleCalendarFetches";
+import { UseMutationResult } from "@tanstack/react-query";
 
 type Props = {
     course: CourseType,
+    submitFunction:  (course: CourseType, navigate: NavigateFunction, mutationPostAppliedCourse: UseMutationResult<void, Error, CourseType, unknown>) => Promise<CourseType>;
+    mutation: UseMutationResult<void, Error, CourseType, unknown>
 }
 
 type Inputs = {
     isDeployingToGoogle: boolean;
     groupEmail: string;
+
 };
 
 
 
 
-export function EditBootcamp({ course }: Props) {
+export function EditBootcamp({ course, submitFunction, mutation }: Props) {
     const [startDate, setStartDate] = useState<Date>(new Date());
     // const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
     const [overlappingDays, setOverlappingDays] = useState<DayType[]>([]);
-    const mutationPostAppliedCourse = useMutationPostAppliedCourse();
 
     const navigate = useNavigate();
 
@@ -74,7 +76,7 @@ export function EditBootcamp({ course }: Props) {
             postCourseToGoogle(events);
         }
 
-        handleApplyTemplate(previewCourse, navigate, mutationPostAppliedCourse)
+        submitFunction(previewCourse, navigate, mutation)
     }
 
 

@@ -175,12 +175,12 @@ export const detectOverlappingDays = (course: CourseType): DayType[] => {
 
   const daysWithOverlap: DayType[] = [];
 
-  for (let i = 0; i < days.length -1; i++) {
+  for (let i = 0; i < days.length - 1; i++) {
     const currentDay = days[i];
     const nextDay = days[i + 1];
 
-    const currentDayString = getDateAsString(currentDay.date)
-    const nextDayString = getDateAsString(nextDay.date)
+    const currentDayString = getDateAsString(currentDay.date);
+    const nextDayString = getDateAsString(nextDay.date);
 
     if (currentDayString == nextDayString) {
       if (!daysWithOverlap.includes(currentDay)) {
@@ -272,27 +272,18 @@ export const getGoogleEventListForCourse = (
   return events;
 };
 
-
-export const handleApplyTemplate = async (course : CourseType,navigate: NavigateFunction,mutationPostAppliedCourse: UseMutationResult<void, Error, CourseType, unknown> ) => {
-
+export const handleApplyTemplate = async (
+  course: CourseType,
+  navigate: NavigateFunction,
+  mutation: UseMutationResult<void, Error, CourseType, unknown>
+) => {
   const myTrack = course.track.id;
-  const myCourse = stripIdsFromCourse(course)
-  myCourse.track.id = myTrack
-  
-  // console.log(isInvalidDate);
-  // setIsInvalidDate(false);
-  // if (
-  //   myCourse.startDate.getDay() == 6 ||
-  //   myCourse.startDate.getDay() == 0
-  // ) {
-  //     if (myCourse.startDate.getDay() == 6 || myCourse.startDate.getDay() == 0)
-  //         setIsInvalidDate(true);
-  // } else {
-      mutationPostAppliedCourse.mutate(myCourse);
-      navigate("/activecourses");
-  // }
-};
+  const myCourse = stripIdsFromCourse(course);
+  myCourse.track.id = myTrack;
 
+  mutation.mutate(myCourse);
+  navigate("/activecourses");
+};
 
 /**
  * Utility function to deeply remove `id` property from objects.
