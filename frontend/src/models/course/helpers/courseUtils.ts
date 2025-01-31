@@ -3,6 +3,8 @@ import { CourseType, DayType, ModuleType } from "../Types";
 import { EventType } from "@models/module/Types";
 import { CalendarDateType } from "@models/calendar/Types";
 import { getDateAsString } from "@helpers/dateHelpers";
+import { NavigateFunction } from "react-router-dom";
+import { UseMutationResult } from "@tanstack/react-query";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
   return modules.some((module, idx) =>
@@ -269,6 +271,28 @@ export const getGoogleEventListForCourse = (
 
   return events;
 };
+
+
+export const handleApplyTemplate = async (course : CourseType,navigate: NavigateFunction,mutationPostAppliedCourse: UseMutationResult<void, Error, CourseType, unknown> ) => {
+
+  const myTrack = course.track.id;
+  const myCourse = stripIdsFromCourse(course)
+  myCourse.track.id = myTrack
+  
+  // console.log(isInvalidDate);
+  // setIsInvalidDate(false);
+  // if (
+  //   myCourse.startDate.getDay() == 6 ||
+  //   myCourse.startDate.getDay() == 0
+  // ) {
+  //     if (myCourse.startDate.getDay() == 6 || myCourse.startDate.getDay() == 0)
+  //         setIsInvalidDate(true);
+  // } else {
+      mutationPostAppliedCourse.mutate(myCourse);
+      navigate("/activecourses");
+  // }
+};
+
 
 /**
  * Utility function to deeply remove `id` property from objects.

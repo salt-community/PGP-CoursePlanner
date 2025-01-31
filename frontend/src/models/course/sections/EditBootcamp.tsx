@@ -2,7 +2,7 @@ import { useMutationPostAppliedCourse } from "@api/appliedCourse/appliedCourseMu
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { updatePreviewCalendarDates, getGoogleEventListForCourse, stripIdsFromCourse, moveModule, getCourseWithDates, detectOverlappingDays } from "../helpers/courseUtils";
+import { updatePreviewCalendarDates, getGoogleEventListForCourse, moveModule, getCourseWithDates, detectOverlappingDays, handleApplyTemplate } from "../helpers/courseUtils";
 import { CourseType, ModuleType, CourseModuleType, DayType } from "../Types";
 import { InfoPanel } from "./InfoPanel";
 import MiniCalendar from "./MiniCalendar";
@@ -24,7 +24,7 @@ type Inputs = {
 
 export function EditBootcamp({ course }: Props) {
     const [startDate, setStartDate] = useState<Date>(new Date());
-    const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
+    // const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
     const [overlappingDays, setOverlappingDays] = useState<DayType[]>([]);
     const mutationPostAppliedCourse = useMutationPostAppliedCourse();
 
@@ -74,28 +74,10 @@ export function EditBootcamp({ course }: Props) {
             postCourseToGoogle(events);
         }
 
-        handleApplyTemplate()
+        handleApplyTemplate(previewCourse, navigate, mutationPostAppliedCourse)
     }
 
 
-    const handleApplyTemplate = async () => {
-
-        const myTrack = previewCourse.track.id;
-        const myCourse = stripIdsFromCourse(previewCourse)
-        myCourse.track.id = myTrack
-        console.log(isInvalidDate);
-        setIsInvalidDate(false);
-        if (
-            startDate.getDay() == 6 ||
-            startDate.getDay() == 0
-        ) {
-            if (startDate.getDay() == 6 || startDate.getDay() == 0)
-                setIsInvalidDate(true);
-        } else {
-            mutationPostAppliedCourse.mutate(myCourse);
-            navigate("/activecourses");
-        }
-    };
 
 
     const handleMoveModule = () => {
