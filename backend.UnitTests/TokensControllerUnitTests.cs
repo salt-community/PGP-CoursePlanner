@@ -1,4 +1,5 @@
 using backend.Controllers;
+using backend.ExceptionHandler.Exceptions;
 using backend.Models.DTOs;
 using backend.Services;
 
@@ -33,5 +34,20 @@ public class TokensControllerUnitTests
         // assert
         result.Should().BeAssignableTo<JWTResponse>();
         result.Should().BeEquivalentTo(expectedResponse);
+    }
+
+    [Fact]
+    public async void GetTokens_Return_BadRequest_with_Message()
+    {
+        // arrange
+        _mockService.Setup(service => service.GetTokensFromGoogle("auth_code", "redirectUri", null)).ThrowsAsync(new BadRequestInvalidGrantException("Error: Type of Error. Description: Error Description."));
+        var controller = new TokensController(_mockService.Object);
+
+        // act
+        var exception = await Record.ExceptionAsync(() => controller.GetTokens("auth_code", "redirectUri"));
+
+        // assert
+        exception.Should().BeOfType<BadRequestInvalidGrantException>();
+        exception.Message.Should().Be("Error: Type of Error. Description: Error Description.");
     }
 }
