@@ -4,7 +4,7 @@ using backend.Models;
 using backend.Models.DTOs;
 using backend.Services;
 
-namespace backend.Tests.UnitTests
+namespace backend.UnitTests
 {
     public class AppliedCoursesControllerUnitTests
     {

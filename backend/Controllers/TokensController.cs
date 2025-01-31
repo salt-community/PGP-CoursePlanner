@@ -11,10 +11,10 @@ namespace backend.Controllers
         private readonly IServiceTokens<TokenResponse> _service = service;
 
         [HttpGet("{auth_code}/{redirectUri}")]
-        public async Task<ActionResult<JWTResponse>> GetTokens(string auth_code, string redirectUri)
+        public async Task<JWTResponse> GetTokens(string auth_code, string redirectUri)
         {
             var response = await _service.GetTokensFromGoogle(auth_code, redirectUri, null);
-            _service.CreateTokens(response);
+            await _service.CreateTokens(response);
             return (JWTResponse)response;
         }
 

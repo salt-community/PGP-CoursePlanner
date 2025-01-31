@@ -97,7 +97,7 @@ public class TokenService(DataContext context, IHttpClientFactory clientFactory)
         return (_environmentVariables["CLIENT_ID"], _environmentVariables["CLIENT_SECRET"]);
     }
 
-    public void CreateTokens(TokenResponse tokenResponse)
+    public async Task CreateTokens(TokenResponse tokenResponse)
     {
         var loggedInUser = new LoggedInUser()
         {
@@ -106,24 +106,24 @@ public class TokenService(DataContext context, IHttpClientFactory clientFactory)
             Id_token = tokenResponse.Id_token
         };
         _context.LoggedInUser.Add(loggedInUser);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateTokens(TokenResponse tokenResponse, string access_token)
     {
-        var user = await _context.LoggedInUser.FirstOrDefaultAsync(u => u.Access_Token == access_token) ?? throw new BadRequestInvalidGrantException("User not found");
+        var user = await _context.LoggedInUser.FirstOrDefaultAsync(u => u.Access_Token == access_token) ?? throw new NotFoundException<TokenResponse>("User not found. Please log in again.");
 
         user.Access_Token = tokenResponse.Access_token;
         user.Id_token = tokenResponse.Id_token;
 
         _context.LoggedInUser.Update(user);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 
     public async Task<TokenResponse> RefreshTokens(string access_token)
     {
-        var user = await _context.LoggedInUser.FirstOrDefaultAsync(u => u.Access_Token == access_token) ?? throw new BadRequestInvalidGrantException("User not found");
-        var refreshToken = user.Refresh_Token ?? throw new BadRequestInvalidGrantException("Refresh token not found");
+        var user = await _context.LoggedInUser.FirstOrDefaultAsync(u => u.Access_Token == access_token) ?? throw new NotFoundException<TokenResponse>("User not found. Please log in again.");
+        var refreshToken = user.Refresh_Token ?? throw new NotFoundException<TokenResponse>("Refresh token not found. Please log in again.");
 
         return await GetTokensFromGoogle(null, null, refreshToken);
     }
