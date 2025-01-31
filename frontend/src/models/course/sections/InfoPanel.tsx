@@ -19,7 +19,7 @@ export function InfoPanel({ selectedDate, handleMoveModule, selectedModule }: Pr
                 {selectedDate.dateContent.map((content, index) => {
 
                     return (
-                        <div key={index} className="mb-4 flex flex-col items-center">
+                        <div key={index} className="mb-4 flex flex-col ">
                             <div>
                                 <h2 className="text-xl font-semibold">
                                     {content.courseName}
@@ -29,9 +29,9 @@ export function InfoPanel({ selectedDate, handleMoveModule, selectedModule }: Pr
                                 </h3>
                                 {content.events.length > 0 ? (
                                     content.events.map((event) => (
-                                        <div key={event.id ?? event.name} className="pb-2 mb-2">
-                                            <div className="flex items-center gap-2 justify-between min-w-96">
-                                                <div className="flex items-center gap-2">
+                                        <div key={event.id ?? event.name} className="pb-2 mb-2 w-2/5">
+                                            <div className="flex  gap-2 justify-between min-w-96">
+                                                <div className="flex  gap-2">
                                                     <div className="w-4 h-4 rounded-[3px]" style={{ backgroundColor: `${content.color}` }}></div>
                                                     <p>{event.name}</p>
                                                 </div>
@@ -54,7 +54,7 @@ export function InfoPanel({ selectedDate, handleMoveModule, selectedModule }: Pr
 
             </div>
 
-            <div className="flex flex-grow">hej</div>
+            <div className="flex flex-grow"></div>
             <button className="btn" onClick={(event) => {
                 event.preventDefault()
                 handleMoveModule()
