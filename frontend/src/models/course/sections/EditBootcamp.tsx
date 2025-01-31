@@ -1,32 +1,34 @@
-import { useMutationPostAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { updatePreviewCalendarDates, getGoogleEventListForCourse, stripIdsFromCourse, moveModule, getCourseWithDates } from "../helpers/courseUtils";
-import { CourseType, ModuleType, CourseModuleType } from "../Types";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import { updatePreviewCalendarDates, getGoogleEventListForCourse, moveModule, getCourseWithDates, detectOverlappingDays } from "../helpers/courseUtils";
+import { CourseType, ModuleType, CourseModuleType, DayType } from "../Types";
 import { InfoPanel } from "./InfoPanel";
 import MiniCalendar from "./MiniCalendar";
 import { EditCourseDays } from "@models/appliedCourse/sections/EditCourseDays";
 import { CalendarDateType } from "@models/calendar/Types";
 import { postCourseToGoogle } from "@api/googleCalendar/googleCalendarFetches";
+import { UseMutationResult } from "@tanstack/react-query";
 
 type Props = {
     course: CourseType,
+    submitFunction:  (course: CourseType, navigate: NavigateFunction, mutationPostAppliedCourse: UseMutationResult<void, Error, CourseType, unknown>) => Promise<CourseType>;
+    mutation: UseMutationResult<void, Error, CourseType, unknown>
 }
 
 type Inputs = {
     isDeployingToGoogle: boolean;
     groupEmail: string;
+
 };
 
 
 
 
-export function EditBootcamp({ course }: Props) {
+export function EditBootcamp({ course, submitFunction, mutation }: Props) {
     const [startDate, setStartDate] = useState<Date>(new Date());
-    const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
-
-    const mutationPostAppliedCourse = useMutationPostAppliedCourse();
+    // const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
+    const [overlappingDays, setOverlappingDays] = useState<DayType[]>([]);
 
     const navigate = useNavigate();
 
@@ -57,7 +59,7 @@ export function EditBootcamp({ course }: Props) {
         console.log("update", previewCourse)
         const updatedDays = updatePreviewCalendarDates(previewCourse);
         setPreviewCalendarDays(updatedDays);
-
+        setOverlappingDays(detectOverlappingDays(previewCourse))
     }, [previewCourse, startDate]);
 
 
@@ -74,28 +76,10 @@ export function EditBootcamp({ course }: Props) {
             postCourseToGoogle(events);
         }
 
-        handleApplyTemplate()
+        submitFunction(previewCourse, navigate, mutation)
     }
 
 
-    const handleApplyTemplate = async () => {
-
-        const myTrack = previewCourse.track.id;
-        const myCourse = stripIdsFromCourse(previewCourse)
-        myCourse.track.id = myTrack
-        console.log(isInvalidDate);
-        setIsInvalidDate(false);
-        if (
-            startDate.getDay() == 6 ||
-            startDate.getDay() == 0
-        ) {
-            if (startDate.getDay() == 6 || startDate.getDay() == 0)
-                setIsInvalidDate(true);
-        } else {
-            mutationPostAppliedCourse.mutate(myCourse);
-            navigate("/activecourses");
-        }
-    };
 
 
     const handleMoveModule = () => {
@@ -114,7 +98,7 @@ export function EditBootcamp({ course }: Props) {
         <>
             <div className="flex flex-col h-[80vh] max-w-full">
                 <br />
-                <section className="flex flex-grow">
+                <section className="flex flex-grow gap-1">
 
                     <div className="flex-grow overflow-auto">
                         <MiniCalendar previewCourse={previewCourse} startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedDate} setSelectedModuleStartDate={setSelectedDate} setSelectedModule={setSelectedModule} />
@@ -125,6 +109,7 @@ export function EditBootcamp({ course }: Props) {
                             <button className="btn w-1/3" onClick={() => setToggle("edit")}>Edit</button>
                             <button className="btn w-1/3">Nothing</button>
                         </div>
+                        {overlappingDays.length > 0 && <p className="text-red-600">you have overlapping days!</p> }
                         {toggle == "info" && <InfoPanel selectedModule={selectedModule} selectedDate={selectedDate} handleMoveModule={handleMoveModule} />}
                         {toggle == "edit" && <EditCourseDays appliedCourse={course} course={previewCourse} setCourse={setCourse} />}
                     </div>

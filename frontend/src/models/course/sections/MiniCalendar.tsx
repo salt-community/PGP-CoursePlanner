@@ -44,34 +44,36 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
     const { data, isLoading, isError, } = useQueryCalendarDateBatch(startOfMonthFormatted, endOfMonthFormatted);
 
+
     useEffect(() => {
         if (!data || !previewCalendarDays) return;
 
-        // Avoid re-processing if the data is already updated
-        const updatedData = data.map(datum => {
-            const previewCalendarDaysIndex = previewCalendarDays
-                .map(d => getDateAsString(d.date))
-                .indexOf(getDateAsString(datum.date));
+        const previewDaysMap = previewCalendarDays.reduce((acc, day) => {
+            const dateKey = getDateAsString(day.date);
+            acc[dateKey] = (acc[dateKey] || []).concat(day);
+            return acc;
+        }, {} as Record<string, typeof previewCalendarDays>);
 
-            // const dcs = datum.dateContent.filter(dc => dc.appliedCourseId != previewCourse.id)
-            const updatedDateContent = previewCalendarDaysIndex > -1
-                ? [
-                    
-                    ...previewCalendarDays[previewCalendarDaysIndex].dateContent,
-                    ...datum.dateContent.filter(dc => dc.appliedCourseId != previewCourse.id),
-                ]
-                : datum.dateContent.filter(dc => dc.appliedCourseId != previewCourse.id);
+        const updatedData = data.map(fetchData => {
+            const dateKey = getDateAsString(fetchData.date);
+            const matchingPreviewDays = previewDaysMap[dateKey] || [];
+
+            const mergedPreviewContent = matchingPreviewDays.flatMap(
+                d => d.dateContent
+            );
+            const filteredExistingContent = fetchData.dateContent.filter(
+                dc => dc.appliedCourseId !== previewCourse.id
+            );
 
             return {
-                ...datum,
-                dateContent: (updatedDateContent),
+                ...fetchData,
+                dateContent: [...mergedPreviewContent, ...filteredExistingContent]
             };
         });
 
-        if (JSON.stringify(updatedData) !== JSON.stringify(calendarData)) {
-            setCalendarData(updatedData);
-        }
-    }, [data, previewCalendarDays, calendarData, previewCourse.id]);
+        setCalendarData(updatedData);
+
+    }, [data, previewCalendarDays, previewCourse.id]);
 
 
 
@@ -112,22 +114,23 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                             {daysBeforeMonth(startOfMonth, firstWeekDay(startOfMonth)).map((index) => (
                                 <div key={`empty-${index}`} className="w-1/7 h-full"></div>
                             ))}
-                            {daysInMonth.map((thisDate, dateIndex) => { 
-                                
-                                if(calendarData[dateIndex])  return(
-                                <CalendarDate
-                                    setSelectedModule={setSelectedModule}
-                                    previewCourse={previewCourse}
-                                    isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1}
-                                    isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) === getDateAsString(thisDate)}
-                                    openModal={selectDate}
-                                    isLoading={isLoading}
-                                    indexForModal={dateIndex}
-                                    dateContent={calendarData[dateIndex].dateContent}
-                                    key={`${getDateAsString(thisDate)}-${dateIndex}`}
-                                    date={getDateAsString(thisDate)}
-                                />
-                            )})}
+                            {daysInMonth.map((thisDate, dateIndex) => {
+
+                                if (calendarData[dateIndex]) return (
+                                    <CalendarDate
+                                        setSelectedModule={setSelectedModule}
+                                        previewCourse={previewCourse}
+                                        isInSelectedModule={moduleDateStrings.indexOf(getDateAsString(thisDate)) > -1}
+                                        isSelectedModuleStartDate={getDateAsString(selectedModuleStartDate.date) === getDateAsString(thisDate)}
+                                        openModal={selectDate}
+                                        isLoading={isLoading}
+                                        indexForModal={dateIndex}
+                                        dateContent={calendarData[dateIndex].dateContent}
+                                        key={`${getDateAsString(thisDate)}-${dateIndex}`}
+                                        date={getDateAsString(thisDate)}
+                                    />
+                                )
+                            })}
                         </div>
                     </div>
                 </section>

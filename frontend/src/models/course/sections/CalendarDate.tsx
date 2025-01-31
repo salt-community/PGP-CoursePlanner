@@ -34,31 +34,6 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
     }
 
 
-    const appliedCourseIds: number[] = [];
-    const appliedCourseColors: string[] = [];
-    const appliedModules: string[] = []
-    const appliedModuleIds: number[] = []
-
-
-    dateContent.forEach(dc => {
-        if (appliedCourseIds.filter(id => id == dc.appliedCourseId!).length == 0) {
-            appliedCourseIds.push(dc.appliedCourseId!)
-            appliedCourseColors.push(dc.color!)
-            appliedModuleIds.push(dc.moduleId)
-            if (dc.moduleName != null) {
-
-                if (dc.dayOfModule != 0) {
-                    appliedModules.push(dc.moduleName! + ` day (${dc.dayOfModule}/${dc.totalDaysInModule})`)
-                }
-                else {
-                    appliedModules.push("Weekend")
-                }
-            }
-        }
-    });
-
-
-
     const updateSelectedModule = (moduleId: number) => {
         console.log(moduleId)
         if (moduleId) {
@@ -82,14 +57,14 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
                     <LoadingSkeletonMonth />
                 ) :
                     <>
-                        {appliedCourseColors.length > 0 && appliedCourseColors.map((color, appliedCourseIndex) => (
+                        {dateContent.length > 0 && dateContent.map((dc, index) => (
                             <div
-                                key={appliedCourseIndex}
-                                style={{ backgroundColor: color }}
+                                key={index}
+                                style={{ backgroundColor: dc.color }}
                                 className="flex justify-center items-center w-full h-5 text-sm text-white text-clip overflow-hidden whitespace-nowrap rounded-md"
-                                onClick={() => updateSelectedModule(appliedModuleIds[appliedCourseIndex])}
+                                onClick={() => updateSelectedModule(dc.moduleId)}
                             >
-                                <p>{appliedModules[appliedCourseIndex]}</p>
+                                <p>{dc.moduleName}</p>
                             </div>
                         ))
                         }

@@ -2,6 +2,9 @@ import { GoogleEvent } from "@helpers/googleHelpers";
 import { CourseType, DayType, ModuleType } from "../Types";
 import { EventType } from "@models/module/Types";
 import { CalendarDateType } from "@models/calendar/Types";
+import { getDateAsString } from "@helpers/dateHelpers";
+import { NavigateFunction } from "react-router-dom";
+import { UseMutationResult } from "@tanstack/react-query";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
   return modules.some((module, idx) =>
@@ -35,10 +38,7 @@ export const getWeekNumberOfModule = (course: CourseType, moduleId: number) => {
   return 1;
 };
 
-export const getCourseDayDates = (
-  course: CourseType,
-  startDate: Date
-) => {
+export const getCourseDayDates = (course: CourseType, startDate: Date) => {
   const calendarDateTypes: CalendarDateType[] = [];
   // Use a local variable instead of mutating course.startDate
   const currentDate = new Date(startDate);
@@ -78,10 +78,7 @@ export const getCourseDayDates = (
   return calendarDateTypes;
 };
 
-export const getCourseWithDates = (
-  course: CourseType,
-  startDate: Date
-) => {
+export const getCourseWithDates = (course: CourseType, startDate: Date) => {
   const calendarDateTypes: CalendarDateType[] = [];
   // Use a local variable instead of mutating course.startDate
   const currentDate = new Date(startDate);
@@ -125,8 +122,6 @@ export const getCourseWithDates = (
   return updatedCourse;
 };
 
-
-
 export const updatePreviewCalendarDates = (course: CourseType) => {
   const calendarDateTypes: CalendarDateType[] = [];
   const modules = course.modules.map((m) => m.module);
@@ -142,7 +137,7 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
             courseName: course.name,
             events: modules[i].days[j].events,
             color: "#999999",
-            appliedCourseId: course.id, 
+            appliedCourseId: course.id,
             moduleName: modules[i].name,
             moduleId: modules[i].id,
             track: course.track,
@@ -154,8 +149,7 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
   return calendarDateTypes;
 };
 
-export const getUpdatedCourse = (course: CourseType, startDate : Date) => {
-
+export const getUpdatedCourse = (course: CourseType, startDate: Date) => {
   const updatedCourse = { ...course, startDate: new Date(startDate) }; // Avoid mutating course
 
   const modules = course.modules.map((m) => m.module);
@@ -164,17 +158,41 @@ export const getUpdatedCourse = (course: CourseType, startDate : Date) => {
     let currentDate = new Date(modules[i].startDate);
 
     for (let j = 0; j < modules[i].numberOfDays; j++) {
-
       while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
-        currentDate = getNewDate(currentDate, 1)
+        currentDate = getNewDate(currentDate, 1);
       }
-
-
-      modules[i].days[j].date = getNewDate(currentDate, 0)
-      currentDate = getNewDate(currentDate, 1)
+      modules[i].days[j].date = getNewDate(currentDate, 0);
+      course.endDate = currentDate;
+      currentDate = getNewDate(currentDate, 1);
     }
   }
   return updatedCourse;
+};
+
+export const detectOverlappingDays = (course: CourseType): DayType[] => {
+  const days = course.modules.flatMap((m) => m.module.days);
+  days.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+  const daysWithOverlap: DayType[] = [];
+
+  for (let i = 0; i < days.length - 1; i++) {
+    const currentDay = days[i];
+    const nextDay = days[i + 1];
+
+    const currentDayString = getDateAsString(currentDay.date);
+    const nextDayString = getDateAsString(nextDay.date);
+
+    if (currentDayString == nextDayString) {
+      if (!daysWithOverlap.includes(currentDay)) {
+        daysWithOverlap.push(currentDay);
+      }
+      if (!daysWithOverlap.includes(nextDay)) {
+        daysWithOverlap.push(nextDay);
+      }
+    }
+  }
+
+  return daysWithOverlap;
 };
 
 export const getDifferenceInDays = (date1: Date, date2: Date) => {
@@ -252,6 +270,19 @@ export const getGoogleEventListForCourse = (
   );
 
   return events;
+};
+
+export const handleApplyTemplate = async (
+  course: CourseType,
+  navigate: NavigateFunction,
+  mutation: UseMutationResult<void, Error, CourseType, unknown>
+) => {
+  const myTrack = course.track.id;
+  const myCourse = stripIdsFromCourse(course);
+  myCourse.track.id = myTrack;
+
+  mutation.mutate(myCourse);
+  navigate("/activecourses");
 };
 
 /**
