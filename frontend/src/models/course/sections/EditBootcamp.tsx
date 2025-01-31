@@ -58,7 +58,6 @@ export function EditBootcamp({ course }: Props) {
         const updatedDays = updatePreviewCalendarDates(previewCourse);
         setPreviewCalendarDays(updatedDays);
         setOverlappingDays(detectOverlappingDays(previewCourse))
-        console.log(overlappingDays)
     }, [previewCourse, startDate]);
 
 
