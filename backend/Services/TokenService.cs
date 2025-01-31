@@ -111,7 +111,7 @@ public class TokenService(DataContext context, IHttpClientFactory clientFactory)
 
     public async Task UpdateTokens(TokenResponse tokenResponse, string access_token)
     {
-        var user = await _context.LoggedInUser.FirstOrDefaultAsync(u => u.Access_Token == access_token) ?? throw new NotFoundException("User not found. Please log in again.");
+        var user = await _context.LoggedInUser.FirstOrDefaultAsync(u => u.Access_Token == access_token) ?? throw new NotFoundException<TokenResponse>("User not found. Please log in again.");
 
         user.Access_Token = tokenResponse.Access_token;
         user.Id_token = tokenResponse.Id_token;
@@ -122,8 +122,8 @@ public class TokenService(DataContext context, IHttpClientFactory clientFactory)
 
     public async Task<TokenResponse> RefreshTokens(string access_token)
     {
-        var user = await _context.LoggedInUser.FirstOrDefaultAsync(u => u.Access_Token == access_token) ?? throw new NotFoundException("User not found. Please log in again.");
-        var refreshToken = user.Refresh_Token ?? throw new NotFoundException("Refresh token not found. Please log in again.");
+        var user = await _context.LoggedInUser.FirstOrDefaultAsync(u => u.Access_Token == access_token) ?? throw new NotFoundException<TokenResponse>("User not found. Please log in again.");
+        var refreshToken = user.Refresh_Token ?? throw new NotFoundException<TokenResponse>("Refresh token not found. Please log in again.");
 
         return await GetTokensFromGoogle(null, null, refreshToken);
     }

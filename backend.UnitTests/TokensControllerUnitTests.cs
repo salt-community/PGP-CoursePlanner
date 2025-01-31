@@ -88,4 +88,20 @@ public class TokensControllerUnitTests
         exception.Should().BeOfType<BadRequestInvalidGrantException>();
         exception.Message.Should().Be("Error: Type of Error. Description: Error Description.");
     }
+
+    [Fact]
+    public async void UpdateTokens_Return_NotFound_with_Message()
+    {
+        // arrange
+        _mockService.Setup(service => service.RefreshTokens("access_token")).ThrowsAsync(new NotFoundException<TokenResponse>("User not found. Please log in again."));
+        _mockService.Setup(service => service.UpdateTokens(tokenResponse, "access_token"));
+        var controller = new TokensController(_mockService.Object);
+
+        // act
+        var exception = await Record.ExceptionAsync(() => controller.UpdateTokens(tokenRequest));
+
+        // assert
+        exception.Should().BeOfType<NotFoundException<TokenResponse>>();
+        exception.Message.Should().Be("User not found. Please log in again.");
+    }
 }
