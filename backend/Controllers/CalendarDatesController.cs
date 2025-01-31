@@ -23,7 +23,7 @@ public class CalendarDatesController(IServiceCalendarDates<CalendarDate> service
             return BadRequest("Start date has to be before end date");
         }
 
-        return await _service.GetCalendarDateBatch(start, end);
+        return Ok(await _service.GetCalendarDateBatch(start, end));
     }
 
     [HttpGet("Weeks/{weekNumber}")]
@@ -34,6 +34,6 @@ public class CalendarDatesController(IServiceCalendarDates<CalendarDate> service
             return BadRequest("Week number has to be between 1 and 53");
         }
 
-        return await _service.GetCalendarDate2Weeks(weekNumber);
+        return Ok(await _service.GetCalendarDate2Weeks(weekNumber));
     }
 }

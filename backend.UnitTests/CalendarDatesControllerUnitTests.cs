@@ -2,6 +2,7 @@ using backend.Controllers;
 using backend.ExceptionHandler.Exceptions;
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace backend.UnitTests;
 
@@ -58,5 +59,42 @@ public class CalendarDatesControllerUnitTests
         // assert
         exception.Should().BeAssignableTo<NotFoundException<CalendarDate>>();
         exception.Message.Should().Be("Content for Calendar Date Not Found");
+    }
+
+    [Fact]
+    public async void GetCalendarDateBatch_Returns_CollectionOfCalendarDates()
+    {
+        // arrange
+        var expectedResponse = new List<CalendarDate>() { calendarDate };
+
+        _mockService.Setup(service => service.GetCalendarDateBatch(It.IsAny<DateTime>(), It.IsAny<DateTime>())).ReturnsAsync(expectedResponse);
+        var controller = new CalendarDatesController(_mockService.Object);
+
+        // act
+        var result = (await controller.GetCalendarDateBatch(new DateTime(), new DateTime().AddDays(31))).Result;
+        var value = (result as ObjectResult)!.Value;
+
+        // assert
+        result.Should().BeAssignableTo<OkObjectResult>();
+        value.Should().BeOfType<List<CalendarDate>>();
+        value.Should().BeEquivalentTo(expectedResponse);
+    }
+
+    [Fact]
+    public async void GetCalendarDateBatch_Returns_BadRequest_With_Message()
+    {
+        // arrange
+        var expectedResponse = new List<CalendarDate>() { calendarDate };
+
+        _mockService.Setup(service => service.GetCalendarDateBatch(It.IsAny<DateTime>(), It.IsAny<DateTime>())).ReturnsAsync(expectedResponse);
+        var controller = new CalendarDatesController(_mockService.Object);
+
+        // act
+        var result = (await controller.GetCalendarDateBatch(new DateTime().AddDays(31), new DateTime())).Result;
+        var Message = (result as ObjectResult)!.Value;
+
+        // assert
+        result.Should().BeAssignableTo<BadRequestObjectResult>();
+        Message.Should().Be("Start date has to be before end date");
     }
 }
