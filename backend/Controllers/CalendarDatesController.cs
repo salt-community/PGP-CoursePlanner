@@ -1,60 +1,39 @@
-using backend.Data;
 using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers;
 
 [Authorize]
 [ApiController]
 [Route("[controller]")]
-public class CalendarDatesController : ControllerBase
+public class CalendarDatesController(IServiceCalendarDates<CalendarDate> service) : ControllerBase
 {
-    private readonly DataContext _context;
-
-    public CalendarDatesController(DataContext context)
-    {
-        _context = context;
-    }
+    private readonly IServiceCalendarDates<CalendarDate> _service = service;
 
     [HttpGet("{date}")]
-
-    public async Task<ActionResult<CalendarDate>> GetCalendarDate(DateTime date)
-    {
-        var convertedDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);
-        var response = await _context.CalendarDates
-                        .Include(convertedDate => convertedDate.DateContent)
-                        .ThenInclude(content => content.Events)
-                        .FirstOrDefaultAsync(calendarDate => calendarDate.Date.Date == convertedDate.Date);
-
-        if (response != null)
-        {
-            return Ok(response);
-        }
-        return NotFound("Date does not exist");
-    }
+    public async Task<CalendarDate> GetCalendarDate(DateTime date) => await _service.GetCalendarDate(date);
 
     [HttpGet("batch")]
-    public ActionResult<CalendarDate?[]> GetCalendarDateBatch(DateTime start, DateTime end)
+    public async Task<ActionResult<List<CalendarDate>>> GetCalendarDateBatch(DateTime start, DateTime end)
     {
         if (end < start)
         {
             return BadRequest("Start date has to be before end date");
         }
-        return CalendarDateLogic.GetCalendarDateBatch(start, end, _context);
+
+        return await _service.GetCalendarDateBatch(start, end);
     }
 
     [HttpGet("Weeks/{weekNumber}")]
-    public ActionResult<CalendarDate?[]> GetCalendarDate2Weeks(int weekNumber)
+    public async Task<ActionResult<List<CalendarDate>>> GetCalendarDate2Weeks(int weekNumber)
     {
         if (weekNumber < 1 || weekNumber > 53)
         {
-            return BadRequest("Weeknumber has to be between 1 and 53");
+            return BadRequest("Week number has to be between 1 and 53");
         }
-        return CalendarDateLogic.GetCalendarDate2Weeks(weekNumber, _context);
+
+        return await _service.GetCalendarDate2Weeks(weekNumber);
     }
-
-
 }
