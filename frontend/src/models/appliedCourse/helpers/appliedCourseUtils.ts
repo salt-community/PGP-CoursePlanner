@@ -1,5 +1,6 @@
 import { CourseModuleType, CourseType } from "@models/course/Types";
 import { UseMutationResult } from "@tanstack/react-query";
+import { NavigateFunction } from "react-router-dom";
 
 export const handleCreateNewAppliedModule = (
   course: CourseType,
@@ -27,16 +28,12 @@ export const handleCreateNewAppliedModule = (
 };
 
 export const handleUpdateCourse = (
-  appliedCourse: CourseType,
   course: CourseType,
-  setCourse: React.Dispatch<React.SetStateAction<CourseType>>,
-  mutationUpdateAppliedCourse: UseMutationResult<void, Error, CourseType, unknown>
-
+  navigate: NavigateFunction,
+  mutation: UseMutationResult<void, Error, CourseType, unknown>
 ) => {
-  if (appliedCourse) {
-    const updatedCourse = assignDatesToModules(course, setCourse);
-    mutationUpdateAppliedCourse.mutate(updatedCourse);
-  }
+  mutation.mutate(course);
+    navigate("/activecourses");
 };
 
 export function assignDatesToModules(

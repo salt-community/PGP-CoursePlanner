@@ -3,7 +3,7 @@ import { useIdFromPath } from "@helpers/helperHooks";
 import { useQueryAppliedCourseById } from "@api/appliedCourse/appliedCourseQueries";
 import { EditBootcamp } from "@models/course/sections/EditBootcamp";
 import { useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
-import { handleApplyTemplate } from "@models/course/helpers/courseUtils";
+import { handleUpdateCourse } from "../helpers/appliedCourseUtils";
 
 export default function EditAppliedCourse() {
     const appliedCourseId = useIdFromPath();
@@ -24,7 +24,7 @@ export default function EditAppliedCourse() {
     return (
         <Page>
             {appliedCourse.modules.length > 0 &&
-                <EditBootcamp course={appliedCourse} submitFunction={handleApplyTemplate} mutation={mutationUpdateAppliedCourse} />
+                <EditBootcamp course={appliedCourse} submitFunction={handleUpdateCourse} mutation={mutationUpdateAppliedCourse} />
             }
         </Page>
     );
