@@ -40,7 +40,10 @@ export default function Course({ course }: CourseProps) {
 
     const handleAddModule = (index: number) => {
         const newModules = [...courseModules];
-        newModules.splice(index + 1, 0, { id: 0, name: "", numberOfDays: 0, days: [], startDate: new Date });
+        newModules.splice(index + 1, 0, {
+            id: 0, name: "", numberOfDays: 0, days: [], startDate: new Date,
+            tracks: []
+        });
         setCourseModules(newModules);
     };
 
