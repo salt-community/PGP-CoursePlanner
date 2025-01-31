@@ -15,7 +15,6 @@ export function InfoPanel({ selectedDate, handleMoveModule, selectedModule }: Pr
             {/* <EditCourseDays course={previewCourse} setCourse={setCourse} /> */}
 
             <div>
-                <h4 className="font-bold pt-6">selected day's events </h4>
                 {selectedDate.dateContent.map((content, index) => {
 
                     return (
@@ -25,7 +24,7 @@ export function InfoPanel({ selectedDate, handleMoveModule, selectedModule }: Pr
                                     {content.courseName}
                                 </h2>
                                 <h3 className="text-lg pb-2">
-                                    Module: {content.moduleName} (day {content.dayOfModule}/{content.totalDaysInModule})
+                                    {content.moduleName} (day {content.dayOfModule}/{content.totalDaysInModule})
                                 </h3>
                                 {content.events.length > 0 ? (
                                     content.events.map((event) => (
@@ -39,9 +38,6 @@ export function InfoPanel({ selectedDate, handleMoveModule, selectedModule }: Pr
                                                     {event.startTime} - {event.endTime}
                                                 </p>
                                             </div>
-                                            {/* {event.description && (
-                                                            <EventDescription description={event.description} />
-                                                        )} */}
                                         </div>
                                     ))
                                 ) : (
@@ -58,7 +54,7 @@ export function InfoPanel({ selectedDate, handleMoveModule, selectedModule }: Pr
             <button className="btn" onClick={(event) => {
                 event.preventDefault()
                 handleMoveModule()
-            }}>Set {selectedModule.name}-module start date to {getDateAsString(selectedDate.date)} </button>
+            }}>Set {selectedModule.name} start date to {getDateAsString(selectedDate.date)} </button>
 
 
         </div>
