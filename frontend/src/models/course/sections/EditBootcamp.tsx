@@ -2,8 +2,8 @@ import { useMutationPostAppliedCourse } from "@api/appliedCourse/appliedCourseMu
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { updatePreviewCalendarDates, getGoogleEventListForCourse, stripIdsFromCourse, moveModule, getCourseWithDates } from "../helpers/courseUtils";
-import { CourseType, ModuleType, CourseModuleType } from "../Types";
+import { updatePreviewCalendarDates, getGoogleEventListForCourse, stripIdsFromCourse, moveModule, getCourseWithDates, detectOverlappingDays } from "../helpers/courseUtils";
+import { CourseType, ModuleType, CourseModuleType, DayType } from "../Types";
 import { InfoPanel } from "./InfoPanel";
 import MiniCalendar from "./MiniCalendar";
 import { EditCourseDays } from "@models/appliedCourse/sections/EditCourseDays";
@@ -25,7 +25,7 @@ type Inputs = {
 export function EditBootcamp({ course }: Props) {
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [isInvalidDate, setIsInvalidDate] = useState<boolean>(false);
-
+    const [overlappingDays, setOverlappingDays] = useState<DayType[]>([]);
     const mutationPostAppliedCourse = useMutationPostAppliedCourse();
 
     const navigate = useNavigate();
@@ -57,7 +57,8 @@ export function EditBootcamp({ course }: Props) {
         console.log("update", previewCourse)
         const updatedDays = updatePreviewCalendarDates(previewCourse);
         setPreviewCalendarDays(updatedDays);
-
+        setOverlappingDays(detectOverlappingDays(previewCourse))
+        console.log(overlappingDays)
     }, [previewCourse, startDate]);
 
 
@@ -125,6 +126,7 @@ export function EditBootcamp({ course }: Props) {
                             <button className="btn w-1/3" onClick={() => setToggle("edit")}>Edit</button>
                             <button className="btn w-1/3">Nothing</button>
                         </div>
+                        {overlappingDays.length > 0 && <p className="text-red-600">you have overlapping days!</p> }
                         {toggle == "info" && <InfoPanel selectedModule={selectedModule} selectedDate={selectedDate} handleMoveModule={handleMoveModule} />}
                         {toggle == "edit" && <EditCourseDays appliedCourse={course} course={previewCourse} setCourse={setCourse} />}
                     </div>
