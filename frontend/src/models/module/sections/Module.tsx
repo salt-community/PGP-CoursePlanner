@@ -71,6 +71,7 @@ export default function Module({ module, buttonText }: ModuleProps) {
                 name: moduleName.value.trim(),
                 numberOfDays: numberOfDays.value,
                 days: days,
+                tracks: []
             };
             if (module.id == 0) {
                 mutationPostModule.mutate(newModule);

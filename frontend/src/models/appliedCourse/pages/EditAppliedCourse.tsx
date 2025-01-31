@@ -19,7 +19,6 @@ export default function EditAppliedCourse() {
             { appliedCourse.modules.length > 0 &&
                 <EditBootcamp course={appliedCourse} />
             }
-           
         </Page>
     );
 }
