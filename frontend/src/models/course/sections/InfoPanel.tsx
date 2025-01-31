@@ -1,3 +1,4 @@
+import { getDateAsString } from "@helpers/dateHelpers";
 import {  ModuleType } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
 
@@ -7,7 +8,7 @@ type Props = {
     handleMoveModule: () => void
 }
 
-export function InfoPanel({ selectedDate, handleMoveModule }: Props) {
+export function InfoPanel({ selectedDate, handleMoveModule, selectedModule }: Props) {
 
     return (
         <div className="p-4 ">
@@ -57,7 +58,7 @@ export function InfoPanel({ selectedDate, handleMoveModule }: Props) {
             <button className="btn" onClick={(event) => {
                 event.preventDefault()
                 handleMoveModule()
-            }}>update module start date</button>
+            }}>Set {selectedModule.name}-module start date to {getDateAsString(selectedDate.date)} </button>
 
 
         </div>
