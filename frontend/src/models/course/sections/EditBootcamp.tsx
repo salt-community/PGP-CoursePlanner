@@ -114,7 +114,7 @@ export function EditBootcamp({ course }: Props) {
         <>
             <div className="flex flex-col h-[80vh] max-w-full">
                 <br />
-                <section className="flex flex-grow">
+                <section className="flex flex-grow gap-1">
 
                     <div className="flex-grow overflow-auto">
                         <MiniCalendar previewCourse={previewCourse} startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedDate} setSelectedModuleStartDate={setSelectedDate} setSelectedModule={setSelectedModule} />

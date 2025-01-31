@@ -14,11 +14,10 @@ export default function DeployModal({ course }: Props) {
 
 
     return (
-        <>
-            <dialog id="my_DeployModal_1" className="modal">
+        <dialog id="my_DeployModal_1" className="modal">
+            <div className="modal-box max-w-none w-[80vw]">
                 <EditBootcamp course={course} />
-            </dialog>
-
-        </>
+            </div>
+        </dialog>
     )
 }
