@@ -56,7 +56,6 @@ builder.Services.AddCors();
 
 builder.Services.AddScoped<IService<Module>, ModuleService>();
 builder.Services.AddScoped<IService<Course>, CourseService>();
-builder.Services.AddScoped<IService<Day>, DayService>();
 builder.Services.AddScoped<IService<Track>, TrackService>();
 builder.Services.AddScoped<IServiceTokens<TokenResponse>, TokenService>();
 builder.Services.AddScoped<IServiceCalendarDates<CalendarDate>, CalendarDateService>();
