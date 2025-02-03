@@ -2,6 +2,8 @@ import { getDateAsString } from "@helpers/dateHelpers";
 import { CourseType, ModuleType } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { EventType } from "@models/module/Types";
+import { formatDateTime } from "../helpers/courseUtils";
 
 type Props = {
     selectedDate: CalendarDateType
@@ -15,16 +17,13 @@ type Props = {
 type Inputs = {
     name: string;
     description: string;
-    start: Date
-    end: Date
+    start: string
+    end: string
     isBelongingToModule: boolean
 };
 
 
-
 export function InfoPanel({ selectedDate, handleMoveModule, selectedModule, course, setCourse }: Props) {
-
-
 
     const {
         register,
@@ -32,11 +31,54 @@ export function InfoPanel({ selectedDate, handleMoveModule, selectedModule, cour
         watch,
         // formState: { errors },
     } = useForm<Inputs>()
-    const onSubmit: SubmitHandler<Inputs> = (data) => {
-        console.log(data)
-       
 
-    }
+const onSubmit: SubmitHandler<Inputs> = (data) => {
+  // Create the new event
+  const newEvent: EventType = {
+    id: 0, 
+    name: data.name,
+    startTime: data.start,
+    endTime: data.end,
+    description: data.description,
+    isApplied: true,
+  };
+
+  if (data.isBelongingToModule) {
+    const updatedModules = course.modules.map((module) => {
+      if (module.module.id === selectedModule.id) {
+        const updatedDays = module.module.days.map((day) => {
+          if (getDateAsString(day.date) === getDateAsString(selectedDate.date)) {
+            return {
+              ...day,
+              events: [...day.events, newEvent], 
+            };
+          }
+          return day;
+        });
+
+        return {
+          ...module,
+          module: {
+            ...module.module,
+            days: updatedDays,
+          },
+        };
+      }
+      return module;
+    });
+
+    const updatedCourse: CourseType = {
+      ...course,
+      modules: updatedModules,
+    };
+
+    setCourse(updatedCourse);
+
+    console.log("Updated course with new event:", updatedCourse);
+  } else {
+    alert("Event does not belong to a module.");
+  }
+};
 
 
 
@@ -94,11 +136,11 @@ export function InfoPanel({ selectedDate, handleMoveModule, selectedModule, cour
                             <option>Greedo</option>
                         </select>
 
-                        <label >Name<input type="text" {...register("name", {required: true})}></input></label>
-                        <label >Description<input type="text" {...register("description", {required: true})}></input></label>
-                        <label >Start<input type="time" {...register("start", {required: true})}></input></label>
-                        <label >End<input type="time" {...register("end", {required: true})}></input></label>
-                        <label>Belongs to module<input type="checkbox"></input></label>
+                        <label >Name<input type="text" {...register("name", { required: true })}></input></label>
+                        <label >Description<input type="text" {...register("description", { required: true })}></input></label>
+                        <label >Start<input type="time" {...register("start", { required: true })}></input></label>
+                        <label >End<input type="time" {...register("end", { required: true })}></input></label>
+                        <label>Belongs to module<input type="checkbox" {...register("isBelongingToModule")}></input></label>
 
                         <button className="btn" type="submit" onClick={handleSubmit(onSubmit)} > Add event </button>
                     </div>

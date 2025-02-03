@@ -221,7 +221,7 @@ export const moveModule = (module: ModuleType, targetDate: Date) => {
   return newModule;
 };
 
-const formatDateTime = (date: Date, time: string): string => {
+export const formatDateTime = (date: Date, time: string): string => {
   const [hours, minutes] = time.split(":").map(Number); // Extract hours and minutes
   const updatedDate = new Date(date); // Clone the date object to avoid mutation
   updatedDate.setHours(hours, minutes, 0, 0); // Set the time

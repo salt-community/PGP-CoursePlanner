@@ -60,7 +60,8 @@ export function EditBootcamp({ course, submitFunction, mutation }: Props) {
         const updatedDays = updatePreviewCalendarDates(previewCourse);
         setPreviewCalendarDays(updatedDays);
         setOverlappingDays(detectOverlappingDays(previewCourse))
-    }, [previewCourse, startDate]);
+        setSelectedModule(previewCourse.modules.map(m => m.module).find(m => m.id == selectedModule.id)!)
+    }, [previewCourse, startDate,selectedModule.id]);
 
 
     const {
