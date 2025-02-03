@@ -5,6 +5,7 @@ import { CalendarDateType } from "@models/calendar/Types";
 import { getDateAsString } from "@helpers/dateHelpers";
 import { NavigateFunction } from "react-router-dom";
 import { UseMutationResult } from "@tanstack/react-query";
+import { getDate } from "date-fns";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
   return modules.some((module, idx) =>
@@ -40,10 +41,9 @@ export const getWeekNumberOfModule = (course: CourseType, moduleId: number) => {
 
 export const getCourseDayDates = (course: CourseType, startDate: Date) => {
   const calendarDateTypes: CalendarDateType[] = [];
-  // Use a local variable instead of mutating course.startDate
   const currentDate = new Date(startDate);
 
-  const updatedCourse = { ...course, startDate: new Date(startDate) }; // Avoid mutating course
+  const updatedCourse = { ...course, startDate: new Date(startDate) }; 
   const modules = updatedCourse.modules.map((m) => m.module);
 
   for (let i = 0; i < modules.length; i++) {
@@ -79,11 +79,9 @@ export const getCourseDayDates = (course: CourseType, startDate: Date) => {
 };
 
 export const getCourseWithDates = (course: CourseType, startDate: Date) => {
-  const calendarDateTypes: CalendarDateType[] = [];
-  // Use a local variable instead of mutating course.startDate
   const currentDate = new Date(startDate);
 
-  const updatedCourse = { ...course, startDate: new Date(startDate) }; // Avoid mutating course
+  const updatedCourse = { ...course, startDate: new Date(startDate) };
   const modules = updatedCourse.modules.map((m) => m.module);
 
   for (let i = 0; i < modules.length; i++) {
@@ -99,22 +97,7 @@ export const getCourseWithDates = (course: CourseType, startDate: Date) => {
 
       modules[i].days[j].date = new Date(currentDate);
       updatedCourse.endDate = new Date(currentDate);
-      calendarDateTypes.push({
-        date: new Date(currentDate),
-        dateContent: [
-          {
-            dayOfModule: modules[i].days[j].dayNumber,
-            totalDaysInModule: modules[i].numberOfDays,
-            courseName: course.name,
-            events: modules[i].days[j].events,
-            color: "#999999",
-            appliedCourseId: course.id,
-            moduleName: modules[i].name,
-            moduleId: modules[i].id,
-            track: course.track,
-          },
-        ],
-      });
+      
       currentDate.setDate(currentDate.getDate() + 1);
     }
     modules[i].startDate = modules[i].days[0].date;
@@ -150,9 +133,14 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
 };
 
 export const getUpdatedCourse = (course: CourseType, startDate: Date) => {
-  const updatedCourse = { ...course, startDate: new Date(startDate) }; // Avoid mutating course
+  const updatedCourse = { ...course, startDate: new Date(startDate) };
 
-  const modules = course.modules.map((m) => m.module);
+  updatedCourse.modules = updatedCourse.modules.map((m) => ({
+    ...m,
+    module: { ...m.module, days: m.module.days.map(day => ({ ...day })) }
+  }));
+
+  const modules = updatedCourse.modules.map((m) => m.module);
 
   for (let i = 0; i < modules.length; i++) {
     let currentDate = new Date(modules[i].startDate);
@@ -161,14 +149,15 @@ export const getUpdatedCourse = (course: CourseType, startDate: Date) => {
       while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
         currentDate = getNewDate(currentDate, 1);
       }
-      modules[i].days[j].date = getNewDate(currentDate, 0);
-      course.endDate = currentDate;
+      modules[i].days[j].date = new Date(currentDate);
+      console.log(modules[i].days[j].date)
+      updatedCourse.endDate = currentDate;
       currentDate = getNewDate(currentDate, 1);
     }
   }
+
   return updatedCourse;
 };
-
 export const detectOverlappingDays = (course: CourseType): DayType[] => {
   const days = course.modules.flatMap((m) => m.module.days);
   days.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
