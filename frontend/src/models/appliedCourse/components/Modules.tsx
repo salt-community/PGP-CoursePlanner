@@ -81,10 +81,9 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
   };
 
   const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
-    // Create a deep copy of the module to avoid mutating the original course
     const myModule: ModuleType = {
       ...course.modules[moduleIndex].module,
-      days: [...course.modules[moduleIndex].module.days], // Ensure days array is also copied
+      days: [...course.modules[moduleIndex].module.days], 
     };
   
     const newDay: DayType = {
@@ -96,11 +95,9 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
       date: getNewDate(myModule.startDate, myModule.numberOfDays + 2),
     };
   
-    // Add the new day to the module
     myModule.days.push(newDay);
     myModule.numberOfDays += 1;
   
-    // Update the course with the modified module
     const updatedCourse = {
       ...course,
       modules: course.modules.map((module, index) => {
@@ -108,7 +105,7 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
           return {
             ...module,
             module: {
-              ...myModule, // Use the updated myModule object
+              ...myModule, 
             },
           };
         }
@@ -116,10 +113,6 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
       }),
     };
   
-    console.log("myModule:", myModule); // Check the updated module
-    console.log("updatedCourse:", updatedCourse); // Check the updated course
-  
-    // Assign dates to modules
     assignDatesToModules(updatedCourse);
   };
 

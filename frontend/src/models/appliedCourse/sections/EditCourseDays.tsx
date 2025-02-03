@@ -18,7 +18,6 @@ export function EditCourseDays({ course, setCourse }: Props) {
 
     const assignDatesToModules = (course: CourseType) => {
         const crs = getUpdatedCourse(course, course.modules[0].module.startDate)
-        console.log("vi gör nåt")
         setCourse(crs)
     }
     

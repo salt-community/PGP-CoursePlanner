@@ -133,7 +133,6 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
 
 export const getUpdatedCourse = (course: CourseType, startDate: Date) => {
 
-    console.log("get updated course:", course)
   const updatedCourse = { ...course, startDate: new Date(startDate) };
 
   updatedCourse.modules = updatedCourse.modules.map((m) => ({
