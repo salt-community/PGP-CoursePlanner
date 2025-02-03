@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import CloseBtn from "@components/buttons/CloseBtn";
+import SaveBtn from "@components/buttons/SaveBtn";
+import AbortBtn from "@components/buttons/AbortBtn";
 
 type Props = {
     openModal: boolean;
@@ -33,6 +35,9 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
                 </div>
                 <CloseBtn onClick={() => handleErrorModal()} color="white" position="absolute right-2 top-2" hover="hover:bg-white hover:border-white" />
                 <div className="flex gap-4 p-3 pt-6">
+
+                    <SaveBtn />
+                    <AbortBtn />
                 </div>
             </div>
             <form method="dialog" className="modal-backdrop">
