@@ -19,10 +19,11 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
     const mutationPostTrack = useMutationPostTrack();
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
         if (name == "" || color == "") {
+            e.preventDefault();
             setReq(true);
         } else {
+            console.log(name, color)
             mutationPostTrack.mutate({
                 name: name,
                 color: color
