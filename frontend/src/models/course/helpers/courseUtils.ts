@@ -150,7 +150,6 @@ export const getUpdatedCourse = (course: CourseType, startDate: Date) => {
         currentDate = getNewDate(currentDate, 1);
       }
       modules[i].days[j].date = new Date(currentDate);
-      console.log(modules[i].days[j].date)
       updatedCourse.endDate = currentDate;
       currentDate = getNewDate(currentDate, 1);
     }
