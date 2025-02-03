@@ -60,7 +60,8 @@ export function EditBootcamp({ course, submitFunction, mutation }: Props) {
         const updatedDays = updatePreviewCalendarDates(previewCourse);
         setPreviewCalendarDays(updatedDays);
         setOverlappingDays(detectOverlappingDays(previewCourse))
-    }, [previewCourse, startDate]);
+        setSelectedModule(previewCourse.modules.map(m => m.module).find(m => m.id == selectedModule.id)!)
+    }, [previewCourse, startDate,selectedModule.id]);
 
 
     const {
@@ -110,7 +111,7 @@ export function EditBootcamp({ course, submitFunction, mutation }: Props) {
                             <button className="btn w-1/3">Nothing</button>
                         </div>
                         {overlappingDays.length > 0 && <p className="text-red-600">you have overlapping days!</p> }
-                        {toggle == "info" && <InfoPanel selectedModule={selectedModule} selectedDate={selectedDate} handleMoveModule={handleMoveModule} />}
+                        {toggle == "info" && <InfoPanel course={previewCourse} setCourse={setCourse} selectedModule={selectedModule} selectedDate={selectedDate} handleMoveModule={handleMoveModule} />}
                         {toggle == "edit" && <EditCourseDays appliedCourse={course} course={previewCourse} setCourse={setCourse} />}
                     </div>
                 </section>

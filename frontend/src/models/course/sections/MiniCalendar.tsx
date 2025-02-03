@@ -73,6 +73,9 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
         setCalendarData(updatedData);
 
+        // const selectedDay = calendarData.find(d => getDateAsString(d.date) == getDateAsString(selectedModuleStartDate.date))
+        // setSelectedModuleStartDate(selectedDay!)
+
     }, [data, previewCalendarDays, previewCourse.id]);
 
 

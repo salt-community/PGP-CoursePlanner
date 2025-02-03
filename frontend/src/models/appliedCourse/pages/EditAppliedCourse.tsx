@@ -27,5 +27,5 @@ export default function EditAppliedCourse() {
                 <EditBootcamp course={appliedCourse} submitFunction={handleUpdateCourse} mutation={mutationUpdateAppliedCourse} />
             }
         </Page>
-    );
+    );1
 }

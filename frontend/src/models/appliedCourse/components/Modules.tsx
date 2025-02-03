@@ -81,22 +81,23 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
   };
 
   const handleCreateNewDay = (moduleIndex: number, numberOfDays: number) => {
-
-    const myModule: ModuleType = { ...course.modules[moduleIndex].module }
-
+    const myModule: ModuleType = {
+      ...course.modules[moduleIndex].module,
+      days: [...course.modules[moduleIndex].module.days], 
+    };
+  
     const newDay: DayType = {
       id: 0,
       dayNumber: numberOfDays + 1,
       description: "New day",
       isApplied: true,
       events: [],
-      date: getNewDate(myModule.startDate, myModule.numberOfDays + 2)
-
+      date: getNewDate(myModule.startDate, myModule.numberOfDays + 2),
     };
-
-    myModule.days.push(newDay)
-    myModule.numberOfDays += 1
-
+  
+    myModule.days.push(newDay);
+    myModule.numberOfDays += 1;
+  
     const updatedCourse = {
       ...course,
       modules: course.modules.map((module, index) => {
@@ -104,18 +105,16 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
           return {
             ...module,
             module: {
-              ...myModule
+              ...myModule, 
             },
           };
         }
-        console.log(module)
         return module;
       }),
     };
+  
     assignDatesToModules(updatedCourse);
   };
-
-
 
   return (
     <div>
