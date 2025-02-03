@@ -1,14 +1,46 @@
 import { getDateAsString } from "@helpers/dateHelpers";
-import {  ModuleType } from "../Types";
+import { CourseType, ModuleType } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 type Props = {
     selectedDate: CalendarDateType
     selectedModule: ModuleType
     handleMoveModule: () => void
+    course: CourseType
+    setCourse: React.Dispatch<React.SetStateAction<CourseType>>
 }
 
-export function InfoPanel({ selectedDate, handleMoveModule, selectedModule }: Props) {
+
+type Inputs = {
+    name: string;
+    description: string;
+    start: Date
+    end: Date
+    isBelongingToModule: boolean
+};
+
+
+
+export function InfoPanel({ selectedDate, handleMoveModule, selectedModule, course, setCourse }: Props) {
+
+
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        // formState: { errors },
+    } = useForm<Inputs>()
+    const onSubmit: SubmitHandler<Inputs> = (data) => {
+        console.log(data)
+       
+
+    }
+
+
+
+
 
     return (
         <div className="p-4 ">
@@ -51,6 +83,31 @@ export function InfoPanel({ selectedDate, handleMoveModule, selectedModule }: Pr
             </div>
 
             <div className="flex flex-grow"></div>
+
+            <details className="dropdown">
+                <summary className="btn m-1">New event?</summary>
+                <form>
+                    <div className=" flex flex-col gap-3 p-5">
+                        <select className="select select-bordered w-full max-w-xs">
+                            <option disabled selected>event template</option>
+                            <option>Han Solo</option>
+                            <option>Greedo</option>
+                        </select>
+
+                        <label >Name<input type="text" {...register("name", {required: true})}></input></label>
+                        <label >Description<input type="text" {...register("description", {required: true})}></input></label>
+                        <label >Start<input type="time" {...register("start", {required: true})}></input></label>
+                        <label >End<input type="time" {...register("end", {required: true})}></input></label>
+                        <label>Belongs to module<input type="checkbox"></input></label>
+
+                        <button className="btn" type="submit" onClick={handleSubmit(onSubmit)} > Add event </button>
+                    </div>
+                </form>
+            </details>
+
+
+
+
             <button className="btn" onClick={(event) => {
                 event.preventDefault()
                 handleMoveModule()

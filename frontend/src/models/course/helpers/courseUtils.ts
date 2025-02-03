@@ -5,7 +5,6 @@ import { CalendarDateType } from "@models/calendar/Types";
 import { getDateAsString } from "@helpers/dateHelpers";
 import { NavigateFunction } from "react-router-dom";
 import { UseMutationResult } from "@tanstack/react-query";
-import { getDate } from "date-fns";
 
 export const findDuplicates = (modules: Array<ModuleType>): boolean => {
   return modules.some((module, idx) =>
@@ -133,6 +132,8 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
 };
 
 export const getUpdatedCourse = (course: CourseType, startDate: Date) => {
+
+    console.log("get updated course:", course)
   const updatedCourse = { ...course, startDate: new Date(startDate) };
 
   updatedCourse.modules = updatedCourse.modules.map((m) => ({
