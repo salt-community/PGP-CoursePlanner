@@ -24,7 +24,7 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
         });
     }
 
-    function handleModal() {
+    function handleCloseModal() {
         setName("");
         setColor("#000");
         setModalState(false);
@@ -35,7 +35,7 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
-                handleModal();
+                handleCloseModal();
             }
         };
         window.addEventListener("keydown", handleKeyDown);
@@ -48,7 +48,7 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
                 <div className="bg-[#ff7961] p-3 pt-6 pb-6 w-full flex flex-col items-center">
                     <h2 className="text-3xl font-semibold text-white p-5">Create Track</h2>
                 </div>
-                <CloseBtn onClick={() => handleModal()} color="white" position="absolute right-2 top-2" hover="hover:bg-white hover:border-white" />
+                <CloseBtn onClick={() => handleCloseModal()} color="white" position="absolute right-2 top-2" hover="hover:bg-white hover:border-white" />
                 <form onSubmit={handleSubmit} className="flex flex-col gap-10 py-10 px-6">
                     <label className="text-lg font-medium">Track name:
                         <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} className="input input-bordered w-full" />
@@ -57,13 +57,13 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
                         <HexColorPicker className="min-w-full" color={color} onChange={setColor} />
                     </label>
                     <div className="flex justify-between gap-4">
-                        <SaveBtn onClick={() => { }} />
-                        <AbortBtn onClick={() => handleModal()} />
+                        <SaveBtn />
+                        <AbortBtn onClick={() => handleCloseModal()} />
                     </div>
                 </form>
             </div>
             <form method="dialog" className="modal-backdrop">
-                <button type="button" onClick={() => handleModal()}>close</button>
+                <button type="button" onClick={() => handleCloseModal()}>close</button>
             </form>
         </dialog>
     );
