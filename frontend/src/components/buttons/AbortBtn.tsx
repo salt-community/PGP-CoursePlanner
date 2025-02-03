@@ -1,6 +1,9 @@
-export default function DeleteBtn() {
+type Props = {
+    onClick: () => void
+}
 
+export default function DeleteBtn({ onClick }: Props) {
     return (
-        <button type="button" className="btn btn-secondary min-w-32">Abort</button>
+        <button type="button" onClick={onClick} className="btn btn-secondary text-xl min-w-40">Abort</button>
     )
 }
