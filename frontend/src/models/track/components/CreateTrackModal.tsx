@@ -27,9 +27,12 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
 
     return (
         <dialog className={`modal ${modalState ? "modal-open" : ""}`}>
-            <div className="modal-box flex flex-col items-center gap-4 p-16">
-                <CloseBtn onClick={() => handleErrorModal()} position="absolute right-2 top-2"></CloseBtn>
-                <div className="flex gap-4">
+            <div className="modal-box flex flex-col items-center p-0">
+                <div className="bg-[#ff7961] p-3 pt-6 pb-6 w-full flex flex-col items-center">
+                    <h2 className="text-3xl font-semibold text-white p-5">Create Track</h2>
+                </div>
+                <CloseBtn onClick={() => handleErrorModal()} color="white" position="absolute right-2 top-2" hover="hover:bg-white hover:border-white" />
+                <div className="flex gap-4 p-3 pt-6">
                 </div>
             </div>
             <form method="dialog" className="modal-backdrop">
