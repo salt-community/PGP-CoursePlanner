@@ -36,7 +36,7 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
                 <CloseBtn onClick={() => handleErrorModal()} color="white" position="absolute right-2 top-2" hover="hover:bg-white hover:border-white" />
                 <div className="flex gap-4 p-6">
                     <SaveBtn />
-                    <AbortBtn onClick={() => handleErrorModal()}/>
+                    <AbortBtn onClick={() => handleErrorModal()} />
                 </div>
             </div>
             <form method="dialog" className="modal-backdrop">
