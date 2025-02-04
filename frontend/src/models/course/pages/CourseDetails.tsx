@@ -109,18 +109,21 @@ export default function CourseDetails() {
           </div>
 
           {/* Third Row, Second Column */}
-          <div className="row-span-1 col-span-7 flex p-8 gap-6">
-            <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary min-w-40" >Edit Course</Link>
-            <DeleteBtn onClick={() => console.log("you clicked delete")}>Delete Course</DeleteBtn>
-
-            <p> Track: {course.track.name}</p>
-            <div
-              style={{
-                width: "15px",
-                height: "15px",
-                backgroundColor: course.color,
-                borderRadius: "3px",
-              }}>
+          <div className="row-span-1 col-span-7 flex p-8 justify-between">
+            <div className="flex gap-4">
+              <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary min-w-40" >Edit Course</Link>
+              <DeleteBtn onClick={() => console.log("you clicked delete")}>Delete Course</DeleteBtn>
+            </div>
+            <div className="flex items-center gap-2 mr-5">
+              <div
+                style={{
+                  width: "15px",
+                  height: "15px",
+                  backgroundColor: course.color,
+                  borderRadius: "3px",
+                }}>
+              </div>
+              <p> Track: {course.track.name}</p>
             </div>
           </div>
         </section>
