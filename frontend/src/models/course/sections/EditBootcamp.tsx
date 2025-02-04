@@ -94,6 +94,23 @@ export function EditBootcamp({ course, submitFunction, mutation }: Props) {
         setSelectedModule(newModule)
     }
 
+    const handleMoveModuleDnd = (moduleId: number, newDate: string) => {
+        const selectedModule = previewCourse.modules
+            .map((m) => m.module)
+            .find((m) => m.id === moduleId);
+    
+        if (!selectedModule) {
+            console.error("Module not found!");
+            return;
+        }
+        const newModule = moveModule(selectedModule, new Date(newDate));
+        const updatedModules: CourseModuleType[] = previewCourse.modules.map((m) =>
+            m.module.id === moduleId ? { ...m, module: newModule } : m
+        );
+        setCourse({ ...previewCourse, modules: updatedModules });
+        setSelectedModule(newModule);
+    };
+
 
     return (
         <>
@@ -102,7 +119,7 @@ export function EditBootcamp({ course, submitFunction, mutation }: Props) {
                 <section className="flex flex-grow gap-1">
 
                     <div className="flex-grow overflow-auto">
-                        <MiniCalendar previewCourse={previewCourse} startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedDate} setSelectedModuleStartDate={setSelectedDate} setSelectedModule={setSelectedModule} />
+                        <MiniCalendar previewCourse={previewCourse} startDate={startDate} previewCalendarDays={previewCalendarDays} selectedModule={selectedModule} selectedModuleStartDate={selectedDate} setSelectedModuleStartDate={setSelectedDate} setSelectedModule={setSelectedModule} handleMoveModuleDnd={handleMoveModuleDnd}/>
                     </div>
                     <div className="flex flex-col w-2/5">
                         <div className="flex">
