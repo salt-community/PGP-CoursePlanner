@@ -24,7 +24,7 @@ export default function CourseDetails() {
         </h1>
       </Header>
       {course &&
-        <section className="grid grid-rows-[150px_1fr] grid-cols-9 h-screen bg-white m-5 rounded-lg overflow-hidden drop-shadow-xl">
+        <section className="grid grid-rows-[145px_1fr] grid-cols-9 bg-white m-5 mt-0 rounded-lg overflow-hidden drop-shadow-xl">
           {/* First Row, First Column */}
           <div className="row-span-1 col-span-2 bg-yellow-500 text-center flex items-center justify-center" style={{ backgroundColor: course.color }}>
             <h2 className="text-4xl">{course.name || "Course Name"}</h2>
@@ -32,32 +32,40 @@ export default function CourseDetails() {
 
           {/* First Row, Second Column */}
           <div className="row-span-1 col-span-7 text-center flex items-center justify-center border-b-2">
-            <h2 className="text-3xl">Modules</h2>
+            <h2 className="text-4xl">Modules</h2>
           </div>
 
+          {/* Second Row, First Column */}
           <div className="row-span-8 col-span-2 border-r-2 p-10 flex flex-col h-full">
             <div className="flex place-content-around p-3 border-b-4 h-20">
               <div className="flex flex-col items-center">
-                <h3>{course.modules.length}</h3>
+                <h3 className="text-2xl font-bold">{course.modules.length}</h3>
                 <p>Modules</p>
               </div>
               <div className="flex flex-col items-center">
-                <h3>{numberOfDaysInCourse(course)}</h3>
+                <h3 className="text-2xl font-bold">{numberOfDaysInCourse(course)}</h3>
                 <p>Days</p>
               </div>
               <div className="flex flex-col items-center">
-                <h3>{course.numberOfWeeks}</h3>
+                <h3 className="text-2xl font-bold">{course.numberOfWeeks}</h3>
                 <p>Weeks</p>
               </div>
             </div>
 
-            <div className="p-7 text-center">
-              <h3 className="text-xl">Module Timeline</h3>
+            <div className="p-7 pb-2 text-center">
+              <h3 className="text-2xl">
+                Module Timeline
+              </h3>
             </div>
 
             <div className="relative flex-grow">
-              <ul className="timeline timeline-vertical relative flex flex-col h-full">
-                <li className="relative  flex flex-col items-center justify-center">
+              <ul className="timeline timeline-vertical flex flex-col h-full">
+                <li className="flex justify-center">
+                  <p className="py-2 text-sm">
+                    Week
+                  </p>
+                </li>
+                <li className="flex flex-col items-center justify-center">
                   <div className="bg-accent w-3 h-3 border rounded-lg"></div>
                 </li>
                 {course.modules.map((moduleElement, index) => (
@@ -65,18 +73,24 @@ export default function CourseDetails() {
                     <hr />
                     <div
                       className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"
-                        } timeline-box`}
+                        } timeline-box flex flex-col items-center py-1 px-4 min-w-32`}
                     >
-                      {moduleElement.module.name}
+                      <p className="font-semibold">
+                        {moduleElement.module.name}
+                      </p>
+                      <p className="text-sm">
+                        Days: <span className="font-bold">
+                          {moduleElement.module.days.length}
+                        </span>
+                      </p>
                     </div>
                     <div className="timeline-middle">
-                      <p>[{getWeekNumberOfModule(course, moduleElement.module.id!)}]</p>
+                      <p className="border rounded px-2">{getWeekNumberOfModule(course, moduleElement.module.id!)}</p>
                     </div>
                     <hr />
                   </li>
                 ))}
-
-                <li className="relative flex-grow flex flex-col items-center justify-center">
+                <li className="flex-grow flex flex-col items-center justify-center">
                   <hr />
                   <div className="bg-accent w-3 h-3 border rounded-lg"></div>
                 </li>
@@ -114,7 +128,7 @@ export default function CourseDetails() {
           </div>
         </section>
       }
-      {(isErrorCourse) && <ErrorModal error="Days" />}
+      {isErrorCourse && <ErrorModal error="Days" />}
     </Page>
   );
 }
