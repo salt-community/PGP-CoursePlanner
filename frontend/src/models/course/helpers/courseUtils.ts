@@ -312,7 +312,7 @@ export function deepRemoveId<T extends Record<string, any>>(obj: T): any {
   return obj;
 }
 
-export function stripIdsFromCourse(course: CourseType): Omit<CourseType, "id"> {
+export function stripIdsFromCourse(course: CourseType)  {
   return deepRemoveId(course);
 }
 
