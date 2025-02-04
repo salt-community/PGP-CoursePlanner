@@ -12,7 +12,7 @@ import { UseMutationResult } from "@tanstack/react-query";
 
 type Props = {
     course: CourseType,
-    submitFunction:  (course: CourseType, navigate: NavigateFunction, mutationPostAppliedCourse: UseMutationResult<void, Error, CourseType, unknown>) => Promise<CourseType>;
+    submitFunction:  (course: CourseType, navigate: NavigateFunction, mutationPostAppliedCourse: UseMutationResult<void, Error, CourseType, unknown>) => Promise<void>;
     mutation: UseMutationResult<void, Error, CourseType, unknown>
 }
 

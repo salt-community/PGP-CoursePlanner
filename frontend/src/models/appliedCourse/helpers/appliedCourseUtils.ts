@@ -27,13 +27,14 @@ export const handleCreateNewAppliedModule = (
   }));
 };
 
-export const handleUpdateCourse = (
+export const handleUpdateCourse = async (
   course: CourseType,
   navigate: NavigateFunction,
   mutation: UseMutationResult<void, Error, CourseType, unknown>
 ) => {
   mutation.mutate(course);
-    navigate("/activecourses");
+  navigate("/activecourses");
+  return;
 };
 
 export function assignDatesToModules(
@@ -61,7 +62,7 @@ export function assignDatesToModules(
 
     const updatedDays = module.module.days.map((existingDay, index) => ({
       ...existingDay,
-      date: moduleDays[index]
+      date: moduleDays[index],
     }));
 
     return {
@@ -79,8 +80,7 @@ export function assignDatesToModules(
     modules: updatedModules,
   });
 
-  return course
-
+  return course;
 }
 
 function getWeekDayList(startDate: Date, totalDays: number): Date[] {
