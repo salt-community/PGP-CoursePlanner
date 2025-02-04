@@ -11,10 +11,7 @@ import Header from "@components/Header";
 
 export default function CourseDetails() {
   const courseId = useIdFromPath();
-
   const { data: course, isError: isErrorCourse } = useQueryCourseById(courseId);
-
-  console.log(course?.modules);
 
   return (
     <Page>
@@ -36,7 +33,7 @@ export default function CourseDetails() {
           </div>
 
           {/* Second Row, First Column */}
-          <div className="row-span-8 col-span-2 border-r-2 p-10 flex flex-col h-full">
+          <div className="row-span-7 col-span-2 border-r-2 p-10 pb-0 flex flex-col h-full">
             <div className="flex place-content-around p-3 border-b-4 h-20">
               <div className="flex flex-col items-center">
                 <h3 className="text-2xl font-bold">{course.modules.length}</h3>
@@ -58,7 +55,7 @@ export default function CourseDetails() {
               </h3>
             </div>
 
-            <div className="relative flex-grow">
+            <div className="flex-grow">
               <ul className="timeline timeline-vertical flex flex-col h-full">
                 <li className="flex justify-center">
                   <p className="py-2 text-sm">
@@ -69,7 +66,7 @@ export default function CourseDetails() {
                   <div className="bg-accent w-3 h-3 border rounded-lg"></div>
                 </li>
                 {course.modules.map((moduleElement, index) => (
-                  <li key={moduleElement.module.id} className="relative">
+                  <li key={moduleElement.module.id}>
                     <hr />
                     <div
                       className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"
@@ -96,34 +93,34 @@ export default function CourseDetails() {
                 </li>
               </ul>
             </div>
-
-            <div className="mt-5 flex flex-col gap-6 p-8">
-              <button className="btn btn-primary" onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>Deploy Bootcamp</button>
-              <DeployModal course={course} />
-            </div>
           </div>
 
           {/* Second Row, Second Column */}
-          <div className="row-span-8 col-span-7">
-            <div className="h-5/6 overflow-scroll">
-              {course.modules.map((modulemap, index) =>
-                <ModuleDetails module={modulemap} key={index} />
-              )}
-            </div>
-            <div className="flex pl-14 pt-4 gap-6">
-              <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary" >Edit Course</Link>
-              <DeleteBtn onClick={() => console.log("you clicked delete")}>Delete Course</DeleteBtn>
+          <div className="row-span-7 col-span-7 overflow-scroll">
+            {course.modules.map((modulemap, index) =>
+              <ModuleDetails module={modulemap} key={index} />
+            )}
+          </div>
 
-              <p> Track: {course?.track.name
-              }</p>
-              <div
-                style={{
-                  width: "15px",
-                  height: "15px",
-                  backgroundColor: course.color,
-                  borderRadius: "3px",
-                }}
-              > </div>
+          {/* Third Row, First Column */}
+          <div className="row-span-1 col-span-2 flex flex-col p-8 border-r-2">
+            <button className="btn btn-primary" onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>Deploy Bootcamp</button>
+            <DeployModal course={course} />
+          </div>
+
+          {/* Third Row, Second Column */}
+          <div className="row-span-1 col-span-7 flex p-8 gap-6">
+            <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary min-w-40" >Edit Course</Link>
+            <DeleteBtn onClick={() => console.log("you clicked delete")}>Delete Course</DeleteBtn>
+
+            <p> Track: {course.track.name}</p>
+            <div
+              style={{
+                width: "15px",
+                height: "15px",
+                backgroundColor: course.color,
+                borderRadius: "3px",
+              }}>
             </div>
           </div>
         </section>
