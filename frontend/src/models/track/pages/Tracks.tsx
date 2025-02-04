@@ -40,7 +40,7 @@ export default function Track() {
                 }
             </section>
             {openModal && <CreateTrackModal openModal={openModal} setOpenModal={setOpenModal} />}
-            {isError && <ErrorModal error="Tracks" />}
+            {(isError) && <ErrorModal error="Tracks" />}
         </Page>
     )
 }

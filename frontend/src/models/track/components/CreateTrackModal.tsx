@@ -19,14 +19,20 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
     const mutationPostTrack = useMutationPostTrack();
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
         if (name == "" || color == "") {
-            e.preventDefault();
             setReq(true);
         } else {
-            console.log(name, color)
             mutationPostTrack.mutate({
                 name: name,
                 color: color
+            }, {
+                onError: (error) => {
+                    if (error.message === "401") {
+                        handleCloseModal();
+                        window.location.reload()
+                    }
+                }
             });
         }
     }
@@ -63,7 +69,7 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
                     </label>
                     <label className="text-lg font-medium">Track color*
                         <HexColorPicker className="min-w-full" color={color} onChange={setColor} />
-                        {(req && name === "") &&
+                        {(req && color === "") &&
                             <RequiredFormError text="Please pick a color" />
                         }
                     </label>
