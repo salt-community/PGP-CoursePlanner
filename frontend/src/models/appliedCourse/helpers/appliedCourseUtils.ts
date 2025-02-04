@@ -1,3 +1,4 @@
+import { getNewWeekDayDate } from "@models/course/helpers/courseUtils";
 import { CourseModuleType, CourseType } from "@models/course/Types";
 import { UseMutationResult } from "@tanstack/react-query";
 import { NavigateFunction } from "react-router-dom";
@@ -17,7 +18,8 @@ export const handleCreateNewAppliedModule = (
       isApplied: false,
       numberOfDays: 0,
       days: [],
-      startDate: new Date(),
+      startDate: getNewWeekDayDate(course.endDate!, 1),
+      
     },
   };
 
