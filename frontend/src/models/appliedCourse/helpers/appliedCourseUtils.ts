@@ -34,6 +34,7 @@ export const handleUpdateCourse = async (
   navigate: NavigateFunction,
   mutation: UseMutationResult<void, Error, CourseType, unknown>
 ) => {
+  console.log("UPDATING COURSE", course)
   mutation.mutate(course);
   navigate("/activecourses");
   return;

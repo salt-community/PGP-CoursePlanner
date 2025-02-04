@@ -36,7 +36,7 @@ export default function CalenderDate({ dateContent, date, openModal, indexForMod
 
     const updateSelectedModule = (moduleId: number) => {
         console.log(moduleId)
-        if (moduleId) {
+        if (moduleId != null) {
             const newSelectedModule = previewCourse.modules.map(m => m.module).find(m => m.id == moduleId)
             if (newSelectedModule) {
                 setSelectedModule(newSelectedModule)

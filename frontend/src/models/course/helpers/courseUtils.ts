@@ -77,32 +77,32 @@ export const getCourseDayDates = (course: CourseType, startDate: Date) => {
   return calendarDateTypes;
 };
 
-// export const getCourseWithDates = (course: CourseType, startDate: Date) => {
-//   const currentDate = new Date(startDate);
+export const getCourseWithDates = (course: CourseType, startDate: Date) => {
+  const currentDate = new Date(startDate);
 
-//   const updatedCourse = { ...course, startDate: new Date(startDate) };
-//   const modules = updatedCourse.modules.map((m) => m.module);
+  const updatedCourse = { ...course, startDate: new Date(startDate) };
+  const modules = updatedCourse.modules.map((m) => m.module);
 
-//   for (let i = 0; i < modules.length; i++) {
-//     while (currentDate.getDay() !== 1) {
-//       currentDate.setDate(currentDate.getDate() + 1);
-//     }
+  for (let i = 0; i < modules.length; i++) {
+    while (currentDate.getDay() !== 1) {
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
 
-//     for (let j = 0; j < modules[i].numberOfDays; j++) {
-//       // Skip weekends (Saturday: 6, Sunday: 0)
-//       while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
-//         currentDate.setDate(currentDate.getDate() + 1);
-//       }
+    for (let j = 0; j < modules[i].numberOfDays; j++) {
+      // Skip weekends (Saturday: 6, Sunday: 0)
+      while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
 
-//       modules[i].days[j].date = new Date(currentDate);
-//       updatedCourse.endDate = new Date(currentDate);
+      modules[i].days[j].date = new Date(currentDate);
+      updatedCourse.endDate = new Date(currentDate);
       
-//       currentDate.setDate(currentDate.getDate() + 1);
-//     }
-//     modules[i].startDate = modules[i].days[0].date;
-//   }
-//   return updatedCourse;
-// };
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    modules[i].startDate = modules[i].days[0].date;
+  }
+  return updatedCourse;
+};
 
 export const updatePreviewCalendarDates = (course: CourseType) => {
   const calendarDateTypes: CalendarDateType[] = [];
