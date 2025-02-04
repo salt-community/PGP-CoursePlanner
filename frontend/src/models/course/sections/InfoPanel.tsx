@@ -3,7 +3,6 @@ import { CourseType, ModuleType } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { EventType } from "@models/module/Types";
-import { formatDateTime } from "../helpers/courseUtils";
 
 type Props = {
     selectedDate: CalendarDateType
@@ -28,12 +27,11 @@ export function InfoPanel({ selectedDate, handleMoveModule, selectedModule, cour
     const {
         register,
         handleSubmit,
-        watch,
+        // watch,
         // formState: { errors },
     } = useForm<Inputs>()
 
 const onSubmit: SubmitHandler<Inputs> = (data) => {
-  // Create the new event
   const newEvent: EventType = {
     id: 0, 
     name: data.name,

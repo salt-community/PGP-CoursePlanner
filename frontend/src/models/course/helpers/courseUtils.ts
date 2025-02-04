@@ -271,6 +271,7 @@ export const handleApplyTemplate = async (
 
   mutation.mutate(myCourse);
   navigate("/activecourses");
+  return;
 };
 
 /**
