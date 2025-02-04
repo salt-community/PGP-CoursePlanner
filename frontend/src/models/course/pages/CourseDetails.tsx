@@ -1,36 +1,33 @@
 import Page from "@components/Page";
 import ModuleDetails from "../sections/ModuleDetails";
 import { useIdFromPath } from "@helpers/helperHooks";
-import { useQueryCourseById, useQueryModulesByCourseId } from "@api/course/courseQueries";
-import LoadingMessage from "@components/LoadingMessage";
+import { useQueryCourseById } from "@api/course/courseQueries";
 import DeleteBtn from "@components/buttons/DeleteBtn";
 import { Link } from "react-router-dom";
-import {  getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
+import { getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
 import DeployModal from "../sections/DeployModal";
 import ErrorModal from "@components/ErrorModal";
+import Header from "@components/Header";
 
 export default function CourseDetails() {
   const courseId = useIdFromPath();
 
-  const { data: course, isLoading: isLoadingCourse, isError: isErrorCourse } = useQueryCourseById(courseId);
-  const { data: modules, isLoading: isLoadingCourseModules, isError: isErrorCourseModules } = useQueryModulesByCourseId(courseId);
+  const { data: course, isError: isErrorCourse } = useQueryCourseById(courseId);
 
-  // Loading or error state handling
-  if (isLoadingCourse || isLoadingCourseModules) {
-    return <LoadingMessage />;
-  }
-
+  console.log(course?.modules);
 
   return (
     <Page>
-      <h1 className="text-4xl pl-5">Course</h1>
-
-      {course && modules &&
-
-        <section className="grid grid-rows-9 grid-cols-9 h-screen bg-white m-5 rounded-lg overflow-hidden drop-shadow-xl">
+      <Header>
+        <h1 className="text-3xl font-semibold">
+          Course Template
+        </h1>
+      </Header>
+      {course &&
+        <section className="grid grid-rows-[150px_1fr] grid-cols-9 h-screen bg-white m-5 rounded-lg overflow-hidden drop-shadow-xl">
           {/* First Row, First Column */}
-          <div className="row-span-1 col-span-2 bg-yellow-500 text-center flex items-center justify-center" style={ {backgroundColor: course.color} }>
-            <h2 className="text-3xl">{course?.name || "Course Name"}</h2>
+          <div className="row-span-1 col-span-2 bg-yellow-500 text-center flex items-center justify-center" style={{ backgroundColor: course.color }}>
+            <h2 className="text-4xl">{course.name || "Course Name"}</h2>
           </div>
 
           {/* First Row, Second Column */}
@@ -41,7 +38,7 @@ export default function CourseDetails() {
           <div className="row-span-8 col-span-2 border-r-2 p-10 flex flex-col h-full">
             <div className="flex place-content-around p-3 border-b-4 h-20">
               <div className="flex flex-col items-center">
-                <h3>{modules.length}</h3>
+                <h3>{course.modules.length}</h3>
                 <p>Modules</p>
               </div>
               <div className="flex flex-col items-center">
@@ -63,17 +60,17 @@ export default function CourseDetails() {
                 <li className="relative  flex flex-col items-center justify-center">
                   <div className="bg-accent w-3 h-3 border rounded-lg"></div>
                 </li>
-                {modules.map((moduleElement, index) => (
-                  <li key={moduleElement.id} className="relative">
+                {course.modules.map((moduleElement, index) => (
+                  <li key={moduleElement.module.id} className="relative">
                     <hr />
                     <div
                       className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"
                         } timeline-box`}
                     >
-                      {moduleElement.name}
+                      {moduleElement.module.name}
                     </div>
                     <div className="timeline-middle">
-                      <p>[{getWeekNumberOfModule(course, moduleElement.id!)}]</p>
+                      <p>[{getWeekNumberOfModule(course, moduleElement.module.id!)}]</p>
                     </div>
                     <hr />
                   </li>
@@ -87,23 +84,16 @@ export default function CourseDetails() {
             </div>
 
             <div className="mt-5 flex flex-col gap-6 p-8">
-              <button className="btn btn-primary" onClick={() =>  (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal() }>Deploy Bootcamp</button>
+              <button className="btn btn-primary" onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>Deploy Bootcamp</button>
               <DeployModal course={course} />
             </div>
           </div>
 
-
-
-
           {/* Second Row, Second Column */}
           <div className="row-span-8 col-span-7">
             <div className="h-5/6 overflow-scroll">
-              {modules && (
-                <>
-                  {modules.map((modulemap, index) =>
-                    <ModuleDetails module={modulemap} key={index} />
-                  )}
-                </>
+              {course.modules.map((modulemap, index) =>
+                <ModuleDetails module={modulemap} key={index} />
               )}
             </div>
             <div className="flex pl-14 pt-4 gap-6">
@@ -111,7 +101,7 @@ export default function CourseDetails() {
               <DeleteBtn onClick={() => console.log("you clicked delete")}>Delete Course</DeleteBtn>
 
               <p> Track: {course?.track.name
-                }</p>
+              }</p>
               <div
                 style={{
                   width: "15px",
@@ -120,12 +110,11 @@ export default function CourseDetails() {
                   borderRadius: "3px",
                 }}
               > </div>
-
             </div>
           </div>
         </section>
       }
-    { (isErrorCourse || isErrorCourseModules) && <ErrorModal error="Days" />}
+      {(isErrorCourse) && <ErrorModal error="Days" />}
     </Page>
   );
 }
