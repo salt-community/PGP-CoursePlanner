@@ -4,10 +4,13 @@ import Header from "@components/Header";
 import Page from "@components/Page";
 import SquareCard from "@components/SquareCard";
 import LoadingSkeletonModule from "@models/module/components/LoadingSkeletonModule";
-import { Link } from "react-router-dom";
+import CreateTrackModal from "../components/CreateTrackModal";
+import { useState } from "react";
 
 export default function Track() {
+    const [openModal, setOpenModal] = useState(false);
     const { data: tracks, isLoading, isError } = useQueryTracks();
+
     return (
         <Page>
             <Header>
@@ -16,11 +19,11 @@ export default function Track() {
                 </h1>
             </Header>
             <section className="flex flex-wrap gap-6 p-10 pt-0">
-                <Link to={"/tracks/create"} className="flex items-center justify-center bg-primary rounded-xl hover:bg-[#EF4E72] drop-shadow-xl text-white min-h-72 min-w-72">
+                <button onClick={() => setOpenModal(true)} className="flex items-center justify-center bg-primary rounded-xl hover:bg-[#EF4E72] drop-shadow-xl text-white min-h-72 min-w-72">
                     <div className="text-lg">
                         Create new track
                     </div>
-                </Link>
+                </button>
                 {tracks && <SquareCard data={tracks} isLoading={isLoading} tracks={true} />}
                 {(!tracks && isLoading) &&
                     <>
@@ -36,7 +39,8 @@ export default function Track() {
                     </>
                 }
             </section>
-            {isError && <ErrorModal error="Tracks" />}
+            {openModal && <CreateTrackModal openModal={openModal} setOpenModal={setOpenModal} />}
+            {(isError) && <ErrorModal error="Tracks" />}
         </Page>
     )
 }
