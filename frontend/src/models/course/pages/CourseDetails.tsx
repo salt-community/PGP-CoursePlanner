@@ -34,7 +34,7 @@ export default function CourseDetails() {
 
           {/* Second Row, First Column */}
           <div className="row-span-7 col-span-2 border-r-2 pt-10 px-4 pb-0 flex flex-col h-full">
-            <div className="flex place-content-around p-3 border-b-4 h-20">
+            <div className="flex place-content-around p-3 pt-0 border-b-4 h-20">
               <div className="flex flex-col items-center">
                 <h3 className="text-2xl font-bold">{course.modules.length}</h3>
                 <p>Modules</p>
