@@ -11,17 +11,18 @@ import { CalendarDateType } from "@models/calendar/Types"
 // import { datePickerToolbarClasses } from "@mui/x-date-pickers"
 
 type Props = {
-    startDate: Date
-    selectedModule: ModuleType
-    selectedModuleStartDate: CalendarDateType
-    previewCalendarDays: CalendarDateType[]
-    setSelectedModuleStartDate: React.Dispatch<React.SetStateAction<CalendarDateType>>
+    startDate: Date;
+    selectedModule: ModuleType;
+    selectedModuleStartDate: CalendarDateType;
+    previewCalendarDays: CalendarDateType[];
+    setSelectedModuleStartDate: React.Dispatch<React.SetStateAction<CalendarDateType>>;
+    previewCourse: CourseType;
+    setSelectedModule: React.Dispatch<React.SetStateAction<ModuleType>>;
+    handleMoveModuleDnd: (moduleId: number, newDate: string) => void;
+};
 
-    previewCourse: CourseType
-    setSelectedModule: React.Dispatch<React.SetStateAction<ModuleType>>
-}
 
-export default function MiniCalendar({ startDate, previewCalendarDays, selectedModule, selectedModuleStartDate, setSelectedModuleStartDate, previewCourse, setSelectedModule }: Props) {
+export default function MiniCalendar({ startDate, previewCalendarDays, selectedModule, selectedModuleStartDate, setSelectedModuleStartDate, previewCourse, setSelectedModule, handleMoveModuleDnd }: Props) {
     const [month, setMonth] = useState<number>(getMonth(startDate));
     const [year, setYear] = useState<number>(getYear(startDate));
     const [calendarData, setCalendarData] = useState<CalendarDateType[]>([]);
@@ -131,6 +132,7 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
                                         dateContent={calendarData[dateIndex].dateContent}
                                         key={`${getDateAsString(thisDate)}-${dateIndex}`}
                                         date={getDateAsString(thisDate)}
+                                        handleMoveModuleDnd={handleMoveModuleDnd}
                                     />
                                 )
                             })}
