@@ -132,6 +132,7 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
 };
 
 export const getUpdatedCourse = (course: CourseType, startDate: Date) => {
+  console.log("crazy?")
 
   const updatedCourse = { ...course, startDate: new Date(startDate) };
 
@@ -141,7 +142,7 @@ export const getUpdatedCourse = (course: CourseType, startDate: Date) => {
   }));
 
   const modules = updatedCourse.modules.map((m) => m.module);
-
+  updatedCourse.startDate = startDate;
   for (let i = 0; i < modules.length; i++) {
     let currentDate = new Date(modules[i].startDate);
 
@@ -195,6 +196,17 @@ export const getNewDate = (currentDate: Date, difference: number) => {
   todayDate.setDate(todayDate.getDate() + difference);
   return todayDate;
 };
+
+export const getNewWeekDayDate = (currentDate: Date, difference: number) => {
+  let  todayDate = new Date(currentDate);
+  todayDate.setDate(todayDate.getDate() + difference);
+
+  while (todayDate.getDay() === 0 || todayDate.getDay() === 6) {
+    todayDate = getNewDate(todayDate, 1);
+  }
+  return todayDate;
+};
+
 
 export const getCalculatedDays = (days: DayType[], startDate: Date) => {
   const currentDate = new Date(startDate);
@@ -300,7 +312,7 @@ export function deepRemoveId<T extends Record<string, any>>(obj: T): any {
   return obj;
 }
 
-export function stripIdsFromCourse(course: CourseType): Omit<CourseType, "id"> {
+export function stripIdsFromCourse(course: CourseType)  {
   return deepRemoveId(course);
 }
 
