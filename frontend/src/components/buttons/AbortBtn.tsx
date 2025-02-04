@@ -4,6 +4,6 @@ type Props = {
 
 export default function DeleteBtn({ onClick }: Props) {
     return (
-        <button type="button" onClick={onClick} className="btn btn-secondary text-xl w-full">Abort</button>
+        <button type="button" onClick={onClick} className="btn btn-secondary text-xl w-48">Abort</button>
     )
 }

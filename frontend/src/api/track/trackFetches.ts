@@ -26,7 +26,7 @@ export async function postTrack(track: TrackRequest) {
         body: JSON.stringify(track),
     });
 
-    if (response.status === 401) {
+    if (!response.ok) {
         throw new Error(response.status.toString());
     }
 }
