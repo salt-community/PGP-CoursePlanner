@@ -21,7 +21,7 @@ export default function CourseDetails() {
         </h1>
       </Header>
       {course &&
-        <section className="grid grid-rows-[145px_1fr] grid-cols-9 bg-white m-5 mt-0 rounded-lg overflow-hidden drop-shadow-xl">
+        <section className="grid grid-rows-[145px_1fr] grid-cols-9 bg-white m-5 mt-0 rounded-lg overflow-auto drop-shadow-xl">
           {/* First Row, First Column */}
           <div className="row-span-1 col-span-2 bg-yellow-500 text-center flex items-center justify-center" style={{ backgroundColor: course.color }}>
             <h2 className="text-4xl">{course.name || "Course Name"}</h2>
@@ -33,7 +33,7 @@ export default function CourseDetails() {
           </div>
 
           {/* Second Row, First Column */}
-          <div className="row-span-7 col-span-2 border-r-2 p-10 pb-0 flex flex-col h-full">
+          <div className="row-span-7 col-span-2 border-r-2 pt-10 px-4 pb-0 flex flex-col h-full">
             <div className="flex place-content-around p-3 border-b-4 h-20">
               <div className="flex flex-col items-center">
                 <h3 className="text-2xl font-bold">{course.modules.length}</h3>
@@ -55,7 +55,7 @@ export default function CourseDetails() {
               </h3>
             </div>
 
-            <div className="flex-grow">
+            <div className="flex-grow overflow-auto">
               <ul className="timeline timeline-vertical flex flex-col h-full">
                 <li className="flex justify-center">
                   <p className="py-2 text-sm">
@@ -96,34 +96,27 @@ export default function CourseDetails() {
           </div>
 
           {/* Second Row, Second Column */}
-          <div className="row-span-7 col-span-7 overflow-scroll">
+          <div className="row-span-7 col-span-7 overflow-auto">
             {course.modules.map((modulemap, index) =>
               <ModuleDetails module={modulemap} key={index} />
             )}
           </div>
 
           {/* Third Row, First Column */}
-          <div className="row-span-1 col-span-2 flex flex-col p-8 border-r-2">
-            <button className="btn btn-primary" onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>Deploy Bootcamp</button>
+          <div className="row-span-1 col-span-2 flex justify-center p-8 border-r-2">
+            <button className="btn btn-primary min-w-48" onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>Deploy Bootcamp</button>
             <DeployModal course={course} />
           </div>
 
           {/* Third Row, Second Column */}
           <div className="row-span-1 col-span-7 flex p-8 justify-between">
             <div className="flex gap-4">
-              <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary min-w-40" >Edit Course</Link>
+              <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary min-w-48" >Edit Course</Link>
               <DeleteBtn onClick={() => console.log("you clicked delete")}>Delete Course</DeleteBtn>
             </div>
             <div className="flex items-center gap-2 mr-5">
-              <div
-                style={{
-                  width: "15px",
-                  height: "15px",
-                  backgroundColor: course.color,
-                  borderRadius: "3px",
-                }}>
-              </div>
-              <p> Track: {course.track.name}</p>
+              <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: course.track.color }}></div>
+              <p className="text-lg text-[#636363]"> Track: {course.track.name}</p>
             </div>
           </div>
         </section>
