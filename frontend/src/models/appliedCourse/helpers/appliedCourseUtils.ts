@@ -1,4 +1,4 @@
-import { getNewWeekDayDate } from "@models/course/helpers/courseUtils";
+import { getNewWeekDayDate, stripIdsFromCourse } from "@models/course/helpers/courseUtils";
 import { CourseModuleType, CourseType } from "@models/course/Types";
 import { UseMutationResult } from "@tanstack/react-query";
 import { NavigateFunction } from "react-router-dom";
@@ -35,7 +35,13 @@ export const handleUpdateCourse = async (
   mutation: UseMutationResult<void, Error, CourseType, unknown>
 ) => {
   console.log("UPDATING COURSE", course)
-  mutation.mutate(course);
+
+    const myTrack = course.track.id;
+    const myCourse = stripIdsFromCourse(course);
+    myCourse.track.id = myTrack;
+    myCourse.id = course.id;
+  
+  mutation.mutate(myCourse);
   navigate("/activecourses");
   return;
 };
