@@ -13,7 +13,6 @@ type Props = {
 }
 
 export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
-    const [modalState, setModalState] = useState(openModal);
     const [color, setColor] = useState("");
     const [name, setName] = useState("");
     const [req, setReq] = useState(false);
@@ -39,7 +38,6 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
     }
 
     function handleCloseModal() {
-        setModalState(false);
         setOpenModal(false);
     }
 
@@ -55,7 +53,7 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
     });
 
     return (
-        <dialog className={`modal ${modalState ? "modal-open" : ""}`}>
+        <dialog className={`modal ${openModal ? "modal-open" : ""}`}>
             <div className="modal-box flex flex-col items-center p-0 bg-white max-w-[450px]">
                 <div className="bg-[#ff7961] p-3 pt-6 pb-6 w-full flex flex-col items-center">
                     <h2 className="text-3xl font-semibold text-white p-5">
