@@ -1,17 +1,22 @@
 import { useEffect } from "react";
 import CloseBtn from "@components/buttons/CloseBtn";
+import SubmitErrorMessage from "./SubmitErrorMessage";
 
 type Props = {
     openModal: boolean
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
     warning: string
     handleDelete: () => void
+    isError: boolean
+    errorMessage: string | undefined
+    resetMutation: () => void
 }
 
-export default function DeleteWarningModal({ openModal, setOpenModal, warning, handleDelete }: Props) {
+export default function DeleteWarningModal({ openModal, setOpenModal, warning, handleDelete, isError, errorMessage, resetMutation }: Props) {
 
     function handleCloseModal() {
         setOpenModal(false);
+        resetMutation();
     }
 
     // Close modal on Escape key
@@ -52,6 +57,9 @@ export default function DeleteWarningModal({ openModal, setOpenModal, warning, h
                             Abort
                         </button>
                     </div>
+                    {(isError && errorMessage) &&
+                        <SubmitErrorMessage statusCode={errorMessage} />
+                    }
                 </div>
                 <form method="dialog" className="modal-backdrop">
                     <button onClick={() => handleCloseModal()}>

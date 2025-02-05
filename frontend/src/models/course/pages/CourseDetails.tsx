@@ -20,7 +20,9 @@ export default function CourseDetails() {
 
   function handleDeleteCourse() {
     mutationDeleteCourse.mutate(courseId);
-    setOpenModal(false);
+    if (mutationDeleteCourse.isSuccess) {
+      setOpenModal(false);
+    }
   }
 
   return (
@@ -132,7 +134,7 @@ export default function CourseDetails() {
               </div>
             </div>
           </section>
-          <DeleteWarningModal openModal={openModal} setOpenModal={setOpenModal} warning={`${course.name} Course Template`} handleDelete={handleDeleteCourse} />
+          <DeleteWarningModal openModal={openModal} setOpenModal={setOpenModal} warning={`${course.name} Course Template`} handleDelete={handleDeleteCourse} isError={mutationDeleteCourse.isError} errorMessage={mutationDeleteCourse.error?.message} resetMutation={mutationDeleteCourse.reset} />
         </>
       }
 
