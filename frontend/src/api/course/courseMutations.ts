@@ -50,6 +50,11 @@ export function useMutationDeleteCourse() {
             });
             navigate(`/courses`);
         },
+        onError: (error) => {
+            if (error.message === "401") {
+                navigate(`/courses`);
+            }
+        },
         retry: 1
     });
 
