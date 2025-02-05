@@ -13,7 +13,8 @@ export function useMutationPostModule() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['modules'] });
             navigate(`/modules`);
-        }
+        },
+        retry: 1
     });
 
     return mutation;
@@ -29,7 +30,8 @@ export function useMutationUpdateModule(navigateTo?: string) {
         onSuccess: (_data, module) => {
             queryClient.invalidateQueries({ queryKey: ['modules', module.id] });
             if (navigateTo) navigate(navigateTo);
-        }
+        },
+        retry: 1
     });
 
     return mutation;
@@ -45,7 +47,8 @@ export function useMutationDeleteModule() {
         onSuccess: (_data, id) => {
             queryClient.invalidateQueries({ queryKey: ['modules', id] })
             navigate(`/modules`);
-        }
+        },
+        retry: 1
     })
 
     return mutation;
