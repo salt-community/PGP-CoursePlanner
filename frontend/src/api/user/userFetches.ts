@@ -14,7 +14,7 @@ export async function getToken() {
   if (authCode === null) {
     throw new Error("No code found in URL");
   }
-  setCookie("auth_code", authCode);
+  setCookie("auth_code", authCode, 72000);
   const redirectURI = getHomeUrl();
   const response = await fetch(`${BASE_URL}/${encodeURIComponent(authCode)}/${encodeURIComponent(redirectURI)}`, {
     headers: {
