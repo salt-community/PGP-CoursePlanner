@@ -11,11 +11,12 @@ import Header from "@components/Header";
 import { useMutationDeleteCourse } from "@api/course/courseMutations";
 import DeleteWarningModal from "@components/DeleteWarningModal";
 import { useState } from "react";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function CourseDetails() {
   const courseId = useIdFromPath();
   const [openModal, setOpenModal] = useState(false);
-  const { data: course, isError: isErrorCourse } = useQueryCourseById(courseId);
+  const { data: course, isLoading: isLoadingCourse, isError: isErrorCourse } = useQueryCourseById(courseId);
   const mutationDeleteCourse = useMutationDeleteCourse();
 
   function handleDeleteCourse() {
@@ -32,22 +33,22 @@ export default function CourseDetails() {
           Course Template
         </h1>
       </Header>
-      {course &&
-        <>
-          <section className="grid grid-rows-[145px_1fr] grid-cols-9 bg-white m-5 mt-0 rounded-lg overflow-auto drop-shadow-xl">
-            {/* First Row, First Column */}
-            <div className="row-span-1 col-span-2 bg-yellow-500 text-center flex items-center justify-center" style={{ backgroundColor: course.color }}>
-              <h2 className="text-4xl">{course.name || "Course Name"}</h2>
-            </div>
+      <section className="grid grid-rows-[145px_1fr] grid-cols-9 bg-white m-5 mt-0 rounded-lg h-full overflow-auto drop-shadow-xl">
+        {/* First Row, First Column */}
+        <div className="row-span-1 col-span-2 bg-yellow-500 text-center flex items-center justify-center" style={course ? { backgroundColor: course.color } : {}}>
+          <h2 className="text-4xl">{course ? course.name : "Course Name"}</h2>
+        </div>
 
-            {/* First Row, Second Column */}
-            <div className="row-span-1 col-span-7 text-center flex items-center justify-center border-b-2">
-              <h2 className="text-4xl">Modules</h2>
-            </div>
+        {/* First Row, Second Column */}
+        <div className="row-span-1 col-span-7 text-center flex items-center justify-center border-b-2">
+          <h2 className="text-4xl">Modules</h2>
+        </div>
 
-            {/* Second Row, First Column */}
-            <div className="row-span-7 col-span-2 border-r-2 pt-10 px-4 pb-0 flex flex-col h-full">
-              <div className="flex place-content-around p-3 pt-0 border-b-4 h-20">
+        {/* Second Row, First Column */}
+        <div className="row-span-7 col-span-2 border-r-2 pt-10 px-4 pb-0 flex flex-col">
+          {course &&
+            <>
+              <div className="flex place-content-around p-3 pt-0 border-b-4">
                 <div className="flex flex-col items-center">
                   <h3 className="text-2xl font-bold">{course.modules.length}</h3>
                   <p>Modules</p>
@@ -106,23 +107,33 @@ export default function CourseDetails() {
                   </li>
                 </ul>
               </div>
-            </div>
+            </>
+          }
+          {isLoadingCourse && <LoadingSpinner />}
+        </div>
 
-            {/* Second Row, Second Column */}
-            <div className="row-span-7 col-span-7 overflow-auto">
-              {course.modules.map((modulemap, index) =>
-                <ModuleDetails module={modulemap} key={index} />
-              )}
-            </div>
+        {/* Second Row, Second Column */}
+        <div className="row-span-7 col-span-7 p-10 overflow-auto">
+          {course && course.modules.map((module, index) =>
+            <ModuleDetails module={module} key={index} />
+          )}
+          {isLoadingCourse && <LoadingSpinner />}
+        </div>
 
-            {/* Third Row, First Column */}
-            <div className="row-span-1 col-span-2 flex justify-center p-8 border-r-2">
+        {/* Third Row, First Column */}
+        <div className="row-span-1 col-span-2 flex justify-center p-8 border-r-2">
+          {course &&
+            <>
               <button className="btn btn-primary min-w-48" onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>Deploy Bootcamp</button>
               <DeployModal course={course} />
-            </div>
+            </>
+          }
+        </div>
 
-            {/* Third Row, Second Column */}
-            <div className="row-span-1 col-span-7 flex p-8 justify-between">
+        {/* Third Row, Second Column */}
+        <div className="row-span-1 col-span-7 flex p-8 justify-between">
+          {course &&
+            <>
               <div className="flex gap-4">
                 <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary min-w-48" >Edit Course</Link>
                 <DeleteBtn onClick={() => setOpenModal(true)}>Delete Course</DeleteBtn>
@@ -132,13 +143,17 @@ export default function CourseDetails() {
                 <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: course.track.color }}></div>
                 <p className="text-lg text-[#636363]"> Track: {course.track.name}</p>
               </div>
-            </div>
-          </section>
-          <DeleteWarningModal openModal={openModal} setOpenModal={setOpenModal} warning={`${course.name} Course Template`} handleDelete={handleDeleteCourse} isError={mutationDeleteCourse.isError} errorMessage={mutationDeleteCourse.error?.message} resetMutation={mutationDeleteCourse.reset} />
-        </>
-      }
+            </>
+          }
+        </div>
 
-      {isErrorCourse && <ErrorModal error="Days" />}
-    </Page>
+      </section>
+      {course &&
+        <DeleteWarningModal openModal={openModal} setOpenModal={setOpenModal} warning={`${course.name} Course Template`} handleDelete={handleDeleteCourse} isError={mutationDeleteCourse.isError} errorMessage={mutationDeleteCourse.error?.message} resetMutation={mutationDeleteCourse.reset} />
+      }
+      {isErrorCourse &&
+        <ErrorModal error="Days" />
+      }
+    </Page >
   );
 }

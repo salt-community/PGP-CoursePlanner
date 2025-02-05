@@ -7,8 +7,8 @@ type Props = {
 
 export default function ModuleDetails({ module }: Props) {
     return (
-        <div className="p-10">
-            <div className="flex justify-between">
+        <>
+            <div className="flex justify-between overflow-auto">
                 <h3 className="text-3xl">{module.module.name}</h3>
                 <div className="flex flex-col items-center">
                     <h3 className="text-2xl font-bold">{module.module.days.length}</h3>
@@ -21,6 +21,6 @@ export default function ModuleDetails({ module }: Props) {
                     <DayTable events={day.events} />
                 </div>
             ))}
-        </div>
+        </>
     )
 }
