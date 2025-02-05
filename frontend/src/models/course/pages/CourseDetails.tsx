@@ -135,9 +135,8 @@ export default function CourseDetails() {
           {course &&
             <>
               <div className="flex gap-4">
-                <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary min-w-60 text-xl">Edit Course</Link>
-                <DeleteBtn onClick={() => setOpenModal(true)}>Delete Course</DeleteBtn>
-
+                <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary min-w-52 text-xl">Edit Course</Link>
+                <DeleteBtn onClick={() => setOpenModal(true)} />
               </div>
               <div className="flex items-center gap-2 mr-5">
                 <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: course.track.color }}></div>

@@ -31,22 +31,22 @@ export default function AppliedCourseDetails() {
     }, [appliedCourse]);
 
     function getWeekDayList() {
-    const days = [];
-    const start = new Date(startDate);
-    
-    for (let current = new Date(start); ; current.setDate(current.getDate() + 1)) {
-        const day = current.getDay();
-      
-        if (day !== 0 && day !== 6) {
-            days.push(new Date(current));
-        }
-        
-        if (days.length >= 360) {
-            break;
-        }
-    }
+        const days = [];
+        const start = new Date(startDate);
 
-    return days;
+        for (let current = new Date(start); ; current.setDate(current.getDate() + 1)) {
+            const day = current.getDay();
+
+            if (day !== 0 && day !== 6) {
+                days.push(new Date(current));
+            }
+
+            if (days.length >= 360) {
+                break;
+            }
+        }
+
+        return days;
     }
 
 
@@ -127,7 +127,7 @@ export default function AppliedCourseDetails() {
                         </section>
                         <div className="flex flex-row gap-2 px-1 mb-6 sm:p-0 md:px-24">
                             <Link to={`/activecourses/edit/${appliedCourse.id}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit</Link>
-                            <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))}>DeleteAll</DeleteBtn>
+                            <DeleteBtn onClick={() => mutation.mutate(parseInt(appliedCourse.id!.toString()))} />
                             <PDFGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays} appliedModules={courseModules}></PDFGenerator>
                             <PDFWeekGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays} appliedModules={courseModules}></PDFWeekGenerator>
                         </div>
