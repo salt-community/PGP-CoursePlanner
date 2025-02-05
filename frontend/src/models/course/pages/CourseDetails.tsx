@@ -124,7 +124,7 @@ export default function CourseDetails() {
         <div className="row-span-1 col-span-2 flex justify-center p-8 border-r-2">
           {course &&
             <>
-              <button className="btn btn-primary min-w-48" onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>Deploy Bootcamp</button>
+              <button className="btn btn-primary min-w-60 text-xl" onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>Deploy Bootcamp</button>
               <DeployModal course={course} />
             </>
           }
@@ -135,7 +135,7 @@ export default function CourseDetails() {
           {course &&
             <>
               <div className="flex gap-4">
-                <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary min-w-48" >Edit Course</Link>
+                <Link to={`/courses/edit/${courseId}`} className="btn btn-secondary min-w-60 text-xl">Edit Course</Link>
                 <DeleteBtn onClick={() => setOpenModal(true)}>Delete Course</DeleteBtn>
 
               </div>
