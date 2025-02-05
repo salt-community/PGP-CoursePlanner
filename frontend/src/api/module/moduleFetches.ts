@@ -46,7 +46,7 @@ export async function postModule(module: ModuleType) {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error(response.status.toString());
   }
 }
 
@@ -62,7 +62,7 @@ export async function updateModule(module: ModuleType) {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error(response.status.toString());
   }
 }
 
@@ -77,6 +77,6 @@ export async function deleteModule(id: number) {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error(response.status.toString());
   }
 }
