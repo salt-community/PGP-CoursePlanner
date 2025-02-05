@@ -67,7 +67,7 @@ export default function AppliedCourses() {
                         No Active Bootcamps
                     </p>
                 }
-                {(!appliedCourses && isLoading) &&
+                {isLoading &&
                     <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
                         <LoadingSkeletonCourse />
                     </div>
@@ -82,7 +82,7 @@ export default function AppliedCourses() {
                         No Upcoming Bootcamps
                     </p>
                 }
-                {(!appliedCourses && isLoading) &&
+                {(isLoading) &&
                     <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
                         <LoadingSkeletonCourse />
                     </div>
@@ -97,7 +97,7 @@ export default function AppliedCourses() {
                         No Completed Bootcamps
                     </p>
                 }
-                {(!appliedCourses && isLoading) &&
+                {(isLoading) &&
                     <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
                         <LoadingSkeletonCourse />
                     </div>
