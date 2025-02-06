@@ -3,7 +3,8 @@ import { CourseType, ModuleType } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { EventType } from "@models/module/Types";
-import { formatDateTime } from "../helpers/courseUtils";
+import { formatDateTime, getDifferenceInDays } from "../helpers/courseUtils";
+import { useEffect, useState } from "react";
 
 type Props = {
     selectedDate: CalendarDateType
@@ -25,10 +26,25 @@ type Inputs = {
 
 export function InfoPanel({ selectedDate, handleMoveModule, selectedModule, course, setCourse }: Props) {
 
+    const [isDateInModule, setIsDateInModule] = useState<boolean>(false)
+
+    useEffect (() => {
+        const daysInModule = selectedModule.days.length;
+        const selectedModuleStartDate = selectedModule.days[0].date
+        const moduleSpan = getDifferenceInDays(selectedModule.days[daysInModule-1].date, selectedModuleStartDate )
+        const daysDiff = getDifferenceInDays( selectedDate.date, selectedModuleStartDate )
+        console.log("diffs: ", daysDiff, moduleSpan)
+        if(daysDiff < 0 || daysDiff > moduleSpan) {
+            setIsDateInModule(false)
+        } else {
+            setIsDateInModule(true)
+        }
+    },[selectedDate, selectedModule]);
+
     const {
         register,
         handleSubmit,
-        // watch,
+        watch,
         // formState: { errors },
     } = useForm<Inputs>()
 
@@ -42,7 +58,7 @@ const onSubmit: SubmitHandler<Inputs> = (data) => {
     isApplied: true,
   };
 
-  if (data.isBelongingToModule) {
+  if (data.isBelongingToModule && isDateInModule) {
     const updatedModules = course.modules.map((module) => {
       if (module.module.id === selectedModule.id) {
         const updatedDays = module.module.days.map((day) => {
@@ -146,9 +162,11 @@ const onSubmit: SubmitHandler<Inputs> = (data) => {
                         <label >Description<input type="text" {...register("description", { required: true }) }></input></label>
                         <label >Start<input type="time" {...register("start", { required: true })}></input></label>
                         <label >End<input type="time" {...register("end", { required: true })}></input></label>
-                        <label>Belongs to module<input type="checkbox" {...register("isBelongingToModule")}></input></label>
+                        <label>Belongs to module<input type="checkbox" {...register("isBelongingToModule")} ></input></label>
 
                         <button className="btn" type="submit" onClick={handleSubmit(onSubmit)} > Add event </button>
+
+                    {!isDateInModule && watch("isBelongingToModule") && <p className="text-red-500">Selected day is not in module</p>}
                     </div>
                 </form>
             </details>
