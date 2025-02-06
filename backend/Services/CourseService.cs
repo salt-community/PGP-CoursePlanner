@@ -146,12 +146,13 @@ public class CourseService(DataContext context) : IService<Course>
 
         foreach (var @event in appliedCourse.MiscellaneousEvents)
         {
-            var eventDate = DateTime.Parse(@event.StartTime);
+            // Parse the DateTime as UTC
+            var eventDate = DateTime.Parse(@event.StartTime, null, System.Globalization.DateTimeStyles.RoundtripKind);
+
             var dateContent = new DateContent()
             {
                 CourseName = appliedCourse.Name!,
                 Track = appliedCourse.Track,
-
                 DayOfModule = 1,
                 TotalDaysInModule = 1,
                 Events = [@event],
@@ -160,7 +161,13 @@ public class CourseService(DataContext context) : IService<Course>
                 ModuleId = 0,
             };
 
-            var calendarDate = _context.CalendarDates.FirstOrDefault(cd => cd.Date.Date == eventDate.Date);
+            // Ensure the eventDate is treated as UTC
+            var eventDateUtc = eventDate.ToUniversalTime();
+
+            // Query the database using UTC date
+            var calendarDate = _context.CalendarDates
+                .FirstOrDefault(cd => cd.Date.Date == eventDateUtc.Date);
+
             if (calendarDate != null)
             {
                 calendarDate.DateContent.Add(dateContent);
@@ -169,7 +176,7 @@ public class CourseService(DataContext context) : IService<Course>
             {
                 calendarDate = new CalendarDate
                 {
-                    Date = eventDate.Date
+                    Date = eventDateUtc.Date
                 };
                 _context.CalendarDates.Add(calendarDate);
                 _context.SaveChanges();

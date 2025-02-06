@@ -3,6 +3,7 @@ import { CourseType, ModuleType } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { EventType } from "@models/module/Types";
+import { formatDateTime } from "../helpers/courseUtils";
 
 type Props = {
     selectedDate: CalendarDateType
@@ -74,7 +75,14 @@ const onSubmit: SubmitHandler<Inputs> = (data) => {
 
     console.log("Updated course with new event:", updatedCourse);
   } else {
-    alert("Event does not belong to a module.");
+    const miscEvents : EventType[]= course.miscellaneousEvents
+    newEvent.startTime =formatDateTime(selectedDate.date, newEvent.startTime)
+    newEvent.endTime =formatDateTime(selectedDate.date, newEvent.endTime)
+
+    miscEvents.push(newEvent);
+
+    setCourse({...course, miscellaneousEvents: miscEvents})
+
   }
 };
 

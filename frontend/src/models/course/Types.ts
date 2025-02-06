@@ -48,6 +48,7 @@ export type CourseType = {
   color?: string;
   isApplied?: boolean;
   modules: CourseModuleType[];
+  miscellaneousEvents: EventType[];
 }
 
 export type Track = {
