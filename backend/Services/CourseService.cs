@@ -17,6 +17,7 @@ public class CourseService(DataContext context) : IService<Course>
                 .ThenInclude(module => module!.Days)
                 .ThenInclude(day => day.Events)
             .Include(c => c.Track)
+            .Include(c => c.MiscellaneousEvents)
                 .ToListAsync();
 
         foreach (var course in courses)
@@ -41,6 +42,7 @@ public class CourseService(DataContext context) : IService<Course>
                 .ThenInclude(module => module!.Days)
                 .ThenInclude(day => day.Events)
             .Include(c => c.Track)
+            .Include(c => c.MiscellaneousEvents)
             .FirstOrDefaultAsync(course => course.Id == id)
             ?? throw new NotFoundByIdException("Course", id);
 
@@ -488,11 +490,7 @@ public class CourseService(DataContext context) : IService<Course>
 
     private bool ClearCourseOfMiscEvents(Course course)
     {
-        foreach(var ev in course.MiscellaneousEvents)
-        {
-        Console.WriteLine("REMOVE RANGE MISC EVENTS");
-        _context.Events.Remove(ev);
-        }
+        _context.RemoveRange(course.MiscellaneousEvents);
         //this part removes dateContent
         var calendarDates = _context.CalendarDates
             .Include(cd => cd.DateContent)
@@ -577,9 +575,8 @@ public class CourseService(DataContext context) : IService<Course>
 
     public async Task DeleteAppliedAsync(Course course)
     {
-        ClearCourseOfMiscEvents(course);
         clearCourseModules(course);
-
+        ClearCourseOfMiscEvents(course);
         
         await _context.SaveChangesAsync();
 
