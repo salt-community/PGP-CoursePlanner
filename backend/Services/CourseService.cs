@@ -579,8 +579,6 @@ public class CourseService(DataContext context) : IService<Course>
         ClearCourseOfMiscEvents(course);
         
         await _context.SaveChangesAsync();
-
-        Console.WriteLine("RAN CLEAR COURSE");
         _context.Courses.Remove(course);
         await _context.SaveChangesAsync();
     }
