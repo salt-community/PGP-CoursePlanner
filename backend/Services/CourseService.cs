@@ -146,8 +146,7 @@ public class CourseService(DataContext context) : IService<Course>
 
         foreach (var @event in appliedCourse.MiscellaneousEvents)
         {
-            // Parse the DateTime as UTC
-            var eventDate = DateTime.Parse(@event.StartTime, null, System.Globalization.DateTimeStyles.RoundtripKind);
+            var eventDate = DateTime.Parse(@event.StartTime);
 
             var dateContent = new DateContent()
             {
@@ -161,10 +160,8 @@ public class CourseService(DataContext context) : IService<Course>
                 ModuleId = 0,
             };
 
-            // Ensure the eventDate is treated as UTC
             var eventDateUtc = eventDate.ToUniversalTime();
 
-            // Query the database using UTC date
             var calendarDate = _context.CalendarDates
                 .FirstOrDefault(cd => cd.Date.Date == eventDateUtc.Date);
 
