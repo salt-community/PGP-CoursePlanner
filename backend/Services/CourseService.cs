@@ -112,8 +112,6 @@ public class CourseService(DataContext context) : IService<Course>
         {
             foreach (var day in module!.Days)
             {
-                var calendarDate = _context.CalendarDates.FirstOrDefault(cd => cd.Date.Date == day.Date.Date);
-
                 var dateContent = new DateContent()
                 {
                     CourseName = appliedCourse.Name!,
@@ -127,6 +125,8 @@ public class CourseService(DataContext context) : IService<Course>
                     ModuleId = module.Id,
                 };
 
+                var calendarDate = _context.CalendarDates.FirstOrDefault(cd => cd.Date.Date == day.Date.Date);
+
                 if (calendarDate != null)
                 {
                     calendarDate.DateContent.Add(dateContent);
@@ -135,7 +135,7 @@ public class CourseService(DataContext context) : IService<Course>
                 {
                     calendarDate = new CalendarDate
                     {
-                        Date = day.Date.Date
+                        Date = day.Date.Date.ToUniversalTime()
                     };
                     _context.CalendarDates.Add(calendarDate);
                     _context.SaveChanges();
@@ -143,6 +143,8 @@ public class CourseService(DataContext context) : IService<Course>
                 }
             }
         }
+        _context.SaveChanges();
+
 
         foreach (var @event in appliedCourse.MiscellaneousEvents)
         {
@@ -150,6 +152,7 @@ public class CourseService(DataContext context) : IService<Course>
 
             var dateContent = new DateContent()
             {
+                ModuleName = @event.Name,
                 CourseName = appliedCourse.Name!,
                 Track = appliedCourse.Track,
                 DayOfModule = 1,
@@ -258,6 +261,7 @@ public class CourseService(DataContext context) : IService<Course>
         var appliedCourse = await _context.Courses.Include(c => c.Modules)
                                             .ThenInclude(m => m.Module)
                                             .Include(c => c.Track)
+                                            .Include(c => c.MiscellaneousEvents)
                                             .FirstAsync(c => c.Id == course.Id);
 
         await DeleteAppliedAsync(appliedCourse);
@@ -481,6 +485,36 @@ public class CourseService(DataContext context) : IService<Course>
         return true;
     }
 
+
+    private bool ClearCourseOfMiscEvents(Course course)
+    {
+        foreach(var ev in course.MiscellaneousEvents)
+        {
+        Console.WriteLine("REMOVE RANGE MISC EVENTS");
+        _context.Events.Remove(ev);
+        }
+        //this part removes dateContent
+        var calendarDates = _context.CalendarDates
+            .Include(cd => cd.DateContent)
+            .Where(cd => cd.DateContent.Any(dc => dc.appliedCourseId == course.Id));
+
+        foreach (var calendarDate in calendarDates)
+        {
+            calendarDate.DateContent.RemoveAll(dc => dc.appliedCourseId == course.Id);
+
+            if (calendarDate.DateContent.Count == 0)
+            {
+                _context.CalendarDates.Remove(calendarDate);
+            }
+            else
+            {
+                _context.CalendarDates.Update(calendarDate);
+            }
+        }
+
+        _context.SaveChanges();
+        return true;
+    }
     public async Task UpdateAsync(int id, Course course)
     {
         if (course.IsApplied)
@@ -543,7 +577,13 @@ public class CourseService(DataContext context) : IService<Course>
 
     public async Task DeleteAppliedAsync(Course course)
     {
+        ClearCourseOfMiscEvents(course);
         clearCourseModules(course);
+
+        
+        await _context.SaveChangesAsync();
+
+        Console.WriteLine("RAN CLEAR COURSE");
         _context.Courses.Remove(course);
         await _context.SaveChangesAsync();
     }

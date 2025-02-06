@@ -143,7 +143,7 @@ const onSubmit: SubmitHandler<Inputs> = (data) => {
                         </select>
 
                         <label >Name<input type="text" {...register("name", { required: true })}></input></label>
-                        <label >Description<input type="text" {...register("description", { required: true })}></input></label>
+                        <label >Description<input type="text" {...register("description", { required: true }) }></input></label>
                         <label >Start<input type="time" {...register("start", { required: true })}></input></label>
                         <label >End<input type="time" {...register("end", { required: true })}></input></label>
                         <label>Belongs to module<input type="checkbox" {...register("isBelongingToModule")}></input></label>
