@@ -1,7 +1,7 @@
 import { GoogleEvent } from "@helpers/googleHelpers";
 import { CourseType, DayType, ModuleType } from "../Types";
 import { EventType } from "@models/module/Types";
-import { CalendarDateType } from "@models/calendar/Types";
+import { CalendarDateType, DateContent } from "@models/calendar/Types";
 import { getDateAsString } from "@helpers/dateHelpers";
 import { NavigateFunction } from "react-router-dom";
 import { UseMutationResult } from "@tanstack/react-query";
@@ -271,6 +271,46 @@ export const getGoogleEventListForCourse = (
 
   return events;
 };
+
+
+export function createCalendarDatesFromMiscellaneousEvents(course: CourseType): CalendarDateType[] {
+  // Step 1: Group events by date
+  const eventsByDate = new Map<string, EventType[]>();
+
+  course.miscellaneousEvents.forEach(event => {
+    const eventDate = new Date(event.startTime).toISOString().split('T')[0]; // Extract the date part (YYYY-MM-DD)
+    
+    if (!eventsByDate.has(eventDate)) {
+      eventsByDate.set(eventDate, []);
+    }
+    eventsByDate.get(eventDate)!.push(event);
+  });
+
+  // Step 2: Transform grouped events into CalendarDateType
+  const calendarDates: CalendarDateType[] = [];
+
+  eventsByDate.forEach((events, date) => {
+    const dateContent: DateContent[] = events.map(event => ({
+      moduleId: -1, // Since these are miscellaneous events, they may not belong to a module
+      appliedCourseId: course.id,
+      track: course.track,
+      moduleName: 'Miscellaneous', // Placeholder name for miscellaneous events
+      dayOfModule: -1, // Not applicable for miscellaneous events
+      totalDaysInModule: -1, // Not applicable for miscellaneous events
+      courseName: course.name,
+      events: [event], // Each event is its own DateContent
+      color: course.color || '#000000', // Default color if not provided
+    }));
+
+    calendarDates.push({
+      date: new Date(date),
+      dateContent,
+    });
+  });
+
+  return calendarDates;
+}
+
 
 export const handleApplyTemplate = async (
   course: CourseType,

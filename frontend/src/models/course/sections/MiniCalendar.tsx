@@ -8,6 +8,7 @@ import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries
 import { CourseType, ModuleType } from "../Types"
 import CalendarDate from "./CalendarDate"
 import { CalendarDateType } from "@models/calendar/Types"
+import { createCalendarDatesFromMiscellaneousEvents } from "../helpers/courseUtils"
 // import { datePickerToolbarClasses } from "@mui/x-date-pickers"
 
 type Props = {
@@ -47,14 +48,28 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
 
     useEffect(() => {
-        if (!data || !previewCalendarDays) return;
+        if (!data || !previewCalendarDays || !previewCourse) return;
 
+        // Step 1: Generate calendarDates from previewCourse.miscellaneousEvents
+        const miscellaneousCalendarDates = createCalendarDatesFromMiscellaneousEvents(previewCourse);
+
+        // Step 2: Merge miscellaneousCalendarDates into previewCalendarDays
         const previewDaysMap = previewCalendarDays.reduce((acc, day) => {
             const dateKey = getDateAsString(day.date);
             acc[dateKey] = (acc[dateKey] || []).concat(day);
             return acc;
         }, {} as Record<string, typeof previewCalendarDays>);
 
+        // Add miscellaneous events to the previewDaysMap
+        miscellaneousCalendarDates.forEach(miscDay => {
+            const dateKey = getDateAsString(miscDay.date);
+            if (!previewDaysMap[dateKey]) {
+                previewDaysMap[dateKey] = [];
+            }
+            previewDaysMap[dateKey].push(miscDay);
+        });
+
+        // Step 3: Update calendarData with the merged previewDaysMap
         const updatedData = data.map(fetchData => {
             const dateKey = getDateAsString(fetchData.date);
             const matchingPreviewDays = previewDaysMap[dateKey] || [];
@@ -72,17 +87,16 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
             };
         });
 
+        // Step 4: Update the calendarData state
         setCalendarData(updatedData);
 
-        const selectedDay = updatedData.find(d => getDateAsString(d.date) == getDateAsString(selectedModuleStartDate.date))
+        // Step 5: Update the selectedModuleStartDate if necessary
+        const selectedDay = updatedData.find(d => getDateAsString(d.date) == getDateAsString(selectedModuleStartDate.date));
         if (selectedDay) {
-            setSelectedModuleStartDate({dateContent: selectedDay.dateContent, date: selectedDay.date})
+            setSelectedModuleStartDate({ dateContent: selectedDay.dateContent, date: selectedDay.date });
         }
 
-
-    }, [data, previewCalendarDays, previewCourse.id, setSelectedModuleStartDate,selectedModuleStartDate.date ]);
-
-
+    }, [data, previewCalendarDays, previewCourse, setSelectedModuleStartDate, selectedModuleStartDate.date]);
 
     const selectDate = (index: number) => {
         setSelectedModuleStartDate({ dateContent: calendarData[index].dateContent, date: calendarData![index].date })
