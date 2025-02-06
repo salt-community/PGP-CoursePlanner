@@ -16,6 +16,7 @@ namespace backend.Models
         public List<int> moduleIds {get; set;} = [];
         
         public List<CourseModule> Modules {get; set;} = [];
+        public List<Event> MiscellaneousEvents {get; set;} = [];
         public string? Color {get; set;}
 
         public bool IsApplied {get; set;} = false;

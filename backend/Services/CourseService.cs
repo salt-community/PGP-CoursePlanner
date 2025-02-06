@@ -143,6 +143,40 @@ public class CourseService(DataContext context) : IService<Course>
                 }
             }
         }
+
+        foreach (var @event in appliedCourse.MiscellaneousEvents)
+        {
+            var eventDate = DateTime.Parse(@event.StartTime);
+            var dateContent = new DateContent()
+            {
+                CourseName = appliedCourse.Name!,
+                Track = appliedCourse.Track,
+
+                DayOfModule = 1,
+                TotalDaysInModule = 1,
+                Events = [@event],
+                Color = appliedCourse.Color,
+                appliedCourseId = appliedCourse.Id,
+                ModuleId = 0,
+            };
+
+            var calendarDate = _context.CalendarDates.FirstOrDefault(cd => cd.Date.Date == eventDate.Date);
+            if (calendarDate != null)
+            {
+                calendarDate.DateContent.Add(dateContent);
+            }
+            else
+            {
+                calendarDate = new CalendarDate
+                {
+                    Date = eventDate.Date
+                };
+                _context.CalendarDates.Add(calendarDate);
+                _context.SaveChanges();
+                calendarDate.DateContent.Add(dateContent);
+            }
+        }
+
         _context.SaveChanges();
     }
 
