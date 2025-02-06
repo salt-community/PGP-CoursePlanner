@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     eventCol3: {
-        width: '20%',
+        width: '25%',
         fontSize: 12
     },
     eventTable: {
@@ -92,11 +92,11 @@ export const generateDocument = (modules: ModuleType[]) => {
                 </View>
             </Page>
             {
-                modules.map((module) => (
+                modules.map((module, moduleIndex) => (
                     <Page size="A4" style={styles.page} >
                         <View style={styles.section}>
                             <Text style={styles.text}>
-                                MODULE {module.name.toUpperCase()}
+                                MODULE {moduleIndex + 1}: {module.name.toUpperCase()}
                             </Text>
                         </View>
                         <View style={styles.table} >
