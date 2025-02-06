@@ -7,7 +7,7 @@ type PDFWeekGeneratorProps = {
     appliedCourse: CourseType;
 };
 
-export default function PDFWeekGenerator({ appliedCourse }: PDFWeekGeneratorProps) {
+export default function PDFModule({ appliedCourse }: PDFWeekGeneratorProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
     const [selectedModuleObject, setSelectedModuleObject] = useState<ModuleType>();
     const [documentName, setDocumentName] = useState<string>("");
@@ -45,9 +45,15 @@ export default function PDFWeekGenerator({ appliedCourse }: PDFWeekGeneratorProp
 
     return (
         <>
-            <button className="btn btn-sm py-1 max-w-xs btn-primary text-white" onClick={() => handlePDFModalOverview("open")}>
-                Create PDF - Module Overview
+            <button onClick={() => handlePDFModalOverview("open")} className="btn py-1 max-w-xs text-white min-w-52 text-xl">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                <p className="pr-2">
+                    Module PDF
+                </p>
             </button>
+
             <dialog id="pdf-modal-overview" className="modal">
                 <div className="modal-box flex flex-col items-center gap-4">
                     <h2 className="m-2 self-center">For which module do you want to create a PDF?</h2>
@@ -63,11 +69,11 @@ export default function PDFWeekGenerator({ appliedCourse }: PDFWeekGeneratorProp
                         {selectedModule !== "DEFAULT"
                             ? <button className="btn btn-sm mt-4 w-40 btn-success text-white" onClick={() => setAllToFalse()}>
                                 <a href={instance.url!} download={documentName}>
-                                    Create PDF
+                                    Module PDF
                                 </a>
                             </button>
                             : <button className="btn btn-sm mt-4 w-40 btn-success text-white" onClick={() => setIsIncompleteInput(true)}>
-                                Create PDF
+                                Module PDF
                             </button>
                         }
                         <button className="btn btn-sm mt-4 w-24 btn-error text-white" onClick={() => { setAllToFalse(); handlePDFModalOverview("close") }}>Cancel</button>

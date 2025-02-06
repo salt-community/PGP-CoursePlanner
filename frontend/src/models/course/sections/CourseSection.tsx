@@ -6,6 +6,8 @@ import ModuleDetails from "./ModuleDetails";
 import { getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
 import { CourseType } from "../Types";
 import { getWeek } from "date-fns";
+import PDFCourse from "@models/appliedCourse/sections/PDFCourse";
+import PDFModule from "@models/appliedCourse/sections/PDFModule";
 
 type Props = {
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -17,8 +19,8 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
     return (
         <section className="grid grid-rows-[145px_1fr] grid-cols-9 bg-white m-5 mt-0 rounded-lg h-full overflow-auto drop-shadow-xl">
             {/* First Row, First Column */}
-            <div className="row-span-1 col-span-2 bg-yellow-500 text-center flex items-center justify-center" style={course ? { backgroundColor: course.color } : {}}>
-                <h2 className="text-4xl">{course ? course.name : "Course Name"}</h2>
+            <div className="row-span-1 col-span-2 text-center flex items-center justify-center" style={course && { backgroundColor: course.color }}>
+                <h2 className="text-4xl">{course && course.name}</h2>
             </div>
 
             {/* First Row, Second Column */}
@@ -126,6 +128,12 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                         <div className="flex gap-4">
                             <Link to={`/courses/edit/${course.id}`} className="btn btn-secondary min-w-52 text-xl">Edit Course</Link>
                             <DeleteBtn onClick={() => setOpenModal(true)} />
+                            {(course && course.isApplied) &&
+                                <>
+                                    <PDFCourse appliedCourse={course}></PDFCourse>
+                                    <PDFModule appliedCourse={course}></PDFModule>
+                                </>
+                            }
                         </div>
                         <div className="flex items-center gap-2 mr-5">
                             <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: course.track.color }}></div>
