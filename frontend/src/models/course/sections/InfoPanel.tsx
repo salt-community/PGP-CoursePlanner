@@ -33,7 +33,6 @@ export function InfoPanel({ selectedDate, handleMoveModule, selectedModule, cour
         const selectedModuleStartDate = selectedModule.days[0].date
         const moduleSpan = getDifferenceInDays(selectedModule.days[daysInModule-1].date, selectedModuleStartDate )
         const daysDiff = getDifferenceInDays( selectedDate.date, selectedModuleStartDate )
-        console.log("diffs: ", daysDiff, moduleSpan)
         if(daysDiff < 0 || daysDiff > moduleSpan) {
             setIsDateInModule(false)
         } else {
@@ -89,7 +88,6 @@ const onSubmit: SubmitHandler<Inputs> = (data) => {
 
     setCourse(updatedCourse);
 
-    console.log("Updated course with new event:", updatedCourse);
   } else {
     const miscEvents : EventType[]= course.miscellaneousEvents
     newEvent.startTime =formatDateTime(selectedDate.date, newEvent.startTime)
