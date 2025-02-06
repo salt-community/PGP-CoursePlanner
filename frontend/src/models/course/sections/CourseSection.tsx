@@ -14,7 +14,6 @@ type Props = {
 }
 
 export default function CourseSection({ setOpenModal, course, isLoading }: Props) {
-
     return (
         <section className="grid grid-rows-[145px_1fr] grid-cols-9 bg-white m-5 mt-0 rounded-lg h-full overflow-auto drop-shadow-xl">
             {/* First Row, First Column */}
@@ -23,8 +22,11 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
             </div>
 
             {/* First Row, Second Column */}
-            <div className="row-span-1 col-span-7 text-center flex items-center justify-center border-b-2">
+            <div className="row-span-1 col-span-7 text-center flex items-center justify-center border-b-2 relative">
                 <h2 className="text-4xl">Modules</h2>
+                {course && course.isApplied && course.startDate && course.endDate && (
+                    <p className="absolute bottom-0 p-4 text-[#636363] text-lg">{new Date(course.startDate).toUTCString().slice(5, 16)} - {new Date(course.endDate).toUTCString().slice(5, 16)}</p>
+                )}
             </div>
 
             {/* Second Row, First Column */}
