@@ -274,11 +274,10 @@ export const getGoogleEventListForCourse = (
 
 
 export function createCalendarDatesFromMiscellaneousEvents(course: CourseType): CalendarDateType[] {
-  // Step 1: Group events by date
   const eventsByDate = new Map<string, EventType[]>();
 
   course.miscellaneousEvents.forEach(event => {
-    const eventDate = new Date(event.startTime).toISOString().split('T')[0]; // Extract the date part (YYYY-MM-DD)
+    const eventDate = new Date(event.startTime).toISOString().split('T')[0]; 
     
     if (!eventsByDate.has(eventDate)) {
       eventsByDate.set(eventDate, []);
@@ -286,20 +285,19 @@ export function createCalendarDatesFromMiscellaneousEvents(course: CourseType): 
     eventsByDate.get(eventDate)!.push(event);
   });
 
-  // Step 2: Transform grouped events into CalendarDateType
   const calendarDates: CalendarDateType[] = [];
 
   eventsByDate.forEach((events, date) => {
     const dateContent: DateContent[] = events.map(event => ({
-      moduleId: -1, // Since these are miscellaneous events, they may not belong to a module
+      moduleId: -1, 
       appliedCourseId: course.id,
       track: course.track,
-      moduleName: 'Miscellaneous', // Placeholder name for miscellaneous events
-      dayOfModule: -1, // Not applicable for miscellaneous events
-      totalDaysInModule: -1, // Not applicable for miscellaneous events
+      moduleName: 'Miscellaneous',
+      dayOfModule: -1, 
+      totalDaysInModule: -1, 
       courseName: course.name,
-      events: [event], // Each event is its own DateContent
-      color: course.color || '#000000', // Default color if not provided
+      events: [event], 
+      color: course.color || '#000000', 
     }));
 
     calendarDates.push({
