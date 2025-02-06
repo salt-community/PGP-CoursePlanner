@@ -1,158 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { Page, Text, View, Document, StyleSheet, usePDF } from '@react-pdf/renderer';
+import { usePDF } from '@react-pdf/renderer';
+import { generateDocument } from '../components/GenerateDocument';
 import { CourseType, ModuleType } from '@models/course/Types';
 
 type PDFWeekGeneratorProps = {
     appliedCourse: CourseType;
-    courseWeekDays: string[];
 };
 
 export default function PDFWeekGenerator({ appliedCourse }: PDFWeekGeneratorProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
-    const [selectedModuleObject, setSelectedModuleObject] = useState<ModuleType | null>(null);
+    const [selectedModuleObject, setSelectedModuleObject] = useState<ModuleType>();
     const [documentName, setDocumentName] = useState<string>("");
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
-
-    const styles = StyleSheet.create({
-        page: {
-            flexDirection: 'column',
-            padding: 20,
-            backgroundColor: '#FFFFFF', // White background
-            alignItems: 'center'
-        },
-        section: {
-            margin: 10,
-            padding: 10,
-            alignSelf: 'center'
-        },
-        text: {
-            fontSize: 24,
-            marginBottom: 10,
-            textAlign: 'center'
-        },
-        table: {
-            width: '70%',
-            alignSelf: 'center'
-        },
-        row: {
-            display: 'flex',
-            flexDirection: 'row',
-            borderTop: '1px solid #EEE',
-            paddingTop: 8,
-            paddingBottom: 8,
-        },
-        header: {
-            borderTop: 'none',
-        },
-        bold: {
-            fontWeight: 'bold',
-        },
-        col1: {
-            width: '20%',
-            fontSize: 12
-        },
-        col2: {
-            width: '20%',
-            fontSize: 12
-        },
-        col3: {
-            width: '60%',
-            fontSize: 12
-        },
-        eventCol1: {
-            width: '25%',
-            fontSize: 12
-        },
-        eventCol2: {
-            width: '55%',
-            fontSize: 12
-        },
-        eventCol3: {
-            width: '20%',
-            fontSize: 12
-        },
-        eventTable: {
-            width: '90%',
-            alignSelf: 'center',
-            color: 'grey',
-            fontSize: 8
-        },
-    });
-
-    const generateDocument = (moduleObject: ModuleType | null) => {
-        return (
-            <Document>
-                <Page size="A4" style={styles.page}>
-                    <View style={styles.section}>
-                        <Text style={styles.text}>COURSE LAYOUT</Text>
-                    </View>
-                    <View style={styles.table}>
-                        <View style={[styles.row, styles.bold, styles.header]}>
-                            <Text style={styles.col1}>Module</Text>
-                            <Text style={styles.col2}>Date</Text>
-                            <Text style={styles.col3}>Module description</Text>
-                        </View>
-                        {appliedCourse.modules.map((module, moduleIndex) => (
-                            <View key={moduleIndex} style={styles.row} wrap={false}>
-                                <Text style={styles.col1}>{moduleIndex + 1}</Text>
-                                <Text style={styles.col2}>{new Date(module.module.startDate).toUTCString().slice(4, 11)}</Text>
-                                <Text style={styles.col3}>{module.module.name}</Text>
-                            </View>
-                        ))}
-                    </View>
-                </Page>
-                {moduleObject && (
-                    <Page size="A4" style={styles.page}>
-                        <View style={styles.section}>
-                            <Text style={styles.text}>
-                                MODULE {appliedCourse.modules.findIndex(m => m.module === moduleObject) + 1}: {moduleObject!.name.toUpperCase()}
-                            </Text>
-                        </View>
-                        <View style={styles.table}>
-                            <View style={[styles.row, styles.bold, styles.header]}>
-                                <Text style={styles.col1}>Day</Text>
-                                <Text style={styles.col2}>Date</Text>
-                                <Text style={styles.col3}>Topic</Text>
-                            </View>
-                            {moduleObject.days.map((day, dayIndex) => {
-                                return (
-                                    <React.Fragment key={dayIndex}>
-                                        <View style={styles.row} wrap={false}>
-                                            <Text style={styles.col1}>{day.dayNumber}</Text>
-                                            <Text style={styles.col2}>{new Date(day.date).toUTCString().slice(4, 11)}</Text>
-                                            <Text style={styles.col3}>{day.description}</Text>
-                                        </View>
-                                        {day.events.length > 0 && day.events.map((event, eventIndex) => (
-                                            <View key={eventIndex} style={[styles.eventTable, styles.row]} wrap={false}>
-                                                <Text style={styles.eventCol1}>{event.name}</Text>
-                                                <Text style={styles.eventCol2}>{event.description!}</Text>
-                                                <Text style={styles.eventCol3}>{event.startTime + " - " + event.endTime}</Text>
-                                            </View>
-                                        ))}
-                                    </React.Fragment>
-                                )
-                            })}
-                        </View>
-                    </Page>
-                )}
-            </Document>
-        );
-    };
-
-    const [instance, updateInstance] = usePDF({ document: generateDocument(selectedModuleObject) });
+    const [instance, updateInstance] = usePDF();
 
     useEffect(() => {
-        updateInstance(generateDocument(selectedModuleObject));
+        if (selectedModuleObject) {
+            updateInstance(generateDocument([selectedModuleObject]));
+        }
     }, [selectedModuleObject, updateInstance]);
 
     const handleSelectModule = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value;
-        const selectedModuleObj = appliedCourse.modules.find(m => m.module.id == parseInt(value))?.module;
-
         setSelectedModule(value);
-        setSelectedModuleObject(selectedModuleObj ?? null);
 
-        setDocumentName("ModuleOverview_" + appliedCourse.name + "_" + selectedModuleObj?.name + ".pdf");
+        const module = appliedCourse.modules.find(m => m.module.id == parseInt(value))?.module;
+        if (module) {
+            setSelectedModuleObject(module);
+            setDocumentName("ModuleOverview_" + appliedCourse.name + "_" + module.name + ".pdf");
+        }
     };
 
     const setAllToFalse = () => {
