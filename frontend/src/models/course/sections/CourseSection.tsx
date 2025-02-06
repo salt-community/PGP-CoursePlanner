@@ -5,6 +5,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import ModuleDetails from "./ModuleDetails";
 import { getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
 import { CourseType } from "../Types";
+import { getWeek } from "date-fns";
 
 type Props = {
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -78,7 +79,11 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                                             </p>
                                         </div>
                                         <div className="timeline-middle">
-                                            <p className="border rounded px-2">{getWeekNumberOfModule(course, moduleElement.module.id!)}</p>
+                                            {course.isApplied ?
+                                                <p className="border rounded px-2">{getWeek(moduleElement.module.startDate)}</p>
+                                                :
+                                                <p className="border rounded px-2">{getWeekNumberOfModule(course, moduleElement.module.id!)}</p>
+                                            }
                                         </div>
                                         <hr />
                                     </li>
@@ -106,7 +111,7 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
             <div className="row-span-1 col-span-2 flex justify-center p-8 border-r-2">
                 {course &&
                     <>
-                        <button className="btn btn-primary min-w-60 text-xl" onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>Deploy Bootcamp</button>
+                        <button className="btn btn-primary min-w-60 text-xl" onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>{course.isApplied ? "Edit Bootcamp" : "Deploy Bootcamp"}</button>
                         <DeployModal course={course} />
                     </>
                 }
