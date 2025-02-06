@@ -7,25 +7,11 @@ type PDFWeekGeneratorProps = {
     courseWeekDays: string[];
 };
 
-export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFWeekGeneratorProps) {
+export default function PDFWeekGenerator({ appliedCourse }: PDFWeekGeneratorProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
     const [selectedModuleObject, setSelectedModuleObject] = useState<ModuleType | null>(null);
     const [documentName, setDocumentName] = useState<string>("");
     const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
-
-    const moduleDays: string[] = [];
-    const moduleDaysPerModule: string[][] = [];
-    let dayCounter = 0;
-    for (let i = 0; i < appliedCourse.modules.length; i++) {
-        moduleDays.push(courseWeekDays[dayCounter]);
-
-        const tempArray: string[] = [];
-        for (let j = dayCounter; j < dayCounter + appliedCourse.modules[i].module.numberOfDays; j++) {
-            tempArray.push(courseWeekDays[j]);
-        }
-        moduleDaysPerModule.push(tempArray);
-        dayCounter = dayCounter + appliedCourse.modules[i].module.numberOfDays;
-    }
 
     const styles = StyleSheet.create({
         page: {
@@ -94,7 +80,6 @@ export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFW
     });
 
     const generateDocument = (moduleObject: ModuleType | null) => {
-        let counter = -1;
         return (
             <Document>
                 <Page size="A4" style={styles.page}>
@@ -130,19 +115,18 @@ export default function PDFWeekGenerator({ appliedCourse, courseWeekDays }: PDFW
                                 <Text style={styles.col3}>Topic</Text>
                             </View>
                             {moduleObject.days.map((day, dayIndex) => {
-                                counter++;
                                 return (
                                     <React.Fragment key={dayIndex}>
                                         <View style={styles.row} wrap={false}>
-                                            <Text style={styles.col1}>{dayIndex + 1}</Text>
-                                            <Text style={styles.col2}>{moduleDaysPerModule[appliedCourse.modules.findIndex(m => m.module === moduleObject)][counter]}</Text>
+                                            <Text style={styles.col1}>{day.dayNumber}</Text>
+                                            <Text style={styles.col2}>{new Date(day.date).toUTCString().slice(4, 11)}</Text>
                                             <Text style={styles.col3}>{day.description}</Text>
                                         </View>
                                         {day.events.length > 0 && day.events.map((event, eventIndex) => (
                                             <View key={eventIndex} style={[styles.eventTable, styles.row]} wrap={false}>
                                                 <Text style={styles.eventCol1}>{event.name}</Text>
                                                 <Text style={styles.eventCol2}>{event.description!}</Text>
-                                                <Text style={styles.eventCol3}>{event.startTime + "-" + event.endTime}</Text>
+                                                <Text style={styles.eventCol3}>{event.startTime + " - " + event.endTime}</Text>
                                             </View>
                                         ))}
                                     </React.Fragment>
