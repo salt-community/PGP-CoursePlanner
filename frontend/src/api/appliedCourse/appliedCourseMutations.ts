@@ -14,6 +14,7 @@ export function useMutationPostAppliedCourse() {
             queryClient.invalidateQueries({ queryKey: ['appliedCourses'] });
             navigate("/activecourses");
         },
+        retry: 1
     });
 
     return mutation
@@ -32,6 +33,7 @@ export function useMutationUpdateAppliedCourse() {
             queryClient.invalidateQueries({ queryKey: ["appliedCourses", appliedCourse.id] });
             navigate(-1);
         },
+        retry: 1
     });
 
     return mutation
@@ -47,7 +49,8 @@ export function useMutationDeleteAppliedCourse() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['appliedCourses'] })
             navigate(`/activecourses`);
-        }
+        },
+        retry: 1
     })
 
     return mutation

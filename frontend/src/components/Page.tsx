@@ -4,11 +4,9 @@ import NavBar from "./NavBar";
 import { useEffect, useState } from "react";
 import { getToken } from "@api/user/userFetches";
 
-
 type Props = {
   children: React.ReactNode;
 }
-
 
 export default function Page({ children }: Props) {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
@@ -19,7 +17,7 @@ export default function Page({ children }: Props) {
   if (location.search) {
     const authCode = new URLSearchParams(location.search).get('code');
     if (authCode !== null) {
-      setCookie("auth_code", authCode);
+      setCookie("auth_code", authCode, 72000);
       getToken();
     }
   }

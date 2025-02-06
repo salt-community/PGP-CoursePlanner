@@ -13,7 +13,8 @@ export function useMutationPostCourse() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['courses'] })
             navigate(`/courses`)
-        }
+        },
+        retry: 1
     })
 
     return mutation;
@@ -29,7 +30,8 @@ export function useMutationUpdateCourse() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['courses'] })
             navigate(`/courses`)
-        }
+        },
+        retry: 1
     })
 
     return mutation;
@@ -48,6 +50,12 @@ export function useMutationDeleteCourse() {
             });
             navigate(`/courses`);
         },
+        onError: (error) => {
+            if (error.message === "401") {
+                navigate(`/courses`);
+            }
+        },
+        retry: 1
     });
 
     return mutation;

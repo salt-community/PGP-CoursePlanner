@@ -6,10 +6,8 @@ export function getCookie(name: string) {
   if (parts.length === 2) return parts.pop()?.split(";").shift();
 }
 
-export const setCookie = (name: string, value: string, seconds?: number) => {
-  document.cookie = seconds
-    ? (document.cookie = `${name}=${value}; Max-Age=${seconds};`)
-    : `${name}=${value};`;
+export const setCookie = (name: string, value: string, seconds: number) => {
+    document.cookie = `${name}=${value}; Max-Age=${seconds}; path=/;`;
 };
 
 export const deleteCookie = (name: string) => {

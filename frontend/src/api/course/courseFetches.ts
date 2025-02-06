@@ -61,7 +61,7 @@ export async function postCourse(course: CourseType) {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error(response.status.toString());
   }
 }
 
@@ -77,7 +77,7 @@ export async function updateCourse(course: CourseType) {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error(response.status.toString());
   }
 }
 
@@ -92,6 +92,6 @@ export async function deleteCourse(id: number) {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error(response.status.toString());
   }
 }

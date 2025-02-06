@@ -53,7 +53,7 @@ export async function postAppliedCourse(appliedCourse: CourseType) {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error(response.status.toString());
   }
 }
 
@@ -69,7 +69,7 @@ export async function updateAppliedCourse(appliedCourse: CourseType) {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error(response.status.toString());
   }
 }
 
@@ -83,6 +83,6 @@ export async function deleteAppliedCourse(id: number) {
   });
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new Error(response.status.toString());
   }
 }
