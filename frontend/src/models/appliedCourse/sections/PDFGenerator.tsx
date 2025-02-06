@@ -1,14 +1,12 @@
 import { Page, Text, View, Document, StyleSheet, usePDF } from '@react-pdf/renderer';
-import { ModuleType } from '@models/module/Types';
 import { CourseType } from '@models/course/Types';
 
 type PDFGeneratorProps = {
     appliedCourse: CourseType;
     courseWeekDays: string[];
-    appliedModules: ModuleType[];
 };
 
-export default function PDFGenerator({ appliedCourse, courseWeekDays, appliedModules }: PDFGeneratorProps) {
+export default function PDFGenerator({ appliedCourse, courseWeekDays }: PDFGeneratorProps) {
 
     const styles = StyleSheet.create({
         page: {
@@ -78,9 +76,9 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays, appliedMod
 
     const moduleDays: string[] = [];
     let dayCounter = 0;
-    for (let i = 0; i < appliedModules!.length; i++) {
+    for (let i = 0; i < appliedCourse.modules.length; i++) {
         moduleDays.push(courseWeekDays[dayCounter]);
-        dayCounter = dayCounter + appliedModules![i].numberOfDays;
+        dayCounter = dayCounter + appliedCourse.modules[i].module.numberOfDays;
     }
 
     const generateDocument = () => {
@@ -97,19 +95,19 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays, appliedMod
                             <Text style={styles.col2}>Date</Text>
                             <Text style={styles.col3}>Module description</Text>
                         </View>
-                        {appliedModules!.map((module, moduleIndex) => (
+                        {appliedCourse.modules.map((module, moduleIndex) => (
                             <View key={moduleIndex} style={styles.row} wrap={false}>
                                 <Text style={styles.col1}>{moduleIndex + 1}</Text>
                                 <Text style={styles.col2}>{moduleDays[moduleIndex]}</Text>
-                                <Text style={styles.col3}>{module.name}</Text>
+                                <Text style={styles.col3}>{module.module.name}</Text>
                             </View>
                         ))}
                     </View>
                 </Page>
-                {appliedModules!.map((module, moduleIndex) => (
+                {appliedCourse.modules.map((module, moduleIndex) => (
                     <Page key={moduleIndex}size="A4" style={styles.page}>
                         <View style={styles.section}>
-                            <Text style={styles.text}>MODULE {moduleIndex + 1}: {module.name.toUpperCase()}</Text>
+                            <Text style={styles.text}>MODULE {moduleIndex + 1}: {module.module.name.toUpperCase()}</Text>
                         </View>
                         <View style={styles.table}>
                             <View style={[styles.row, styles.bold, styles.header]}>
@@ -117,7 +115,7 @@ export default function PDFGenerator({ appliedCourse, courseWeekDays, appliedMod
                                 <Text style={styles.col2}>Date</Text>
                                 <Text style={styles.col3}>Topic</Text>
                             </View>
-                            {module.days.map((day, dayIndex) => {
+                            {module.module.days.map((day, dayIndex) => {
                                 counter++;
                                 return (
                                     

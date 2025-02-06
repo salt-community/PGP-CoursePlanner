@@ -67,8 +67,8 @@ export default function AppliedCourseDetails() {
             <CourseSection setOpenModal={setOpenModal} course={appliedCourse} isLoading={isLoadingAppliedCourse} />
             {(appliedCourse && courseModules) &&
                 <>
-                    <PDFGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays} appliedModules={courseModules}></PDFGenerator>
-                    <PDFWeekGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays} appliedModules={courseModules}></PDFWeekGenerator>
+                    <PDFGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays}></PDFGenerator>
+                    <PDFWeekGenerator appliedCourse={appliedCourse} courseWeekDays={courseWeekDays}></PDFWeekGenerator>
                 </>
             }
             {appliedCourse &&
