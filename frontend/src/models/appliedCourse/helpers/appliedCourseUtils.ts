@@ -40,6 +40,19 @@ export const handleUpdateCourse = async (
     const myCourse = stripIdsFromCourse(course);
     myCourse.track.id = myTrack;
     myCourse.id = course.id;
+    const firstModule = course.modules.sort((a, b) => new Date(a.module.startDate).getTime() - new Date(b.module.startDate).getTime())[0];
+    console.log("First module start date", firstModule.module.startDate);
+    
+
+    if (firstModule) {
+      const localStartDate = new Date(firstModule.module.startDate);
+      localStartDate.setHours(localStartDate.getHours() + 1); 
+      myCourse.startDate = localStartDate.toISOString();
+  }
+
+    console.log("UPDATING myCourse", myCourse)
+
+
   
   mutation.mutate(myCourse);
   navigate("/activecourses");
