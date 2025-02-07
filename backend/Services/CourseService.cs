@@ -103,8 +103,7 @@ public class CourseService(DataContext context) : IService<Course>
                                     .ThenInclude(m => m.Days)
                                     .ThenInclude(d => d.Events)
                                 .Include(c => c.Track)
-                                .First(c => c.Id == appliedCourse.Id)
-                                    ; // ändra denna till _context.Courses blablabla
+                                .First(c => c.Id == appliedCourse.Id);
     }
 
 
@@ -114,6 +113,8 @@ public class CourseService(DataContext context) : IService<Course>
         {
             foreach (var day in module!.Days)
             {
+                var localDate = day.Date.AddHours(1); // only UTC is supported so we need to do this
+
                 var dateContent = new DateContent()
                 {
                     CourseName = appliedCourse.Name!,
@@ -127,7 +128,7 @@ public class CourseService(DataContext context) : IService<Course>
                     ModuleId = module.Id,
                 };
 
-                var calendarDate = _context.CalendarDates.FirstOrDefault(cd => cd.Date.Date == day.Date.Date);
+                var calendarDate = _context.CalendarDates.FirstOrDefault(cd => cd.Date == localDate);
 
                 if (calendarDate != null)
                 {
@@ -135,9 +136,10 @@ public class CourseService(DataContext context) : IService<Course>
                 }
                 else
                 {
+                    Console.WriteLine(localDate);
                     calendarDate = new CalendarDate
                     {
-                        Date = day.Date.Date.ToUniversalTime()
+                        Date = localDate 
                     };
                     _context.CalendarDates.Add(calendarDate);
                     _context.SaveChanges();
@@ -150,7 +152,8 @@ public class CourseService(DataContext context) : IService<Course>
 
         foreach (var @event in appliedCourse.MiscellaneousEvents)
         {
-            var eventDate = DateTime.Parse(@event.StartTime);
+
+            var eventDate = DateTime.Parse(@event.StartTime).AddHours(1);
 
             var dateContent = new DateContent()
             {
@@ -165,10 +168,8 @@ public class CourseService(DataContext context) : IService<Course>
                 ModuleId = 0,
             };
 
-            var eventDateUtc = eventDate.ToUniversalTime();
-
             var calendarDate = _context.CalendarDates
-                .FirstOrDefault(cd => cd.Date.Date == eventDateUtc.Date);
+                .FirstOrDefault(cd => cd.Date.Date == eventDate.Date);
 
             if (calendarDate != null)
             {
@@ -178,7 +179,7 @@ public class CourseService(DataContext context) : IService<Course>
             {
                 calendarDate = new CalendarDate
                 {
-                    Date = eventDateUtc.Date
+                    Date = eventDate.Date
                 };
                 _context.CalendarDates.Add(calendarDate);
                 _context.SaveChanges();
@@ -577,7 +578,7 @@ public class CourseService(DataContext context) : IService<Course>
     {
         clearCourseModules(course);
         ClearCourseOfMiscEvents(course);
-        
+
         await _context.SaveChangesAsync();
         _context.Courses.Remove(course);
         await _context.SaveChangesAsync();

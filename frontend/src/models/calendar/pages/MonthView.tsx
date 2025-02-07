@@ -86,7 +86,7 @@ export default function MonthView() {
             return weekNumber;
         }
     }
-
+    console.log(data)
     return (
         <Page >
             <Header>
