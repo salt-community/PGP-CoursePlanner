@@ -54,7 +54,7 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
 
     return (
         <dialog className={`modal ${openModal ? "modal-open" : ""}`}>
-            <div className="modal-box flex flex-col items-center p-0 bg-white max-w-[450px]">
+            <div className="modal-box flex flex-col items-center p-0 bg-white max-w-[460px]">
                 <div className="bg-[#ff7961] p-3 pt-6 pb-6 w-full flex flex-col items-center">
                     <h2 className="text-3xl font-semibold text-white p-5">
                         Create Track

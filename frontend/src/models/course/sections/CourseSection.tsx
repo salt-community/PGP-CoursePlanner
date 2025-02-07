@@ -6,8 +6,7 @@ import ModuleDetails from "./ModuleDetails";
 import { getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
 import { CourseType } from "../Types";
 import { getWeek } from "date-fns";
-import PDFCourse from "@models/appliedCourse/sections/PDFCourse";
-import PDFModule from "@models/appliedCourse/sections/PDFModule";
+import PDFDownloadBtn from "@components/buttons/PDFDownloadBtn";
 
 type Props = {
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -27,7 +26,10 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
             <div className="row-span-1 col-span-7 text-center flex items-center justify-center border-b-2 relative">
                 <h2 className="text-4xl">Modules</h2>
                 {course && course.isApplied && course.startDate && course.endDate && (
-                    <p className="absolute bottom-0 p-4 text-[#636363] text-lg">{new Date(course.startDate).toUTCString().slice(5, 16)} - {new Date(course.endDate).toUTCString().slice(5, 16)}</p>
+                    <div className="flex gap-1 justify-center items-center absolute bottom-0 p-4">
+                        <p className=" text-[#636363] text-lg">{new Date(course.startDate).toUTCString().slice(5, 16)} - {new Date(course.endDate).toUTCString().slice(5, 16)}</p>
+                        <PDFDownloadBtn course={course} color="#636363" size="size-5" />
+                    </div>
                 )}
             </div>
 
@@ -66,27 +68,29 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                                 <li className="flex flex-col items-center justify-center">
                                     <div className="bg-accent w-3 h-3 border rounded-lg"></div>
                                 </li>
-                                {course.modules.map((moduleElement, index) => (
-                                    <li key={moduleElement.module.id}>
+                                {course.modules.map((module, index) => (
+                                    <li key={module.module.id}>
                                         <hr />
-                                        <div
-                                            className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"
-                                                } timeline-box flex flex-col items-center py-1 px-4 min-w-32`}
-                                        >
-                                            <p className="font-semibold ">
-                                                {moduleElement.module.name}
-                                            </p>
+                                        <div className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"} timeline-box flex flex-col items-center py-1 px-1 min-w-32`}>
+                                            <div className="flex justify-center items-center gap-1">
+                                                <p className="font-semibold ">
+                                                    {module.module.name}
+                                                </p>
+                                                {course.isApplied &&
+                                                    <PDFDownloadBtn course={course} module={module.module} color="#636363" size="size-5" />
+                                                }
+                                            </div>
                                             <p className="text-sm">
                                                 Days: <span className="font-bold">
-                                                    {moduleElement.module.days.length}
+                                                    {module.module.days.length}
                                                 </span>
                                             </p>
                                         </div>
                                         <div className="timeline-middle">
                                             {course.isApplied ?
-                                                <p className="border rounded px-2">{getWeek(moduleElement.module.startDate)}</p>
+                                                <p className="border rounded px-2">{getWeek(module.module.startDate)}</p>
                                                 :
-                                                <p className="border rounded px-2">{getWeekNumberOfModule(course, moduleElement.module.id!)}</p>
+                                                <p className="border rounded px-2">{getWeekNumberOfModule(course, module.module.id!)}</p>
                                             }
                                         </div>
                                         <hr />
@@ -126,14 +130,8 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                 {course &&
                     <>
                         <div className="flex gap-4">
-                            <Link to={course.isApplied?`/activecourses/edit/${course.id}` : `/courses/edit/${course.id}`} className="btn btn-secondary min-w-52 text-xl">Edit Course</Link>
+                            <Link to={course.isApplied ? `/activecourses/edit/${course.id}` : `/courses/edit/${course.id}`} className="btn btn-secondary min-w-52 text-xl">Edit Course</Link>
                             <DeleteBtn onClick={() => setOpenModal(true)} />
-                            {(course && course.isApplied) &&
-                                <>
-                                    <PDFCourse appliedCourse={course}></PDFCourse>
-                                    <PDFModule appliedCourse={course}></PDFModule>
-                                </>
-                            }
                         </div>
                         <div className="flex items-center gap-2 mr-5">
                             <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: course.track.color }}></div>
