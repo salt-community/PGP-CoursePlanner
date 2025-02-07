@@ -23,49 +23,6 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
     }));
   };
 
-  const handleDragStart = (index: number) => {
-    setDraggedIndex(index);
-  };
-
-  const handleDragEnd = () => {
-    setDraggedIndex(null);
-    assignDatesToModules(course)
-  };
-
-  const handleDragOver = (e: React.DragEvent, targetIndex: number) => {
-    e.preventDefault();
-
-    if (draggedIndex === null || draggedIndex === targetIndex) return;
-
-    setCourse((prevCourse) => {
-      const updatedModules = [...prevCourse.modules];
-
-      const targetNewStart = updatedModules[draggedIndex].module.startDate;
-      const draggedNewStart = updatedModules[targetIndex].module.startDate;
-
-      updatedModules[draggedIndex].module.startDate = draggedNewStart;
-      updatedModules[targetIndex].module.startDate = targetNewStart;
-
-
-      const [draggedModule] = updatedModules.splice(draggedIndex, 1);
-      updatedModules.splice(targetIndex, 0, draggedModule);
-
-      const reorderedModules = updatedModules.map((courseModule, index) => ({
-        ...courseModule,
-        module: {
-          ...courseModule.module,
-          order: index,
-        },
-      }));
-
-      return {
-        ...prevCourse,
-        modules: reorderedModules,
-      };
-    });
-    setDraggedIndex(targetIndex);
-  };
-
   const handleRemoveModule = (index: number) => {
     setCourse((prevCourse) => {
       const updatedModules = prevCourse.modules.filter((_, i) => i !== index);
@@ -120,20 +77,11 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
     <div>
       {course.modules
         .slice()
-        .sort((a, b) => a.module.order - b.module.order)
+        .sort((a, b) => new Date(a.module.startDate).getTime() - new Date(b.module.startDate).getTime())
         .map((courseModule, moduleIndex) => (
           <div
             key={moduleIndex}
-            className={` flex space-between mb-4 rounded-r-lg border-r border-b border-gray-300 ${draggedIndex === moduleIndex ? "dragging" : ""
-              }`}
-            draggable={!collapseOpen[moduleIndex]}
-            onDragStart={() => handleDragStart(moduleIndex)}
-            onDragEnd={handleDragEnd}
-            onDragOver={(e) => handleDragOver(e, moduleIndex)}
-            style={{
-              opacity: draggedIndex === moduleIndex ? 0.5 : 1,
-              cursor: collapseOpen[moduleIndex] ? "default" : "move",
-            }}
+            className={` flex space-between mb-4 rounded-r-lg border-r border-b border-gray-300`}
           >
             <div className="collapse border-t border-l border-gray-300 rounded-none">
               <input
@@ -143,7 +91,6 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
               />
               <div className="collapse-title text-xl font-medium border-b border-gray-300">
                 <div className="flex items-center">
-                  <DotsIcon position="mr-1" size={6} />
                   {courseModule.module.name}
                 </div>
               </div>
