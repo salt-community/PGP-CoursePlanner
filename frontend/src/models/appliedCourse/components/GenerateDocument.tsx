@@ -93,7 +93,7 @@ export const generateDocument = (modules: ModuleType[]) => {
             </Page>
             {
                 modules.map((module, moduleIndex) => (
-                    <Page size="A4" style={styles.page} >
+                    <Page key ={moduleIndex} size="A4" style={styles.page} >
                         <View style={styles.section}>
                             <Text style={styles.text}>
                                 MODULE {moduleIndex + 1}: {module.name.toUpperCase()}
