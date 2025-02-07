@@ -6,7 +6,6 @@ import ModuleDetails from "./ModuleDetails";
 import { getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
 import { CourseType } from "../Types";
 import { getWeek } from "date-fns";
-import PDFCourse from "@models/appliedCourse/sections/PDFCourse";
 import { usePDF } from "@react-pdf/renderer";
 import { generateDocument } from "@models/appliedCourse/components/GenerateDocument";
 
@@ -30,7 +29,16 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
             <div className="row-span-1 col-span-7 text-center flex items-center justify-center border-b-2 relative">
                 <h2 className="text-4xl">Modules</h2>
                 {course && course.isApplied && course.startDate && course.endDate && (
-                    <p className="absolute bottom-0 p-4 text-[#636363] text-lg">{new Date(course.startDate).toUTCString().slice(5, 16)} - {new Date(course.endDate).toUTCString().slice(5, 16)}</p>
+                    <div className="flex gap-1 justify-center absolute bottom-0 p-4">
+                        <p className=" text-[#636363] text-lg">{new Date(course.startDate).toUTCString().slice(5, 16)} - {new Date(course.endDate).toUTCString().slice(5, 16)}</p>
+                        <button onClick={() => updateInstance(generateDocument(course.modules.map(m => m.module)))}>
+                            <a href={instance.url!} download={"CourseOverview_" + course.name + "_" + new Date(course.startDate).toUTCString().slice(5, 16) + "-" + new Date(course.endDate).toUTCString().slice(5, 16) + ".pdf"}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#636363" className="size-5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                </svg>
+                            </a>
+                        </button>
+                    </div>
                 )}
             </div>
 
@@ -139,9 +147,6 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                         <div className="flex gap-4">
                             <Link to={course.isApplied ? `/activecourses/edit/${course.id}` : `/courses/edit/${course.id}`} className="btn btn-secondary min-w-52 text-xl">Edit Course</Link>
                             <DeleteBtn onClick={() => setOpenModal(true)} />
-                            {(course && course.isApplied) &&
-                                <PDFCourse appliedCourse={course}></PDFCourse>
-                            }
                         </div>
                         <div className="flex items-center gap-2 mr-5">
                             <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: course.track.color }}></div>
