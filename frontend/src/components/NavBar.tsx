@@ -7,6 +7,7 @@ import { useQueryTracks } from "@api/track/trackQueries";
 import { getStorageTrackVisibility, initialStorageTrackVisibility, updateStorageTrackVisibility } from "@helpers/localStorage";
 import VisibilityButton from "./VisibilityButton";
 import { TrackVisibilityContext } from "../context/TrackVisibilityContext";
+import PDFDownloadBtn from "./buttons/PDFDownloadBtn";
 
 type Props = {
   isSidebarExpanded: boolean,
@@ -132,13 +133,16 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
 
         <h2 className={`pt-6 pr-2 pb-3 pl-6 font-semibold text-xl text-left whitespace-nowrap ${isSidebarExpanded ? "" : "invisible"}`}>Active Bootcamps</h2>
         {activeCourses.map((course) => (
-          <li className="hover:rounded-none" key={course.id}>
+          <li className="hover:rounded-none relative" key={course.id}>
             <NavLink
               to={`/activecourses/details/${course.id}`}
               className={({ isActive }) => isActive || (bootcampIsActive && (location.pathname.includes(`/activecourses/details/${course.id}`) || location.pathname.includes(`/activecourses/edit/${course.id}`))) ? "flex pl-6 text-xl bg-primary-content rounded-none" : "flex pl-6 text-xl rounded-none"}>
               <div className="p-2.5 m-1 mask rounded border-2 border-white" style={{ backgroundColor: course.color }}></div>
               {isSidebarExpanded && course.name}
             </NavLink>
+            <div className="absolute right-0 p-0 rounded-none border-l">
+              <PDFDownloadBtn course={course} color="#fff" size="size-6" navbar={true} />
+            </div>
           </li>
         ))}
 

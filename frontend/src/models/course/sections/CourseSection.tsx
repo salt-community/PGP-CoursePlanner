@@ -26,9 +26,9 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
             <div className="row-span-1 col-span-7 text-center flex items-center justify-center border-b-2 relative">
                 <h2 className="text-4xl">Modules</h2>
                 {course && course.isApplied && course.startDate && course.endDate && (
-                    <div className="flex gap-1 justify-center absolute bottom-0 p-4">
+                    <div className="flex gap-1 justify-center items-center absolute bottom-0 p-4">
                         <p className=" text-[#636363] text-lg">{new Date(course.startDate).toUTCString().slice(5, 16)} - {new Date(course.endDate).toUTCString().slice(5, 16)}</p>
-                        <PDFDownloadBtn course={course} />
+                        <PDFDownloadBtn course={course} color="#636363" size="size-5" />
                     </div>
                 )}
             </div>
@@ -72,12 +72,12 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                                     <li key={module.module.id}>
                                         <hr />
                                         <div className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"} timeline-box flex flex-col items-center py-1 px-1 min-w-32`}>
-                                            <div className="flex justify-center gap-1">
+                                            <div className="flex justify-center items-center gap-1">
                                                 <p className="font-semibold ">
                                                     {module.module.name}
                                                 </p>
                                                 {course.isApplied &&
-                                                    <PDFDownloadBtn course={course} module={module.module} />
+                                                    <PDFDownloadBtn course={course} module={module.module} color="#636363" size="size-5" />
                                                 }
                                             </div>
                                             <p className="text-sm">
