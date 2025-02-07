@@ -83,7 +83,8 @@ export function useFilterCourses(data?: CourseType[]) {
                 moduleIds: c.moduleIds,
                 modules: c.modules,
                 isApplied: c.isApplied,
-                track: track ? track : c.track
+                track: track ? track : c.track,
+                miscellaneousEvents : c.miscellaneousEvents
             }
         }).filter((course) => course.track.visibility === true);
     }, [data, trackVisibility]);

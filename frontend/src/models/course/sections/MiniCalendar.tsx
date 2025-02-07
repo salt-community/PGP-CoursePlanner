@@ -8,6 +8,7 @@ import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries
 import { CourseType, ModuleType } from "../Types"
 import CalendarDate from "./CalendarDate"
 import { CalendarDateType } from "@models/calendar/Types"
+import { createCalendarDatesFromMiscellaneousEvents } from "../helpers/courseUtils"
 // import { datePickerToolbarClasses } from "@mui/x-date-pickers"
 
 type Props = {
@@ -47,13 +48,23 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
 
     useEffect(() => {
-        if (!data || !previewCalendarDays) return;
+        if (!data || !previewCalendarDays || !previewCourse) return;
+
+        const miscellaneousCalendarDates = createCalendarDatesFromMiscellaneousEvents(previewCourse);
 
         const previewDaysMap = previewCalendarDays.reduce((acc, day) => {
             const dateKey = getDateAsString(day.date);
             acc[dateKey] = (acc[dateKey] || []).concat(day);
             return acc;
         }, {} as Record<string, typeof previewCalendarDays>);
+
+        miscellaneousCalendarDates.forEach(miscDay => {
+            const dateKey = getDateAsString(miscDay.date);
+            if (!previewDaysMap[dateKey]) {
+                previewDaysMap[dateKey] = [];
+            }
+            previewDaysMap[dateKey].push(miscDay);
+        });
 
         const updatedData = data.map(fetchData => {
             const dateKey = getDateAsString(fetchData.date);
@@ -74,15 +85,12 @@ export default function MiniCalendar({ startDate, previewCalendarDays, selectedM
 
         setCalendarData(updatedData);
 
-        const selectedDay = updatedData.find(d => getDateAsString(d.date) == getDateAsString(selectedModuleStartDate.date))
+        const selectedDay = updatedData.find(d => getDateAsString(d.date) == getDateAsString(selectedModuleStartDate.date));
         if (selectedDay) {
-            setSelectedModuleStartDate({dateContent: selectedDay.dateContent, date: selectedDay.date})
+            setSelectedModuleStartDate({ dateContent: selectedDay.dateContent, date: selectedDay.date });
         }
 
-
-    }, [data, previewCalendarDays, previewCourse.id, setSelectedModuleStartDate,selectedModuleStartDate.date ]);
-
-
+    }, [data, previewCalendarDays, previewCourse, setSelectedModuleStartDate, selectedModuleStartDate.date]);
 
     const selectDate = (index: number) => {
         setSelectedModuleStartDate({ dateContent: calendarData[index].dateContent, date: calendarData![index].date })

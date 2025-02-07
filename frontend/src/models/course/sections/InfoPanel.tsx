@@ -3,6 +3,8 @@ import { CourseType, ModuleType } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { EventType } from "@models/module/Types";
+import { formatDateTime, getDifferenceInDays } from "../helpers/courseUtils";
+import { useEffect, useState } from "react";
 
 type Props = {
     selectedDate: CalendarDateType
@@ -24,10 +26,24 @@ type Inputs = {
 
 export function InfoPanel({ selectedDate, handleMoveModule, selectedModule, course, setCourse }: Props) {
 
+    const [isDateInModule, setIsDateInModule] = useState<boolean>(false)
+
+    useEffect (() => {
+        const daysInModule = selectedModule.days.length;
+        const selectedModuleStartDate = selectedModule.days[0].date
+        const moduleSpan = getDifferenceInDays(selectedModule.days[daysInModule-1].date, selectedModuleStartDate )
+        const daysDiff = getDifferenceInDays( selectedDate.date, selectedModuleStartDate )
+        if(daysDiff < 0 || daysDiff > moduleSpan) {
+            setIsDateInModule(false)
+        } else {
+            setIsDateInModule(true)
+        }
+    },[selectedDate, selectedModule]);
+
     const {
         register,
         handleSubmit,
-        // watch,
+        watch,
         // formState: { errors },
     } = useForm<Inputs>()
 
@@ -41,7 +57,7 @@ const onSubmit: SubmitHandler<Inputs> = (data) => {
     isApplied: true,
   };
 
-  if (data.isBelongingToModule) {
+  if (data.isBelongingToModule && isDateInModule) {
     const updatedModules = course.modules.map((module) => {
       if (module.module.id === selectedModule.id) {
         const updatedDays = module.module.days.map((day) => {
@@ -72,9 +88,15 @@ const onSubmit: SubmitHandler<Inputs> = (data) => {
 
     setCourse(updatedCourse);
 
-    console.log("Updated course with new event:", updatedCourse);
   } else {
-    alert("Event does not belong to a module.");
+    const miscEvents : EventType[]= course.miscellaneousEvents
+    newEvent.startTime =formatDateTime(selectedDate.date, newEvent.startTime)
+    newEvent.endTime =formatDateTime(selectedDate.date, newEvent.endTime)
+
+    miscEvents.push(newEvent);
+
+    setCourse({...course, miscellaneousEvents: miscEvents})
+
   }
 };
 
@@ -134,13 +156,15 @@ const onSubmit: SubmitHandler<Inputs> = (data) => {
                             <option>Greedo</option>
                         </select>
 
-                        <label >Name<input type="text" {...register("name", { required: true })}></input></label>
-                        <label >Description<input type="text" {...register("description", { required: true })}></input></label>
-                        <label >Start<input type="time" {...register("start", { required: true })}></input></label>
-                        <label >End<input type="time" {...register("end", { required: true })}></input></label>
-                        <label>Belongs to module<input type="checkbox" {...register("isBelongingToModule")}></input></label>
+                        <label >Name<input type="text" {...register("name", { required: true })} defaultValue={"Alva Labs"}></input></label>
+                        <label >Description<input type="text" {...register("description", { required: true }) } defaultValue={"We discuss Alva Labs results"}></input></label>
+                        <label >Start<input type="time" {...register("start", { required: true })} defaultValue={"15:00"}></input> </label>
+                        <label >End<input type="time" {...register("end", { required: true })} defaultValue={"16:00"}></input></label>
+                        <label>Belongs to module<input type="checkbox" {...register("isBelongingToModule")} defaultChecked ></input></label>
 
                         <button className="btn" type="submit" onClick={handleSubmit(onSubmit)} > Add event </button>
+
+                    {!isDateInModule && watch("isBelongingToModule") && <p className="text-red-500">Selected day is not in module</p>}
                     </div>
                 </form>
             </details>

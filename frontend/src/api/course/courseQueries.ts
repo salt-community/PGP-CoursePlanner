@@ -5,7 +5,7 @@ import { ModuleType } from "@models/module/Types";
 import { useState } from "react";
 import { useFilterCourses } from "@helpers/filterDataHooks";
 
-export function useQueryCourses() {
+export function useQueryCourses()  {
     const { data, isLoading, isError } = useQuery<CourseType[]>({
         queryKey: ['courses'],
         queryFn: getCourses

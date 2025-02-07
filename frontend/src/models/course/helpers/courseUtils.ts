@@ -1,7 +1,7 @@
 import { GoogleEvent } from "@helpers/googleHelpers";
 import { CourseType, DayType, ModuleType } from "../Types";
 import { EventType } from "@models/module/Types";
-import { CalendarDateType } from "@models/calendar/Types";
+import { CalendarDateType, DateContent } from "@models/calendar/Types";
 import { getDateAsString } from "@helpers/dateHelpers";
 import { NavigateFunction } from "react-router-dom";
 import { UseMutationResult } from "@tanstack/react-query";
@@ -271,6 +271,44 @@ export const getGoogleEventListForCourse = (
 
   return events;
 };
+
+
+export function createCalendarDatesFromMiscellaneousEvents(course: CourseType): CalendarDateType[] {
+  const eventsByDate = new Map<string, EventType[]>();
+
+  course.miscellaneousEvents.forEach(event => {
+    const eventDate = new Date(event.startTime).toISOString().split('T')[0]; 
+    
+    if (!eventsByDate.has(eventDate)) {
+      eventsByDate.set(eventDate, []);
+    }
+    eventsByDate.get(eventDate)!.push(event);
+  });
+
+  const calendarDates: CalendarDateType[] = [];
+
+  eventsByDate.forEach((events, date) => {
+    const dateContent: DateContent[] = events.map(event => ({
+      moduleId: -1, 
+      appliedCourseId: course.id,
+      track: course.track,
+      moduleName: 'Miscellaneous',
+      dayOfModule: -1, 
+      totalDaysInModule: -1, 
+      courseName: course.name,
+      events: [event], 
+      color: course.color || '#000000', 
+    }));
+
+    calendarDates.push({
+      date: new Date(date),
+      dateContent,
+    });
+  });
+
+  return calendarDates;
+}
+
 
 export const handleApplyTemplate = async (
   course: CourseType,

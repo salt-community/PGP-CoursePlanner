@@ -12,6 +12,7 @@ public record CourseResponse
     // public List<CourseModuleResponse> CourseModules { get; init; } = new();
     public string? Color { get; init; }
     public bool IsApplied { get; init; }
+    public List<EventResponse> MiscellaneousEvents {get; init;} = [];
 
     // Constructor
     public CourseResponse(Course course)
@@ -27,6 +28,7 @@ public record CourseResponse
         // Modules = course.Modules.Select(cm => new ModuleResponse(cm.Module!)).ToList();
         Color = course.Track.Color;
         IsApplied = course.IsApplied;
+        MiscellaneousEvents = course.MiscellaneousEvents.Select(e => (EventResponse) e).ToList();
     }
 
     // Implicit operator

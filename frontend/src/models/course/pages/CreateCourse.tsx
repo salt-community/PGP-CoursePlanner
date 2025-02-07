@@ -14,7 +14,8 @@ export default function CreateCourse() {
         startDate: new Date(),
         moduleIds: [0],
         track: myTrack,
-        modules: []
+        modules: [],
+        miscellaneousEvents: [],
     }
 
     return (
