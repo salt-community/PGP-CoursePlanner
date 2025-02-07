@@ -6,8 +6,7 @@ import ModuleDetails from "./ModuleDetails";
 import { getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
 import { CourseType } from "../Types";
 import { getWeek } from "date-fns";
-import { usePDF } from "@react-pdf/renderer";
-import { generateDocument } from "@models/appliedCourse/components/GenerateDocument";
+import PDFDownloadBtn from "@components/buttons/PDFDownloadBtn";
 
 type Props = {
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -16,8 +15,6 @@ type Props = {
 }
 
 export default function CourseSection({ setOpenModal, course, isLoading }: Props) {
-    const [instance, updateInstance] = usePDF();
-
     return (
         <section className="grid grid-rows-[145px_1fr] grid-cols-9 bg-white m-5 mt-0 rounded-lg h-full overflow-auto drop-shadow-xl">
             {/* First Row, First Column */}
@@ -31,13 +28,7 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                 {course && course.isApplied && course.startDate && course.endDate && (
                     <div className="flex gap-1 justify-center absolute bottom-0 p-4">
                         <p className=" text-[#636363] text-lg">{new Date(course.startDate).toUTCString().slice(5, 16)} - {new Date(course.endDate).toUTCString().slice(5, 16)}</p>
-                        <button onClick={() => updateInstance(generateDocument(course.modules.map(m => m.module)))}>
-                            <a href={instance.url!} download={"CourseOverview_" + course.name + "_" + new Date(course.startDate).toUTCString().slice(5, 16) + "-" + new Date(course.endDate).toUTCString().slice(5, 16) + ".pdf"}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#636363" className="size-5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                                </svg>
-                            </a>
-                        </button>
+                        <PDFDownloadBtn course={course} />
                     </div>
                 )}
             </div>
@@ -86,13 +77,7 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                                                     {module.module.name}
                                                 </p>
                                                 {course.isApplied &&
-                                                    <button onClick={() => updateInstance(generateDocument([module.module]))}>
-                                                        <a href={instance.url!} download={"ModuleOverview_" + course.name + "_" + module.module.name + ".pdf"}>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                                                            </svg>
-                                                        </a>
-                                                    </button>
+                                                    <PDFDownloadBtn course={course} module={module.module} />
                                                 }
                                             </div>
                                             <p className="text-sm">
