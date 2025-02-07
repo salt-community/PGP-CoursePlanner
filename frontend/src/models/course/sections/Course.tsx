@@ -110,7 +110,8 @@ export default function Course({ course }: CourseProps) {
             numberOfWeeks: numberOfWeeks,
             moduleIds: courseModuleIds,
             track: trackData!.find(t => t.id == inputs.trackId)!,
-            modules: []
+            modules: [],
+            miscellaneousEvents: []
         };
         if (newCourse.id == 0) {
             console.log(newCourse)
