@@ -31,7 +31,7 @@ export default function AppliedCourseDetails() {
             </Header>
             <CourseSection setOpenModal={setOpenModal} course={appliedCourse} isLoading={isLoadingAppliedCourse} />
             {appliedCourse &&
-                <DeleteWarningModal openModal={openModal} setOpenModal={setOpenModal} warning={`${appliedCourse.name} Course Template`} handleDelete={handleDeleteCourse} isError={mutationDeleteAppliedCourse.isError} errorMessage={mutationDeleteAppliedCourse.error?.message} resetMutation={mutationDeleteAppliedCourse.reset} />
+                <DeleteWarningModal openModal={openModal} setOpenModal={setOpenModal} warning={`${appliedCourse.name} Bootcamp`} handleDelete={handleDeleteCourse} isError={mutationDeleteAppliedCourse.isError} errorMessage={mutationDeleteAppliedCourse.error?.message} resetMutation={mutationDeleteAppliedCourse.reset} />
             }
             {isErrorAppliedCourse &&
                 <ErrorModal error="Course Template" />
