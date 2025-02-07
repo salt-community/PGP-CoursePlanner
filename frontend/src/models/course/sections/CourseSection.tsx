@@ -126,7 +126,7 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                 {course &&
                     <>
                         <div className="flex gap-4">
-                            <Link to={`/courses/edit/${course.id}`} className="btn btn-secondary min-w-52 text-xl">Edit Course</Link>
+                            <Link to={course.isApplied?`/activecourses/edit/${course.id}` : `/courses/edit/${course.id}`} className="btn btn-secondary min-w-52 text-xl">Edit Course</Link>
                             <DeleteBtn onClick={() => setOpenModal(true)} />
                             {(course && course.isApplied) &&
                                 <>
