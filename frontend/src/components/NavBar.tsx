@@ -140,7 +140,7 @@ export default function NavBar({ isSidebarExpanded, setIsSidebarExpanded }: Prop
               <div className="p-2.5 m-1 mask rounded border-2 border-white" style={{ backgroundColor: course.color }}></div>
               {isSidebarExpanded && course.name}
             </NavLink>
-            <div className="absolute right-0 p-0 rounded-none border-l">
+            <div className="absolute right-0 p-0 rounded-none">
               <PDFDownloadBtn course={course} color="#fff" size="size-6" navbar={true} />
             </div>
           </li>
