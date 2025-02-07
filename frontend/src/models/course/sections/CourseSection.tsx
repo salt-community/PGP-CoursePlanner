@@ -7,7 +7,8 @@ import { getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUt
 import { CourseType } from "../Types";
 import { getWeek } from "date-fns";
 import PDFCourse from "@models/appliedCourse/sections/PDFCourse";
-import PDFModule from "@models/appliedCourse/sections/PDFModule";
+import { usePDF } from "@react-pdf/renderer";
+import { generateDocument } from "@models/appliedCourse/components/GenerateDocument";
 
 type Props = {
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -16,6 +17,8 @@ type Props = {
 }
 
 export default function CourseSection({ setOpenModal, course, isLoading }: Props) {
+    const [instance, updateInstance] = usePDF();
+
     return (
         <section className="grid grid-rows-[145px_1fr] grid-cols-9 bg-white m-5 mt-0 rounded-lg h-full overflow-auto drop-shadow-xl">
             {/* First Row, First Column */}
@@ -66,27 +69,35 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                                 <li className="flex flex-col items-center justify-center">
                                     <div className="bg-accent w-3 h-3 border rounded-lg"></div>
                                 </li>
-                                {course.modules.map((moduleElement, index) => (
-                                    <li key={moduleElement.module.id}>
+                                {course.modules.map((module, index) => (
+                                    <li key={module.module.id}>
                                         <hr />
-                                        <div
-                                            className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"
-                                                } timeline-box flex flex-col items-center py-1 px-4 min-w-32`}
-                                        >
-                                            <p className="font-semibold ">
-                                                {moduleElement.module.name}
-                                            </p>
+                                        <div className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"} timeline-box flex flex-col items-center py-1 px-1 min-w-32`}>
+                                            <div className="flex justify-center gap-1">
+                                                <p className="font-semibold ">
+                                                    {module.module.name}
+                                                </p>
+                                                {course.isApplied &&
+                                                    <button onClick={() => updateInstance(generateDocument([module.module]))}>
+                                                        <a href={instance.url!} download={"ModuleOverview_" + course.name + "_" + module.module.name + ".pdf"}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                                                            </svg>
+                                                        </a>
+                                                    </button>
+                                                }
+                                            </div>
                                             <p className="text-sm">
                                                 Days: <span className="font-bold">
-                                                    {moduleElement.module.days.length}
+                                                    {module.module.days.length}
                                                 </span>
                                             </p>
                                         </div>
                                         <div className="timeline-middle">
                                             {course.isApplied ?
-                                                <p className="border rounded px-2">{getWeek(moduleElement.module.startDate)}</p>
+                                                <p className="border rounded px-2">{getWeek(module.module.startDate)}</p>
                                                 :
-                                                <p className="border rounded px-2">{getWeekNumberOfModule(course, moduleElement.module.id!)}</p>
+                                                <p className="border rounded px-2">{getWeekNumberOfModule(course, module.module.id!)}</p>
                                             }
                                         </div>
                                         <hr />
@@ -126,13 +137,10 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                 {course &&
                     <>
                         <div className="flex gap-4">
-                            <Link to={course.isApplied?`/activecourses/edit/${course.id}` : `/courses/edit/${course.id}`} className="btn btn-secondary min-w-52 text-xl">Edit Course</Link>
+                            <Link to={course.isApplied ? `/activecourses/edit/${course.id}` : `/courses/edit/${course.id}`} className="btn btn-secondary min-w-52 text-xl">Edit Course</Link>
                             <DeleteBtn onClick={() => setOpenModal(true)} />
                             {(course && course.isApplied) &&
-                                <>
-                                    <PDFCourse appliedCourse={course}></PDFCourse>
-                                    <PDFModule appliedCourse={course}></PDFModule>
-                                </>
+                                <PDFCourse appliedCourse={course}></PDFCourse>
                             }
                         </div>
                         <div className="flex items-center gap-2 mr-5">
