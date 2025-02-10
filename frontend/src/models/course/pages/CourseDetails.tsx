@@ -30,7 +30,13 @@ export default function CourseDetails() {
       </Header>
       <CourseSection setOpenModal={setOpenModal} course={course} isLoading={isLoadingCourse} />
       {course &&
-        <DeleteWarningModal openModal={openModal} setOpenModal={setOpenModal} warning={`${course.name} Course Template`} handleDelete={handleDeleteCourse} isError={mutationDeleteCourse.isError} errorMessage={mutationDeleteCourse.error?.message} resetMutation={mutationDeleteCourse.reset} />
+        <DeleteWarningModal
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          warning={`Deleting this ${course.name} Course Template will permanently remove it from the system.`} handleDelete={handleDeleteCourse}
+          isError={mutationDeleteCourse.isError}
+          errorMessage={mutationDeleteCourse.error?.message}
+          resetMutation={mutationDeleteCourse.reset} />
       }
       {isErrorCourse &&
         <ErrorModal error="Course Template" />

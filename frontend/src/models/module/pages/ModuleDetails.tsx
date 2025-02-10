@@ -21,7 +21,7 @@ export default function ModuleDetails() {
     const moduleUsed = courses?.filter((c) => c.moduleIds?.includes(moduleId)).map((c) => c.track.id);
 
     function handleDeleteModule() {
-        if (courses && moduleUsed && moduleUsed.length > 0) {
+        if (courses && moduleUsed && moduleUsed.length === 0) {
             mutationDeleteModule.mutate(moduleId);
             if (mutationDeleteModule.isSuccess) {
                 setOpenModal(false);
@@ -87,7 +87,7 @@ export default function ModuleDetails() {
                 <DeleteWarningModal
                     openModal={openModal}
                     setOpenModal={setOpenModal}
-                    warning={`${module.name} Module Template`}
+                    warning={`Deleting this ${module.name} Module Template will also remove it from all associated Course Templates.`}
                     handleDelete={handleDeleteModule}
                     isError={mutationDeleteModule.isError}
                     errorMessage={mutationDeleteModule.error?.message}

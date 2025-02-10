@@ -42,7 +42,7 @@ export default function DeleteWarningModal({ openModal, setOpenModal, warning, h
                             Warning
                         </h2>
                         <p className="text-lg px-6 m-4 border border-zinc-400 p-4 rounded-3xl bg-[#f8f8f8]">
-                            Deleting this {warning} will permanently remove it from the system.
+                            {warning}
                         </p>
                         <p className="text-xl font-semibold pt-4">
                             Are you sure you want to proceed?
