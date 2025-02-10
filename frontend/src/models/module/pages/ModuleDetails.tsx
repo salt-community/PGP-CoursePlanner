@@ -52,10 +52,10 @@ export default function ModuleDetails() {
                 </div>
 
                 {/* First Row, Second Column */}
-                <div className="row-span-8 col-span-2 p-10 pt-20 px-0">
+                <div className="row-span-8 col-span-2 p-10 pt-10 px-0">
                     {module &&
                         <>
-                            <h3 className="text-2xl text-[#636363] text-center p-4">Tracks</h3>
+                            <h3 className="text-2xl text-[#636363] text-center p-2">Tracks</h3>
                             <div className="flex flex-col items-center gap-2">
                                 <div className="flex flex-col gap-2">
                                     {module.tracks.map((track, trackIndex) =>
