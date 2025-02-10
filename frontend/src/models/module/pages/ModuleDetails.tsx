@@ -9,7 +9,7 @@ import Header from "@components/Header";
 import LoadingSpinner from "@models/course/components/LoadingSpinner";
 import ModuleOverview from "@models/course/sections/ModuleOverview";
 import DeleteBtn from "@components/buttons/DeleteBtn";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import DeleteWarningModal from "@components/DeleteWarningModal";
 
 export default function ModuleDetails() {
@@ -54,21 +54,17 @@ export default function ModuleDetails() {
                                 <div className="flex flex-col gap-2">
                                     <h4 className="text-xl text-[#636363] p-2">In use</h4>
                                     {moduleUsed && module.tracks.filter((track) => moduleUsed.includes(track.id)).map((track, trackIndex) =>
-                                        <Fragment key={trackIndex}>
-                                            <div className="flex border rounded-full px-4 py-2 gap-1">
-                                                <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: track.color }}></div>
-                                                <p className="text-lg text-[#636363]">{track.name}</p>
-                                            </div>
-                                        </Fragment>
+                                        <div key={trackIndex} className="flex border rounded-full px-4 py-2 gap-1">
+                                            <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: track.color }}></div>
+                                            <p className="text-lg text-[#636363]">{track.name}</p>
+                                        </div>
                                     )}
                                     <h4 className="text-xl text-[#636363] p-2">Not in use</h4>
                                     {moduleUsed && module.tracks.filter((track) => !moduleUsed.includes(track.id)).map((track, trackIndex) =>
-                                        <Fragment key={trackIndex}>
-                                            <div className="flex border rounded-full px-4 py-2 gap-1">
-                                                <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: track.color }}></div>
-                                                <p className="text-lg text-[#636363]">{track.name}</p>
-                                            </div>
-                                        </Fragment>
+                                        <div key={trackIndex} className="flex border rounded-full px-4 py-2 gap-1">
+                                            <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: track.color }}></div>
+                                            <p className="text-lg text-[#636363]">{track.name}</p>
+                                        </div>
                                     )}
                                 </div>
                             </div>
