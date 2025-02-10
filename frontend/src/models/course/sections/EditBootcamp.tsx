@@ -14,6 +14,7 @@ type Props = {
     course: CourseType,
     submitFunction:  (course: CourseType, navigate: NavigateFunction, mutationPostAppliedCourse: UseMutationResult<void, Error, CourseType, unknown>) => Promise<void>;
     mutation: UseMutationResult<void, Error, CourseType, unknown>
+    
 }
 
 type Inputs = {
@@ -84,19 +85,18 @@ export function EditBootcamp({ course, submitFunction, mutation }: Props) {
 
 
     const handleMoveModule = () => {
-        const newModule = moveModule(selectedModule, selectedDate.date)
-        const updatedModules: CourseModuleType[] = previewCourse.modules.map((m) =>
-            m.module.id == selectedModule.id
-                ? { ...m, module: newModule }
-                : m
-        );
+        const newModule = moveModule(selectedModule, selectedDate.date);
+        let updatedModules: CourseModuleType[] = previewCourse.modules
+            .map((m) => (m.module.id == selectedModule.id ? { ...m, module: newModule } : m))
+            .sort((a, b) => new Date(a.module.startDate).getTime() - new Date(b.module.startDate).getTime()); // Sorting by date
+    
         let updatedCourse = { ...previewCourse, modules: updatedModules };
-        updatedCourse = getUpdatedCourse(updatedCourse, updatedCourse.modules[0].module.days[0].date)
-
+        updatedCourse = getUpdatedCourse(updatedCourse, updatedCourse.modules[0].module.days[0].date);
+    
         setCourse(updatedCourse);
-        setSelectedModule(newModule)
-    }
-
+        setSelectedModule(newModule);
+    };
+    
     const handleMoveModuleDnd = (moduleId: number, newDate: string) => {
         const selectedModule = previewCourse.modules
             .map((m) => m.module)
@@ -106,10 +106,12 @@ export function EditBootcamp({ course, submitFunction, mutation }: Props) {
             console.error("Module not found!");
             return;
         }
+    
         const newModule = moveModule(selectedModule, new Date(newDate));
-        const updatedModules: CourseModuleType[] = previewCourse.modules.map((m) =>
-            m.module.id === moduleId ? { ...m, module: newModule } : m
-        );
+        let updatedModules: CourseModuleType[] = previewCourse.modules
+            .map((m) => (m.module.id === moduleId ? { ...m, module: newModule } : m))
+            .sort((a, b) => new Date(a.module.startDate).getTime() - new Date(b.module.startDate).getTime()); // Sorting by date
+    
         setCourse({ ...previewCourse, modules: updatedModules });
         setSelectedModule(newModule);
     };
@@ -132,7 +134,7 @@ export function EditBootcamp({ course, submitFunction, mutation }: Props) {
                         </div>
                         {overlappingDays.length > 0 && <p className="text-red-600">you have overlapping days!</p> }
                         {toggle == "info" && <InfoPanel course={previewCourse} setCourse={setCourse} selectedModule={selectedModule} selectedDate={selectedDate} handleMoveModule={handleMoveModule} />}
-                        {toggle == "edit" && <EditCourseDays appliedCourse={course} course={previewCourse} setCourse={setCourse} />}
+                        {toggle == "edit" && <EditCourseDays appliedCourse={course} course={previewCourse} setCourse={setCourse} handleMoveModule={handleMoveModuleDnd} />}
                     </div>
                 </section>
                 <div className="modal-action">
