@@ -5,6 +5,7 @@ import { useQueryCourses } from "@api/course/courseQueries";
 import { useQueryModuleById } from "@api/module/moduleQueries";
 import { useMutationDeleteModule } from "@api/module/moduleMutations";
 import ErrorModal from "@components/ErrorModal";
+import Header from "@components/Header";
 
 export default function ModuleDetails() {
     const moduleId = useIdFromPath();
@@ -28,6 +29,11 @@ export default function ModuleDetails() {
 
     return (
         <Page>
+            <Header>
+                <h1 className="text-3xl font-semibold">
+                    Module Template
+                </h1>
+            </Header>
             {module &&
                 <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
                     <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
