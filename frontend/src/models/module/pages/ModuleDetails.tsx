@@ -8,12 +8,16 @@ import ErrorModal from "@components/ErrorModal";
 import Header from "@components/Header";
 import LoadingSpinner from "@models/course/components/LoadingSpinner";
 import ModuleOverview from "@models/course/sections/ModuleOverview";
+import DeleteBtn from "@components/buttons/DeleteBtn";
+import { useState } from "react";
+import DeleteWarningModal from "@components/DeleteWarningModal";
 
 export default function ModuleDetails() {
+    const [openModal, setOpenModal] = useState(false);
     const moduleId = useIdFromPath();
     const { data: module, isLoading, isError } = useQueryModuleById(moduleId);
     const { data: courses } = useQueryCourses();
-    const mutation = useMutationDeleteModule();
+    const mutationDeleteModule = useMutationDeleteModule();
 
     const usedModules: number[] = [];
     if (courses) {
@@ -24,9 +28,11 @@ export default function ModuleDetails() {
         });
     }
 
-    const handleDelete = (id: number) => {
-        mutation.mutate(id);
-        document.getElementById("invalid-module-delete")?.classList.remove("hidden");
+    function handleDeleteModule() {
+        mutationDeleteModule.mutate(moduleId);
+        if (mutationDeleteModule.isSuccess) {
+            setOpenModal(false);
+        }
     }
 
     return (
@@ -44,15 +50,25 @@ export default function ModuleDetails() {
                     }
                     {isLoading && <LoadingSpinner />}
                 </div>
+                {/* Third Row, Second Column */}
+                <div className="row-span-1 col-span-7 flex p-8 justify-between">
+                    {module &&
+                        <div className="flex gap-4">
+                            <Link to={`/modules/edit/${moduleId}`} className="btn btn-secondary min-w-52 text-xl">Edit Module</Link>
+                            <DeleteBtn onClick={() => setOpenModal(true)} />
+                        </div>
+                    }
+                </div>
             </section>
             {module &&
-                <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
-                    <p className="error-message text-red-600 text-sm hidden" id="invalid-module-delete">Cannot delete this module, it is used in a course!</p>
-                    <div className="pt-4 mb-4 flex gap-4 flex-col sm:flex-row">
-                        <Link to={`/modules/edit/${moduleId}`} className="btn btn-sm py-1 max-w-xs btn-info text-white">Edit Module</Link>
-                        <button onClick={() => handleDelete(moduleId)} className="btn btn-sm py-1 max-w-xs btn-error text-white">Delete Module</button>
-                    </div>
-                </section>
+                <DeleteWarningModal
+                    openModal={openModal}
+                    setOpenModal={setOpenModal}
+                    warning={`${module.name} Module Template`}
+                    handleDelete={handleDeleteModule}
+                    isError={mutationDeleteModule.isError}
+                    errorMessage={mutationDeleteModule.error?.message}
+                    resetMutation={mutationDeleteModule.reset} />
             }
             {isError && <ErrorModal error="Module" />}
         </Page>
