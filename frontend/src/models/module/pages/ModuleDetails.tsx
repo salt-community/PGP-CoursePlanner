@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import Page from "@components/Page";
 import { useIdFromPath } from "@helpers/helperHooks";
-import LoadingMessage from "@components/LoadingMessage";
-import ErrorMessage from "@components/ErrorMessage";
 import { useQueryCourses } from "@api/course/courseQueries";
 import { useQueryModuleById } from "@api/module/moduleQueries";
 import { useMutationDeleteModule } from "@api/module/moduleMutations";
@@ -30,8 +28,6 @@ export default function ModuleDetails() {
 
     return (
         <Page>
-            {isLoading && <LoadingMessage />}
-            {isError && <ErrorMessage />}
             {module &&
                 <section className="mx-auto flex flex-col gap-4 px-4 md:px-24 lg:px-56">
                     <div className="w-[320px] overflow-scroll sm:w-auto sm:overflow-auto">
