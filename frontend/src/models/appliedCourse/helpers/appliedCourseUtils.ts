@@ -50,6 +50,15 @@ export const handleUpdateCourse = async (
       myCourse.startDate = localStartDate.toISOString();
   }
 
+  const latestDayDate = course.modules
+  .flatMap((module) => module.module.days) 
+  .map((day) => new Date(day.date)) 
+  .reduce((latest, current) => (current > latest ? current : latest), new Date(0)); 
+
+if (latestDayDate.getTime() > 0) { 
+  myCourse.endDate = latestDayDate.toISOString();
+}
+
     console.log("UPDATING myCourse", myCourse)
 
 

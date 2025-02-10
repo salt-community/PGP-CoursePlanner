@@ -88,7 +88,7 @@ export function EditBootcamp({ course, submitFunction, mutation }: Props) {
         const newModule = moveModule(selectedModule, selectedDate.date);
         let updatedModules: CourseModuleType[] = previewCourse.modules
             .map((m) => (m.module.id == selectedModule.id ? { ...m, module: newModule } : m))
-            .sort((a, b) => new Date(a.module.startDate).getTime() - new Date(b.module.startDate).getTime()); // Sorting by date
+            .sort((a, b) => new Date(a.module.startDate).getTime() - new Date(b.module.startDate).getTime()); 
     
         let updatedCourse = { ...previewCourse, modules: updatedModules };
         updatedCourse = getUpdatedCourse(updatedCourse, updatedCourse.modules[0].module.days[0].date);
@@ -110,7 +110,7 @@ export function EditBootcamp({ course, submitFunction, mutation }: Props) {
         const newModule = moveModule(selectedModule, new Date(newDate));
         let updatedModules: CourseModuleType[] = previewCourse.modules
             .map((m) => (m.module.id === moduleId ? { ...m, module: newModule } : m))
-            .sort((a, b) => new Date(a.module.startDate).getTime() - new Date(b.module.startDate).getTime()); // Sorting by date
+            .sort((a, b) => new Date(a.module.startDate).getTime() - new Date(b.module.startDate).getTime());
     
         setCourse({ ...previewCourse, modules: updatedModules });
         setSelectedModule(newModule);
