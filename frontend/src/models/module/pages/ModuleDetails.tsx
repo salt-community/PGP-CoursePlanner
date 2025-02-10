@@ -9,8 +9,9 @@ import Header from "@components/Header";
 import LoadingSpinner from "@models/course/components/LoadingSpinner";
 import ModuleOverview from "@models/course/sections/ModuleOverview";
 import DeleteBtn from "@components/buttons/DeleteBtn";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import DeleteWarningModal from "@components/DeleteWarningModal";
+import Track from "@models/track/pages/Tracks";
 
 export default function ModuleDetails() {
     const [openModal, setOpenModal] = useState(false);
@@ -18,20 +19,14 @@ export default function ModuleDetails() {
     const { data: module, isLoading, isError } = useQueryModuleById(moduleId);
     const { data: courses } = useQueryCourses();
     const mutationDeleteModule = useMutationDeleteModule();
-
-    const usedModules: number[] = [];
-    if (courses) {
-        courses.forEach(c => {
-            c.moduleIds!.forEach(element => {
-                usedModules.push(element);
-            });
-        });
-    }
+    const moduleUsed = courses?.filter((c) => c.moduleIds?.includes(moduleId)).map((c) => c.track.id);
 
     function handleDeleteModule() {
-        mutationDeleteModule.mutate(moduleId);
-        if (mutationDeleteModule.isSuccess) {
-            setOpenModal(false);
+        if (courses && moduleUsed && moduleUsed.length > 0) {
+            mutationDeleteModule.mutate(moduleId);
+            if (mutationDeleteModule.isSuccess) {
+                setOpenModal(false);
+            }
         }
     }
 
@@ -58,11 +53,23 @@ export default function ModuleDetails() {
                             <h3 className="text-2xl text-[#636363] text-center p-2">Tracks</h3>
                             <div className="flex flex-col items-center gap-2">
                                 <div className="flex flex-col gap-2">
-                                    {module.tracks.map((track, trackIndex) =>
-                                        <div className="flex border rounded-full px-4 py-2 gap-1" key={trackIndex}>
-                                            <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: track.color }}></div>
-                                            <p className="text-lg text-[#636363]">{track.name}</p>
-                                        </div>
+                                    <h4 className="text-xl text-[#636363] p-2">In use</h4>
+                                    {moduleUsed && module.tracks.filter((track) => moduleUsed.includes(track.id)).map((track, trackIndex) =>
+                                        <Fragment key={trackIndex}>
+                                            <div className="flex border rounded-full px-4 py-2 gap-1">
+                                                <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: track.color }}></div>
+                                                <p className="text-lg text-[#636363]">{track.name}</p>
+                                            </div>
+                                        </Fragment>
+                                    )}
+                                    <h4 className="text-xl text-[#636363] p-2">Not in use</h4>
+                                    {moduleUsed && module.tracks.filter((track) => !moduleUsed.includes(track.id)).map((track, trackIndex) =>
+                                        <Fragment key={trackIndex}>
+                                            <div className="flex border rounded-full px-4 py-2 gap-1">
+                                                <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: track.color }}></div>
+                                                <p className="text-lg text-[#636363]">{track.name}</p>
+                                            </div>
+                                        </Fragment>
                                     )}
                                 </div>
                             </div>
