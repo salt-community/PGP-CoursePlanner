@@ -11,7 +11,6 @@ import ModuleOverview from "@models/course/sections/ModuleOverview";
 import DeleteBtn from "@components/buttons/DeleteBtn";
 import { Fragment, useState } from "react";
 import DeleteWarningModal from "@components/DeleteWarningModal";
-import Track from "@models/track/pages/Tracks";
 
 export default function ModuleDetails() {
     const [openModal, setOpenModal] = useState(false);
