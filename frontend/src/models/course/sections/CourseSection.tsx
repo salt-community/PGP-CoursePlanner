@@ -2,7 +2,7 @@ import DeleteBtn from "@components/buttons/DeleteBtn";
 import { Link } from "react-router-dom";
 import DeployModal from "./DeployModal";
 import LoadingSpinner from "../components/LoadingSpinner";
-import ModuleDetails from "./ModuleDetails";
+import ModuleOverview from "./ModuleOverview";
 import { getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
 import { CourseType } from "../Types";
 import { getWeek } from "date-fns";
@@ -87,7 +87,7 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                                             </p>
                                         </div>
                                         <div className="timeline-middle">
-                                            {course.isApplied ?
+                                            {(course.isApplied && module.module.startDate) ?
                                                 <p className="border rounded px-2">{getWeek(module.module.startDate)}</p>
                                                 :
                                                 <p className="border rounded px-2">{getWeekNumberOfModule(course, module.module.id!)}</p>
@@ -110,7 +110,7 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
             {/* Second Row, Second Column */}
             <div className="row-span-7 col-span-7 p-10 pt-0 overflow-auto">
                 {course && course.modules.map((module, index) =>
-                    <ModuleDetails module={module} key={index} />
+                    <ModuleOverview module={module.module} key={index} />
                 )}
                 {isLoading && <LoadingSpinner />}
             </div>
