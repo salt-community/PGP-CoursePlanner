@@ -11,10 +11,11 @@ type Props = {
     appliedCourse: CourseType
     course: CourseType,
     setCourse: React.Dispatch<React.SetStateAction<CourseType>>
+    handleMoveModule: (moduleId: number, newDate: string) => void;
 }
 
 
-export function EditCourseDays({ course, setCourse }: Props) {
+export function EditCourseDays({ course, setCourse, handleMoveModule }: Props) {
 
     const assignDatesToModules = (course: CourseType) => {
         const crs = getUpdatedCourse(course, course.modules[0].module.startDate)
@@ -30,7 +31,7 @@ export function EditCourseDays({ course, setCourse }: Props) {
                 <CourseInfo course={course} setCourse={setCourse} />
             </div>
             <div>
-                <Modules course={course} setCourse={setCourse} assignDatesToModules={assignDatesToModules} />
+                <Modules course={course} setCourse={setCourse} assignDatesToModules={assignDatesToModules} handleMoveModule={handleMoveModule}/>
             </div>
             <div>
                 <div className="flex justify-center items-center">

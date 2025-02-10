@@ -10,10 +10,10 @@ interface ModulesProps {
   course: CourseType;
   setCourse: React.Dispatch<React.SetStateAction<CourseType>>;
   assignDatesToModules: (course: CourseType) => void;
+  handleMoveModule: (moduleId: number, newDate: string) => void;
 }
 
-const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+const Modules = ({ course, setCourse, assignDatesToModules,handleMoveModule }: ModulesProps) => {
   const [collapseOpen, setCollapseOpen] = useState<Record<number, boolean>>({});
 
   const toggleCollapse = (index: number) => {
@@ -75,10 +75,7 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
 
   return (
     <div>
-      {course.modules
-        .slice()
-        .sort((a, b) => new Date(a.module.startDate).getTime() - new Date(b.module.startDate).getTime())
-        .map((courseModule, moduleIndex) => (
+      {course.modules.map((courseModule, moduleIndex) => (
           <div
             key={moduleIndex}
             className={` flex space-between mb-4 rounded-r-lg border-r border-b border-gray-300`}
@@ -97,6 +94,8 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
               {collapseOpen[moduleIndex] && (
                 <div className="collapse-content max-w-full">
                   <div className="p-4">
+                    
+                    <div>
                     <label>
                       Module Name:
                       <input
@@ -111,6 +110,26 @@ const Modules = ({ course, setCourse, assignDatesToModules }: ModulesProps) => {
                         style={{ padding: "5px", border: "1px solid gray" }}
                       />
                     </label>
+                      </div>
+                      <div>
+                      <input
+                        type="date"
+                        value={""} 
+                        onChange={(e) => {
+                            const updatedModules = [...course.modules];
+                            const updatedModule = { 
+                                ...updatedModules[moduleIndex].module, 
+                                startDate: new Date(e.target.value)
+                            };
+
+                            updatedModules[moduleIndex] = { ...updatedModules[moduleIndex], module: updatedModule };
+                            setCourse({ ...course, modules: updatedModules });
+
+                            // Directly call handleMoveModule with the updated date
+                            handleMoveModule(updatedModule.id, e.target.value);
+                        }}
+                    />
+                  </div>
                   </div>
                   <Days
                     moduleIndex={moduleIndex}
