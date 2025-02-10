@@ -292,12 +292,12 @@ export function createCalendarDatesFromMiscellaneousEvents(course: CourseType): 
       moduleId: -1, 
       appliedCourseId: course.id,
       track: course.track,
-      moduleName: 'Miscellaneous',
+      moduleName: 'Special Event',
       dayOfModule: -1, 
       totalDaysInModule: -1, 
       courseName: course.name,
       events: [event], 
-      color: course.color || '#000000', 
+      color: "#999999",
     }));
 
     calendarDates.push({
