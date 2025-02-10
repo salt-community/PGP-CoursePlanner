@@ -42,16 +42,37 @@ export default function ModuleDetails() {
                     Module Template
                 </h1>
             </Header>
-            <section className="grid grid-rows-[145px_1fr] grid-cols-9 bg-white m-5 mt-0 rounded-lg h-full overflow-auto drop-shadow-xl">
-                {/* Second Row, Second Column */}
-                <div className="row-span-7 col-span-7 p-10 pt-0 overflow-auto">
+            <section className="grid grid-rows-[145px_1fr] grid-cols-9 bg-white m-5 mt-0 rounded-lg h-full overflow-auto drop-shadow-xl p-10 pb-0">
+                {/* First Row, First Column */}
+                <div className="row-span-8 col-span-7 p-10 pt-0 overflow-auto">
                     {module &&
                         <ModuleOverview module={module} />
                     }
                     {isLoading && <LoadingSpinner />}
                 </div>
-                {/* Third Row, Second Column */}
-                <div className="row-span-1 col-span-7 flex p-8 justify-between">
+
+                {/* First Row, Second Column */}
+                <div className="row-span-8 col-span-2 p-10 pt-20 px-0">
+                    {module &&
+                        <>
+                            <h3 className="text-2xl text-[#636363] text-center p-4">Tracks</h3>
+                            <div className="flex flex-col items-center gap-2">
+                                <div className="flex flex-col gap-2">
+                                    {module.tracks.map((track, trackIndex) =>
+                                        <div className="flex border rounded-full px-4 py-2 gap-1" key={trackIndex}>
+                                            <div className="p-2.5 m-1 mask rounded" style={{ backgroundColor: track.color }}></div>
+                                            <p className="text-lg text-[#636363]">{track.name}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </>
+                    }
+                    {isLoading && <LoadingSpinner />}
+                </div>
+
+                {/* Second Row */}
+                <div className="row-span-1 col-span-9 flex p-8 justify-between">
                     {module &&
                         <div className="flex gap-4">
                             <Link to={`/modules/edit/${moduleId}`} className="btn btn-secondary min-w-52 text-xl">Edit Module</Link>
