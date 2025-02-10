@@ -56,6 +56,7 @@ export const handleUpdateCourse = async (
   .reduce((latest, current) => (current > latest ? current : latest), new Date(0)); 
 
 if (latestDayDate.getTime() > 0) { 
+  latestDayDate.setHours(latestDayDate.getHours() + 1)
   myCourse.endDate = latestDayDate.toISOString();
 }
 
