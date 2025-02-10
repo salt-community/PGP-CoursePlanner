@@ -114,7 +114,11 @@ const Modules = ({ course, setCourse, assignDatesToModules,handleMoveModule }: M
                       <div>
                       <input
                         type="date"
-                        value={""} 
+                        value={
+                          courseModule.module.startDate 
+                            ? new Date(courseModule.module.startDate).toISOString().split("T")[0] 
+                            : ""
+                        } 
                         onChange={(e) => {
                             const updatedModules = [...course.modules];
                             const updatedModule = { 
@@ -124,8 +128,6 @@ const Modules = ({ course, setCourse, assignDatesToModules,handleMoveModule }: M
 
                             updatedModules[moduleIndex] = { ...updatedModules[moduleIndex], module: updatedModule };
                             setCourse({ ...course, modules: updatedModules });
-
-                            // Directly call handleMoveModule with the updated date
                             handleMoveModule(updatedModule.id, e.target.value);
                         }}
                     />
