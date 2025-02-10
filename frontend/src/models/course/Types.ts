@@ -1,4 +1,4 @@
-import { EventType } from "@models/module/Types";
+import { EventType, ModuleType } from "@models/module/Types";
 
 export type CourseModuleType = {
   courseId?: number;
@@ -23,18 +23,6 @@ export type DayType = {
   isApplied: boolean;
   events: EventType[];
   date: Date;
-}
-
-export type ModuleType = {
-  id: number;
-  name: string;
-  numberOfDays: number;
-  track?: Track[];
-  order: number;
-  isApplied: boolean;
-  days: DayType[];
-  // courseModules?: CourseModuleType[];
-  startDate: Date
 }
 
 export type CourseType = {

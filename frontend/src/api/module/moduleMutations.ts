@@ -48,6 +48,11 @@ export function useMutationDeleteModule() {
             queryClient.invalidateQueries({ queryKey: ['modules', id] })
             navigate(`/modules`);
         },
+        onError: (error) => {
+            if (error.message === "401") {
+                navigate(`/courses`);
+            }
+        },
         retry: 1
     })
 

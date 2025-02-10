@@ -65,7 +65,10 @@ export default function RectangularCard({ data, isLoading, trackName, mutationDe
                     <DeleteWarningModal
                         openModal={openModal}
                         setOpenModal={setOpenModal}
-                        warning={course.isApplied ? `${course.name} Bootcamp`:`${course.name} Course Template`}
+                        warning={course.isApplied ?
+                            `Deleting this ${course.name} Bootcamp will permanently remove it from the system.`
+                            :
+                            `Deleting this ${course.name} Course Template will permanently remove it from the system.`}
                         handleDelete={handleDeleteCourse}
                         isError={mutationDelete.isError}
                         errorMessage={mutationDelete.error?.message}
