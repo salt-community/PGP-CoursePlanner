@@ -75,11 +75,9 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                                             onClick={() => document.getElementById(module.module.name + module.module.id)?.scrollIntoView({ behavior: "smooth" })}
                                             className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"} timeline-box flex flex-col items-center py-1 px-1 min-w-32 hover:bg-[#cacaca]`}
                                         >
-                                            <div className="flex justify-center items-center gap-1">
-                                                <p className="font-semibold ">
-                                                    {module.module.name}
-                                                </p>
-                                            </div>
+                                            <p className="font-semibold ">
+                                                {module.module.name}
+                                            </p>
                                             <p className="text-sm">
                                                 Days: <span className="font-bold">
                                                     {module.module.days.length}
