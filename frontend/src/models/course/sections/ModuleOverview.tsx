@@ -1,16 +1,24 @@
 import { ModuleType } from "@models/module/Types";
 import DayTable from "./DayTable"
+import { CourseType } from "../Types";
+import PDFDownloadBtn from "@components/buttons/PDFDownloadBtn";
 
 type Props = {
     module: ModuleType
+    course: CourseType
 }
 const dayNamesLong = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-export default function ModuleOverview({ module }: Props) {
+export default function ModuleOverview({ module, course }: Props) {
     return (
         <>
             <div id={module.name + module.id} className="flex justify-between overflow-auto pt-10">
-                <h3 className="text-3xl">{module.name}</h3>
+                <div className="flex gap-2">
+                    <h3 className="text-3xl">{module.name}</h3>
+                    {course.isApplied &&
+                        <PDFDownloadBtn course={course} module={module} color="#000" size="size-8" />
+                    }
+                </div>
                 <div className="flex flex-col items-center">
                     <h3 className="text-2xl font-bold">{module.days.length}</h3>
                     <p>Days</p>

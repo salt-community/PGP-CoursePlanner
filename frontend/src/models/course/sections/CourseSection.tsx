@@ -79,9 +79,6 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                                                 <p className="font-semibold ">
                                                     {module.module.name}
                                                 </p>
-                                                {course.isApplied &&
-                                                    <PDFDownloadBtn course={course} module={module.module} color="#636363" size="size-5" />
-                                                }
                                             </div>
                                             <p className="text-sm">
                                                 Days: <span className="font-bold">
@@ -113,7 +110,7 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
             {/* Second Row, Second Column */}
             <div className="row-span-7 col-span-7 p-10 pt-0 overflow-auto">
                 {course && course.modules.map((module, index) =>
-                    <ModuleOverview module={module.module} key={index} />
+                    <ModuleOverview module={module.module} course={course} key={index} />
                 )}
                 {isLoading && <LoadingSpinner />}
             </div>
