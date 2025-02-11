@@ -9,7 +9,7 @@ const dayNamesLong = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "S
 export default function ModuleOverview({ module }: Props) {
     return (
         <>
-            <div className="flex justify-between overflow-auto pt-10">
+            <div id={module.name + module.id} className="flex justify-between overflow-auto pt-10">
                 <h3 className="text-3xl">{module.name}</h3>
                 <div className="flex flex-col items-center">
                     <h3 className="text-2xl font-bold">{module.days.length}</h3>

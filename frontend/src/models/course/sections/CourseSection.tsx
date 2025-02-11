@@ -71,7 +71,10 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                                 {course.modules.map((module, index) => (
                                     <li key={module.module.id}>
                                         <hr />
-                                        <div className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"} timeline-box flex flex-col items-center py-1 px-1 min-w-32`}>
+                                        <button
+                                            onClick={() => document.getElementById(module.module.name + module.module.id)?.scrollIntoView({ behavior: "smooth" })}
+                                            className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"} timeline-box flex flex-col items-center py-1 px-1 min-w-32 hover:bg-[#cacaca]`}
+                                        >
                                             <div className="flex justify-center items-center gap-1">
                                                 <p className="font-semibold ">
                                                     {module.module.name}
@@ -85,7 +88,7 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                                                     {module.module.days.length}
                                                 </span>
                                             </p>
-                                        </div>
+                                        </button>
                                         <div className="timeline-middle">
                                             {(course.isApplied && module.module.startDate) ?
                                                 <p className="border rounded px-2">{getWeek(module.module.startDate)}</p>
