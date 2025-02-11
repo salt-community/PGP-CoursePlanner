@@ -71,21 +71,19 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                                 {course.modules.map((module, index) => (
                                     <li key={module.module.id}>
                                         <hr />
-                                        <div className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"} timeline-box flex flex-col items-center py-1 px-1 min-w-32`}>
-                                            <div className="flex justify-center items-center gap-1">
-                                                <p className="font-semibold ">
-                                                    {module.module.name}
-                                                </p>
-                                                {course.isApplied &&
-                                                    <PDFDownloadBtn course={course} module={module.module} color="#636363" size="size-5" />
-                                                }
-                                            </div>
+                                        <button
+                                            onClick={() => document.getElementById(module.module.name + module.module.id)?.scrollIntoView({ behavior: "smooth" })}
+                                            className={`${index % 2 === 0 ? "timeline-start" : "timeline-end"} timeline-box flex flex-col items-center py-1 px-1 min-w-32 hover:bg-[#cacaca]`}
+                                        >
+                                            <p className="font-semibold ">
+                                                {module.module.name}
+                                            </p>
                                             <p className="text-sm">
                                                 Days: <span className="font-bold">
                                                     {module.module.days.length}
                                                 </span>
                                             </p>
-                                        </div>
+                                        </button>
                                         <div className="timeline-middle">
                                             {(course.isApplied && module.module.startDate) ?
                                                 <p className="border rounded px-2">{getWeek(module.module.startDate)}</p>
@@ -110,7 +108,7 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
             {/* Second Row, Second Column */}
             <div className="row-span-7 col-span-7 p-10 pt-0 overflow-auto">
                 {course && course.modules.map((module, index) =>
-                    <ModuleOverview module={module.module} key={index} />
+                    <ModuleOverview module={module.module} course={course} key={index} />
                 )}
                 {isLoading && <LoadingSpinner />}
             </div>
