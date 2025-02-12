@@ -25,7 +25,8 @@ export function useCourse(courseId: number) {
         } else {
             setCourseModules([{
                 id: 0, name: "", numberOfDays: 0, days: [],
-                tracks: []
+                tracks: [],
+                creationDate: new Date
             }]);
         }
     }, [courseModulesData]);

@@ -33,7 +33,8 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
             days: module.days,
             tracks: module.tracks,
             isApplied: true,
-            order: module.order
+            order: module.order,
+            creationDate: module.creationDate
         };
         const updatedModules = [...appliedModules];
         updatedModules[index] = newAppliedModule;
@@ -48,7 +49,8 @@ export default function ModuleEdit({ incomingAppliedModules, onUpdateModules }: 
             days: [],
             tracks: [],
             isApplied: true,
-            order: 0
+            order: 0,
+            creationDate: new Date()
         };
         const editedModules = [...appliedModules];
         editedModules.splice(index + 1, 0, emptyModule);

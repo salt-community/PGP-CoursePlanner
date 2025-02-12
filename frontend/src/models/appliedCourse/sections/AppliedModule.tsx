@@ -58,7 +58,8 @@ export default function AppliedModule({ saveAppliedModule, module, index, button
                 name: moduleName.value,
                 numberOfDays: numberOfDays.value,
                 days: days,
-                tracks: []
+                tracks: [],
+                creationDate: new Date()
             };
 
             saveAppliedModule(index, newModule);
