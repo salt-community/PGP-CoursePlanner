@@ -10,4 +10,6 @@ public class Track
     [Required]
     public string Color { get; set; } = null!;
     public bool Visibility { get; set; } = true;
+    [Required]
+    public DateTime CreationDate { get; set; }
 }
