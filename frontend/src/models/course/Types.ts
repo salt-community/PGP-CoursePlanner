@@ -17,6 +17,7 @@ export type CourseType = {
   isApplied?: boolean;
   modules: CourseModuleType[];
   miscellaneousEvents: EventType[];
+  creationDate: Date;
 }
 
 export type Track = {
@@ -24,6 +25,7 @@ export type Track = {
   color: string;
   name: string;
   visibility: boolean;
+  creationDate: Date;
 }
 
 export type CourseProps = {
@@ -39,7 +41,8 @@ days: DayType[];
 tracks: Track[];
 order?: number;
 isApplied?: boolean;
-startDate?: Date
+startDate?: Date;
+creationDate: Date;
 };
 
 export type ModuleProps = {
