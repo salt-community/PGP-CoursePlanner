@@ -56,6 +56,7 @@ export function useFilterModules(data?: ModuleType[]) {
                 order: m.order,
                 startDate: m.startDate,
                 isApplied: m.isApplied,
+                creationDate : m.creationDate,
                 tracks: m.tracks!.map((t) => {
                     const track = trackVisibility.find((track) => track.id === t.id);
                     return track as Track;
@@ -64,7 +65,7 @@ export function useFilterModules(data?: ModuleType[]) {
         }).filter((module) => module.tracks.some((track) => track?.visibility ?? false))
     }, [data, trackVisibility]);
 
-    return filteredData;
+    return filteredData as ModuleType[];
 }
 
 export function useFilterCourses(data?: CourseType[]) {
@@ -84,10 +85,11 @@ export function useFilterCourses(data?: CourseType[]) {
                 modules: c.modules,
                 isApplied: c.isApplied,
                 track: track ? track : c.track,
-                miscellaneousEvents : c.miscellaneousEvents
+                miscellaneousEvents : c.miscellaneousEvents,
+                creationDate : c.creationDate
             }
         }).filter((course) => course.track.visibility === true);
     }, [data, trackVisibility]);
 
-    return filteredData;
+    return filteredData as CourseType[];
 }
