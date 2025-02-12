@@ -11,14 +11,8 @@ type Props = {
 export default function SquareCard({ data, isLoading, tracks }: Props) {
     return (
         <>
-            {data && data.map((item, index) => {
-                const date = new Date(item.creationDate);
-                if (isNaN(date.getTime())) {
-                    console.log('Invalid date');
-                } else {
-                    console.log('Valid date');
-                }
-                return <Link to={`/${tracks ? "tracks" : "modules"}/details/${item.id}`} key={item.name + index} className={`flex items-center justify-center flex-col gap-2 relative ${isLoading ? "cursor-default pointer-events-none" : "hover:bg-[#F9F9F9]"} bg-white rounded-xl drop-shadow-xl min-h-72 min-w-72`}>
+            {data && data.map((item, index) =>
+                <Link to={`/${tracks ? "tracks" : "modules"}/details/${item.id}`} key={item.name + index} className={`flex items-center justify-center flex-col gap-2 relative ${isLoading ? "cursor-default pointer-events-none" : "hover:bg-[#F9F9F9]"} bg-white rounded-xl drop-shadow-xl min-h-72 min-w-72`}>
                     {isLoading ?
                         <LoadingSkeletonModule />
                         :
@@ -51,7 +45,6 @@ export default function SquareCard({ data, isLoading, tracks }: Props) {
                         </>
                     }
                 </Link>
-            }
             )}
         </>
     )
