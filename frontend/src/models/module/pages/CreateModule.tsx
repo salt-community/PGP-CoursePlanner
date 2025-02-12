@@ -1,6 +1,6 @@
 import Page from "@components/Page"
 import Module from "../sections/Module"
-import { ModuleType } from "../Types"
+import { ModuleType } from "@models/course/Types"
 
 export default function CreateModule() {
     const emptyModule: ModuleType =
@@ -11,7 +11,7 @@ export default function CreateModule() {
             dayNumber: 1,
             description: "",
             events: [],
-            date: new Date().toISOString(),
+            date: new Date(),
         }],
         tracks: []
     }

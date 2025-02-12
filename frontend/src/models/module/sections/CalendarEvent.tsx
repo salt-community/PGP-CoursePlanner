@@ -2,12 +2,12 @@ import { useState } from "react";
 import TrashBtn from "@components/buttons/TrashBtn";
 import InputSmall from "@components/inputFields/InputSmall";
 import InputSmallTime from "@components/inputFields/InputSmallTime";
-import { EventProps, ModuleType } from "../Types";
 import ModalContainer from "../components/ModalContainer";
 import EllipsisBtn from "../components/EllipsisBtn";
 import { openCloseModal } from "../helpers/openCloseModal";
 import { useQueryModules } from "@api/module/moduleQueries";
 import { useMutationUpdateModule } from "@api/module/moduleMutations";
+import { EventProps, ModuleType } from "@models/course/Types";
 
 export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumber, setDays, days, index, event }: EventProps) {
     const [selectedDay, setSelectedDay] = useState<string>("DEFAULT");

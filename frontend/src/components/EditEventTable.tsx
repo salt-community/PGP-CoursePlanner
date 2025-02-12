@@ -1,5 +1,5 @@
+import { DayType } from "@models/course/Types"
 import CalendarEvent from "../models/module/sections/CalendarEvent"
-import { DayType } from "../models/module/Types"
 
 type Props = {
     editTrue: boolean

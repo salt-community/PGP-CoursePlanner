@@ -48,7 +48,7 @@ const Modules = ({ course, setCourse, assignDatesToModules,handleMoveModule }: M
       description: "New day",
       isApplied: true,
       events: [],
-      date: getNewDate(myModule.startDate, myModule.numberOfDays + 2),
+      date: getNewDate(myModule.startDate ?? new Date(), myModule.numberOfDays + 2),
     };
   
     myModule.days.push(newDay);
@@ -127,7 +127,7 @@ const Modules = ({ course, setCourse, assignDatesToModules,handleMoveModule }: M
 
                             updatedModules[moduleIndex] = { ...updatedModules[moduleIndex], module: updatedModule };
                             setCourse({ ...course, modules: updatedModules });
-                            handleMoveModule(updatedModule.id, e.target.value);
+                            handleMoveModule(updatedModule.id ?? 0, e.target.value);
                         }}
                     />
                   </div>

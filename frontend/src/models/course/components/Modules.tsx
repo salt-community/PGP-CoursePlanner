@@ -97,7 +97,7 @@ const Modules = ({ course, setCourse }: ModulesProps) => {
     <div>
       {course.modules
         .slice()
-        .sort((a, b) => a.module.order - b.module.order)
+        .sort((a, b) => (a.module.order ?? Infinity) - (b.module.order ?? Infinity))
         .map((courseModule, moduleIndex) => (
           <div
             key={moduleIndex}

@@ -30,7 +30,7 @@ export default function AppliedDay({ moduleIndex, day, setDays, days, setNumOfDa
             dayNumber: index + 2,
             description: "",
             events: [],
-            date: new Date().toISOString(),
+            date: new Date(),
         };
         const editedDays = [...days];
         editedDays.splice(index + 1, 0, emptyDay);

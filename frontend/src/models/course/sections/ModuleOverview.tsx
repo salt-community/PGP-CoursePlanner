@@ -5,7 +5,7 @@ import PDFDownloadBtn from "@components/buttons/PDFDownloadBtn";
 
 type Props = {
     module: ModuleType
-    course: CourseType
+    course?: CourseType
 }
 const dayNamesLong = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -15,7 +15,7 @@ export default function ModuleOverview({ module, course }: Props) {
             <div id={module.name + module.id} className="flex justify-between overflow-auto pt-10">
                 <div className="flex gap-2">
                     <h3 className="text-3xl">{module.name}</h3>
-                    {course.isApplied &&
+                    {(course && course.isApplied) &&
                         <PDFDownloadBtn course={course} module={module} color="#000" size="size-8" />
                     }
                 </div>

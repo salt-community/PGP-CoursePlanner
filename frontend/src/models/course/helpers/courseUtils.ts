@@ -65,7 +65,7 @@ export const getCourseDayDates = (course: CourseType, startDate: Date) => {
             color: "#999999",
             appliedCourseId: course.id,
             moduleName: modules[i].name,
-            moduleId: modules[i].id,
+            moduleId: modules[i].id ?? 0,
             track: course.track,
           },
         ],
@@ -121,7 +121,7 @@ export const updatePreviewCalendarDates = (course: CourseType) => {
             color: "#999999",
             appliedCourseId: course.id,
             moduleName: modules[i].name,
-            moduleId: modules[i].id,
+            moduleId: modules[i].id ?? 0,
             track: course.track,
           },
         ],
@@ -144,8 +144,8 @@ export const getUpdatedCourse = (course: CourseType, startDate: Date) => {
   const modules = updatedCourse.modules.map((m) => m.module);
   updatedCourse.startDate = startDate;
   for (let i = 0; i < modules.length; i++) {
-    let currentDate = new Date(modules[i].startDate);
-
+    let currentDate = new Date(modules[i].startDate ?? new Date());
+    
     for (let j = 0; j < modules[i].numberOfDays; j++) {
       while (currentDate.getDay() === 0 || currentDate.getDay() === 6) {
         currentDate = getNewDate(currentDate, 1);

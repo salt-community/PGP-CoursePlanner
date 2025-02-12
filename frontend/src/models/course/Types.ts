@@ -53,7 +53,7 @@ dayNumber: number;
 description: string;
 events: EventType[];
 isApplied?: boolean;
-date: string;
+date: Date;
 };
 
 export type DayProps = {

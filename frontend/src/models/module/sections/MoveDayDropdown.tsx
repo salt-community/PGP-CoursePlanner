@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import EllipsisBtn from '../components/EllipsisBtn';
 import ModalContainer from '../components/ModalContainer';
-import { DayType, ModuleType } from '../Types';
 import { openCloseModal } from '../helpers/openCloseModal';
 import { useMutationUpdateModule } from '@api/module/moduleMutations';
+import { DayType, ModuleType } from '@models/course/Types';
 
 
 function MoveDayDropdown({

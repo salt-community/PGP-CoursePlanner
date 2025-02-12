@@ -40,12 +40,17 @@ export const handleUpdateCourse = async (
     const myCourse = stripIdsFromCourse(course);
     myCourse.track.id = myTrack;
     myCourse.id = course.id;
-    const firstModule = course.modules.sort((a, b) => new Date(a.module.startDate).getTime() - new Date(b.module.startDate).getTime())[0];
+    const firstModule = course.modules
+  .sort((a, b) => 
+    new Date(a.module.startDate ?? 0).getTime() - new Date(b.module.startDate ?? 0).getTime()
+  )[0];
     console.log("First module start date", firstModule.module.startDate);
     
 
     if (firstModule) {
-      const localStartDate = new Date(firstModule.module.startDate);
+      const localStartDate = firstModule.module.startDate 
+        ? new Date(firstModule.module.startDate) 
+        : new Date();
       localStartDate.setHours(localStartDate.getHours() + 1); 
       myCourse.startDate = localStartDate.toISOString();
   }
@@ -82,7 +87,7 @@ export function assignDatesToModules(
   let dateIndex = 0;
 
   const sortedModules = [...course.modules].sort(
-    (a, b) => a.module.order - b.module.order
+    (a, b) => (a.module.order ?? Infinity) - (b.module.order ?? Infinity)
   );
 
   const updatedModules = sortedModules.map((module) => {

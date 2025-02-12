@@ -3,9 +3,7 @@ import CourseInfo from "../components/CourseInfo"
 import Modules from "../components/Modules"
 import PrimaryBtn from "@components/buttons/PrimaryBtn"
 import { handleCreateNewAppliedModule } from "../helpers/appliedCourseUtils"
-// import { useMutationUpdateAppliedCourse } from "@api/appliedCourse/appliedCourseMutations"
 import { getUpdatedCourse } from "@models/course/helpers/courseUtils"
-// import { useNavigate } from "react-router-dom"
 
 type Props = {
     appliedCourse: CourseType
@@ -18,7 +16,7 @@ type Props = {
 export function EditCourseDays({ course, setCourse, handleMoveModule }: Props) {
 
     const assignDatesToModules = (course: CourseType) => {
-        const crs = getUpdatedCourse(course, course.modules[0].module.startDate)
+        const crs = getUpdatedCourse(course, course.modules[0].module.startDate ?? new Date())
         setCourse(crs)
     }
     

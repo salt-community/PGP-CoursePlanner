@@ -1,6 +1,5 @@
-import { Track } from "@models/course/Types"
+import { ModuleType, Track } from "@models/course/Types"
 import LoadingSkeletonModule from "@models/module/components/LoadingSkeletonModule"
-import { ModuleType } from "@models/module/Types"
 import { Link } from "react-router-dom"
 
 type Props = {

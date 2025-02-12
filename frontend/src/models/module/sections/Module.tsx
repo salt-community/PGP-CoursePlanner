@@ -3,9 +3,9 @@ import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import SuccessBtn from "@components/buttons/SuccessBtn";
 import { useNavigate } from "react-router-dom";
 import { useState, FormEvent, useEffect, useRef } from "react";
-import { ModuleProps, DayType, ModuleType, EventType } from "../Types";
 import Day from "./Day";
 import { useMutationPostModule, useMutationUpdateModule } from "@api/module/moduleMutations";
+import { DayType, EventType, ModuleProps, ModuleType } from "@models/course/Types";
 
 export default function Module({ module, buttonText }: ModuleProps) {
     const navigate = useNavigate();
@@ -32,7 +32,7 @@ export default function Module({ module, buttonText }: ModuleProps) {
                     dayNumber: num + days.length,
                     description: "",
                     events: [],
-                    date: new Date().toISOString()
+                    date: new Date(),
                 };
 
                 editedDays.push(newDay);

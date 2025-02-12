@@ -1,13 +1,13 @@
 import InputSmall from '@components/inputFields/InputSmall';
 import PrimaryBtn from '@components/buttons/PrimaryBtn';
 import TrashBtn from '@components/buttons/TrashBtn';
-import { DayProps} from '../Types';
 import { useState } from 'react';
 import DownArrowBtn from '../../../components/buttons/DownArrowBtn';
 import UpArrowBtn from '../../../components/buttons/UpArrowBtn';
 import EditEventTable from '../../../components/EditEventTable';
 import { useQueryModules } from '@api/module/moduleQueries';
 import MoveDayDropdown from './MoveDayDropdown';
+import { DayProps } from '@models/course/Types';
 
 export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
@@ -38,7 +38,7 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
             dayNumber: index + 2,
             description: "",
             events: [],
-            date: new Date().toISOString(),
+            date: new Date(),
         };
         const editedDays = [...days];
         editedDays.splice(index + 1, 0, emptyDay);

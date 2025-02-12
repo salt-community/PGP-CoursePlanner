@@ -4,7 +4,7 @@ import SuccessBtn from "@components/buttons/SuccessBtn";
 import { useState, FormEvent } from "react";
 import { AppliedModuleProps } from '../Types';
 import AppliedDay from "./AppliedDay";
-import { DayType, EventType, ModuleType } from "../../module/Types";
+import { DayType, EventType, ModuleType } from "@models/course/Types";
 
 export default function AppliedModule({ saveAppliedModule, module, index, buttonText }: AppliedModuleProps) {
     const [moduleName, setModuleName] = useState<string>(module.name);
@@ -26,7 +26,7 @@ export default function AppliedModule({ saveAppliedModule, module, index, button
                     dayNumber: num + days.length,
                     description: "",
                     events: [],
-                    date: new Date().toISOString()
+                    date: new Date()
                 };
                 editedDays.push(newDay)
             })
