@@ -10,6 +10,7 @@ public record ModuleResponse
     public int Order { get; init; }
     public bool IsApplied { get; init; }
     public DateTime StartDate { get; init; }
+    public DateTime CreationDate { get; init; }
 
     public ModuleResponse(Module module)
     {
@@ -21,6 +22,7 @@ public record ModuleResponse
         Order = module.Order;
         IsApplied = module.IsApplied;
         StartDate = module.StartDate;
+        CreationDate = module.CreationDate;
     }
 
     public static implicit operator ModuleResponse(Module module) => new(module);
