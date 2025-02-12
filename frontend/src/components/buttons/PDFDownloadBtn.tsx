@@ -1,6 +1,6 @@
 import { generateDocument } from "@models/appliedCourse/components/GenerateDocument";
 import { CourseType } from "@models/course/Types"
-import { ModuleType } from "@models/module/Types";
+import { ModuleType } from "@models/course/Types";
 import { usePDF } from "@react-pdf/renderer";
 
 type Props = {

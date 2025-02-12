@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ModuleType } from "@models/module/Types";
+import { ModuleType } from "@models/course/Types";
 import { useQueryModules } from "@api/module/moduleQueries";
 import { useQueryModulesByCourseId } from "@api/course/courseQueries";
 import { Track } from "../Types";

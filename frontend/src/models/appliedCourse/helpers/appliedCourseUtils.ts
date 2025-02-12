@@ -14,7 +14,7 @@ export const handleCreateNewAppliedModule = (
       id: 0,
       name: "New module",
       order: course.modules.length,
-      track: [],
+      tracks: [],
       isApplied: false,
       numberOfDays: 0,
       days: [],

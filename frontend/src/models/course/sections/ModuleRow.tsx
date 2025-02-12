@@ -1,7 +1,7 @@
 import TrashBtn from "@components/buttons/TrashBtn";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import DropDown from "@components/DropDown";
-import { ModuleType } from "@models/module/Types";
+import { ModuleType } from "@models/course/Types";
 
 interface ModuleRowProps {
     module: ModuleType;

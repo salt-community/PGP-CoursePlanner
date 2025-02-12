@@ -2,7 +2,7 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import TrashBtn from "@components/buttons/TrashBtn";
 import AppliedModule from "./AppliedModule";
-import { ModuleType } from "@models/module/Types";
+import { ModuleType } from "@models/course/Types";
 import { useQueryModules } from "@api/module/moduleQueries";
 import { ReorderModule } from "../components/ReorderModule";
 import ErrorMessage from "@components/ErrorMessage";

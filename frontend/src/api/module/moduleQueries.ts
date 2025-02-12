@@ -1,4 +1,4 @@
-import { ModuleType } from "@models/module/Types";
+import { ModuleType } from "@models/course/Types";
 import { useQuery } from "@tanstack/react-query";
 import { getModules, getModuleById } from "./moduleFetches";
 import { useFilterModules } from "@helpers/filterDataHooks";

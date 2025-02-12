@@ -1,4 +1,4 @@
-import { EventType } from "@models/module/Types";
+import { EventType } from "@models/course/Types";
 import { Track } from "@models/course/Types";
 
 export type CalendarDateType = {

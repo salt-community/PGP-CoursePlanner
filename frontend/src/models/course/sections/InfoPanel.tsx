@@ -2,7 +2,7 @@ import { getDateAsString } from "@helpers/dateHelpers";
 import { CourseType, ModuleType } from "../Types";
 import { CalendarDateType } from "@models/calendar/Types";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { EventType } from "@models/module/Types";
+import { EventType } from "@models/course/Types";
 import { formatDateTime, getDifferenceInDays } from "../helpers/courseUtils";
 import { useEffect, useState } from "react";
 

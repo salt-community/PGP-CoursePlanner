@@ -1,4 +1,4 @@
-import { ModuleType } from "@models/module/Types";
+import { ModuleType } from "@models/course/Types";
 import DayTable from "./DayTable"
 import { CourseType } from "../Types";
 import PDFDownloadBtn from "@components/buttons/PDFDownloadBtn";
