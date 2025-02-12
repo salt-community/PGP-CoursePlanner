@@ -11,5 +11,5 @@ public class Track
     public string Color { get; set; } = null!;
     public bool Visibility { get; set; } = true;
     [Required]
-    public DateTime CreationDate { get; set; }
+    public DateTime CreationDate { get; init; } = DateTime.UtcNow;
 }
