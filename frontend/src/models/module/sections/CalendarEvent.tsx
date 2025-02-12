@@ -7,9 +7,20 @@ import EllipsisBtn from "../components/EllipsisBtn";
 import { openCloseModal } from "../helpers/openCloseModal";
 import { useQueryModules } from "@api/module/moduleQueries";
 import { useMutationUpdateModule } from "@api/module/moduleMutations";
-import { EventProps, ModuleType } from "@api/Types";
+import { DayType, EventType, ModuleType } from "@api/Types";
 
-export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumber, setDays, days, index, event }: EventProps) {
+export type Props = {
+    appliedTrue: boolean;
+    editTrue: boolean;
+    moduleId: number;
+    setDays: React.Dispatch<React.SetStateAction<DayType[]>>;
+    days: DayType[];
+    index: number;
+    dayNumber: number;
+    event: EventType;
+};
+
+export default function CalendarEvent({ appliedTrue, editTrue, moduleId, dayNumber, setDays, days, index, event }: Props) {
     const [selectedDay, setSelectedDay] = useState<string>("DEFAULT");
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
     const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");

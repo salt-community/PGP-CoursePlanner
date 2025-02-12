@@ -7,9 +7,18 @@ import UpArrowBtn from '../../../components/buttons/UpArrowBtn';
 import EditEventTable from '../../../components/EditEventTable';
 import { useQueryModules } from '@api/module/moduleQueries';
 import MoveDayDropdown from './MoveDayDropdown';
-import { DayProps } from '@api/Types';
+import { DayType } from '@api/Types';
 
-export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: DayProps) {
+export type Props = {
+    editTrue: boolean;
+    moduleId: number;
+    day: DayType;
+    setDays: React.Dispatch<React.SetStateAction<DayType[]>>;
+    days: DayType[];
+    setNumOfDays: React.Dispatch<React.SetStateAction<number>>;
+};
+
+export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: Props) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");
     const [selectedModuleDay, setSelectedModuleDay] = useState<string>("DEFAULT");
     const { data: modules } = useQueryModules();
@@ -146,8 +155,8 @@ export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDa
                                     moduleId={moduleId}
                                     selectedModule={selectedModule}
                                     selectedModuleDay={selectedModuleDay}
-                                    handleSelectModule={handleSelectModule} 
-                                    handleSelectModuleDay={handleSelectModuleDay} 
+                                    handleSelectModule={handleSelectModule}
+                                    handleSelectModuleDay={handleSelectModuleDay}
                                     setSelectedModule={setSelectedModule}
                                     setSelectedModuleDay={setSelectedModuleDay}
                                     setNumOfDays={setNumOfDays}

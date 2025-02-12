@@ -1,14 +1,10 @@
 import { useCourse } from "../helpers/useCourse";
 import ModuleRow from "./ModuleRow";
 import { useEffect, useState } from "react";
-import { CourseProps, CourseType } from "../../../api/Types";
+import { CourseType } from "../../../api/Types";
 import { useMutationPostCourse, useMutationUpdateCourse } from "@api/course/courseMutations";
-// import { useNavigate } from "react-router-dom";
 import { useQueryTracks } from "@api/track/trackQueries";
-
-
-
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form";
 import LoadingMessage from "@components/LoadingMessage";
 import ErrorModal from "@components/ErrorModal";
 
@@ -18,8 +14,12 @@ type Inputs = {
     trackId: number; // or `number` depending on the track's unique identifier
 };
 
+export type Props = {
+    course: CourseType;
+    buttonText: string;
+}
 
-export default function Course({ course }: CourseProps) {
+export default function Course({ course }: Props) {
     const { courseModules, setCourseModules, filteredModules } = useCourse(course.id!);
     const [isIncorrectModuleInput, setIsIncorrectModuleInput] = useState<boolean>(false);
     // const [isIncorrectName, setIsIncorrectName] = useState<boolean>(false);
@@ -103,7 +103,7 @@ export default function Course({ course }: CourseProps) {
 
         setIsIncorrectModuleInput(false);
         setIsNotSelected(false);
-        
+
         const newCourse: CourseType = {
             id: course.id,
             name: courseName.trim(),
@@ -121,7 +121,7 @@ export default function Course({ course }: CourseProps) {
         } else {
             mutationUpdateCourse.mutate(newCourse);
         }
-        
+
     }
 
 
@@ -208,7 +208,7 @@ export default function Course({ course }: CourseProps) {
                     </form>
                 </div>
             }
-        {isErrorTracks && <ErrorModal error="Tracks" />}
+            {isErrorTracks && <ErrorModal error="Tracks" />}
         </>
     );
 }

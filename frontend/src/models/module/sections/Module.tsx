@@ -5,9 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { useState, FormEvent, useEffect, useRef } from "react";
 import Day from "./Day";
 import { useMutationPostModule, useMutationUpdateModule } from "@api/module/moduleMutations";
-import { DayType, EventType, ModuleProps, ModuleType } from "@api/Types";
+import { DayType, EventType, ModuleType } from "@api/Types";
 
-export default function Module({ module, buttonText }: ModuleProps) {
+export type Props = {
+    module: ModuleType;
+    buttonText: string;
+};
+
+export default function Module({ module, buttonText }: Props) {
     const navigate = useNavigate();
     const [moduleName, setModuleName] = useState<string>(module.name);
     const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
