@@ -49,7 +49,7 @@ export default function RectangularCard({ data, isLoading, trackName, mutationDe
                                         </h3>
                                     }
                                     <h4 className="text-sm text-[#636363] text-end p-7 w-96">
-                                        Creation Date: 2024-01-13
+                                        Creation Date: {new Date(course.creationDate).toUTCString().slice(4, 16)}
                                     </h4>
                                 </Link>
                                 <button
