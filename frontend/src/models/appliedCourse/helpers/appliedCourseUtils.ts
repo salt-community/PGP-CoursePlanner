@@ -19,7 +19,7 @@ export const handleCreateNewAppliedModule = (
       numberOfDays: 0,
       days: [],
       startDate: getNewWeekDayDate(course.endDate!, 1),
-      
+      creationDate: new Date(),
     },
   };
 

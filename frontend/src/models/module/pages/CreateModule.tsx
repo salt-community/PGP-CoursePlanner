@@ -13,7 +13,8 @@ export default function CreateModule() {
             events: [],
             date: new Date(),
         }],
-        tracks: []
+        tracks: [],
+        creationDate: new Date()
     }
 
     return (

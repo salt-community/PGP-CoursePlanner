@@ -41,7 +41,7 @@ export default function SquareCard({ data, isLoading, tracks }: Props) {
                                     )}
                                 </div>
                             }
-                            <h4 className="absolute text-sm text-[#636363] bottom-0 mb-8">Creation Date: 2024-01-13</h4>
+                            <h4 className="absolute text-sm text-[#636363] bottom-0 mb-8">Creation Date: {new Date(item.creationDate).toUTCString().slice(4, 16)}</h4>
                         </>
                     }
                 </Link>

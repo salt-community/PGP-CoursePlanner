@@ -42,7 +42,8 @@ export default function Course({ course }: CourseProps) {
         const newModules = [...courseModules];
         newModules.splice(index + 1, 0, {
             id: 0, name: "", numberOfDays: 0, days: [], startDate: new Date,
-            tracks: []
+            tracks: [],
+            creationDate: new Date()
         });
         setCourseModules(newModules);
     };
@@ -111,7 +112,8 @@ export default function Course({ course }: CourseProps) {
             moduleIds: courseModuleIds,
             track: trackData!.find(t => t.id == inputs.trackId)!,
             modules: [],
-            miscellaneousEvents: []
+            miscellaneousEvents: [],
+            creationDate: course.creationDate
         };
         if (newCourse.id == 0) {
             console.log(newCourse)
