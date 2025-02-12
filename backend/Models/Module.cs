@@ -19,6 +19,8 @@ public class Module
     public int Order { get; set; }
     public bool IsApplied { get; set; } = false;
     public DateTime StartDate { get; set; }
+    [Required]
+    public DateTime CreationDate { get; init; } = DateTime.UtcNow;
 
     public Module ShallowClone()
     {
