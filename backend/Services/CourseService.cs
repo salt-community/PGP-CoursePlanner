@@ -58,13 +58,22 @@ public class CourseService(DataContext context) : IService<Course>
     }
 
     private async Task<Course> CreateAppliedCourseAsync(Course appliedCourse)
+{
+    Console.WriteLine("Entering CreateAppliedCourseAsync...");
+
+    using var transaction = await _context.Database.BeginTransactionAsync();
+    try
     {
         var trackId = appliedCourse.Track.Id;
-        var existingTrack = _context.Tracks.First(t => t.Id == trackId);
+        var existingTrack = await _context.Tracks.FirstOrDefaultAsync(t => t.Id == trackId);
+        if (existingTrack == null)
+        {
+            throw new Exception($"Track with ID {trackId} not found.");
+        }
         appliedCourse.Track = existingTrack;
 
         _context.Courses.Add(appliedCourse);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         addDaysToCalendar(appliedCourse);
 
@@ -74,37 +83,48 @@ public class CourseService(DataContext context) : IService<Course>
             {
                 foreach (var @event in day.Events)
                 {
-                    @event.DateContents = _context.CalendarDates.First(cd => cd.Date.Date == day.Date.Date).DateContent;
-                    @event.IsApplied = true;
+                    var calendarDate = await _context.CalendarDates
+                        .FirstOrDefaultAsync(cd => cd.Date.Date == day.Date.Date);
+                    if (calendarDate != null)
+                    {
+                        @event.DateContents = calendarDate.DateContent;
+                        @event.IsApplied = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Warning: No CalendarDate found for {day.Date.Date}");
+                    }
                 }
                 day.IsApplied = true;
             }
             module.Module.IsApplied = true;
         }
-        _context.SaveChanges();
 
-        foreach (var courseModule in appliedCourse.Modules)
-        {
-            courseModule.Course = appliedCourse;
-            courseModule.CourseId = appliedCourse.Id;
-            courseModule.Module = courseModule.Module;
-            courseModule.ModuleId = courseModule.ModuleId;
-        }
-        _context.SaveChanges();
-
+        Console.WriteLine("Setting module IDs...");
         appliedCourse.moduleIds = appliedCourse.Modules.Select(m => m.ModuleId).ToList();
-        _context.SaveChanges();
 
+        await _context.SaveChangesAsync();
+        await transaction.CommitAsync();
 
+        Console.WriteLine($"Successfully created AppliedCourse with ID {appliedCourse.Id}.");
 
-        return _context.Courses
-                                .Include(c => c.Modules)
-                                    .ThenInclude(cm => cm.Module)
-                                    .ThenInclude(m => m.Days)
-                                    .ThenInclude(d => d.Events)
-                                .Include(c => c.Track)
-                                .First(c => c.Id == appliedCourse.Id);
+        return await _context.Courses
+            .Include(c => c.Modules)
+                .ThenInclude(cm => cm.Module)
+                .ThenInclude(m => m.Days)
+                .ThenInclude(d => d.Events)
+            .Include(c => c.Track)
+            .FirstAsync(c => c.Id == appliedCourse.Id);
     }
+    catch (Exception ex)
+    {
+        await transaction.RollbackAsync();
+        Console.WriteLine($"Error in CreateAppliedCourseAsync: {ex.Message}");
+        Console.WriteLine($"StackTrace: {ex.StackTrace}");
+        throw;
+    }
+}
+
 
 
     private void addDaysToCalendar(Course appliedCourse)
@@ -199,7 +219,7 @@ public class CourseService(DataContext context) : IService<Course>
             return await CreateAppliedCourseAsync(course);
         }
 
-
+        Console.WriteLine("Im in the createAsync");
         var track = _context.Tracks.First(t => t.Id == course.Track.Id);
 
         course.Track = track;
