@@ -1,4 +1,4 @@
-import { CourseType } from "@models/course/Types";
+import { CourseType } from "@api/Types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { deleteCourse, postCourse, updateCourse } from "./courseFetches";

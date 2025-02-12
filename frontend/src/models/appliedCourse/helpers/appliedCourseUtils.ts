@@ -1,5 +1,5 @@
 import { getNewWeekDayDate, stripIdsFromCourse } from "@models/course/helpers/courseUtils";
-import { CourseModuleType, CourseType } from "@models/course/Types";
+import { CourseModuleType, CourseType } from "@api/Types";
 import { UseMutationResult } from "@tanstack/react-query";
 import { NavigateFunction } from "react-router-dom";
 

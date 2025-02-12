@@ -1,4 +1,4 @@
-import { DayType } from "@models/course/Types"
+import { DayType } from "@api/Types"
 import CalendarEvent from "../models/module/sections/CalendarEvent"
 
 type Props = {

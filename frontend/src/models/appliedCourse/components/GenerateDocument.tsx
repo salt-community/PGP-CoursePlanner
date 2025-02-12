@@ -1,4 +1,4 @@
-import { ModuleType } from '@models/course/Types';
+import { ModuleType } from '@api/Types';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import React from 'react';
 

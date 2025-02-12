@@ -1,4 +1,4 @@
-import { CourseType } from "@models/course/Types";
+import { CourseType } from "@api/Types";
 
 interface CourseInfoProps {
         course: CourseType;

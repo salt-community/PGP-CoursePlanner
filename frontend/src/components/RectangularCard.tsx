@@ -1,5 +1,5 @@
 import LoadingSkeletonCourse from "@models/course/components/LoadingSkeletonCourse"
-import { CourseType } from "@models/course/Types"
+import { CourseType } from "@api/Types"
 import { UseMutationResult } from "@tanstack/react-query"
 import { Link } from "react-router-dom"
 import DeleteWarningModal from "./DeleteWarningModal"

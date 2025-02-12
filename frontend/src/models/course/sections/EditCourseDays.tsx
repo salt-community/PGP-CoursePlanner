@@ -1,4 +1,4 @@
-import { CourseType} from "@models/course/Types";
+import { CourseType} from "@api/Types";
 import Modules from "../components/Modules";
 import CourseInfo from "../components/CourseInfo";
 

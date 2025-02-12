@@ -1,8 +1,8 @@
 import { getDateAsString } from "@helpers/dateHelpers";
-import { CourseType, ModuleType } from "../Types";
+import { CourseType, ModuleType } from "../../../api/Types";
 import { CalendarDateType } from "@models/calendar/Types";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { EventType } from "@models/course/Types";
+import { EventType } from "@api/Types";
 import { formatDateTime, getDifferenceInDays } from "../helpers/courseUtils";
 import { useEffect, useState } from "react";
 

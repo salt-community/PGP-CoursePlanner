@@ -3,7 +3,7 @@ import EllipsisBtn from '../components/EllipsisBtn';
 import ModalContainer from '../components/ModalContainer';
 import { openCloseModal } from '../helpers/openCloseModal';
 import { useMutationUpdateModule } from '@api/module/moduleMutations';
-import { DayType, ModuleType } from '@models/course/Types';
+import { DayType, ModuleType } from '@api/Types';
 
 
 function MoveDayDropdown({

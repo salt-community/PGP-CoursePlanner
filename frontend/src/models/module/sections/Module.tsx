@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, FormEvent, useEffect, useRef } from "react";
 import Day from "./Day";
 import { useMutationPostModule, useMutationUpdateModule } from "@api/module/moduleMutations";
-import { DayType, EventType, ModuleProps, ModuleType } from "@models/course/Types";
+import { DayType, EventType, ModuleProps, ModuleType } from "@api/Types";
 
 export default function Module({ module, buttonText }: ModuleProps) {
     const navigate = useNavigate();

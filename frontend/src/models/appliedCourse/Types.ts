@@ -1,4 +1,4 @@
-import { DayType, EventType, ModuleType } from "@models/course/Types";
+import { DayType, EventType, ModuleType } from "@api/Types";
 
 export type AppliedModuleProps = {
   saveAppliedModule: (index: number, module: ModuleType) => void;

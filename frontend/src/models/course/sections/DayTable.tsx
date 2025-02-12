@@ -1,4 +1,4 @@
-import { EventType } from "@models/course/Types";
+import { EventType } from "@api/Types";
 
 type Props = {
     events: EventType[];

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { deleteModule, postModule, updateModule } from "./moduleFetches";
-import { ModuleType } from "@models/course/Types";
+import { ModuleType } from "@api/Types";
 
 export function useMutationPostModule() {
     const navigate = useNavigate();

@@ -11,7 +11,7 @@ import {
   addDays,
   differenceInCalendarDays,
 } from "date-fns";
-import { CourseType } from "@models/course/Types";
+import { CourseType } from "@api/Types";
 
 type Props = {
   course: CourseType;

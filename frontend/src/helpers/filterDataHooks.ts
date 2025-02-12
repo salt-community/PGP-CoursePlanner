@@ -1,7 +1,7 @@
 import { TrackVisibilityContext } from "@context/TrackVisibilityContext";
-import { CourseType, Track } from "@models/course/Types";
+import { CourseType, Track } from "@api/Types";
 import { CalendarDateType } from "@models/calendar/Types";
-import { ModuleType } from "@models/course/Types";
+import { ModuleType } from "@api/Types";
 import { useContext, useMemo } from "react";
 
 export function useFilterWeeksCalendar(data?: CalendarDateType[]) {

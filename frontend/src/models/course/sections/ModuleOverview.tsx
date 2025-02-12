@@ -1,6 +1,6 @@
-import { ModuleType } from "@models/course/Types";
+import { ModuleType } from "@api/Types";
 import DayTable from "./DayTable"
-import { CourseType } from "../Types";
+import { CourseType } from "../../../api/Types";
 import PDFDownloadBtn from "@components/buttons/PDFDownloadBtn";
 
 type Props = {

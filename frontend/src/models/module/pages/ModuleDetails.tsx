@@ -11,7 +11,7 @@ import ModuleOverview from "@models/course/sections/ModuleOverview";
 import DeleteBtn from "@components/buttons/DeleteBtn";
 import { useMemo, useState } from "react";
 import DeleteWarningModal from "@components/DeleteWarningModal";
-import { CourseType } from "@models/course/Types";
+import { CourseType } from "@api/Types";
 
 export default function ModuleDetails() {
     const moduleId = useIdFromPath();

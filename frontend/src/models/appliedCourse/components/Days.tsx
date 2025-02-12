@@ -1,4 +1,4 @@
-import { CourseModuleType, CourseType } from "@models/course/Types";
+import { CourseModuleType, CourseType } from "@api/Types";
 import DotsIcon from "./DotsIcon";
 import TrashIcon from "./TrashIcon";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";

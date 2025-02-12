@@ -1,6 +1,6 @@
 import { getCookie } from "@helpers/cookieHelpers";
 import { fetchWithRefreshTokenInterceptor } from "@helpers/interceptorHelpers";
-import { ModuleType } from "@models/course/Types";
+import { ModuleType } from "@api/Types";
 
 const BASE_URL = `${import.meta.env.VITE_BACKEND_URL}/Modules`;
 

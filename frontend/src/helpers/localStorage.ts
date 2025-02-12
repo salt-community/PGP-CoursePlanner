@@ -1,4 +1,4 @@
-import { Track } from "@models/course/Types";
+import { Track } from "@api/Types";
 
 export interface TrackVisibility {
     id: number;

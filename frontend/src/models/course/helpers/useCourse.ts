@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { ModuleType } from "@models/course/Types";
+import { ModuleType } from "@api/Types";
 import { useQueryModules } from "@api/module/moduleQueries";
 import { useQueryModulesByCourseId } from "@api/course/courseQueries";
-import { Track } from "../Types";
+import { Track } from "../../../api/Types";
 
 export function useCourse(courseId: number) {
     const [filteredModules, setFilteredModules] = useState<ModuleType[]>([]);

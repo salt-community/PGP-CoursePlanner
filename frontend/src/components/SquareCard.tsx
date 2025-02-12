@@ -1,4 +1,4 @@
-import { ModuleType, Track } from "@models/course/Types"
+import { ModuleType, Track } from "@api/Types"
 import LoadingSkeletonModule from "@models/module/components/LoadingSkeletonModule"
 import { Link } from "react-router-dom"
 

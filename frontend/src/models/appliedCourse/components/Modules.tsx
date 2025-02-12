@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CourseType, DayType, ModuleType } from "@models/course/Types";
+import { CourseType, DayType, ModuleType } from "@api/Types";
 import TrashIcon from "./TrashIcon";
 import PrimaryBtn from "@components/buttons/PrimaryBtn";
 import Days from "./Days";
