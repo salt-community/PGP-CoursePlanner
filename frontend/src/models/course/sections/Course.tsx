@@ -1,7 +1,7 @@
 import { useCourse } from "../helpers/useCourse";
 import ModuleRow from "./ModuleRow";
 import { useEffect, useState } from "react";
-import { CourseProps, CourseType } from "../Types";
+import { CourseProps, CourseType } from "../../../api/Types";
 import { useMutationPostCourse, useMutationUpdateCourse } from "@api/course/courseMutations";
 // import { useNavigate } from "react-router-dom";
 import { useQueryTracks } from "@api/track/trackQueries";

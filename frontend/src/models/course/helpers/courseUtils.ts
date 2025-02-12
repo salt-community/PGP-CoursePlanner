@@ -1,6 +1,6 @@
 import { GoogleEvent } from "@helpers/googleHelpers";
-import { CourseType, DayType, ModuleType } from "../Types";
-import { EventType } from "@models/course/Types";
+import { CourseType, DayType, ModuleType } from "../../../api/Types";
+import { EventType } from "@api/Types";
 import { CalendarDateType, DateContent } from "@models/calendar/Types";
 import { getDateAsString } from "@helpers/dateHelpers";
 import { NavigateFunction } from "react-router-dom";

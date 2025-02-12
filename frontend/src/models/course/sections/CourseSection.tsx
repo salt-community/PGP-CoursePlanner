@@ -4,7 +4,7 @@ import DeployModal from "./DeployModal";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ModuleOverview from "./ModuleOverview";
 import { getWeekNumberOfModule, numberOfDaysInCourse } from "../helpers/courseUtils";
-import { CourseType } from "../Types";
+import { CourseType } from "../../../api/Types";
 import { getWeek } from "date-fns";
 import PDFDownloadBtn from "@components/buttons/PDFDownloadBtn";
 

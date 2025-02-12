@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { usePDF } from '@react-pdf/renderer';
 import { generateDocument } from '../components/GenerateDocument';
-import { CourseType, ModuleType } from '@models/course/Types';
+import { CourseType, ModuleType } from '@api/Types';
 
 type PDFWeekGeneratorProps = {
     appliedCourse: CourseType;

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getTracks } from "./trackFetches";
-import { Track } from "@models/course/Types";
+import { Track } from "@api/Types";
 import { useState } from "react";
 
 export function useQueryTracks() {

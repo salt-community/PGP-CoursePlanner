@@ -1,4 +1,4 @@
-import { ModuleType } from "@models/course/Types";
+import { ModuleType } from "@api/Types";
 
 export const reorderModule = (
     modules: ModuleType[],

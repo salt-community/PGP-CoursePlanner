@@ -1,7 +1,7 @@
-import { CourseType } from "@models/course/Types";
+import { CourseType } from "@api/Types";
 import { useQuery } from "@tanstack/react-query";
 import { getCourses, getCourseById, getModulesByCourseId } from "./courseFetches";
-import { ModuleType } from "@models/course/Types";
+import { ModuleType } from "@api/Types";
 import { useState } from "react";
 import { useFilterCourses } from "@helpers/filterDataHooks";
 

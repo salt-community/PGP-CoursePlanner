@@ -1,5 +1,5 @@
-import { EventType } from "@models/course/Types";
-import { Track } from "@models/course/Types";
+import { EventType } from "@api/Types";
+import { Track } from "@api/Types";
 
 export type CalendarDateType = {
     id?: number;

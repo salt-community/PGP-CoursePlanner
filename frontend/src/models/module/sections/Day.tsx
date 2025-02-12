@@ -7,7 +7,7 @@ import UpArrowBtn from '../../../components/buttons/UpArrowBtn';
 import EditEventTable from '../../../components/EditEventTable';
 import { useQueryModules } from '@api/module/moduleQueries';
 import MoveDayDropdown from './MoveDayDropdown';
-import { DayProps } from '@models/course/Types';
+import { DayProps } from '@api/Types';
 
 export default function Day({ editTrue, moduleId, day, setDays, days, setNumOfDays }: DayProps) {
     const [selectedModule, setSelectedModule] = useState<string>("DEFAULT");

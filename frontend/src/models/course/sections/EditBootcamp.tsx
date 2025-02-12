@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { updatePreviewCalendarDates, getGoogleEventListForCourse, moveModule, detectOverlappingDays, getUpdatedCourse, getCourseWithDates } from "../helpers/courseUtils";
-import { CourseType, ModuleType, CourseModuleType, DayType } from "../Types";
+import { CourseType, ModuleType, CourseModuleType, DayType } from "../../../api/Types";
 import { InfoPanel } from "./InfoPanel";
 import MiniCalendar from "./MiniCalendar";
 import { EditCourseDays } from "@models/appliedCourse/sections/EditCourseDays";

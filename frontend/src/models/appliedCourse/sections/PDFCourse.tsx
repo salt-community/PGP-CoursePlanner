@@ -1,5 +1,5 @@
 import { usePDF } from '@react-pdf/renderer';
-import { CourseType } from '@models/course/Types';
+import { CourseType } from '@api/Types';
 import { generateDocument } from '../components/GenerateDocument';
 
 type PDFGeneratorProps = {

@@ -1,6 +1,6 @@
 
 import { useMutationPostAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
-import { CourseType } from "../Types";
+import { CourseType } from "../../../api/Types";
 import { EditBootcamp } from "./EditBootcamp";
 import { handleApplyTemplate } from "../helpers/courseUtils";
 

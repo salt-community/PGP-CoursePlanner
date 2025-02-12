@@ -1,6 +1,6 @@
 import Page from "@components/Page";
 import { useEffect, useState } from "react";
-import { CourseType } from "@models/course/Types";
+import { CourseType } from "@api/Types";
 import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries";
 import { useMutationDeleteAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import Header from "@components/Header";

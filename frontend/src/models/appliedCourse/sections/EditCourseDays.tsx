@@ -1,4 +1,4 @@
-import { CourseType } from "@models/course/Types"
+import { CourseType } from "@api/Types"
 import CourseInfo from "../components/CourseInfo"
 import Modules from "../components/Modules"
 import PrimaryBtn from "@components/buttons/PrimaryBtn"

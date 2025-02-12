@@ -4,7 +4,7 @@ import SuccessBtn from "@components/buttons/SuccessBtn";
 import { useState, FormEvent } from "react";
 import { AppliedModuleProps } from '../Types';
 import AppliedDay from "./AppliedDay";
-import { DayType, EventType, ModuleType } from "@models/course/Types";
+import { DayType, EventType, ModuleType } from "@api/Types";
 
 export default function AppliedModule({ saveAppliedModule, module, index, buttonText }: AppliedModuleProps) {
     const [moduleName, setModuleName] = useState<string>(module.name);

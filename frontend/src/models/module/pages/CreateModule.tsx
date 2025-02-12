@@ -1,6 +1,6 @@
 import Page from "@components/Page"
 import Module from "../sections/Module"
-import { ModuleType } from "@models/course/Types"
+import { ModuleType } from "@api/Types"
 
 export default function CreateModule() {
     const emptyModule: ModuleType =

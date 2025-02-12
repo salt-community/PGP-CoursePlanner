@@ -1,6 +1,6 @@
 import Page from "@components/Page";
 import Course from "../sections/Course";
-import { CourseType, Track } from "../Types";
+import { CourseType, Track } from "../../../api/Types";
 
 export default function CreateCourse() {
 
