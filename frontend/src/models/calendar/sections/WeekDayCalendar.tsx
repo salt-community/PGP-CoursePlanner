@@ -1,7 +1,7 @@
-import { DateContent } from "../Types";
 import { Link } from "react-router-dom";
 import { today } from "@helpers/dateHelpers";
 import { format } from "date-fns";
+import { DateContent } from "@api/Types";
 
 type Props = {
     date: string;

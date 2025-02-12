@@ -4,11 +4,11 @@ import Page from "@components/Page";
 import { format } from "date-fns";
 import NextBtn from "@components/buttons/NextBtn";
 import PreviousBtn from "@components/buttons/PreviousBtn";
-import { DateContent } from "../Types";
 import { useDateFromPath } from "@helpers/helperHooks";
 import WeekDay from "../sections/WeekDay";
 import { getDateAsString } from "@helpers/dateHelpers";
 import { useQueryCalendarDate } from "@api/calendarDate/calendarDateQueries";
+import { DateContent } from "@api/Types";
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 

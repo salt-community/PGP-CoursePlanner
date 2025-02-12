@@ -2,11 +2,10 @@ import { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { updatePreviewCalendarDates, getGoogleEventListForCourse, moveModule, detectOverlappingDays, getUpdatedCourse, getCourseWithDates } from "../helpers/courseUtils";
-import { CourseType, ModuleType, CourseModuleType, DayType } from "../../../api/Types";
+import { CourseType, ModuleType, CourseModuleType, DayType, CalendarDateType } from "../../../api/Types";
 import { InfoPanel } from "./InfoPanel";
 import MiniCalendar from "./MiniCalendar";
 import { EditCourseDays } from "@models/appliedCourse/sections/EditCourseDays";
-import { CalendarDateType } from "@models/calendar/Types";
 import { postCourseToGoogle } from "@api/googleCalendar/googleCalendarFetches";
 import { UseMutationResult } from "@tanstack/react-query";
 
@@ -14,7 +13,6 @@ type Props = {
     course: CourseType,
     submitFunction:  (course: CourseType, navigate: NavigateFunction, mutationPostAppliedCourse: UseMutationResult<void, Error, CourseType, unknown>) => Promise<void>;
     mutation: UseMutationResult<void, Error, CourseType, unknown>
-    
 }
 
 type Inputs = {
@@ -22,9 +20,6 @@ type Inputs = {
     groupEmail: string;
 
 };
-
-
-
 
 export function EditBootcamp({ course, submitFunction, mutation }: Props) {
     const [startDate, setStartDate] = useState<Date>(new Date());

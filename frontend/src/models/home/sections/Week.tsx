@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { DayModal } from "./DayModal";
 import { weekDays, getDateAsString, today } from "@helpers/dateHelpers";
-import { CalendarDateType } from "@models/calendar/Types";
 import { format, getWeek } from "date-fns";
 import WeekDay from "@models/calendar/sections/WeekDay";
 import LoadingSkeletonDay from "../components/LoadingSkeletonDay";
+import { CalendarDateType } from "@api/Types";
 
 interface WeekProps {
     data: CalendarDateType[] | undefined;

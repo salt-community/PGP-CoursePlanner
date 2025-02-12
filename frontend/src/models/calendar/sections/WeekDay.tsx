@@ -1,4 +1,4 @@
-import { DateContent } from "../Types";
+import { DateContent } from "@api/Types"
 
 type Props = {
     dateContent: DateContent[] | undefined

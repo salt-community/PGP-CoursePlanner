@@ -1,7 +1,6 @@
 import { GoogleEvent } from "@helpers/googleHelpers";
-import { CourseType, DayType, ModuleType } from "../../../api/Types";
+import { CalendarDateType, CourseType, DateContent, DayType, ModuleType } from "../../../api/Types";
 import { EventType } from "@api/Types";
-import { CalendarDateType, DateContent } from "@models/calendar/Types";
 import { getDateAsString } from "@helpers/dateHelpers";
 import { NavigateFunction } from "react-router-dom";
 import { UseMutationResult } from "@tanstack/react-query";

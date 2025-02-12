@@ -62,3 +62,22 @@ export type EventType = {
   description?: string;
   isApplied?: boolean;
 };
+
+export type CalendarDateType = {
+  id?: number;
+  date: Date;
+  dateContent: DateContent[];
+}
+
+export type DateContent = {
+  moduleId: number;
+  appliedCourseId?: number;
+  id?: number;
+  track: Track;
+  moduleName?: string;
+  dayOfModule: number;
+  totalDaysInModule: number;
+  courseName: string;
+  events: EventType[];
+  color: string
+}

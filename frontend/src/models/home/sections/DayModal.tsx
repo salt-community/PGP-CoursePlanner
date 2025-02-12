@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { CalendarDateType } from "@models/calendar/Types";
 import PreviousBtn from "@components/buttons/PreviousBtn";
 import NextBtn from "@components/buttons/NextBtn";
 import CloseBtn from "@components/buttons/CloseBtn";
 import EventDescription from "../components/EventDescription";
+import { CalendarDateType } from "@api/Types";
 
 export type Props = {
     modalData: CalendarDateType;

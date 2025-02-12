@@ -1,8 +1,8 @@
-import { CalendarDateType } from "@models/calendar/Types";
 import { useQuery } from "@tanstack/react-query";
 import { getCalendarDate, getCalendarDateBatch, getCalendarDateWeeks } from "./calendarDateFetches";
 import { useState } from "react";
 import { useFilterMonthCalendar, useFilterWeeksCalendar } from "@helpers/filterDataHooks.ts";
+import { CalendarDateType } from "@api/Types";
 
 export function useQueryCalendarDate(date: string) {
     const { data, isLoading, isError } = useQuery<CalendarDateType>({

@@ -1,6 +1,5 @@
 import { TrackVisibilityContext } from "@context/TrackVisibilityContext";
-import { CourseType, Track } from "@api/Types";
-import { CalendarDateType } from "@models/calendar/Types";
+import { CalendarDateType, CourseType, Track } from "@api/Types";
 import { ModuleType } from "@api/Types";
 import { useContext, useMemo } from "react";
 

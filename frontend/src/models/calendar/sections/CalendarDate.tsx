@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { today } from "@helpers/dateHelpers";
-import { CalendarDateType, DateContent } from "../Types";
 import LoadingSkeletonDay from "../components/LoadingSkeletonDay";
+import { CalendarDateType, DateContent } from "@api/Types";
 
 type Props = {
     dateContent: DateContent[];

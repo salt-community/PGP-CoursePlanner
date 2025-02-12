@@ -1,15 +1,12 @@
 import NextBtn from "@components/buttons/NextBtn"
 import PreviousBtn from "@components/buttons/PreviousBtn"
 import { useEffect, useState } from "react"
-
 import { firstDayOfMonth, allDaysInInterval, fullWeek, daysBeforeMonth, firstWeekDay, getDateAsString, lastDayOfMonth } from "../../../helpers/dateHelpers"
 import { format, getMonth, getWeek, getYear } from "date-fns"
 import { useQueryCalendarDateBatch } from "@api/calendarDate/calendarDateQueries"
-import { CourseType, ModuleType } from "../../../api/Types"
+import { CalendarDateType, CourseType, ModuleType } from "../../../api/Types"
 import CalendarDate from "./CalendarDate"
-import { CalendarDateType } from "@models/calendar/Types"
 import { createCalendarDatesFromMiscellaneousEvents } from "../helpers/courseUtils"
-// import { datePickerToolbarClasses } from "@mui/x-date-pickers"
 
 type Props = {
     startDate: Date;
