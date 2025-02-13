@@ -13,8 +13,7 @@ public class CourseService(DataContext context) : IService<Course>
     {
         var courses = await _context.Courses
             .Include(course => course.Modules)
-                .ThenInclude(courseModule => courseModule.Module)
-                .ThenInclude(module => module!.Days)
+                .ThenInclude(module => module.Days)
                 .ThenInclude(day => day.Events)
             .Include(c => c.Track)
             .Include(c => c.MiscellaneousEvents)
@@ -22,10 +21,10 @@ public class CourseService(DataContext context) : IService<Course>
 
         foreach (var course in courses)
         {
-            foreach (var courseModule in course.Modules)
+            foreach (var module in course.Modules)
             {
-                courseModule.Module.Days = courseModule.Module.Days.OrderBy(d => d.DayNumber).ToList();
-                foreach (var day in courseModule.Module.Days)
+                module.Days = module.Days.OrderBy(d => d.DayNumber).ToList();
+                foreach (var day in module.Days)
                 {
                     day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
                 }
@@ -38,18 +37,17 @@ public class CourseService(DataContext context) : IService<Course>
     {
         var course = await _context.Courses
             .Include(course => course.Modules)
-                .ThenInclude(courseModule => courseModule.Module)
-                .ThenInclude(module => module!.Days)
+                .ThenInclude(module => module.Days)
                 .ThenInclude(day => day.Events)
             .Include(c => c.Track)
             .Include(c => c.MiscellaneousEvents)
             .FirstOrDefaultAsync(course => course.Id == id)
             ?? throw new NotFoundByIdException("Course", id);
 
-        foreach (var courseModule in course.Modules)
+        foreach (var module in course.Modules)
         {
-            courseModule.Module.Days = courseModule.Module.Days.OrderBy(d => d.DayNumber).ToList();
-            foreach (var day in courseModule.Module.Days)
+            module.Days = module.Days.OrderBy(d => d.DayNumber).ToList();
+            foreach (var day in module.Days)
             {
                 day.Events = day.Events.OrderBy(e => e.StartTime).ThenBy(e => e.EndTime).ToList();
             }
@@ -58,78 +56,75 @@ public class CourseService(DataContext context) : IService<Course>
     }
 
     private async Task<Course> CreateAppliedCourseAsync(Course appliedCourse)
-{
-    Console.WriteLine("Entering CreateAppliedCourseAsync...");
-
-    using var transaction = await _context.Database.BeginTransactionAsync();
-    try
     {
-        var trackId = appliedCourse.Track.Id;
-        var existingTrack = await _context.Tracks.FirstOrDefaultAsync(t => t.Id == trackId);
-        if (existingTrack == null)
+        Console.WriteLine("Entering CreateAppliedCourseAsync...");
+
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
         {
-            throw new Exception($"Track with ID {trackId} not found.");
-        }
-        appliedCourse.Track = existingTrack;
-
-        _context.Courses.Add(appliedCourse);
-        await _context.SaveChangesAsync();
-
-        addDaysToCalendar(appliedCourse);
-
-        foreach (var module in appliedCourse.Modules)
-        {
-            foreach (var day in module.Module.Days)
+            var trackId = appliedCourse.Track.Id;
+            var existingTrack = await _context.Tracks.FirstOrDefaultAsync(t => t.Id == trackId);
+            if (existingTrack == null)
             {
-                foreach (var @event in day.Events)
-                {
-                    var calendarDate = await _context.CalendarDates
-                        .FirstOrDefaultAsync(cd => cd.Date.Date == day.Date.Date);
-                    if (calendarDate != null)
-                    {
-                        @event.DateContents = calendarDate.DateContent;
-                        @event.IsApplied = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Warning: No CalendarDate found for {day.Date.Date}");
-                    }
-                }
-                day.IsApplied = true;
+                throw new Exception($"Track with ID {trackId} not found.");
             }
-            module.Module.IsApplied = true;
+            appliedCourse.Track = existingTrack;
+
+            _context.Courses.Add(appliedCourse);
+            await _context.SaveChangesAsync();
+
+            AddDaysToCalendar(appliedCourse);
+
+            foreach (var module in appliedCourse.Modules)
+            {
+                foreach (var day in module.Days)
+                {
+                    foreach (var @event in day.Events)
+                    {
+                        var calendarDate = await _context.CalendarDates
+                            .FirstOrDefaultAsync(cd => cd.Date.Date == day.Date.Date);
+                        if (calendarDate != null)
+                        {
+                            @event.DateContents = calendarDate.DateContent;
+                            @event.IsApplied = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Warning: No CalendarDate found for {day.Date.Date}");
+                        }
+                    }
+                    day.IsApplied = true;
+                }
+                module.IsApplied = true;
+            }
+
+            Console.WriteLine("Setting module IDs...");
+            appliedCourse.ModuleIds = appliedCourse.Modules.Select(m => m.Id).ToList();
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            Console.WriteLine($"Successfully created AppliedCourse with ID {appliedCourse.Id}.");
+
+            return await _context.Courses
+                .Include(c => c.Modules)
+                    .ThenInclude(m => m.Days)
+                    .ThenInclude(d => d.Events)
+                .Include(c => c.Track)
+                .FirstAsync(c => c.Id == appliedCourse.Id);
         }
-
-        Console.WriteLine("Setting module IDs...");
-        appliedCourse.moduleIds = appliedCourse.Modules.Select(m => m.ModuleId).ToList();
-
-        await _context.SaveChangesAsync();
-        await transaction.CommitAsync();
-
-        Console.WriteLine($"Successfully created AppliedCourse with ID {appliedCourse.Id}.");
-
-        return await _context.Courses
-            .Include(c => c.Modules)
-                .ThenInclude(cm => cm.Module)
-                .ThenInclude(m => m.Days)
-                .ThenInclude(d => d.Events)
-            .Include(c => c.Track)
-            .FirstAsync(c => c.Id == appliedCourse.Id);
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            Console.WriteLine($"Error in CreateAppliedCourseAsync: {ex.Message}");
+            Console.WriteLine($"StackTrace: {ex.StackTrace}");
+            throw;
+        }
     }
-    catch (Exception ex)
+
+    private void AddDaysToCalendar(Course appliedCourse)
     {
-        await transaction.RollbackAsync();
-        Console.WriteLine($"Error in CreateAppliedCourseAsync: {ex.Message}");
-        Console.WriteLine($"StackTrace: {ex.StackTrace}");
-        throw;
-    }
-}
-
-
-
-    private void addDaysToCalendar(Course appliedCourse)
-    {
-        foreach (var module in appliedCourse.Modules.Select(CM => CM.Module))
+        foreach (var module in appliedCourse.Modules)
         {
             foreach (var day in module!.Days)
             {
@@ -159,7 +154,7 @@ public class CourseService(DataContext context) : IService<Course>
                     Console.WriteLine(localDate);
                     calendarDate = new CalendarDate
                     {
-                        Date = localDate 
+                        Date = localDate
                     };
                     _context.CalendarDates.Add(calendarDate);
                     _context.SaveChanges();
@@ -168,7 +163,6 @@ public class CourseService(DataContext context) : IService<Course>
             }
         }
         _context.SaveChanges();
-
 
         foreach (var @event in appliedCourse.MiscellaneousEvents)
         {
@@ -210,8 +204,6 @@ public class CourseService(DataContext context) : IService<Course>
         _context.SaveChanges();
     }
 
-
-
     public async Task<Course> CreateAsync(Course course)
     {
         if (course.IsApplied == true)
@@ -225,54 +217,15 @@ public class CourseService(DataContext context) : IService<Course>
         course.Track = track;
 
         var modulesInDb = await _context.Modules
-                .Where(m => course.moduleIds.Contains(m.Id))
+                .Where(m => course.ModuleIds.Contains(m.Id))
                 .ToListAsync();
 
-        course.Modules = new List<CourseModule>();
-        foreach (var module in modulesInDb)
-        {
-            course.Modules.Add(new CourseModule
-            {
-                CourseId = course.Id,
-                ModuleId = module.Id,
-                Module = module
-            });
-        }
-
+        course.Modules = [.. modulesInDb];
         await _context.Courses.AddAsync(course);
         await _context.SaveChangesAsync();
         return course;
     }
 
-    // private async Task<Course> UpdateAppliedAsync(int id, Course appliedCourse)
-    // {
-    //     var appliedCourseToUpdate = await _context.Courses
-    //             .Include(course => course.Modules!)
-    //             .ThenInclude(module => module!.Module)
-    //             .ThenInclude(module => module!.Days)
-    //             .ThenInclude(day => day.Events)
-
-
-    //             .FirstOrDefaultAsync(ac => ac.Id == id)
-    //             ?? throw new NotFoundByIdException("Course", appliedCourse.Id);
-
-    //     appliedCourseToUpdate = clearCourseModules(appliedCourseToUpdate);
-
-    //     appliedCourseToUpdate.moduleIds = appliedCourse.moduleIds;
-    //     appliedCourseToUpdate.StartDate = appliedCourse.StartDate;
-    //     appliedCourseToUpdate.Name = appliedCourse.Name;
-
-    //     var startDate = appliedCourseToUpdate.StartDate;
-    //     int order = 1;
-    //     foreach (var moduleId in appliedCourseToUpdate.moduleIds)
-    //     {
-    //         startDate = await addModuleToCourse(appliedCourseToUpdate, moduleId, startDate, order);
-    //         order++;
-    //     }
-    //     appliedCourseToUpdate.EndDate = calculateEndDate(appliedCourseToUpdate);
-    //     _context.SaveChanges();
-    //     return appliedCourseToUpdate;
-    // }
     private void RemoveAllDaysFromCalendar(int id)
     {
         var courseDaysContet = _context.DateContent.Where(dc => dc.appliedCourseId == id);
@@ -282,7 +235,6 @@ public class CourseService(DataContext context) : IService<Course>
     {
 
         var appliedCourse = await _context.Courses.Include(c => c.Modules)
-                                            .ThenInclude(m => m.Module)
                                             .Include(c => c.Track)
                                             .Include(c => c.MiscellaneousEvents)
                                             .FirstAsync(c => c.Id == course.Id);
@@ -294,10 +246,7 @@ public class CourseService(DataContext context) : IService<Course>
         return res;
     }
 
-
-
-
-    private DateTime calculateEndDate(Course course)
+    private DateTime CalculateEndDate(Course course)
     {
         var numberOfDays = _context.CalendarDates
             .Include(cd => cd.DateContent)
@@ -308,11 +257,10 @@ public class CourseService(DataContext context) : IService<Course>
         return course.StartDate.AddDays(numberOfDays - 1).Date;
     }
 
-    private async Task<DateTime> addModuleToCourse(Course course, int moduleId, DateTime moduleDate, int order)
+    private async Task<DateTime> AddModuleToCourse(Course course, int moduleId, DateTime moduleDate, int order)
     {
         var courseToAddTo = await _context.Courses
-                        .Include(course => course.Modules!)
-                        .ThenInclude(module => module!.Module)
+                        .Include(course => course.Modules)
                         .FirstOrDefaultAsync(ac => ac.Id == course.Id)
                         ?? throw new NotFoundByIdException("Course", course.Id);
 
@@ -377,7 +325,7 @@ public class CourseService(DataContext context) : IService<Course>
             }
             moduleDate = moduleDate.AddDays(1);
 
-            if (moduleDate.DayOfWeek == DayOfWeek.Saturday && !(day.DayNumber == moduleToAdd.NumberOfDays && moduleId == courseToAddTo.moduleIds.Last()))
+            if (moduleDate.DayOfWeek == DayOfWeek.Saturday && !(day.DayNumber == moduleToAdd.NumberOfDays && moduleId == courseToAddTo.ModuleIds.Last()))
             {
                 AddWeekendDates(courseToAddTo, moduleToAdd, moduleDate);
                 moduleDate = moduleDate.AddDays(2);
@@ -385,17 +333,7 @@ public class CourseService(DataContext context) : IService<Course>
             _context.SaveChanges();
         }
 
-        var courseModule = new CourseModule
-        {
-            CourseId = courseToAddTo.Id,
-            Course = courseToAddTo,
-            Module = moduleToAdd,
-            ModuleId = moduleToAdd.Id,
-        };
-
-        _context.CourseModules.Add(courseModule);
-
-        course.Modules.Add(courseModule);
+        courseToAddTo.Modules.Add(moduleToAdd);
         _context.SaveChanges();
 
         return moduleDate;
@@ -465,17 +403,6 @@ public class CourseService(DataContext context) : IService<Course>
         return true;
     }
 
-    private Course clearCourseModules(Course course)
-    {
-        foreach (var module in course.Modules.Select(m => m.Module!))
-        {
-            ClearModuleOfDays(module, course.Id);
-        }
-        _context.CourseModules.RemoveRange(course.Modules);
-        _context.SaveChanges();
-        return course;
-    }
-
     private bool ClearModuleOfDays(Module module, int courseId)
     {
         foreach (var day in module.Days)
@@ -508,7 +435,6 @@ public class CourseService(DataContext context) : IService<Course>
         return true;
     }
 
-
     private bool ClearCourseOfMiscEvents(Course course)
     {
         _context.RemoveRange(course.MiscellaneousEvents);
@@ -534,6 +460,7 @@ public class CourseService(DataContext context) : IService<Course>
         _context.SaveChanges();
         return true;
     }
+    
     public async Task UpdateAsync(int id, Course course)
     {
         if (course.IsApplied)
@@ -544,31 +471,23 @@ public class CourseService(DataContext context) : IService<Course>
 
         var courseToUpdate = await _context.Courses
                 .Include(course => course.Modules)
-                .ThenInclude(courseModule => courseModule.Module)
                 .ThenInclude(module => module!.Days)
                 .ThenInclude(day => day.Events)
                 .FirstOrDefaultAsync(course => course.Id == id)
                 ?? throw new NotFoundByIdException("Course", id);
 
 
-        var moduleIds = course.moduleIds;
+        var moduleIds = course.ModuleIds;
         var modulesInDb = await _context.Modules
                 .Where(m => moduleIds.Contains(m.Id))
                 .ToListAsync();
 
         courseToUpdate.Name = course.Name;
         courseToUpdate.NumberOfWeeks = course.NumberOfWeeks;
-        courseToUpdate.moduleIds = course.moduleIds;
+        courseToUpdate.ModuleIds = course.ModuleIds;
 
         courseToUpdate.Modules.Clear();
-        foreach (var module in modulesInDb)
-        {
-            courseToUpdate.Modules.Add(new CourseModule
-            {
-                CourseId = courseToUpdate.Id,
-                ModuleId = module.Id
-            });
-        }
+
         _context.Courses.Update(courseToUpdate);
         await _context.SaveChangesAsync();
     }
@@ -576,12 +495,11 @@ public class CourseService(DataContext context) : IService<Course>
     public async Task DeleteAsync(int id)
     {
         var course = _context.Courses
-               .Include(course => course.Modules!)
-               .ThenInclude(module => module!.Module)
-               .ThenInclude(module => module!.Days)
+               .Include(course => course.Modules)
+               .ThenInclude(module => module.Days)
                .ThenInclude(day => day.Events)
                .AsNoTracking()
-               .FirstOrDefault(ac => ac.Id == id);
+               .FirstOrDefault(c => c.Id == id);
 
         if (course == null) return;
 
@@ -596,7 +514,6 @@ public class CourseService(DataContext context) : IService<Course>
 
     public async Task DeleteAppliedAsync(Course course)
     {
-        clearCourseModules(course);
         ClearCourseOfMiscEvents(course);
 
         await _context.SaveChangesAsync();
