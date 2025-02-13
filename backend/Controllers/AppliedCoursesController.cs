@@ -29,17 +29,68 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CourseResponse>> CreateAppliedCourse(Course appliedCourse)
+        public async Task<ActionResult<CourseResponse>> CreateAppliedCourse(CourseRequest courseRequest)
         {
-            appliedCourse.IsApplied = true;
-            await _service.CreateAsync(appliedCourse);
-            return CreatedAtAction("GetAppliedCourse", new { id = appliedCourse.Id }, (CourseResponse)appliedCourse);
+            courseRequest.IsApplied = true;
+
+            var course = new Course
+            {
+                Track = courseRequest.Track,
+                Name = courseRequest.Name,
+                StartDate = courseRequest.StartDate,
+                EndDate = courseRequest.EndDate,
+                NumberOfWeeks = courseRequest.NumberOfWeeks,
+                Modules = courseRequest.Modules.Select(m => new Module
+                {
+                    Name = m.Module!.Name,
+                    NumberOfDays = m.Module.NumberOfDays,
+                    Days = m.Module.Days,
+                    Tracks = m.Module.Tracks,
+                    Order = m.Module.Order,
+                    IsApplied = m.Module.IsApplied,
+                    StartDate = m.Module.StartDate,
+                    CreationDate = m.Module.CreationDate
+                }).ToList(),
+                ModuleIds = courseRequest.ModuleIds,
+                IsApplied = courseRequest.IsApplied,
+                MiscellaneousEvents = courseRequest.MiscellaneousEvents,
+                CreationDate = courseRequest.CreationDate,
+                Color = courseRequest.Color
+            };
+
+            await _service.CreateAsync(course);
+            return CreatedAtAction("GetAppliedCourse", new { id = course.Id }, (CourseResponse)course);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateAppliedCourse(int id, [FromBody] Course appliedCourse)
+        public async Task<ActionResult> UpdateAppliedCourse(int id, CourseRequest courseRequest)
         {
-            await _service.UpdateAsync(id, appliedCourse);
+            var course = new Course
+            {
+                Track = courseRequest.Track,
+                Name = courseRequest.Name,
+                StartDate = courseRequest.StartDate,
+                EndDate = courseRequest.EndDate,
+                NumberOfWeeks = courseRequest.NumberOfWeeks,
+                Modules = courseRequest.Modules.Select(m => new Module
+                {
+                    Name = m.Module!.Name,
+                    NumberOfDays = m.Module.NumberOfDays,
+                    Days = m.Module.Days,
+                    Tracks = m.Module.Tracks,
+                    Order = m.Module.Order,
+                    IsApplied = m.Module.IsApplied,
+                    StartDate = m.Module.StartDate,
+                    CreationDate = m.Module.CreationDate
+                }).ToList(),
+                ModuleIds = courseRequest.ModuleIds,
+                IsApplied = courseRequest.IsApplied,
+                MiscellaneousEvents = courseRequest.MiscellaneousEvents,
+                CreationDate = courseRequest.CreationDate,
+                Color = courseRequest.Color
+            };
+
+            await _service.UpdateAsync(id, course);
             return NoContent();
         }
 
