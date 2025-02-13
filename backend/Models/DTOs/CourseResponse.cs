@@ -22,8 +22,8 @@ public record CourseResponse
         StartDate = course.StartDate;
         EndDate = course.EndDate;
         NumberOfWeeks = course.NumberOfWeeks;
-        ModuleIds = course.Modules.Select(cm => cm.ModuleId).ToList();
-        Modules = course.Modules.Select(cm => new CourseModuleResponse(cm)).ToList();
+        ModuleIds = course.Modules.Select(c => c.Id).ToList();
+        Modules = course.Modules.Select(m => new CourseModuleResponse(course.Id, m)).ToList();
         Color = course.Track.Color;
         IsApplied = course.IsApplied;
         MiscellaneousEvents = course.MiscellaneousEvents.Select(e => (EventResponse)e).ToList();

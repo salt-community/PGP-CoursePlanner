@@ -4,16 +4,16 @@ public record CourseModuleResponse
 {
     public int CourseId { get; init; }
     public int ModuleId { get; init; }
-    public ModuleResponse? Module { get; init; }
+    public ModuleResponse Module { get; init; }
 
     // Constructor
-    public CourseModuleResponse(CourseModule courseModule)
+    public CourseModuleResponse(int courseId, Module module)
     {
-        CourseId = courseModule.CourseId;
-        ModuleId = courseModule.ModuleId;
-        Module = courseModule.Module != null ? new ModuleResponse(courseModule.Module) : null;
+        CourseId = courseId;
+        ModuleId = module.Id;
+        Module = module;
     }
 
     // Implicit operator
-    public static implicit operator CourseModuleResponse(CourseModule courseModule) => new(courseModule);
+    public static implicit operator CourseModuleResponse((int courseId, Module module) tuple) => new(tuple.courseId, tuple.module);
 }

@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace backend.Models;
 
@@ -12,8 +11,6 @@ public class Module
     public required string Name { get; set; }
     public int NumberOfDays { get; set; }
     public List<Day> Days { get; set; } = [];
-    [JsonIgnore]
-    public List<CourseModule> CourseModules { get; set; } = [];
     [Required]
     public List<Track> Tracks { get; set; } = [];
     public int Order { get; set; }

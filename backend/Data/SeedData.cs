@@ -286,30 +286,19 @@ public static class SeedData
         var tracks = _context.Tracks.ToList();
         var modules = _context.Modules.ToList();
 
-        string[] courseNames = { "Java", "JavaScript", "Dotnet" };
-        int[] courseNumOfWeeks = { 2, 3, 2 };
+        string[] courseNames = ["Java", "JavaScript", "Dotnet"];
+        int[] courseNumOfWeeks = [2, 3, 2];
 
-        List<List<int>> courseModuleIds = [[1, 2, 3], [1, 2, 3, 4], [1, 3, 4]];
+        List<List<int>> moduleIds = [[1, 2, 3], [1, 3], [1, 4]];
 
         for (var i = 0; i < courseNames.Length; i++)
         {
-            var courseModules = new List<CourseModule>();
-            for (int j = 0; j < courseModuleIds[i].Count; j++)
-            {
-                var courseModuleElement = new CourseModule
-                {
-                    ModuleId = courseModuleIds[i][j],
-                    Module = modules.First(m => m.Id == courseModuleIds[i][j])
-                };
-                courseModules.Add(courseModuleElement);
-            }
-
             var course = new Course
             {
                 Name = courseNames[i],
                 NumberOfWeeks = courseNumOfWeeks[i],
-                moduleIds = courseModuleIds[i],
-                Modules = courseModules,
+                ModuleIds = moduleIds[i],
+                Modules = modules.Where(m => moduleIds[i].Contains(m.Id)).ToList(),
                 IsApplied = false,
                 Track = tracks[i]
             };

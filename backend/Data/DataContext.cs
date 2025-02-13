@@ -11,7 +11,6 @@ namespace backend.Data
         public DbSet<Module> Modules { get; set; } //This is both active and inactive modules
         public DbSet<Day> Days { get; set; } //This is both active and inactive days
         public DbSet<Event> Events { get; set; } //this is both active and inactive events
-        public DbSet<CourseModule> CourseModules { get; set; }
         public DbSet<CalendarDate> CalendarDates { get; set; }
         public DbSet<DateContent> DateContent { get; set; }
         public DbSet<LoggedInUser> LoggedInUser { get; set; }
@@ -20,20 +19,15 @@ namespace backend.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            // Configuring the many-to-many relationship
-            modelBuilder.Entity<CourseModule>()
-                .HasKey(cm => new { cm.CourseId, cm.ModuleId });
-
-            modelBuilder.Entity<CourseModule>()
-                .HasOne(cm => cm.Course)
-                .WithMany(c => c.Modules)
-                .HasForeignKey(cm => cm.CourseId);
-
-            modelBuilder.Entity<CourseModule>()
-                .HasOne(cm => cm.Module)
-                .WithMany(m => m.CourseModules)
-                .HasForeignKey(cm => cm.ModuleId);
+            
+            modelBuilder.Entity<Course>()
+                .HasMany(c => c.Modules)
+                .WithMany()
+                .UsingEntity<Dictionary<string, object>>(
+                    "CourseModule",
+                    j => j.HasOne<Module>().WithMany().HasForeignKey("ModuleId"),
+                    j => j.HasOne<Course>().WithMany().HasForeignKey("CourseId")
+                );
 
             modelBuilder.Entity<Module>()
                 .HasMany(m => m.Tracks)
