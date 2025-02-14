@@ -19,10 +19,11 @@ export default function RectangularCard({ data, isLoading, trackName, mutationDe
 
     function handleDeleteCourse() {
         if (courseId) {
-            mutationDelete.mutate(courseId);
-            if (mutationDelete.isSuccess) {
-                setOpenModal(false);
-            }
+            mutationDelete.mutate(courseId, {
+                onSuccess: () => {
+                    window.location.reload();
+                }
+            });
         }
     }
 

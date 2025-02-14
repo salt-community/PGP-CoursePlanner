@@ -17,9 +17,6 @@ export default function AppliedCourseDetails() {
 
     function handleDeleteCourse() {
         mutationDeleteAppliedCourse.mutate(appliedCourseId);
-        if (mutationDeleteAppliedCourse.isSuccess) {
-            setOpenModal(false);
-        }
     }
 
     return (
