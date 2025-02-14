@@ -4,7 +4,7 @@ import Header from "@components/Header";
 import Page from "@components/Page";
 import SquareCard from "@components/SquareCard";
 import LoadingSkeletonModule from "@models/module/components/LoadingSkeletonModule";
-import CreateTrackModal from "../components/CreateTrackModal";
+import CreateUpdateTrackModal from "../components/CreateUpdateTrackModal";
 import { useState } from "react";
 import { useMutationPostTrack } from "@api/track/trackMutations";
 
@@ -41,7 +41,7 @@ export default function Track() {
                     </>
                 }
             </section>
-            {openModal && <CreateTrackModal openModal={openModal} setOpenModal={setOpenModal} mutation={mutationPostTrack} />}
+            {openModal && <CreateUpdateTrackModal openModal={openModal} setOpenModal={setOpenModal} mutation={mutationPostTrack} />}
             {(isError) && <ErrorModal error="Tracks" />}
         </Page>
     )

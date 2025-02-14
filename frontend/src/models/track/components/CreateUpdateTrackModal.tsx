@@ -16,7 +16,7 @@ type Props = {
     mutation: UseMutationResult<void, Error, TrackRequest, unknown>;
 }
 
-export default function CreateTrackModal({ openModal, setOpenModal, prevColor, prevName, mutation }: Props) {
+export default function CreateUpdateTrackModal({ openModal, setOpenModal, prevColor, prevName, mutation }: Props) {
     const [color, setColor] = useState(prevColor ? prevColor : "");
     const [name, setName] = useState(prevName ? prevName : "");
     const [req, setReq] = useState(false);
@@ -60,7 +60,7 @@ export default function CreateTrackModal({ openModal, setOpenModal, prevColor, p
             <div className="modal-box flex flex-col items-center p-0 bg-white max-w-[460px]">
                 <div className="bg-[#ff7961] p-3 pt-6 pb-6 w-full flex flex-col items-center">
                     <h2 className="text-3xl font-semibold text-white p-5">
-                        Create Track
+                        {(prevName && prevColor) ? "Edit Track" : "Create Track"}
                     </h2>
                 </div>
                 <CloseBtn onClick={() => handleCloseModal()} color="white" position="absolute right-2 top-2" hover="hover:bg-white hover:border-white" />
