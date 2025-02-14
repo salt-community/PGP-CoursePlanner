@@ -5,7 +5,6 @@ import { useQueryAppliedCourses } from "@api/appliedCourse/appliedCourseQueries"
 import { useMutationDeleteAppliedCourse } from "@api/appliedCourse/appliedCourseMutations";
 import Header from "@components/Header";
 import RectangularCard from "@components/RectangularCard";
-import LoadingSkeletonCourse from "@models/course/components/LoadingSkeletonCourse";
 import ErrorModal from "@components/ErrorModal";
 
 export default function AppliedCourses() {
@@ -67,11 +66,6 @@ export default function AppliedCourses() {
                         No Active Bootcamps
                     </p>
                 }
-                {isLoading &&
-                    <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
-                        <LoadingSkeletonCourse />
-                    </div>
-                }
                 <h2 className="text-2xl font-semibold mt-4 gap-4">
                     Upcoming Bootcamps
                 </h2>
@@ -82,11 +76,6 @@ export default function AppliedCourses() {
                         No Upcoming Bootcamps
                     </p>
                 }
-                {(isLoading) &&
-                    <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
-                        <LoadingSkeletonCourse />
-                    </div>
-                }
                 <h2 className="text-2xl font-semibold mt-4 gap-4">
                     Completed Bootcamps
                 </h2>
@@ -96,11 +85,6 @@ export default function AppliedCourses() {
                     <p className="text-lg ml-2">
                         No Completed Bootcamps
                     </p>
-                }
-                {(isLoading) &&
-                    <div className="flex justify-between items-center bg-white w-full rounded-md drop-shadow-xl">
-                        <LoadingSkeletonCourse />
-                    </div>
                 }
             </section>
             {isError && <ErrorModal error="Bootcamps" />}
