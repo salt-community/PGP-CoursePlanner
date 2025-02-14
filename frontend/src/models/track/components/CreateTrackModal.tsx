@@ -2,28 +2,31 @@ import { useEffect, useState } from "react";
 import CloseBtn from "@components/buttons/CloseBtn";
 import SaveBtn from "@components/buttons/SaveBtn";
 import AbortBtn from "@components/buttons/AbortBtn";
-import { useMutationPostTrack } from "@api/track/trackMutations";
 import { HexColorPicker } from "react-colorful";
 import RequiredFormError from "./RequiredFormError";
 import SubmitErrorMessage from "@components/SubmitErrorMessage";
+import { TrackRequest } from "@api/Types";
+import { UseMutationResult } from "@tanstack/react-query";
 
 type Props = {
     openModal: boolean;
-    setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+    setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+    prevColor?: string;
+    prevName?: string;
+    mutation: UseMutationResult<void, Error, TrackRequest, unknown>;
 }
 
-export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
-    const [color, setColor] = useState("");
-    const [name, setName] = useState("");
+export default function CreateTrackModal({ openModal, setOpenModal, prevColor, prevName, mutation }: Props) {
+    const [color, setColor] = useState(prevColor ? prevColor : "");
+    const [name, setName] = useState(prevName ? prevName : "");
     const [req, setReq] = useState(false);
-    const mutationPostTrack = useMutationPostTrack();
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        if (name == "" || color == "") {
+        if (name == "" || color == "" || (prevName == name && prevColor == color)) {
             setReq(true);
         } else {
-            mutationPostTrack.mutate({
+            mutation.mutate({
                 name: name,
                 color: color
             }, {
@@ -65,23 +68,23 @@ export default function CreateTrackModal({ openModal, setOpenModal }: Props) {
                     <label className="text-lg font-medium">
                         Track name*
                         <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} className={`input input-bordered w-full ${(req && name === "") ? "input-error" : ""}`} />
-                        {(req && name === "") &&
-                            <RequiredFormError text="Please provide a name" />
+                        {(req && (prevName === name || name === "")) &&
+                            <RequiredFormError text={prevName ? "Please provide a different name" : "Please provide a name"} />
                         }
                     </label>
                     <label className="text-lg font-medium">
                         Track color*
                         <HexColorPicker className="min-w-full" color={color} onChange={setColor} />
-                        {(req && color === "") &&
-                            <RequiredFormError text="Please pick a color" />
+                        {(req && (prevColor === color || color === "")) &&
+                            <RequiredFormError text={prevColor ? "Please pick a different color" : "Please pick a color"} />
                         }
                     </label>
                     <div className="flex justify-between gap-3 mt-6">
                         <SaveBtn />
                         <AbortBtn onClick={() => handleCloseModal()} />
                     </div>
-                    {mutationPostTrack.isError &&
-                        <SubmitErrorMessage statusCode={mutationPostTrack.error.message} />
+                    {mutation.isError &&
+                        <SubmitErrorMessage statusCode={mutation.error.message} />
                     }
                 </form>
             </div>

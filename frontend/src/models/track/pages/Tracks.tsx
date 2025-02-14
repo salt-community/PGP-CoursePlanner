@@ -6,10 +6,12 @@ import SquareCard from "@components/SquareCard";
 import LoadingSkeletonModule from "@models/module/components/LoadingSkeletonModule";
 import CreateTrackModal from "../components/CreateTrackModal";
 import { useState } from "react";
+import { useMutationPostTrack } from "@api/track/trackMutations";
 
 export default function Track() {
     const [openModal, setOpenModal] = useState(false);
     const { data: tracks, isLoading, isError } = useQueryTracks();
+    const mutationPostTrack = useMutationPostTrack();
 
     return (
         <Page>
@@ -39,7 +41,7 @@ export default function Track() {
                     </>
                 }
             </section>
-            {openModal && <CreateTrackModal openModal={openModal} setOpenModal={setOpenModal} />}
+            {openModal && <CreateTrackModal openModal={openModal} setOpenModal={setOpenModal} mutation={mutationPostTrack} />}
             {(isError) && <ErrorModal error="Tracks" />}
         </Page>
     )
