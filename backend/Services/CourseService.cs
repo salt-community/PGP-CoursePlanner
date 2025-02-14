@@ -167,7 +167,7 @@ public class CourseService(DataContext context) : IService<Course>
         foreach (var @event in appliedCourse.MiscellaneousEvents)
         {
 
-            var eventDate = DateTime.Parse(@event.StartTime).AddHours(1);
+            var eventDate = DateTime.Parse(@event.StartTime).ToUniversalTime().AddHours(1);
 
             var dateContent = new DateContent()
             {
