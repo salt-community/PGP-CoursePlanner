@@ -50,6 +50,11 @@ export function useMutationDeleteAppliedCourse() {
             queryClient.invalidateQueries({ queryKey: ['appliedCourses'] })
             navigate(`/activecourses`);
         },
+        onError: (error) => {
+            if (error.message === "401") {
+                navigate(`/activecourses`);
+            }
+        },
         retry: 1
     })
 
