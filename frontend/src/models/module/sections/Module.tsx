@@ -1,214 +1,244 @@
-import InputSmall from "@components/inputFields/InputSmall";
-import PrimaryBtn from "@components/buttons/PrimaryBtn";
-import SuccessBtn from "@components/buttons/SuccessBtn";
-import { useNavigate } from "react-router-dom";
-import { useState, FormEvent, useEffect, useRef } from "react";
-import Day from "./Day";
+import { useState } from "react";
+import { DayType, ModuleProps, ModuleType, Track } from "@models/course/Types";
+import { useQueryTracks } from "@api/track/trackQueries";
 import { useMutationPostModule, useMutationUpdateModule } from "@api/module/moduleMutations";
-import { DayType, EventType, ModuleType } from "@api/Types";
 
-export type Props = {
-    module: ModuleType;
-    buttonText: string;
+export default function Module({ buttonText }: ModuleProps) {
+  const [newModule, setNewModule] = useState<ModuleType>({
+    name: "New Module",
+    numberOfDays: 0,
+    days: [],
+    tracks: [],
+    order: 1
+  });
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [collapseOpen, setCollapseOpen] = useState<Record<number, boolean>>({});
+  const { data: trackData, isLoading: isLoadingTracks, isError: isErrorTracks } = useQueryTracks();
+
+  const { mutate: createModule } = useMutationPostModule();
+  const { mutate: updateModule } = useMutationUpdateModule("/modules");
+
+  const handleSubmitModule = () => {
+    if (false) {
+      console.log(newModule);
+      updateModule(newModule);
+    } else {
+      createModule(newModule);
+    }
+  };
+
+  function addButton() {
+    const newDay: DayType = {
+      dayNumber: newModule.numberOfDays + 1,
+      description: "New Day",
+      events: [],
+      date: new Date(),
+    };
+    setNewModule((prevModule) => ({
+      ...prevModule,
+      days: [...prevModule.days, newDay],
+      numberOfDays: prevModule.numberOfDays + 1,
+    }));
+  }
+
+  const toggleCollapse = (index: number) => {
+    setCollapseOpen((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index],
+    }));
+  };
+
+  const handleDragStart = (dayIndex: number) => {
+    setDraggedIndex(dayIndex);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+  };
+
+  const handleDragOver = (e: React.DragEvent, targetIndex: number) => {
+    e.preventDefault();
+
+    if (draggedIndex === null || draggedIndex === targetIndex) return;
+
+    setNewModule((prevModule) => {
+      const updatedDays = [...prevModule.days];
+      const [draggedDay] = updatedDays.splice(draggedIndex, 1);
+      updatedDays.splice(targetIndex, 0, draggedDay);
+
+      updatedDays.forEach((day, index) => {
+        day.dayNumber = index + 1;
+      });
+
+      return {
+        ...prevModule,
+        days: updatedDays,
+      };
+    });
+
+    setDraggedIndex(targetIndex);
+  };
+
+  const handleCreateNewEvent = (dayIndex: number) => {
+    const newEvent = {
+        name: "New Event",
+        startTime: "00:00",
+        endTime: "00:00",
+        description: "",
+    };
+
+    setNewModule((prevModule) => ({
+        ...prevModule,
+        days: prevModule.days.map((day, index) => 
+            index === dayIndex
+                ? { ...day, events: [...day.events, newEvent] }
+                : day
+        ),
+    }));
 };
 
-export default function Module({ module, buttonText }: Props) {
-    const navigate = useNavigate();
-    const [moduleName, setModuleName] = useState<string>(module.name);
-    const [numOfDays, setNumOfDays] = useState<number>(module.days.length);
-    const [days, setDays] = useState<DayType[]>(module.days);
-    const [track, setTrack] = useState<string[]>(module.tracks?.map(t => t.name) || [".NET"]);
-    const [isIncompleteInput, setIsIncompleteInput] = useState<boolean>(false);
-    const dropdownRef = useRef<HTMLUListElement>(null);
-    const buttonRef = useRef<HTMLButtonElement>(null);
-    const mutationPostModule = useMutationPostModule();
-    const mutationUpdateModule = useMutationUpdateModule("/modules");
+  const handleRemoveEvent = (dayIndex: number, eventIndex: number) => {
+    setNewModule((prevModule) => {
+      const updatedDays = [...prevModule.days];
+      updatedDays[dayIndex].events = updatedDays[dayIndex].events.filter(
+        (_, eIndex) => eIndex !== eventIndex
+      );
 
-    const handleDays = () => {
-        const editedDays = days.slice();
-        if (numOfDays < days.length) {
-            editedDays.splice(numOfDays, days.length - numOfDays);
-        }
-        else {
-            const numOfDaysArray = ([...Array(numOfDays - days.length).keys()].map(i => i + 1));
+      return {
+        ...prevModule,
+        days: updatedDays,
+      };
+    });
+  };
 
-            numOfDaysArray.map((num) => {
-                const newDay = {
-                    dayNumber: num + days.length,
-                    description: "",
-                    events: [],
-                    date: new Date(),
-                };
+  const handleRemoveDay = (dayIndex: number) => {
+    setNewModule((prevModule) => {
+      const updatedDays = prevModule.days.filter((_, index) => index !== dayIndex);
+      return {
+        ...prevModule,
+        days: updatedDays,
+        numberOfDays: updatedDays.length,
+      };
+    });
+  };
 
-                editedDays.push(newDay);
-            });
-        }
-        setDays(editedDays);
-    };
+  const handleModuleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewModule((prevModule) => ({
+      ...prevModule,
+      name: e.target.value,
+    }));
+  };
 
-    const handleTrackChange = (selectedTrack: string) => {
-        if (track.includes(selectedTrack)) {
-            setTrack(track.filter(t => t !== selectedTrack));
-        } else {
-            setTrack([...track, selectedTrack]);
-        }
-    };
+  const handleTrackSelection = (track: Track, isChecked: boolean) => {
+    setNewModule((prevModule) => {
+      const updatedTracks = isChecked
+        ? [...prevModule.tracks, track]  
+        : prevModule.tracks.filter((t) => t.id !== track.id); 
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+      return {
+        ...prevModule,
+        tracks: updatedTracks,
+      };
+    });
+  };
 
-        const { moduleName } = e.target as typeof e.target & { moduleName: { value: string } };
-        const { numberOfDays } = e.target as typeof e.target & { numberOfDays: { value: number } };
-        const events: EventType[] = [];
-        days.forEach(day => {
-            const eventsOfDay = day.events;
-            eventsOfDay.forEach(event => {
-                events.push(event);
-            });
-        });
+  return (
+    <section className="p-6 md:px-24 lg:px-56">
+      <input
+        type="text"
+        value={newModule.name}
+        onChange={handleModuleNameChange}
+        placeholder="Module Name"
+        className="input input-bordered w-full mb-4"
+      />
+      
+      {isLoadingTracks ? (
+        <p>Loading tracks...</p>
+      ) : isErrorTracks ? (
+        <p className="text-error">Error loading tracks.</p>
+      ) : (
+        <div className="mb-4">
+          {trackData?.map((track, index) => (
+            <label key={index} className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={newModule.tracks.some((t) => t.id === track.id)} 
+                onChange={(e) => handleTrackSelection(track, e.target.checked)}
+                className="checkbox"
+              />
+              {track.name}
+            </label>
+          ))}
+        </div>
+      )}
 
-        setIsIncompleteInput(false);
-        if (isStringInputIncorrect(moduleName.value) || numberOfDays.value == 0 || days.some(d => d.description == "") || events.some(e => e.name == "") || events.some(e => e.startTime == "") || events.some(e => e.endTime == "")) {
-            setIsIncompleteInput(true);
-        } else {
-            const newModule: ModuleType = {
-                id: module.id ?? 0,
-                name: moduleName.value.trim(),
-                numberOfDays: numberOfDays.value,
-                days: days,
-                tracks: [],
-                creationDate: new Date()
-            };
-            if (module.id == 0) {
-                mutationPostModule.mutate(newModule);
-            } else {
-                mutationUpdateModule.mutate(newModule);
-            }
-        }
-    }
+      {newModule.days.map((day, dayIndex) => (
+        <div
+          key={dayIndex}
+          className="collapse collapse-arrow bg-base-100 border border-base-300 mb-4"
+          draggable
+          onDragStart={() => handleDragStart(dayIndex)}
+          onDragEnd={handleDragEnd}
+          onDragOver={(e) => handleDragOver(e, dayIndex)}
+          style={{ opacity: draggedIndex === dayIndex ? 0.5 : 1 }}
+        >
+          <input type="checkbox" checked={collapseOpen[dayIndex]} onChange={() => toggleCollapse(dayIndex)} className="collapse-toggle" />
+          <div className="collapse-title text-xl font-medium cursor-pointer">
+            {day.description}
+          </div>
+          <div className="collapse-content">
+            <input
+              type="text"
+              value={day.description}
+              onChange={(e) => {
+                const updatedDays = [...newModule.days];
+                updatedDays[dayIndex].description = e.target.value;
+                setNewModule({ ...newModule, days: updatedDays });
+              }}
+              className="input input-bordered w-full mb-2"
+            />
+            {day.events.map((event, eventIndex) => (
+              <div key={eventIndex} className="flex items-center gap-2 border-b py-2">
+                <input
+                  type="text"
+                  value={event.description}
+                  onChange={(e) => {
+                    const updatedDays = [...newModule.days];
+                    updatedDays[dayIndex].events[eventIndex].description = e.target.value;
+                    setNewModule({ ...newModule, days: updatedDays });
+                  }}
+                  className="input input-bordered w-full"
+                />
+                <button
+                  onClick={() => handleRemoveEvent(dayIndex, eventIndex)}
+                  className="btn btn-error btn-sm"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              onClick={() => handleCreateNewEvent(dayIndex)}
+              className="btn btn-accent btn-sm mt-2"
+            >
+              + Add Event
+            </button>
+            <button
+              onClick={() => handleRemoveDay(dayIndex)}
+              className="btn btn-error btn-sm mt-2 ml-2"
+            >
+              Remove Day
+            </button>
+          </div>
+        </div>
+      ))}
 
-    const isStringInputIncorrect = (str: string) => {
-        const strNoSpace = str.replaceAll(" ", "");
-        if (strNoSpace.length > 0)
-            return false;
-        else
-            return true;
-    }
-
-    function handleClick() {
-        const dropdownMenu = document.getElementById('dropdownMenu')!;
-        if (dropdownMenu.className.includes('block')) {
-            dropdownMenu.classList.add('hidden')
-            dropdownMenu.classList.remove('block')
-        } else {
-            dropdownMenu.classList.add('block')
-            dropdownMenu.classList.remove('hidden')
-        }
-    }
-
-    useEffect(() => {
-        function handleOutsideClick(event: MouseEvent) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) &&
-                buttonRef.current && !buttonRef.current.contains(event.target as Node)) {
-                dropdownRef.current.classList.add('hidden');
-                dropdownRef.current.classList.remove('block');
-            }
-        }
-        document.addEventListener('mousedown', handleOutsideClick);
-        return () => document.removeEventListener('mousedown', handleOutsideClick);
-    }, []);
-
-    return (
-        <section className="px-4 pb-10 md:px-24 lg:px-56">
-            <form id="editCourse-form" onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
-                <div className="flex flex-col justify-between">
-                    <div className="flex flex-row items-center">
-                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Module Name: </h2>
-                        <div className="w-3/4">
-                            <InputSmall
-                                type="text"
-                                name="moduleName"
-                                onChange={(e) => setModuleName(e.target.value)}
-                                placeholder="Module name"
-                                value={moduleName}
-                            />
-                        </div>
-                    </div>
-                    <div className="flex flex-row items-center">
-                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Number of days:</h2>
-                        <input
-                            type="number"
-                            name="numberOfDays"
-                            onChange={(e) => setNumOfDays(parseInt(e.target.value))}
-                            value={numOfDays.toString()}
-                            min="0"
-                            className="input input-bordered input-sm w-3/5 mr-4"
-                            placeholder="Number of days"
-                        />
-                    </div>
-                    <div className="flex flex-row items-center">
-                        <h2 className="self-start mt-2 w-1/4 text-lg mb-2">Track(s):</h2>
-                        <div className="relative w-3/5 mr-4">
-                            {track.length > 0
-                                ? <button ref={buttonRef} type="button" id="dropdownToggle" onClick={handleClick} className="h-8 text-start pl-3 text-sm w-full border rounded-lg border-gray-300">
-                                    {track.join(", ")}
-                                </button>
-                                : <button ref={buttonRef} type="button" id="dropdownToggle" onClick={handleClick} className="h-8 text-start pl-3 text-sm w-full border rounded-lg border-gray-300">
-                                    Select
-                                </button>
-                            }
-
-                            <ul ref={dropdownRef} id="dropdownMenu" className='absolute hidden bg-neutral rounded-lg py-2 px-2 z-[1000] w-full shadow'>
-                                <li>
-                                    <label className="flex flex-row gap-2">
-                                        <input
-                                            type="checkbox"
-                                            value=".NET"
-                                            checked={track.includes(".NET")}
-                                            onChange={(e) => handleTrackChange(e.target.value)}
-                                        />
-                                        <h1 className="text-md">.NET</h1>
-                                    </label>
-                                </li>
-                                <li>
-                                    <label className="flex flex-row gap-2">
-                                        <input
-                                            type="checkbox"
-                                            value="Javascript"
-                                            checked={track.includes("Javascript")}
-                                            onChange={(e) => handleTrackChange(e.target.value)}
-                                        />
-                                        <h1 className="text-md">Javascript</h1>
-                                    </label>
-                                </li>
-                                <li >
-                                    <label className="flex flex-row gap-2">
-                                        <input
-                                            type="checkbox"
-                                            value="Java"
-                                            checked={track.includes("Java")}
-                                            onChange={(e) => handleTrackChange(e.target.value)}
-                                        />
-                                        <h1 className="text-md">Java</h1>
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <PrimaryBtn onClick={handleDays}>Apply</PrimaryBtn>
-                    </div>
-                </div>
-                <div className="flex flex-col space-y-2">
-                    {days.map((day) =>
-                        <Day key={"day_" + day.dayNumber} editTrue={module.id ? true : false} moduleId={module.id!} setDays={setDays} days={days} day={day} setNumOfDays={setNumOfDays} />)}
-                </div>
-                {isIncompleteInput &&
-                    <p className="error-message text-red-600 text-sm" id="invalid-helper">Please fill in all the fields</p>}
-                <div className="flex flex-row gap-2">
-                    <SuccessBtn value={buttonText}></SuccessBtn>
-                    <button onClick={() => navigate(`/modules/details/${module.id}`)} className="btn btn-sm mt-4 max-w-66 btn-info text-white">Go back without saving changes</button>
-                </div>
-            </form>
-        </section>
-    );
+      <button onClick={addButton} className="btn btn-primary w-full mb-4">
+        + Add Day
+      </button>
+      <button onClick={handleSubmitModule} className="btn btn-success w-full">
+        {buttonText || "Submit Module"}
+      </button>
+    </section>
+  );
 }
