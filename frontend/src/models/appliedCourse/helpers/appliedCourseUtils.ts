@@ -40,9 +40,10 @@ export const handleUpdateCourse = async (
   console.log("UPDATING COURSE", course);
 
   const myTrack = course.track.id;
+  const myCourseId = course.id;
   const myCourse = stripIdsFromCourse(course);
   myCourse.track.id = myTrack;
-  myCourse.id = course.id;
+  myCourse.id = myCourseId;
   const firstModule = course.modules.sort(
     (a, b) =>
       new Date(a.module.startDate ?? 0).getTime() -

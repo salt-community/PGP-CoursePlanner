@@ -237,8 +237,8 @@ public class CourseService(DataContext context) : IService<Course>
         var appliedCourse = await _context.Courses.Include(c => c.Modules)
                                             .Include(c => c.Track)
                                             .Include(c => c.MiscellaneousEvents)
-                                            .FirstOrDefaultAsync(c => c.Id == id)
-                                            ?? throw new NotFoundByIdException("course", id);
+                                            .FirstOrDefaultAsync(c => c.Id == course.Id)
+                                            ?? throw new NotFoundByIdException("course", course.Id);
         await DeleteAppliedAsync(appliedCourse);
 
         var res = await CreateAppliedCourseAsync(course);
