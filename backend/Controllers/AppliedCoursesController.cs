@@ -67,6 +67,7 @@ namespace backend.Controllers
         {
             var course = new Course
             {
+                Id = id,
                 Track = courseRequest.Track,
                 Name = courseRequest.Name,
                 StartDate = courseRequest.StartDate,
