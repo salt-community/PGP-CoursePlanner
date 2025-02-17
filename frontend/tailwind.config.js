@@ -51,9 +51,13 @@ export default {
           "bg-primary": {
             "background-color": "#ff7961",
           },
-          
+
           ".btn-primary, .btn-secondary": {
             "color": "#fff",
+          },
+
+          ".btn.btn-disabled, .btn:disabled, .btn[disabled]": {
+            "background-color": "#E5E5E5",
           }
         },
       },

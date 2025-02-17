@@ -28,12 +28,7 @@ export default function ModuleDetails() {
     }, [courses, moduleId])
 
     function handleDeleteModule() {
-        if (courses && inCourses && inCourses.length === 0) {
             mutationDeleteModule.mutate(moduleId);
-            if (mutationDeleteModule.isSuccess) {
-                setOpenModal(false);
-            }
-        }
     }
 
     return (

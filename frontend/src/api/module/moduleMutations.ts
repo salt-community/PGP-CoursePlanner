@@ -44,8 +44,8 @@ export function useMutationDeleteModule() {
         mutationFn: (id: number) => {
             return deleteModule(id);
         },
-        onSuccess: (_data, id) => {
-            queryClient.invalidateQueries({ queryKey: ['modules', id] })
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['modules'] })
             navigate(`/modules`);
         },
         onError: (error) => {
