@@ -117,7 +117,7 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
             <div className="row-span-1 col-span-2 flex justify-center p-8 border-r-2">
                 {course &&
                     <>
-                        <button className="btn min-w-60 text-xl" disabled={course.modules.length === 0} onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>{course.isApplied ? "Edit Bootcamp" : "Deploy Bootcamp"}</button>
+                        <button className="btn btn-primary min-w-60 text-xl" disabled={course.modules.length === 0} onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>{course.isApplied ? "Edit Bootcamp" : "Deploy Bootcamp"}</button>
                         {course.modules.length !== 0 &&
                             <DeployModal course={course} />
                         }
