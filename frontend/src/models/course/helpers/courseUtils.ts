@@ -317,7 +317,7 @@ export const handleApplyTemplate = async (
   const myTrack = course.track.id;
   const myCourse = stripIdsFromCourse(course);
   myCourse.track.id = myTrack;
-
+  console.log("APPLYING COURSE: ", myCourse)
   mutation.mutate(myCourse);
   navigate("/activecourses");
   return;
