@@ -64,39 +64,25 @@ public class ModuleService : IService<Module>
     }
 
     public async Task<Module> CreateAsync(Module module)
+{
+    if (!module.Days.Any())
     {
-        if (module.Days.Count == 0)
-        {
-            throw new BadRequestException<int>("Cannot create module with zero days");
-        }
-
-        _context.ChangeTracker.Clear();
-        _context.Entry(module).State = EntityState.Added;
-
-        for (int i = 0; i < module.Tracks.Count; i++)
-        {
-            var trackId = module.Tracks[i].Id;
-            var existingTrack = _context.Tracks.First(t => t.Id == trackId);
-            module.Tracks[i] = existingTrack;
-        }
-
-        _context.Modules.Add(module);
-        _context.SaveChanges();
-
-        foreach (var day in module.Days)
-        {
-            foreach (var eventItem in day.Events)
-            {
-                _context.Events.Add(eventItem);
-            }
-            _context.Days.Add(day);
-        }
-        await _context.Modules.AddAsync(module);
-
-        await _context.SaveChangesAsync();
-
-        return module;
+        throw new BadRequestException<int>("Cannot create module with zero days.");
     }
+
+    // Ensure existing tracks are attached
+    foreach (var track in module.Tracks)
+    {
+        _context.Tracks.Attach(track);
+    }
+
+    // Add and save the new module
+    await _context.Modules.AddAsync(module);
+    await _context.SaveChangesAsync();
+
+    return module;
+}
+
 
     public async Task UpdateAsync(int id, Module module)
     {
