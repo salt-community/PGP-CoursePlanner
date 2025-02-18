@@ -1,7 +1,14 @@
 import { useState } from "react";
-import { DayType, ModuleProps, ModuleType, Track } from "@models/course/Types";
 import { useQueryTracks } from "@api/track/trackQueries";
 import { useMutationPostModule, useMutationUpdateModule } from "@api/module/moduleMutations";
+import { DayType, ModuleType, Track } from "@api/Types";
+import TrashIcon from "@models/course/components/TrashIcon";
+import PrimaryBtn from "@components/buttons/PrimaryBtn";
+import DotsIcon from "@models/appliedCourse/components/DotsIcon";
+
+type ModuleProps = {
+  buttonText: string;
+};
 
 export default function Module({ buttonText }: ModuleProps) {
   const [newModule, setNewModule] = useState<ModuleType>({
@@ -9,7 +16,8 @@ export default function Module({ buttonText }: ModuleProps) {
     numberOfDays: 0,
     days: [],
     tracks: [],
-    order: 1
+    order: 1,
+    creationDate: new Date()
   });
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [collapseOpen, setCollapseOpen] = useState<Record<number, boolean>>({});
@@ -23,6 +31,7 @@ export default function Module({ buttonText }: ModuleProps) {
       console.log(newModule);
       updateModule(newModule);
     } else {
+      console.log(newModule);
       createModule(newModule);
     }
   };
@@ -144,6 +153,8 @@ export default function Module({ buttonText }: ModuleProps) {
 
   return (
     <section className="p-6 md:px-24 lg:px-56">
+      <label>
+        module name:
       <input
         type="text"
         value={newModule.name}
@@ -151,6 +162,7 @@ export default function Module({ buttonText }: ModuleProps) {
         placeholder="Module Name"
         className="input input-bordered w-full mb-4"
       />
+      </label>
       
       {isLoadingTracks ? (
         <p>Loading tracks...</p>
@@ -158,11 +170,13 @@ export default function Module({ buttonText }: ModuleProps) {
         <p className="text-error">Error loading tracks.</p>
       ) : (
         <div className="mb-4">
+        <p>Select tracks</p>
+        <div className="flex flex-wrap gap-4">
           {trackData?.map((track, index) => (
             <label key={index} className="flex items-center gap-2">
               <input
                 type="checkbox"
-                checked={newModule.tracks.some((t) => t.id === track.id)} 
+                checked={newModule.tracks.some((t) => t.id === track.id)}
                 onChange={(e) => handleTrackSelection(track, e.target.checked)}
                 className="checkbox"
               />
@@ -170,23 +184,30 @@ export default function Module({ buttonText }: ModuleProps) {
             </label>
           ))}
         </div>
+      </div>
       )}
 
       {newModule.days.map((day, dayIndex) => (
         <div
           key={dayIndex}
-          className="collapse collapse-arrow bg-base-100 border border-base-300 mb-4"
-          draggable
+          className={"bg-base-100 flex space-between border border-black mb-4 rounded-r-lg"}
+          draggable={!collapseOpen[dayIndex]} 
           onDragStart={() => handleDragStart(dayIndex)}
           onDragEnd={handleDragEnd}
           onDragOver={(e) => handleDragOver(e, dayIndex)}
           style={{ opacity: draggedIndex === dayIndex ? 0.5 : 1 }}
         >
+          <div className="collapse">
           <input type="checkbox" checked={collapseOpen[dayIndex]} onChange={() => toggleCollapse(dayIndex)} className="collapse-toggle" />
-          <div className="collapse-title text-xl font-medium cursor-pointer">
-            {day.description}
-          </div>
+          <div className="collapse-title text-xl font-medium">
+                    <div className="flex items-center">
+                        <DotsIcon position="mr-1" size={6} />
+                        Day {dayIndex + 1} {day.description}
+                    </div>
+                </div>
           <div className="collapse-content">
+            <label>
+              Name of day:
             <input
               type="text"
               value={day.description}
@@ -195,10 +216,31 @@ export default function Module({ buttonText }: ModuleProps) {
                 updatedDays[dayIndex].description = e.target.value;
                 setNewModule({ ...newModule, days: updatedDays });
               }}
-              className="input input-bordered w-full mb-2"
+              className="p-2 border border-gray-300 rounded-md"
             />
+            </label>
             {day.events.map((event, eventIndex) => (
               <div key={eventIndex} className="flex items-center gap-2 border-b py-2">
+                <button onClick={() => handleRemoveEvent(dayIndex, eventIndex)} className="btn btn-square btn-outline scale-75">
+                  <TrashIcon size={6} />
+                </button>
+
+                <label className="flex flex-col">
+                    Event Name:
+                    <input
+                        type="text"
+                        value={event.name}
+                        onChange={(e) => {
+                            const updatedDays = [...newModule.days];
+                            updatedDays[dayIndex].events[eventIndex].name = e.target.value;
+                            setNewModule({ ...newModule, days: updatedDays });
+                        }}
+                        className="p-2 border border-gray-300 rounded-md"
+                    />
+                </label>
+
+                <label className="flex flex-col">
+                Event description:
                 <input
                   type="text"
                   value={event.description}
@@ -207,38 +249,61 @@ export default function Module({ buttonText }: ModuleProps) {
                     updatedDays[dayIndex].events[eventIndex].description = e.target.value;
                     setNewModule({ ...newModule, days: updatedDays });
                   }}
-                  className="input input-bordered w-full"
+                  className="p-2 border border-gray-300 rounded-md"
                 />
-                <button
-                  onClick={() => handleRemoveEvent(dayIndex, eventIndex)}
-                  className="btn btn-error btn-sm"
-                >
-                  Remove
-                </button>
+                </label>
+
+                <label className="flex flex-col">
+                  Start Time:
+                  <input
+                      type="time"
+                      value={event.startTime}
+                      onChange={(e) => {
+                        const updatedDays = [...newModule.days];
+                        updatedDays[dayIndex].events[eventIndex].startTime = e.target.value;
+                        setNewModule({ ...newModule, days: updatedDays });
+                      }}
+                      className="p-2 border border-gray-300 rounded-md"
+                  />
+              </label>
+              <label className="flex flex-col">
+                  End Time:
+                  <input
+                      type="time"
+                      value={event.endTime}
+                      onChange={(e) => {
+                        const updatedDays = [...newModule.days];
+                        updatedDays[dayIndex].events[eventIndex].endTime = e.target.value;
+                        setNewModule({ ...newModule, days: updatedDays });
+                      }}
+                      className="p-2 border border-gray-300 rounded-md"
+                  />
+              </label>
               </div>
             ))}
-            <button
-              onClick={() => handleCreateNewEvent(dayIndex)}
-              className="btn btn-accent btn-sm mt-2"
-            >
-              + Add Event
-            </button>
-            <button
-              onClick={() => handleRemoveDay(dayIndex)}
-              className="btn btn-error btn-sm mt-2 ml-2"
-            >
-              Remove Day
+            <div className="mt-auto">
+                                <PrimaryBtn onClick={() => handleCreateNewEvent(dayIndex)}>
+                                    + Event
+                                </PrimaryBtn>
+                            </div>
+          </div>
+          </div>
+          <div className="flex justify-end">
+            <button onClick={() => handleRemoveDay(dayIndex)} className="btn btn-square btn-outline h-[61px] w-[61px] rounded-none rounded-r-lg">
+              <TrashIcon size={6} />
             </button>
           </div>
         </div>
+        
       ))}
 
-      <button onClick={addButton} className="btn btn-primary w-full mb-4">
-        + Add Day
+      <button onClick={addButton} className="btn btn-primary w-20 mb-16">
+        + Day
       </button>
       <button onClick={handleSubmitModule} className="btn btn-success w-full">
-        {buttonText || "Submit Module"}
+        { buttonText|| "Submit Module"}
       </button>
+      
     </section>
   );
 }
