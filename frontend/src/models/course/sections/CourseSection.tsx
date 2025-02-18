@@ -117,8 +117,10 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
             <div className="row-span-1 col-span-2 flex justify-center p-8 border-r-2">
                 {course &&
                     <>
-                        <button className="btn btn-primary min-w-60 text-xl" onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>{course.isApplied ? "Edit Bootcamp" : "Deploy Bootcamp"}</button>
-                        <DeployModal course={course} />
+                        <button className="btn btn-primary min-w-60 text-xl" disabled={course.modules.length === 0} onClick={() => (document.getElementById('my_DeployModal_1') as HTMLDialogElement).showModal()}>{course.isApplied ? "Edit Bootcamp" : "Deploy Bootcamp"}</button>
+                        {course.modules.length !== 0 &&
+                            <DeployModal course={course} />
+                        }
                     </>
                 }
             </div>
@@ -128,7 +130,7 @@ export default function CourseSection({ setOpenModal, course, isLoading }: Props
                 {course &&
                     <>
                         <div className="flex gap-4">
-                            <Link to={course.isApplied ? `/activecourses/edit/${course.id}` : `/courses/edit/${course.id}`} className="btn btn-secondary min-w-52 text-xl">Edit Course</Link>
+                            {/* <Link to={course.isApplied ? `/activecourses/edit/${course.id}` : `/courses/edit/${course.id}`} className="btn btn-secondary min-w-52 text-xl">Edit Course</Link> */}
                             <DeleteBtn onClick={() => setOpenModal(true)} />
                         </div>
                         <div className="flex items-center gap-2 mr-5">

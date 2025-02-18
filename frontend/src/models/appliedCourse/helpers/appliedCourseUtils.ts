@@ -1,4 +1,7 @@
-import { getNewWeekDayDate, stripIdsFromCourse } from "@models/course/helpers/courseUtils";
+import {
+  getNewWeekDayDate,
+  stripIdsFromCourse,
+} from "@models/course/helpers/courseUtils";
 import { CourseModuleType, CourseType } from "@api/Types";
 import { UseMutationResult } from "@tanstack/react-query";
 import { NavigateFunction } from "react-router-dom";
@@ -34,41 +37,43 @@ export const handleUpdateCourse = async (
   navigate: NavigateFunction,
   mutation: UseMutationResult<void, Error, CourseType, unknown>
 ) => {
-  console.log("UPDATING COURSE", course)
+  console.log("UPDATING COURSE", course);
 
-    const myTrack = course.track.id;
-    const myCourse = stripIdsFromCourse(course);
-    myCourse.track.id = myTrack;
-    myCourse.id = course.id;
-    const firstModule = course.modules
-  .sort((a, b) => 
-    new Date(a.module.startDate ?? 0).getTime() - new Date(b.module.startDate ?? 0).getTime()
+  const myTrack = course.track.id;
+  const myCourseId = course.id;
+  const myCourse = stripIdsFromCourse(course);
+  myCourse.track.id = myTrack;
+  myCourse.id = myCourseId;
+  const firstModule = course.modules.sort(
+    (a, b) =>
+      new Date(a.module.startDate ?? 0).getTime() -
+      new Date(b.module.startDate ?? 0).getTime()
   )[0];
-    console.log("First module start date", firstModule.module.startDate);
-    
+  console.log("First module start date", firstModule.module.startDate);
 
-    if (firstModule) {
-      const localStartDate = firstModule.module.startDate 
-        ? new Date(firstModule.module.startDate) 
-        : new Date();
-      localStartDate.setHours(localStartDate.getHours() + 1); 
-      myCourse.startDate = localStartDate.toISOString();
+  if (firstModule) {
+    const localStartDate = firstModule.module.startDate
+      ? new Date(firstModule.module.startDate)
+      : new Date();
+    localStartDate.setHours(localStartDate.getHours() + 1);
+    myCourse.startDate = localStartDate.toISOString();
   }
 
   const latestDayDate = course.modules
-  .flatMap((module) => module.module.days) 
-  .map((day) => new Date(day.date)) 
-  .reduce((latest, current) => (current > latest ? current : latest), new Date(0)); 
+    .flatMap((module) => module.module.days)
+    .map((day) => new Date(day.date))
+    .reduce(
+      (latest, current) => (current > latest ? current : latest),
+      new Date(0)
+    );
 
-if (latestDayDate.getTime() > 0) { 
-  latestDayDate.setHours(latestDayDate.getHours() + 1)
-  myCourse.endDate = latestDayDate.toISOString();
-}
+  if (latestDayDate.getTime() > 0) {
+    latestDayDate.setHours(latestDayDate.getHours() + 1);
+    myCourse.endDate = latestDayDate.toISOString();
+  }
 
-    console.log("UPDATING myCourse", myCourse)
+  console.log("UPDATING myCourse", myCourse);
 
-
-  
   mutation.mutate(myCourse);
   navigate("/activecourses");
   return;
