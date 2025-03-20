@@ -48,7 +48,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddAuthentication().AddJwtBearer(options =>
 {
     options.Authority = "https://accounts.google.com";
-    options.Audience = "735865474111-hbubksmrfl5l6b7tkgnjetiuqp1jvoeh.apps.googleusercontent.com";
+    options.Audience = "628615651226-36r94suqhonsd49gogtd7c9tmk5i7d1l.apps.googleusercontent.com";
     options.TokenValidationParameters.ValidIssuer = "accounts.google.com";
 });
 
